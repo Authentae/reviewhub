@@ -66,9 +66,9 @@ export default function OwnerDashboard() {
   }, [userLoading, isPaid, t, toast]);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="rh-design rh-app min-h-screen">
       <Navbar />
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+      <main id="main-content" className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
         <header className="mb-6">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-1">
             {t('owner.heading', 'Your claimed businesses')}

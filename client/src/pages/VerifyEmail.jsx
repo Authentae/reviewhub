@@ -31,9 +31,9 @@ export default function VerifyEmail() {
   }, [token, t]);
 
   return (
-    <main id="main-content" className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col justify-center py-12 px-4">
-      <div className="max-w-md w-full mx-auto">
-        <div className="card p-8 text-center">
+    <main id="main-content" className="rh-design min-h-screen grid place-items-center px-4 py-12">
+      <div className="max-w-md w-full">
+        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-sm p-8 text-center rh-sans">
           {status === 'pending' && (
             <>
               <div className="w-10 h-10 mx-auto mb-4 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" aria-hidden="true" />
@@ -43,28 +43,28 @@ export default function VerifyEmail() {
           {status === 'success' && (
             <>
               <p className="text-5xl mb-3" aria-hidden="true">✅</p>
-              <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">{t('verify.successTitle')}</h1>
+              <h1 className="rh-serif text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2 tracking-tight">{t('verify.successTitle')}</h1>
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">{t('verify.successDesc')}</p>
-              <Link to="/dashboard" className="btn-primary text-sm inline-block">{t('verify.goDashboard')}</Link>
+              <Link to="/dashboard" className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-5 py-2.5 rounded-xl shadow-sm shadow-blue-600/20 transition-colors">{t('verify.goDashboard')}</Link>
             </>
           )}
           {status === 'error' && (
             <>
               <p className="text-5xl mb-3" aria-hidden="true">⚠️</p>
-              <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">{t('verify.errorTitle')}</h1>
+              <h1 className="rh-serif text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2 tracking-tight">{t('verify.errorTitle')}</h1>
               <p className="text-sm text-red-600 dark:text-red-400 mb-6" role="alert">{error}</p>
               <div className="flex gap-2 justify-center flex-wrap">
-                <Link to="/login" className="btn-secondary text-sm">{t('verify.backToLogin')}</Link>
-                <Link to="/dashboard" className="btn-primary text-sm">{t('verify.goDashboard')}</Link>
+                <Link to="/login" className="inline-flex items-center justify-center text-sm font-semibold px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">{t('verify.backToLogin')}</Link>
+                <Link to="/dashboard" className="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-4 py-2.5 rounded-xl shadow-sm shadow-blue-600/20 transition-colors">{t('verify.goDashboard')}</Link>
               </div>
             </>
           )}
           {status === 'missing' && (
             <>
               <p className="text-5xl mb-3" aria-hidden="true">📧</p>
-              <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">{t('verify.missingTitle')}</h1>
+              <h1 className="rh-serif text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2 tracking-tight">{t('verify.missingTitle')}</h1>
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">{t('verify.missingDesc')}</p>
-              <Link to="/login" className="btn-secondary text-sm inline-block">{t('verify.backToLogin')}</Link>
+              <Link to="/login" className="inline-flex items-center justify-center text-sm font-semibold px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">{t('verify.backToLogin')}</Link>
             </>
           )}
         </div>

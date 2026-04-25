@@ -4,6 +4,8 @@ import api from '../lib/api';
 import { setToken } from '../lib/auth';
 import usePageTitle from '../hooks/usePageTitle';
 import { useI18n } from '../context/I18nContext';
+import AuthSideArt from '../components/AuthSideArt';
+import Logo from '../components/Logo';
 
 // Second-factor challenge page. Reached via navigate('/login/mfa', {state:
 // {pendingToken}}) from Login.jsx after a correct password against an
@@ -103,30 +105,46 @@ export default function LoginMfa() {
   }
 
   return (
-    <main id="main-content" className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col justify-center py-12 px-4">
-      <div className="max-w-md w-full mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{t('mfa.challengeTitle')}</h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">
-            {mode === 'otp' ? t('mfa.challengeSubtitleOtp') : t('mfa.challengeSubtitleRecovery')}
-          </p>
-        </div>
+    <main id="main-content" className="rh-design rh-auth-form-pane min-h-screen lg:grid lg:grid-cols-2">
+      {/* ── Left: marketing panel (desktop only) ───────────────────── */}
+      <AuthSideArt
+        eyebrow="TWO-FACTOR"
+        title={t('mfa.challengeTitle')}
+      />
 
-        <div className="card p-6">
+      {/* ── Right: the actual form ─────────────────────────────────── */}
+      <div className="flex flex-col justify-center py-12 px-4 sm:px-8 lg:px-12">
+        <div className="max-w-md w-full mx-auto">
+          {/* Brand bar — only shown on mobile where AuthSideArt is hidden */}
+          <div className="lg:hidden text-center mb-8">
+            <Link to="/" className="inline-flex items-center gap-2 mb-4">
+              <Logo size={36} />
+              <span className="font-bold text-xl text-gray-900 dark:text-gray-100">ReviewHub</span>
+            </Link>
+          </div>
+
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">{t('mfa.challengeTitle')}</h1>
+            <p className="text-gray-500 dark:text-gray-400 mt-1.5 text-sm">
+              {mode === 'otp' ? t('mfa.challengeSubtitleOtp') : t('mfa.challengeSubtitleRecovery')}
+            </p>
+          </div>
+
           {error && (
-            <div role="alert" className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 text-sm px-4 py-3 rounded-lg mb-4">
-              {error}
+            <div role="alert" className="flex items-start gap-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/70 text-red-700 dark:text-red-300 text-sm px-4 py-3 rounded-xl mb-5">
+              <svg className="w-4 h-4 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span>{error}</span>
             </div>
           )}
           {info && (
-            <div role="status" className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 text-sm px-4 py-3 rounded-lg mb-4">
+            <div role="status" className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/70 text-blue-700 dark:text-blue-300 text-sm px-4 py-3 rounded-xl mb-5">
               {info}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label htmlFor="mfa-code" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+              <label htmlFor="mfa-code" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">
                 {mode === 'otp' ? t('mfa.codeLabel') : t('mfa.recoveryCodeLabel')}
               </label>
               <input
@@ -145,23 +163,32 @@ export default function LoginMfa() {
                 className="input text-lg tracking-widest text-center font-mono"
                 aria-describedby="mfa-hint"
               />
-              <p id="mfa-hint" className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+              <p id="mfa-hint" className="text-xs text-gray-400 dark:text-gray-500 mt-1.5">
                 {mode === 'otp' ? t('mfa.codeHint') : t('mfa.recoveryCodeHint')}
               </p>
             </div>
-            <button type="submit" disabled={loading} aria-busy={loading} className="btn-primary w-full py-2.5">
+            <button
+              type="submit" disabled={loading} aria-busy={loading}
+              className="w-full inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-3 rounded-xl shadow-sm shadow-blue-600/20 transition-colors disabled:opacity-60"
+            >
+              {loading && (
+                <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+                </svg>
+              )}
               {loading ? t('mfa.verifying') : t('mfa.verify')}
             </button>
           </form>
 
-          <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 space-y-2 text-center text-sm">
+          <div className="mt-6 pt-5 border-t border-gray-100 dark:border-gray-700 space-y-2 text-center text-sm">
             {mode === 'otp' ? (
               <>
                 <button
                   type="button"
                   onClick={handleResend}
                   disabled={resending}
-                  className="text-blue-600 hover:underline disabled:opacity-60"
+                  className="text-blue-600 dark:text-blue-400 hover:underline font-medium disabled:opacity-60"
                 >
                   {resending ? t('mfa.resending') : t('mfa.resendCode')}
                 </button>
@@ -185,11 +212,11 @@ export default function LoginMfa() {
               </button>
             )}
           </div>
-        </div>
 
-        <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-4">
-          <Link to="/login" className="text-blue-600 hover:underline font-medium">{t('forgot.backToLogin')}</Link>
-        </p>
+          <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-8">
+            <Link to="/login" className="text-blue-600 dark:text-blue-400 hover:underline font-semibold">{t('forgot.backToLogin')}</Link>
+          </p>
+        </div>
       </div>
     </main>
   );

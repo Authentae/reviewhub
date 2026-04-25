@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import Navbar from '../components/Navbar';
 import api from '../lib/api';
 import usePageTitle from '../hooks/usePageTitle';
 import { useI18n } from '../context/I18nContext';
@@ -30,8 +31,9 @@ export default function EmailChange() {
   }, [token, t]);
 
   return (
-    <main id="main-content" className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col justify-center py-12 px-4">
-      <div className="max-w-md w-full mx-auto">
+    <div className="rh-design rh-app min-h-screen">
+      <Navbar />
+      <main id="main-content" className="max-w-md mx-auto px-4 py-12">
         <div className="card p-8 text-center">
           {status === 'pending' && (
             <>
@@ -65,7 +67,7 @@ export default function EmailChange() {
             </>
           )}
         </div>
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }

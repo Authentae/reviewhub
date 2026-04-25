@@ -106,6 +106,7 @@ export default function ReplyGeneratorTool() {
 
         {/* SEO hero — editorial treatment matching Landing v2 */}
         <div className="rh-tool-hero">
+          <p className="rh-mono" style={{ marginBottom: 12, color: 'var(--rh-ochre-deep)' }}>FREE TOOL · NO SIGNUP</p>
           <div className="rh-section-head" style={{ marginBottom: 24 }}>
             <div className="kicker">
               <div className="num" style={{ color: 'var(--rh-ochre-deep)' }}>00</div>
@@ -186,15 +187,17 @@ export default function ReplyGeneratorTool() {
                 <button
                   type="button"
                   onClick={() => { setForm(SAMPLES.negative); setDraft(null); setError(''); }}
-                  className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+                  className="hover:underline font-medium"
+                  style={{ color: 'var(--rh-teal)' }}
                 >
                   ★ 1-star sample
                 </button>
-                <span className="text-gray-300 dark:text-gray-600">·</span>
+                <span style={{ color: 'var(--rh-ink-soft, #999)' }}>·</span>
                 <button
                   type="button"
                   onClick={() => { setForm(SAMPLES.positive); setDraft(null); setError(''); }}
-                  className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+                  className="hover:underline font-medium"
+                  style={{ color: 'var(--rh-teal)' }}
                 >
                   ★★★★★ 5-star sample
                 </button>
@@ -250,23 +253,25 @@ export default function ReplyGeneratorTool() {
             {/* Inline conversion ask — shown right at the magic moment so
                 users don't have to scroll past 600+ pixels of SEO content
                 before they're invited to use this on their own reviews. */}
-            <p className="mt-4 text-xs text-gray-500 dark:text-gray-400 border-t border-gray-100 dark:border-gray-700 pt-3">
+            <p className="mt-4 text-xs border-t pt-3" style={{ color: 'var(--rh-ink)', opacity: 0.7, borderColor: 'var(--rh-rule, rgba(0,0,0,0.1))' }}>
               Like this? <a
                 href="https://chrome.google.com/webstore/detail/reviewhub"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 dark:text-blue-400 font-medium hover:underline"
+                className="font-medium hover:underline"
+                style={{ color: 'var(--rh-teal)' }}
               >Get the Chrome extension</a> — same draft, on every review platform you visit, with one click. Free forever.
             </p>
           </section>
         )}
 
         {/* Conversion block — always visible, not just on result */}
-        <aside className="mt-10 card p-6 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-100 dark:border-blue-900/50">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+        <aside className="mt-10 card p-6" style={{ background: 'var(--rh-paper)', borderColor: 'var(--rh-teal)', borderWidth: 1, borderStyle: 'solid' }}>
+          <p className="rh-mono" style={{ marginBottom: 8, color: 'var(--rh-teal)' }}>UPGRADE</p>
+          <h2 className="text-xl font-bold mb-2" style={{ color: 'var(--rh-ink)', fontFamily: 'var(--rh-serif)', fontWeight: 500 }}>
             Want this button on every review platform?
           </h2>
-          <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
+          <p className="text-sm mb-4 leading-relaxed" style={{ color: 'var(--rh-ink)', opacity: 0.85 }}>
             Install the free ReviewHub Chrome extension. An ✨ AI Draft button
             appears next to every review on Yelp, Facebook, TripAdvisor,
             Trustpilot, Amazon, Etsy, and Google — no copy-pasting, no
@@ -287,8 +292,9 @@ export default function ReplyGeneratorTool() {
         </aside>
 
         {/* SEO content — helps the page rank for long-tail review-reply queries */}
-        <section aria-label="How the AI review reply generator works" className="mt-10 prose prose-sm dark:prose-invert max-w-none text-gray-700 dark:text-gray-300">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 mt-0">
+        <section aria-label="How the AI review reply generator works" className="mt-10 prose prose-sm max-w-none" style={{ color: 'var(--rh-ink)' }}>
+          <p className="rh-mono" style={{ marginBottom: 8, color: 'var(--rh-sage)' }}>HOW IT WORKS</p>
+          <h2 className="text-lg mt-0" style={{ color: 'var(--rh-ink)', fontFamily: 'var(--rh-serif)', fontWeight: 500 }}>
             How the AI review reply generator works
           </h2>
           <p>
@@ -299,13 +305,13 @@ export default function ReplyGeneratorTool() {
             make it sound more like you, then copy and paste into the review
             platform.
           </p>
-          <h3 className="font-semibold text-gray-900 dark:text-gray-100">Why respond to online reviews?</h3>
+          <h3 className="font-semibold" style={{ color: 'var(--rh-ink)', fontFamily: 'var(--rh-serif)' }}>Why respond to online reviews?</h3>
           <ul>
             <li>Replies are visible to every future customer who reads the review — a good one turns a complaint into social proof of your responsiveness.</li>
             <li>Google, Yelp, and TripAdvisor's algorithms favor businesses that engage with reviews — responding can lift your ranking.</li>
             <li>Customers who get a thoughtful reply after a negative review frequently update their rating or delete the review.</li>
           </ul>
-          <h3 className="font-semibold text-gray-900 dark:text-gray-100">Is this free?</h3>
+          <h3 className="font-semibold" style={{ color: 'var(--rh-ink)', fontFamily: 'var(--rh-serif)' }}>Is this free?</h3>
           <p>
             Yes. This tool is free with no signup. We rate-limit to 20 drafts
             per hour per IP to keep the service available for everyone. If
