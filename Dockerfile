@@ -55,9 +55,8 @@ COPY --from=server-builder --chown=node:node /app/scripts ./scripts
 # Built client SPA — served by Express via SERVE_CLIENT=1
 COPY --from=client-builder --chown=node:node /build/dist ./client-dist
 
-# SQLite DB + backup mountpoints — volumes for persistence across deploys
+# SQLite DB + backup mountpoints — Railway mounts volumes here (configured in Railway UI, not Dockerfile)
 RUN mkdir -p /app/data /app/backups && chown -R node:node /app/data /app/backups
-VOLUME ["/app/data", "/app/backups"]
 
 USER node
 EXPOSE 3001

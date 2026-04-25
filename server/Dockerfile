@@ -53,7 +53,6 @@ COPY --from=builder --chown=node:node /app/scripts ./scripts
 # replacements. Pre-create so the app doesn't need permission to mkdir at
 # runtime under the non-root user.
 RUN mkdir -p /app/data /app/backups && chown -R node:node /app/data /app/backups
-VOLUME ["/app/data", "/app/backups"]
 
 USER node
 EXPOSE 3001
