@@ -413,3 +413,103 @@
 .rh-design .rh-app .bg-gradient-to-br.from-blue-500.to-indigo-600 {
   background: linear-gradient(135deg, var(--rh-teal), var(--rh-teal-deep)) !important;
 }
+
+/* ── Extended palette overrides ──────────────────────────────────────────
+   The 1st-pass overrides handled the most-common Tailwind utilities.
+   This block sweeps up the lighter/darker shades and the accent palettes
+   (purple/orange/emerald/etc.) so any nested Tailwind class inside the app
+   shell adopts the editorial palette automatically. */
+
+/* Subtle tinted backgrounds → soft editorial paper-mixes */
+.rh-design.rh-app .bg-blue-50,   .rh-design .rh-app .bg-blue-50,
+.rh-design.rh-app .bg-blue-100,  .rh-design .rh-app .bg-blue-100,
+.rh-design.rh-app .bg-indigo-100,.rh-design .rh-app .bg-indigo-100 { background-color: color-mix(in oklab, var(--rh-teal) 10%, var(--rh-paper)) !important; }
+
+.rh-design.rh-app .bg-red-50,    .rh-design .rh-app .bg-red-50,
+.rh-design.rh-app .bg-red-100,   .rh-design .rh-app .bg-red-100,
+.rh-design.rh-app .bg-rose-50,   .rh-design .rh-app .bg-rose-50,
+.rh-design.rh-app .bg-rose-500,  .rh-design .rh-app .bg-rose-500 { background-color: color-mix(in oklab, var(--rh-rose) 12%, var(--rh-paper)) !important; }
+
+.rh-design.rh-app .bg-green-50,    .rh-design .rh-app .bg-green-50,
+.rh-design.rh-app .bg-green-100,   .rh-design .rh-app .bg-green-100,
+.rh-design.rh-app .bg-emerald-50,  .rh-design .rh-app .bg-emerald-50,
+.rh-design.rh-app .bg-emerald-400, .rh-design .rh-app .bg-emerald-400,
+.rh-design.rh-app .bg-lime-400,    .rh-design .rh-app .bg-lime-400,
+.rh-design.rh-app .bg-lime-500,    .rh-design .rh-app .bg-lime-500 { background-color: color-mix(in oklab, var(--rh-sage) 12%, var(--rh-paper)) !important; }
+
+.rh-design.rh-app .bg-amber-50,   .rh-design .rh-app .bg-amber-50,
+.rh-design.rh-app .bg-amber-100,  .rh-design .rh-app .bg-amber-100,
+.rh-design.rh-app .bg-yellow-50,  .rh-design .rh-app .bg-yellow-50,
+.rh-design.rh-app .bg-yellow-200, .rh-design .rh-app .bg-yellow-200,
+.rh-design.rh-app .bg-orange-50,  .rh-design .rh-app .bg-orange-50,
+.rh-design.rh-app .bg-orange-400, .rh-design .rh-app .bg-orange-400,
+.rh-design.rh-app .bg-orange-500, .rh-design .rh-app .bg-orange-500 { background-color: color-mix(in oklab, var(--rh-ochre) 16%, var(--rh-paper)) !important; }
+
+/* Purple → teal-deep (no purple in the editorial palette) */
+.rh-design.rh-app .bg-purple-500, .rh-design .rh-app .bg-purple-500 { background-color: var(--rh-teal-deep) !important; }
+.rh-design.rh-app .bg-teal-500,   .rh-design .rh-app .bg-teal-500   { background-color: var(--rh-teal) !important; }
+
+/* Dark-mode tinted bgs (xx-900) — used in dark cards */
+.rh-design.rh-app .bg-blue-900,    .rh-design .rh-app .bg-blue-900,
+.rh-design.rh-app .bg-indigo-900,  .rh-design .rh-app .bg-indigo-900 { background-color: color-mix(in oklab, var(--rh-teal-deep) 28%, var(--rh-ink)) !important; }
+.rh-design.rh-app .bg-red-900,     .rh-design .rh-app .bg-red-900    { background-color: color-mix(in oklab, var(--rh-rose) 30%, var(--rh-ink)) !important; }
+.rh-design.rh-app .bg-green-900,   .rh-design .rh-app .bg-green-900,
+.rh-design.rh-app .bg-emerald-900, .rh-design .rh-app .bg-emerald-900 { background-color: color-mix(in oklab, var(--rh-sage) 24%, var(--rh-ink)) !important; }
+.rh-design.rh-app .bg-amber-900,   .rh-design .rh-app .bg-amber-900,
+.rh-design.rh-app .bg-orange-900,  .rh-design .rh-app .bg-orange-900 { background-color: color-mix(in oklab, var(--rh-ochre-deep) 28%, var(--rh-ink)) !important; }
+
+/* Tinted text colors */
+.rh-design.rh-app .text-blue-50,    .rh-design .rh-app .text-blue-50,
+.rh-design.rh-app .text-blue-100,   .rh-design .rh-app .text-blue-100,
+.rh-design.rh-app .text-blue-900,   .rh-design .rh-app .text-blue-900,
+.rh-design.rh-app .text-indigo-100, .rh-design .rh-app .text-indigo-100 { color: var(--rh-teal-deep) !important; }
+
+.rh-design.rh-app .text-red-50,    .rh-design .rh-app .text-red-50,
+.rh-design.rh-app .text-red-200,   .rh-design .rh-app .text-red-200,
+.rh-design.rh-app .text-red-900,   .rh-design .rh-app .text-red-900 { color: var(--rh-rose) !important; }
+
+.rh-design.rh-app .text-green-700,    .rh-design .rh-app .text-green-700,
+.rh-design.rh-app .text-emerald-400,  .rh-design .rh-app .text-emerald-400,
+.rh-design.rh-app .text-emerald-600,  .rh-design .rh-app .text-emerald-600,
+.rh-design.rh-app .text-emerald-700,  .rh-design .rh-app .text-emerald-700 { color: var(--rh-sage) !important; }
+
+.rh-design.rh-app .text-amber-50,   .rh-design .rh-app .text-amber-50,
+.rh-design.rh-app .text-amber-100,  .rh-design .rh-app .text-amber-100,
+.rh-design.rh-app .text-amber-200,  .rh-design .rh-app .text-amber-200,
+.rh-design.rh-app .text-amber-900,  .rh-design .rh-app .text-amber-900,
+.rh-design.rh-app .text-orange-400, .rh-design .rh-app .text-orange-400,
+.rh-design.rh-app .text-orange-700, .rh-design .rh-app .text-orange-700,
+.rh-design.rh-app .text-yellow-700, .rh-design .rh-app .text-yellow-700 { color: var(--rh-ochre-deep) !important; }
+
+/* Purple → teal */
+.rh-design.rh-app .text-purple-300, .rh-design .rh-app .text-purple-300,
+.rh-design.rh-app .text-purple-400, .rh-design .rh-app .text-purple-400,
+.rh-design.rh-app .text-purple-600, .rh-design .rh-app .text-purple-600,
+.rh-design.rh-app .text-purple-800, .rh-design .rh-app .text-purple-800 { color: var(--rh-teal-deep) !important; }
+
+/* Borders for tinted boxes */
+.rh-design.rh-app .border-blue-200,    .rh-design .rh-app .border-blue-200,
+.rh-design.rh-app .border-blue-300,    .rh-design .rh-app .border-blue-300,
+.rh-design.rh-app .border-indigo-200,  .rh-design .rh-app .border-indigo-200 { border-color: color-mix(in oklab, var(--rh-teal) 35%, var(--rh-rule)) !important; }
+.rh-design.rh-app .border-red-200,     .rh-design .rh-app .border-red-200,
+.rh-design.rh-app .border-red-300,     .rh-design .rh-app .border-red-300 { border-color: color-mix(in oklab, var(--rh-rose) 35%, var(--rh-rule)) !important; }
+.rh-design.rh-app .border-green-200,   .rh-design .rh-app .border-green-200,
+.rh-design.rh-app .border-emerald-200, .rh-design .rh-app .border-emerald-200 { border-color: color-mix(in oklab, var(--rh-sage) 35%, var(--rh-rule)) !important; }
+.rh-design.rh-app .border-amber-200,   .rh-design .rh-app .border-amber-200,
+.rh-design.rh-app .border-amber-300,   .rh-design .rh-app .border-amber-300,
+.rh-design.rh-app .border-yellow-200,  .rh-design .rh-app .border-yellow-200,
+.rh-design.rh-app .border-orange-200,  .rh-design .rh-app .border-orange-200 { border-color: color-mix(in oklab, var(--rh-ochre) 40%, var(--rh-rule)) !important; }
+
+/* Focus ring → editorial teal instead of Tailwind blue */
+.rh-design.rh-app .focus\:ring-blue-500:focus,
+.rh-design.rh-app .focus\:ring-indigo-500:focus,
+.rh-design .rh-app .focus\:ring-blue-500:focus,
+.rh-design .rh-app .focus\:ring-indigo-500:focus { --tw-ring-color: var(--rh-teal) !important; }
+
+/* Generic gradient sweeps → muted editorial gradient */
+.rh-design.rh-app .bg-gradient-to-r.from-blue-500.to-indigo-600,
+.rh-design .rh-app .bg-gradient-to-r.from-blue-500.to-indigo-600,
+.rh-design.rh-app .bg-gradient-to-r.from-purple-500,
+.rh-design .rh-app .bg-gradient-to-r.from-purple-500 {
+  background: linear-gradient(90deg, var(--rh-teal), var(--rh-teal-deep)) !important;
+}
