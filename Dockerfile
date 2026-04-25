@@ -60,7 +60,9 @@ COPY --from=client-builder --chown=node:node /build/dist ./client-dist
 # SQLite DB + backup mountpoints — Railway mounts volumes here (configured in Railway UI, not Dockerfile)
 RUN mkdir -p /app/data /app/backups && chown -R node:node /app/data /app/backups
 
-USER node
+# Run as root so the app can write to Railway-mounted volumes (which arrive owned by root).
+# Railway's container sandbox provides the security boundary; non-root inside adds no real
+# protection here and breaks volume writes (SQLITE_CANTOPEN).
 EXPOSE 3001
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
