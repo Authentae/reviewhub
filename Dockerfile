@@ -19,7 +19,9 @@
 FROM node:20-bookworm-slim AS client-builder
 WORKDIR /build
 COPY client/package.json client/package-lock.json* ./
-RUN npm ci
+# Using npm install (not ci) because the lockfile has cross-platform optional
+# binary metadata that strict ci doesn't tolerate. install handles it cleanly.
+RUN npm install --no-audit --no-fund
 COPY client/ ./
 RUN npm run build
 # Output: /build/dist
