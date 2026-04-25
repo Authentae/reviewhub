@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /dashboard
+Disallow: /settings
+Allow: /
+Allow: /pricing
+
+Sitemap: https://reviewhub.app/sitemap.xml

@@ -1,0 +1,241 @@
+{
+  "validation": {
+    "results": [
+      {
+        "valid": true,
+        "record": {
+          "review_id": "rev_001",
+          "rating": 5.0,
+          "review_text": "Outstanding Thai restaurant in Bangkok! The pad thai was perfect and service was excellent.",
+          "reviewer_name": "Sarah Chen",
+          "platform": "google",
+          "review_date": "2024-04-20",
+          "business_name": "Thai Paradise Restaurant"
+        },
+        "errors": []
+      },
+      {
+        "valid": true,
+        "record": {
+          "review_id": "rev_002",
+          "rating": 4.2,
+          "review_text": "Good food and atmosphere. Will come back again.",
+          "reviewer_name": "Michael Rodriguez",
+          "platform": "yelp",
+          "review_date": "2024-04-19",
+          "business_name": "Thai Paradise Restaurant"
+        },
+        "errors": []
+      },
+      {
+        "valid": false,
+        "record": {
+          "rating": 3.5,
+          "review_text": "Average experience. Food was okay.",
+          "reviewer_name": "Anonymous",
+          "platform": "facebook",
+          "review_date": "2024-04-18",
+          "business_name": "Thai Paradise Restaurant"
+        },
+        "errors": [
+          "Missing required field: review_id"
+        ]
+      },
+      {
+        "valid": false,
+        "record": {
+          "review_id": "rev_004",
+          "rating": 8.0,
+          "review_text": "Amazing! Best Thai food ever!",
+          "reviewer_name": "David Kim",
+          "platform": "google",
+          "review_date": "2024-04-17",
+          "business_name": "Thai Paradise Restaurant"
+        },
+        "errors": [
+          "Rating must be between 0 and 5"
+        ]
+      },
+      {
+        "valid": true,
+        "record": {
+          "review_id": "rev_005",
+          "rating": 1.5,
+          "review_text": "",
+          "reviewer_name": "Lisa Wang",
+          "platform": "tripadvisor",
+          "review_date": "2024-04-16"
+        },
+        "errors": []
+      },
+      {
+        "valid": true,
+        "record": {
+          "review_id": "rev_006",
+          "rating": 4.8,
+          "review_text": "Authentic flavors and great value. Highly recommended for anyone looking for real Thai cuisine.",
+          "reviewer_name": "Carlos Mendoza",
+          "platform": "yelp",
+          "review_date": "2024-04-15",
+          "business_name": "Thai Paradise Restaurant"
+        },
+        "errors": []
+      }
+    ],
+    "summary": {
+      "total_records": 6,
+      "valid_records": 4,
+      "invalid_records": 2,
+      "validation_level": "comprehensive",
+      "success_rate": 0.6666666666666666
+    }
+  },
+  "quality": {
+    "quality_score": 95.23809523809524,
+    "completeness_scores": {
+      "review_date": 1.0,
+      "review_text": 1.0,
+      "rating": 1.0,
+      "business_name": 0.8333333333333334,
+      "reviewer_name": 1.0,
+      "platform": 1.0,
+      "review_id": 0.8333333333333334
+    },
+    "issues": [],
+    "total_records": 6,
+    "total_fields": 7
+  },
+  "profiling": {
+    "total_records": 6,
+    "total_fields": 7,
+    "field_profiles": {
+      "review_date": {
+        "field": "review_date",
+        "total_count": 6,
+        "non_null_count": 6,
+        "null_count": 0,
+        "completeness": 1.0,
+        "inferred_types": [
+          "str"
+        ],
+        "unique_values": 6,
+        "sample_values": [
+          "2024-04-18",
+          "2024-04-19",
+          "2024-04-20",
+          "2024-04-17",
+          "2024-04-15"
+        ]
+      },
+      "review_text": {
+        "field": "review_text",
+        "total_count": 6,
+        "non_null_count": 6,
+        "null_count": 0,
+        "completeness": 1.0,
+        "inferred_types": [
+          "str"
+        ],
+        "unique_values": 6,
+        "sample_values": [
+          "",
+          "Good food and atmosphere. Will come back again.",
+          "Average experience. Food was okay.",
+          "Authentic flavors and great value. Highly recommended for anyone looking for real Thai cuisine.",
+          "Outstanding Thai restaurant in Bangkok! The pad thai was perfect and service was excellent."
+        ]
+      },
+      "rating": {
+        "field": "rating",
+        "total_count": 6,
+        "non_null_count": 6,
+        "null_count": 0,
+        "completeness": 1.0,
+        "inferred_types": [
+          "float"
+        ],
+        "unique_values": 6,
+        "sample_values": [
+          1.5,
+          3.5,
+          4.2,
+          5.0,
+          4.8
+        ]
+      },
+      "business_name": {
+        "field": "business_name",
+        "total_count": 5,
+        "non_null_count": 5,
+        "null_count": 0,
+        "completeness": 1.0,
+        "inferred_types": [
+          "str"
+        ],
+        "unique_values": 1,
+        "sample_values": [
+          "Thai Paradise Restaurant"
+        ]
+      },
+      "reviewer_name": {
+        "field": "reviewer_name",
+        "total_count": 6,
+        "non_null_count": 6,
+        "null_count": 0,
+        "completeness": 1.0,
+        "inferred_types": [
+          "str"
+        ],
+        "unique_values": 6,
+        "sample_values": [
+          "Anonymous",
+          "Carlos Mendoza",
+          "Lisa Wang",
+          "Michael Rodriguez",
+          "Sarah Chen"
+        ]
+      },
+      "platform": {
+        "field": "platform",
+        "total_count": 6,
+        "non_null_count": 6,
+        "null_count": 0,
+        "completeness": 1.0,
+        "inferred_types": [
+          "str"
+        ],
+        "unique_values": 4,
+        "sample_values": [
+          "tripadvisor",
+          "yelp",
+          "facebook",
+          "google"
+        ]
+      },
+      "review_id": {
+        "field": "review_id",
+        "total_count": 5,
+        "non_null_count": 5,
+        "null_count": 0,
+        "completeness": 1.0,
+        "inferred_types": [
+          "str"
+        ],
+        "unique_values": 5,
+        "sample_values": [
+          "rev_006",
+          "rev_004",
+          "rev_002",
+          "rev_001",
+          "rev_005"
+        ]
+      }
+    }
+  },
+  "summary": {
+    "total_records": 6,
+    "validation_passed": 4,
+    "quality_score": 95.23809523809524,
+    "analysis_level": "comprehensive"
+  }
+}

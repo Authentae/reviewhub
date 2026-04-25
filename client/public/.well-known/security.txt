@@ -1,0 +1,21 @@
+# Security reporting policy for ReviewHub
+# Served at /.well-known/security.txt per RFC 9116
+
+Contact: mailto:security@reviewhub.app
+Expires: 2027-01-01T00:00:00.000Z
+Preferred-Languages: en
+Policy: https://reviewhub.app/security-policy
+Acknowledgments: https://reviewhub.app/security-acknowledgments
+
+# If you believe you've found a security vulnerability in ReviewHub, please
+# email security@reviewhub.app with the details. We ask that you:
+#   - Give us a reasonable time (90 days) to address the issue before
+#     public disclosure.
+#   - Do not access, modify, or delete data beyond what is necessary to
+#     demonstrate the vulnerability.
+#   - Do not perform denial-of-service attacks or testing that would
+#     disrupt service for other users.
+#
+# In return we'll acknowledge receipt within 2 business days, keep you
+# informed of the fix timeline, and credit you (with your permission) in
+# our security acknowledgments page.

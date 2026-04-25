@@ -1,0 +1,182 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import api from '../lib/api';
+import { setToken } from '../lib/auth';
+import usePageTitle from '../hooks/usePageTitle';
+import { useI18n } from '../context/I18nContext';
+import AuthSideArt from '../components/AuthSideArt';
+import Logo from '../components/Logo';
+
+export default function Login() {
+  const { t } = useI18n();
+  usePageTitle(t('page.signIn'));
+  const navigate = useNavigate();
+  const location = useLocation();
+  // If PrivateRoute redirected us here, it stashed the intended destination.
+  // Only accept same-origin paths (open-redirect defence) — anything starting
+  // with "/" and not "//" is a safe path.
+  const intended = typeof location.state?.from === 'string'
+    && location.state.from.startsWith('/')
+    && !location.state.from.startsWith('//')
+    ? location.state.from
+    : '/dashboard';
+  const [form, setForm] = useState({ email: '', password: '' });
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const emailRef = useRef(null);
+
+  // Move focus to email field when an error occurs so keyboard users notice it
+  useEffect(() => {
+    if (error) emailRef.current?.focus();
+  }, [error]);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+    try {
+      const { data } = await api.post('/auth/login', form);
+      if (data.mfaRequired) {
+        // Two-factor path: route to the challenge page, pass the pending
+        // token in location state so the URL doesn't contain it (the token
+        // is short-lived but logs/referers still shouldn't see it).
+        navigate('/login/mfa', { state: { pendingToken: data.mfaPendingToken, from: intended } });
+        return;
+      }
+      setToken(data.token);
+      navigate(intended, { replace: true });
+    } catch (err) {
+      // If the auth limiter blocked us, show how long to wait — the
+      // server echoes that via RateLimit-Reset headers and api.js surfaces
+      // it as err.retryAfterSeconds.
+      if (err.isRateLimited && err.retryAfterSeconds) {
+        setError(t('common.rateLimitedWait', { seconds: err.retryAfterSeconds }));
+      } else {
+        setError(err.response?.data?.error || t('auth.loginFailed'));
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function fillDemo() {
+    setForm({ email: 'demo@reviewhub.app', password: 'demo123' });
+  }
+
+  return (
+    <main id="main-content" className="rh-design rh-auth-form-pane min-h-screen lg:grid lg:grid-cols-2">
+      {/* ── Left: marketing panel (desktop only) ───────────────────── */}
+      <AuthSideArt
+        eyebrow={t('auth.welcomeBack')}
+        title={t('auth.signInSubtitle')}
+      />
+
+      {/* ── Right: the actual form ─────────────────────────────────── */}
+      <div className="flex flex-col justify-center py-12 px-4 sm:px-8 lg:px-12">
+        <div className="max-w-md w-full mx-auto">
+          {/* Brand bar — only shown on mobile where AuthSideArt is hidden */}
+          <div className="lg:hidden text-center mb-8">
+            <Link to="/" className="inline-flex items-center gap-2 mb-4">
+              <Logo size={36} />
+              <span className="font-bold text-xl text-gray-900 dark:text-gray-100">ReviewHub</span>
+            </Link>
+          </div>
+
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">{t('auth.welcomeBack')}</h1>
+            <p className="text-gray-500 dark:text-gray-400 mt-1.5 text-sm">{t('auth.signInSubtitle')}</p>
+          </div>
+
+          {error && (
+            <div id="login-error" role="alert" className="flex items-start gap-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/70 text-red-700 dark:text-red-300 text-sm px-4 py-3 rounded-xl mb-5">
+              <svg className="w-4 h-4 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span>{error}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label htmlFor="login-email" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">{t('auth.emailAddress')}</label>
+              <input
+                id="login-email"
+                ref={emailRef}
+                name="email"
+                type="email" required className="input" autoComplete="email" autoFocus
+                aria-describedby={error ? 'login-error' : undefined}
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                placeholder="you@example.com"
+              />
+            </div>
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <label htmlFor="login-password" className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('auth.password')}</label>
+                <Link to="/forgot-password" className="text-xs text-blue-600 dark:text-blue-400 hover:underline">{t('auth.forgotPassword')}</Link>
+              </div>
+              <div className="relative">
+                <input
+                  id="login-password"
+                  name="password"
+                  type={showPassword ? 'text' : 'password'} required className="input pr-20" autoComplete="current-password"
+                  maxLength={128}
+                  aria-describedby={error ? 'login-error' : undefined}
+                  value={form.password}
+                  onChange={(e) => setForm({ ...form, password: e.target.value })}
+                  placeholder="••••••••"
+                />
+                <button type="button" onClick={() => setShowPassword(v => !v)}
+                  aria-label={showPassword ? t('auth.hidePassword') : t('auth.showPassword')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-xs font-medium">
+                  {showPassword ? t('auth.hidePassword') : t('auth.showPassword')}
+                </button>
+              </div>
+            </div>
+            <button
+              type="submit" disabled={loading} aria-busy={loading}
+              className="w-full inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-3 rounded-xl shadow-sm shadow-blue-600/20 transition-colors disabled:opacity-60"
+            >
+              {loading && (
+                <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+                </svg>
+              )}
+              {loading ? t('auth.signingIn') : t('auth.signIn')}
+            </button>
+          </form>
+
+          {/* Demo CTA — shown ONLY in dev builds or when the operator
+              explicitly opted in at build time via VITE_SHOW_DEMO=1 for a
+              public demo deployment. In a real prod launch the demo user
+              itself isn't seeded (see server/src/db/seed.js), so the
+              button would point at a non-existent account. */}
+          {(import.meta.env.DEV || import.meta.env.VITE_SHOW_DEMO === '1') && (
+            <>
+              <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                  <div className="w-full border-t border-gray-200 dark:border-gray-700" />
+                </div>
+                <div className="relative flex justify-center">
+                  <span className="bg-white dark:bg-gray-900 px-3 text-xs uppercase tracking-widest text-gray-400 font-semibold">{t('auth.orDemo')}</span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={fillDemo}
+                className="w-full text-sm text-blue-600 dark:text-blue-400 font-medium py-2.5 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-xl transition-colors"
+              >
+                {t('auth.demoAccount')} (demo@reviewhub.app)
+              </button>
+            </>
+          )}
+
+          <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-8">
+            {t('auth.noAccount')}{' '}
+            <Link to="/register" className="text-blue-600 dark:text-blue-400 hover:underline font-semibold">{t('auth.signUp')}</Link>
+          </p>
+        </div>
+      </div>
+    </main>
+  );
+}

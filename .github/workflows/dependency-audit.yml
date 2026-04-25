@@ -1,0 +1,245 @@
+# Continuous Dependency Security Monitoring for ReviewHub
+name: Dependency Security Audit
+
+on:
+  # Run weekly on Mondays at 2 AM Thailand time
+  schedule:
+    - cron: '0 19 * * 0'  # Sunday 7PM UTC = Monday 2AM Bangkok
+
+  # Run when dependencies change
+  push:
+    paths:
+      - '**/package*.json'
+      - '**/yarn.lock'
+      - '**/pnpm-lock.yaml'
+      - '.github/workflows/dependency-audit.yml'
+
+  # Allow manual triggering
+  workflow_dispatch:
+    inputs:
+      audit_level:
+        description: 'Audit level (low, moderate, high, critical)'
+        required: false
+        default: 'moderate'
+        type: choice
+        options:
+          - low
+          - moderate
+          - high
+          - critical
+
+jobs:
+  audit-dependencies:
+    name: Security Audit
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        workspace: [root, server, client]
+        include:
+          - workspace: root
+            directory: "."
+            name: "Root Workspace"
+          - workspace: server
+            directory: "./server"
+            name: "Server (Backend)"
+          - workspace: client
+            directory: "./client"
+            name: "Client (Frontend)"
+
+    steps:
+      - name: 🔍 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: '${{ matrix.directory }}/package-lock.json'
+
+      - name: 🔧 Install dependencies
+        working-directory: ${{ matrix.directory }}
+        run: |
+          if [ -f "package-lock.json" ]; then
+            npm ci
+          else
+            npm install
+          fi
+
+      - name: 🛡️ Run security audit
+        id: audit
+        working-directory: ${{ matrix.directory }}
+        run: |
+          # Set audit level from input or default
+          AUDIT_LEVEL="${{ github.event.inputs.audit_level || 'moderate' }}"
+          echo "Running audit at level: $AUDIT_LEVEL"
+
+          # Run npm audit and capture output
+          if npm audit --audit-level=$AUDIT_LEVEL --json > audit-results.json 2>/dev/null; then
+            echo "audit_status=clean" >> $GITHUB_OUTPUT
+            echo "✅ No vulnerabilities found at $AUDIT_LEVEL level"
+          else
+            echo "audit_status=vulnerabilities" >> $GITHUB_OUTPUT
+            echo "⚠️ Vulnerabilities found at $AUDIT_LEVEL level"
+
+            # Parse and display vulnerabilities
+            if command -v jq >/dev/null 2>&1; then
+              echo "## Vulnerability Summary" >> $GITHUB_STEP_SUMMARY
+              jq -r '.metadata.vulnerabilities | to_entries[] | "\(.key): \(.value)"' audit-results.json >> $GITHUB_STEP_SUMMARY
+
+              echo "## Critical/High Vulnerabilities" >> $GITHUB_STEP_SUMMARY
+              jq -r '.vulnerabilities | to_entries[] | select(.value.severity == "critical" or .value.severity == "high") | "- **\(.value.name)**: \(.value.severity) - \(.value.via[0].title // "No description")"' audit-results.json >> $GITHUB_STEP_SUMMARY
+            fi
+          fi
+
+          # Always show the results for transparency
+          cat audit-results.json
+
+      - name: 📊 Check outdated packages
+        id: outdated
+        working-directory: ${{ matrix.directory }}
+        run: |
+          echo "## Outdated Packages - ${{ matrix.name }}" >> $GITHUB_STEP_SUMMARY
+
+          if npm outdated --json > outdated.json 2>/dev/null; then
+            echo "✅ All packages are up to date"
+            echo "outdated_status=clean" >> $GITHUB_OUTPUT
+          else
+            echo "📅 Outdated packages found"
+            echo "outdated_status=outdated" >> $GITHUB_OUTPUT
+
+            if command -v jq >/dev/null 2>&1 && [ -s outdated.json ]; then
+              echo "| Package | Current | Latest | Type |" >> $GITHUB_STEP_SUMMARY
+              echo "|---------|---------|---------|------|" >> $GITHUB_STEP_SUMMARY
+              jq -r 'to_entries[] | "| \(.key) | \(.value.current) | \(.value.latest) | \(if (.value.current | split(".")[0]) != (.value.latest | split(".")[0]) then "Major 🚨" elif (.value.current | split(".")[1]) != (.value.latest | split(".")[1]) then "Minor ⚠️" else "Patch ✅" end) |"' outdated.json >> $GITHUB_STEP_SUMMARY
+            fi
+          fi
+
+      - name: 📋 Upload audit results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-results-${{ matrix.workspace }}
+          path: |
+            ${{ matrix.directory }}/audit-results.json
+            ${{ matrix.directory }}/outdated.json
+          retention-days: 30
+
+  create-security-issue:
+    name: Create Security Issue
+    runs-on: ubuntu-latest
+    needs: audit-dependencies
+    if: failure() && github.event_name == 'schedule'
+
+    steps:
+      - name: 🔍 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📥 Download audit results
+        uses: actions/download-artifact@v4
+        with:
+          pattern: audit-results-*
+          path: ./audit-artifacts
+          merge-multiple: true
+
+      - name: 🚨 Create Security Issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            // Check if audit results exist
+            let issueBody = '🚨 **Automated dependency security audit found vulnerabilities**\n\n';
+            issueBody += 'Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n\n';
+
+            // Try to read audit results
+            const workspaces = ['root', 'server', 'client'];
+            for (const workspace of workspaces) {
+              try {
+                const auditFile = `./audit-artifacts/audit-results.json`;
+                if (fs.existsSync(auditFile)) {
+                  const auditData = JSON.parse(fs.readFileSync(auditFile, 'utf8'));
+
+                  issueBody += `## ${workspace.charAt(0).toUpperCase() + workspace.slice(1)} Workspace\n`;
+
+                  if (auditData.vulnerabilities && Object.keys(auditData.vulnerabilities).length > 0) {
+                    issueBody += `- **Vulnerabilities**: ${auditData.metadata.vulnerabilities.total}\n`;
+                    issueBody += `- **Critical**: ${auditData.metadata.vulnerabilities.critical}\n`;
+                    issueBody += `- **High**: ${auditData.metadata.vulnerabilities.high}\n`;
+                    issueBody += `- **Moderate**: ${auditData.metadata.vulnerabilities.moderate}\n\n`;
+                  }
+                }
+              } catch (error) {
+                console.log(`Could not read audit results for ${workspace}: ${error.message}`);
+              }
+            }
+
+            issueBody += '\n## Recommended Actions\n';
+            issueBody += '1. Review the workflow logs for detailed vulnerability information\n';
+            issueBody += '2. Run the security fix script: `./scripts/security-fixes.sh`\n';
+            issueBody += '3. Update vulnerable packages manually if needed\n';
+            issueBody += '4. Test thoroughly after updates\n\n';
+            issueBody += '**Auto-generated by dependency-audit workflow**';
+
+            // Create the issue
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🚨 Security vulnerabilities detected in dependencies',
+              body: issueBody,
+              labels: ['security', 'dependencies', 'automated']
+            });
+
+  send-notification:
+    name: Send Notification
+    runs-on: ubuntu-latest
+    needs: audit-dependencies
+    if: failure() && github.event_name == 'schedule'
+
+    steps:
+      - name: 📢 Security Alert Summary
+        run: |
+          echo "## 🚨 Security Alert Summary" >> $GITHUB_STEP_SUMMARY
+          echo "Dependency audit failed on scheduled run" >> $GITHUB_STEP_SUMMARY
+          echo "- **Time**: $(date -u)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Trigger**: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Repository**: ${{ github.repository }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Next Steps" >> $GITHUB_STEP_SUMMARY
+          echo "1. Check the created security issue" >> $GITHUB_STEP_SUMMARY
+          echo "2. Review workflow logs for details" >> $GITHUB_STEP_SUMMARY
+          echo "3. Run security fixes: \`./scripts/security-fixes.sh\`" >> $GITHUB_STEP_SUMMARY
+          echo "4. Consider updating dependency monitoring settings" >> $GITHUB_STEP_SUMMARY
+
+  # Optional: License compliance check
+  license-check:
+    name: License Compliance
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: 🔍 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: 🔧 Install license checker
+        run: npm install -g license-checker
+
+      - name: ⚖️ Check licenses
+        run: |
+          echo "## License Compliance Report" >> $GITHUB_STEP_SUMMARY
+
+          for workspace in "." "server" "client"; do
+            if [ -f "$workspace/package.json" ]; then
+              echo "### $(basename $(realpath $workspace))" >> $GITHUB_STEP_SUMMARY
+              echo '```' >> $GITHUB_STEP_SUMMARY
+              cd $workspace && license-checker --summary 2>/dev/null || echo "No dependencies found"
+              echo '```' >> $GITHUB_STEP_SUMMARY
+              cd - > /dev/null
+            fi
+          done

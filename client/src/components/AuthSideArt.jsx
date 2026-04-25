@@ -1,0 +1,80 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useI18n } from '../context/I18nContext';
+import { RhThemeToggle, RhLangPicker } from './MarketingNav';
+import '../styles/design-system.css';
+
+// Marketing-side panel shown next to the Login/Register/Forgot/Reset forms on
+// lg+ screens. Uses the editorial v2 aesthetic — cream paper, giant italic
+// ampersand, ochre coordinates marker, sage LIVE ping — so auth flows feel
+// like the same brand as the Landing page. Hidden on mobile.
+export default function AuthSideArt({ eyebrow, title }) {
+  const { t } = useI18n();
+  return (
+    <aside className="hidden lg:flex rh-design rh-auth-aside">
+      <div className="rh-hero-bg" />
+      <div className="rh-hero-grid" />
+      <div className="rh-hero-vignette" />
+      <div className="rh-hero-amp">&amp;</div>
+      <div className="rh-hero-coords">
+        <span className="cx">N 13°44′</span>
+        <span className="cy">E 100°31′</span>
+        <span className="cn">SUKHUMVIT · BKK</span>
+      </div>
+
+      <div className="rh-auth-aside-inner">
+        {/* Brand + controls row */}
+        <div className="rh-auth-top">
+          <Link to="/" className="rh-brand">
+            <div className="mark">r</div>
+            <div className="wm">Review<em>Hub</em></div>
+          </Link>
+          <div className="rh-auth-controls">
+            <Link to="/tools/review-reply-generator" className="rh-nav-tool">Free tool</Link>
+            <RhLangPicker />
+            <RhThemeToggle />
+          </div>
+        </div>
+
+        {/* Headline */}
+        <div className="rh-auth-headline">
+          {eyebrow && <p className="rh-auth-eyebrow">{eyebrow}</p>}
+          <h2 className="rh-auth-title">{title}</h2>
+
+          {/* Editorial pull quote */}
+          <figure className="rh-auth-quote">
+            <div className="rh-stars" aria-label="5 of 5 stars">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <svg key={i} width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                  <path d="M8 1.5l2 4.4 4.8.4-3.7 3.2 1.1 4.7L8 11.8 3.8 14.2l1.1-4.7L1.2 6.3l4.8-.4L8 1.5z" />
+                </svg>
+              ))}
+            </div>
+            <blockquote>"{t('landing.testimonial1')}"</blockquote>
+            <figcaption>
+              <span className="portrait">M</span>
+              <span>
+                <b>Maria S.</b>
+                <span className="biz">Downtown Café</span>
+              </span>
+            </figcaption>
+          </figure>
+
+          {/* Platform chips */}
+          <p className="rh-mono rh-auth-plat-label">{t('landing.platformsLabel')}</p>
+          <div className="rh-auth-platforms">
+            {['Google', 'Yelp', 'Facebook', 'TripAdvisor', 'Trustpilot', 'Wongnai'].map((name) => (
+              <span key={name}>{name}</span>
+            ))}
+          </div>
+        </div>
+
+        {/* Bottom meta */}
+        <div className="rh-auth-foot">
+          <span className="rh-nav-ping"><span className="ping-dot" />LIVE</span>
+          <span>{t('landing.heroNote')}</span>
+        </div>
+      </div>
+    </aside>
+  );
+}

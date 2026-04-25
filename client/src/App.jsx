@@ -1,0 +1,96 @@
+import React, { Suspense, lazy } from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { isLoggedIn } from './lib/auth';
+import { ThemeProvider } from './context/ThemeContext';
+import KeyboardShortcuts from './components/KeyboardShortcuts';
+import GlobalHotkeys from './components/GlobalHotkeys';
+import CookieConsent from './components/CookieConsent';
+
+// Eagerly load auth-adjacent pages (accessed immediately on first visit)
+import Landing from './pages/Landing';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import NotFound from './pages/NotFound';
+
+// Lazy load heavier pages to reduce initial bundle
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const Analytics = lazy(() => import('./pages/Analytics'));
+const Settings = lazy(() => import('./pages/Settings'));
+const Pricing = lazy(() => import('./pages/Pricing'));
+// Auth-adjacent but infrequently hit — keep them out of the main bundle
+const VerifyEmail = lazy(() => import('./pages/VerifyEmail'));
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
+const ResetPassword = lazy(() => import('./pages/ResetPassword'));
+const Terms = lazy(() => import('./pages/Terms'));
+const Privacy = lazy(() => import('./pages/Privacy'));
+const AcceptableUse = lazy(() => import('./pages/AcceptableUse'));
+const Refund = lazy(() => import('./pages/Refund'));
+const ThaiSummary = lazy(() => import('./pages/ThaiSummary'));
+const ReviewRequests = lazy(() => import('./pages/ReviewRequests'));
+const LoginMfa = lazy(() => import('./pages/LoginMfa'));
+const EmailChange = lazy(() => import('./pages/EmailChange'));
+const ReplyGeneratorTool = lazy(() => import('./pages/ReplyGeneratorTool'));
+const OwnerDashboard = lazy(() => import('./pages/OwnerDashboard'));
+
+function PrivateRoute({ children }) {
+  const location = useLocation();
+  if (isLoggedIn()) return children;
+  // Preserve the intended destination (path + query) so post-login can bounce
+  // the user back — important for links like /settings?unsub=digest that must
+  // survive the auth detour.
+  const from = location.pathname + location.search;
+  return <Navigate to="/login" replace state={{ from }} />;
+}
+
+function PublicOnlyRoute({ children }) {
+  return isLoggedIn() ? <Navigate to="/dashboard" replace /> : children;
+}
+
+// Minimal skeleton while lazy chunks load
+function PageLoader() {
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center" role="status" aria-label="Loading page">
+      <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" aria-hidden="true" />
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+    <GlobalHotkeys />
+    <KeyboardShortcuts />
+    <CookieConsent />
+    <Suspense fallback={<PageLoader />}>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={<PublicOnlyRoute><Login /></PublicOnlyRoute>} />
+        {/* MFA challenge is reached from Login with state.pendingToken.
+            Not wrapped in PublicOnlyRoute because the user IS in the middle
+            of authenticating — they just haven't completed it yet. */}
+        <Route path="/login/mfa" element={<LoginMfa />} />
+        <Route path="/register" element={<PublicOnlyRoute><Register /></PublicOnlyRoute>} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+        <Route path="/analytics" element={<PrivateRoute><Analytics /></PrivateRoute>} />
+        <Route path="/review-requests" element={<PrivateRoute><ReviewRequests /></PrivateRoute>} />
+        <Route path="/owner" element={<PrivateRoute><OwnerDashboard /></PrivateRoute>} />
+        <Route path="/settings" element={<PrivateRoute><Settings /></PrivateRoute>} />
+        {/* Verification works whether logged in or not — the token carries the identity */}
+        <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/email-change" element={<EmailChange />} />
+        <Route path="/forgot-password" element={<PublicOnlyRoute><ForgotPassword /></PublicOnlyRoute>} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/acceptable-use" element={<AcceptableUse />} />
+        <Route path="/refund-policy" element={<Refund />} />
+        <Route path="/legal/th-summary" element={<ThaiSummary />} />
+        {/* Public no-signup SEO/PLG tool */}
+        <Route path="/tools/review-reply-generator" element={<ReplyGeneratorTool />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Suspense>
+    </ThemeProvider>
+  );
+}

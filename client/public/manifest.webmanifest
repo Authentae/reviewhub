@@ -1,0 +1,38 @@
+{
+  "name": "ReviewHub — Local Business Review Manager",
+  "short_name": "ReviewHub",
+  "description": "Manage Google, Yelp, and Facebook reviews in one dashboard. Respond faster with AI-drafted replies.",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#2563eb",
+  "background_color": "#0f172a",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["business", "productivity"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Home",
+      "description": "Open the review dashboard",
+      "url": "/dashboard",
+      "icons": [{ "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any" }]
+    },
+    {
+      "name": "Settings",
+      "short_name": "Settings",
+      "description": "Manage your account and platforms",
+      "url": "/settings",
+      "icons": [{ "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any" }]
+    }
+  ]
+}

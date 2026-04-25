@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Editorial design system — palette, typography, and primitives shared by
+   the marketing surfaces (Landing, Auth, Pricing). Wrap a page in
+   `<div className="rh-design">` to opt into the cream-paper + teal +
+   ochre look with Instrument Serif display type. */
+@import './styles/design-system.css';
+
+/* Dashboard / app-shell layer — adds .rh-app workspace primitives on top
+   of the editorial palette. Wrap a logged-in page in `.rh-design.rh-app`. */
+@import './styles/dashboard-system.css';
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 antialiased dark:bg-gray-900 dark:text-gray-100;
+  }
+}
+
+/* ┌──────────────────────────────────────────────────────────────────────┐
+ * │ Design system — component classes                                    │
+ * │                                                                      │
+ * │ Each class is the *canonical* expression of one UI primitive. Reach  │
+ * │ for the class before hand-rolling the same styles inline — that's    │
+ * │ how dark mode, focus rings, and future re-brands stay consistent.    │
+ * │                                                                      │
+ * │ Radius convention:                                                   │
+ * │   rounded-md   — nested pills inside a rounded-lg segmented control  │
+ * │   rounded-lg   — interactive controls (buttons, inputs, pills)       │
+ * │   rounded-xl   — cards, panels, surface containers                   │
+ * │   rounded-2xl  — hero / promo surfaces                               │
+ * │   rounded-full — badges, avatars, FABs                               │
+ * │                                                                      │
+ * │ Elevation:                                                           │
+ * │   shadow-sm    — default ambient elevation on cards                  │
+ * │   shadow-md    — hover/raised state                                  │
+ * │   shadow-lg    — overlays, floating buttons, modals                  │
+ * │   shadow-xl+   — reserved for hero / highest-focus surfaces          │
+ * └──────────────────────────────────────────────────────────────────────┘ */
+@layer components {
+  /* Primary call-to-action. Use for the main action in a group (one per
+     section, ideally). Blue brand fill, white text. Dark mode inherits. */
+  .btn-primary {
+    @apply bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  /* Secondary action. Neutral surface, bordered. Use for cancel/dismiss
+     next to a primary, or for standalone low-emphasis actions. */
+  .btn-secondary {
+    @apply bg-white hover:bg-gray-50 text-gray-700 font-semibold px-4 py-2 rounded-lg border border-gray-300 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed
+    dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-100 dark:border-gray-600;
+  }
+  /* Floating action button — circular primary CTA pinned to a corner of
+     the viewport (back-to-top, compose, etc.). Caller supplies size +
+     position utilities (e.g. `w-10 h-10 fixed bottom-6 right-6`). */
+  .btn-fab {
+    @apply bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  /* Text + select + textarea control. Explicit light-mode bg/text/placeholder
+     so browsers that auto-apply OS dark colours to form controls (Chromium's
+     auto-dark, Safari with system dark) don't render our light-themed inputs
+     with black backgrounds on a light page. */
+  .input {
+    @apply w-full bg-white text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed
+    dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 dark:placeholder-gray-500 dark:disabled:bg-gray-700;
+  }
+  /* Global keyboard-focus ring. Applied to all buttons + links via tag
+     selector so individual components don't need to opt in. */
+  button:focus-visible, a:focus-visible {
+    @apply outline-2 outline-offset-2 outline-blue-500;
+  }
+  /* Surface container — the default card. Ambient `shadow-sm` is intentional;
+     override to `shadow-md` on hover or `shadow-lg` for overlays. */
+  .card {
+    @apply bg-white rounded-xl border border-gray-200 shadow-sm dark:bg-gray-800 dark:border-gray-700;
+  }
+}
+
+/* Custom animation: fade-in + slight scale-up (used by back-to-top button) */
+@layer utilities {
+  @keyframes fade-in {
+    from { opacity: 0; transform: scale(0.85) translateY(4px); }
+    to   { opacity: 1; transform: scale(1)    translateY(0);   }
+  }
+  .animate-fade-in {
+    animation: fade-in 0.15s ease-out both;
+  }
+}
+
+/* Respect the user's OS-level reduced-motion preference. Kill transitions
+   and animations for users who get motion-triggered discomfort (vestibular
+   disorders, migraine). The `!important`s override Tailwind's per-class
+   transitions without needing to touch every component. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Print-friendly styles — hide UI chrome and show reviews cleanly */
+@media print {
+  /* Hide all interactive/navigation chrome.
+     [class*="sticky"] also hides the search+filter bar (sticky top-14).
+     No language-specific aria-label selectors — use structural/class selectors instead. */
+  nav, footer, [role="navigation"],
+  .btn-primary, .btn-secondary, button, select,
+  [class*="sticky"], [class*="fixed"] {
+    display: none !important;
+  }
+  body { background: white !important; color: black !important; font-size: 12pt; }
+  .card { border: 1px solid #e5e7eb !important; box-shadow: none !important; background: white !important; }
+  main { padding: 0 !important; max-width: 100% !important; }
+  @page { margin: 1in; }
+}

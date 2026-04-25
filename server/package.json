@@ -1,0 +1,35 @@
+{
+  "name": "review-manager-server",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "backup": "node scripts/backup-db.js",
+    "test": "node --test --test-reporter=spec tests/tokens.test.js tests/auth.test.js tests/reviews.test.js tests/platforms.test.js tests/export-digest.test.js tests/aiDrafts.test.js tests/mfa.test.js tests/sessionCookie.test.js tests/planEnforcement.test.js tests/googleProvider.test.js tests/admin.test.js tests/reviewResponses.test.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.90.0",
+    "@lemonsqueezy/lemonsqueezy.js": "^4.0.0",
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^12.9.0",
+    "compression": "^1.8.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.3",
+    "express-rate-limit": "^8.3.2",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.1",
+    "nodemailer": "^8.0.6"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0",
+    "supertest": "^7.2.2"
+  }
+}

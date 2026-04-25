@@ -1,0 +1,111 @@
+# Dependabot Configuration for ReviewHub
+# Automatically creates PRs for dependency updates
+
+version: 2
+updates:
+  # Root workspace - coordination and scripts
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Asia/Bangkok"  # Thailand timezone
+    open-pull-requests-limit: 3
+    target-branch: "main"
+    commit-message:
+      prefix: "chore(deps):"
+      prefix-development: "chore(deps-dev):"
+    labels:
+      - "dependencies"
+      - "automerge"  # Safe for root workspace
+    # Auto-approve minor updates for root workspace (low risk)
+    reviewers: []  # Add GitHub usernames when available
+
+  # Server workspace - critical backend dependencies
+  - package-ecosystem: "npm"
+    directory: "/server"
+    schedule:
+      interval: "daily"  # More frequent for security
+      time: "09:00"
+      timezone: "Asia/Bangkok"
+    open-pull-requests-limit: 5
+    target-branch: "main"
+    commit-message:
+      prefix: "chore(server-deps):"
+      prefix-development: "chore(server-deps-dev):"
+    labels:
+      - "dependencies"
+      - "server"
+      - "security"
+    # Security-focused ignore patterns
+    ignore:
+      # Skip major Node.js version updates (need manual review)
+      - dependency-name: "better-sqlite3"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "bcryptjs"
+        update-types: ["version-update:semver-major"]
+    reviewers: []
+
+  # Client workspace - frontend dependencies with bundle size concern
+  - package-ecosystem: "npm"
+    directory: "/client"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Asia/Bangkok"
+    open-pull-requests-limit: 5
+    target-branch: "main"
+    commit-message:
+      prefix: "chore(client-deps):"
+      prefix-development: "chore(client-deps-dev):"
+    labels:
+      - "dependencies"
+      - "frontend"
+    # Ignore major framework updates (need manual review)
+    ignore:
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "vite"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-router-dom"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "tailwindcss"
+        update-types: ["version-update:semver-major"]
+    reviewers: []
+
+  # Docker dependencies
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+      time: "09:00"
+      timezone: "Asia/Bangkok"
+    open-pull-requests-limit: 2
+    target-branch: "main"
+    commit-message:
+      prefix: "chore(docker):"
+    labels:
+      - "dependencies"
+      - "docker"
+      - "infrastructure"
+
+  # Server Dockerfile
+  - package-ecosystem: "docker"
+    directory: "/server"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+      time: "09:00"
+      timezone: "Asia/Bangkok"
+    open-pull-requests-limit: 2
+    target-branch: "main"
+    commit-message:
+      prefix: "chore(server-docker):"
+    labels:
+      - "dependencies"
+      - "docker"
+      - "server"

@@ -1,0 +1,73 @@
+[
+  {
+    "review_id": "rev_001",
+    "rating": 5.0,
+    "review_text": "Outstanding restaurant! The food was incredible and the service was top-notch. I highly recommend the pad thai and green curry.",
+    "reviewer_name": "Sarah Chen",
+    "platform": "google",
+    "review_date": "2024-04-20",
+    "business_name": "Thai Paradise Bangkok"
+  },
+  {
+    "review_id": "rev_002",
+    "rating": 4.5,
+    "review_text": "Great atmosphere and delicious food. The staff was friendly and accommodating. Will definitely come back!",
+    "reviewer_name": "Michael Rodriguez",
+    "platform": "yelp",
+    "review_date": "2024-04-19",
+    "business_name": "Thai Paradise Bangkok"
+  },
+  {
+    "review_id": "rev_003",
+    "rating": 2.0,
+    "review_text": "Food was okay but service was slow. Had to wait 45 minutes for our order. The tom yum was too salty.",
+    "reviewer_name": "Jennifer Park",
+    "platform": "facebook",
+    "review_date": "2024-04-18",
+    "business_name": "Thai Paradise Bangkok"
+  },
+  {
+    "review_id": "rev_004",
+    "rating": 4.8,
+    "review_text": "Authentic Thai flavors! Love the mango sticky rice dessert. Great value for money.",
+    "reviewer_name": "David Thompson",
+    "platform": "google",
+    "review_date": "2024-04-17",
+    "business_name": "Thai Paradise Bangkok"
+  },
+  {
+    "review_id": "rev_005",
+    "rating": 3.5,
+    "review_text": "Average experience. Food was decent but nothing special. Location is convenient though.",
+    "reviewer_name": "Lisa Wang",
+    "platform": "tripadvisor",
+    "review_date": "2024-04-16",
+    "business_name": "Thai Paradise Bangkok"
+  },
+  {
+    "review_id": "rev_006",
+    "rating": 4.2,
+    "review_text": "Good food and reasonable prices. The restaurant could use better lighting, but overall a pleasant dining experience.",
+    "reviewer_name": "Carlos Mendoza",
+    "platform": "yelp",
+    "review_date": "2024-04-15",
+    "business_name": "Thai Paradise Bangkok"
+  },
+  {
+    "rating": 1.5,
+    "review_text": "Terrible experience. Food was cold and the chicken was undercooked. Will not return.",
+    "reviewer_name": "Anonymous User",
+    "platform": "google",
+    "review_date": "2024-04-14",
+    "business_name": "Thai Paradise Bangkok"
+  },
+  {
+    "review_id": "rev_008",
+    "rating": 7.0,
+    "review_text": "Amazing! Best Thai food in the city!",
+    "reviewer_name": "Mark Johnson",
+    "platform": "google",
+    "review_date": "2024-04-13",
+    "business_name": "Thai Paradise Bangkok"
+  }
+]

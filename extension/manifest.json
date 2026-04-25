@@ -1,0 +1,91 @@
+{
+  "manifest_version": 3,
+  "name": "ReviewHub — AI Review Replies",
+  "short_name": "ReviewHub",
+  "version": "0.1.0",
+  "description": "Reply to Google, Yelp, Facebook, TripAdvisor, and Trustpilot reviews in 10 seconds with AI — right inside the review platform.",
+  "author": "ReviewHub",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://*.yelp.com/*",
+    "https://*.facebook.com/*",
+    "https://business.facebook.com/*",
+    "https://*.tripadvisor.com/*",
+    "https://*.tripadvisor.co.uk/*",
+    "https://*.tripadvisor.in/*",
+    "https://*.trustpilot.com/*",
+    "https://business.google.com/*",
+    "https://*.amazon.com/*",
+    "https://*.amazon.co.uk/*",
+    "https://*.amazon.ca/*",
+    "https://sellercentral.amazon.com/*",
+    "https://*.etsy.com/*",
+    "https://reviewhub.app/*",
+    "http://localhost:3001/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "ReviewHub",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.yelp.com/*"],
+      "js": ["content/common.js", "content/yelp.js"],
+      "css": ["styles/injected.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://*.facebook.com/*", "https://business.facebook.com/*"],
+      "js": ["content/common.js", "content/facebook.js"],
+      "css": ["styles/injected.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://*.tripadvisor.com/*", "https://*.tripadvisor.co.uk/*", "https://*.tripadvisor.in/*"],
+      "js": ["content/common.js", "content/tripadvisor.js"],
+      "css": ["styles/injected.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://*.trustpilot.com/*"],
+      "js": ["content/common.js", "content/trustpilot.js"],
+      "css": ["styles/injected.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://*.amazon.com/*", "https://*.amazon.co.uk/*", "https://*.amazon.ca/*", "https://sellercentral.amazon.com/*"],
+      "js": ["content/common.js", "content/amazon.js"],
+      "css": ["styles/injected.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://*.etsy.com/*"],
+      "js": ["content/common.js", "content/etsy.js"],
+      "css": ["styles/injected.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["icons/*.png"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

@@ -1,0 +1,415 @@
+/* ┌──────────────────────────────────────────────────────────────────────┐
+ * │ Dashboard / app-shell layer — .rh-app modifier                       │
+ * │                                                                      │
+ * │ Adds workspace-density primitives on top of the editorial palette    │
+ * │ from design-system.css. Wrap a logged-in page in                     │
+ * │ <div className="rh-design rh-app"> to opt into:                      │
+ * │   - tighter spacing scale + smaller radii                            │
+ * │   - rh-app-shell, rh-toolbar, rh-filter-chip, rh-card-dense,         │
+ * │     rh-meta-row, rh-bulk-bar primitives                              │
+ * │   - workspace-tuned overrides for legacy Tailwind .card / .input     │
+ * │                                                                      │
+ * │ Marketing pages (Landing/Pricing/AuthSideArt) keep using .rh-design  │
+ * │ alone with the magazine-density tokens.                              │
+ * └──────────────────────────────────────────────────────────────────────┘ */
+
+.rh-design.rh-app,
+.rh-design .rh-app {
+  background: var(--rh-paper);
+  color: var(--rh-ink);
+  font-family: var(--rh-sans);
+  min-height: 100vh;
+}
+
+/* Make headings serif but at workspace sizes (not magazine sizes) */
+.rh-design.rh-app h1,
+.rh-design .rh-app h1 { font-family: var(--rh-serif); font-weight: 400; font-size: 32px; line-height: 1.1; letter-spacing: -0.02em; color: var(--rh-ink); }
+.rh-design.rh-app h2,
+.rh-design .rh-app h2 { font-family: var(--rh-serif); font-weight: 400; font-size: 24px; line-height: 1.15; letter-spacing: -0.015em; color: var(--rh-ink); }
+.rh-design.rh-app h3,
+.rh-design .rh-app h3 { font-family: var(--rh-sans); font-weight: 600; font-size: 16px; color: var(--rh-ink); }
+
+/* App nav (logged-in) — same chrome as MarketingNav but with user menu */
+.rh-app-nav {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in oklab, var(--rh-paper) 88%, transparent);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border-bottom: 1px solid color-mix(in oklab, var(--rh-rule) 60%, transparent);
+}
+.rh-app-nav .rh-bar { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 16px; }
+.rh-app-nav .rh-app-nav-links { display: flex; align-items: center; gap: 4px; }
+.rh-app-nav .rh-app-nav-links a {
+  text-decoration: none;
+  color: var(--rh-ink-2);
+  font-size: 13.5px; font-weight: 500;
+  padding: 8px 12px; border-radius: 8px;
+  transition: color .15s, background .15s;
+}
+.rh-app-nav .rh-app-nav-links a:hover { color: var(--rh-ink); background: var(--rh-paper-2); }
+.rh-app-nav .rh-app-nav-links a.active {
+  color: var(--rh-ink); font-weight: 600;
+  background: color-mix(in oklab, var(--rh-ochre) 18%, var(--rh-paper));
+}
+.rh-app-nav .rh-app-nav-links .badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 18px; height: 18px; padding: 0 5px;
+  border-radius: 999px; margin-left: 6px;
+  background: var(--rh-rose); color: var(--rh-paper);
+  font-family: var(--rh-mono); font-size: 10px; font-weight: 700;
+}
+@media (max-width: 768px) {
+  .rh-app-nav .rh-app-nav-links { display: none; }
+}
+
+/* User menu */
+.rh-user-menu { position: relative; }
+.rh-user-menu-trigger {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 4px 10px 4px 4px;
+  border-radius: 999px; border: 1px solid var(--rh-rule);
+  background: var(--rh-paper); color: var(--rh-ink);
+  font-family: inherit; cursor: pointer;
+  transition: border-color .15s, background .15s;
+}
+.rh-user-menu-trigger:hover { border-color: var(--rh-ink-3); background: var(--rh-paper-2); }
+.rh-user-menu-trigger .rh-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--rh-teal), var(--rh-teal-deep));
+  color: var(--rh-paper);
+  display: grid; place-items: center;
+  font-family: var(--rh-serif); font-size: 13px; font-weight: 700;
+}
+.rh-user-menu-trigger .rh-user-email {
+  font-size: 12.5px; color: var(--rh-ink-2);
+  max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+@media (max-width: 600px) { .rh-user-menu-trigger .rh-user-email { display: none; } }
+
+.rh-user-menu-panel {
+  position: absolute; right: 0; top: calc(100% + 8px);
+  min-width: 220px;
+  background: var(--rh-paper);
+  border: 1px solid var(--rh-rule);
+  border-radius: 12px;
+  box-shadow: 0 20px 50px -20px color-mix(in oklab, var(--rh-ink) 30%, transparent);
+  padding: 6px; z-index: 60;
+}
+.rh-user-menu-panel .rh-user-menu-head {
+  padding: 10px 12px; border-bottom: 1px solid var(--rh-rule);
+  margin-bottom: 6px;
+}
+.rh-user-menu-panel .rh-user-menu-head .name { font-size: 12.5px; font-weight: 600; color: var(--rh-ink); }
+.rh-user-menu-panel .rh-user-menu-head .email { font-size: 11.5px; color: var(--rh-ink-3); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rh-user-menu-panel a,
+.rh-user-menu-panel button {
+  display: flex; width: 100%; align-items: center; gap: 8px;
+  padding: 8px 12px; border-radius: 8px;
+  background: transparent; border: 0; cursor: pointer;
+  font-family: inherit; font-size: 13px; color: var(--rh-ink-2);
+  text-align: left; text-decoration: none;
+  transition: background .12s, color .12s;
+}
+.rh-user-menu-panel a:hover,
+.rh-user-menu-panel button:hover { background: var(--rh-paper-2); color: var(--rh-ink); }
+.rh-user-menu-panel button.danger { color: var(--rh-rose); }
+.rh-user-menu-panel button.danger:hover { background: color-mix(in oklab, var(--rh-rose) 10%, var(--rh-paper)); color: var(--rh-rose); }
+
+/* Page chrome */
+.rh-app .rh-page {
+  max-width: 1200px; margin: 0 auto;
+  padding: 32px 24px 64px;
+}
+@media (max-width: 720px) { .rh-app .rh-page { padding: 24px 16px 48px; } }
+
+.rh-app .rh-page-head {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+  padding-bottom: 18px; margin-bottom: 24px;
+  border-bottom: 1px solid var(--rh-rule);
+}
+.rh-app .rh-page-head h1 { margin: 0; }
+.rh-app .rh-page-head .rh-page-sub {
+  font-size: 13.5px; color: var(--rh-ink-3);
+  font-family: var(--rh-mono); letter-spacing: 0.04em; text-transform: uppercase;
+  margin-top: 6px;
+}
+.rh-app .rh-page-actions { display: inline-flex; gap: 8px; flex-wrap: wrap; }
+
+/* Toolbar — sticky filter row */
+.rh-toolbar {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 12px 14px;
+  background: var(--rh-paper);
+  border: 1px solid var(--rh-rule);
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+.rh-toolbar > * { min-height: 36px; }
+.rh-toolbar .rh-toolbar-spacer { flex: 1; }
+
+/* Filter chips */
+.rh-filter-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 12px; height: 34px;
+  background: var(--rh-paper-2);
+  border: 1px solid var(--rh-rule);
+  border-radius: 999px;
+  color: var(--rh-ink-2);
+  font-family: var(--rh-sans); font-size: 13px; font-weight: 500;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.rh-filter-chip:hover { color: var(--rh-ink); border-color: var(--rh-ink-3); }
+.rh-filter-chip[aria-pressed="true"], .rh-filter-chip.on {
+  background: color-mix(in oklab, var(--rh-teal) 12%, var(--rh-paper));
+  border-color: color-mix(in oklab, var(--rh-teal) 35%, var(--rh-rule));
+  color: var(--rh-ink);
+}
+.rh-filter-chip .count {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 20px; height: 18px; padding: 0 6px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--rh-ochre) 22%, transparent);
+  color: var(--rh-ochre-deep);
+  font-family: var(--rh-mono); font-size: 10.5px; font-weight: 700;
+}
+
+/* Dense card */
+.rh-card-dense {
+  background: var(--rh-paper);
+  border: 1px solid var(--rh-rule);
+  border-radius: 12px;
+  padding: 16px 18px;
+  transition: border-color .15s, box-shadow .15s;
+}
+.rh-card-dense:hover { border-color: var(--rh-rule-2); }
+.rh-card-dense.has-accent { border-left: 3px solid var(--rh-teal); padding-left: 16px; }
+.rh-card-dense.accent-positive { border-left-color: var(--rh-sage); }
+.rh-card-dense.accent-negative { border-left-color: var(--rh-rose); }
+.rh-card-dense.accent-warning { border-left-color: var(--rh-ochre); }
+
+/* Meta row — tabular metadata strip with mono accents */
+.rh-meta-row {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  font-family: var(--rh-mono); font-size: 11px; letter-spacing: 0.04em;
+  color: var(--rh-ink-3); text-transform: uppercase;
+}
+.rh-meta-row .v { color: var(--rh-ink-2); font-weight: 600; text-transform: none; letter-spacing: 0; }
+.rh-meta-row .sep { color: var(--rh-rule-2); }
+
+/* Bulk action bar — fixed bottom */
+.rh-bulk-bar {
+  position: fixed; left: 50%; bottom: 24px;
+  transform: translateX(-50%);
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 10px 14px;
+  background: var(--rh-ink); color: var(--rh-paper);
+  border-radius: 999px;
+  box-shadow: 0 20px 60px -20px color-mix(in oklab, var(--rh-ink) 60%, transparent);
+  z-index: 40;
+  animation: rh-bulk-in .25s cubic-bezier(.2,.8,.2,1) both;
+}
+.rh-bulk-bar .count {
+  font-family: var(--rh-mono); font-size: 12px; font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.rh-bulk-bar .sep { width: 1px; height: 22px; background: color-mix(in oklab, var(--rh-paper) 22%, transparent); }
+.rh-bulk-bar button, .rh-bulk-bar a {
+  background: transparent; border: 0; cursor: pointer;
+  color: var(--rh-paper); font-family: inherit; font-size: 13px; font-weight: 500;
+  padding: 6px 12px; border-radius: 999px;
+  transition: background .15s;
+  text-decoration: none;
+}
+.rh-bulk-bar button:hover, .rh-bulk-bar a:hover { background: color-mix(in oklab, var(--rh-paper) 12%, transparent); }
+.rh-bulk-bar button.danger:hover { background: color-mix(in oklab, var(--rh-rose) 35%, transparent); color: var(--rh-paper); }
+@keyframes rh-bulk-in { from { opacity: 0; transform: translate(-50%, 12px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+/* Empty state */
+.rh-empty {
+  text-align: center; padding: 64px 24px;
+  border: 1px dashed var(--rh-rule); border-radius: 16px;
+  background: var(--rh-paper);
+}
+.rh-empty .rh-empty-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: color-mix(in oklab, var(--rh-teal) 10%, var(--rh-paper));
+  color: var(--rh-teal);
+  margin-bottom: 18px;
+}
+.rh-empty h3 { font-family: var(--rh-serif); font-weight: 400; font-size: 24px; margin: 0 0 8px; }
+.rh-empty p { font-size: 14px; color: var(--rh-ink-3); margin: 0 auto; max-width: 44ch; line-height: 1.5; }
+.rh-empty .rh-empty-cta { margin-top: 20px; }
+
+/* Banner — for EmailVerify / PastDue / SessionExpiry banners atop the app */
+.rh-banner {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 16px;
+  font-size: 13.5px; line-height: 1.4;
+}
+.rh-banner.warning { background: color-mix(in oklab, var(--rh-ochre) 22%, var(--rh-paper)); color: var(--rh-ink); border-bottom: 1px solid color-mix(in oklab, var(--rh-ochre-deep) 35%, transparent); }
+.rh-banner.danger  { background: color-mix(in oklab, var(--rh-rose) 18%, var(--rh-paper)); color: var(--rh-ink); border-bottom: 1px solid color-mix(in oklab, var(--rh-rose) 40%, transparent); }
+.rh-banner.info    { background: color-mix(in oklab, var(--rh-teal) 12%, var(--rh-paper)); color: var(--rh-ink); border-bottom: 1px solid color-mix(in oklab, var(--rh-teal) 30%, transparent); }
+.rh-banner a { color: var(--rh-teal-deep); font-weight: 600; }
+
+/* Inside .rh-app, nudge legacy Tailwind .card and .btn primitives toward
+   workspace density (smaller padding, cooler borders) without breaking the
+   global look elsewhere. */
+.rh-design.rh-app .card,
+.rh-design .rh-app .card {
+  background: var(--rh-paper);
+  border: 1px solid var(--rh-rule);
+  border-radius: 12px;
+  box-shadow: none;
+}
+.rh-design.rh-app .card:hover,
+.rh-design .rh-app .card:hover { border-color: var(--rh-rule-2); }
+
+/* Sage success / rose danger / ochre warning text helpers */
+.rh-app .text-success { color: var(--rh-sage); }
+.rh-app .text-danger  { color: var(--rh-rose); }
+.rh-app .text-warn    { color: var(--rh-ochre-deep); }
+
+/* Tag/badge — small pills used for status, sentiment, platform */
+.rh-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-family: var(--rh-mono); font-size: 10.5px; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  background: var(--rh-paper-2); color: var(--rh-ink-2);
+  border: 1px solid var(--rh-rule);
+}
+.rh-tag.platform-google { color: oklch(0.45 0.18 240); border-color: color-mix(in oklab, oklch(0.45 0.18 240) 30%, var(--rh-rule)); }
+.rh-tag.platform-yelp { color: oklch(0.45 0.20 25); border-color: color-mix(in oklab, oklch(0.45 0.20 25) 30%, var(--rh-rule)); }
+.rh-tag.platform-facebook { color: oklch(0.42 0.17 255); border-color: color-mix(in oklab, oklch(0.42 0.17 255) 30%, var(--rh-rule)); }
+.rh-tag.platform-tripadvisor { color: oklch(0.45 0.16 155); border-color: color-mix(in oklab, oklch(0.45 0.16 155) 30%, var(--rh-rule)); }
+.rh-tag.platform-trustpilot { color: oklch(0.45 0.16 155); border-color: color-mix(in oklab, oklch(0.45 0.16 155) 30%, var(--rh-rule)); }
+.rh-tag.platform-wongnai { color: oklch(0.55 0.18 35); border-color: color-mix(in oklab, oklch(0.55 0.18 35) 30%, var(--rh-rule)); }
+.rh-tag.sentiment-positive { background: color-mix(in oklab, var(--rh-sage) 12%, var(--rh-paper)); color: var(--rh-sage); border-color: color-mix(in oklab, var(--rh-sage) 30%, var(--rh-rule)); }
+.rh-tag.sentiment-negative { background: color-mix(in oklab, var(--rh-rose) 12%, var(--rh-paper)); color: var(--rh-rose); border-color: color-mix(in oklab, var(--rh-rose) 30%, var(--rh-rule)); }
+.rh-tag.sentiment-neutral  { background: var(--rh-paper-2); color: var(--rh-ink-3); }
+
+/* Stat tile (Dashboard hero metrics) */
+.rh-stat {
+  background: var(--rh-paper);
+  border: 1px solid var(--rh-rule);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+.rh-stat .label { font-family: var(--rh-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rh-ink-3); margin-bottom: 8px; }
+.rh-stat .value { font-family: var(--rh-serif); font-size: 32px; line-height: 1; letter-spacing: -0.02em; color: var(--rh-ink); }
+.rh-stat .value small { font-family: var(--rh-sans); font-size: 14px; color: var(--rh-ink-3); margin-left: 2px; }
+.rh-stat .delta { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; font-family: var(--rh-mono); font-size: 11px; }
+.rh-stat .delta.up { color: var(--rh-sage); }
+.rh-stat .delta.down { color: var(--rh-rose); }
+
+/* ── Targeted Tailwind overrides inside .rh-app ─────────────────────────
+   The internals of Dashboard / ReviewCard / BulkActionBar / Settings still
+   use Tailwind utility classes (bg-white, bg-gray-*, bg-blue-600, etc.).
+   Rather than rewriting 1500+ lines of JSX, retarget the highest-frequency
+   classes when nested inside the editorial app shell so the palette flips
+   automatically. Anything not targeted here keeps its Tailwind look.       */
+
+.rh-design.rh-app .bg-white,
+.rh-design .rh-app .bg-white { background-color: var(--rh-paper) !important; }
+.rh-design.rh-app .bg-gray-50,
+.rh-design .rh-app .bg-gray-50 { background-color: var(--rh-paper-2) !important; }
+.rh-design.rh-app .bg-gray-100,
+.rh-design .rh-app .bg-gray-100 { background-color: var(--rh-paper-2) !important; }
+.rh-design.rh-app .bg-gray-800,
+.rh-design .rh-app .bg-gray-800 { background-color: var(--rh-ink) !important; }
+.rh-design.rh-app .bg-gray-900,
+.rh-design .rh-app .bg-gray-900 { background-color: var(--rh-ink) !important; }
+
+/* Brand-blue → editorial ink for buttons & accents inside the app */
+.rh-design.rh-app .bg-blue-500,
+.rh-design.rh-app .bg-blue-600,
+.rh-design.rh-app .bg-blue-700,
+.rh-design .rh-app .bg-blue-500,
+.rh-design .rh-app .bg-blue-600,
+.rh-design .rh-app .bg-blue-700 { background-color: var(--rh-ink) !important; color: var(--rh-paper) !important; }
+.rh-design.rh-app .hover\:bg-blue-600:hover,
+.rh-design.rh-app .hover\:bg-blue-700:hover,
+.rh-design .rh-app .hover\:bg-blue-600:hover,
+.rh-design .rh-app .hover\:bg-blue-700:hover { background-color: var(--rh-teal) !important; color: var(--rh-paper) !important; }
+
+/* Indigo accent → teal */
+.rh-design.rh-app .bg-indigo-50,
+.rh-design .rh-app .bg-indigo-50 { background-color: color-mix(in oklab, var(--rh-teal) 10%, var(--rh-paper)) !important; }
+.rh-design.rh-app .text-indigo-700,
+.rh-design.rh-app .text-indigo-300,
+.rh-design.rh-app .text-blue-600,
+.rh-design.rh-app .text-blue-400,
+.rh-design .rh-app .text-indigo-700,
+.rh-design .rh-app .text-indigo-300,
+.rh-design .rh-app .text-blue-600,
+.rh-design .rh-app .text-blue-400 { color: var(--rh-teal) !important; }
+
+/* Border + text greys on cream */
+.rh-design.rh-app .border-gray-200,
+.rh-design.rh-app .border-gray-300,
+.rh-design .rh-app .border-gray-200,
+.rh-design .rh-app .border-gray-300 { border-color: var(--rh-rule) !important; }
+.rh-design.rh-app .border-gray-700,
+.rh-design .rh-app .border-gray-700 { border-color: var(--rh-rule-2) !important; }
+.rh-design.rh-app .text-gray-400,
+.rh-design .rh-app .text-gray-400 { color: var(--rh-ink-3) !important; }
+.rh-design.rh-app .text-gray-500,
+.rh-design.rh-app .text-gray-600,
+.rh-design .rh-app .text-gray-500,
+.rh-design .rh-app .text-gray-600 { color: var(--rh-ink-3) !important; }
+.rh-design.rh-app .text-gray-700,
+.rh-design.rh-app .text-gray-800,
+.rh-design.rh-app .text-gray-900,
+.rh-design.rh-app .text-gray-100,
+.rh-design.rh-app .text-gray-200,
+.rh-design.rh-app .text-gray-300,
+.rh-design .rh-app .text-gray-700,
+.rh-design .rh-app .text-gray-800,
+.rh-design .rh-app .text-gray-900,
+.rh-design .rh-app .text-gray-100,
+.rh-design .rh-app .text-gray-200,
+.rh-design .rh-app .text-gray-300 { color: var(--rh-ink) !important; }
+
+/* Red destructive → rose */
+.rh-design.rh-app .bg-red-500,
+.rh-design.rh-app .bg-red-600,
+.rh-design .rh-app .bg-red-500,
+.rh-design .rh-app .bg-red-600 { background-color: var(--rh-rose) !important; }
+.rh-design.rh-app .text-red-600,
+.rh-design.rh-app .text-red-500,
+.rh-design .rh-app .text-red-600,
+.rh-design .rh-app .text-red-500 { color: var(--rh-rose) !important; }
+
+/* Success green → sage */
+.rh-design.rh-app .bg-green-500,
+.rh-design.rh-app .bg-green-600,
+.rh-design .rh-app .bg-green-500,
+.rh-design .rh-app .bg-green-600 { background-color: var(--rh-sage) !important; }
+.rh-design.rh-app .text-green-500,
+.rh-design.rh-app .text-green-600,
+.rh-design .rh-app .text-green-500,
+.rh-design .rh-app .text-green-600 { color: var(--rh-sage) !important; }
+
+/* Amber → ochre */
+.rh-design.rh-app .text-amber-500,
+.rh-design.rh-app .text-amber-600,
+.rh-design.rh-app .text-yellow-500,
+.rh-design.rh-app .text-yellow-600,
+.rh-design .rh-app .text-amber-500,
+.rh-design .rh-app .text-amber-600,
+.rh-design .rh-app .text-yellow-500,
+.rh-design .rh-app .text-yellow-600 { color: var(--rh-ochre-deep) !important; }
+
+/* Page background — top-level Tailwind .min-h-screen pages already wrapped */
+.rh-design.rh-app.min-h-screen,
+.rh-design .rh-app.min-h-screen { background: var(--rh-paper); }
+
+/* Re-skin the avatar circle on ReviewCard from blue gradient to teal */
+.rh-design.rh-app .bg-gradient-to-br.from-blue-500.to-indigo-600,
+.rh-design .rh-app .bg-gradient-to-br.from-blue-500.to-indigo-600 {
+  background: linear-gradient(135deg, var(--rh-teal), var(--rh-teal-deep)) !important;
+}

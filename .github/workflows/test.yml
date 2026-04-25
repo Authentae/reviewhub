@@ -1,0 +1,62 @@
+name: Test
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  server:
+    name: Server tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: server/package-lock.json
+      - name: Install server deps
+        working-directory: server
+        run: npm ci
+      - name: Run server tests
+        working-directory: server
+        run: npm test
+
+  client:
+    name: Client tests + build + i18n check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: client/package-lock.json
+      - name: Install client deps
+        working-directory: client
+        run: npm ci
+      - name: Verify non-legal i18n keys present in all languages
+        working-directory: client
+        run: |
+          node -e "
+          const {translations} = require('./src/i18n/translations');
+          const enKeys = Object.keys(translations.en);
+          let missing = 0;
+          for (const lang of Object.keys(translations)) {
+            if (lang === 'en') continue;
+            const m = enKeys.filter(k => !Object.keys(translations[lang]).includes(k));
+            // Legal body text is intentionally English-only (see translations.js header).
+            const nonLegal = m.filter(k => !/^legal\.(terms|privacy)\./.test(k));
+            if (nonLegal.length) { console.error(lang + ': missing', nonLegal.join(',')); missing += nonLegal.length; }
+          }
+          if (missing) { console.error('FAIL: ' + missing + ' missing i18n keys'); process.exit(1); }
+          console.log('OK: all non-legal i18n keys present across all languages.');
+          "
+      - name: Run client tests
+        working-directory: client
+        run: npm test
+      - name: Build
+        working-directory: client
+        run: npm run build

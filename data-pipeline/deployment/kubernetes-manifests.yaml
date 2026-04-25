@@ -1,0 +1,758 @@
+# Kubernetes Deployment Manifests for ReviewHub Data Pipeline
+# Production-ready deployment with auto-scaling, monitoring, and high availability
+
+---
+# Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: reviewhub-pipeline
+  labels:
+    name: reviewhub-pipeline
+    environment: production
+---
+# ConfigMap for pipeline configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pipeline-config
+  namespace: reviewhub-pipeline
+data:
+  kafka.properties: |
+    bootstrap.servers=kafka:9092
+    security.protocol=SASL_SSL
+    sasl.mechanism=PLAIN
+    compression.type=gzip
+    batch.size=16384
+    linger.ms=5
+    acks=all
+    retries=10
+
+  beam.conf: |
+    runner=FlinkRunner
+    flinkMaster=flink-jobmanager:8081
+    parallelism=10
+    checkpointingInterval=60000
+    enableCheckpointing=true
+
+  monitoring.yaml: |
+    metrics:
+      enabled: true
+      port: 8080
+      path: /metrics
+    alerts:
+      error_rate_threshold: 0.05
+      latency_threshold: 30000
+      throughput_threshold: 100
+    notifications:
+      slack:
+        webhook: "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK"
+        channel: "#pipeline-alerts"
+
+---
+# Secret for sensitive configuration
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pipeline-secrets
+  namespace: reviewhub-pipeline
+type: Opaque
+data:
+  kafka-username: <base64-encoded-username>
+  kafka-password: <base64-encoded-password>
+  google-api-key: <base64-encoded-api-key>
+  yelp-api-key: <base64-encoded-api-key>
+  wongnai-api-key: <base64-encoded-api-key>
+  database-url: <base64-encoded-db-url>
+
+---
+# ServiceAccount for pipeline components
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pipeline-service-account
+  namespace: reviewhub-pipeline
+
+---
+# Role for pipeline permissions
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: pipeline-role
+  namespace: reviewhub-pipeline
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "configmaps", "secrets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+
+---
+# RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: pipeline-role-binding
+  namespace: reviewhub-pipeline
+subjects:
+- kind: ServiceAccount
+  name: pipeline-service-account
+  namespace: reviewhub-pipeline
+roleRef:
+  kind: Role
+  name: pipeline-role
+  apiGroup: rbac.authorization.k8s.io
+
+---
+# PersistentVolumeClaim for data storage
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pipeline-storage
+  namespace: reviewhub-pipeline
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: fast-ssd
+
+---
+# Deployment for Data Ingestion Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-ingestion
+  namespace: reviewhub-pipeline
+  labels:
+    app: data-ingestion
+    component: ingestion
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: data-ingestion
+  template:
+    metadata:
+      labels:
+        app: data-ingestion
+        component: ingestion
+    spec:
+      serviceAccountName: pipeline-service-account
+      containers:
+      - name: ingestion
+        image: reviewhub/data-ingestion:v1.2.0
+        ports:
+        - containerPort: 8080
+          name: metrics
+        - containerPort: 8081
+          name: health
+        env:
+        - name: KAFKA_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: pipeline-secrets
+              key: kafka-username
+        - name: KAFKA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: pipeline-secrets
+              key: kafka-password
+        - name: GOOGLE_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: pipeline-secrets
+              key: google-api-key
+        - name: YELP_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: pipeline-secrets
+              key: yelp-api-key
+        - name: LOG_LEVEL
+          value: "INFO"
+        - name: METRICS_ENABLED
+          value: "true"
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: storage
+          mountPath: /data
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8081
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 65534
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+      volumes:
+      - name: config
+        configMap:
+          name: pipeline-config
+      - name: storage
+        persistentVolumeClaim:
+          claimName: pipeline-storage
+      nodeSelector:
+        node-type: compute
+      tolerations:
+      - key: "compute-intensive"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"
+
+---
+# Service for Data Ingestion
+apiVersion: v1
+kind: Service
+metadata:
+  name: data-ingestion
+  namespace: reviewhub-pipeline
+  labels:
+    app: data-ingestion
+spec:
+  ports:
+  - port: 8080
+    name: metrics
+  - port: 8081
+    name: health
+  selector:
+    app: data-ingestion
+
+---
+# HorizontalPodAutoscaler for ingestion
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: data-ingestion-hpa
+  namespace: reviewhub-pipeline
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: data-ingestion
+  minReplicas: 3
+  maxReplicas: 20
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  - type: Pods
+    pods:
+      metric:
+        name: kafka_consumer_lag
+      target:
+        type: AverageValue
+        averageValue: "1000"
+
+---
+# Deployment for Stream Processing (Apache Beam on Flink)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stream-processing
+  namespace: reviewhub-pipeline
+  labels:
+    app: stream-processing
+    component: processing
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: stream-processing
+  template:
+    metadata:
+      labels:
+        app: stream-processing
+        component: processing
+    spec:
+      serviceAccountName: pipeline-service-account
+      containers:
+      - name: beam-processor
+        image: reviewhub/beam-processor:v1.2.0
+        ports:
+        - containerPort: 8080
+          name: metrics
+        - containerPort: 8081
+          name: health
+        env:
+        - name: FLINK_MASTER
+          value: "flink-jobmanager:8081"
+        - name: BEAM_RUNNER
+          value: "FlinkRunner"
+        - name: PARALLELISM
+          value: "10"
+        - name: CHECKPOINTING_INTERVAL
+          value: "60000"
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: storage
+          mountPath: /data
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "1000m"
+          limits:
+            memory: "4Gi"
+            cpu: "2000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8081
+          initialDelaySeconds: 30
+          periodSeconds: 10
+      volumes:
+      - name: config
+        configMap:
+          name: pipeline-config
+      - name: storage
+        persistentVolumeClaim:
+          claimName: pipeline-storage
+      nodeSelector:
+        node-type: memory-optimized
+
+---
+# Service for Stream Processing
+apiVersion: v1
+kind: Service
+metadata:
+  name: stream-processing
+  namespace: reviewhub-pipeline
+  labels:
+    app: stream-processing
+spec:
+  ports:
+  - port: 8080
+    name: metrics
+  - port: 8081
+    name: health
+  selector:
+    app: stream-processing
+
+---
+# Deployment for Data Quality Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-quality
+  namespace: reviewhub-pipeline
+  labels:
+    app: data-quality
+    component: quality
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: data-quality
+  template:
+    metadata:
+      labels:
+        app: data-quality
+        component: quality
+    spec:
+      serviceAccountName: pipeline-service-account
+      containers:
+      - name: quality-checker
+        image: reviewhub/data-quality:v1.2.0
+        ports:
+        - containerPort: 8080
+          name: metrics
+        - containerPort: 8081
+          name: health
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: pipeline-secrets
+              key: database-url
+        - name: QUALITY_THRESHOLD
+          value: "0.85"
+        - name: CHECK_INTERVAL
+          value: "300"
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8081
+          initialDelaySeconds: 10
+          periodSeconds: 10
+      volumes:
+      - name: config
+        configMap:
+          name: pipeline-config
+
+---
+# Service for Data Quality
+apiVersion: v1
+kind: Service
+metadata:
+  name: data-quality
+  namespace: reviewhub-pipeline
+  labels:
+    app: data-quality
+spec:
+  ports:
+  - port: 8080
+    name: metrics
+  - port: 8081
+    name: health
+  selector:
+    app: data-quality
+
+---
+# Deployment for Pipeline Monitoring
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pipeline-monitoring
+  namespace: reviewhub-pipeline
+  labels:
+    app: pipeline-monitoring
+    component: monitoring
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: pipeline-monitoring
+  template:
+    metadata:
+      labels:
+        app: pipeline-monitoring
+        component: monitoring
+    spec:
+      serviceAccountName: pipeline-service-account
+      containers:
+      - name: monitor
+        image: reviewhub/pipeline-monitor:v1.2.0
+        ports:
+        - containerPort: 8080
+          name: metrics
+        - containerPort: 8090
+          name: dashboard
+        - containerPort: 8081
+          name: health
+        env:
+        - name: MONITOR_INTERVAL
+          value: "30"
+        - name: ALERT_ENABLED
+          value: "true"
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8081
+          initialDelaySeconds: 10
+          periodSeconds: 10
+      volumes:
+      - name: config
+        configMap:
+          name: pipeline-config
+
+---
+# Service for Pipeline Monitoring
+apiVersion: v1
+kind: Service
+metadata:
+  name: pipeline-monitoring
+  namespace: reviewhub-pipeline
+  labels:
+    app: pipeline-monitoring
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    name: metrics
+  - port: 8090
+    name: dashboard
+  - port: 8081
+    name: health
+  selector:
+    app: pipeline-monitoring
+
+---
+# ServiceMonitor for Prometheus scraping
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: pipeline-metrics
+  namespace: reviewhub-pipeline
+  labels:
+    app: pipeline-monitoring
+spec:
+  selector:
+    matchLabels:
+      app: data-ingestion
+  endpoints:
+  - port: metrics
+    interval: 30s
+    path: /metrics
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: processing-metrics
+  namespace: reviewhub-pipeline
+spec:
+  selector:
+    matchLabels:
+      app: stream-processing
+  endpoints:
+  - port: metrics
+    interval: 30s
+    path: /metrics
+
+---
+# CronJob for batch processing jobs
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: daily-aggregation
+  namespace: reviewhub-pipeline
+spec:
+  schedule: "0 2 * * *"  # Daily at 2 AM
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: pipeline-service-account
+          containers:
+          - name: aggregator
+            image: reviewhub/batch-aggregator:v1.2.0
+            env:
+            - name: BATCH_DATE
+              value: "$(date -d 'yesterday' +%Y-%m-%d)"
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: pipeline-secrets
+                  key: database-url
+            volumeMounts:
+            - name: storage
+              mountPath: /data
+            resources:
+              requests:
+                memory: "1Gi"
+                cpu: "500m"
+              limits:
+                memory: "4Gi"
+                cpu: "2000m"
+          volumes:
+          - name: storage
+            persistentVolumeClaim:
+              claimName: pipeline-storage
+          restartPolicy: OnFailure
+      backoffLimit: 3
+
+---
+# CronJob for data cleanup
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: data-cleanup
+  namespace: reviewhub-pipeline
+spec:
+  schedule: "0 1 * * 0"  # Weekly on Sunday at 1 AM
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: pipeline-service-account
+          containers:
+          - name: cleanup
+            image: reviewhub/data-cleanup:v1.2.0
+            env:
+            - name: RETENTION_DAYS
+              value: "90"
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: pipeline-secrets
+                  key: database-url
+            resources:
+              requests:
+                memory: "256Mi"
+                cpu: "250m"
+              limits:
+                memory: "512Mi"
+                cpu: "500m"
+          restartPolicy: OnFailure
+
+---
+# NetworkPolicy for security
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: pipeline-network-policy
+  namespace: reviewhub-pipeline
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    - namespaceSelector:
+        matchLabels:
+          name: reviewhub-pipeline
+    ports:
+    - protocol: TCP
+      port: 8080
+    - protocol: TCP
+      port: 8081
+  egress:
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443  # HTTPS
+    - protocol: TCP
+      port: 80   # HTTP
+    - protocol: TCP
+      port: 9092 # Kafka
+    - protocol: TCP
+      port: 5432 # PostgreSQL
+    - protocol: TCP
+      port: 6379 # Redis
+
+---
+# PodDisruptionBudget for high availability
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: data-ingestion-pdb
+  namespace: reviewhub-pipeline
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: data-ingestion
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: stream-processing-pdb
+  namespace: reviewhub-pipeline
+spec:
+  minAvailable: 3
+  selector:
+    matchLabels:
+      app: stream-processing
+
+---
+# Ingress for monitoring dashboard
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pipeline-dashboard
+  namespace: reviewhub-pipeline
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: basic-auth
+spec:
+  tls:
+  - hosts:
+    - pipeline.reviewhub.com
+    secretName: pipeline-tls
+  rules:
+  - host: pipeline.reviewhub.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: pipeline-monitoring
+            port:
+              number: 8090
+
+---
+# VPA (VerticalPodAutoscaler) for resource optimization
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: data-ingestion-vpa
+  namespace: reviewhub-pipeline
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: data-ingestion
+  updatePolicy:
+    updateMode: "Auto"
+  resourcePolicy:
+    containerPolicies:
+    - containerName: ingestion
+      minAllowed:
+        cpu: 100m
+        memory: 128Mi
+      maxAllowed:
+        cpu: 2
+        memory: 2Gi

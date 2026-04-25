@@ -1,0 +1,283 @@
+// Express app factory. Exports a configured app without starting a listener,
+// so tests can mount it in-process via supertest while production uses
+// index.js to bind it to a port and run the full boot sequence.
+
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const compression = require('compression');
+const morgan = require('morgan');
+const rateLimit = require('express-rate-limit');
+const cookieParser = require('cookie-parser');
+
+function createApp() {
+  const app = express();
+
+  // Trust first proxy in production (Vercel, nginx, etc.) so rate limiting
+  // and IP detection work correctly behind a reverse proxy.
+  if (process.env.NODE_ENV === 'production') {
+    app.set('trust proxy', 1);
+  }
+
+  app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        // The hash allows ONE specific inline script in index.html that
+        // applies the dark/light class before React mounts — prevents a
+        // theme-flash on first paint. If the script in index.html changes
+        // its bytes, this hash must be recomputed or prod will block it.
+        scriptSrc: ["'self'", "'sha256-56TOw150PJQmxnQA760y2qTxuksOALKymeXC2YC+rm8='"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", 'data:'],
+        connectSrc: ["'self'"],
+        fontSrc: ["'self'"],
+        objectSrc: ["'none'"],
+        frameAncestors: ["'none'"],
+        baseUri: ["'self'"],
+        formAction: ["'self'"],
+        // In production, silently upgrade any stray http:// URL to https://
+        // (browsers don't render mixed content anyway, but this prevents the
+        // request from even being attempted → saves the roundtrip and avoids
+        // any referrer leak). Skipped in dev so local http dev servers work.
+        ...(process.env.NODE_ENV === 'production' ? { upgradeInsecureRequests: [] } : {}),
+      },
+    },
+    noSniff: true,
+    frameguard: { action: 'deny' },
+    hsts: process.env.NODE_ENV === 'production'
+      ? { maxAge: 31536000, includeSubDomains: true }
+      : false,
+    hidePoweredBy: true,
+    referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
+    crossOriginEmbedderPolicy: false,
+    permittedCrossDomainPolicies: false,
+  }));
+
+  app.use((req, res, next) => {
+    res.setHeader(
+      'Permissions-Policy',
+      'camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=(), serial=()'
+    );
+    next();
+  });
+  app.use(compression());
+  app.use((req, res, next) => {
+    const reqId = req.headers['x-request-id'];
+    if (reqId && /^[a-z0-9]{1,32}$/.test(reqId)) {
+      res.setHeader('X-Request-Id', reqId);
+    }
+    next();
+  });
+  app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173', credentials: true }));
+
+  // Billing webhook: receives RAW body for HMAC signature verification.
+  // Must be mounted BEFORE express.json() or the body is consumed as parsed
+  // JSON and the signature check fails. We mount just this one route with
+  // express.raw() — every other route gets the normal JSON parser below.
+  //
+  // Rate-limited per-IP to blunt a signature-spraying attack. Legitimate LS
+  // webhooks arrive a handful per minute at most; 60/min/IP leaves generous
+  // headroom even during a bulk subscription-change event.
+  const webhookLimiter = rateLimit({
+    windowMs: 60 * 1000,
+    max: 60,
+    standardHeaders: true,
+    legacyHeaders: false,
+    skip: () => process.env.NODE_ENV === 'test',
+  });
+  app.post(
+    '/api/billing/webhook',
+    webhookLimiter,
+    express.raw({ type: '*/*', limit: '1mb' }),
+    (req, res, next) => {
+      // Billing router exports its webhook handler directly so we can mount
+      // it here with express.raw() without JSON-parsing the body (HMAC
+      // verification needs the raw bytes).
+      const { webhookHandler } = require('./routes/billing');
+      return webhookHandler(req, res, next);
+    }
+  );
+
+  app.use(express.json({ limit: '50kb' }));
+  // Parse Cookie headers so readSessionCookie() in middleware/auth can read
+  // the httpOnly session cookie. No signing key needed — the cookie VALUE
+  // is a JWT that's already signed.
+  app.use(cookieParser());
+
+  // CSRF defence for state-changing requests. With SameSite=Lax on the
+  // session cookie, cross-site GET/HEAD/OPTIONS navigation still carries
+  // the cookie (expected), but cross-site form POSTs do NOT. Attackers
+  // could still try cross-origin fetches with credentials — those are
+  // rejected here unless they carry an X-Requested-With header, which
+  // simple-request rules prevent cross-origin scripts from sending without
+  // an explicit CORS preflight (and our CORS policy only allows the
+  // configured CLIENT_URL). This is the standard double-submit-cookie
+  // pattern minus the cookie — the custom header alone is enough given
+  // our CORS + SameSite policy.
+  const SAFE_METHODS = new Set(['GET', 'HEAD', 'OPTIONS']);
+  app.use((req, res, next) => {
+    if (SAFE_METHODS.has(req.method)) return next();
+    // Skip CSRF check for Bearer-authenticated requests — they come from
+    // non-browser clients (curl, scripts, mobile apps) that aren't subject
+    // to CSRF, and don't send cookies.
+    const hasBearer = req.headers.authorization && req.headers.authorization.startsWith('Bearer ');
+    if (hasBearer) return next();
+    // If no session cookie is present, auth middleware will reject anyway —
+    // let that happen with a clearer error. CSRF only applies to cookie-auth.
+    if (!req.cookies || !req.cookies.rh_session) return next();
+    // Require the custom header. Browsers from other origins can't set this
+    // without a CORS preflight; our CORS policy doesn't allow other origins.
+    const xrw = req.headers['x-requested-with'];
+    if (xrw !== 'XMLHttpRequest') {
+      return res.status(403).json({ error: 'CSRF check failed' });
+    }
+    next();
+  });
+  // In-memory request metrics (counts + latency percentiles). Exposed to the
+  // operator at /api/admin/metrics. Mounted after body parsing so req.route
+  // is populated by the time we record the bucket.
+  const metrics = require('./lib/metrics');
+  app.use(metrics.middleware());
+
+  morgan.token('req-id', (req) => req.headers['x-request-id'] || '-');
+  // Skip request logging in tests — test runners render cleaner without it.
+  if (process.env.NODE_ENV !== 'test') {
+    const logFormat = process.env.NODE_ENV === 'production'
+      ? 'combined'
+      : ':method :url :status :response-time ms [:req-id]';
+    app.use(morgan(logFormat));
+  }
+
+  // The /api/auth limiter is a wide-net defence for brute-forcing login or
+  // spraying registration. Individual routes add tighter limits on top.
+  const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 20,
+    message: { error: 'Too many attempts, please try again later' },
+    standardHeaders: true,
+    legacyHeaders: false,
+    // In tests, skip the limiter so fixtures can create many users rapidly.
+    skip: () => process.env.NODE_ENV === 'test',
+  });
+
+  // Public widget endpoint — no auth needed, registered before auth routes
+  app.use('/api/public', require('./routes/publicWidget'));
+
+  app.use('/api/auth', authLimiter, require('./routes/auth'));
+  app.use('/api/admin', require('./routes/admin'));
+  // Admin sub-router for business-claim approvals (same admin-email gate)
+  app.use('/api/admin/claims', require('./routes/businessClaims').adminRouter);
+  app.use('/api/reviews', require('./routes/reviews'));
+  // Owner public responses on reviews (POST/PUT/DELETE/GET /:id/response).
+  // Mounted on the same /api/reviews prefix; Express resolves the more
+  // specific /:id/response paths against this router, while bare /:id
+  // routes (PUT pin/flag/etc.) still hit the main reviews router above.
+  app.use('/api/reviews', require('./routes/reviewResponses'));
+  app.use('/api/tags', require('./routes/tags'));
+  app.use('/api/review-requests', require('./routes/reviewRequests'));
+  app.use('/api/auto-rules', require('./routes/autoRules'));
+  app.use('/api/businesses', require('./routes/businesses'));
+  // Claim flow lives on the same /api/businesses prefix
+  app.use('/api/businesses', require('./routes/businessClaims'));
+  app.use('/api/templates', require('./routes/templates'));
+  app.use('/api/platforms', require('./routes/platforms'));
+  app.use('/api/webhooks', require('./routes/webhooks'));
+  app.use('/api/plans', require('./routes/plans'));
+  // Note: /api/billing/webhook is already mounted above with raw body.
+  // The rest of the billing routes (checkout, portal) get JSON parsed
+  // requests via the standard pipeline.
+  app.use('/api/billing', require('./routes/billing'));
+  app.use('/api/apikeys', require('./routes/apiKeys'));
+  app.use('/api/extension', require('./routes/extension'));
+  app.use('/api/gdpr', require('./routes/gdpr'));
+
+  // Health check. Returns 200 when all critical dependencies respond, 503 when
+  // any of them is down. Structure is stable so load balancers / uptime
+  // monitors can alert on `ok: false` without parsing detail. Individual
+  // component fields surface which dep is broken when something fails.
+  app.get('/api/health', (req, res) => {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    const components = { db: 'unknown', smtp: 'unknown' };
+    let overallOk = true;
+
+    try {
+      const { get } = require('./db/schema');
+      const row = get('SELECT 1 as ok');
+      components.db = row ? 'ok' : 'error';
+      if (!row) overallOk = false;
+    } catch (err) {
+      components.db = 'error';
+      components.db_error = err.message;
+      overallOk = false;
+    }
+
+    // SMTP is non-critical — absent config means console fallback, which is
+    // a valid state. We only report 'error' when SMTP was configured but a
+    // prior verify() call rejected. For MVP we treat it as advisory.
+    components.smtp = process.env.SMTP_HOST ? 'configured' : 'console-fallback';
+
+    const payload = {
+      ok: overallOk,
+      ts: new Date().toISOString(),
+      uptime_seconds: Math.floor(process.uptime()),
+      version: process.env.APP_VERSION || 'dev',
+      components,
+    };
+    res.status(overallOk ? 200 : 503).json(payload);
+  });
+
+  app.use('/api/*', (req, res) => res.status(404).json({ error: 'Not found' }));
+
+  // Optional: serve the built React SPA from this same process. Controlled by
+  // SERVE_CLIENT=1 so dev (where Vite serves on :5173) and tests don't get
+  // affected. Production Dockerfile copies the built dist/ to /app/client-dist
+  // and sets this env var, giving us a single-service deploy topology
+  // (one Railway / Fly / VPS service handles both /api/* and the SPA) without
+  // needing a separate nginx or reverse proxy.
+  if (process.env.SERVE_CLIENT === '1') {
+    const path = require('path');
+    const fs = require('fs');
+    const clientDist = process.env.CLIENT_DIST_DIR || path.join(__dirname, '..', 'client-dist');
+    if (fs.existsSync(clientDist)) {
+      // Hashed asset bundles (/assets/index-abcd.js) can cache for a year —
+      // filename changes on content change. index.html itself must not cache.
+      app.use('/assets', express.static(path.join(clientDist, 'assets'), {
+        immutable: true,
+        maxAge: '1y',
+      }));
+      app.use(express.static(clientDist, {
+        index: false, // we route / manually below so we can set no-cache on HTML
+        maxAge: '1d',
+      }));
+      // SPA fallback: anything not matching /api/* or a static asset gets
+      // index.html so client-side routing handles /dashboard, /settings, etc.
+      app.get('*', (req, res, next) => {
+        if (req.path.startsWith('/api/')) return next();
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.sendFile(path.join(clientDist, 'index.html'));
+      });
+      console.log(`[APP] Serving client SPA from ${clientDist}`);
+    } else {
+      console.warn(`[APP] SERVE_CLIENT=1 but ${clientDist} does not exist — client not served`);
+    }
+  }
+
+  const { captureException } = require('./lib/errorReporter');
+  app.use((err, req, res, next) => {
+    const errorId = Date.now().toString(36);
+    captureException(err, {
+      errorId,
+      method: req.method,
+      path: req.originalUrl,
+      userId: req.user?.id,
+      requestId: req.headers['x-request-id'] || undefined,
+    });
+    res.status(500).json({ error: 'Internal server error', errorId });
+  });
+
+  return app;
+}
+
+module.exports = { createApp };

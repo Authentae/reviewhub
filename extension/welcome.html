@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Welcome to ReviewHub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    min-height: 100vh;
+    padding: 40px 20px;
+    color: #0f172a;
+    background:
+      radial-gradient(circle at 20% 10%, rgba(99,102,241,0.25), transparent 50%),
+      radial-gradient(circle at 85% 85%, rgba(37,99,235,0.25), transparent 55%),
+      linear-gradient(135deg, #0b1220 0%, #1e1b4b 100%);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .card {
+    width: 100%; max-width: 640px;
+    background: #fff; border-radius: 16px; overflow: hidden;
+    box-shadow: 0 20px 48px rgba(0,0,0,0.35);
+  }
+  .body { padding: 40px 44px 36px; }
+  .logo { display:flex; align-items:center; gap:10px; margin-bottom: 24px; }
+  .logo .mark { width:36px; height:36px; border-radius: 9px; background: linear-gradient(135deg,#2563eb,#6366f1); display:flex; align-items:center; justify-content:center; box-shadow: 0 4px 12px rgba(99,102,241,0.4); }
+  .logo .wm { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; }
+  h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.025em; margin: 0 0 8px; line-height: 1.15; }
+  p.lead { font-size: 15px; color: #475569; line-height: 1.55; margin: 0 0 24px; }
+  .progress { display: flex; gap: 6px; margin-bottom: 22px; }
+  .progress i { height: 4px; border-radius: 2px; flex: 1; background: #e2e8f0; transition: background 0.2s; }
+  .progress i.on { background: #2563eb; }
+  .progress i.done { background: #22c55e; }
+  .step-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #2563eb; margin-bottom: 10px; }
+  .step-label.done { color: #16a34a; }
+  .btn-primary {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 13px 22px; border-radius: 10px; border: 0; cursor: pointer;
+    background: linear-gradient(135deg, #2563eb, #6366f1);
+    color: #fff; font-size: 14px; font-weight: 700;
+    box-shadow: 0 6px 18px rgba(99,102,241,0.4);
+    font-family: inherit;
+  }
+  .btn-primary:hover { filter: brightness(1.05); }
+  .btn-ghost { padding: 13px 18px; border: 0; background: transparent; color: #64748b; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .btn-ghost:hover { color: #0f172a; }
+  .install-viz {
+    margin: 24px 0 28px; padding: 20px; border-radius: 12px;
+    background: linear-gradient(135deg, #eef2ff, #f0f9ff);
+    border: 1px solid #e0e7ff;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .install-viz .big-check { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #22c55e, #16a34a); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 6px 16px rgba(34,197,94,0.35); }
+  .install-viz .label { font-size: 15px; font-weight: 700; }
+  .install-viz .sub { font-size: 12.5px; color: #64748b; margin-top: 2px; }
+  .bullets { list-style: none; padding: 0; margin: 0 0 28px; display: flex; flex-direction: column; gap: 12px; }
+  .bullets li { display: flex; gap: 12px; font-size: 13.5px; color: #334155; line-height: 1.5; align-items: flex-start; }
+  .bullets i { width: 22px; height: 22px; border-radius: 6px; background: #f0fdf4; color: #16a34a; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0; font-style: normal; }
+  .token-field {
+    margin: 20px 0 10px;
+    padding: 16px 18px;
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    background: #fafbfc;
+    display: flex; gap: 12px;
+  }
+  .token-field.filled { border-style: solid; border-color: #22c55e; background: #f0fdf4; }
+  .token-field input {
+    flex: 1; border: 0; background: transparent; outline: none;
+    font-family: "SF Mono", Menlo, monospace; font-size: 13px; color: #0f172a;
+  }
+  .token-field input::placeholder { color: #94a3b8; }
+  .token-hint { font-size: 12px; color: #64748b; margin-bottom: 20px; }
+  .token-hint a { color: #2563eb; font-weight: 600; text-decoration: none; }
+  .token-hint a:hover { text-decoration: underline; }
+  .secure-note { background: #f8fafc; border-radius: 10px; padding: 12px 14px; display: flex; gap: 10px; align-items: flex-start; font-size: 12px; color: #475569; line-height: 1.5; margin-bottom: 24px; border: 1px solid #e2e8f0; }
+  .platform-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 24px 0 24px; }
+  .pchip { padding: 14px 8px; border: 1px solid #e2e8f0; border-radius: 10px; text-align: center; background: #fff; }
+  .pchip .pi { width: 28px; height: 28px; border-radius: 7px; color: #fff; font-weight: 800; font-size: 15px; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; }
+  .pchip .pn { font-size: 11.5px; font-weight: 600; color: #0f172a; }
+  .done-check { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #22c55e, #16a34a); display: flex; align-items: center; justify-content: center; margin-bottom: 18px; box-shadow: 0 8px 20px rgba(34,197,94,0.35); }
+  .foot-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .error { font-size: 12.5px; color: #b91c1c; margin-top: 8px; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="body">
+      <div class="logo">
+        <div class="mark">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="#fff" aria-hidden="true"><path d="M10 2.5l1.8 4.5 4.7.4-3.6 3 1.1 4.6L10 12.6 5.9 15l1.1-4.6-3.6-3 4.7-.4L10 2.5z"/></svg>
+        </div>
+        <div class="wm">ReviewHub</div>
+      </div>
+
+      <!-- Screen 1 -->
+      <section id="step-1">
+        <div class="progress"><i class="on"></i><i></i><i></i></div>
+        <div class="step-label">Step 1 of 3</div>
+        <h1>You're in. Welcome to ReviewHub.</h1>
+        <p class="lead">The extension is installed. One quick thing before we make it useful:</p>
+        <div class="install-viz">
+          <div class="big-check">
+            <svg width="24" height="24" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg>
+          </div>
+          <div>
+            <div class="label">ReviewHub added to Chrome</div>
+            <div class="sub">Now pin it so you can reach it in one click.</div>
+          </div>
+        </div>
+        <ul class="bullets">
+          <li><i>1</i><div>Click the <b>puzzle-piece icon</b> in your toolbar (top-right of Chrome).</div></li>
+          <li><i>2</i><div>Find <b>ReviewHub</b> and click the <b>pin</b> next to it.</div></li>
+          <li><i>3</i><div>The ✨ logo will stay in your toolbar.</div></li>
+        </ul>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <button class="btn-primary" data-next="2">I've pinned it — continue →</button>
+          <button class="btn-ghost" data-next="2">Skip for now</button>
+        </div>
+      </section>
+
+      <!-- Screen 2 -->
+      <section id="step-2" class="hidden">
+        <div class="progress"><i class="done"></i><i class="on"></i><i></i></div>
+        <div class="step-label">Step 2 of 3</div>
+        <h1>Connect your account.</h1>
+        <p class="lead">Paste your extension token so drafts save to your history. Takes ~10 seconds.</p>
+        <div class="token-field" id="token-field">
+          <input id="token-input" type="text" placeholder="rh_live_..." autocomplete="off" spellcheck="false" />
+        </div>
+        <div class="token-hint">
+          No token? <a href="https://reviewhub.app/settings" target="_blank" rel="noopener">Grab it from your dashboard →</a>
+        </div>
+        <div id="token-error" class="error hidden"></div>
+        <div class="secure-note">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#64748b" stroke-width="1.6" aria-hidden="true">
+            <path d="M3 7V5a5 5 0 0110 0v2" stroke-linecap="round"/>
+            <rect x="2" y="7" width="12" height="8" rx="1.5"/>
+          </svg>
+          <div><b style="color:#0f172a;">Your token stays in your browser.</b> It's kept in chrome.storage.local, isolated per extension.</div>
+        </div>
+        <div class="foot-row">
+          <button class="btn-ghost" data-next="1">← Back</button>
+          <div style="display:flex; gap:8px;">
+            <button class="btn-ghost" data-next="3">Skip</button>
+            <button class="btn-primary" id="connect-btn">Connect &amp; continue →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Screen 3 -->
+      <section id="step-3" class="hidden">
+        <div class="progress"><i class="done"></i><i class="done"></i><i class="on"></i></div>
+        <div class="done-check">
+          <svg width="30" height="30" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg>
+        </div>
+        <div class="step-label done">Setup complete · Step 3 of 3</div>
+        <h1>Now go see the magic.</h1>
+        <p class="lead">Open any review on these platforms and click the ✨ button that appears next to it. That's it.</p>
+        <div class="platform-grid">
+          <div class="pchip"><div class="pi" style="background:#4285F4">G</div><div class="pn">Google</div></div>
+          <div class="pchip"><div class="pi" style="background:#D32323">y</div><div class="pn">Yelp</div></div>
+          <div class="pchip"><div class="pi" style="background:#1877F2">f</div><div class="pn">Facebook</div></div>
+          <div class="pchip"><div class="pi" style="background:#00AF87">T</div><div class="pn">Tripadvisor</div></div>
+          <div class="pchip"><div class="pi" style="background:#00B67A">★</div><div class="pn">Trustpilot</div></div>
+          <div class="pchip"><div class="pi" style="background:#FF9900">a</div><div class="pn">Amazon</div></div>
+          <div class="pchip"><div class="pi" style="background:#F1641E">E</div><div class="pn">Etsy</div></div>
+          <div class="pchip" style="background:#f8fafc; border-style:dashed;"><div class="pi" style="background:#cbd5e1; color:#64748b;">+</div><div class="pn" style="color:#64748b;">More soon</div></div>
+        </div>
+        <div class="foot-row">
+          <a href="https://www.google.com/maps" target="_blank" rel="noopener" class="btn-primary" style="text-decoration:none;">Open Google Maps →</a>
+          <button class="btn-ghost" id="close-btn">Close this tab</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+<script>
+  const steps = [1, 2, 3];
+  function show(n) {
+    steps.forEach((s) => {
+      document.getElementById('step-' + s).classList.toggle('hidden', s !== n);
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  document.querySelectorAll('[data-next]').forEach((btn) => {
+    btn.addEventListener('click', () => show(Number(btn.dataset.next)));
+  });
+
+  const tokenInput = document.getElementById('token-input');
+  const tokenField = document.getElementById('token-field');
+  const tokenError = document.getElementById('token-error');
+  const connectBtn = document.getElementById('connect-btn');
+
+  tokenInput.addEventListener('input', () => {
+    tokenField.classList.toggle('filled', tokenInput.value.trim().length > 0);
+  });
+
+  connectBtn.addEventListener('click', async () => {
+    const token = tokenInput.value.trim();
+    tokenError.classList.add('hidden');
+    if (!token) {
+      tokenError.textContent = 'Paste a token first, or click Skip.';
+      tokenError.classList.remove('hidden');
+      return;
+    }
+    try {
+      await chrome.storage.local.set({ token });
+      show(3);
+    } catch (err) {
+      tokenError.textContent = 'Could not save token: ' + (err?.message || 'unknown error');
+      tokenError.classList.remove('hidden');
+    }
+  });
+
+  document.getElementById('close-btn').addEventListener('click', () => {
+    window.close();
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,277 @@
+// GDPR Data Subject Rights Implementation
+// Articles 15-22: Access, Rectification, Erasure, Portability, Restriction, Objection
+
+const { get, all, run, transaction } = require('../../db/schema');
+const crypto = require('crypto');
+const fs = require('fs').promises;
+const path = require('path');
+
+class DataSubjectRights {
+  constructor() {
+    this.exportFormats = ['json', 'csv', 'xml'];
+  }
+
+  // Article 15 - Right of Access
+  async exportUserData(userId, format = 'json') {
+    if (!this.exportFormats.includes(format)) {
+      throw new Error(`Unsupported export format: ${format}`);
+    }
+
+    const userData = {
+      export_metadata: {
+        export_date: new Date().toISOString(),
+        user_id: userId,
+        format_version: '1.0',
+        data_controller: 'ReviewHub',
+        retention_notice: 'Data retained as per privacy policy'
+      },
+      personal_data: await this.collectUserPersonalData(userId),
+      consent_history: await this.getConsentHistory(userId),
+      processing_activities: await this.getProcessingActivities(userId)
+    };
+
+    switch (format) {
+      case 'json':
+        return JSON.stringify(userData, null, 2);
+      case 'csv':
+        return this.convertToCSV(userData);
+      case 'xml':
+        return this.convertToXML(userData);
+      default:
+        return JSON.stringify(userData, null, 2);
+    }
+  }
+
+  async collectUserPersonalData(userId) {
+    return {
+      account_data: get(`
+        SELECT id, email, created_at, email_verified_at, terms_accepted_at,
+               terms_version_accepted, last_digest_sent_at, mfa_enabled,
+               referral_code, onboarding_dismissed_at
+        FROM users WHERE id = ?
+      `, [userId]),
+
+      businesses: all(`
+        SELECT id, business_name, google_place_id, yelp_business_id,
+               facebook_page_id, widget_enabled, created_at
+        FROM businesses WHERE user_id = ?
+      `, [userId]),
+
+      subscription_data: get(`
+        SELECT plan, status, billing_provider, created_at, renewal_date
+        FROM subscriptions WHERE user_id = ?
+      `, [userId]),
+
+      templates: all(`
+        SELECT id, title, body, created_at, updated_at
+        FROM templates WHERE user_id = ?
+      `, [userId]),
+
+      review_requests: all(`
+        SELECT customer_name, customer_email, platform, message,
+               sent_at, clicked_at, created_at
+        FROM review_requests rr
+        JOIN businesses b ON rr.business_id = b.id
+        WHERE b.user_id = ?
+      `, [userId]),
+
+      audit_log: all(`
+        SELECT event, ip, user_agent, metadata, created_at
+        FROM audit_log WHERE user_id = ?
+        ORDER BY created_at DESC LIMIT 100
+      `, [userId]),
+
+      api_keys: all(`
+        SELECT name, key_prefix, created_at, last_used_at
+        FROM api_keys WHERE user_id = ?
+      `, [userId])
+    };
+  }
+
+  // Article 17 - Right to Erasure (Right to be Forgotten)
+  async processErasureRequest(userId, verificationToken) {
+    // Verify request authenticity
+    if (!await this.verifyErasureToken(userId, verificationToken)) {
+      throw new Error('Invalid erasure request token');
+    }
+
+    const erasureLog = {
+      user_id: userId,
+      requested_at: new Date().toISOString(),
+      data_categories: [],
+      retention_justifications: []
+    };
+
+    await transaction(async (tx) => {
+      // 1. Personal data erasure
+      await this.erasePersonalData(tx, userId, erasureLog);
+
+      // 2. Anonymize user-generated content (legal requirement to retain)
+      await this.anonymizeUserContent(tx, userId, erasureLog);
+
+      // 3. Remove from third-party services
+      await this.notifyThirdPartyProcessors(userId);
+
+      // 4. Schedule backup deletion
+      await this.scheduleBackupDeletion(userId);
+
+      // 5. Store minimal erasure record for legal compliance
+      const erasureId = tx.insert(`
+        INSERT INTO data_erasures (user_id, categories_erased,
+                                   retention_justifications, completed_at)
+        VALUES (?, ?, ?, ?)
+      `, [
+        userId,
+        JSON.stringify(erasureLog.data_categories),
+        JSON.stringify(erasureLog.retention_justifications),
+        erasureLog.requested_at
+      ]);
+
+      erasureLog.erasure_id = erasureId;
+    });
+
+    return erasureLog;
+  }
+
+  async erasePersonalData(tx, userId, log) {
+    // Delete user account and cascade to related data
+    tx.run('DELETE FROM users WHERE id = ?', [userId]);
+    log.data_categories.push('user_profile');
+    log.data_categories.push('businesses');
+    log.data_categories.push('subscriptions');
+    log.data_categories.push('templates');
+    log.data_categories.push('api_keys');
+    log.data_categories.push('audit_log');
+  }
+
+  async anonymizeUserContent(tx, userId, log) {
+    // Anonymize review requests (retain for business analytics)
+    tx.run(`
+      UPDATE review_requests
+      SET customer_name = 'ANONYMIZED',
+          customer_email = 'erased@gdpr.local'
+      WHERE business_id IN (SELECT id FROM businesses WHERE user_id = ?)
+    `, [userId]);
+
+    log.data_categories.push('review_requests_anonymized');
+    log.retention_justifications.push('Business analytics and fraud prevention');
+  }
+
+  // Article 20 - Right to Data Portability
+  async generatePortableData(userId) {
+    const data = await this.collectUserPersonalData(userId);
+
+    // Structure for easy import into competitor systems
+    return {
+      format: 'ReviewHub_Portable_v1.0',
+      generated_at: new Date().toISOString(),
+      user_data: {
+        email: data.account_data.email,
+        businesses: data.businesses.map(b => ({
+          name: b.business_name,
+          platforms: {
+            google: b.google_place_id,
+            yelp: b.yelp_business_id,
+            facebook: b.facebook_page_id
+          },
+          created: b.created_at
+        })),
+        templates: data.templates.map(t => ({
+          title: t.title,
+          content: t.body,
+          created: t.created_at
+        })),
+        review_requests: data.review_requests.map(r => ({
+          customer_name: r.customer_name,
+          customer_email: r.customer_email,
+          platform: r.platform,
+          message: r.message,
+          sent_date: r.sent_at
+        }))
+      }
+    };
+  }
+
+  // Article 18 - Right to Restriction of Processing
+  async restrictProcessing(userId, restrictions) {
+    await transaction(async (tx) => {
+      // Add processing restrictions
+      for (const restriction of restrictions) {
+        tx.insert(`
+          INSERT INTO processing_restrictions (user_id, restriction_type, reason, created_at)
+          VALUES (?, ?, ?, ?)
+        `, [userId, restriction.type, restriction.reason, new Date().toISOString()]);
+      }
+
+      // Update user flags
+      tx.run(`
+        UPDATE users
+        SET processing_restricted = 1, processing_restriction_date = ?
+        WHERE id = ?
+      `, [new Date().toISOString(), userId]);
+    });
+  }
+
+  async verifyErasureToken(userId, token) {
+    const hash = crypto.createHash('sha256').update(token).digest('hex');
+    const stored = get(`
+      SELECT erasure_token_hash, erasure_token_expires
+      FROM users WHERE id = ? AND erasure_token_hash = ?
+    `, [userId, hash]);
+
+    if (!stored) return false;
+    if (new Date() > new Date(stored.erasure_token_expires)) return false;
+
+    return true;
+  }
+
+  async notifyThirdPartyProcessors(userId) {
+    // Notify review platforms to remove data
+    console.log(`[GDPR] Notifying third-party processors of erasure for user ${userId}`);
+    // TODO: Implement API calls to Google, Yelp, Facebook to request data removal
+  }
+
+  async scheduleBackupDeletion(userId) {
+    // Schedule deletion from backups after retention period
+    const deleteAfter = new Date();
+    deleteAfter.setMonth(deleteAfter.getMonth() + 3); // 3 month grace period
+
+    await fs.writeFile(
+      path.join(__dirname, '../../../data/erasure_schedule.txt'),
+      `${userId}:${deleteAfter.toISOString()}\n`,
+      { flag: 'a' }
+    );
+  }
+
+  convertToCSV(data) {
+    // Simple CSV conversion for data portability
+    const lines = ['Category,Field,Value,Date'];
+
+    const addRows = (category, obj, date = '') => {
+      for (const [key, value] of Object.entries(obj)) {
+        if (typeof value === 'object' && value !== null) {
+          addRows(`${category}.${key}`, value, date);
+        } else {
+          lines.push(`"${category}","${key}","${value}","${date}"`);
+        }
+      }
+    };
+
+    addRows('account', data.personal_data.account_data);
+    return lines.join('\n');
+  }
+
+  convertToXML(data) {
+    // Basic XML structure for data portability
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<gdpr_export>
+  <metadata>
+    <export_date>${data.export_metadata.export_date}</export_date>
+    <user_id>${data.export_metadata.user_id}</user_id>
+  </metadata>
+  <personal_data>${JSON.stringify(data.personal_data)}</personal_data>
+</gdpr_export>`;
+  }
+}
+
+module.exports = { DataSubjectRights };

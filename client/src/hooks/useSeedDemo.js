@@ -1,0 +1,35 @@
+import { useState } from 'react';
+import api from '../lib/api';
+import { useI18n } from '../context/I18nContext';
+import { useToast } from '../components/Toast';
+
+// Shared helper for the "Try demo data" path surfaced on the Dashboard empty
+// state, Analytics empty state, and Onboarding checklist. Centralises the
+// POST, the seeding state flag, and the success/failure toast so callers only
+// need to handle their own follow-up (refetch, navigate, etc.).
+//
+// Returns { seed, seeding }. `seed` resolves to the number of reviews added
+// (0 if the account was already seeded), or null on error.
+export default function useSeedDemo() {
+  const { t } = useI18n();
+  const toast = useToast();
+  const [seeding, setSeeding] = useState(false);
+
+  async function seed() {
+    setSeeding(true);
+    try {
+      const { data } = await api.post('/reviews/seed');
+      if (data.reviews_added > 0) {
+        toast(t('dashboard.seedLoaded', { n: data.reviews_added }), 'success');
+      }
+      return data.reviews_added ?? 0;
+    } catch {
+      toast(t('dashboard.seedFailed'), 'error');
+      return null;
+    } finally {
+      setSeeding(false);
+    }
+  }
+
+  return { seed, seeding };
+}
