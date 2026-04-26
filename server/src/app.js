@@ -199,9 +199,15 @@ function createApp() {
   // component fields surface which dep is broken when something fails.
   app.get('/api/health', (req, res) => {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    const components = { db: 'unknown', smtp: 'unknown' };
+    const components = {
+      db: 'unknown',
+      smtp: 'unknown',
+      ai: 'unknown',
+      billing: 'unknown',
+    };
     let overallOk = true;
 
+    // DB — load-bearing. A failure here is a hard 503.
     try {
       const { get } = require('./db/schema');
       const row = get('SELECT 1 as ok');
@@ -213,10 +219,44 @@ function createApp() {
       overallOk = false;
     }
 
-    // SMTP is non-critical — absent config means console fallback, which is
-    // a valid state. We only report 'error' when SMTP was configured but a
-    // prior verify() call rejected. For MVP we treat it as advisory.
+    // SMTP — advisory. 'configured' means env is set; the actual TCP probe
+    // happens at boot via verifySmtp(). 'console-fallback' is a valid state
+    // for dev (emails log to stdout instead of being sent).
     components.smtp = process.env.SMTP_HOST ? 'configured' : 'console-fallback';
+
+    // AI drafts — advisory. 'live' = real Anthropic API key wired,
+    // 'mock' = built-in template/mock client (still functional, just not
+    // calling a real LLM). Useful for ops dashboards: a sudden flip from
+    // 'live' to 'mock' on a given env means someone removed the key.
+    if (process.env.ANTHROPIC_MOCK === '1') {
+      components.ai = 'mock-forced';
+    } else if (process.env.ANTHROPIC_API_KEY) {
+      components.ai = 'live';
+    } else if (process.env.NODE_ENV === 'production') {
+      // Prod without an API key falls back to template-only — flag it so
+      // operators notice. Not a hard failure since drafts still work.
+      components.ai = 'template-fallback';
+    } else {
+      components.ai = 'mock-dev';
+    }
+
+    // Billing — advisory. 'configured' means LS creds AND at least one
+    // variant ID are set, so /checkout can actually issue a real session.
+    // Without variants, the route 400s with "billing not configured."
+    const lsKey = process.env.LEMONSQUEEZY_API_KEY;
+    const lsStore = process.env.LEMONSQUEEZY_STORE_ID;
+    const hasAnyVariant = !!(
+      process.env.LS_VARIANT_STARTER_MONTHLY ||
+      process.env.LS_VARIANT_PRO_MONTHLY ||
+      process.env.LS_VARIANT_BUSINESS_MONTHLY
+    );
+    if (lsKey && lsStore && hasAnyVariant) {
+      components.billing = 'configured';
+    } else if (lsKey || lsStore) {
+      components.billing = 'partial'; // half-configured, /checkout likely 400s
+    } else {
+      components.billing = 'free-only';
+    }
 
     const payload = {
       ok: overallOk,
