@@ -31,6 +31,27 @@ process.env.NODE_ENV = 'test';
 // what goes into the outbound links.
 process.env.CLIENT_URL = process.env.CLIENT_URL || 'http://test.local';
 
+// Block any subsequent dotenv.config() in the require chain (app.js,
+// index.js) from putting the developer's local SMTP creds into process.env.
+// dotenv DOES NOT overwrite existing keys — so setting them to empty
+// string here neuters them for the duration of the test run. Setting to
+// '' (vs delete) is the key trick: delete leaves them undefined and dotenv
+// happily fills them back in from server/.env on the next config() call.
+//
+// Tests that want a stub transporter (emailTemplates.test.js) set
+// SMTP_HOST themselves AFTER this and monkey-patch nodemailer.createTransport
+// before re-requiring lib/email.
+process.env.SMTP_HOST = '';
+process.env.SMTP_PORT = '';
+process.env.SMTP_SECURE = '';
+process.env.SMTP_USER = '';
+process.env.SMTP_PASS = '';
+process.env.SMTP_FROM = '';
+// Also neuter ANTHROPIC_API_KEY so tests using AI drafts hit the mock
+// client (lib/aiDrafts.js → mockAnthropic) instead of paying for real
+// API calls and tripping rate limits.
+process.env.ANTHROPIC_API_KEY = '';
+
 const request = require('supertest');
 
 // Late-bind so tests that `require('./helpers')` first see the env vars applied.

@@ -13,13 +13,13 @@ function escapeHtml(str) {
 let _transporter = null;
 
 function getTransporter() {
-  // Tests must never make real SMTP calls — they'd hit the live Resend API
-  // and fail (550 from sandbox sender restrictions) AND would actually deliver
-  // mail to bogus test fixtures if domain verification succeeded later. Force
-  // console fallback in test env regardless of SMTP_HOST.
-  if (process.env.NODE_ENV === 'test') return null;
   if (!process.env.SMTP_HOST) {
-    // Dev fallback: log to console
+    // Dev fallback: log to console. Tests rely on this path too — see
+    // tests/helpers.js, which clears any SMTP_* env vars at load time so the
+    // suite never hits a real provider (would otherwise fail with 550 from
+    // Resend's sandbox restriction). Tests that DO want a stub transporter
+    // (e.g. tests/emailTemplates.test.js) set SMTP_HOST themselves and
+    // monkey-patch nodemailer.createTransport before requiring this module.
     return null;
   }
   if (!_transporter) {
