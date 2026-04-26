@@ -27,12 +27,15 @@ export default function ThaiSummary() {
     <div className="rh-design rh-app min-h-screen">
       <Navbar />
       <main id="main-content" className="max-w-3xl mx-auto px-4 py-12" lang="th">
-        <h1 className="text-3xl font-extrabold text-gray-900 dark:text-gray-100 mb-2">
-          สรุปข้อกำหนดสำคัญ (ภาษาไทย)
-        </h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-          อัปเดตล่าสุด: {updated}
-        </p>
+        <div className="rh-page-head">
+          <div>
+            <p className="rh-mono" style={{ fontSize: 11, color: 'var(--rh-ink-3)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>
+              TH · สรุป
+            </p>
+            <h1>สรุปข้อกำหนดสำคัญ (ภาษาไทย)</h1>
+            <p className="rh-page-sub">อัปเดตล่าสุด: {updated}</p>
+          </div>
+        </div>
         <p className="text-sm text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 mb-8">
           หน้านี้สรุปประเด็นสำคัญ 6 ข้อจากข้อกำหนดการใช้บริการฉบับเต็มภาษาอังกฤษ
           <strong> ฉบับภาษาอังกฤษคือเอกสารหลักตามกฎหมาย </strong>

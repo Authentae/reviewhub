@@ -69,14 +69,17 @@ export default function OwnerDashboard() {
     <div className="rh-design rh-app min-h-screen">
       <Navbar />
       <main id="main-content" className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
-        <header className="mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-1">
-            {t('owner.heading', 'Your claimed businesses')}
-          </h1>
-          <p className="text-sm text-gray-600 dark:text-gray-300 max-w-2xl">
-            {t('owner.subheading', 'Respond to customer reviews on the businesses you’ve verified ownership of. Replies appear publicly under each review with an “Owner response” badge.')}
-          </p>
-        </header>
+        <div className="rh-page-head">
+          <div>
+            <p className="rh-mono" style={{ fontSize: 11, color: 'var(--rh-ink-3)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>
+              № 06 · Owner replies
+            </p>
+            <h1>{t('owner.heading', 'Your claimed businesses')}</h1>
+            <p className="rh-page-sub">
+              {t('owner.subheading', 'Respond to customer reviews on the businesses you’ve verified ownership of. Replies appear publicly under each review with an “Owner response” badge.')}
+            </p>
+          </div>
+        </div>
 
         {!isPaid ? (
           <UpsellCard plan={plan} />

@@ -155,9 +155,14 @@ export default function ReviewRequests() {
     <div className="rh-design rh-app min-h-screen">
       <Navbar />
       <main id="main-content" className="max-w-5xl mx-auto px-4 py-8">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{t('requests.title')}</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{t('requests.subtitle')}</p>
+        <div className="rh-page-head">
+          <div>
+            <p className="rh-mono" style={{ fontSize: 11, color: 'var(--rh-ink-3)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>
+              № 05 · Outreach
+            </p>
+            <h1>{t('requests.title')}</h1>
+            <p className="rh-page-sub">{t('requests.subtitle')}</p>
+          </div>
         </div>
 
         {/* Stats */}

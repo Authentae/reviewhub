@@ -300,27 +300,32 @@ export default function Analytics() {
       <main id="main-content" className="max-w-5xl mx-auto px-4 py-8">
 
         {/* Header */}
-        <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+        <div className="rh-page-head">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{t('analytics.title')}</h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{t('analytics.subtitle')}</p>
+            <p className="rh-mono" style={{ fontSize: 11, color: 'var(--rh-ink-3)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>
+              № 04 · Analytics
+            </p>
+            <h1>{t('analytics.title')}</h1>
+            <p className="rh-page-sub">{t('analytics.subtitle')}</p>
           </div>
-          <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1" role="group" aria-label={t('analytics.periodLabel')}>
-            {[4, 12, 24].map(w => (
-              <button
-                key={w}
-                type="button"
-                onClick={() => setDisplayWeeks(w)}
-                className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${
-                  displayWeeks === w
-                    ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm'
-                    : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
-                }`}
-                aria-pressed={displayWeeks === w}
-              >
-                {t(`analytics.period${w}w`)}
-              </button>
-            ))}
+          <div className="rh-page-actions">
+            <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1" role="group" aria-label={t('analytics.periodLabel')}>
+              {[4, 12, 24].map(w => (
+                <button
+                  key={w}
+                  type="button"
+                  onClick={() => setDisplayWeeks(w)}
+                  className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${
+                    displayWeeks === w
+                      ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm'
+                      : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
+                  }`}
+                  aria-pressed={displayWeeks === w}
+                >
+                  {t(`analytics.period${w}w`)}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 

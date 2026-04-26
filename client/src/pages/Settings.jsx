@@ -2194,14 +2194,22 @@ export default function Settings() {
     <div className="rh-design rh-app min-h-screen">
       <Navbar />
       <main id="main-content" className="max-w-2xl mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{t('settings.title')}</h1>
-          {subscription && (
-            <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${subBadge.cls}`}>
-              {subBadge.label}
-              {subscription.renewal_date ? ` · ${t('settings.renewsOn', { date: new Date(subscription.renewal_date).toLocaleDateString(lang) })}` : ''}
-            </span>
-          )}
+        <div className="rh-page-head">
+          <div>
+            <p className="rh-mono" style={{ fontSize: 11, color: 'var(--rh-ink-3)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>
+              № 03 · Settings
+            </p>
+            <h1>{t('settings.title')}</h1>
+            <p className="rh-page-sub">{t('settings.subtitle', 'Account, business, integrations')}</p>
+          </div>
+          <div className="rh-page-actions">
+            {subscription && (
+              <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${subBadge.cls}`}>
+                {subBadge.label}
+                {subscription.renewal_date ? ` · ${t('settings.renewsOn', { date: new Date(subscription.renewal_date).toLocaleDateString(lang) })}` : ''}
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Multi-business switcher — only visible when user has or can add multiple businesses */}

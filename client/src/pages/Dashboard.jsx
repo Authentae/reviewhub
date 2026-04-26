@@ -313,15 +313,20 @@ export default function Dashboard() {
       <Navbar />
 
       <main id="main-content" className={`rh-page ${selectMode && selectedIds.size > 0 ? 'pb-40' : ''}`}>
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+        {/* Editorial page head — eyebrow + serif title + mono subtitle, matches
+            the Landing/Pricing voice so the app and marketing feel like one
+            product. */}
+        <div className="rh-page-head">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            <p className="rh-mono" style={{ fontSize: 11, color: 'var(--rh-ink-3)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>
+              № 01 · Inbox
+            </p>
+            <h1>
               {data?.business?.business_name || t('dashboard.title')}
             </h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{t('dashboard.subtitle')}</p>
+            <p className="rh-page-sub">{t('dashboard.subtitle')}</p>
           </div>
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="rh-page-actions">
             {seedMsg && <span className="text-sm text-amber-600 font-medium" aria-live="polite">{seedMsg}</span>}
             {/* Bulk-select toggle — only shown when there are reviews to act on */}
             {data?.total > 0 && (
@@ -409,16 +414,24 @@ export default function Dashboard() {
         {!loading && data?.stats?.unresponded_negative > 0 && !responded && !sentiment && (
           <div
             role="alert"
-            className="mb-4 flex items-center justify-between gap-3 px-4 py-2.5 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl text-sm"
+            className="rh-banner danger"
+            style={{ marginBottom: 16, borderRadius: 12, border: '1px solid color-mix(in oklab, var(--rh-rose) 30%, var(--rh-rule))', justifyContent: 'space-between' }}
           >
-            <span className="text-red-700 dark:text-red-300">
+            <span style={{ color: 'var(--rh-ink)' }}>
               <span aria-hidden="true">⚠️ </span>
               {t('dashboard.negativeAlert', { n: data.stats.unresponded_negative })}
             </span>
             <button
               type="button"
               onClick={() => { setSentiment('negative'); setResponded('no'); setPage(1); }}
-              className="flex-shrink-0 text-xs font-semibold text-red-600 dark:text-red-400 border border-red-300 dark:border-red-700 px-2.5 py-1 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors"
+              style={{
+                flexShrink: 0,
+                fontSize: 12, fontWeight: 600,
+                color: 'var(--rh-rose)',
+                border: '1px solid color-mix(in oklab, var(--rh-rose) 35%, var(--rh-rule))',
+                padding: '4px 10px', borderRadius: 8,
+                background: 'transparent', cursor: 'pointer',
+              }}
             >
               {t('dashboard.negativeAlertAction')}
             </button>
@@ -453,15 +466,11 @@ export default function Dashboard() {
                       onClick={() => { setPlatform(isActive ? '' : p); setPage(1); }}
                       aria-pressed={isActive}
                       aria-label={`${p.charAt(0).toUpperCase() + p.slice(1)}: ${count} reviews`}
-                      className={`flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full border transition-colors ${
-                        isActive
-                          ? 'bg-blue-600 border-blue-600 text-white'
-                          : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-blue-400'
-                      }`}
+                      className="rh-filter-chip"
                     >
                       <span aria-hidden="true">{icons[p]}</span>
                       <span className="capitalize">{p}</span>
-                      <span className="font-semibold">{count}</span>
+                      <span className="count">{count}</span>
                     </button>
                   );
                 })}
@@ -502,7 +511,7 @@ export default function Dashboard() {
         )}
 
         {/* Search + Filters — sticky on scroll */}
-        <section aria-label={t('dashboard.filtersSection')} className="space-y-2 mb-4 sticky top-14 bg-gray-50 dark:bg-gray-900 pt-2 pb-2 z-10 -mx-4 px-4 shadow-sm">
+        <section aria-label={t('dashboard.filtersSection')} className="space-y-2 mb-4 sticky top-14 pt-2 pb-2 z-10 -mx-4 px-4" style={{ background: 'color-mix(in oklab, var(--rh-paper) 92%, transparent)', backdropFilter: 'blur(12px) saturate(160%)', WebkitBackdropFilter: 'blur(12px) saturate(160%)', borderBottom: '1px solid var(--rh-rule)' }}>
           <div className="relative">
             <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -821,12 +830,17 @@ export default function Dashboard() {
   );
 }
 
-const StatCard = React.memo(function StatCard({ label, value, color = 'text-gray-900 dark:text-gray-100' }) {
+const StatCard = React.memo(function StatCard({ label, value, color }) {
+  // Editorial stat tile — matches the .rh-stat primitive in dashboard-system.css
+  // (mono uppercase label + serif numeric value). The optional `color` prop maps
+  // legacy Tailwind colour classes onto editorial accents so existing call sites
+  // still tint the value.
+  const valueClass = color ? color : '';
   return (
-    <div className="card p-4">
-      <dl>
-        <dt className="text-xs text-gray-500 dark:text-gray-400 mb-1">{label}</dt>
-        <dd className={`text-2xl font-bold ${color}`}>{value ?? '—'}</dd>
+    <div className="rh-stat">
+      <dl style={{ margin: 0 }}>
+        <dt className="label">{label}</dt>
+        <dd className={`value ${valueClass}`} style={{ margin: 0 }}>{value ?? '—'}</dd>
       </dl>
     </div>
   );
