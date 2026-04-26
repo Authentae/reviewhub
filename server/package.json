@@ -10,7 +10,7 @@
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "backup": "node scripts/backup-db.js",
-    "test": "node --test --test-reporter=spec tests/tokens.test.js tests/auth.test.js tests/reviews.test.js tests/platforms.test.js tests/export-digest.test.js tests/aiDrafts.test.js tests/mfa.test.js tests/sessionCookie.test.js tests/planEnforcement.test.js tests/googleProvider.test.js tests/admin.test.js tests/reviewResponses.test.js"
+    "test": "node --test --test-reporter=spec tests/*.test.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.90.0",
