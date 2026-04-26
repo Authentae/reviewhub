@@ -29,10 +29,14 @@ function createApp() {
         // theme-flash on first paint. If the script in index.html changes
         // its bytes, this hash must be recomputed or prod will block it.
         scriptSrc: ["'self'", "'sha256-56TOw150PJQmxnQA760y2qTxuksOALKymeXC2YC+rm8='"],
-        styleSrc: ["'self'", "'unsafe-inline'"],
+        // Google Fonts: CSS from fonts.googleapis.com, woff2 from fonts.gstatic.com.
+        // Without these in style-src/font-src, the editorial typography
+        // (Instrument Serif / Inter Tight / JetBrains Mono) silently falls
+        // back to system sans-serif on every page — visible regression.
+        styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
         imgSrc: ["'self'", 'data:'],
         connectSrc: ["'self'"],
-        fontSrc: ["'self'"],
+        fontSrc: ["'self'", 'https://fonts.gstatic.com'],
         objectSrc: ["'none'"],
         frameAncestors: ["'none'"],
         baseUri: ["'self'"],
