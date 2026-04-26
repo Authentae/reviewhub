@@ -59,6 +59,13 @@
   border-bottom: 1px solid color-mix(in oklab, var(--rh-rule) 60%, transparent);
 }
 .rh-bar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 68px; }
+/* On mobile the middle column is hidden (.rh-nav-links display:none), so the
+   3-col grid would awkwardly auto-place the right cluster into column 2 and
+   leave a big empty column 3 on the right — making the bar look "off-center".
+   Switch to flex with justify-between below the nav-links breakpoint. */
+@media (max-width: 860px) {
+  .rh-bar { display: flex; justify-content: space-between; gap: 16px; height: 60px; }
+}
 .rh-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--rh-ink); }
 .rh-brand .mark {
   width: 30px; height: 30px; border-radius: 8px;
@@ -1038,6 +1045,31 @@
     outline-offset: 3px;
     box-shadow: none;
   }
+}
+
+/* ── Mobile safety net ──────────────────────────────────────────────────
+   1. Prevent any rogue element (decorative ampersand, overflowing card,
+      wide table) from creating horizontal scroll on phones — that's the
+      #1 cause of "page looks off-center" because the user sees content
+      shifted left by the scrollable distance.
+   2. Tighten section padding so wide editorial layouts don't crowd the
+      narrow viewport.
+   3. Constrain the giant decorative hero ampersand to the right gutter
+      so it never pushes the page wider than the viewport. */
+@media (max-width: 720px) {
+  html, body { overflow-x: hidden; }
+  .rh-design { overflow-x: hidden; }
+  .rh-design .rh-hero-amp { right: 0 !important; max-width: 50vw; overflow: hidden; }
+  /* Editorial hero: smaller, tighter on phones */
+  .rh-design .rh-hero { padding: 56px 0 36px; }
+  /* Marketing nav CTAs: drop "Sign in" text on tiny screens, keep just
+     the primary "Install free" CTA + theme/lang toggles, so the bar fits. */
+  .rh-design .rh-nav-cta { gap: 6px; }
+}
+@media (max-width: 480px) {
+  /* Hide secondary auth CTA on very narrow phones — the page itself has
+     prominent CTAs in the hero, the nav doesn't need a second one. */
+  .rh-design .rh-nav-cta .rh-btn-ghost { display: none; }
 }
 
 /* Reduced motion - disable focus animations */
