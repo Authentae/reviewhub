@@ -1,48 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://reviewhub.app/</loc>
+    <loc>https://reviewhub.review/</loc>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://reviewhub.app/pricing</loc>
+    <loc>https://reviewhub.review/pricing</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://reviewhub.app/login</loc>
+    <loc>https://reviewhub.review/login</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://reviewhub.app/register</loc>
+    <loc>https://reviewhub.review/register</loc>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://reviewhub.app/terms</loc>
+    <loc>https://reviewhub.review/terms</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://reviewhub.app/privacy</loc>
+    <loc>https://reviewhub.review/privacy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://reviewhub.app/acceptable-use</loc>
+    <loc>https://reviewhub.review/acceptable-use</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://reviewhub.app/refund-policy</loc>
+    <loc>https://reviewhub.review/refund-policy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://reviewhub.app/legal/th-summary</loc>
+    <loc>https://reviewhub.review/legal/th-summary</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://reviewhub.review/tools/review-reply-generator</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
 </urlset>

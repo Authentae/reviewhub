@@ -8,6 +8,7 @@ const { substituteVars, hasVars } = require('../lib/templateVars');
 const { fireWebhooks } = require('../lib/webhookDelivery');
 const { getPlan } = require('../lib/billing/plans');
 
+const { captureException } = require('../lib/errorReporter');
 const router = express.Router();
 router.use(authMiddleware);
 
@@ -138,7 +139,7 @@ router.get('/summary', summaryLimiter, (req, res) => {
     res.setHeader('Cache-Control', 'no-store, private');
     res.json({ unresponded: row?.n ?? 0 });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -206,7 +207,7 @@ router.get('/trend', summaryLimiter, (req, res) => {
     res.setHeader('Cache-Control', 'no-store, private');
     res.json({ weeks });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -366,7 +367,7 @@ router.get('/analytics', summaryLimiter, (req, res) => {
     res.setHeader('Cache-Control', 'no-store, private');
     res.json({ weeks, platforms, topReviewers, overview, tagStats, responseTime });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -437,7 +438,7 @@ router.get('/keywords', summaryLimiter, (req, res) => {
     res.setHeader('Cache-Control', 'no-store, private');
     res.json({ keywords });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -524,7 +525,7 @@ router.get('/', readLimiter, (req, res) => {
     res.setHeader('Cache-Control', 'no-store, private');
     res.json({ reviews: finalReviews, business, stats: globalStats, filteredStats, platformCounts, total: totalRow?.total ?? 0, page, limit, sort });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -549,7 +550,7 @@ router.post('/seed', seedLimiter, (req, res) => {
     const result = seedDemoData(req.user.id);
     res.json(result);
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -618,7 +619,7 @@ router.post('/bulk-respond', bulkRespondLimiter, (req, res) => {
 
     res.json({ updated: targets.length, skipped: review_ids.length - targets.length });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -659,7 +660,7 @@ router.post('/bulk-delete', bulkRespondLimiter, (req, res) => {
 
     res.json({ deleted: targetIds.length });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -708,7 +709,7 @@ router.post('/bulk-tag', bulkRespondLimiter, (req, res) => {
 
     res.json({ tagged: targetIds.length });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -754,7 +755,7 @@ router.post('/bulk-status', bulkRespondLimiter, (req, res) => {
 
     res.json({ updated: targetIds.length });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -802,7 +803,7 @@ router.post('/bulk-untag', bulkRespondLimiter, (req, res) => {
 
     res.json({ untagged: targetIds.length });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -853,6 +854,7 @@ router.post('/', reviewCreateLimiter, async (req, res) => {
       if (wantsNew || wantsNeg) {
         sendNewReviewNotification(user.email, review, business.business_name).catch((err) => {
           console.error('[EMAIL] Failed to send new review notification:', err.message);
+          captureException(err, { kind: 'email.send_failed', label: 'new-review-notification', userId: user.id });
         });
       }
     }
@@ -910,7 +912,7 @@ router.post('/', reviewCreateLimiter, async (req, res) => {
     });
     res.status(201).json({ review: finalReview, autoResponded: finalReview?.response_text ? true : false });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -983,7 +985,7 @@ router.post('/:id/respond', respondLimiter, async (req, res) => {
     });
     res.json({ success: true, response_text, posted, postError });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -1003,7 +1005,7 @@ router.put('/:id/pin', respondLimiter, (req, res) => {
     run('UPDATE reviews SET pinned = ? WHERE id = ?', [newPinned, review.id]);
     res.json({ success: true, pinned: !!newPinned });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -1023,7 +1025,7 @@ router.put('/:id/flag', respondLimiter, (req, res) => {
     run('UPDATE reviews SET flagged = ? WHERE id = ?', [newFlagged, review.id]);
     res.json({ success: true, flagged: !!newFlagged });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -1048,7 +1050,7 @@ router.put('/:id/sentiment', respondLimiter, (req, res) => {
     run("UPDATE reviews SET sentiment = ?, sentiment_override = 1, updated_at = datetime('now') WHERE id = ?", [sentiment, review.id]);
     res.json({ success: true, sentiment });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -1074,7 +1076,7 @@ router.put('/:id/status', respondLimiter, (req, res) => {
     run("UPDATE reviews SET status = ?, updated_at = datetime('now') WHERE id = ?", [newStatus, review.id]);
     res.json({ success: true, status: newStatus });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -1100,7 +1102,7 @@ router.put('/:id/note', respondLimiter, (req, res) => {
     run('UPDATE reviews SET note = ? WHERE id = ?', [note || null, review.id]);
     res.json({ success: true, note: note || null });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -1148,7 +1150,7 @@ router.put('/:id/tags', respondLimiter, (req, res) => {
     );
     res.json({ tags });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -1207,7 +1209,7 @@ router.get('/:id/draft', draftLimiter, async (req, res) => {
     res.setHeader('Cache-Control', 'no-store, private');
     res.json({ draft, sentiment: review.sentiment, source });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -1223,7 +1225,7 @@ router.delete('/:id', deleteLimiter, (req, res) => {
     run('DELETE FROM reviews WHERE id = ?', [review.id]);
     res.json({ success: true });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -1292,7 +1294,7 @@ router.get('/export/csv', exportLimiter, (req, res) => {
     if (total > reviews.length) res.setHeader('X-Truncated', 'true');
     res.send([header.join(','), ...rows].join('\r\n'));
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -1343,7 +1345,7 @@ router.get('/export/json', exportLimiter, (req, res) => {
     res.setHeader('Cache-Control', 'no-store');
     res.send(JSON.stringify(payload, null, 2));
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -1473,7 +1475,7 @@ router.post('/import', importLimiter, express.text({ type: ['text/plain', 'text/
 
     res.json({ imported, skipped, errors: errors.slice(0, 50) });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
   }
 });

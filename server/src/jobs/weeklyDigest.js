@@ -86,6 +86,7 @@ async function runWeeklyDigest() {
 
     try {
       await sendWeeklyDigest(user.email, {
+        userId: user.id,
         business_name: business.business_name,
         total: stats.total,
         avg_rating: stats.avg_rating,

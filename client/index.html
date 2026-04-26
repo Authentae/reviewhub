@@ -16,12 +16,51 @@
     <meta property="og:title" content="ReviewHub — Local Business Review Manager" />
     <meta property="og:description" content="Manage reviews from every major platform in one dashboard. Respond faster with AI-drafted replies. Free plan available." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://reviewhub.app/" />
+    <meta property="og:url" content="https://reviewhub.review/" />
     <meta property="og:site_name" content="ReviewHub" />
-    <meta name="twitter:card" content="summary" />
-    <link rel="canonical" href="https://reviewhub.app/" />
-    <meta name="twitter:title" content="ReviewHub" />
-    <meta name="twitter:description" content="All your business reviews in one smart dashboard." />
+    <meta property="og:image" content="https://reviewhub.review/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="ReviewHub dashboard showing reviews from Google, Yelp, and Facebook" />
+    <meta property="og:locale" content="en_US" />
+    <!-- summary_large_image gives ~3x click-through over plain summary on Twitter/X
+         and is also what LinkedIn / Slack / LINE / Discord render as a hero card. -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ReviewHub — Local Business Review Manager" />
+    <meta name="twitter:description" content="All your business reviews in one smart dashboard. AI-drafted replies, free plan." />
+    <meta name="twitter:image" content="https://reviewhub.review/og-image.png" />
+    <link rel="canonical" href="https://reviewhub.review/" />
+    <!-- Structured data for Google's Knowledge Graph + rich snippets. SoftwareApplication
+         lets Google show price + rating in search results once we have aggregate reviews
+         to attach. Organization establishes the brand entity. Both are inert until Google
+         crawls the site, so they're safe to ship before launch. -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "SoftwareApplication",
+          "name": "ReviewHub",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Web",
+          "url": "https://reviewhub.review/",
+          "description": "Manage Google, Yelp, and Facebook reviews in one dashboard with AI-drafted replies.",
+          "offers": [
+            { "@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "USD" },
+            { "@type": "Offer", "name": "Starter", "price": "14", "priceCurrency": "USD" },
+            { "@type": "Offer", "name": "Pro", "price": "29", "priceCurrency": "USD" },
+            { "@type": "Offer", "name": "Business", "price": "59", "priceCurrency": "USD" }
+          ]
+        },
+        {
+          "@type": "Organization",
+          "name": "ReviewHub",
+          "url": "https://reviewhub.review/",
+          "logo": "https://reviewhub.review/logo.svg"
+        }
+      ]
+    }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />

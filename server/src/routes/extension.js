@@ -13,6 +13,7 @@ const express = require('express');
 const rateLimit = require('express-rate-limit');
 const { authMiddleware } = require('../middleware/auth');
 
+const { captureException } = require('../lib/errorReporter');
 const router = express.Router();
 router.use(authMiddleware);
 
@@ -84,7 +85,7 @@ router.post('/draft', draftLimiter, async (req, res) => {
     res.setHeader('Cache-Control', 'no-store, private');
     res.json({ draft, source, platform });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'extension' });
     res.status(500).json({ error: 'Server error' });
   }
 });

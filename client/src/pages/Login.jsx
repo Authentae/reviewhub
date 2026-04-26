@@ -61,7 +61,7 @@ export default function Login() {
   }
 
   function fillDemo() {
-    setForm({ email: 'demo@reviewhub.app', password: 'demo123' });
+    setForm({ email: 'demo@reviewhub.review', password: 'demo123' });
   }
 
   return (
@@ -166,7 +166,7 @@ export default function Login() {
                 onClick={fillDemo}
                 className="w-full text-sm text-blue-600 dark:text-blue-400 font-medium py-2.5 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-xl transition-colors"
               >
-                {t('auth.demoAccount')} (demo@reviewhub.app)
+                {t('auth.demoAccount')} (demo@reviewhub.review)
               </button>
             </>
           )}

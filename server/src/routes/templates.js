@@ -4,6 +4,7 @@ const { get, all, insert, run } = require('../db/schema');
 const { authMiddleware } = require('../middleware/auth');
 const { getPlan } = require('../lib/billing/plans');
 
+const { captureException } = require('../lib/errorReporter');
 const MAX_TEMPLATES = 10;
 
 function parseId(param) {
@@ -40,7 +41,7 @@ router.get('/', readLimiter, (req, res) => {
     res.setHeader('Cache-Control', 'no-store, private');
     res.json({ templates });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'templates' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -76,7 +77,7 @@ router.post('/', mutateLimiter, (req, res) => {
     const created = get('SELECT * FROM templates WHERE id = ?', [id]);
     res.status(201).json(created || { id, user_id: req.user.id, title, body });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'templates' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -104,7 +105,7 @@ router.put('/:id', mutateLimiter, (req, res) => {
     run("UPDATE templates SET title = ?, body = ?, updated_at = datetime('now') WHERE id = ?", [title, body, tmplId]);
     res.json({ success: true, id: tmplId, title, body });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'templates' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -121,7 +122,7 @@ router.delete('/:id', mutateLimiter, (req, res) => {
     run('DELETE FROM templates WHERE id = ?', [tmplId]);
     res.json({ success: true });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'templates' });
     res.status(500).json({ error: 'Server error' });
   }
 });

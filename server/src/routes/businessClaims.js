@@ -18,6 +18,7 @@ const rateLimit = require('express-rate-limit');
 const { get, all, insert, run } = require('../db/schema');
 const { authMiddleware } = require('../middleware/auth');
 
+const { captureException } = require('../lib/errorReporter');
 const router = express.Router({ mergeParams: true });
 router.use(authMiddleware);
 
@@ -94,7 +95,7 @@ router.post('/:id/claim', claimMutateLimiter, (req, res) => {
       evidence: r.value || null,
     });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'businessClaims' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -115,7 +116,7 @@ router.get('/:id/claim', claimReadLimiter, (req, res) => {
     res.setHeader('Cache-Control', 'no-store, private');
     res.json({ claim: claim || null });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'businessClaims' });
     res.status(500).json({ error: 'Server error' });
   }
 });

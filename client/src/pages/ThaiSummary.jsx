@@ -128,7 +128,7 @@ export default function ThaiSummary() {
               6. การระงับข้อพิพาทและกฎหมายที่ใช้
             </h2>
             <ul className="list-disc ml-5 space-y-1">
-              <li>หากมีข้อพิพาท กรุณาติดต่อเราที่ <strong>support@reviewhub.app</strong> ก่อน เรายินดีแก้ไขโดยไม่ต้องฟ้องศาล</li>
+              <li>หากมีข้อพิพาท กรุณาติดต่อเราที่ <strong>support@reviewhub.review</strong> ก่อน เรายินดีแก้ไขโดยไม่ต้องฟ้องศาล</li>
               <li>หากต้องดำเนินคดี ข้อกำหนดฉบับเต็มระบุให้ใช้<strong>อนุญาโตตุลาการแบบรายบุคคล</strong> (ดูข้อ §10 ฉบับอังกฤษ)</li>
               <li>อย่างไรก็ตาม <strong>สิทธิของคุณตามกฎหมายไทยที่คุ้มครองผู้บริโภค</strong> (พ.ร.บ. คุ้มครองผู้บริโภค, พ.ร.บ. ว่าด้วยข้อสัญญาที่ไม่เป็นธรรม) <strong>ยังคงมีผลเต็มที่</strong> และไม่ถูกตัดทอนโดยข้อกำหนดนี้</li>
               <li>คุณสามารถ<strong>ร้องเรียนได้ที่สำนักงานคณะกรรมการคุ้มครองผู้บริโภค (สคบ.)</strong> ได้ตามปกติ</li>
@@ -154,9 +154,9 @@ export default function ThaiSummary() {
             <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-2">
               ติดต่อ
             </h2>
-            <p>คำถามเกี่ยวกับข้อกำหนด: <strong>legal@reviewhub.app</strong></p>
-            <p>คำถามเกี่ยวกับข้อมูลส่วนบุคคล: <strong>privacy@reviewhub.app</strong></p>
-            <p>การใช้งานทั่วไป: <strong>support@reviewhub.app</strong></p>
+            <p>คำถามเกี่ยวกับข้อกำหนด: <strong>legal@reviewhub.review</strong></p>
+            <p>คำถามเกี่ยวกับข้อมูลส่วนบุคคล: <strong>privacy@reviewhub.review</strong></p>
+            <p>การใช้งานทั่วไป: <strong>support@reviewhub.review</strong></p>
           </section>
         </article>
       </main>

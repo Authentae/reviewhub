@@ -96,7 +96,7 @@ describe('Login page', () => {
     renderLogin();
     const user = userEvent.setup();
     await user.click(screen.getByRole('button', { name: /demo account/i }));
-    expect(screen.getByLabelText(/email/i)).toHaveValue('demo@reviewhub.app');
+    expect(screen.getByLabelText(/email/i)).toHaveValue('demo@reviewhub.review');
     expect(screen.getByLabelText(/^password$/i)).toHaveValue('demo123');
   });
 });

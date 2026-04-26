@@ -4,6 +4,7 @@ const { get, all, insert, run } = require('../db/schema');
 const { authMiddleware } = require('../middleware/auth');
 const { getPlan } = require('../lib/billing/plans');
 
+const { captureException } = require('../lib/errorReporter');
 function parseId(param) {
   const n = parseInt(param, 10);
   return (isFinite(n) && n > 0 && String(n) === String(param)) ? n : null;
@@ -36,7 +37,7 @@ router.get('/', bizReadLimiter, (req, res) => {
     res.setHeader('Cache-Control', 'no-store, private');
     res.json({ businesses, active_business_id: activeId });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'businesses' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -77,7 +78,7 @@ router.post('/', bizMutateLimiter, (req, res) => {
     const id = insert('INSERT INTO businesses (user_id, business_name) VALUES (?, ?)', [req.user.id, business_name]);
     res.json({ id, business_name, user_id: req.user.id });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'businesses' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -92,7 +93,7 @@ router.put('/active', bizMutateLimiter, (req, res) => {
     run('UPDATE users SET active_business_id = ? WHERE id = ?', [biz.id, req.user.id]);
     res.json({ active_business_id: biz.id });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'businesses' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -229,7 +230,7 @@ router.put('/:id', bizMutateLimiter, (req, res) => {
 
     res.json({ success: true });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'businesses' });
     res.status(500).json({ error: 'Server error' });
   }
 });

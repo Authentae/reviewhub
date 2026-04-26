@@ -1,6 +1,7 @@
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 const { get, all } = require('../db/schema');
+const { captureException } = require('../lib/errorReporter');
 
 const router = express.Router();
 
@@ -81,7 +82,7 @@ router.get('/widget/:id/badge', widgetLimiter, (req, res) => {
   const displayRating = avgRating != null ? Number(avgRating).toFixed(1) : '—';
   const starsHtml = avgRating != null ? escHtml(stars(avgRating)) : '—';
   const safeName = escHtml(biz.business_name);
-  const appUrl = process.env.CLIENT_URL || 'https://reviewhub.app';
+  const appUrl = process.env.CLIENT_URL || 'https://reviewhub.review';
 
   const html = `<!doctype html>
 <html lang="en">
@@ -226,7 +227,12 @@ router.post('/review-reply-generator', freeToolLimiter, async (req, res) => {
     res.setHeader('Cache-Control', 'no-store, private');
     res.json({ draft, source });
   } catch (err) {
-    console.error(err);
+    // Route via the central error reporter so this surface forwards to Sentry
+    // (when configured) rather than spilling a raw stack to stdout.
+    captureException(err, {
+      route: 'public.review-reply-generator',
+      ip: req.ip,
+    });
     res.status(500).json({ error: 'Couldn\'t generate a draft right now. Please try again.' });
   }
 });

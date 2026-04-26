@@ -24,6 +24,7 @@ const rateLimit = require('express-rate-limit');
 const { get, all, insert, run } = require('../db/schema');
 const { authMiddleware } = require('../middleware/auth');
 
+const { captureException } = require('../lib/errorReporter');
 const router = express.Router();
 router.use(authMiddleware);
 
@@ -135,7 +136,7 @@ router.get('/:id/response', responseReadLimiter, (req, res) => {
     res.setHeader('Cache-Control', 'no-store, private');
     res.json({ response: row || null });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviewResponses' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -192,7 +193,7 @@ router.post('/:id/response', responseMutateLimiter, (req, res) => {
     );
     res.status(201).json({ response: row });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviewResponses' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -237,7 +238,7 @@ router.put('/:id/response', responseMutateLimiter, (req, res) => {
     );
     res.json({ response: row });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviewResponses' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -259,7 +260,7 @@ router.delete('/:id/response', responseMutateLimiter, (req, res) => {
     run('DELETE FROM review_responses WHERE id = ?', [existing.id]);
     res.json({ success: true });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviewResponses' });
     res.status(500).json({ error: 'Server error' });
   }
 });

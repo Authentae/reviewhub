@@ -6,6 +6,7 @@ const { generateToken, hashToken } = require('../lib/tokens');
 const { sendReviewRequest } = require('../lib/email');
 const { getPlan } = require('../lib/billing/plans');
 
+const { captureException } = require('../lib/errorReporter');
 const router = express.Router();
 
 // Click-tracking redirect — public, no auth. Must be registered BEFORE
@@ -116,7 +117,7 @@ router.get('/', readLimiter, (req, res) => {
       },
     });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviewRequests' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -183,7 +184,7 @@ router.post('/', sendLimiter, async (req, res) => {
       clicked_at: null,
     });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviewRequests' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -283,7 +284,7 @@ router.post('/bulk', sendLimiter, expressText({ type: ['text/csv', 'text/plain',
 
     res.json(results);
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviewRequests' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -328,7 +329,7 @@ router.post('/:id/resend', sendLimiter, async (req, res) => {
 
     res.json({ resent: true, sent_at: new Date().toISOString() });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviewRequests' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -345,7 +346,7 @@ router.delete('/:id', readLimiter, (req, res) => {
     run('DELETE FROM review_requests WHERE id = ?', [rr.id]);
     res.json({ deleted: true });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'reviewRequests' });
     res.status(500).json({ error: 'Server error' });
   }
 });

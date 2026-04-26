@@ -31,6 +31,9 @@ const LoginMfa = lazy(() => import('./pages/LoginMfa'));
 const EmailChange = lazy(() => import('./pages/EmailChange'));
 const ReplyGeneratorTool = lazy(() => import('./pages/ReplyGeneratorTool'));
 const OwnerDashboard = lazy(() => import('./pages/OwnerDashboard'));
+// Landing page after one-click unsubscribe (RFC 8058). Public — the server
+// applies the unsub, then redirects browser-clicks here as a confirmation.
+const Unsubscribed = lazy(() => import('./pages/Unsubscribed'));
 
 function PrivateRoute({ children }) {
   const location = useLocation();
@@ -86,6 +89,7 @@ export default function App() {
         <Route path="/acceptable-use" element={<AcceptableUse />} />
         <Route path="/refund-policy" element={<Refund />} />
         <Route path="/legal/th-summary" element={<ThaiSummary />} />
+        <Route path="/unsubscribed" element={<Unsubscribed />} />
         {/* Public no-signup SEO/PLG tool */}
         <Route path="/tools/review-reply-generator" element={<ReplyGeneratorTool />} />
         <Route path="*" element={<NotFound />} />

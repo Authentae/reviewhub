@@ -5,6 +5,7 @@ const { get, all, run } = require('../db/schema');
 const { authMiddleware } = require('../middleware/auth');
 const { getPlan } = require('../lib/billing/plans');
 
+const { captureException } = require('../lib/errorReporter');
 const router = express.Router();
 router.use(authMiddleware);
 
@@ -36,7 +37,7 @@ router.get('/', limiter, (req, res) => {
     );
     res.json({ keys: rows.map(r => ({ ...r, id: Number(r.id) })) });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'apiKeys' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -76,7 +77,7 @@ router.post('/', limiter, (req, res) => {
     // Return the full key only once — never again
     res.status(201).json({ key: rawKey, id: Number(created.id), name: created.name, key_prefix: created.key_prefix, created_at: created.created_at });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'apiKeys' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -93,7 +94,7 @@ router.delete('/:id', limiter, (req, res) => {
     run('DELETE FROM api_keys WHERE id = ?', [id]);
     res.json({ deleted: true });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'apiKeys' });
     res.status(500).json({ error: 'Server error' });
   }
 });

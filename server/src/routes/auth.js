@@ -16,9 +16,10 @@ const {
 // whose terms_version_accepted != current will need to re-accept (handle in UI).
 // Stored on user row so we know WHICH version each user saw.
 const CURRENT_TERMS_VERSION = '2025-04-22';
-const { generateToken, hashToken } = require('../lib/tokens');
-const { sendVerificationEmail, sendPasswordResetEmail, sendMfaCode, sendEmailChangeAlert, sendEmailChangeConfirmation } = require('../lib/email');
+const { generateToken, hashToken, verifyUnsubToken } = require('../lib/tokens');
+const { sendVerificationEmail, sendPasswordResetEmail, sendMfaCode, sendEmailChangeAlert, sendEmailChangeConfirmation, portBlockHint } = require('../lib/email');
 const { logAudit } = require('../lib/audit');
+const { captureException } = require('../lib/errorReporter');
 const {
   OTP_EXPIRY_MINUTES,
   generateOtp,
@@ -39,9 +40,17 @@ function clientUrl(pathWithQuery) {
 }
 
 // Fire-and-forget: don't block the HTTP response if SMTP is slow or down.
-// The email lib logs its own errors; we just swallow them here.
+// Failures forward to captureException so they reach Sentry (when configured)
+// AND keep the human-readable [EMAIL] line in stderr for local visibility —
+// SMTP outages are operationally important (verification flow stalls, password
+// resets stall) so we surface them through the same telemetry path as route
+// errors, not a raw console.error swallow.
 function sendEmailInBackground(promise, label) {
-  promise.catch((err) => console.error(`[EMAIL] ${label} failed:`, err.message));
+  promise.catch((err) => {
+    const hint = portBlockHint ? portBlockHint(err) : '';
+    console.error(`[EMAIL] ${label} failed: ${err.message}${hint}`);
+    captureException(err, { kind: 'email.send_failed', label });
+  });
 }
 
 // Rate limiter for password change — prevents brute-forcing current password
@@ -167,7 +176,7 @@ router.post('/register', async (req, res) => {
     // client code ignores it and relies on the httpOnly cookie.
     res.json({ token, user: { id: userId, email, email_verified: false } });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'auth' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -243,7 +252,7 @@ router.post('/login', async (req, res) => {
     res.setHeader('Cache-Control', 'no-store');
     res.json({ token, user: { id: user.id, email: user.email, email_verified: !!user.email_verified_at, mfa_enabled: false } });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'auth' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -327,7 +336,7 @@ router.get('/me', accountLimiter, authMiddleware, (req, res) => {
     res.setHeader('Cache-Control', 'no-store, private');
     res.json({ user: safeUser, subscription: sub, notifications, session_expires_at: sessionExpiresAt });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'auth' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -348,7 +357,7 @@ router.delete('/email/pending', accountLimiter, authMiddleware, (req, res) => {
     res.setHeader('Cache-Control', 'no-store');
     res.json({ success: true });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'auth' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -445,7 +454,7 @@ router.get('/me/export', accountLimiter, authMiddleware, (req, res) => {
     res.setHeader('Cache-Control', 'no-store, private');
     res.send(JSON.stringify(payload, null, 2));
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'auth' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -499,7 +508,7 @@ router.delete('/me', accountLimiter, authMiddleware, async (req, res) => {
     res.setHeader('Cache-Control', 'no-store');
     res.json({ success: true });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'auth' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -559,7 +568,7 @@ router.get('/referral-code', notifLimiter, authMiddleware, (req, res) => {
       referred_count: stats?.referred_count || 0,
     });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'auth' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -591,7 +600,7 @@ router.post('/extension-token', notifLimiter, authMiddleware, (req, res) => {
     );
     res.json({ token: plaintext, created_at: new Date().toISOString() });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'auth' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -604,7 +613,7 @@ router.delete('/extension-token', notifLimiter, authMiddleware, (req, res) => {
     );
     res.json({ revoked: true });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'auth' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -623,7 +632,7 @@ router.get('/extension-token', notifLimiter, authMiddleware, (req, res) => {
       created_at: row?.extension_token_created_at || null,
     });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'auth' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -635,7 +644,7 @@ router.post('/onboarding/dismiss', notifLimiter, authMiddleware, (req, res) => {
     run("UPDATE users SET onboarding_dismissed_at = datetime('now') WHERE id = ? AND onboarding_dismissed_at IS NULL", [req.user.id]);
     res.json({ dismissed: true });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'auth' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -655,7 +664,7 @@ router.get('/notifications', notifLimiter, authMiddleware, (req, res) => {
       follow_up_after_days: user.follow_up_after_days ?? 0,
     });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'auth' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -689,7 +698,7 @@ router.put('/notifications', notifLimiter, authMiddleware, (req, res) => {
     run(`UPDATE users SET ${fields.join(', ')} WHERE id = ?`, params);
     res.json({ success: true });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'auth' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -791,7 +800,7 @@ router.put('/email', emailChangeLimiter, authMiddleware, async (req, res) => {
     res.setHeader('Cache-Control', 'no-store');
     res.json({ success: true });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'auth' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -850,7 +859,7 @@ router.post('/email/confirm', emailChangeLimiter, async (req, res) => {
     res.setHeader('Cache-Control', 'no-store');
     res.json({ success: true, email: user.pending_email });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'auth' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -897,7 +906,7 @@ router.put('/password', pwChangeLimiter, authMiddleware, async (req, res) => {
     res.setHeader('Cache-Control', 'no-store');
     res.json({ success: true, token });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'auth' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -974,7 +983,7 @@ router.post('/verify-email', tokenLimiter, (req, res) => {
     res.setHeader('Cache-Control', 'no-store');
     res.json({ success: true });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'auth' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -1006,7 +1015,7 @@ router.post('/resend-verification', emailSendLimiter, authMiddleware, (req, res)
     res.setHeader('Cache-Control', 'no-store');
     res.json({ success: true });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'auth' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -1050,7 +1059,7 @@ router.post('/forgot-password', emailSendLimiter, (req, res) => {
     res.setHeader('Cache-Control', 'no-store');
     res.json({ success: true });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'auth' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -1101,7 +1110,7 @@ router.post('/reset-password', tokenLimiter, async (req, res) => {
     res.setHeader('Cache-Control', 'no-store');
     res.json({ success: true });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'auth' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -1150,7 +1159,7 @@ router.post('/mfa/enable', mfaChallengeLimiter, authMiddleware, (req, res) => {
     res.setHeader('Cache-Control', 'no-store');
     res.json({ success: true });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'auth' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -1198,7 +1207,7 @@ router.post('/mfa/enable/confirm', mfaVerifyLimiter, authMiddleware, (req, res) 
     res.setHeader('Cache-Control', 'no-store');
     res.json({ success: true, recovery_codes: plaintextCodes });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'auth' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -1235,7 +1244,7 @@ router.post('/mfa/disable', mfaVerifyLimiter, authMiddleware, async (req, res) =
     res.setHeader('Cache-Control', 'no-store');
     res.json({ success: true });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'auth' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -1279,7 +1288,7 @@ router.post('/login/mfa', mfaVerifyLimiter, mfaPendingMiddleware, (req, res) => 
       user: { id: user.id, email: user.email, email_verified: !!user.email_verified_at, mfa_enabled: true },
     });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'auth' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -1333,7 +1342,7 @@ router.post('/login/recovery', mfaVerifyLimiter, mfaPendingMiddleware, (req, res
       )?.n) || 0,
     });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'auth' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -1358,9 +1367,74 @@ router.post('/login/mfa/resend', mfaChallengeLimiter, mfaPendingMiddleware, (req
     res.setHeader('Cache-Control', 'no-store');
     res.json({ success: true });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'auth' });
     res.status(500).json({ error: 'Server error' });
   }
 });
+
+// One-click email unsubscribe — RFC 8058 List-Unsubscribe-Post target.
+//
+// Mounted at BOTH GET (for users clicking the email link) and POST (for
+// Gmail/Outlook automated mail-client unsub via List-Unsubscribe-Post:
+// List-Unsubscribe=One-Click). Unauthenticated by design — that's the whole
+// point. Authentication is via the signed token, which only the server's
+// JWT_SECRET could have generated.
+//
+// Why this matters: when Gmail probes the List-Unsubscribe header and gets
+// a redirect to a login wall, it counts that as a failed unsubscribe and
+// downgrades sender reputation. With a signed token endpoint, Gmail's
+// automated POST gets a 200 and the user is removed cleanly — preserving
+// deliverability for the rest of the user base.
+const unsubLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: () => process.env.NODE_ENV === 'test',
+});
+
+const LIST_TYPE_TO_COLUMN = {
+  digest: 'notif_weekly_summary',
+  new_review: 'notif_new_review',
+  negative_alert: 'notif_negative_alert',
+};
+
+function unsubHandler(req, res) {
+  try {
+    const token = req.method === 'GET' ? req.query.token : (req.query.token || req.body?.token);
+    if (typeof token !== 'string' || !token) {
+      return res.status(400).json({ error: 'Missing token' });
+    }
+    const result = verifyUnsubToken(token);
+    if (!result.ok) {
+      return res.status(400).json({ error: 'Invalid or expired link' });
+    }
+    const column = LIST_TYPE_TO_COLUMN[result.listType];
+    if (!column) {
+      return res.status(400).json({ error: 'Unknown list' });
+    }
+    // Idempotent: setting to 0 multiple times is fine.
+    run(`UPDATE users SET ${column} = 0 WHERE id = ?`, [result.userId]);
+    logAudit({
+      userId: result.userId,
+      event: 'email.unsubscribed',
+      ip: req.ip,
+      userAgent: req.headers['user-agent'],
+      metadata: JSON.stringify({ list: result.listType, via: req.method }),
+    });
+    // For mail-client one-click POSTs, return 200 JSON. For browser GETs from
+    // the email footer link, redirect to a confirmation page on the SPA.
+    if (req.method === 'POST') {
+      return res.json({ ok: true, list: result.listType });
+    }
+    const base = process.env.CLIENT_URL || 'http://localhost:5173';
+    return res.redirect(`${base}/unsubscribed?list=${encodeURIComponent(result.listType)}`);
+  } catch (err) {
+    captureException(err, { route: 'auth', op: 'unsubscribe' });
+    return res.status(500).json({ error: 'Server error' });
+  }
+}
+router.get('/unsubscribe', unsubLimiter, unsubHandler);
+router.post('/unsubscribe', unsubLimiter, unsubHandler);
 
 module.exports = router;

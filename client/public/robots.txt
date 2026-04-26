@@ -4,4 +4,4 @@ Disallow: /settings
 Allow: /
 Allow: /pricing
 
-Sitemap: https://reviewhub.app/sitemap.xml
+Sitemap: https://reviewhub.review/sitemap.xml

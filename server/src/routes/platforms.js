@@ -14,6 +14,7 @@ const { authMiddleware } = require('../middleware/auth');
 const { syncOne, syncAll } = require('../jobs/syncReviews');
 const { logAudit } = require('../lib/audit');
 
+const { captureException } = require('../lib/errorReporter');
 const router = express.Router();
 router.use(authMiddleware);
 
@@ -53,7 +54,7 @@ router.get('/', (req, res) => {
     res.setHeader('Cache-Control', 'no-store, private');
     res.json({ connections: rows });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'platforms' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -66,7 +67,7 @@ router.post('/sync', syncLimiter, async (req, res) => {
     res.setHeader('Cache-Control', 'no-store, private');
     res.json(result);
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'platforms' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -89,7 +90,7 @@ router.post('/:id/sync', syncLimiter, async (req, res) => {
     res.setHeader('Cache-Control', 'no-store, private');
     res.json(result);
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'platforms' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -139,8 +140,10 @@ router.get('/google/oauth/start', (req, res) => {
     res.setHeader('Cache-Control', 'no-store');
     res.json({ url });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: err.message || 'Server error' });
+    // Don't leak err.message to the client — internal stack/DB strings can
+    // surface here. The captureException above gets the full detail for ops.
+    captureException(err, { route: 'platforms', op: 'oauth-start' });
+    res.status(500).json({ error: 'Server error' });
   }
 });
 

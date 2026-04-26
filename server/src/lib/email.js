@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const { makeUnsubToken } = require('./tokens');
 
 function escapeHtml(str) {
   return String(str ?? '')
@@ -12,19 +13,59 @@ function escapeHtml(str) {
 let _transporter = null;
 
 function getTransporter() {
+  // Tests must never make real SMTP calls — they'd hit the live Resend API
+  // and fail (550 from sandbox sender restrictions) AND would actually deliver
+  // mail to bogus test fixtures if domain verification succeeded later. Force
+  // console fallback in test env regardless of SMTP_HOST.
+  if (process.env.NODE_ENV === 'test') return null;
   if (!process.env.SMTP_HOST) {
     // Dev fallback: log to console
     return null;
   }
   if (!_transporter) {
+    // Tighter timeouts than nodemailer's defaults (~10 min). On a PaaS that
+    // blocks outbound 587 (Railway, Fly, Render's free plan), the connection
+    // hangs for the full default timeout — by which point a user clicking
+    // "Resend verification" sees a successful toast but the request thread
+    // is stuck. 8s is enough for a healthy handshake from any region while
+    // still surfacing port-block issues quickly.
     _transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: parseInt(process.env.SMTP_PORT || '587'),
       secure: process.env.SMTP_SECURE === 'true',
       auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+      connectionTimeout: 8_000,
+      greetingTimeout: 8_000,
+      socketTimeout: 30_000,
     });
   }
   return _transporter;
+}
+
+// Operator-facing hint when an SMTP error looks like a blocked-port symptom.
+// Runs on both boot-verify failures and runtime send failures so the operator
+// sees an actionable line in logs no matter when things break. Returns the
+// hint string (or '' when nothing matches) so the caller can attach it.
+function _portBlockHint(err) {
+  const msg = String(err?.message || err || '').toLowerCase();
+  const code = String(err?.code || '');
+  const isTimeoutOrRefused =
+    code === 'ETIMEDOUT' ||
+    code === 'ECONNREFUSED' ||
+    code === 'ESOCKET' ||
+    msg.includes('connection timeout') ||
+    msg.includes('connect etimedout') ||
+    msg.includes('connect econnrefused');
+  if (!isTimeoutOrRefused) return '';
+  const port = parseInt(process.env.SMTP_PORT || '587');
+  const host = String(process.env.SMTP_HOST || '');
+  if (port === 587 && /resend\.com$/.test(host)) {
+    return ' — Railway/Fly/many PaaS providers block outbound :587 by default. Switch SMTP_PORT to 2587 (Resend\'s alternate) and redeploy.';
+  }
+  if (port === 587) {
+    return ' — outbound :587 may be blocked by your host. Try your provider\'s alternate submission port (2587/465/2525).';
+  }
+  return '';
 }
 
 // Verify SMTP connection on startup if configured
@@ -34,12 +75,36 @@ async function verifySmtp() {
   try {
     await transporter.verify();
     console.log('[EMAIL] SMTP connection verified');
+
+    // Warn loudly when SMTP_FROM is still on a provider's "dev" sender
+    // domain. These are sandbox-only addresses (Resend's `onboarding@resend.dev`,
+    // SendGrid's `test@sendgrid.net`, Postmark's `inbound-test@postmarkapp.com`)
+    // — the connection verifies fine and sends return 250 OK at the SMTP layer,
+    // but the provider silently drops anything addressed to recipients other
+    // than the account's verified owner email. Symptom: zero emails arrive,
+    // server logs show success. Boot warning surfaces this BEFORE customers
+    // hit the dead path.
+    const from = String(process.env.SMTP_FROM || '');
+    const devSenders = ['@resend.dev', '@sendgrid.net', '@postmarkapp.com', '@mailtrap.io'];
+    const matched = devSenders.find((d) => from.toLowerCase().includes(d));
+    if (matched) {
+      console.warn(
+        `[EMAIL] SMTP_FROM uses a dev/sandbox sender (${matched}). ` +
+        `Most providers only deliver from these to the account owner — ` +
+        `customers will NOT receive emails. Verify a real domain at your ` +
+        `provider and switch SMTP_FROM to noreply@<yourdomain> before launch.`
+      );
+    }
   } catch (err) {
-    console.warn('[EMAIL] SMTP configuration error:', err.message);
+    console.warn(`[EMAIL] SMTP configuration error: ${err.message}${_portBlockHint(err)}`);
     // Reset so a bad transporter doesn't persist
     _transporter = null;
   }
 }
+
+// Exported for the send wrapper (and tests) — same hint logic that fires at
+// boot also runs on runtime sendMail failures.
+const portBlockHint = _portBlockHint;
 
 async function sendNewReviewNotification(userEmail, review, businessName) {
   const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
@@ -89,7 +154,7 @@ async function sendNewReviewNotification(userEmail, review, businessName) {
   ].join('\n');
 
   await transporter.sendMail({
-    from: process.env.SMTP_FROM || 'ReviewHub <noreply@reviewhub.app>',
+    from: process.env.SMTP_FROM || 'ReviewHub <noreply@reviewhub.review>',
     to: userEmail,
     subject,
     html,
@@ -156,7 +221,7 @@ async function sendVerificationEmail(userEmail, verifyUrl) {
     return;
   }
   await transporter.sendMail({
-    from: process.env.SMTP_FROM || 'ReviewHub <noreply@reviewhub.app>',
+    from: process.env.SMTP_FROM || 'ReviewHub <noreply@reviewhub.review>',
     to: userEmail,
     subject,
     html,
@@ -197,7 +262,7 @@ async function sendPasswordResetEmail(userEmail, resetUrl) {
     return;
   }
   await transporter.sendMail({
-    from: process.env.SMTP_FROM || 'ReviewHub <noreply@reviewhub.app>',
+    from: process.env.SMTP_FROM || 'ReviewHub <noreply@reviewhub.review>',
     to: userEmail,
     subject,
     html,
@@ -209,10 +274,21 @@ async function sendPasswordResetEmail(userEmail, resetUrl) {
 // runWeeklyDigest prepares — minimal, just enough to render a readable email.
 async function sendWeeklyDigest(userEmail, stats) {
   const {
+    userId,
     business_name, total, avg_rating = null,
     positive = 0, negative = 0, unresponded = 0,
     recentReviews = [],
   } = stats;
+  // Signed one-click unsub token. The same token goes into both the email
+  // footer link (for users who click) AND the List-Unsubscribe header (for
+  // mail clients' automated probes — RFC 8058). Without a userId we can
+  // still send the digest but the footer falls back to the in-app login
+  // route, which is OK for back-compat with old call sites.
+  const unsubToken = userId ? makeUnsubToken(userId, 'digest') : null;
+  const apiBase = process.env.CLIENT_URL || 'http://localhost:5173';
+  const oneClickUnsubUrl = unsubToken
+    ? `${apiBase}/api/auth/unsubscribe?token=${encodeURIComponent(unsubToken)}`
+    : `${apiBase}/settings?unsub=digest`;
   const safeBiz = escapeHtml(business_name);
   const safeUrl = escapeHtml(process.env.CLIENT_URL || 'http://localhost:5173');
   // Subject is drawn from the numbers so the preview-pane line tells you
@@ -304,7 +380,7 @@ async function sendWeeklyDigest(userEmail, stats) {
         <a href="${safeUrl}/dashboard" style="display:inline-block;background:#0f172a;color:#fff;font-size:14px;font-weight:700;text-decoration:none;padding:13px 24px;border-radius:10px;">Open dashboard →</a>
       </td></tr>
       <tr><td style="border-top:1px solid #e2e8f0;padding:18px 28px;font-size:11px;color:#94a3b8;line-height:1.55;" align="center">
-        You get this every Monday. <a href="${safeUrl}/settings" style="color:#94a3b8;">Change frequency</a> · <a href="${safeUrl}/settings?unsub=digest" style="color:#94a3b8;">Unsubscribe</a>
+        You get this every Monday. <a href="${safeUrl}/settings" style="color:#94a3b8;">Change frequency</a> · <a href="${escapeHtml(oneClickUnsubUrl)}" style="color:#94a3b8;">Unsubscribe</a>
       </td></tr>
     </table>
   </td></tr>
@@ -339,19 +415,18 @@ async function sendWeeklyDigest(userEmail, stats) {
     console.log(`[EMAIL] Weekly digest → ${userEmail}: ${total} new review(s) this week`);
     return;
   }
-  // List-Unsubscribe is effectively mandatory for bulk mail deliverability —
-  // Gmail/Yahoo drop senders that omit it. Points users at /settings where
-  // the weekly-digest toggle lives. One-Click satisfies RFC 8058 so inboxes
-  // that honour one-click unsubscription work without a round-trip.
-  const unsubUrl = `${process.env.CLIENT_URL || 'http://localhost:5173'}/settings?unsub=digest`;
+  // List-Unsubscribe + List-Unsubscribe-Post per RFC 8058 — Gmail/Yahoo
+  // require these for bulk senders or deliverability tanks. The URL is signed
+  // with HMAC so Gmail's automated POST (no cookies, no session) can identify
+  // the user from the token alone — no login wall, no failed unsub probes.
   await transporter.sendMail({
-    from: process.env.SMTP_FROM || 'ReviewHub <noreply@reviewhub.app>',
+    from: process.env.SMTP_FROM || 'ReviewHub <noreply@reviewhub.review>',
     to: userEmail,
     subject,
     html,
     text,
     headers: {
-      'List-Unsubscribe': `<${unsubUrl}>, <mailto:unsubscribe@reviewhub.app?subject=unsubscribe%20digest>`,
+      'List-Unsubscribe': `<${oneClickUnsubUrl}>, <mailto:unsubscribe@reviewhub.review?subject=unsubscribe%20digest>`,
       'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
     },
   });
@@ -407,7 +482,7 @@ async function sendReviewRequest({ customerEmail, customerName, businessName, pl
               <a href="${safeUrl}" style="display:inline-block;background:linear-gradient(135deg,#2563eb,#6366f1);color:#fff;font-size:14px;font-weight:700;text-decoration:none;padding:12px 22px;border-radius:10px;">Leave a ${safePlatform} review</a>
             </td>
             <td style="padding:0 6px;">
-              <a href="mailto:support@reviewhub.app?subject=Feedback%20about%20${encodeURIComponent(businessName)}" style="display:inline-block;background:#f1f5f9;color:#0f172a;font-size:14px;font-weight:600;text-decoration:none;padding:12px 22px;border-radius:10px;">Tell me privately</a>
+              <a href="mailto:support@reviewhub.review?subject=Feedback%20about%20${encodeURIComponent(businessName)}" style="display:inline-block;background:#f1f5f9;color:#0f172a;font-size:14px;font-weight:600;text-decoration:none;padding:12px 22px;border-radius:10px;">Tell me privately</a>
             </td>
           </tr>
         </table>
@@ -456,7 +531,7 @@ async function sendReviewRequest({ customerEmail, customerName, businessName, pl
     return;
   }
   await transporter.sendMail({
-    from: process.env.SMTP_FROM || 'ReviewHub <noreply@reviewhub.app>',
+    from: process.env.SMTP_FROM || 'ReviewHub <noreply@reviewhub.review>',
     to: customerEmail,
     subject,
     html,
@@ -500,7 +575,7 @@ async function sendMfaCode(userEmail, code, purpose = 'login') {
     return;
   }
   await transporter.sendMail({
-    from: process.env.SMTP_FROM || 'ReviewHub <noreply@reviewhub.app>',
+    from: process.env.SMTP_FROM || 'ReviewHub <noreply@reviewhub.review>',
     to: userEmail,
     subject,
     html,
@@ -543,7 +618,7 @@ async function sendEmailChangeConfirmation(newEmail, confirmUrl) {
     return;
   }
   await transporter.sendMail({
-    from: process.env.SMTP_FROM || 'ReviewHub <noreply@reviewhub.app>',
+    from: process.env.SMTP_FROM || 'ReviewHub <noreply@reviewhub.review>',
     to: newEmail,
     subject,
     html,
@@ -594,7 +669,7 @@ async function sendEmailChangeAlert(oldEmail, newEmail) {
     return;
   }
   await transporter.sendMail({
-    from: process.env.SMTP_FROM || 'ReviewHub <noreply@reviewhub.app>',
+    from: process.env.SMTP_FROM || 'ReviewHub <noreply@reviewhub.review>',
     to: oldEmail,
     subject,
     html,
@@ -612,4 +687,5 @@ module.exports = {
   sendEmailChangeConfirmation,
   sendReviewRequest,
   verifySmtp,
+  portBlockHint,
 };

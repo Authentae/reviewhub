@@ -10,6 +10,7 @@ import { getToken } from '../lib/auth';
 import api from '../lib/api';
 import ReviewTrend from '../components/ReviewTrend';
 import OnboardingChecklist from '../components/OnboardingChecklist';
+import ValueReceipt from '../components/ValueReceipt';
 import { useI18n } from '../context/I18nContext';
 import { useUser } from '../context/UserContext';
 import useSeedDemo from '../hooks/useSeedDemo';
@@ -439,6 +440,7 @@ export default function Dashboard() {
         )}
 
         {/* Stats */}
+        {stats && !loading && <ValueReceipt stats={stats} />}
         {stats && !loading && (
           <section aria-label={t('dashboard.statsSection')} className="mb-6">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">

@@ -31,6 +31,7 @@ function formatSyncAgo(isoLike, rtf, t) {
 
 function ConnectCard({ platform, icon, color, connected, onConnect, syncStatus }) {
   const { t, lang } = useI18n();
+  const toast = useToast();
   const [id, setId] = useState('');
   const [saving, setSaving] = useState(false);
   const [open, setOpen] = useState(false);
@@ -182,9 +183,11 @@ function ConnectCard({ platform, icon, color, connected, onConnect, syncStatus }
                   if (data?.url) window.location.href = data.url;
                 } catch (err) {
                   const msg = err.response?.data?.error || t('settings.platform.oauthUnavailable');
-                  // Show the error inline; fall back to manual path below
-                  // so the user isn't stuck if OAuth isn't configured.
-                  window.alert(msg);
+                  // Surface via the in-app toast (consistent with the rest
+                  // of the app — no native window.alert dialogs anywhere).
+                  // The manual fallback form below stays open so the user
+                  // isn't stuck if OAuth isn't configured.
+                  toast(msg, 'error');
                 }
               }}
               className="w-full inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 border-2 border-gray-300 text-gray-800 font-semibold px-4 py-2.5 rounded-lg transition-colors text-sm dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 dark:text-gray-100"
@@ -411,6 +414,7 @@ function TagManager() {
                   <button
                     type="button"
                     onClick={() => setConfirmDeleteId(tag.id)}
+                    aria-label={t('tags.deleteAria') || 'Delete tag'}
                     className="text-xs text-gray-300 hover:text-red-400 px-1"
                   >✕</button>
                 </div>
@@ -575,6 +579,7 @@ function WebhooksSection() {
                           {hook.enabled ? t('webhooks.active') : t('webhooks.disabled')}
                         </button>
                         <button type="button" onClick={() => handleDelete(hook.id)}
+                          aria-label={t('webhooks.deleteAria') || 'Delete webhook'}
                           className="text-xs text-gray-300 hover:text-red-400 px-1">✕</button>
                       </div>
                     </div>
@@ -1103,7 +1108,7 @@ function AutoRules() {
                     setEditingId(rule.id);
                     setEditRule({ ...rule, platform: rule.platform || '', min_rating: rule.min_rating ?? '', max_rating: rule.max_rating ?? '', sentiment: rule.sentiment || '', match_keywords_text: kwText, tag_id: rule.tag_id ?? '' });
                   }} className="text-xs text-gray-400 hover:text-blue-600 px-1">{t('review.editNote')}</button>
-                  <button type="button" onClick={() => setConfirmDeleteId(rule.id)} className="text-xs text-gray-300 hover:text-red-400 px-1">✕</button>
+                  <button type="button" onClick={() => setConfirmDeleteId(rule.id)} aria-label={t('autoRules.deleteAria') || 'Delete rule'} className="text-xs text-gray-300 hover:text-red-400 px-1">✕</button>
                 </div>
               </div>
             )}
@@ -1528,6 +1533,7 @@ function ExtensionTokenSection() {
   const [busy, setBusy] = useState(false);
   const [newToken, setNewToken] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [confirmRevoke, setConfirmRevoke] = useState(false);
 
   useEffect(() => {
     api.get('/auth/extension-token')
@@ -1547,12 +1553,12 @@ function ExtensionTokenSection() {
   }
 
   async function revoke() {
-    if (!window.confirm(t('settings.extension.revokeConfirm'))) return;
     setBusy(true);
     try {
       await api.delete('/auth/extension-token');
       setState({ loading: false, hasToken: false, createdAt: null });
       setNewToken(null);
+      setConfirmRevoke(false);
       toast(t('settings.extension.revoked'), 'success');
     } catch {
       toast(t('settings.extension.revokeFailed'), 'error');
@@ -1619,14 +1625,37 @@ function ExtensionTokenSection() {
               >
                 {busy ? t('common.loading') : t('settings.extension.regenerate')}
               </button>
-              <button
-                type="button"
-                onClick={revoke}
-                disabled={busy}
-                className="text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 disabled:opacity-60"
-              >
-                {t('settings.extension.revoke')}
-              </button>
+              {confirmRevoke ? (
+                <span className="inline-flex items-center gap-2 text-xs">
+                  <span className="text-red-600 dark:text-red-400 font-medium">{t('settings.extension.revokeConfirm')}</span>
+                  <button
+                    type="button"
+                    onClick={revoke}
+                    disabled={busy}
+                    aria-busy={busy}
+                    className="text-red-600 dark:text-red-400 font-semibold hover:underline px-1 disabled:opacity-50"
+                  >
+                    {busy ? t('common.loading') : t('review.yes')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmRevoke(false)}
+                    disabled={busy}
+                    className="text-gray-500 dark:text-gray-400 hover:underline px-1 disabled:opacity-50"
+                  >
+                    {t('review.cancel') || 'Cancel'}
+                  </button>
+                </span>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setConfirmRevoke(true)}
+                  disabled={busy}
+                  className="text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 disabled:opacity-60"
+                >
+                  {t('settings.extension.revoke')}
+                </button>
+              )}
             </>
           ) : (
             <button

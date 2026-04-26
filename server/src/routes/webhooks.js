@@ -5,6 +5,7 @@ const { get, all, insert, run } = require('../db/schema');
 const { authMiddleware } = require('../middleware/auth');
 const { VALID_EVENTS } = require('../lib/webhookDelivery');
 
+const { captureException } = require('../lib/errorReporter');
 const router = express.Router();
 router.use(authMiddleware);
 
@@ -31,7 +32,7 @@ router.get('/', webhookLimiter, (req, res) => {
     const rows = all('SELECT * FROM webhooks WHERE user_id = ? ORDER BY created_at DESC', [req.user.id]);
     res.json({ webhooks: rows.map(w => ({ ...w, events: JSON.parse(w.events || '[]') })) });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'webhooks' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -62,7 +63,7 @@ router.post('/', webhookLimiter, (req, res) => {
     const hook = get('SELECT * FROM webhooks WHERE id = ?', [id]);
     res.status(201).json({ ...hook, events: JSON.parse(hook.events) });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'webhooks' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -103,7 +104,7 @@ router.put('/:id', webhookLimiter, (req, res) => {
     const updated = get('SELECT * FROM webhooks WHERE id = ?', [hook.id]);
     res.json({ ...updated, events: JSON.parse(updated.events) });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'webhooks' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -118,7 +119,7 @@ router.delete('/:id', webhookLimiter, (req, res) => {
     run('DELETE FROM webhooks WHERE id = ?', [hook.id]);
     res.json({ deleted: true });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'webhooks' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -137,7 +138,7 @@ router.get('/:id/deliveries', webhookLimiter, (req, res) => {
     );
     res.json({ deliveries: rows });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'webhooks' });
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -183,7 +184,7 @@ router.post('/:id/test', webhookLimiter, async (req, res) => {
     }
     res.json({ ok, status });
   } catch (err) {
-    console.error(err);
+    captureException(err, { route: 'webhooks' });
     res.status(500).json({ error: 'Server error' });
   }
 });
