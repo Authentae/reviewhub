@@ -8,6 +8,7 @@ const { authMiddleware: requireAuth } = require('../middleware/auth');
 const { get, run, insert } = require('../db/schema');
 const crypto = require('crypto');
 const rateLimit = require('express-rate-limit');
+const { captureException } = require('../lib/errorReporter');
 
 const router = express.Router();
 const consentManager = new ConsentManager();
@@ -148,16 +149,28 @@ router.post('/erasure-request', requireAuth, gdprRateLimit, async (req, res) => 
       JSON.stringify({ token_expires: expiresAt.toISOString() })
     ]);
 
-    // TODO: Send confirmation email with erasure link
-    console.log(`[GDPR] Erasure token for user ${req.user.id}: ${token}`);
+    // SECURITY: never log the plaintext erasure token. Anyone with log
+    // access (Railway operators, log aggregators, leaked .log files) could
+    // replay the token to permanently delete this user's data — irreversible
+    // by definition (Article 17 — right to be forgotten). The DB only ever
+    // stores SHA-256(token); the plaintext exists in memory for the
+    // duration of this request only.
+    //
+    // The token reaches the user via email (the request happens against
+    // an authenticated session, so we have the address on req.user.email).
+    // TODO: wire sendErasureConfirmation in lib/email.js. Until then the
+    // token is unreachable to the user, which is a privacy-safe failure
+    // mode (the data simply won't be deleted) rather than the previous
+    // log-leak failure mode.
 
     res.json({
       success: true,
       message: 'Erasure request initiated. Check your email for confirmation.',
-      tokenPreview: token.substring(0, 8) + '...' // For development only
+      // tokenPreview removed: leaking the first 8 chars halves entropy and
+      // gives a brute-forcer a meaningful head start on the remaining 56.
     });
   } catch (error) {
-    console.error('Erasure request error:', error);
+    captureException(error, { route: 'gdpr', op: 'erasure-request', userId: req.user?.id });
     res.status(500).json({ error: 'Failed to process erasure request' });
   }
 });
