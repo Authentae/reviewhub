@@ -36,7 +36,7 @@ router.get('/privacy-policy', async (req, res) => {
 
     res.json(policy);
   } catch (error) {
-    console.error('Privacy policy fetch error:', error);
+    captureException(error, { route: 'gdpr', op: 'privacy-policy' });
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -53,7 +53,7 @@ router.get('/consent-status', requireAuth, async (req, res) => {
 
     res.json({ consents });
   } catch (error) {
-    console.error('Consent status error:', error);
+    captureException(error, { route: 'gdpr', op: 'consent-status', userId: req.user?.id });
     res.status(500).json({ error: 'Failed to retrieve consent status' });
   }
 });
@@ -81,7 +81,7 @@ router.post('/consent', requireAuth, gdprRateLimit, async (req, res) => {
 
     res.json({ success: true, consentRecord });
   } catch (error) {
-    console.error('Consent recording error:', error);
+    captureException(error, { route: 'gdpr', op: 'consent-recording', userId: req.user?.id });
     res.status(500).json({ error: 'Failed to record consent' });
   }
 });
@@ -116,7 +116,7 @@ router.post('/data-export', requireAuth, gdprRateLimit, async (req, res) => {
     res.setHeader('Content-Disposition', `attachment; filename="gdpr-export-${req.user.id}.${format}"`);
     res.send(exportData);
   } catch (error) {
-    console.error('Data export error:', error);
+    captureException(error, { route: 'gdpr', op: 'data-export', userId: req.user?.id });
     res.status(500).json({ error: 'Failed to generate data export' });
   }
 });
@@ -193,7 +193,7 @@ router.post('/confirm-erasure', gdprRateLimit, async (req, res) => {
       categoriesErased: erasureResult.data_categories
     });
   } catch (error) {
-    console.error('Erasure confirmation error:', error);
+    captureException(error, { route: 'gdpr', op: 'erasure-confirmation' });
 
     if (error.message === 'Invalid erasure request token') {
       return res.status(400).json({ error: 'Invalid or expired erasure token' });
@@ -232,7 +232,7 @@ router.post('/processing-restriction', requireAuth, gdprRateLimit, async (req, r
       restrictions
     });
   } catch (error) {
-    console.error('Processing restriction error:', error);
+    captureException(error, { route: 'gdpr', op: 'processing-restriction', userId: req.user?.id });
     res.status(500).json({ error: 'Failed to apply processing restrictions' });
   }
 });
@@ -251,7 +251,7 @@ router.get('/breach-notification', async (req, res) => {
 
     res.json({ breaches: breaches || [] });
   } catch (error) {
-    console.error('Breach notification error:', error);
+    captureException(error, { route: 'gdpr', op: 'breach-notification' });
     res.status(500).json({ error: 'Failed to retrieve breach notifications' });
   }
 });
