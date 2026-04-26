@@ -102,6 +102,7 @@ const en = {
   'nav.dashboard': 'Dashboard',
   'nav.analytics': 'Analytics',
   'nav.reviewRequests': 'Requests',
+  'nav.owner': 'Owner',
   'nav.settings': 'Settings',
   'nav.pricing': 'Pricing',
   'nav.login': 'Log in',

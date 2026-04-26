@@ -7,6 +7,8 @@ import ErrorBoundary from './components/ErrorBoundary';
 import { I18nProvider } from './context/I18nContext';
 import { UserProvider } from './context/UserContext';
 import './index.css';
+import './styles/design-system.css';
+import './styles/dashboard-system.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
