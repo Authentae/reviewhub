@@ -10,6 +10,41 @@ const compression = require('compression');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const cookieParser = require('cookie-parser');
+const crypto = require('crypto');
+const fs = require('fs');
+const pathLib = require('path');
+
+// Compute the SHA-256 hash of the inline theme-flash script in client/index.html
+// at boot time, so CSP automatically tracks edits to that script (no manual
+// hash bumping). Falls back to a hardcoded hash if the file isn't present
+// (test runs without a built client). The hash format is what helmet's
+// scriptSrc directive expects: 'sha256-<base64>'.
+function computeInlineScriptHash() {
+  // Look in two places: the built client SPA (CLIENT_DIST_DIR or ../client-dist
+  // when SERVE_CLIENT=1) and the source-of-truth at client/index.html.
+  const candidates = [
+    process.env.CLIENT_DIST_DIR && pathLib.join(process.env.CLIENT_DIST_DIR, 'index.html'),
+    pathLib.join(__dirname, '..', 'client-dist', 'index.html'),
+    pathLib.join(__dirname, '..', '..', 'client', 'index.html'),
+  ].filter(Boolean);
+  for (const p of candidates) {
+    try {
+      if (!fs.existsSync(p)) continue;
+      const html = fs.readFileSync(p, 'utf8');
+      // Match the FIRST inline <script>...</script> with no src attribute.
+      // The theme-flash script is the only inline script in index.html;
+      // all other scripts are external (type="module" src=...).
+      const m = html.match(/<script>\s*([\s\S]+?)\s*<\/script>/);
+      if (!m) continue;
+      const hash = crypto.createHash('sha256').update(m[1]).digest('base64');
+      return `'sha256-${hash}'`;
+    } catch { /* try next candidate */ }
+  }
+  // Hardcoded fallback (matches the script as-of 2026-04-27); kept so test
+  // boots without a client/ checkout still succeed.
+  return "'sha256-NSs+hzMhH+NczQN/UN0+Sl/EWmV2lnPzMCeXmqiPIvk='";
+}
+const INLINE_SCRIPT_HASH = computeInlineScriptHash();
 
 function createApp() {
   const app = express();
@@ -26,9 +61,12 @@ function createApp() {
         defaultSrc: ["'self'"],
         // The hash allows ONE specific inline script in index.html that
         // applies the dark/light class before React mounts — prevents a
-        // theme-flash on first paint. If the script in index.html changes
-        // its bytes, this hash must be recomputed or prod will block it.
-        scriptSrc: ["'self'", "'sha256-56TOw150PJQmxnQA760y2qTxuksOALKymeXC2YC+rm8='"],
+        // theme-flash on first paint. The hash is auto-computed at boot
+        // from the actual built index.html (see computeInlineScriptHash
+        // above), so editing the inline script no longer requires manually
+        // bumping the hash here — would silently re-block the theme-flash
+        // and re-introduce the white-flash regression for dark-mode users.
+        scriptSrc: ["'self'", INLINE_SCRIPT_HASH],
         // Google Fonts: CSS from fonts.googleapis.com, woff2 from fonts.gstatic.com.
         // Without these in style-src/font-src, the editorial typography
         // (Instrument Serif / Inter Tight / JetBrains Mono) silently falls
