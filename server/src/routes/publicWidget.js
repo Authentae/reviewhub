@@ -120,7 +120,16 @@ router.get('/widget/:id/badge', widgetLimiter, (req, res) => {
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.setHeader('Cache-Control', 'public, max-age=300');
-  res.setHeader('X-Frame-Options', 'ALLOWALL'); // allow embedding in iframes
+  // Allow iframe embedding from any origin — the badge is the entire
+  // point of this endpoint, customers paste it on their own websites.
+  // Two headers are needed because modern browsers prefer CSP's
+  // frame-ancestors over the legacy X-Frame-Options. helmet sets BOTH
+  // restrictively at the global level, so we need to overwrite both
+  // here per-response. Without overriding the CSP, browsers refuse to
+  // render the iframe even if X-Frame-Options says ALLOWALL — the
+  // strictest applicable directive wins.
+  res.removeHeader('X-Frame-Options');
+  res.setHeader('Content-Security-Policy', "frame-ancestors *");
   res.send(html);
 });
 
