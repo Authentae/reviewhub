@@ -3,81 +3,83 @@
 <head>
 <meta charset="utf-8" />
 <title>ReviewHub — Tweet cards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; }
-  body { margin: 0; background: #e2e8f0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 32px; }
+  body { margin: 0; background: #ede4cf; font-family: "Inter", -apple-system, system-ui, sans-serif; padding: 32px; }
   .stack { display: flex; flex-direction: column; gap: 32px; align-items: center; }
-  .label { font-size: 12px; color: #64748b; font-weight: 600; margin-bottom: -20px; align-self: flex-start; max-width: 1200px; width: 100%; }
+  .label { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 11px; color: #7a8189; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: -20px; align-self: flex-start; max-width: 1200px; width: 100%; }
   .card {
     width: 1200px; height: 675px; position: relative; overflow: hidden;
-    border-radius: 14px; box-shadow: 0 10px 40px rgba(15,23,42,0.15);
-    color: #fff; padding: 80px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    border-radius: 12px; box-shadow: 0 12px 40px rgba(29,36,44,0.18);
+    padding: 80px;
     display: flex; flex-direction: column; justify-content: space-between;
   }
-  .card h1 { font-size: 110px; line-height: 1; font-weight: 800; letter-spacing: -0.04em; margin: 0; text-wrap: balance; }
-  .card .small { font-size: 20px; font-weight: 600; letter-spacing: 0.02em; opacity: 0.85; }
-  .logo { display:flex; align-items:center; gap:12px; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; }
-  .mark { width:40px; height:40px; border-radius: 10px; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); display:flex; align-items:center; justify-content:center; }
+  .card h1 { font-family: "Newsreader", "Source Serif Pro", Georgia, serif; font-size: 110px; line-height: 1.02; font-weight: 400; letter-spacing: -0.025em; margin: 0; text-wrap: balance; }
+  .card .small { font-family: "Inter", sans-serif; font-size: 18px; font-weight: 500; letter-spacing: 0; opacity: 0.85; }
+  .eyebrow { font-family: "JetBrains Mono", monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; }
+  .logo { display:flex; align-items:center; gap:12px; font-family: "Newsreader", serif; font-size: 24px; font-weight: 600; letter-spacing: -0.01em; }
+  .mark { width:40px; height:40px; display:flex; align-items:center; justify-content:center; }
   .foot { display: flex; align-items: center; justify-content: space-between; }
-  .tag { padding: 8px 14px; border-radius: 999px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); font-size: 14px; font-weight: 600; backdrop-filter: blur(10px); }
+  .tag { padding: 8px 14px; border-radius: 999px; font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+  .rule { width: 60px; height: 1px; margin: 14px 0 18px; }
 
-  /* Card 1 — Platforms */
-  .c1 {
-    background:
-      radial-gradient(circle at 80% 20%, rgba(139,92,246,0.4), transparent 50%),
-      linear-gradient(135deg, #1e3a8a 0%, #4338ca 60%, #6d28d9 100%);
-  }
-  .c1 h1 .dot { color: #fbbf24; }
-  .platforms-row { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 20px; }
-  .ptile { padding: 14px 22px; border-radius: 12px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); font-size: 18px; font-weight: 700; display:flex; align-items:center; gap:10px; }
-  .pdot { width: 14px; height: 14px; border-radius: 3px; }
+  /* Card 1 — cream paper + ochre accent */
+  .c1 { background: #fbf8f1; color: #1d242c; border: 1px solid #e6dfce; }
+  .c1 .eyebrow { color: #a06d1c; }
+  .c1 .rule { background: #c48a2c; }
+  .c1 h1 .dot { color: #c48a2c; font-style: italic; }
+  .c1 .tag { background: #f4eee0; color: #3a4248; border: 1px solid #e6dfce; }
+  .platforms-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+  .ptile { padding: 12px 18px; border-radius: 6px; background: #fbf8f1; border: 1px solid #e6dfce; font-size: 15px; font-weight: 500; display:flex; align-items:center; gap:10px; color: #1d242c; }
+  .pdot { width: 10px; height: 10px; border-radius: 2px; }
 
-  /* Card 2 — Speed */
-  .c2 {
-    background:
-      radial-gradient(circle at 20% 80%, rgba(37,99,235,0.5), transparent 55%),
-      linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-  }
+  /* Card 2 — ink solid + paper text + teal accent */
+  .c2 { background: #1d242c; color: #fbf8f1; }
   .c2 h1 { font-size: 130px; }
-  .c2 h1 .strike { position: relative; opacity: 0.45; }
-  .c2 h1 .strike::after { content: ''; position: absolute; left: -4%; right: -4%; top: 54%; height: 6px; background: #f87171; transform: rotate(-3deg); border-radius: 3px; }
-  .c2 h1 .good { background: linear-gradient(120deg, #22d3ee, #818cf8); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .c2 .eyebrow { color: #2c7889; }
+  .c2 .rule { background: #2c7889; }
+  .c2 h1 .strike { position: relative; opacity: 0.55; font-style: italic; }
+  .c2 h1 .strike::after { content: ''; position: absolute; left: -2%; right: -2%; top: 56%; height: 4px; background: #b85450; transform: rotate(-2deg); border-radius: 2px; }
+  .c2 h1 .good { color: #fbf8f1; font-style: italic; }
+  .c2 .tag { background: rgba(251,248,241,0.08); color: #fbf8f1; border: 1px solid rgba(251,248,241,0.18); }
 
-  /* Card 3 — Free */
-  .c3 {
-    background:
-      radial-gradient(circle at 30% 30%, rgba(34,197,94,0.4), transparent 50%),
-      linear-gradient(135deg, #064e3b 0%, #1e3a8a 70%, #4338ca 100%);
-  }
-  .c3 h1 .highlight { background: #fbbf24; color: #064e3b; padding: 0 18px; border-radius: 10px; display: inline-block; transform: rotate(-1deg); }
+  /* Card 3 — cream + sage success */
+  .c3 { background: #fbf8f1; color: #1d242c; border: 1px solid #e6dfce; }
+  .c3 .eyebrow { color: #7a9b78; }
+  .c3 .rule { background: #7a9b78; }
+  .c3 h1 .highlight { font-style: italic; color: #7a9b78; }
+  .c3 .tag { background: #f4eee0; color: #3a4248; border: 1px solid #e6dfce; }
+  .c3 .check-tag { background: #fbf8f1; color: #1d242c; border: 1px solid #7a9b78; padding: 8px 14px; border-radius: 999px; font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; }
+  .c3 .check-tag::before { content: '✓ '; color: #7a9b78; }
 
-  /* Card 4 — Priced like one */
-  .c4 {
-    background:
-      radial-gradient(circle at 75% 70%, rgba(236,72,153,0.35), transparent 55%),
-      linear-gradient(135deg, #1e3a8a 0%, #4338ca 55%, #7c3aed 100%);
-  }
-  .price-row { display: flex; align-items: baseline; gap: 22px; margin-top: 8px; }
-  .big-price { font-size: 150px; font-weight: 900; letter-spacing: -0.05em; line-height: 1; color: #fbbf24; }
-  .per { font-size: 26px; opacity: 0.7; font-weight: 600; }
-  .strike-price { text-decoration: line-through; opacity: 0.5; font-size: 28px; font-weight: 600; }
+  /* Card 4 — paper-2 + rose */
+  .c4 { background: #f4eee0; color: #1d242c; border: 1px solid #e6dfce; }
+  .c4 .eyebrow { color: #b85450; }
+  .c4 .rule { background: #b85450; }
+  .c4 h1 { font-size: 84px; }
+  .price-row { display: flex; align-items: baseline; gap: 22px; margin-top: 12px; }
+  .big-price { font-family: "Newsreader", serif; font-size: 150px; font-weight: 400; letter-spacing: -0.04em; line-height: 1; color: #1e4d5e; font-style: italic; }
+  .per { font-family: "Inter", sans-serif; font-size: 18px; color: #3a4248; font-weight: 500; }
+  .strike-price { font-family: "JetBrains Mono", monospace; text-decoration: line-through; opacity: 0.55; font-size: 13px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: #3a4248; margin-top: 6px; }
+  .c4 .tag { background: #fbf8f1; color: #3a4248; border: 1px solid #e6dfce; }
 
-  /* Card 5 — Testimonial */
-  .c5 {
-    background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
-    color: #0f172a;
-  }
-  .c5 .quote-open { font-size: 180px; line-height: 0.8; color: #6366f1; font-family: Georgia, serif; font-weight: 700; height: 60px; }
-  .c5 h1 { font-size: 62px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; color: #0f172a; max-width: 900px; }
-  .c5 .logo { color: #0f172a; }
-  .c5 .mark { background: linear-gradient(135deg, #2563eb, #6366f1); border-color: transparent; }
+  /* Card 5 — teal-deep solid */
+  .c5 { background: #1e4d5e; color: #fbf8f1; }
+  .c5 .eyebrow { color: #c48a2c; }
+  .c5 .rule { background: #c48a2c; }
+  .c5 .quote-open { font-family: "Newsreader", serif; font-size: 180px; line-height: 0.8; color: #c48a2c; font-weight: 400; height: 60px; font-style: italic; }
+  .c5 h1 { font-family: "Newsreader", serif; font-size: 58px; font-weight: 400; letter-spacing: -0.015em; line-height: 1.18; color: #fbf8f1; max-width: 900px; }
+  .c5 h1 em { color: #fbf8f1; font-style: italic; }
   .c5 .attr { display: flex; align-items: center; gap: 14px; }
-  .c5 .avatar { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #fbbf24, #f472b6); display:flex; align-items:center; justify-content:center; font-weight:800; font-size: 22px; color: #fff; }
-  .c5 .name { font-size: 18px; font-weight: 700; }
-  .c5 .title { font-size: 14px; color: #64748b; }
-  .c5 .placeholder-note { position: absolute; top: 24px; right: 24px; background: #fef3c7; color: #92400e; padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; border: 1px dashed #f59e0b; }
-  .c5 .stars { color: #f59e0b; font-size: 20px; margin-bottom: 4px; }
+  .c5 .avatar { width: 56px; height: 56px; border-radius: 50%; background: #c48a2c; display:flex; align-items:center; justify-content:center; font-weight:700; font-size: 20px; color: #fbf8f1; font-family: "Inter", sans-serif; }
+  .c5 .name { font-family: "Inter", sans-serif; font-size: 16px; font-weight: 600; }
+  .c5 .title { font-family: "JetBrains Mono", monospace; font-size: 11px; color: rgba(251,248,241,0.65); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 2px; }
+  .c5 .placeholder-note { position: absolute; top: 24px; right: 24px; background: rgba(196,138,44,0.18); color: #c48a2c; padding: 6px 12px; border-radius: 999px; font-family: "JetBrains Mono", monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; border: 1px dashed #c48a2c; }
+  .c5 .stars { color: #c48a2c; font-size: 18px; margin-bottom: 4px; }
+  .c5 .tag { background: rgba(251,248,241,0.1); color: #fbf8f1; border: 1px solid rgba(251,248,241,0.2); }
 </style>
 </head>
 <body>
@@ -85,7 +87,14 @@
 
   <div class="label">Card 1 — "Yelp. Facebook. Google. One AI reply button."</div>
   <div class="card c1">
-    <div class="logo"><div class="mark"><svg width="22" height="22" viewBox="0 0 64 64" fill="#fff"><path d="M32 10l5.2 11.8 12.8 1.2-9.6 8.5 2.8 12.5L32 37.5l-11.2 6.5 2.8-12.5-9.6-8.5 12.8-1.2L32 10z"/></svg></div> ReviewHub</div>
+    <div>
+      <div class="logo">
+        <div class="mark"><svg width="40" height="40" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="rh-grad-t1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e4d5e"/><stop offset="1" stop-color="#2c7889"/></linearGradient></defs><rect width="64" height="64" rx="14" fill="url(#rh-grad-t1)"/><path d="M32 10c1.5 10 4 12.5 14 14-10 1.5-12.5 4-14 14-1.5-10-4-12.5-14-14 10-1.5 12.5-4 14-14z" fill="#fbf8f1"/><path d="M48 40c.7 4 1.6 4.9 5.5 5.5-3.9.6-4.8 1.5-5.5 5.5-.6-4-1.5-4.9-5.5-5.5 4-.6 4.9-1.5 5.5-5.5z" fill="#fbf8f1" opacity="0.95"/></svg></div>
+        ReviewHub
+      </div>
+      <div class="eyebrow" style="margin-top: 24px;">№ 01 — Platforms</div>
+      <div class="rule"></div>
+    </div>
     <div>
       <h1>Yelp<span class="dot">.</span><br/>Facebook<span class="dot">.</span><br/>Google<span class="dot">.</span></h1>
       <div class="platforms-row">
@@ -99,14 +108,21 @@
       </div>
     </div>
     <div class="foot">
-      <div class="small">One AI reply button. ✨</div>
+      <div class="small"><em>One AI reply button.</em></div>
       <div class="tag">reviewhub.co</div>
     </div>
   </div>
 
   <div class="label">Card 2 — "Reply in 10 seconds. Not 10 minutes."</div>
   <div class="card c2">
-    <div class="logo"><div class="mark"><svg width="22" height="22" viewBox="0 0 64 64" fill="#fff"><path d="M32 10l5.2 11.8 12.8 1.2-9.6 8.5 2.8 12.5L32 37.5l-11.2 6.5 2.8-12.5-9.6-8.5 12.8-1.2L32 10z"/></svg></div> ReviewHub</div>
+    <div>
+      <div class="logo">
+        <div class="mark"><svg width="40" height="40" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="rh-grad-t2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e4d5e"/><stop offset="1" stop-color="#2c7889"/></linearGradient></defs><rect width="64" height="64" rx="14" fill="url(#rh-grad-t2)"/><path d="M32 10c1.5 10 4 12.5 14 14-10 1.5-12.5 4-14 14-1.5-10-4-12.5-14-14 10-1.5 12.5-4 14-14z" fill="#fbf8f1"/><path d="M48 40c.7 4 1.6 4.9 5.5 5.5-3.9.6-4.8 1.5-5.5 5.5-.6-4-1.5-4.9-5.5-5.5 4-.6 4.9-1.5 5.5-5.5z" fill="#fbf8f1" opacity="0.95"/></svg></div>
+        ReviewHub
+      </div>
+      <div class="eyebrow" style="margin-top: 24px;">№ 02 — Speed</div>
+      <div class="rule"></div>
+    </div>
     <div>
       <h1><span class="good">10 seconds.</span><br/><span class="strike">Not 10 minutes.</span></h1>
     </div>
@@ -118,14 +134,21 @@
 
   <div class="label">Card 3 — "Free forever — no credit card."</div>
   <div class="card c3">
-    <div class="logo"><div class="mark"><svg width="22" height="22" viewBox="0 0 64 64" fill="#fff"><path d="M32 10l5.2 11.8 12.8 1.2-9.6 8.5 2.8 12.5L32 37.5l-11.2 6.5 2.8-12.5-9.6-8.5 12.8-1.2L32 10z"/></svg></div> ReviewHub</div>
+    <div>
+      <div class="logo">
+        <div class="mark"><svg width="40" height="40" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="rh-grad-t3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e4d5e"/><stop offset="1" stop-color="#2c7889"/></linearGradient></defs><rect width="64" height="64" rx="14" fill="url(#rh-grad-t3)"/><path d="M32 10c1.5 10 4 12.5 14 14-10 1.5-12.5 4-14 14-1.5-10-4-12.5-14-14 10-1.5 12.5-4 14-14z" fill="#fbf8f1"/><path d="M48 40c.7 4 1.6 4.9 5.5 5.5-3.9.6-4.8 1.5-5.5 5.5-.6-4-1.5-4.9-5.5-5.5 4-.6 4.9-1.5 5.5-5.5z" fill="#fbf8f1" opacity="0.95"/></svg></div>
+        ReviewHub
+      </div>
+      <div class="eyebrow" style="margin-top: 24px;">№ 03 — Free Forever</div>
+      <div class="rule"></div>
+    </div>
     <div>
       <h1>Free <span class="highlight">forever.</span><br/>No credit card.</h1>
-      <div style="margin-top: 24px; display: flex; gap: 16px; flex-wrap: wrap;">
-        <div class="tag">✓ 3 AI drafts / day</div>
-        <div class="tag">✓ All 8 platforms</div>
-        <div class="tag">✓ 10 languages</div>
-        <div class="tag">✓ No signup to try</div>
+      <div style="margin-top: 28px; display: flex; gap: 12px; flex-wrap: wrap;">
+        <div class="check-tag">3 AI drafts / day</div>
+        <div class="check-tag">All 8 platforms</div>
+        <div class="check-tag">10 languages</div>
+        <div class="check-tag">No signup to try</div>
       </div>
     </div>
     <div class="foot">
@@ -136,9 +159,16 @@
 
   <div class="label">Card 4 — "Made for solo founders. Priced like one."</div>
   <div class="card c4">
-    <div class="logo"><div class="mark"><svg width="22" height="22" viewBox="0 0 64 64" fill="#fff"><path d="M32 10l5.2 11.8 12.8 1.2-9.6 8.5 2.8 12.5L32 37.5l-11.2 6.5 2.8-12.5-9.6-8.5 12.8-1.2L32 10z"/></svg></div> ReviewHub</div>
     <div>
-      <h1 style="font-size: 92px;">Made for solo founders.<br/>Priced like one.</h1>
+      <div class="logo">
+        <div class="mark"><svg width="40" height="40" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="rh-grad-t4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e4d5e"/><stop offset="1" stop-color="#2c7889"/></linearGradient></defs><rect width="64" height="64" rx="14" fill="url(#rh-grad-t4)"/><path d="M32 10c1.5 10 4 12.5 14 14-10 1.5-12.5 4-14 14-1.5-10-4-12.5-14-14 10-1.5 12.5-4 14-14z" fill="#fbf8f1"/><path d="M48 40c.7 4 1.6 4.9 5.5 5.5-3.9.6-4.8 1.5-5.5 5.5-.6-4-1.5-4.9-5.5-5.5 4-.6 4.9-1.5 5.5-5.5z" fill="#fbf8f1" opacity="0.95"/></svg></div>
+        ReviewHub
+      </div>
+      <div class="eyebrow" style="margin-top: 24px;">№ 04 — Pricing</div>
+      <div class="rule"></div>
+    </div>
+    <div>
+      <h1>Made for solo founders.<br/><em style="color:#a06d1c;">Priced like one.</em></h1>
       <div class="price-row">
         <div class="big-price">$14</div>
         <div>
@@ -155,11 +185,18 @@
 
   <div class="label">Card 5 — Testimonial (placeholder quote)</div>
   <div class="card c5">
-    <div class="placeholder-note">[ replace with real quote ]</div>
-    <div class="logo"><div class="mark"><svg width="22" height="22" viewBox="0 0 64 64" fill="#fff"><path d="M32 10l5.2 11.8 12.8 1.2-9.6 8.5 2.8 12.5L32 37.5l-11.2 6.5 2.8-12.5-9.6-8.5 12.8-1.2L32 10z"/></svg></div> ReviewHub</div>
+    <div class="placeholder-note">Replace with real quote</div>
+    <div>
+      <div class="logo">
+        <div class="mark"><svg width="40" height="40" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="rh-grad-t5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e4d5e"/><stop offset="1" stop-color="#2c7889"/></linearGradient></defs><rect width="64" height="64" rx="14" fill="url(#rh-grad-t5)"/><path d="M32 10c1.5 10 4 12.5 14 14-10 1.5-12.5 4-14 14-1.5-10-4-12.5-14-14 10-1.5 12.5-4 14-14z" fill="#fbf8f1"/><path d="M48 40c.7 4 1.6 4.9 5.5 5.5-3.9.6-4.8 1.5-5.5 5.5-.6-4-1.5-4.9-5.5-5.5 4-.6 4.9-1.5 5.5-5.5z" fill="#fbf8f1" opacity="0.95"/></svg></div>
+        ReviewHub
+      </div>
+      <div class="eyebrow" style="margin-top: 24px;">№ 05 — Testimonial</div>
+      <div class="rule"></div>
+    </div>
     <div>
       <div class="quote-open">"</div>
-      <h1>This used to eat an hour of my Sunday. Now it takes two cups of coffee.</h1>
+      <h1>This used to eat an hour of my Sunday.<br/><em>Now it takes two cups of coffee.</em></h1>
     </div>
     <div class="foot">
       <div class="attr">
@@ -167,10 +204,10 @@
         <div>
           <div class="stars">★★★★★</div>
           <div class="name">Maria Chen</div>
-          <div class="title">Owner, Ember Coffee House · Bangkok</div>
+          <div class="title">Owner · Ember Coffee · Bangkok</div>
         </div>
       </div>
-      <div class="tag" style="background:#0f172a; color:#fff; border-color:transparent;">reviewhub.co</div>
+      <div class="tag">reviewhub.co</div>
     </div>
   </div>
 

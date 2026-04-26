@@ -3,30 +3,40 @@
 <head>
 <meta charset="utf-8" />
 <title>ReviewHub — Logo concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
-  body { margin: 0; background: #fafbfc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #0f172a; }
+  body { margin: 0; background: #fbf8f1; font-family: "Inter", -apple-system, system-ui, sans-serif; color: #1d242c; }
   .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 24px; padding: 32px; max-width: 1600px; margin: 0 auto; }
-  .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; overflow: hidden; }
-  .big { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; padding: 26px; background: linear-gradient(135deg, #f8fafc, #eef2ff); }
-  .meta { padding: 14px 16px 16px; border-top: 1px solid #f1f5f9; }
-  .name { font-size: 13px; font-weight: 700; letter-spacing: -0.01em; }
-  .desc { font-size: 11.5px; line-height: 1.45; color: #64748b; margin: 4px 0 10px; }
-  .sizes { display: flex; align-items: center; gap: 14px; padding-top: 8px; border-top: 1px dashed #e2e8f0; }
-  .size-label { font-size: 10px; color: #94a3b8; font-variant-numeric: tabular-nums; }
-  .mono-row { display: flex; gap: 10px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #e2e8f0; align-items: center; }
-  .mono-label { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em; }
-  h1 { padding: 32px 32px 0; margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
-  .sub { padding: 4px 32px 0; margin: 0; font-size: 13px; color: #64748b; }
+  .card { background: #fbf8f1; border: 1px solid #e6dfce; border-radius: 8px; overflow: hidden; }
+  .big { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; padding: 26px; background: #f4eee0; border-bottom: 1px solid #e6dfce; }
+  .meta { padding: 16px 18px 18px; }
+  .name { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: #1d242c; }
+  .desc { font-family: "Inter", sans-serif; font-size: 12.5px; line-height: 1.5; color: #7a8189; margin: 8px 0 14px; }
+  .sizes { display: flex; align-items: center; gap: 14px; padding-top: 12px; border-top: 1px solid #e6dfce; }
+  .size-label { font-family: "JetBrains Mono", monospace; font-size: 10px; color: #7a8189; font-variant-numeric: tabular-nums; letter-spacing: 0.04em; }
+  .mono-row { display: flex; gap: 10px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #e6dfce; align-items: center; }
+  .mono-label { font-family: "JetBrains Mono", monospace; font-size: 10px; color: #7a8189; text-transform: uppercase; letter-spacing: 0.1em; }
+  .header { padding: 56px 32px 8px; max-width: 1600px; margin: 0 auto; border-bottom: 1px solid #e6dfce; }
+  .eyebrow { font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #a06d1c; margin-bottom: 14px; }
+  h1 { padding: 0; margin: 0; font-family: "Newsreader", "Source Serif Pro", Georgia, serif; font-size: 38px; font-weight: 400; letter-spacing: -0.02em; }
+  h1 em { color: #1e4d5e; font-style: italic; }
+  .sub { padding: 0; margin: 8px 0 32px; font-family: "Inter", sans-serif; font-size: 15px; color: #3a4248; line-height: 1.55; }
+  .rule { width: 56px; height: 1px; background: #c48a2c; margin: 14px 0 18px; }
 </style>
 </head>
 <body>
-<h1>ReviewHub logo concepts</h1>
-<p class="sub">Each renders cleanly at 128×128 and 16×16. Monochrome version on right.</p>
+<div class="header">
+  <div class="eyebrow">Brand · Marks</div>
+  <h1>ReviewHub <em>logo concepts.</em></h1>
+  <p class="sub">Each renders cleanly at 128×128 and 16×16. Monochrome version on right.</p>
+</div>
 <div id="root"></div>
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-<script type="text/babel" src="logo.jsx"></script>
+<script type="text/babel" src="logo-concepts.jsx"></script>
 <script type="text/babel">
 function Card({ id, name, description, Component }) {
   return (
