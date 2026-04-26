@@ -227,7 +227,7 @@ publicRouter.get('/google/oauth/callback', async (req, res) => {
 
     return returnUrl(true);
   } catch (err) {
-    console.error('[GOOGLE OAUTH]', err.message);
+    captureException(err, { route: 'platforms', op: 'oauth-callback' });
     return returnUrl(false, 'exchange_failed');
   }
 });
