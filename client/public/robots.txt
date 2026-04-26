@@ -1,7 +1,34 @@
 User-agent: *
+# App pages — require auth, no SEO value, would otherwise eat crawl budget.
 Disallow: /dashboard
 Disallow: /settings
+Disallow: /analytics
+Disallow: /review-requests
+Disallow: /owner
+
+# Token-bearing landing pages. These URLs include single-use secrets
+# (?token=...) that have no business showing up in Google's index. Even
+# though the tokens 404 after first use, indexing the URL trail leaks
+# the user's email + the fact they once signed up. Deny crawl, deny index.
+Disallow: /verify-email
+Disallow: /reset-password
+Disallow: /email-change
+Disallow: /unsubscribed
+
+# In-app auth flow — also blocked from indexing (login/register show on
+# the homepage anyway as buttons; no need for a dedicated indexed page).
+Disallow: /login
+Disallow: /login/mfa
+Disallow: /forgot-password
+
+# Public, indexable surfaces.
 Allow: /
 Allow: /pricing
+Allow: /tools/
+Allow: /terms
+Allow: /privacy
+Allow: /acceptable-use
+Allow: /refund-policy
+Allow: /legal/
 
 Sitemap: https://reviewhub.review/sitemap.xml
