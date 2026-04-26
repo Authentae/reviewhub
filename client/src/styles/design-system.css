@@ -253,6 +253,26 @@
 .rh-float-card.b { top: 110px; right: 0; width: 300px; animation: rh-float-2 7s ease-in-out infinite; }
 .rh-float-card.c { top: 260px; left: 60px; width: 340px; animation: rh-float-3 8s ease-in-out infinite; }
 
+/* Phone: stack the float cards vertically inside the viewport. They're
+   decorative — animation is fine but they MUST NOT overflow horizontally,
+   otherwise the page scrolls sideways and looks "off-center". */
+@media (max-width: 720px) {
+  .rh-card-stack { height: auto; max-width: 100%; padding: 0 16px; }
+  .rh-card-stack > .rh-float-card {
+    position: relative !important;
+    top: auto !important; left: auto !important; right: auto !important;
+    width: 100% !important; max-width: 100% !important;
+    margin-bottom: 14px;
+    /* Disable rotation animations on mobile — they were causing overflow
+       and don't read at small sizes anyway. Keep cards calm and stacked. */
+    animation: none !important;
+    transform: none !important;
+    padding: 14px 16px;
+  }
+  .rh-float-card .fc-body { font-size: 13px; }
+  .rh-float-card .fc-draft { font-size: 12px; padding: 8px 10px; }
+}
+
 .rh-float-card .sent {
   position: absolute; top: -10px; right: -8px;
   background: var(--rh-sage); color: white;
