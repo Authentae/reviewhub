@@ -115,9 +115,16 @@ router.put('/:id', limiter, (req, res) => {
     : req.body.enabled === true || req.body.enabled === 1 ? 1
     : rule.enabled;
   // Allow explicitly clearing keywords by sending null/empty; otherwise fall back to existing value.
+  // Defensive: corrupted match_keywords JSON in the row would otherwise throw
+  // and 500 every PUT for that rule, locking the user out of editing it.
+  const safeExistingKeywords = (() => {
+    if (!rule.match_keywords) return null;
+    try { return JSON.parse(rule.match_keywords); }
+    catch { return null; }
+  })();
   const keywords = req.body.match_keywords !== undefined
     ? parseKeywords(req.body.match_keywords)
-    : (rule.match_keywords ? JSON.parse(rule.match_keywords) : null);
+    : safeExistingKeywords;
   const tagId = req.body.tag_id !== undefined
     ? (req.body.tag_id != null ? (parseInt(req.body.tag_id, 10) || null) : null)
     : rule.tag_id;

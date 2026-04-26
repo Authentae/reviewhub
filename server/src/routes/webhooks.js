@@ -26,11 +26,19 @@ function parseId(param) {
   return (isFinite(n) && n > 0 && String(n) === String(param)) ? n : null;
 }
 
+// Safe-parse: a single corrupted events JSON row would otherwise throw and
+// 500 the whole webhooks list (locking the user out of the Settings webhooks
+// UI). Default to ['review.created'] so the row stays usable.
+function safeParseEvents(raw) {
+  try { return JSON.parse(raw || '[]'); }
+  catch { return ['review.created']; }
+}
+
 // GET /api/webhooks — list all webhooks for the authenticated user
 router.get('/', webhookLimiter, (req, res) => {
   try {
     const rows = all('SELECT * FROM webhooks WHERE user_id = ? ORDER BY created_at DESC', [req.user.id]);
-    res.json({ webhooks: rows.map(w => ({ ...w, events: JSON.parse(w.events || '[]') })) });
+    res.json({ webhooks: rows.map(w => ({ ...w, events: safeParseEvents(w.events) })) });
   } catch (err) {
     captureException(err, { route: 'webhooks' });
     res.status(500).json({ error: 'Server error' });
@@ -61,7 +69,7 @@ router.post('/', webhookLimiter, (req, res) => {
       [req.user.id, urlClean, secret, JSON.stringify(eventList)]
     );
     const hook = get('SELECT * FROM webhooks WHERE id = ?', [id]);
-    res.status(201).json({ ...hook, events: JSON.parse(hook.events) });
+    res.status(201).json({ ...hook, events: safeParseEvents(hook.events) });
   } catch (err) {
     captureException(err, { route: 'webhooks' });
     res.status(500).json({ error: 'Server error' });
@@ -96,13 +104,13 @@ router.put('/:id', webhookLimiter, (req, res) => {
     }
 
     if (fields.length === 0) {
-      const current = { ...hook, events: JSON.parse(hook.events) };
+      const current = { ...hook, events: safeParseEvents(hook.events) };
       return res.json(current);
     }
     params.push(hook.id);
     run(`UPDATE webhooks SET ${fields.join(', ')} WHERE id = ?`, params);
     const updated = get('SELECT * FROM webhooks WHERE id = ?', [hook.id]);
-    res.json({ ...updated, events: JSON.parse(updated.events) });
+    res.json({ ...updated, events: safeParseEvents(updated.events) });
   } catch (err) {
     captureException(err, { route: 'webhooks' });
     res.status(500).json({ error: 'Server error' });
