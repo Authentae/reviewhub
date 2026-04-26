@@ -42,12 +42,28 @@ export function I18nProvider({ children }) {
     document.documentElement.setAttribute('lang', lang);
   }, [lang]);
 
-  // t(key, vars) — look up a translation key and replace {var} placeholders
-  const t = useCallback((key, vars = {}) => {
+  // t(key, varsOrFallback, vars) — look up a translation and substitute {var}.
+  //
+  // Two supported signatures:
+  //   t('key')                            — plain lookup, falls back to en, then to key string
+  //   t('key', { name: 'Tom' })           — interpolate {name} from vars
+  //   t('key', 'English fallback')        — render fallback if key is missing in BOTH current locale and en
+  //   t('key', 'English fallback', vars)  — fallback + interpolation
+  //
+  // The `string-as-second-arg` form was widespread in the codebase (~60 call
+  // sites in claim/owner/ownerResponse components) under the assumption it
+  // was the fallback. Without this overload, those components render literal
+  // key strings ("claim.signInToClaim") to users — visible UX bug.
+  const t = useCallback((key, varsOrFallback = {}, varsArg = {}) => {
     const dict = translations[lang] || translations.en;
-    let str = dict[key] ?? translations.en[key] ?? key;
-    for (const [k, v] of Object.entries(vars)) {
-      str = str.replaceAll(`{${k}}`, v);
+    const isFallbackString = typeof varsOrFallback === 'string';
+    const fallback = isFallbackString ? varsOrFallback : null;
+    const vars = isFallbackString ? varsArg : varsOrFallback;
+    let str = dict[key] ?? translations.en[key] ?? fallback ?? key;
+    if (vars && typeof vars === 'object') {
+      for (const [k, v] of Object.entries(vars)) {
+        str = str.replaceAll(`{${k}}`, v);
+      }
     }
     return str;
   }, [lang]);
