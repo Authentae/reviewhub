@@ -57,8 +57,13 @@ router.get('/consent-status', requireAuth, async (req, res) => {
   }
 });
 
-// POST /api/gdpr/consent - Record user consent
-router.post('/consent', requireAuth, async (req, res) => {
+// POST /api/gdpr/consent - Record user consent.
+// Rate-limited because each call writes a row to consent_audit (immutable
+// trail) — without a cap, an attacker (or a buggy client) could fill the
+// table with thousands of duplicate consent flips per second. The 5-per-15-
+// min limit comfortably covers a real user re-toggling preferences in the
+// CookieConsent UI but cuts off any automated abuse.
+router.post('/consent', requireAuth, gdprRateLimit, async (req, res) => {
   try {
     const { consentType, granted } = req.body;
 
