@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { isLoggedIn } from '../lib/auth';
@@ -9,6 +9,21 @@ export default function NotFound() {
   const { t } = useI18n();
   usePageTitle(t('page.notFound'));
   const loggedIn = isLoggedIn();
+
+  // Tell search-engine crawlers not to index this URL. Without this, Google
+  // sees the SPA fallback returning HTTP 200 for any path under our domain
+  // and would happily index thousands of bogus URLs ("/random-typo",
+  // "/old-blog-post-that-never-existed", etc.) — diluting our real
+  // page-rank signals. Setting `noindex, nofollow` on each render fixes the
+  // perception without needing server-side route detection.
+  useEffect(() => {
+    const meta = document.createElement('meta');
+    meta.name = 'robots';
+    meta.content = 'noindex, nofollow';
+    document.head.appendChild(meta);
+    return () => { document.head.removeChild(meta); };
+  }, []);
+
   return (
     <div className="rh-design rh-app min-h-screen">
       <Navbar />
