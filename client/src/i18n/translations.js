@@ -1207,6 +1207,104 @@ const en = {
   'webhooks.saving': 'Saving…',
   'webhooks.add': 'Add webhook',
   'webhooks.addBtn': 'Add webhook',
+
+  // ── Keys added during overnight i18n audit (2026-04-27) ────────────────
+  // These were used in components but missing from the en dictionary, so
+  // users saw the literal key string ("claim.signInToClaim") rendered.
+  // The earlier t() fallback fix handled call sites that pass a string as
+  // 2nd arg; this section covers the rest (and gives non-en locales a
+  // baseline to translate from). Each key reflects the exact fallback the
+  // calling component intended.
+
+  // Common micro-strings used across many forms
+  'common.delete': 'Delete',
+  'common.deleting': 'Deleting…',
+  'common.edit': 'Edit',
+  'common.yes': 'Yes',
+  'common.no': 'No',
+  'common.optional': 'Optional',
+
+  // Aria labels for icon-only delete buttons
+  'autoRules.deleteAria': 'Delete rule',
+  'tags.deleteAria': 'Delete tag',
+  'webhooks.deleteAria': 'Delete webhook',
+
+  // Business-claim flow (ClaimBusinessButton). Strings mirror the inline
+  // fallbacks in the component so existing tests continue to assert against
+  // the same visible text.
+  'claim.checking': 'Checking ownership status…',
+  'claim.signInToClaim': 'Sign in to claim this business',
+  'claim.approved': 'Verified owner',
+  'claim.pending': 'Claim under review',
+  'claim.rejected': 'Claim was not approved',
+  'claim.claimCta': 'Claim this business',
+  'claim.modalTitle': 'Claim this business',
+  'claim.modalSubtitle': 'Tell us who you are at {name}. We\'ll verify and grant owner-response access.',
+  'claim.fieldName': 'Your name',
+  'claim.fieldRole': 'Your role',
+  'claim.fieldRolePlaceholder': 'Owner, Manager, Marketing Lead…',
+  'claim.fieldNote': 'Anything we should know? (optional)',
+  'claim.fieldNotePlaceholder': 'e.g. company email domain, business registration number',
+  'claim.missingFields': 'Name and role are required',
+  'claim.submitting': 'Submitting…',
+  'claim.submit': 'Submit claim',
+  'claim.submitted': 'Claim submitted — we\'ll review it shortly',
+  'claim.failed': 'Could not submit claim — please try again',
+
+  // Owner dashboard (OwnerDashboard page)
+  'owner.pageTitle': 'My businesses',
+  'owner.heading': 'Businesses you own',
+  'owner.subheading': 'Verified businesses where you can post public owner responses to reviews.',
+  'owner.backToDashboard': '← Back to dashboard',
+  'owner.loadFailed': 'Could not load your businesses — please refresh.',
+  'owner.emptyTitle': 'No verified businesses yet',
+  'owner.emptyBody': 'Once a claim is approved, the business shows up here.',
+  'owner.row.manage': 'Manage',
+  'owner.row.totalReviews': '{n} reviews',
+  'owner.row.pendingAria': 'Pending owner response on {n} reviews',
+  'owner.upsellTitle': 'Want owner responses across all your reviews?',
+  'owner.upsellBody': 'Connect your business platforms to pull every review into one dashboard with AI-drafted replies.',
+  'owner.upsellCta': 'Upgrade to Pro',
+  'owner.upsellBadge': 'Pro',
+
+  // Owner public response (ReviewResponse + ReviewResponseForm). Strings
+  // mirror the existing inline fallbacks; tests assert against this visible
+  // text so changes here ripple to test expectations.
+  'ownerResponse.label': 'Owner response',
+  'ownerResponse.badge': 'Owner response',
+  'ownerResponse.placeholder': 'Thank the reviewer, address their feedback, invite them back…',
+  'ownerResponse.minHint': 'Minimum {n} characters',
+  'ownerResponse.maxHint': 'Maximum {n} characters',
+  'ownerResponse.publish': 'Publish response',
+  'ownerResponse.saveEdit': 'Save changes',
+  'ownerResponse.saving': 'Saving…',
+  'ownerResponse.posted': 'Response posted',
+  'ownerResponse.updated': 'Response updated',
+  'ownerResponse.deleted': 'Response deleted',
+  'ownerResponse.postFailed': 'Could not post response',
+  'ownerResponse.updateFailed': 'Could not update response',
+  'ownerResponse.deleteFailed': 'Could not delete response',
+  'ownerResponse.editAria': 'Edit owner response',
+  'ownerResponse.deleteAria': 'Delete owner response',
+  'ownerResponse.formAria': 'Respond as the business owner',
+  'ownerResponse.regionAria': 'Owner response',
+  'ownerResponse.confirmDelete': 'Delete?',
+  'ownerResponse.confirmDeleteAria': 'Confirm delete',
+  'ownerResponse.edited': 'edited',
+
+  // Settings subtitle
+  'settings.subtitle': 'Manage your business, integrations, billing, and notifications.',
+
+  // Unsubscribe confirmation page (Unsubscribed.jsx)
+  'unsub.title': 'You\'re unsubscribed',
+  'unsub.body': 'We won\'t send you {list} anymore.',
+  'unsub.note': 'You can re-subscribe anytime from Settings → Notifications.',
+  'unsub.openSettings': 'Notification settings',
+
+  // Monthly value receipt (ValueReceipt.jsx) — interpolation keys: {responded}, {hours}
+  'value.thisMonthLabel': 'This month with ReviewHub',
+  'value.receiptBody': 'You responded to {responded} reviews — about {hours} of work handled.',
+  'value.receiptAria': 'Monthly value summary',
 };
 
 const es = {
