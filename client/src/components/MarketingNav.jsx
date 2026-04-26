@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import { useI18n } from '../context/I18nContext';
+import Logo from './Logo';
 
 // Editorial sticky nav for the marketing surfaces (Landing, Pricing, etc).
 //
@@ -69,7 +70,7 @@ export default function MarketingNav({ sections = [] }) {
     <nav className="rh-nav">
       <div className="rh-shell rh-bar">
         <Link to="/" className="rh-brand">
-          <div className="mark">r</div>
+          <Logo size={30} />
           <div className="wm">Review<em>Hub</em></div>
         </Link>
         {sections.length > 0 ? (

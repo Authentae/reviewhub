@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useI18n } from '../context/I18nContext';
 import { RhThemeToggle, RhLangPicker } from './MarketingNav';
+import Logo from './Logo';
 import '../styles/design-system.css';
 
 // Marketing-side panel shown next to the Login/Register/Forgot/Reset forms on
@@ -26,7 +27,7 @@ export default function AuthSideArt({ eyebrow, title }) {
         {/* Brand + controls row */}
         <div className="rh-auth-top">
           <Link to="/" className="rh-brand">
-            <div className="mark">r</div>
+            <Logo size={30} />
             <div className="wm">Review<em>Hub</em></div>
           </Link>
           <div className="rh-auth-controls">
