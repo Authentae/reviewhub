@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import api from '../lib/api';
 import usePageTitle from '../hooks/usePageTitle';
@@ -46,11 +46,10 @@ export default function ConfirmErasure() {
       });
   }
 
-  // Don't auto-submit. This is destructive and irreversible — explicit
+  // Note: no auto-submit. This is destructive and irreversible — explicit
   // click required. The email already explains the consequences; arriving
   // here is intent, but a user might reach this page from a forwarded
   // email by accident, so the final button-click stays.
-  useEffect(() => { /* noop — see comment */ }, []);
 
   return (
     <div className="rh-design rh-app min-h-screen flex items-center justify-center px-4">
