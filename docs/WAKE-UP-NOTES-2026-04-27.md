@@ -161,3 +161,51 @@ later iterations (iterations 20–66, ~46 more commits):
 Branch is in solid shape. No outstanding blockers other than the
 ones in the original notes (Anthropic credit, optional key rotation).
 
+---
+
+## Late addendum — additional iterations (66+)
+
+A handful of high-impact wins surfaced beyond the previous addendum.
+The biggest one is worth calling out explicitly:
+
+**REAL BUG: timing-oracle defense was broken** ([`eb042fa`], [`ed846b4`])
+
+The login route's "unknown email" branch burns a bcrypt cycle against
+a fixed dummy hash so response time matches the "bad password" branch.
+But the dummy was \`$2a$10$…\` (cost 10) while real users hash at
+\`BCRYPT_COST = 12\`. Cost 12 is ~4× slower than cost 10 — so the
+unknown branch returned in ~85ms vs the bad branch's ~340ms,
+**re-opening the very email-enumeration oracle the dummy was meant to
+close**. An attacker measuring response times over a sample could
+distinguish "registered user" from "unknown" with high confidence.
+
+The "flaky" timing-regression test from iteration 24 wasn't actually
+flaky — it was correctly detecting the structural ratio. The fix
+generates the dummy at module-load via
+\`bcrypt.hashSync(..., BCRYPT_COST)\`, so a future BCRYPT_COST bump
+automatically propagates. Pinned with a regression test ([`635994f`])
+that asserts cost-factor parity AND end-to-end timing-ratio < 5×.
+
+**Other late wins:**
+- `og-image.png` 404 fix ([`de34bdc`]) — every social share got
+  text-only cards because the image never existed
+- Morgan stdout token redaction ([`152f468`]) — same class of leak
+  as Sentry, missed in earlier passes
+- Metrics `by_route` cardinality fix ([`ec1e3f7`]) — slow memory leak
+  growing with attack noise
+- Metrics top-routes split ([`a5534b2`]) — scan noise no longer
+  hides real-traffic ranking
+- ConfirmErasure SPA page + 7 tests ([`0301401`], [`7ee85f9`])
+- Cookie consent banner now i18n + 5 tests ([`d8420ef`], [`8926bd6`])
+- Boot-failure exits 1 ([`c8b37ce`]) — was zombie-process under
+  bad config
+- `.editorconfig` + `.gitattributes` ([`afa0041`], [`f75687d`]) —
+  contributor-experience cleanup
+- Thai i18n: 574 → 872 keys covering pricing, dashboard filters,
+  bulk actions, auto-rules, cookie banner, onboarding, claim flow,
+  owner response, owner dashboard, widget settings, review requests,
+  analytics, settings banners, email-change wizard
+
+**Final test totals**: 572+ server (was 521), ~177 client (was 161).
+
+
