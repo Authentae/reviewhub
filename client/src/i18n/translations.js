@@ -7490,6 +7490,10 @@ const th = {
   'landing.pullQuote': 'จินตนาการดูว่าคุณเปลี่ยนจากเช้าวันจันทร์ที่กลัว เป็นเคลียร์รีวิวทั้งสัปดาห์เสร็จก่อนกาแฟเย็น',
   'landing.pullQuoteAttribTitle': 'นี่คือสิ่งที่เรากำลังสร้าง',
   'landing.pullQuoteAttribDesc': 'คำชมจริงจากลูกค้าเบต้ารุ่นแรกจะมาเร็วๆ นี้',
+  'landing.hintAria': 'ลองร่างคำตอบ',
+  'landing.hintPressLabel': 'กด',
+  'landing.hintToDraft': 'เพื่อร่างคำตอบ',
+  'a11y.skipToMain': 'ข้ามไปยังเนื้อหาหลัก',
 
   // ReviewCard action affordances — pin, flag, status, sentiment override.
   // Visible on every review row in the dashboard.

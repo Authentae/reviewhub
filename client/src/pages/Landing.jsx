@@ -712,6 +712,7 @@ const DRAFT_SAMPLES = [
 ];
 
 function GimmickLayer() {
+  const { t } = useI18n();
   const [toasts, setToasts] = useState([]);
   const [hintShown, setHintShown] = useState(true);
   const nextId = useRef(1);
@@ -799,8 +800,8 @@ function GimmickLayer() {
         ))}
       </div>
       {hintShown && (
-        <button className="rh-kbd-hint" onClick={() => { dismissHint(); spawnToast(); }} aria-label="Try drafting a review">
-          Press <kbd>R</kbd> to draft a reply
+        <button className="rh-kbd-hint" onClick={() => { dismissHint(); spawnToast(); }} aria-label={t('landing.hintAria', 'Try drafting a review')}>
+          {t('landing.hintPressLabel', 'Press')} <kbd>R</kbd> {t('landing.hintToDraft', 'to draft a reply')}
         </button>
       )}
     </>
@@ -830,7 +831,7 @@ export default function Landing() {
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:bg-[color:var(--rh-paper)] focus:text-[color:var(--rh-teal)] focus:px-4 focus:py-2 focus:rounded-lg focus:font-semibold focus:shadow-lg focus:outline-none"
       >
-        Skip to main content
+        {t('a11y.skipToMain', 'Skip to main content')}
       </a>
       <MarketingNav sections={[
         { id: 'how', label: t('nav.howItWorks', 'How it works') },
