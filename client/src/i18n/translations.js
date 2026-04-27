@@ -7401,6 +7401,22 @@ const th = {
   'shortcuts.goPricing': 'ไปที่ราคา',
   'shortcuts.then': 'แล้ว',
   'shortcuts.footerHint': 'แป้นพิมพ์ลัดถูกปิดในขณะที่คุณกำลังพิมพ์ในช่องข้อความ',
+
+  // Toast notifications — fired by AI-quota and reply-post-back flows
+  'toast.aiDraftLimit': 'ใช้โควตา AI Draft ครบสำหรับเดือนนี้แล้ว — อัปเกรดเพื่อเพิ่มจำนวน',
+  'toast.aiDraftLimitUpgrade': 'ใช้โควตา AI Draft ครบแล้ว — อัปเกรดเป็น {plan} เพื่อใช้ไม่จำกัด',
+  'toast.responsePosted': 'บันทึกคำตอบและโพสต์บน {platform} แล้ว',
+  'toast.responseSavedPostFailed': 'บันทึกคำตอบในเครื่องแล้ว แต่โพสต์ขึ้นแพลตฟอร์มไม่สำเร็จ: {err}',
+
+  // Email-change confirmation page — landed via the /email-change link
+  'emailChange.verifying': 'กำลังยืนยันอีเมลใหม่ของคุณ…',
+  'emailChange.successTitle': 'อัปเดตอีเมลแล้ว',
+  'emailChange.successDesc': 'อีเมลในบัญชีของคุณตอนนี้คือ:',
+  'emailChange.goSettings': 'ไปที่การตั้งค่า',
+  'emailChange.errorTitle': 'ยืนยันไม่สำเร็จ',
+  'emailChange.missingTitle': 'ไม่มีโทเค็นยืนยัน',
+  'emailChange.missingDesc': 'หน้านี้ต้องการลิงก์ยืนยันที่ถูกต้อง หากคุณขอเปลี่ยนอีเมล โปรดเปิดลิงก์ที่เราส่งไปยังที่อยู่ใหม่',
+  'emailChange.genericError': 'เกิดข้อผิดพลาดขณะยืนยันการเปลี่ยนอีเมล ลิงก์อาจหมดอายุหรือถูกใช้แล้ว',
 };
 
 export const LANGUAGES = [
