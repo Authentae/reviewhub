@@ -155,7 +155,7 @@ export default function Navbar() {
           <div className="hidden sm:flex items-center" style={{ gap: 4 }}>
             {loggedIn ? (
               <div className="rh-app-nav-links">
-                <Link to="/dashboard" className={isActive('/dashboard') ? 'active' : ''}>
+                <Link to="/dashboard" className={isActive('/dashboard') ? 'active' : ''} aria-current={isActive('/dashboard') ? 'page' : undefined}>
                   {t('nav.dashboard')}
                   {unresponded > 0 && (
                     <span
@@ -166,15 +166,15 @@ export default function Navbar() {
                     </span>
                   )}
                 </Link>
-                <Link to="/analytics" className={isActive('/analytics') ? 'active' : ''}>{t('nav.analytics')}</Link>
-                <Link to="/review-requests" className={isActive('/review-requests') ? 'active' : ''}>{t('nav.reviewRequests')}</Link>
-                <Link to="/owner" className={isActive('/owner') ? 'active' : ''}>{t('nav.owner') || 'Owner'}</Link>
-                <Link to="/settings" className={isActive('/settings') ? 'active' : ''}>{t('nav.settings')}</Link>
-                <Link to="/pricing" className={isActive('/pricing') ? 'active' : ''}>{t('nav.pricing')}</Link>
+                <Link to="/analytics" className={isActive('/analytics') ? 'active' : ''} aria-current={isActive('/analytics') ? 'page' : undefined}>{t('nav.analytics')}</Link>
+                <Link to="/review-requests" className={isActive('/review-requests') ? 'active' : ''} aria-current={isActive('/review-requests') ? 'page' : undefined}>{t('nav.reviewRequests')}</Link>
+                <Link to="/owner" className={isActive('/owner') ? 'active' : ''} aria-current={isActive('/owner') ? 'page' : undefined}>{t('nav.owner') || 'Owner'}</Link>
+                <Link to="/settings" className={isActive('/settings') ? 'active' : ''} aria-current={isActive('/settings') ? 'page' : undefined}>{t('nav.settings')}</Link>
+                <Link to="/pricing" className={isActive('/pricing') ? 'active' : ''} aria-current={isActive('/pricing') ? 'page' : undefined}>{t('nav.pricing')}</Link>
               </div>
             ) : (
               <div className="rh-app-nav-links">
-                <Link to="/pricing" className={isActive('/pricing') ? 'active' : ''}>{t('nav.pricing')}</Link>
+                <Link to="/pricing" className={isActive('/pricing') ? 'active' : ''} aria-current={isActive('/pricing') ? 'page' : undefined}>{t('nav.pricing')}</Link>
               </div>
             )}
           </div>
@@ -322,6 +322,7 @@ function MobileLink({ to, label, active, highlight, badge }) {
   return (
     <Link
       to={to}
+      aria-current={active ? 'page' : undefined}
       style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '10px 12px', borderRadius: 8,
