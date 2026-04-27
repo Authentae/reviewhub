@@ -7269,6 +7269,40 @@ const th = {
   'widget.enabled': 'เปิดใช้งานแบดจ์แล้ว',
   'widget.disabled': 'ปิดใช้งานแบดจ์แล้ว',
   'widget.saveFailed': 'บันทึกการตั้งค่าแบดจ์ไม่สำเร็จ',
+
+  // Review Requests page — owners send personalized review-invite emails
+  // to customers. Top of the form + history list, all visible on first
+  // visit. Most-used surface for the proactive review-collection flow.
+  'requests.title': 'ขอรีวิว',
+  'requests.subtitle': 'ส่งคำเชิญส่วนตัวให้ลูกค้าเขียนรีวิวบนแพลตฟอร์มที่คุณเลือก',
+  'requests.sendRequest': 'ส่งคำขอ',
+  'requests.customerName': 'ชื่อลูกค้า',
+  'requests.customerNamePlaceholder': 'สมชาย ใจดี',
+  'requests.customerEmail': 'อีเมลลูกค้า',
+  'requests.platform': 'แพลตฟอร์ม',
+  'requests.personalMessage': 'ข้อความส่วนตัว',
+  'requests.messagePlaceholder': 'ขอบคุณที่มาใช้บริการเรา!',
+  'requests.send': 'ส่งคำขอ',
+  'requests.sending': 'กำลังส่ง…',
+  'requests.sendHint': 'อีเมลพร้อมลิงก์รีวิวโดยตรงจะถูกส่งให้ลูกค้า',
+  'requests.sent': 'ส่งคำขอแล้ว!',
+  'requests.sendFailed': 'ส่งคำขอไม่สำเร็จ',
+  'requests.loadFailed': 'โหลดรายการคำขอไม่สำเร็จ',
+  'requests.nameRequired': 'กรุณาระบุชื่อลูกค้า',
+  'requests.invalidEmail': 'กรุณาระบุอีเมลที่ถูกต้อง',
+  'requests.history': 'คำขอที่ส่งแล้ว',
+  'requests.noHistory': 'ยังไม่มีคำขอที่ส่ง',
+  'requests.noHistoryHint': 'ส่งคำขอแรกของคุณด้วยฟอร์มด้านบน',
+  'requests.customer': 'ลูกค้า',
+  'requests.sentAt': 'ส่งเมื่อ',
+  'requests.status': 'สถานะ',
+  'requests.clicked': 'คลิกแล้ว',
+  'requests.pending': 'รอดำเนินการ',
+  'requests.deleted': 'ลบคำขอแล้ว',
+  'requests.deleteFailed': 'ลบคำขอไม่สำเร็จ',
+  'requests.deleteAria': 'ลบคำขอของ {name}',
+  'requests.resend': 'ส่งซ้ำ',
+  'requests.resent': 'ส่งคำขอซ้ำแล้ว',
 };
 
 export const LANGUAGES = [
