@@ -7343,6 +7343,29 @@ const th = {
   'settings.emailChangeFailed': 'เริ่มเปลี่ยนอีเมลไม่สำเร็จ ตรวจสอบรหัสผ่านและลองใหม่',
   'settings.emailChangeSentTitle': 'ตรวจสอบกล่องอีเมลใหม่ของคุณ',
   'settings.emailChangeSentDesc': 'เราส่งลิงก์ยืนยันไปที่ {email} คลิกเพื่อยืนยันการเปลี่ยนอีเมล ลิงก์หมดอายุใน 1 ชั่วโมง',
+
+  // Landing page — highest-traffic surface, hero CTAs and "how it works"
+  // sections that drive conversion.
+  'landing.heroCtaPrimary': 'ติดตั้งส่วนขยาย Chrome',
+  'landing.heroCtaSecondary': 'ลองฟรี — ไม่ต้องสมัคร',
+  'landing.heroCtaPrimaryNewTab': '(เปิดในแท็บใหม่)',
+  'landing.platformsLabel': 'เชื่อมต่อกับแพลตฟอร์มสำคัญที่สุด',
+  'landing.featuresEyebrow': 'แดชบอร์ดเดียว เห็นภาพรวมทั้งหมด',
+  'landing.testimonialsEyebrow': 'ผลลัพธ์จริง',
+  'landing.footerTagline': 'แดชบอร์ดรีวิวสำหรับธุรกิจท้องถิ่น ตอบเร็วขึ้น เรียนรู้จากคำติชม รักษาลูกค้าให้กลับมา',
+  'landing.footerProduct': 'ผลิตภัณฑ์',
+  'landing.footerLegal': 'ข้อกฎหมาย',
+  'landing.footerPlatforms': 'การเชื่อมต่อ',
+  'landing.howEyebrow': 'ใช้งานได้อย่างไร',
+  'landing.howTitle': 'พร้อมใช้งานภายใน 3 นาที',
+  'landing.howSubtitle': 'ไม่ต้องตั้งค่าซับซ้อน ไม่ต้องอบรม ผู้ใช้ส่วนใหญ่ส่งคำตอบแรกในวันที่สมัคร',
+  'landing.how1Title': 'เชื่อมต่อแพลตฟอร์ม',
+  'landing.how1Desc': 'เข้าสู่ระบบด้วย Google วาง ID ของ Yelp หรือ Facebook หรือนำเข้า CSV — ที่เหลือเราจัดการให้',
+  'landing.how2Title': 'รีวิวซิงค์อัตโนมัติ',
+  'landing.how2Desc': 'รีวิวใหม่ปรากฏในแดชบอร์ดภายในไม่กี่นาที รับการแจ้งเตือนทางอีเมลเมื่อมีรีวิวเชิงลบ',
+  'landing.how3Title': 'ตอบในไม่กี่วินาที',
+  'landing.how3Desc': 'ใช้ร่าง AI เทมเพลตที่บันทึกไว้ หรือพิมพ์เอง — บันทึกครั้งเดียว เราจะเตือนให้โพสต์บนแพลตฟอร์ม',
+  'landing.howCta': 'เริ่มต้นบัญชีฟรี',
 };
 
 export const LANGUAGES = [
