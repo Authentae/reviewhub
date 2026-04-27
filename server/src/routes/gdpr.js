@@ -188,8 +188,19 @@ router.post('/confirm-erasure', gdprRateLimit, async (req, res) => {
     if (!userId || !token) {
       return res.status(400).json({ error: 'User ID and token required' });
     }
+    // Fast-fail on obviously-malformed tokens so we don't waste a SHA-256
+    // and a DB lookup on payloads that can't possibly match. The signed
+    // erasure token is 32 random bytes hex-encoded → exactly 64 lowercase
+    // hex chars. Same shape check as /reset-password.
+    if (typeof token !== 'string' || !/^[a-f0-9]{64}$/.test(token)) {
+      return res.status(400).json({ error: 'Invalid or expired erasure token' });
+    }
+    const userIdNum = Number(userId);
+    if (!Number.isInteger(userIdNum) || userIdNum <= 0) {
+      return res.status(400).json({ error: 'Invalid user id' });
+    }
 
-    const erasureResult = await dataRights.processErasureRequest(userId, token);
+    const erasureResult = await dataRights.processErasureRequest(userIdNum, token);
 
     res.json({
       success: true,
