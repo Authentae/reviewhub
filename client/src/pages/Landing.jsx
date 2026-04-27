@@ -652,6 +652,7 @@ function BigCta() {
 }
 
 function Footer() {
+  const { t } = useI18n();
   return (
     <footer className="rh-footer">
       <div className="rh-shell">
@@ -661,42 +662,33 @@ function Footer() {
               <div className="mark">r</div>
               <div className="wm">Review<em>Hub</em></div>
             </Link>
-            <div className="tagline">The reply layer for <em>local business.</em></div>
+            <div className="tagline">{t('landing.footerTagline')}</div>
           </div>
           <div className="cols">
             <div>
-              <h4>Product</h4>
+              <h4>{t('landing.footerProduct', 'Product')}</h4>
               <ul>
-                <li><Link to="/register">Chrome extension</Link></li>
-                <li><Link to="/login">Dashboard</Link></li>
-                <li><a href="#demo">AI drafts</a></li>
-                <li><a href="#features">Review requests</a></li>
-                <li><a href="#features">Analytics</a></li>
+                <li><Link to="/tools/review-reply-generator">{t('landing.footerFreeTool', 'Free tool')}</Link></li>
+                <li><Link to="/login">{t('landing.footerDashboard', 'Dashboard')}</Link></li>
+                <li><Link to="/pricing">{t('landing.footerPricing', 'Pricing')}</Link></li>
+                <li><a href="#demo">{t('landing.footerAiDrafts', 'AI drafts')}</a></li>
+                <li><a href="#features">{t('landing.footerFeatures', 'Features')}</a></li>
               </ul>
             </div>
             <div>
-              <h4>Company</h4>
+              <h4>{t('landing.footerLegal', 'Legal')}</h4>
               <ul>
-                <li><Link to="/about">About</Link></li>
-                <li><Link to="/changelog">Changelog</Link></li>
-                <li><Link to="/status">Status</Link></li>
-                <li><Link to="/contact">Contact</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4>Legal</h4>
-              <ul>
-                <li><Link to="/privacy">Privacy</Link></li>
-                <li><Link to="/terms">Terms</Link></li>
-                <li><Link to="/acceptable-use">Acceptable use</Link></li>
-                <li><Link to="/refunds">Refunds</Link></li>
+                <li><Link to="/privacy">{t('landing.footerPrivacy', 'Privacy')}</Link></li>
+                <li><Link to="/terms">{t('landing.footerTerms', 'Terms')}</Link></li>
+                <li><Link to="/acceptable-use">{t('landing.footerAcceptable', 'Acceptable use')}</Link></li>
+                <li><Link to="/refund-policy">{t('landing.footerRefunds', 'Refunds')}</Link></li>
               </ul>
             </div>
           </div>
         </div>
         <div className="copy">
-          <div>© 2026 ReviewHub · Made solo in Chiang Mai</div>
-          <div className="status rh-mono">all systems nominal</div>
+          <div>© 2026 ReviewHub · {t('landing.footerMadeSolo', 'Made solo in Chiang Mai')}</div>
+          <div className="status rh-mono">{t('landing.footerStatus', 'all systems nominal')}</div>
         </div>
       </div>
     </footer>

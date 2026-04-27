@@ -7392,6 +7392,17 @@ const th = {
   'landing.step3Cat': 'โพสต์',
   'landing.step3H': 'แตะครั้งเดียว เผยแพร่ทันที',
   'landing.step3P': 'ส่วนขยายโพสต์บนแพลตฟอร์มที่คุณอยู่ — ไม่ต้องคัดลอกวาง ไม่ต้องสลับแท็บ ไม่ต้องจำรหัสผ่าน เวลาตอบเฉลี่ย: 12 วินาที',
+  'landing.footerFreeTool': 'เครื่องมือฟรี',
+  'landing.footerDashboard': 'แดชบอร์ด',
+  'landing.footerPricing': 'ราคา',
+  'landing.footerAiDrafts': 'AI ร่างคำตอบ',
+  'landing.footerFeatures': 'ฟีเจอร์',
+  'landing.footerPrivacy': 'นโยบายความเป็นส่วนตัว',
+  'landing.footerTerms': 'ข้อกำหนด',
+  'landing.footerAcceptable': 'การใช้งานที่ยอมรับได้',
+  'landing.footerRefunds': 'การคืนเงิน',
+  'landing.footerMadeSolo': 'พัฒนาคนเดียวจากเชียงใหม่',
+  'landing.footerStatus': 'ทุกระบบทำงานปกติ',
 
   // ReviewCard action affordances — pin, flag, status, sentiment override.
   // Visible on every review row in the dashboard.
