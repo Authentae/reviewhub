@@ -501,7 +501,11 @@ function PullQuote() {
 
 // ── Bento feature grid ────────────────────────────────────────────────────
 function FeatureGrid() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
+  const isThai = lang === 'th';
+  const dashNames = isThai
+    ? ['มาร์โก พี. · Google', 'พลอย ส. · Google', 'เจมี่ อาร์. · Google']
+    : ['Marco P. · Google', 'Ploy S. · Google', 'Jamie R. · Google'];
   const days = [38, 42, 55, 49, 61, 58, 72, 65, 78, 82, 79, 91];
   return (
     <section className="rh-section rh-features" id="features" aria-label="Product features">
@@ -547,9 +551,9 @@ function FeatureGrid() {
             <h3>{t('landing.bento.inboxTitle', 'One feed. Every Google review.')}</h3>
             <div className="viz mini-dash">
               <div className="mdh"><span>{t('landing.bento.todayLabel', 'TODAY')}</span><span>14 {t('landing.bento.newLabel', 'NEW')}</span></div>
-              <div className="mdrow"><span className="dot g" /><span className="name">Marco P. · Google</span><span className="st">★★★★★</span></div>
-              <div className="mdrow"><span className="dot g" /><span className="name">Ploy S. · Google</span><span className="st">★★★★★</span></div>
-              <div className="mdrow"><span className="dot g" /><span className="name">Jamie R. · Google</span><span className="st">★★★★</span></div>
+              <div className="mdrow"><span className="dot g" /><span className="name">{dashNames[0]}</span><span className="st">★★★★★</span></div>
+              <div className="mdrow"><span className="dot g" /><span className="name">{dashNames[1]}</span><span className="st">★★★★★</span></div>
+              <div className="mdrow"><span className="dot g" /><span className="name">{dashNames[2]}</span><span className="st">★★★★</span></div>
             </div>
           </div>
           <div className="cell e rh-reveal">
