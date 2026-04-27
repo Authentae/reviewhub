@@ -677,6 +677,56 @@ async function sendEmailChangeAlert(oldEmail, newEmail) {
   });
 }
 
+// GDPR Article 17 erasure-request confirmation. Sent in response to a
+// /api/gdpr/erasure-request POST. The user must click the link inside
+// (which lands on the SPA's confirm page → POSTs the token to
+// /api/gdpr/confirm-erasure) for the actual deletion to fire.
+//
+// Why a confirmation step at all: erasure is irreversible. Two factors
+// guard it — (a) the requester must be authenticated to start the flow,
+// (b) they must hold the inbox to complete it. Cuts off "I left my laptop
+// open at the cafe and someone clicked Delete Account" scenarios.
+async function sendErasureConfirmation(userEmail, confirmUrl) {
+  const subject = 'Confirm your ReviewHub account deletion';
+  const safeUrl = escapeHtml(confirmUrl);
+  const html = `
+    <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
+      <h2 style="color:#dc2626">Confirm account deletion</h2>
+      <p>You requested permanent deletion of your ReviewHub account and all associated data. This action is irreversible — once confirmed, your reviews, settings, audit trail, and connected platforms are removed and cannot be recovered.</p>
+      <p style="margin:24px 0">
+        <a href="${safeUrl}"
+           style="background:#dc2626;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block">
+          Confirm deletion
+        </a>
+      </p>
+      <p style="font-size:12px;color:#6b7280">If the button doesn't work, paste this URL into your browser:<br>${safeUrl}</p>
+      <p style="font-size:11px;color:#9ca3af;margin-top:24px">This link is valid for 24 hours. If you did not request deletion, you can safely ignore this email — nothing will be removed.</p>
+    </div>`;
+  const text = [
+    'Confirm ReviewHub account deletion',
+    '',
+    'You requested permanent deletion of your ReviewHub account.',
+    'This action is irreversible. To proceed, click:',
+    confirmUrl,
+    '',
+    'This link is valid for 24 hours.',
+    "If you didn't request this, you can safely ignore this email.",
+  ].join('\n');
+
+  const transporter = getTransporter();
+  if (!transporter) {
+    console.log(`[EMAIL] Erasure confirmation → ${userEmail}: ${confirmUrl}`);
+    return;
+  }
+  await transporter.sendMail({
+    from: process.env.SMTP_FROM || 'ReviewHub <noreply@reviewhub.review>',
+    to: userEmail,
+    subject,
+    html,
+    text,
+  });
+}
+
 module.exports = {
   sendNewReviewNotification,
   sendVerificationEmail,
@@ -686,6 +736,7 @@ module.exports = {
   sendEmailChangeAlert,
   sendEmailChangeConfirmation,
   sendReviewRequest,
+  sendErasureConfirmation,
   verifySmtp,
   portBlockHint,
 };

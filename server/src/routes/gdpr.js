@@ -154,14 +154,19 @@ router.post('/erasure-request', requireAuth, gdprRateLimit, async (req, res) => 
     // replay the token to permanently delete this user's data — irreversible
     // by definition (Article 17 — right to be forgotten). The DB only ever
     // stores SHA-256(token); the plaintext exists in memory for the
-    // duration of this request only.
-    //
-    // The token reaches the user via email (the request happens against
-    // an authenticated session, so we have the address on req.user.email).
-    // TODO: wire sendErasureConfirmation in lib/email.js. Until then the
-    // token is unreachable to the user, which is a privacy-safe failure
-    // mode (the data simply won't be deleted) rather than the previous
-    // log-leak failure mode.
+    // duration of this request only and is sent ONLY to the user's email.
+    const { sendErasureConfirmation } = require('../lib/email');
+    const baseUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+    const confirmUrl = `${baseUrl}/confirm-erasure?userId=${req.user.id}&token=${token}`;
+    // Fire-and-forget: don't block the response on SMTP. If the send fails,
+    // the failure-mode is privacy-safe (data simply isn't deleted) but we
+    // still want operator visibility, so route the error through Sentry.
+    sendErasureConfirmation(req.user.email, confirmUrl).catch((err) => {
+      captureException(err, {
+        route: 'gdpr', op: 'erasure-confirmation-send', userId: req.user.id,
+        kind: 'email.send_failed',
+      });
+    });
 
     res.json({
       success: true,
