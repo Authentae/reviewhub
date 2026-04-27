@@ -7366,6 +7366,17 @@ const th = {
   'landing.how3Title': 'ตอบในไม่กี่วินาที',
   'landing.how3Desc': 'ใช้ร่าง AI เทมเพลตที่บันทึกไว้ หรือพิมพ์เอง — บันทึกครั้งเดียว เราจะเตือนให้โพสต์บนแพลตฟอร์ม',
   'landing.howCta': 'เริ่มต้นบัญชีฟรี',
+  'landing.demoEyebrow': 'ลองใช้สด',
+  'landing.demoTitle': 'ลองร่างคำตอบเดี๋ยวนี้ — ทำงานจริง',
+  'landing.pricingEyebrow': 'ราคา',
+  'landing.pricingTitle': 'ราคาตรงไปตรงมา ไม่ซับซ้อน',
+  'landing.faqTitle': 'คำถามที่พบบ่อย',
+  'landing.faqEyebrow': 'มีคำถาม?',
+  'landing.ctaEyebrow': 'พร้อมเมื่อคุณพร้อม',
+  'landing.ctaTitle': 'พร้อมจะจัดการรีวิวของคุณแล้วใช่ไหม?',
+  'landing.ctaSubtitle': 'ร่วมกับธุรกิจท้องถิ่นหลายร้อยรายที่ประหยัดเวลาได้ทุกสัปดาห์',
+  'landing.ctaButton': 'เริ่มฟรี',
+  'landing.ctaSecondary': 'ดูตัวอย่างคำตอบ',
 
   // ReviewCard action affordances — pin, flag, status, sentiment override.
   // Visible on every review row in the dashboard.

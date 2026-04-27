@@ -250,6 +250,7 @@ function Marquee() {
 
 // ── How it works — 3 big bordered rows with serif Roman numerals ──────────
 function HowItWorks() {
+  const { t } = useI18n();
   const steps = [
     { n: 'I', cat: 'Connect', h: <>Paste a link,<br />we pull the <em>reviews.</em></>,
       p: 'Google OAuth takes 20 seconds. Other platforms accept a public URL or a CSV while their APIs warm up. You\'re online inside a minute.',
@@ -284,8 +285,8 @@ function HowItWorks() {
     <section className="rh-section rh-how" id="how" aria-label="How it works">
       <div className="rh-shell">
         <div className="rh-section-head">
-          <div className="kicker"><div className="num">01</div><div className="cat">§ Workflow</div></div>
-          <h2 className="rh-reveal">Three steps to an <em>empty</em> review queue.</h2>
+          <div className="kicker"><div className="num">01</div><div className="cat">§ {t('landing.howEyebrow')}</div></div>
+          <h2 className="rh-reveal">{t('landing.howTitle')}</h2>
         </div>
         <div className="rh-bigsteps">
           {steps.map((s, i) => (
@@ -344,6 +345,7 @@ const DEMO_FALLBACKS = {
 };
 
 function AiDemo() {
+  const { t } = useI18n();
   const [which, setWhich] = useState('mixed');
   const [tone, setTone] = useState('warm');
   const [output, setOutput] = useState('');
@@ -386,8 +388,8 @@ function AiDemo() {
     <section className="rh-section rh-demo-section" id="demo" aria-label="AI drafts demo">
       <div className="rh-shell">
         <div className="rh-section-head">
-          <div className="kicker"><div className="num">02</div><div className="cat">§ Live demo</div></div>
-          <h2 className="rh-reveal">Draft one right now. <em>It's really running.</em></h2>
+          <div className="kicker"><div className="num">02</div><div className="cat">§ {t('landing.demoEyebrow', 'Live demo')}</div></div>
+          <h2 className="rh-reveal">{t('landing.demoTitle', "Draft one right now. It's really running.")}</h2>
         </div>
         <div className="rh-demo rh-reveal">
           <div className="demo-side">
@@ -458,13 +460,14 @@ function PullQuote() {
 
 // ── Bento feature grid ────────────────────────────────────────────────────
 function FeatureGrid() {
+  const { t } = useI18n();
   const days = [38, 42, 55, 49, 61, 58, 72, 65, 78, 82, 79, 91];
   return (
     <section className="rh-section rh-features" id="features" aria-label="Product features">
       <div className="rh-shell">
         <div className="rh-section-head">
-          <div className="kicker"><div className="num">03</div><div className="cat">§ The system</div></div>
-          <h2 className="rh-reveal">Built for <em>operators</em>, not managers.</h2>
+          <div className="kicker"><div className="num">03</div><div className="cat">§ {t('landing.featuresEyebrow')}</div></div>
+          <h2 className="rh-reveal">{t('landing.featuresTitle')}</h2>
         </div>
         <div className="rh-bento">
           <div className="cell a rh-reveal">
@@ -526,12 +529,13 @@ function FeatureGrid() {
 
 // ── Pricing — cream panel, dark featured plan ─────────────────────────────
 function Pricing() {
+  const { t } = useI18n();
   return (
     <section className="rh-section rh-pricing" id="pricing" aria-label="Pricing plans">
       <div className="rh-shell">
         <div className="rh-section-head">
-          <div className="kicker"><div className="num">04</div><div className="cat">§ Pricing</div></div>
-          <h2 className="rh-reveal">Priced like we're <em>building it ourselves.</em></h2>
+          <div className="kicker"><div className="num">04</div><div className="cat">§ {t('landing.pricingEyebrow', 'Pricing')}</div></div>
+          <h2 className="rh-reveal">{t('landing.pricingTitle', 'Simple, honest pricing.')}</h2>
         </div>
         <div className="rh-price-grid rh-reveal">
           <div className="plan">
@@ -597,8 +601,8 @@ function Faq({ t }) {
     <section className="rh-section rh-faq-section" id="faq" aria-label="Frequently asked questions">
       <div className="rh-shell">
         <div className="rh-section-head">
-          <div className="kicker"><div className="num">05</div><div className="cat">§ Common questions</div></div>
-          <h2 className="rh-reveal">Everything <em>else.</em></h2>
+          <div className="kicker"><div className="num">05</div><div className="cat">§ {t('landing.faqEyebrow')}</div></div>
+          <h2 className="rh-reveal">{t('landing.faqTitle')}</h2>
         </div>
         <div className="rh-faq">
           {items.map((item, i) => {
@@ -631,15 +635,16 @@ function Faq({ t }) {
 
 // ── Big CTA + Footer ───────────────────────────────────────────────────────
 function BigCta() {
+  const { t } = useI18n();
   return (
     <section className="rh-big-cta" id="cta" aria-label="Sign up call to action">
       <div className="rh-shell">
-        <div className="rh-mono" style={{ color: 'color-mix(in oklab, var(--rh-paper) 55%, transparent)', marginBottom: 20 }}>— Ready when you are —</div>
-        <h2>Clear the queue by <em>lunch.</em></h2>
-        <p>Install the extension, paste one Google link, post your first AI-drafted reply inside two minutes. No card, no meeting, no onboarding webinar.</p>
+        <div className="rh-mono" style={{ color: 'color-mix(in oklab, var(--rh-paper) 55%, transparent)', marginBottom: 20 }}>— {t('landing.ctaEyebrow', 'Ready when you are')} —</div>
+        <h2>{t('landing.ctaTitle')}</h2>
+        <p>{t('landing.ctaSubtitle')}</p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-          <Link to="/register" className="rh-btn rh-btn-primary rh-btn-lg">Add to Chrome — free <Arrow /></Link>
-          <a href="#demo" className="rh-btn rh-btn-ghost rh-btn-lg">Watch the 60-second tour</a>
+          <Link to="/register" className="rh-btn rh-btn-primary rh-btn-lg">{t('landing.ctaButton')} <Arrow /></Link>
+          <a href="#demo" className="rh-btn rh-btn-ghost rh-btn-lg">{t('landing.ctaSecondary', 'See a live draft')}</a>
         </div>
       </div>
     </section>
