@@ -7366,6 +7366,27 @@ const th = {
   'landing.how3Title': 'ตอบในไม่กี่วินาที',
   'landing.how3Desc': 'ใช้ร่าง AI เทมเพลตที่บันทึกไว้ หรือพิมพ์เอง — บันทึกครั้งเดียว เราจะเตือนให้โพสต์บนแพลตฟอร์ม',
   'landing.howCta': 'เริ่มต้นบัญชีฟรี',
+
+  // ReviewCard action affordances — pin, flag, status, sentiment override.
+  // Visible on every review row in the dashboard.
+  'review.overrideSentimentAria': 'เปลี่ยนความรู้สึก',
+  'review.sentimentFailed': 'อัปเดตความรู้สึกไม่สำเร็จ',
+  'review.pin': 'ปักหมุดรีวิว',
+  'review.unpin': 'เลิกปักหมุด',
+  'review.flag': 'ทำเครื่องหมายเพื่อติดตามผล',
+  'review.unflag': 'ลบเครื่องหมาย',
+  'review.flagAria': 'ทำเครื่องหมายรีวิวนี้เพื่อติดตามผล',
+  'review.unflagAria': 'ลบเครื่องหมายจากรีวิวนี้',
+  'review.flagFailed': 'อัปเดตเครื่องหมายไม่สำเร็จ',
+  'review.status.none': 'ไม่มีสถานะ',
+  'review.status.follow_up': 'ติดตาม',
+  'review.status.resolved': 'แก้ไขแล้ว',
+  'review.status.escalated': 'ส่งต่อเพิ่มเติม',
+  'review.statusFailed': 'อัปเดตสถานะไม่สำเร็จ',
+  'review.statusAriaLabel': 'ตั้งสถานะรีวิว',
+  'review.pinAria': 'ปักหมุดรีวิวนี้',
+  'review.unpinAria': 'เลิกปักหมุดรีวิวนี้',
+  'review.pinFailed': 'อัปเดตการปักหมุดไม่สำเร็จ',
 };
 
 export const LANGUAGES = [
