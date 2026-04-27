@@ -14,6 +14,7 @@ Disallow: /verify-email
 Disallow: /reset-password
 Disallow: /email-change
 Disallow: /unsubscribed
+Disallow: /confirm-erasure
 
 # In-app auth flow — also blocked from indexing (login/register show on
 # the homepage anyway as buttons; no need for a dedicated indexed page).

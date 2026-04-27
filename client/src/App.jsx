@@ -34,6 +34,10 @@ const OwnerDashboard = lazy(() => import('./pages/OwnerDashboard'));
 // Landing page after one-click unsubscribe (RFC 8058). Public — the server
 // applies the unsub, then redirects browser-clicks here as a confirmation.
 const Unsubscribed = lazy(() => import('./pages/Unsubscribed'));
+// GDPR Article 17 erasure-confirmation landing. The email link from
+// /api/gdpr/erasure-request lands here with ?userId&token, and the user
+// clicks the destructive button to complete the deletion.
+const ConfirmErasure = lazy(() => import('./pages/ConfirmErasure'));
 
 function PrivateRoute({ children }) {
   const location = useLocation();
@@ -90,6 +94,7 @@ export default function App() {
         <Route path="/refund-policy" element={<Refund />} />
         <Route path="/legal/th-summary" element={<ThaiSummary />} />
         <Route path="/unsubscribed" element={<Unsubscribed />} />
+        <Route path="/confirm-erasure" element={<ConfirmErasure />} />
         {/* Public no-signup SEO/PLG tool */}
         <Route path="/tools/review-reply-generator" element={<ReplyGeneratorTool />} />
         <Route path="*" element={<NotFound />} />
