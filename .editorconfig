@@ -1,0 +1,26 @@
+# EditorConfig — keep line endings, indentation, and charset consistent
+# across editors. Most modern editors honour this without a plugin
+# (VS Code, JetBrains, Sublime, vim with vim-editorconfig).
+#
+# https://editorconfig.org
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+# Markdown is pickier — trailing whitespace can be meaningful (line break)
+# and indentation in code fences should be preserved verbatim.
+[*.md]
+trim_trailing_whitespace = false
+
+# Make / Dockerfile indentation MUST be hard tabs; spaces silently break.
+[Makefile]
+indent_style = tab
+[Dockerfile*]
+indent_style = tab
