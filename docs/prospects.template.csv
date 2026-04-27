@@ -1,0 +1,4 @@
+business_name,city,industry,owner_first_name,owner_email,review_count,avg_rating,worst_recent_review_url,worst_recent_review_excerpt,language,google_maps_url,template,date_sent,follow_up_sent,outcome,notes
+Sakura Coffee,Bangkok,cafe,Somchai,owner@sakura.example.com,87,4.2,https://goo.gl/maps/example1,"กาแฟอร่อย แต่พนักงานช้ามาก เสียเวลาเยอะ",th,https://www.google.com/maps/place/...,T1,,,,
+Phuket Beach Bistro,Phuket,restaurant,Niran,info@phuketbeach.example.com,142,3.8,https://goo.gl/maps/example2,"Food was cold when it arrived. 30 minute wait for water.",en,https://www.google.com/maps/place/...,T2,,,,
+ChiangMai Massage Studio,Chiang Mai,wellness,Ploy,booking@cmstudio.example.com,56,4.7,,"",th,https://www.google.com/maps/place/...,T3,,,,

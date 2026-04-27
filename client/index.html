@@ -94,6 +94,33 @@
         } catch (e) { /* ignore */ }
       })();
     </script>
+
+    <!-- ============================================================
+         ANALYTICS PLACEHOLDER — drop your snippet RIGHT HERE
+         ============================================================
+         When you sign up for Plausible or Umami, paste their script
+         tag right after this comment block.
+
+         For Plausible Cloud (recommended):
+           <script defer data-domain="reviewhub.review"
+                   src="https://plausible.io/js/script.js"></script>
+
+         For Umami self-hosted:
+           <script defer src="https://your-umami-host/script.js"
+                   data-website-id="YOUR-ID"></script>
+
+         IMPORTANT — also update server/src/app.js helmet CSP:
+           - add the analytics origin to scriptSrc
+             e.g. scriptSrc: ["'self'", INLINE_SCRIPT_HASH,
+                              'https://plausible.io']
+           - add the same origin to connectSrc so the tracker can POST
+             events back:  connectSrc: ["'self'", 'https://plausible.io']
+
+         Without those CSP changes the tracker will load BUT the
+         browser will block the outbound event request (you'll see
+         the script in DevTools but no data in the dashboard).
+         ============================================================ -->
+
   </head>
   <body>
     <noscript>
