@@ -155,6 +155,18 @@ function Hero() {
 }
 
 function CardStack() {
+  const { lang } = useI18n();
+  // Card B is always Thai — it demonstrates the AI's Thai-native capability
+  // regardless of locale. Cards A and C swap to Thai when lang=th so a Thai
+  // visitor sees a coherent Thai-first hero rather than 2 English snippets
+  // they have to mentally translate.
+  const isThai = lang === 'th';
+  const cardA = isThai
+    ? { name: 'มาร์โก พี.', body: '"บาริสต้าจำเมนูได้หลังมาแค่ครั้งเดียว แต่วันนี้ pour-over ไม่ได้เปิดให้สั่ง"', draftLabel: 'ร่าง AI · ในสไตล์คุณ', draft: 'ขอบคุณคุณมาร์โกที่แวะมา — pour-over กลับมาวันพฤหัส เจอกันค่ะ' }
+    : { name: 'Marco P.', body: '"Barista remembered my order after one visit. Pour-over was down though."', draftLabel: 'AI draft · your voice', draft: "Appreciate you stopping by, Marco — pour-over's back Thursday. See you then." };
+  const cardC = isThai
+    ? { name: 'เจมี่ อาร์.', body: '"ครัวซองต์อร่อยดี แต่วันเสาร์บริการช้านิดหน่อย ก็ยังจะกลับมาอยู่ดี"', draftLabel: 'ร่าง AI · อบอุ่น', draft: 'ขอบคุณคุณเจมี่ — เพิ่มเตาอบที่ 2 สำหรับวันหยุดแล้ว แวะมาใหม่นะคะ' }
+    : { name: 'Jamie R.', body: '"Solid croissants, a bit slow on a Saturday. Would still come back."', draftLabel: 'AI draft · warm', draft: "Thanks Jamie — we've added a second oven for weekends. Try us again." };
   return (
     <div className="rh-card-stack">
       <div className="rh-float-card a">
@@ -163,15 +175,15 @@ function CardStack() {
         <div className="fc-head">
           <div className="fc-who">
             <div className="fc-avatar" style={{ background: 'var(--rh-rose)' }}>MP</div>
-            <div className="fc-name">Marco P.</div>
+            <div className="fc-name">{cardA.name}</div>
             <Stars n={5} />
           </div>
           <div className="fc-plat">Google</div>
         </div>
-        <div className="fc-body">"Barista remembered my order after one visit. Pour-over was down though."</div>
+        <div className="fc-body">{cardA.body}</div>
         <div className="fc-draft">
-          <div className="fc-draft-label">AI draft · your voice</div>
-          Appreciate you stopping by, Marco — pour-over's back Thursday. See you then.
+          <div className="fc-draft-label">{cardA.draftLabel}</div>
+          {cardA.draft}
         </div>
       </div>
       <div className="rh-float-card b">
@@ -196,15 +208,15 @@ function CardStack() {
         <div className="fc-head">
           <div className="fc-who">
             <div className="fc-avatar" style={{ background: 'var(--rh-teal-deep)' }}>JR</div>
-            <div className="fc-name">Jamie R.</div>
+            <div className="fc-name">{cardC.name}</div>
             <Stars n={4} />
           </div>
           <div className="fc-plat">Google</div>
         </div>
-        <div className="fc-body">"Solid croissants, a bit slow on a Saturday. Would still come back."</div>
+        <div className="fc-body">{cardC.body}</div>
         <div className="fc-draft">
-          <div className="fc-draft-label">AI draft · warm</div>
-          Thanks Jamie — we've added a second oven for weekends. Try us again.
+          <div className="fc-draft-label">{cardC.draftLabel}</div>
+          {cardC.draft}
         </div>
       </div>
     </div>
