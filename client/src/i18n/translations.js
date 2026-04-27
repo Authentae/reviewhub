@@ -120,7 +120,7 @@ const en = {
 
   // Dashboard
   'dashboard.title': 'Review Dashboard',
-  'dashboard.subtitle': 'Unified review feed across all platforms',
+  'dashboard.subtitle': 'Your Google reviews · one feed · AI-drafted replies',
   'dashboard.exportCsv': 'Export CSV',
   'dashboard.exporting': 'Exporting…',
   'dashboard.loadTestData': 'Load Test Data',
@@ -1375,7 +1375,7 @@ const es = {
 
   // Dashboard
   'dashboard.title': 'Panel de reseñas',
-  'dashboard.subtitle': 'Feed unificado de todas las plataformas',
+  'dashboard.subtitle': 'Tus reseñas de Google · un feed · respuestas con IA',
   'dashboard.exportCsv': 'Exportar CSV',
   'dashboard.exporting': 'Exportando…',
   'dashboard.loadTestData': 'Cargar datos de prueba',
@@ -2026,7 +2026,7 @@ const fr = {
 
   // Dashboard
   'dashboard.title': 'Tableau de bord des avis',
-  'dashboard.subtitle': 'Flux unifié de toutes les plateformes',
+  'dashboard.subtitle': 'Tes avis Google · un flux · réponses IA',
   'dashboard.exportCsv': 'Exporter CSV',
   'dashboard.exporting': 'Exportation…',
   'dashboard.loadTestData': 'Charger les données de test',
@@ -2652,7 +2652,7 @@ const de = {
 
   // Dashboard
   'dashboard.title': 'Bewertungs-Dashboard',
-  'dashboard.subtitle': 'Einheitlicher Bewertungs-Feed aller Plattformen',
+  'dashboard.subtitle': 'Deine Google-Bewertungen · ein Feed · KI-Antworten',
   'dashboard.exportCsv': 'CSV exportieren',
   'dashboard.exporting': 'Exportiere…',
   'dashboard.loadTestData': 'Testdaten laden',
@@ -3278,7 +3278,7 @@ const pt = {
 
   // Dashboard
   'dashboard.title': 'Painel de avaliações',
-  'dashboard.subtitle': 'Feed unificado de todas as plataformas',
+  'dashboard.subtitle': 'Suas avaliações do Google · um feed · respostas com IA',
   'dashboard.exportCsv': 'Exportar CSV',
   'dashboard.exporting': 'Exportando…',
   'dashboard.loadTestData': 'Carregar dados de teste',
@@ -3904,7 +3904,7 @@ const it = {
 
   // Dashboard
   'dashboard.title': 'Dashboard delle recensioni',
-  'dashboard.subtitle': 'Feed unificato da tutte le piattaforme',
+  'dashboard.subtitle': 'Le tue recensioni Google · un feed · risposte con IA',
   'dashboard.exportCsv': 'Esporta CSV',
   'dashboard.exporting': 'Esportazione…',
   'dashboard.loadTestData': 'Carica dati di prova',
@@ -4530,7 +4530,7 @@ const ja = {
 
   // Dashboard
   'dashboard.title': '口コミダッシュボード',
-  'dashboard.subtitle': '全プラットフォームの統合口コミフィード',
+  'dashboard.subtitle': 'Google口コミを1つのフィードに · AIが返信を下書き',
   'dashboard.exportCsv': 'CSVエクスポート',
   'dashboard.exporting': 'エクスポート中…',
   'dashboard.loadTestData': 'テストデータを読み込む',
@@ -5161,7 +5161,7 @@ const zh = {
 
   // Dashboard
   'dashboard.title': '评价仪表盘',
-  'dashboard.subtitle': '管理您的客户评价并快速回复',
+  'dashboard.subtitle': '您的Google评价 · 一个信息流 · AI起草回复',
   'dashboard.loadTestData': '加载测试数据',
   'dashboard.loadTestDataHint': '点击"{action}"加载示例评价。',
   'dashboard.seedLoaded': '已加载 {n} 条示例评价！',
@@ -5798,7 +5798,7 @@ const ko = {
 
   // Dashboard
   'dashboard.title': '리뷰 대시보드',
-  'dashboard.subtitle': '고객 리뷰를 관리하고 빠르게 답변하세요',
+  'dashboard.subtitle': 'Google 리뷰 · 한 피드에 · AI 답변 초안',
   'dashboard.loadTestData': '테스트 데이터 불러오기',
   'dashboard.loadTestDataHint': '"{action}"을 클릭하여 샘플 리뷰를 불러오세요.',
   'dashboard.seedLoaded': '{n}개의 샘플 리뷰를 불러왔습니다!',
@@ -6430,7 +6430,7 @@ const th = {
 
   // Dashboard
   'dashboard.title': 'แดชบอร์ดรีวิว',
-  'dashboard.subtitle': 'ฟีดรีวิวรวมจากทุกแพลตฟอร์ม',
+  'dashboard.subtitle': 'รีวิว Google ของคุณ · ฟีดเดียว · AI ร่างคำตอบให้',
   'dashboard.exportCsv': 'ส่งออก CSV',
   'dashboard.exporting': 'กำลังส่งออก…',
   'dashboard.loadTestData': 'โหลดข้อมูลทดสอบ',
