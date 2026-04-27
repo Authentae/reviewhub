@@ -364,6 +364,11 @@ function createApp() {
       app.use(express.static(clientDist, {
         index: false, // we route / manually below so we can set no-cache on HTML
         maxAge: '1d',
+        // Try `<path>.html` for extension-less URLs before falling through
+        // to the SPA fallback. Lets /blog/reply-1-star-google-review-th
+        // serve the static HTML file at /blog/reply-1-star-google-review-th.html
+        // without forcing the .html in the URL the user sees.
+        extensions: ['html'],
       }));
       // SPA fallback: anything not matching /api/* or a static asset gets
       // index.html so client-side routing handles /dashboard, /settings, etc.

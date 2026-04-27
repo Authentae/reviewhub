@@ -26,6 +26,7 @@ Disallow: /forgot-password
 Allow: /
 Allow: /pricing
 Allow: /tools/
+Allow: /blog/
 Allow: /terms
 Allow: /privacy
 Allow: /acceptable-use
