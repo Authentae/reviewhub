@@ -10,9 +10,10 @@ AI-drafted responses; track sentiment and ratings over time.
   jsonwebtoken · nodemailer · LemonSqueezy billing · Anthropic SDK for AI
   drafts · helmet · express-rate-limit
 - **Client** — React 18 · Vite · Tailwind CSS · react-router-dom · axios · vitest
-- **Tests** — 521 server (`node:test` + supertest, 49 files) + 161 client
-  (vitest + Testing Library, 21 files) = 682 total, green on every push via
-  GitHub Actions
+- **Tests** — 557+ server (`node:test` + supertest) + 169+ client
+  (vitest + Testing Library) — green on every push via GitHub Actions.
+  Counts grow with new features; run `npm test` (server) and
+  `npx vitest run` (client) for the current totals.
 
 ## Running locally
 
