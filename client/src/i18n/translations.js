@@ -7494,6 +7494,12 @@ const th = {
   'landing.hintPressLabel': 'กด',
   'landing.hintToDraft': 'เพื่อร่างคำตอบ',
   'a11y.skipToMain': 'ข้ามไปยังเนื้อหาหลัก',
+  'landing.demoChip.glowing': 'ชื่นชม',
+  'landing.demoChip.mixed': 'ผสม',
+  'landing.demoChip.harsh': 'รุนแรง',
+  'landing.toneWarm': 'อบอุ่น',
+  'landing.toneBrisk': 'กระชับ',
+  'landing.toneFormal': 'ทางการ',
 
   // ReviewCard action affordances — pin, flag, status, sentiment override.
   // Visible on every review row in the dashboard.

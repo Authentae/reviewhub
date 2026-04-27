@@ -400,7 +400,7 @@ function AiDemo() {
               <div className="ttl"><span className="dot"></span>{t('landing.demoReviewLabel', 'The review')}</div>
               <div className="chips">
                 {Object.entries(SAMPLE_REVIEWS).map(([k, v]) => (
-                  <button key={k} className={'chip' + (which === k ? ' active' : '')} onClick={() => { setWhich(k); setOutput(''); }}>{v.stars}★ {k}</button>
+                  <button key={k} className={'chip' + (which === k ? ' active' : '')} onClick={() => { setWhich(k); setOutput(''); }}>{v.stars}★ {t(`landing.demoChip.${k}`, k)}</button>
                 ))}
               </div>
             </div>
@@ -414,7 +414,7 @@ function AiDemo() {
               <div className="chips">
                 <span className="rh-mono" style={{ color: 'color-mix(in oklab, var(--rh-paper) 55%, transparent)', padding: '4px 0' }}>{t('landing.demoTone', 'Tone')}</span>
                 {TONE_PRESETS.map((p) => (
-                  <button key={p.id} className={'chip' + (tone === p.id ? ' active' : '')} onClick={() => setTone(p.id)}>{p.label}</button>
+                  <button key={p.id} className={'chip' + (tone === p.id ? ' active' : '')} onClick={() => setTone(p.id)}>{t(`landing.tone${p.label}`, p.label)}</button>
                 ))}
               </div>
               <button className="rh-btn rh-btn-primary" onClick={generate} disabled={loading}>{loading ? t('landing.demoDrafting', 'Drafting…') : t('landing.demoDraftReply', 'Draft reply')} <Arrow /></button>
