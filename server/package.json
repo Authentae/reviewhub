@@ -1,6 +1,8 @@
 {
   "name": "review-manager-server",
   "version": "1.0.0",
+  "private": true,
+  "license": "UNLICENSED",
   "type": "commonjs",
   "main": "src/index.js",
   "engines": {
