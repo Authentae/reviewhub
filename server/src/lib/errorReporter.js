@@ -52,10 +52,15 @@ function captureException(err, context = {}) {
 }
 
 // Minimal Sentry envelope-endpoint forwarder. Avoids taking on @sentry/node as
-// a runtime dep: the store API accepts a simple JSON payload. If the DSN is
-// malformed we silently skip; it's diagnostic, not load-bearing.
+// a runtime dep: the envelope API accepts a 3-line JSON-Lines payload. If the
+// DSN is malformed we silently skip; it's diagnostic, not load-bearing.
 //
 // DSN format: https://<publicKey>@<host>/<projectId>
+//
+// Why /envelope/ not /store/: Sentry deprecated /store/ and newer projects
+// silently drop events sent there (200 returned, but never indexed). Verified
+// the hard way during the reviewhub-ro project setup — store probes returned
+// 200 with event ids that never appeared in the Issues feed.
 async function forwardToSentry(record) {
   const dsn = process.env.SENTRY_DSN;
   if (!dsn) return;
@@ -76,9 +81,12 @@ async function forwardToSentry(record) {
     return;
   }
 
-  const endpoint = `https://${host}/api/${projectId}/store/`;
-  const payload = {
-    event_id: record.errorId || (record.ts + Math.random()).replace(/[^a-z0-9]/gi, '').slice(0, 32),
+  const endpoint = `https://${host}/api/${projectId}/envelope/`;
+  // event_id must be a 32-char hex string with no dashes per Sentry spec.
+  const eventId = (record.errorId || '').replace(/[^a-f0-9]/gi, '').toLowerCase().padEnd(32, '0').slice(0, 32)
+    || require('crypto').randomBytes(16).toString('hex');
+  const event = {
+    event_id: eventId,
     timestamp: record.ts,
     platform: 'node',
     level: 'error',
@@ -102,6 +110,11 @@ async function forwardToSentry(record) {
     ),
   };
 
+  // Envelope: header line + item header line + item payload line, NDJSON.
+  const envelopeHeader = JSON.stringify({ event_id: eventId, sent_at: new Date().toISOString(), dsn });
+  const itemHeader = JSON.stringify({ type: 'event', content_type: 'application/json' });
+  const body = `${envelopeHeader}\n${itemHeader}\n${JSON.stringify(event)}\n`;
+
   const authHeader = [
     'Sentry sentry_version=7',
     `sentry_key=${publicKey}`,
@@ -119,8 +132,8 @@ async function forwardToSentry(record) {
   try {
     await fetch(endpoint, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-Sentry-Auth': authHeader },
-      body: JSON.stringify(payload),
+      headers: { 'Content-Type': 'application/x-sentry-envelope', 'X-Sentry-Auth': authHeader },
+      body,
       signal: ctl.signal,
     });
   } finally {
