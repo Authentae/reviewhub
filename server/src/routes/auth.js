@@ -1429,12 +1429,9 @@ function unsubHandler(req, res) {
     }
     // Idempotent: setting to 0 multiple times is fine.
     run(`UPDATE users SET ${column} = 0 WHERE id = ?`, [result.userId]);
-    logAudit({
+    logAudit(req, 'email.unsubscribed', {
       userId: result.userId,
-      event: 'email.unsubscribed',
-      ip: req.ip,
-      userAgent: req.headers['user-agent'],
-      metadata: JSON.stringify({ list: result.listType, via: req.method }),
+      metadata: { list: result.listType, via: req.method },
     });
     // For mail-client one-click POSTs, return 200 JSON. For browser GETs from
     // the email footer link, redirect to a confirmation page on the SPA.
