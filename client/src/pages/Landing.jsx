@@ -181,7 +181,7 @@ function CardStack() {
             <div className="fc-name">Ploy S.</div>
             <Stars n={5} />
           </div>
-          <div className="fc-plat">Wongnai</div>
+          <div className="fc-plat">Google</div>
         </div>
         <div className="fc-body">"ร้านน่ารักมาก บรรยากาศดี กาแฟอร่อย จะกลับมาอีกแน่นอน"</div>
         <div className="fc-draft">
@@ -198,7 +198,7 @@ function CardStack() {
             <div className="fc-name">Jamie R.</div>
             <Stars n={4} />
           </div>
-          <div className="fc-plat">Yelp</div>
+          <div className="fc-plat">Google</div>
         </div>
         <div className="fc-body">"Solid croissants, a bit slow on a Saturday. Would still come back."</div>
         <div className="fc-draft">
@@ -210,24 +210,29 @@ function CardStack() {
   );
 }
 
-// ── Marquee — pause on hover, brand-tinted stars + counts ─────────────────
+// ── Marquee — platforms we connect to (live + coming soon) ─────────────────
+// Honest framing: ReviewHub is Google-only at launch. The other platforms
+// have scaffolded providers but no live API integration yet, so we label
+// them as "coming soon" rather than implying current support with fake
+// rating numbers (which previously read like ReviewHub's own ratings on
+// each platform — they weren't).
 function Marquee() {
   const platforms = [
-    { name: 'Google',      color: 'oklch(0.72 0.16 240)', rating: '4.9', reviews: '1.2M' },
-    { name: 'Yelp',        color: 'oklch(0.65 0.22 25)',  rating: '4.8', reviews: '340K' },
-    { name: 'Facebook',    color: 'oklch(0.62 0.15 255)', rating: '4.7', reviews: '890K' },
-    { name: 'TripAdvisor', color: 'oklch(0.68 0.16 155)', rating: '4.9', reviews: '210K' },
-    { name: 'Trustpilot',  color: 'oklch(0.68 0.16 155)', rating: '4.8', reviews: '450K' },
-    { name: 'Wongnai',     color: 'oklch(0.72 0.18 35)',  rating: '4.9', reviews: '180K' },
+    { name: 'Google',      color: 'oklch(0.72 0.16 240)', status: 'Live today' },
+    { name: 'Yelp',        color: 'oklch(0.65 0.22 25)',  status: 'Coming soon' },
+    { name: 'Facebook',    color: 'oklch(0.62 0.15 255)', status: 'Coming soon' },
+    { name: 'TripAdvisor', color: 'oklch(0.68 0.16 155)', status: 'Coming soon' },
+    { name: 'Trustpilot',  color: 'oklch(0.68 0.16 155)', status: 'Coming soon' },
+    { name: 'Wongnai',     color: 'oklch(0.72 0.18 35)',  status: 'Coming soon' },
   ];
   const Row = () => (
     <span>
       {platforms.map((p, i) => (
         <React.Fragment key={i}>
           <span className="chunk" style={{ '--platcolor': p.color }}>
-            <span className="star">★</span>
+            <span className="star">{p.status === 'Live today' ? '★' : '○'}</span>
             <span className="plat">{p.name}</span>
-            <span className="count">{p.rating}<span style={{ opacity: 0.5, margin: '0 6px' }}>·</span><b>{p.reviews}</b></span>
+            <span className="count" style={{ opacity: p.status === 'Live today' ? 1 : 0.55 }}>{p.status}</span>
           </span>
           {i < platforms.length - 1 && <span className="sep">—</span>}
         </React.Fragment>
@@ -236,7 +241,7 @@ function Marquee() {
     </span>
   );
   return (
-    <section className="rh-marquee" aria-label="Platform ratings showcase">
+    <section className="rh-marquee" aria-label="Platforms we connect to">
       <div className="rh-marquee-row"><Row /><Row /><Row /></div>
     </section>
   );
@@ -300,10 +305,15 @@ function HowItWorks() {
 }
 
 // ── AI Demo — wired to the public reply-generator endpoint ────────────────
+// All three sample reviews labeled Google — that's the only platform we
+// actually pull from at launch. The free generator under
+// /tools/review-reply-generator does work for any platform's review
+// text (it just rewords whatever you paste), but the Landing demo
+// shouldn't imply current Yelp/TripAdvisor pull-in support.
 const SAMPLE_REVIEWS = {
-  glowing: { name: 'Priya M.', plat: 'google', platLabel: 'Google',     stars: 5, body: 'Came here on my anniversary. Staff noticed, brought out a little candle on the tiramisu. Small thing — made the night. Thank you.' },
-  mixed:   { name: 'Dan T.',   plat: 'yelp',   platLabel: 'Yelp',       stars: 3, body: 'Pasta was excellent. Service took forever though — 40 minutes for the mains on a Tuesday. Wanted to love it more than I did.' },
-  harsh:   { name: 'Anon.',    plat: 'tripadvisor', platLabel: 'TripAdvisor', stars: 1, body: 'Rude manager. Overpriced. Never coming back. Zero stars if I could.' },
+  glowing: { name: 'Priya M.', plat: 'google', platLabel: 'Google', stars: 5, body: 'Came here on my anniversary. Staff noticed, brought out a little candle on the tiramisu. Small thing — made the night. Thank you.' },
+  mixed:   { name: 'Dan T.',   plat: 'google', platLabel: 'Google', stars: 3, body: 'Pasta was excellent. Service took forever though — 40 minutes for the mains on a Tuesday. Wanted to love it more than I did.' },
+  harsh:   { name: 'Anon.',    plat: 'google', platLabel: 'Google', stars: 1, body: 'Rude manager. Overpriced. Never coming back. Zero stars if I could.' },
 };
 const TONE_PRESETS = [
   { id: 'warm', label: 'Warm' },
@@ -489,12 +499,12 @@ function FeatureGrid() {
           </div>
           <div className="cell d rh-reveal">
             <div className="tag">Inbox</div>
-            <h3>One feed.<br /><em>Six sources.</em></h3>
+            <h3>One feed.<br /><em>Every Google review.</em></h3>
             <div className="viz mini-dash">
               <div className="mdh"><span>TODAY</span><span>14 NEW</span></div>
               <div className="mdrow"><span className="dot g" /><span className="name">Marco P. · Google</span><span className="st">★★★★★</span></div>
-              <div className="mdrow"><span className="dot g" /><span className="name">Ploy S. · Wongnai</span><span className="st">★★★★★</span></div>
-              <div className="mdrow"><span className="dot y" /><span className="name">Jamie R. · Yelp</span><span className="st">★★★★</span></div>
+              <div className="mdrow"><span className="dot g" /><span className="name">Ploy S. · Google</span><span className="st">★★★★★</span></div>
+              <div className="mdrow"><span className="dot g" /><span className="name">Jamie R. · Google</span><span className="st">★★★★</span></div>
             </div>
           </div>
           <div className="cell e rh-reveal">
@@ -544,7 +554,7 @@ function Pricing() {
             <div className="plan-sub">For the place you actually show up to every morning.</div>
             <ul>
               <li><Check />Unlimited reviews</li>
-              <li><Check />Five platforms live, Wongnai in beta</li>
+              <li><Check />Google today · Yelp, Facebook, Wongnai coming soon</li>
               <li><Check />Claude-powered drafts, 10 languages</li>
               <li><Check />Sentiment, trends, weekly digest</li>
               <li><Check />3 teammates</li>
@@ -688,12 +698,15 @@ function Footer() {
 }
 
 // ── Gimmick layer: R-key spawns a drafting toast; CTA clicks burst stars ──
+// All samples shown as Google reviews — that's the only platform the
+// product ships with at launch. Don't reintroduce Yelp/Wongnai/TripAdvisor
+// labels here without restoring real provider integrations first.
 const DRAFT_SAMPLES = [
-  { name: 'Alex K.', plat: 'google',  platLabel: 'Google',  stars: 5, body: 'Best flat white on the block. Staff remembered my name by visit two.' },
-  { name: 'Nina D.', plat: 'yelp',    platLabel: 'Yelp',    stars: 4, body: 'Loved the food, patio was freezing though. Heaters would help.' },
-  { name: 'Rai T.',  plat: 'wongnai', platLabel: 'Wongnai', stars: 5, body: 'ขนมปังอร่อยมาก กาแฟเข้มกำลังดี' },
-  { name: 'Sam O.',  plat: 'tripadvisor', platLabel: 'TripAdvisor', stars: 5, body: 'Best brunch we had all trip. Saved a window table without asking.' },
-  { name: 'Mia L.',  plat: 'facebook', platLabel: 'Facebook', stars: 3, body: 'Food was good but the wait for a table was 35 minutes on a Wednesday.' },
+  { name: 'Alex K.', plat: 'google', platLabel: 'Google', stars: 5, body: 'Best flat white on the block. Staff remembered my name by visit two.' },
+  { name: 'Nina D.', plat: 'google', platLabel: 'Google', stars: 4, body: 'Loved the food, patio was freezing though. Heaters would help.' },
+  { name: 'Rai T.',  plat: 'google', platLabel: 'Google', stars: 5, body: 'ขนมปังอร่อยมาก กาแฟเข้มกำลังดี' },
+  { name: 'Sam O.',  plat: 'google', platLabel: 'Google', stars: 5, body: 'Best brunch we had all trip. Saved a window table without asking.' },
+  { name: 'Mia L.',  plat: 'google', platLabel: 'Google', stars: 3, body: 'Food was good but the wait for a table was 35 minutes on a Wednesday.' },
 ];
 
 function GimmickLayer() {
