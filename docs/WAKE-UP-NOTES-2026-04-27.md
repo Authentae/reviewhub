@@ -94,3 +94,70 @@ In rough priority order:
 4. **Sentry hookup** — get free Sentry account, paste DSN to Railway env. Already wired in code via `lib/errorReporter.js` — just needs DSN.
 
 I'll keep auto-pacing the loop (next wake at 04:54) until you sit back down.
+
+---
+
+## Addendum — extended overnight run (continued past 5am)
+
+The loop kept going beyond the original ~5am wake-up. Highlights from the
+later iterations (iterations 20–66, ~46 more commits):
+
+**Real bugs found and fixed**
+- **GDPR erasure flow was broken end-to-end**: confirmation email helper
+  was a TODO, link target page didn't exist (404). Fixed both in [`fae8e95`]
+  and [`0301401`]. Now: request email → real email → SPA page → token
+  validation → actual data wipe.
+- **`logAudit({...})` signature mismatch on the unsubscribe handler**:
+  every unsubscribe action since launch silently dropped its audit row
+  due to NOT NULL constraint on `event`. Fixed in [`ab44955`].
+- **`og-image.png` referenced but never existed**: every social share
+  (LinkedIn / Slack / Discord / WhatsApp / iMessage) returned 404.
+  Added a brand SVG OG card in [`de34bdc`].
+- **Unbounded `metrics.by_route` map**: 404 scans (`/wp-admin`, `/.env`,
+  `/api/users/12345` brute-force) added a fresh key per scan attempt —
+  slow memory leak that grew with attack noise. Collapsed to
+  `:unmatched-api` / `:unmatched` buckets in [`ec1e3f7`].
+- **Token query-strings logged to stdout via morgan**: `?token=` and
+  OAuth `?code=&state=` were being written to Railway logs verbatim.
+  Fixed in [`152f468`] (morgan `:url` redaction) — same redactor the
+  Sentry forwarder uses.
+
+**Security hardening**
+- `/login` and `/register` were unbounded — added 20-attempts/15min/IP
+  limiter against credential stuffing.
+- Default `Cache-Control: no-store, private` middleware on `/api/*`
+  prevents browser back-button stale-data + CDN cross-user leaks.
+- Sentry forwarder query-param redaction (`token`/`code`/`state`/`signature`).
+- Public `/api/health` no longer echoes raw SQLite error messages
+  (filesystem paths, table names) in production.
+- Widget badge CSP tightened from `frame-ancestors *` only to
+  `default-src 'none'; script-src 'none'; frame-ancestors *`.
+- `/confirm-erasure` fast-fails malformed tokens before SHA-256 + DB.
+
+**Ops**
+- Boot-failure now exits 1 (was zombie process under bad config).
+- Sentry forwarder abort-timer `.unref()` so SIGTERM exits cleanly.
+- All background-job errors (backup, digest, follow-up, sync) now
+  forward to Sentry instead of stdout-only.
+
+**Brand consistency post-reskin**
+- PWA `theme_color` + mobile `theme-color` aligned with editorial teal
+  (was legacy blue).
+- PageLoader spinner switched to teal-on-paper.
+
+**i18n — Thai coverage**
+- 643 → 723 Thai keys: nav, common, dashboard filters, settings switcher,
+  pricing CTAs, billing banners, review actions, bulk-action confirms,
+  auto-rules, Unsubscribed page, **CookieConsent banner**.
+
+**Test coverage**
+- 521 → 560 server tests: GDPR routes, unsubscribe (with audit-row
+  regression guard), Cache-Control defaults, sanitizePath unit tests,
+  health endpoint, morgan redaction, metrics cardinality, widget CSP.
+- Client: ConfirmErasure page (7 tests, locks down auto-submit absence),
+  CookieConsent (5 tests including "Essential is locked-on" guard),
+  useNoIndex hook (3 tests).
+
+Branch is in solid shape. No outstanding blockers other than the
+ones in the original notes (Anthropic credit, optional key rotation).
+
