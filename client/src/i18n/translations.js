@@ -7074,6 +7074,13 @@ const th = {
   'billing.aiUsageResetHint': 'รีเซ็ตทุกวันที่ 1 ของเดือน',
   'billing.pastDueBanner': 'การชำระเงินครั้งล่าสุดไม่สำเร็จ กรุณาอัปเดตบัตรเพื่อรักษาแพ็กเกจของคุณ',
   'billing.cancelledBanner': 'แพ็กเกจของคุณจะสิ้นสุดในวันที่ {date} คุณยังคงใช้แพ็กเกจปัจจุบันได้จนถึงวันนั้น',
+
+  // Unsubscribe confirmation page list labels (so the body copy doesn't mix
+  // Thai with English "weekly digest").
+  'unsub.list.digest': 'อีเมลสรุปประจำสัปดาห์',
+  'unsub.list.new_review': 'การแจ้งเตือนรีวิวใหม่',
+  'unsub.list.negative_alert': 'การแจ้งเตือนรีวิวเชิงลบ',
+  'unsub.list.generic': 'รายการอีเมลนี้',
 };
 
 export const LANGUAGES = [

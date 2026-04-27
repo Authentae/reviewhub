@@ -13,7 +13,10 @@ import { useI18n } from '../context/I18nContext';
 // Public — no auth required. Anyone holding the signed token reaches the
 // server route; the redirect that lands here happens AFTER the unsub is
 // already applied, so this page is purely a confirmation/UX surface.
-const LIST_LABELS = {
+//
+// List labels resolve through t() so Thai (and other locales) don't end up
+// with mixed-language body copy like "เราจะไม่ส่ง weekly digest ให้คุณอีก".
+const LIST_LABEL_FALLBACKS = {
   digest: 'weekly digest',
   new_review: 'new-review notifications',
   negative_alert: 'negative-review alerts',
@@ -23,7 +26,10 @@ export default function Unsubscribed() {
   const { t } = useI18n();
   const [params] = useSearchParams();
   const list = params.get('list') || '';
-  const label = LIST_LABELS[list] || 'this email list';
+  const fallback = LIST_LABEL_FALLBACKS[list] || 'this email list';
+  const label = list
+    ? t(`unsub.list.${list}`, fallback)
+    : t('unsub.list.generic', fallback);
   usePageTitle(t('unsub.title') || 'Unsubscribed');
   const loggedIn = isLoggedIn();
 
