@@ -394,7 +394,7 @@ function AiDemo() {
         <div className="rh-demo rh-reveal">
           <div className="demo-side">
             <div className="demo-head">
-              <div className="ttl"><span className="dot"></span>The review</div>
+              <div className="ttl"><span className="dot"></span>{t('landing.demoReviewLabel', 'The review')}</div>
               <div className="chips">
                 {Object.entries(SAMPLE_REVIEWS).map(([k, v]) => (
                   <button key={k} className={'chip' + (which === k ? ' active' : '')} onClick={() => { setWhich(k); setOutput(''); }}>{v.stars}★ {k}</button>
@@ -409,27 +409,27 @@ function AiDemo() {
             <div className="body">"{review.body}"</div>
             <div className="demo-foot">
               <div className="chips">
-                <span className="rh-mono" style={{ color: 'color-mix(in oklab, var(--rh-paper) 55%, transparent)', padding: '4px 0' }}>Tone</span>
+                <span className="rh-mono" style={{ color: 'color-mix(in oklab, var(--rh-paper) 55%, transparent)', padding: '4px 0' }}>{t('landing.demoTone', 'Tone')}</span>
                 {TONE_PRESETS.map((p) => (
                   <button key={p.id} className={'chip' + (tone === p.id ? ' active' : '')} onClick={() => setTone(p.id)}>{p.label}</button>
                 ))}
               </div>
-              <button className="rh-btn rh-btn-primary" onClick={generate} disabled={loading}>{loading ? 'Drafting…' : 'Draft reply'} <Arrow /></button>
+              <button className="rh-btn rh-btn-primary" onClick={generate} disabled={loading}>{loading ? t('landing.demoDrafting', 'Drafting…') : t('landing.demoDraftReply', 'Draft reply')} <Arrow /></button>
             </div>
           </div>
           <div className="demo-side out">
             <div className="demo-head">
-              <div className="ttl"><span className="dot on"></span>AI draft · in your voice</div>
+              <div className="ttl"><span className="dot on"></span>{t('landing.demoAiDraftLabel', 'AI draft · in your voice')}</div>
               <div className="rh-mono" style={{ color: 'var(--rh-ochre)' }}>✦ Claude Haiku</div>
             </div>
             <div className={'out-text body' + (loading ? ' typing' : '')}>
-              {output || <span style={{ color: 'color-mix(in oklab, var(--rh-paper) 55%, transparent)' }}>Hit <b style={{ color: 'var(--rh-paper)' }}>Draft reply</b> to see a real response from our drafting model. Change the tone or pick a different review — each run is live.</span>}
+              {output || <span style={{ color: 'color-mix(in oklab, var(--rh-paper) 55%, transparent)' }}>{t('landing.demoEmptyHint', 'Hit Draft reply to see a real response from our drafting model. Change the tone or pick a different review — each run is live.')}</span>}
             </div>
             <div className="demo-foot">
               <div className="rh-mono" style={{ color: 'color-mix(in oklab, var(--rh-paper) 55%, transparent)' }}>
-                {output ? `${output.split(/\s+/).filter(Boolean).length} words · ${Math.ceil(output.length / 5)} tokens` : '—'}
+                {output ? `${output.split(/\s+/).filter(Boolean).length} ${t('landing.demoWordsLabel', 'words')} · ${Math.ceil(output.length / 5)} ${t('landing.demoTokensLabel', 'tokens')}` : '—'}
               </div>
-              <Link to="/register" className="rh-btn rh-btn-ghost">Get unlimited drafts →</Link>
+              <Link to="/register" className="rh-btn rh-btn-ghost">{t('landing.demoUnlimited', 'Get unlimited drafts')} →</Link>
             </div>
           </div>
         </div>

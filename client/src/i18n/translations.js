@@ -7403,6 +7403,15 @@ const th = {
   'landing.footerRefunds': 'การคืนเงิน',
   'landing.footerMadeSolo': 'พัฒนาคนเดียวจากเชียงใหม่',
   'landing.footerStatus': 'ทุกระบบทำงานปกติ',
+  'landing.demoReviewLabel': 'รีวิว',
+  'landing.demoTone': 'น้ำเสียง',
+  'landing.demoDrafting': 'กำลังร่าง…',
+  'landing.demoDraftReply': 'ร่างคำตอบ',
+  'landing.demoAiDraftLabel': 'ร่าง AI · ในสไตล์คุณ',
+  'landing.demoEmptyHint': 'กดร่างคำตอบเพื่อดูคำตอบจริงจาก AI ของเรา ลองเปลี่ยนน้ำเสียงหรือเลือกรีวิวอื่น — ทุกครั้งคือของจริง',
+  'landing.demoWordsLabel': 'คำ',
+  'landing.demoTokensLabel': 'โทเค็น',
+  'landing.demoUnlimited': 'รับร่างไม่จำกัด',
 
   // ReviewCard action affordances — pin, flag, status, sentiment override.
   // Visible on every review row in the dashboard.
