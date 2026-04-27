@@ -17,6 +17,14 @@ const tagLimiter = rateLimit({
 
 const HEX_COLOR_RE = /^#[0-9a-fA-F]{6}$/;
 
+// Per-user cap. Tags are cheap individually, but every review's tag panel
+// renders all tags and the dashboard's tag-filter dropdown has to ship
+// the full list to the client, so unbounded growth degrades both UX and
+// page weight. 50 is generous — most businesses categorize on a handful
+// of axes (location, sentiment, topic, escalation, etc.). Matches the
+// MAX_RULES precedent in autoRules.js.
+const MAX_TAGS = 50;
+
 // GET /api/tags — list all tags for this user with usage counts
 router.get('/', tagLimiter, (req, res) => {
   const rows = all(
@@ -40,6 +48,11 @@ router.post('/', tagLimiter, (req, res) => {
   }
   const trimmedName = name.trim().slice(0, 50);
   const tagColor = color && HEX_COLOR_RE.test(color) ? color : '#6b7280';
+
+  const countRow = get('SELECT COUNT(*) AS n FROM tags WHERE user_id = ?', [req.user.id]);
+  if ((countRow?.n ?? 0) >= MAX_TAGS) {
+    return res.status(400).json({ error: `Maximum ${MAX_TAGS} tags per account` });
+  }
 
   const existing = get('SELECT id FROM tags WHERE user_id = ? AND name = ?', [req.user.id, trimmedName]);
   if (existing) return res.status(409).json({ error: 'Tag name already exists' });
