@@ -728,16 +728,24 @@ function Footer() {
 // All samples shown as Google reviews — that's the only platform the
 // product ships with at launch. Don't reintroduce Yelp/Wongnai/TripAdvisor
 // labels here without restoring real provider integrations first.
-const DRAFT_SAMPLES = [
+const DRAFT_SAMPLES_EN = [
   { name: 'Alex K.', plat: 'google', platLabel: 'Google', stars: 5, body: 'Best flat white on the block. Staff remembered my name by visit two.' },
   { name: 'Nina D.', plat: 'google', platLabel: 'Google', stars: 4, body: 'Loved the food, patio was freezing though. Heaters would help.' },
   { name: 'Rai T.',  plat: 'google', platLabel: 'Google', stars: 5, body: 'ขนมปังอร่อยมาก กาแฟเข้มกำลังดี' },
   { name: 'Sam O.',  plat: 'google', platLabel: 'Google', stars: 5, body: 'Best brunch we had all trip. Saved a window table without asking.' },
   { name: 'Mia L.',  plat: 'google', platLabel: 'Google', stars: 3, body: 'Food was good but the wait for a table was 35 minutes on a Wednesday.' },
 ];
+const DRAFT_SAMPLES_TH = [
+  { name: 'อเล็กซ์ ก.', plat: 'google', platLabel: 'Google', stars: 5, body: 'แฟลตไวท์อร่อยที่สุดในย่านนี้ พนักงานจำชื่อได้ตั้งแต่มาครั้งที่สอง' },
+  { name: 'นีน่า ด.',  plat: 'google', platLabel: 'Google', stars: 4, body: 'อาหารอร่อยแต่ลานข้างนอกหนาวมาก น่าจะมีฮีตเตอร์' },
+  { name: 'ราย ท.',   plat: 'google', platLabel: 'Google', stars: 5, body: 'ขนมปังอร่อยมาก กาแฟเข้มกำลังดี' },
+  { name: 'แซม โอ.',   plat: 'google', platLabel: 'Google', stars: 5, body: 'บรันช์ที่ดีที่สุดของทริป จองโต๊ะริมหน้าต่างให้โดยไม่ต้องร้องขอ' },
+  { name: 'มีอา ล.',   plat: 'google', platLabel: 'Google', stars: 3, body: 'อาหารดีแต่รอโต๊ะ 35 นาทีในวันพุธ' },
+];
 
 function GimmickLayer() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
+  const DRAFT_SAMPLES = lang === 'th' ? DRAFT_SAMPLES_TH : DRAFT_SAMPLES_EN;
   const [toasts, setToasts] = useState([]);
   const [hintShown, setHintShown] = useState(true);
   const nextId = useRef(1);
