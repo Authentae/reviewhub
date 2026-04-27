@@ -474,9 +474,9 @@ function FeatureGrid() {
         </div>
         <div className="rh-bento">
           <div className="cell a rh-reveal">
-            <div className="tag">Trends</div>
-            <h3>Ratings that <em>move</em>, over time.</h3>
-            <p>Sparklines per platform, weekly digest in your inbox, alerts when sentiment drops two notches in a week — so you're addressing a dip, not discovering it.</p>
+            <div className="tag">{t('landing.bento.trendsTag', 'Trends')}</div>
+            <h3>{t('landing.bento.trendsTitle', 'Ratings that move, over time.')}</h3>
+            <p>{t('landing.bento.trendsDesc', "Sparklines per platform, weekly digest in your inbox, alerts when sentiment drops two notches in a week — so you're addressing a dip, not discovering it.")}</p>
             <div className="viz">
               <div className="spark">
                 {days.map((d, i) => <span key={i} className={i > 8 ? 'hi' : ''} style={{ height: `${d}%` }} />)}
@@ -487,8 +487,8 @@ function FeatureGrid() {
             </div>
           </div>
           <div className="cell b rh-reveal">
-            <div className="tag">Sentiment</div>
-            <h3>Know what's <em>actually</em> said.</h3>
+            <div className="tag">{t('landing.bento.sentimentTag', 'Sentiment')}</div>
+            <h3>{t('landing.bento.sentimentTitle', "Know what's actually said.")}</h3>
             <div className="viz senti">
               <div className="senti-row"><span className="lbl">Positive</span><div className="bar pos"><span /></div><span className="pct">72%</span></div>
               <div className="senti-row"><span className="lbl">Neutral</span><div className="bar neu"><span /></div><span className="pct">19%</span></div>
@@ -496,8 +496,8 @@ function FeatureGrid() {
             </div>
           </div>
           <div className="cell c rh-reveal">
-            <div className="tag">i18n · 10 langs</div>
-            <h3>Thai, Japanese,<br /><em>native.</em></h3>
+            <div className="tag">{t('landing.bento.i18nTag', 'i18n · 10 langs')}</div>
+            <h3>{t('landing.bento.i18nTitle', 'Thai, Japanese, native.')}</h3>
             <div className="viz langs">
               {['EN', 'ES', 'FR', 'DE', 'PT', 'IT', 'TH', 'JA', 'ZH', 'KO'].map((l) => (
                 <span key={l} className={'lang' + (['TH', 'JA', 'KO'].includes(l) ? ' on' : '')}>{l}</span>
@@ -505,24 +505,24 @@ function FeatureGrid() {
             </div>
           </div>
           <div className="cell d rh-reveal">
-            <div className="tag">Inbox</div>
-            <h3>One feed.<br /><em>Every Google review.</em></h3>
+            <div className="tag">{t('landing.bento.inboxTag', 'Inbox')}</div>
+            <h3>{t('landing.bento.inboxTitle', 'One feed. Every Google review.')}</h3>
             <div className="viz mini-dash">
-              <div className="mdh"><span>TODAY</span><span>14 NEW</span></div>
+              <div className="mdh"><span>{t('landing.bento.todayLabel', 'TODAY')}</span><span>14 {t('landing.bento.newLabel', 'NEW')}</span></div>
               <div className="mdrow"><span className="dot g" /><span className="name">Marco P. · Google</span><span className="st">★★★★★</span></div>
               <div className="mdrow"><span className="dot g" /><span className="name">Ploy S. · Google</span><span className="st">★★★★★</span></div>
               <div className="mdrow"><span className="dot g" /><span className="name">Jamie R. · Google</span><span className="st">★★★★</span></div>
             </div>
           </div>
           <div className="cell e rh-reveal">
-            <div className="tag">Roles · Audit</div>
-            <h3>Team-safe by <em>default.</em></h3>
-            <p>Owner, manager, responder. Every reply attributable, every change logged.</p>
+            <div className="tag">{t('landing.bento.rolesTag', 'Roles · Audit')}</div>
+            <h3>{t('landing.bento.rolesTitle', 'Team-safe by default.')}</h3>
+            <p>{t('landing.bento.rolesDesc', 'Owner, manager, responder. Every reply attributable, every change logged.')}</p>
           </div>
           <div className="cell f rh-reveal">
-            <div className="tag">Review requests</div>
-            <h3>Ask at the <em>right moment.</em></h3>
-            <p>QR at the table, SMS after pickup, follow-up at day four. Measured per channel.</p>
+            <div className="tag">{t('landing.bento.requestsTag', 'Review requests')}</div>
+            <h3>{t('landing.bento.requestsTitle', 'Ask at the right moment.')}</h3>
+            <p>{t('landing.bento.requestsDesc', 'QR at the table, SMS after pickup, follow-up at day four. Measured per channel.')}</p>
           </div>
         </div>
       </div>

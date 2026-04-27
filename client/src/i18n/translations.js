@@ -7446,6 +7446,23 @@ const th = {
   'page.tool': 'เครื่องมือร่างคำตอบรีวิวด้วย AI ฟรี — ReviewHub',
   'marquee.liveToday': 'พร้อมใช้วันนี้',
   'marquee.comingSoon': 'เร็วๆ นี้',
+  'landing.bento.trendsTag': 'แนวโน้ม',
+  'landing.bento.trendsTitle': 'คะแนนที่เคลื่อนไหว ตามเวลา',
+  'landing.bento.trendsDesc': 'กราฟแนวโน้มต่อแพลตฟอร์ม สรุปประจำสัปดาห์ในกล่องอีเมล แจ้งเตือนเมื่อความรู้สึกตกลง 2 ระดับในสัปดาห์ — เพื่อให้คุณแก้ไขก่อนค้นพบปัญหาเอง',
+  'landing.bento.sentimentTag': 'ความรู้สึก',
+  'landing.bento.sentimentTitle': 'รู้ว่าจริงๆ พูดอะไร',
+  'landing.bento.i18nTag': 'หลายภาษา · 10 ภาษา',
+  'landing.bento.i18nTitle': 'ไทย ญี่ปุ่น เกาหลี เจ้าของภาษา',
+  'landing.bento.inboxTag': 'กล่องรีวิว',
+  'landing.bento.inboxTitle': 'ฟีดเดียว ทุกรีวิว Google',
+  'landing.bento.todayLabel': 'วันนี้',
+  'landing.bento.newLabel': 'ใหม่',
+  'landing.bento.rolesTag': 'บทบาท · บันทึก',
+  'landing.bento.rolesTitle': 'ปลอดภัยเป็นทีมโดยอัตโนมัติ',
+  'landing.bento.rolesDesc': 'เจ้าของ ผู้จัดการ ผู้ตอบ ทุกคำตอบระบุที่มาได้ ทุกการเปลี่ยนแปลงถูกบันทึก',
+  'landing.bento.requestsTag': 'ขอรีวิว',
+  'landing.bento.requestsTitle': 'ขอในจังหวะที่ใช่',
+  'landing.bento.requestsDesc': 'QR ที่โต๊ะ SMS หลังรับสินค้า ติดตามวันที่ 4 วัดผลแยกตามช่อง',
 
   // ReviewCard action affordances — pin, flag, status, sentiment override.
   // Visible on every review row in the dashboard.
