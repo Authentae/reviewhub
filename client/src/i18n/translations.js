@@ -7303,6 +7303,24 @@ const th = {
   'requests.deleteAria': 'ลบคำขอของ {name}',
   'requests.resend': 'ส่งซ้ำ',
   'requests.resent': 'ส่งคำขอซ้ำแล้ว',
+
+  // Analytics page — Pro upsell + chart labels for owners on the analytics tab
+  'analytics.upgradeTitle': 'การวิเคราะห์แนวโน้ม — ต้องใช้แพ็กเกจ Pro',
+  'analytics.upgradeDesc': 'ปลดล็อกกราฟรายสัปดาห์ การแบ่งตามแพลตฟอร์ม แนวโน้มความรู้สึก และการติดตามอัตราการตอบ',
+  'analytics.upgradeCta': 'ดูแพ็กเกจ',
+  'analytics.kwUpgradeTitle': 'การวิเคราะห์คำค้น — ต้องใช้แพ็กเกจ Pro',
+  'analytics.kwUpgradeDesc': 'อัปเกรดเป็น Pro เพื่อดูคำที่พบบ่อยที่สุดในรีวิวของคุณ',
+  'analytics.noDataHint': 'เชื่อมต่อแพลตฟอร์มรีวิวแรกของคุณเพื่อดูแนวโน้ม การแบ่งความรู้สึก และตัวชี้วัดการตอบ หรือโหลดข้อมูลตัวอย่างเพื่อสำรวจกราฟก่อน',
+  'analytics.deltaNote': 'ป้าย ▲/▼ เปรียบเทียบ 12 สัปดาห์ล่าสุดกับ 12 สัปดาห์ก่อนหน้า',
+  'analytics.tagDistribution': 'การกระจายของแท็ก',
+  'analytics.tagDistributionDesc': 'ความถี่ของแต่ละแท็กในรีวิวของคุณ',
+  'analytics.responseTime': 'เวลาตอบสนอง',
+  'analytics.responseTimeDesc': 'คุณตอบรีวิวเร็วแค่ไหน (จากรีวิวที่บันทึกเวลาตอบไว้)',
+  'analytics.avgResponseTime': 'เวลาตอบเฉลี่ย',
+  'analytics.within24h': 'ภายใน 24 ชั่วโมง',
+  'analytics.within7d': 'ภายใน 7 วัน',
+  'analytics.responseTimeHours': '{h} ชม.',
+  'analytics.responseTimeNoData': 'ยังไม่มีข้อมูลเวลาตอบ — เริ่มตอบรีวิวเพื่อเก็บสถิติ',
 };
 
 export const LANGUAGES = [
