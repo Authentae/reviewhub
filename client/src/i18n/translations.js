@@ -7014,6 +7014,36 @@ const th = {
   'common.optional': 'ไม่บังคับ',
   'common.rateLimitedWait': 'คุณดำเนินการเร็วเกินไป — ลองใหม่ในอีก {seconds} วินาที',
   'auth.orDemo': 'หรือลองใช้เดโม',
+
+  // Dashboard filter bar (visible on every dashboard load)
+  'dashboard.filter.statusAriaLabel': 'กรองตามสถานะรีวิว',
+  'dashboard.filter.allStatuses': 'ทุกสถานะ',
+  'dashboard.filter.pinnedOnly': 'ปักหมุด',
+  'dashboard.filter.pinnedFirst': 'ปักหมุดก่อน',
+  'dashboard.filter.flaggedOnly': 'ทำเครื่องหมาย',
+  'dashboard.filter.dateFrom': 'ตั้งแต่วันที่',
+  'dashboard.filter.dateTo': 'ถึงวันที่',
+  'dashboard.filter.datePresets': 'ช่วงเวลาที่กำหนดไว้',
+  'dashboard.filter.preset7d': '7 วัน',
+  'dashboard.filter.preset30d': '30 วัน',
+  'dashboard.filter.preset90d': '90 วัน',
+  'dashboard.exportJson': 'ส่งออกเป็น JSON',
+  'dashboard.exportJsonAria': 'ส่งออกข้อมูลที่แสดงเป็น JSON',
+  'dashboard.noReviewsOnboardHint': 'เชื่อมต่อ Google, Yelp, Facebook หรือแพลตฟอร์มที่รองรับอื่นๆ ในการตั้งค่า — เราจะเริ่มดึงรีวิวของคุณภายในไม่กี่นาที',
+  'dashboard.connectAPlatform': 'เชื่อมต่อแพลตฟอร์ม →',
+
+  // Settings page subtitle + business switcher (most-visited settings rows)
+  'settings.subtitle': 'จัดการธุรกิจ การเชื่อมต่อ การเรียกเก็บเงิน และการแจ้งเตือน',
+  'settings.businesses': 'ธุรกิจ',
+  'settings.businessActive': 'ใช้งานอยู่',
+  'settings.businessSwitch': 'สลับมาใช้',
+  'settings.businessAdd': 'เพิ่มธุรกิจ',
+  'settings.businessSwitched': 'สลับไปที่ {name} แล้ว',
+  'settings.businessSwitchFailed': 'สลับธุรกิจไม่สำเร็จ',
+  'settings.businessAdded': 'เพิ่ม {name} แล้ว',
+  'settings.businessAddFailed': 'เพิ่มธุรกิจไม่สำเร็จ',
+  'settings.changeEmail': 'เปลี่ยน',
+  'settings.sending': 'กำลังส่ง…',
 };
 
 export const LANGUAGES = [
