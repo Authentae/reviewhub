@@ -201,4 +201,24 @@ describe('tags', () => {
     const found = list.body.reviews.find(r => r.id === review.id);
     assert.deepStrictEqual(found.tags, []);
   });
+
+  test('POST /tags rejects with 400 once user hits the per-account cap', async () => {
+    // Cap is 50; we go up to that, then assert the next POST is rejected.
+    // Direct DB inserts would skip the route's check and let us seed faster,
+    // but driving through the real route is what we actually care about.
+    const u = await makeUserWithBusiness();
+    for (let i = 0; i < 50; i++) {
+      const res = await request(app)
+        .post('/api/tags')
+        .set('Authorization', `Bearer ${u.token}`)
+        .send({ name: `cap-${i}` });
+      assert.strictEqual(res.status, 201, `seed POST #${i} failed: ${res.status}`);
+    }
+    const overflow = await request(app)
+      .post('/api/tags')
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({ name: 'one-too-many' });
+    assert.strictEqual(overflow.status, 400);
+    assert.match(overflow.body.error, /Maximum 50 tags/);
+  });
 });
