@@ -7236,6 +7236,24 @@ const th = {
   'ownerResponse.confirmDelete': 'ลบ?',
   'ownerResponse.confirmDeleteAria': 'ยืนยันการลบ',
   'ownerResponse.edited': 'แก้ไขแล้ว',
+
+  // Owner dashboard — verified-claim users land here to manage their
+  // public-facing businesses. Linked from Navbar, accessed by anyone
+  // who's claimed at least one business.
+  'owner.pageTitle': 'ธุรกิจของฉัน',
+  'owner.heading': 'ธุรกิจที่คุณเป็นเจ้าของ',
+  'owner.subheading': 'ธุรกิจที่ผ่านการยืนยัน — โพสต์คำตอบในฐานะเจ้าของบนรีวิวสาธารณะได้',
+  'owner.backToDashboard': '← กลับไปแดชบอร์ด',
+  'owner.loadFailed': 'โหลดข้อมูลธุรกิจไม่สำเร็จ — กรุณารีเฟรช',
+  'owner.emptyTitle': 'ยังไม่มีธุรกิจที่ผ่านการยืนยัน',
+  'owner.emptyBody': 'เมื่อคำอ้างสิทธิ์ได้รับการอนุมัติ ธุรกิจจะปรากฏที่นี่',
+  'owner.row.manage': 'จัดการ',
+  'owner.row.totalReviews': '{n} รีวิว',
+  'owner.row.pendingAria': 'ยังไม่ได้ตอบ {n} รีวิว',
+  'owner.upsellTitle': 'อยากตอบรีวิวทุกรายการในที่เดียว?',
+  'owner.upsellBody': 'เชื่อมต่อแพลตฟอร์มของคุณเพื่อดึงรีวิวทั้งหมดเข้ามาในแดชบอร์ดเดียว พร้อมร่างคำตอบด้วย AI',
+  'owner.upsellCta': 'อัปเกรดเป็น Pro',
+  'owner.upsellBadge': 'Pro',
 };
 
 export const LANGUAGES = [
