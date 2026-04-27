@@ -58,4 +58,17 @@ async function start() {
   process.on('SIGINT', () => shutdown('SIGINT'));
 }
 
-start();
+// If start() throws (bad DATABASE_PATH, schema migration error, missing
+// JWT_SECRET in prod, etc.) the unhandledRejection handler in
+// errorReporter just logs — it doesn't exit. Without an explicit catch
+// here the process would hang in a half-booted state, the orchestrator
+// (Railway/Docker) would see a zombie container, and ops would have no
+// signal that the boot itself failed. Exit 1 so the supervisor restarts
+// cleanly and the failure is visible in logs.
+start().catch((err) => {
+  // eslint-disable-next-line no-console
+  console.error('[BOOT] start() failed:', err?.stack || err);
+  const { captureException } = require('./lib/errorReporter');
+  captureException(err, { kind: 'boot-failure' });
+  process.exit(1);
+});
