@@ -543,45 +543,45 @@ function Pricing() {
         <div className="rh-price-grid rh-reveal">
           <div className="plan">
             <div className="plan-name">Solo</div>
-            <h3>The first shop.</h3>
-            <div className="plan-price">$0<small>/mo, forever</small></div>
-            <div className="plan-sub">One location, two platforms, all the basics.</div>
+            <h3>{t('landing.plan.soloHeadline', 'The first shop.')}</h3>
+            <div className="plan-price">$0<small>{t('landing.plan.foreverSuffix', '/mo, forever')}</small></div>
+            <div className="plan-sub">{t('landing.plan.soloSub', 'One location, two platforms, all the basics.')}</div>
             <ul>
-              <li><Check />Up to 50 reviews / month</li>
-              <li><Check />Google today · Yelp, Facebook, Wongnai coming soon</li>
-              <li><Check />AI drafts (template fallback)</li>
-              <li><Check />CSV import</li>
+              <li><Check />{t('landing.plan.solo1', 'Up to 50 reviews / month')}</li>
+              <li><Check />{t('landing.plan.solo2', 'Google today · Yelp, Facebook, Wongnai coming soon')}</li>
+              <li><Check />{t('landing.plan.solo3', 'AI drafts (template fallback)')}</li>
+              <li><Check />{t('landing.plan.solo4', 'CSV import')}</li>
             </ul>
-            <Link to="/register" className="rh-btn rh-btn-ghost">Start free</Link>
+            <Link to="/register" className="rh-btn rh-btn-ghost">{t('nav.startFree', 'Start free')}</Link>
           </div>
           <div className="plan featured">
-            <div className="badge">Most popular</div>
+            <div className="badge">{t('landing.plan.popular', 'Most popular')}</div>
             <div className="plan-name">Shop</div>
-            <h3>A real front door.</h3>
+            <h3>{t('landing.plan.shopHeadline', 'A real front door.')}</h3>
             <div className="plan-price">$29<small>/mo</small></div>
-            <div className="plan-sub">For the place you actually show up to every morning.</div>
+            <div className="plan-sub">{t('landing.plan.shopSub', 'For the place you actually show up to every morning.')}</div>
             <ul>
-              <li><Check />Unlimited reviews</li>
-              <li><Check />Google today · Yelp, Facebook, Wongnai coming soon</li>
-              <li><Check />Claude-powered drafts, 10 languages</li>
-              <li><Check />Sentiment, trends, weekly digest</li>
-              <li><Check />3 teammates</li>
+              <li><Check />{t('landing.plan.shop1', 'Unlimited reviews')}</li>
+              <li><Check />{t('landing.plan.shop2', 'Google today · Yelp, Facebook, Wongnai coming soon')}</li>
+              <li><Check />{t('landing.plan.shop3', 'Claude-powered drafts, 10 languages')}</li>
+              <li><Check />{t('landing.plan.shop4', 'Sentiment, trends, weekly digest')}</li>
+              <li><Check />{t('landing.plan.shop5', '3 teammates')}</li>
             </ul>
-            <Link to="/register" className="rh-btn rh-btn-amber">Choose Shop · $29/mo</Link>
+            <Link to="/register" className="rh-btn rh-btn-amber">{t('landing.plan.chooseShop', 'Choose Shop · $29/mo')}</Link>
           </div>
           <div className="plan">
             <div className="plan-name">Chain</div>
-            <h3>More than one.</h3>
+            <h3>{t('landing.plan.chainHeadline', 'More than one.')}</h3>
             <div className="plan-price">$59<small>/mo</small></div>
-            <div className="plan-sub">For multi-location operators juggling dashboards.</div>
+            <div className="plan-sub">{t('landing.plan.chainSub', 'For multi-location operators juggling dashboards.')}</div>
             <ul>
-              <li><Check />Everything in Shop</li>
-              <li><Check />Up to 10 locations</li>
-              <li><Check />Unlimited teammates + audit log</li>
-              <li><Check />API + webhooks</li>
-              <li><Check />Priority support</li>
+              <li><Check />{t('landing.plan.chain1', 'Everything in Shop')}</li>
+              <li><Check />{t('landing.plan.chain2', 'Up to 10 locations')}</li>
+              <li><Check />{t('landing.plan.chain3', 'Unlimited teammates + audit log')}</li>
+              <li><Check />{t('landing.plan.chain4', 'API + webhooks')}</li>
+              <li><Check />{t('landing.plan.chain5', 'Priority support')}</li>
             </ul>
-            <Link to="/register" className="rh-btn rh-btn-ghost">Choose Chain · $59/mo</Link>
+            <Link to="/register" className="rh-btn rh-btn-ghost">{t('landing.plan.chooseChain', 'Choose Chain · $59/mo')}</Link>
           </div>
         </div>
       </div>
