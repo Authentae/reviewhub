@@ -10,7 +10,20 @@ const {
   comparePassword,
   needsRehash,
   MAX_LENGTH: PW_MAX_LENGTH,
+  BCRYPT_COST,
 } = require('../lib/passwordPolicy');
+
+// Timing-oracle defense: bcrypt.compare against this dummy hash on the
+// "unknown email" login path so response time matches the "bad password"
+// path (which compares against a real user's hash). Generated ONCE at
+// module load using the same BCRYPT_COST as real users — if the cost
+// constant changes, the dummy automatically tracks it. Hardcoding a
+// $2a$10$… dummy while real users hashed at cost 12 was the bug that
+// reopened the email-enumeration oracle for months.
+const DUMMY_BCRYPT_HASH = bcrypt.hashSync(
+  'reviewhub-timing-defense-dummy-not-a-real-password',
+  BCRYPT_COST
+);
 
 // Bump this when Terms or Privacy get a material revision. Existing users
 // whose terms_version_accepted != current will need to re-accept (handle in UI).
@@ -220,17 +233,11 @@ router.post('/login', authAttemptLimiter, async (req, res) => {
   try {
     const user = get('SELECT * FROM users WHERE email = ?', [email]);
     if (!user) {
-      // Burn a bcrypt cycle against a fixed dummy hash so response time for
-      // "unknown email" matches "bad password". Without this, the
-      // bcrypt.compare against a real user's hash creates a timing oracle
-      // that lets an attacker enumerate valid emails.
-      //
-      // CRITICAL: the dummy hash MUST use the same cost factor as real
-      // user hashes (BCRYPT_COST = 12). Using a $2a$10$ dummy meant the
-      // "unknown" path ran ~4× faster than the "bad" path — restoring
-      // the very oracle this code was meant to close. Real cost-12 hash
-      // generated from `bcrypt.hashSync('dummy', 12)` and pinned below.
-      await bcrypt.compare(password, '$2a$12$G9SYBi06Urrz7Mvy8OhfIuMMIbpwo85fjcNSsfXegFBXJu8lkAcoO');
+      // Burn a bcrypt cycle against the module-load dummy hash (same
+      // BCRYPT_COST as real users) so response time for "unknown email"
+      // matches "bad password". See DUMMY_BCRYPT_HASH at the top of this
+      // file for why the cost factor has to track BCRYPT_COST exactly.
+      await bcrypt.compare(password, DUMMY_BCRYPT_HASH);
       logAudit(req, 'user.login_failed', { metadata: { reason: 'unknown_email' } });
       return res.status(401).json({ error: 'Invalid credentials' });
     }
