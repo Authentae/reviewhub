@@ -111,20 +111,42 @@ describe('auth: registration + login', () => {
     // Regression guard for the timing-oracle fix. If the unknown-email path
     // skips bcrypt.compare and returns immediately, an attacker can enumerate
     // registered addresses by diffing response times (~2ms vs ~80ms). Ensure
-    // both paths do roughly equal CPU work. Generous 4x slack for jitter.
+    // both paths do roughly equal CPU work.
+    //
+    // Single-sample comparisons here turned out to be flaky on Windows
+    // (bcrypt's first call after a GC pause spiked tBad to ~300ms while
+    // tUnknown landed at ~70ms — well under 4x but no actual oracle). Take
+    // the median of N samples to smooth jitter; an attacker would need to
+    // distinguish populations, not single requests, so a population-level
+    // assertion is the right level of rigour.
     const user = await makeUser();
+    const SAMPLES = 5;
 
-    const t1 = Date.now();
-    await request(app).post('/api/auth/login').send({ email: user.email, password: 'WrongPass!9xQ' });
-    const tBad = Date.now() - t1;
+    const measure = async (email, password) => {
+      const t = Date.now();
+      await request(app).post('/api/auth/login').send({ email, password });
+      return Date.now() - t;
+    };
 
-    const t2 = Date.now();
-    await request(app).post('/api/auth/login')
-      .send({ email: `noexist-${Date.now()}@test.local`, password: 'anything' });
-    const tUnknown = Date.now() - t2;
+    const median = (arr) => {
+      const s = [...arr].sort((a, b) => a - b);
+      return s[Math.floor(s.length / 2)];
+    };
 
+    const badSamples = [];
+    const unknownSamples = [];
+    for (let i = 0; i < SAMPLES; i++) {
+      badSamples.push(await measure(user.email, 'WrongPass!9xQ'));
+      unknownSamples.push(await measure(`noexist-${Date.now()}-${i}@test.local`, 'anything'));
+    }
+    const tBad = median(badSamples);
+    const tUnknown = median(unknownSamples);
+
+    // 4× slack on the median: an order-of-magnitude oracle (10×+) would
+    // still trip this, while routine ±2× jitter no longer does.
     assert.ok(tUnknown * 4 >= tBad,
-      `timing oracle regression: unknown=${tUnknown}ms bad=${tBad}ms`);
+      `timing oracle regression: unknown=${tUnknown}ms bad=${tBad}ms ` +
+      `(samples bad=${badSamples.join(',')} unknown=${unknownSamples.join(',')})`);
   });
 
   test('/me requires auth', async () => {
