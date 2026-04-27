@@ -177,6 +177,18 @@ function createApp() {
     }
     next();
   });
+  // Default Cache-Control for /api/* responses. User-specific JSON shouldn't
+  // be cached by browsers or intermediate proxies — without an explicit
+  // header, browser heuristic caching can serve stale data, and a
+  // misconfigured CDN could cross-leak responses between users. Routes that
+  // genuinely benefit from caching (publicWidget, plans, public reviews
+  // feed) explicitly call setHeader to override this default — Express's
+  // setHeader replaces, so the override wins.
+  app.use('/api', (req, res, next) => {
+    res.setHeader('Cache-Control', 'no-store, private');
+    next();
+  });
+
   // In-memory request metrics (counts + latency percentiles). Exposed to the
   // operator at /api/admin/metrics. Mounted after body parsing so req.route
   // is populated by the time we record the bucket.
