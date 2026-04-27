@@ -133,7 +133,13 @@ export default function Navbar() {
   const isActive = (to) => location.pathname === to;
 
   return (
-    <div className="rh-design rh-app">
+    // Wrapper exposes the editorial design tokens (--rh-*) to the navbar
+    // tree but MUST NOT carry .rh-app — that class sets `min-height: 100vh`
+    // in dashboard-system.css, and when the page itself is also wrapped in
+    // .rh-app (every authenticated page is), you get two stacked viewport-
+    // tall containers and ~700px of empty space between navbar and content.
+    // Caught via preview_eval on a logged-in dashboard 2026-04-27.
+    <div className="rh-design rh-app-nav-wrap">
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:bg-[color:var(--rh-paper)] focus:text-[color:var(--rh-teal)] focus:px-4 focus:py-2 focus:rounded-lg focus:font-semibold focus:shadow-lg focus:outline-none"

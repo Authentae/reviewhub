@@ -1065,7 +1065,7 @@ const en = {
   'dashboard.exportJson': 'Export as JSON',
   'dashboard.exportJsonAria': 'Export the current view as JSON',
   'pricing.currency': 'Currency',
-  'dashboard.noReviewsOnboardHint': 'Connect Google, Yelp, Facebook, or any other supported platform in Settings — we\'ll start importing your reviews within a few minutes.',
+  'dashboard.noReviewsOnboardHint': 'Connect your Google business in Settings — we\'ll start pulling your reviews within a few minutes. Yelp, Facebook, and more platforms coming soon.',
   'dashboard.connectAPlatform': 'Connect a platform →',
   'settings.platform.connectWithGoogle': 'Connect with Google',
   'settings.platform.oauthUnavailable': 'Google OAuth is not configured on this deployment. Use the manual Place ID field below.',
@@ -7029,7 +7029,7 @@ const th = {
   'dashboard.filter.preset90d': '90 วัน',
   'dashboard.exportJson': 'ส่งออกเป็น JSON',
   'dashboard.exportJsonAria': 'ส่งออกข้อมูลที่แสดงเป็น JSON',
-  'dashboard.noReviewsOnboardHint': 'เชื่อมต่อ Google, Yelp, Facebook หรือแพลตฟอร์มที่รองรับอื่นๆ ในการตั้งค่า — เราจะเริ่มดึงรีวิวของคุณภายในไม่กี่นาที',
+  'dashboard.noReviewsOnboardHint': 'เชื่อมต่อธุรกิจ Google ของคุณในการตั้งค่า — เราจะเริ่มดึงรีวิวของคุณภายในไม่กี่นาที Yelp, Facebook และแพลตฟอร์มอื่นๆ เร็วๆ นี้',
   'dashboard.connectAPlatform': 'เชื่อมต่อแพลตฟอร์ม →',
 
   // Settings page subtitle + business switcher (most-visited settings rows)
