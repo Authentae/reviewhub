@@ -94,6 +94,25 @@ describe('public widget', () => {
     assert.ok(res.text.includes('5.0'));
   });
 
+  test('badge response is iframe-embeddable AND blocks script execution', async () => {
+    // Locks down two coupled requirements:
+    //   1. customers paste this on their own websites → frame-ancestors must
+    //      allow any origin (without it, the iframe won't render at all)
+    //   2. the badge HTML is server-rendered with zero JavaScript → CSP
+    //      must explicitly forbid scripts so a future XSS regression in
+    //      the template can't escalate to script execution.
+    // A future CSP refactor that drops either of these silently would now
+    // trip this test instead of shipping.
+    const u = await makeUserWithBusiness();
+    const bizId = await enableWidget(u);
+    const res = await request(app).get(`/api/public/widget/${bizId}/badge`);
+    const csp = res.headers['content-security-policy'] || '';
+    assert.match(csp, /frame-ancestors \*/, 'badge must allow any-origin embed');
+    assert.match(csp, /script-src 'none'/, 'badge must forbid script execution');
+    // X-Frame-Options must be absent — its DENY would override frame-ancestors.
+    assert.strictEqual(res.headers['x-frame-options'], undefined);
+  });
+
   // ── Settings toggle ───────────────────────────────────────────────────────
 
   test('widget_enabled can be toggled via PUT /api/businesses/:id', async () => {
