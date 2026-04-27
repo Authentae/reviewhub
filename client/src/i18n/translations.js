@@ -7189,6 +7189,28 @@ const th = {
   'onboarding.tryDemo': 'ลองด้วยข้อมูลตัวอย่าง',
   'onboarding.or': 'หรือ',
   'onboarding.respondHint': 'คลิกรีวิวใดก็ได้ด้านล่างเพื่อร่างคำตอบ',
+
+  // Business claim flow — critical conversion path: a customer who can
+  // see the public business page clicks "Claim this business", fills the
+  // form, gets verified, then can post owner responses.
+  'claim.checking': 'กำลังตรวจสอบสถานะการเป็นเจ้าของ…',
+  'claim.signInToClaim': 'เข้าสู่ระบบเพื่ออ้างสิทธิ์ธุรกิจนี้',
+  'claim.approved': 'ยืนยันการเป็นเจ้าของแล้ว',
+  'claim.pending': 'อยู่ระหว่างพิจารณา',
+  'claim.rejected': 'การอ้างสิทธิ์ไม่ได้รับการอนุมัติ',
+  'claim.claimCta': 'อ้างสิทธิ์ธุรกิจนี้',
+  'claim.modalTitle': 'อ้างสิทธิ์ธุรกิจนี้',
+  'claim.modalSubtitle': 'บอกเราว่าคุณเป็นใครที่ {name} เราจะตรวจสอบและให้สิทธิ์ตอบรีวิวในฐานะเจ้าของ',
+  'claim.fieldName': 'ชื่อของคุณ',
+  'claim.fieldRole': 'ตำแหน่งของคุณ',
+  'claim.fieldRolePlaceholder': 'เจ้าของ ผู้จัดการ หัวหน้าฝ่ายการตลาด…',
+  'claim.fieldNote': 'มีอะไรเพิ่มเติมที่อยากบอกเรา? (ไม่บังคับ)',
+  'claim.fieldNotePlaceholder': 'เช่น โดเมนอีเมลบริษัท เลขทะเบียนธุรกิจ',
+  'claim.missingFields': 'ต้องระบุชื่อและตำแหน่ง',
+  'claim.submitting': 'กำลังส่ง…',
+  'claim.submit': 'ส่งคำอ้างสิทธิ์',
+  'claim.submitted': 'ส่งคำอ้างสิทธิ์แล้ว — เราจะพิจารณาให้เร็วที่สุด',
+  'claim.failed': 'ส่งคำอ้างสิทธิ์ไม่สำเร็จ กรุณาลองใหม่',
 };
 
 export const LANGUAGES = [
