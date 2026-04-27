@@ -7383,6 +7383,15 @@ const th = {
   'landing.heroMetricLangs': 'รวมภาษาไทยเต็มรูปแบบ',
   'landing.heroMetricPlatform': 'วันนี้ · แพลตฟอร์มอื่นเร็วๆ นี้',
   'landing.heroMetricSpeed': 'จากรีวิวถึงร่างคำตอบ',
+  'landing.step1Cat': 'เชื่อมต่อ',
+  'landing.step1H': 'วางลิงก์ — เราดึงรีวิวมาให้',
+  'landing.step1P': 'Google OAuth ใช้เวลา 20 วินาที แพลตฟอร์มอื่นรับ URL สาธารณะหรือ CSV ระหว่างที่ API ของพวกเขายังไม่พร้อม คุณออนไลน์ภายในนาทีเดียว',
+  'landing.step2Cat': 'ร่างคำตอบ',
+  'landing.step2H': 'AI เขียนในสไตล์ของคุณ — ไม่ใช่ "ขอบคุณค่ะ"',
+  'landing.step2P': 'ฝึกจากคำตอบล่าสุด 20 รายการของคุณ ร่างฟังเป็นคุณ ใน 10 ภาษา — ภาษาไทย ญี่ปุ่น เกาหลี เจ้าของภาษาแท้ ไม่ใช่ผ่านการแปล',
+  'landing.step3Cat': 'โพสต์',
+  'landing.step3H': 'แตะครั้งเดียว เผยแพร่ทันที',
+  'landing.step3P': 'ส่วนขยายโพสต์บนแพลตฟอร์มที่คุณอยู่ — ไม่ต้องคัดลอกวาง ไม่ต้องสลับแท็บ ไม่ต้องจำรหัสผ่าน เวลาตอบเฉลี่ย: 12 วินาที',
 
   // ReviewCard action affordances — pin, flag, status, sentiment override.
   // Visible on every review row in the dashboard.

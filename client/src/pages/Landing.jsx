@@ -252,8 +252,8 @@ function Marquee() {
 function HowItWorks() {
   const { t } = useI18n();
   const steps = [
-    { n: 'I', cat: 'Connect', h: <>Paste a link,<br />we pull the <em>reviews.</em></>,
-      p: 'Google OAuth takes 20 seconds. Other platforms accept a public URL or a CSV while their APIs warm up. You\'re online inside a minute.',
+    { n: 'I', cat: t('landing.step1Cat', 'Connect'), h: t('landing.step1H', 'Paste a link, we pull the reviews.'),
+      p: t('landing.step1P', "Google OAuth takes 20 seconds. Other platforms accept a public URL or a CSV while their APIs warm up. You're online inside a minute."),
       illo: (
         <div style={{ width: '100%', display: 'flex', gap: 8, alignItems: 'center' }}>
           <div style={{ flex: 1, padding: '10px 12px', background: 'var(--rh-paper)', border: '1px solid var(--rh-rule)', borderRadius: 8, fontFamily: 'var(--rh-mono)', fontSize: 11, color: 'var(--rh-ink-3)' }}>https://g.page/cafe-morning</div>
@@ -261,8 +261,8 @@ function HowItWorks() {
         </div>
       ),
     },
-    { n: 'II', cat: 'Draft', h: <>AI writes in <em>your voice —</em> not "delight."</>,
-      p: 'Trained on your last 20 replies. Drafts sound like you, in any of 10 languages — Thai, Japanese, and Korean done natively, not via translate.',
+    { n: 'II', cat: t('landing.step2Cat', 'Draft'), h: t('landing.step2H', 'AI writes in your voice — not "delight."'),
+      p: t('landing.step2P', 'Trained on your last 20 replies. Drafts sound like you, in any of 10 languages — Thai, Japanese, and Korean done natively, not via translate.'),
       illo: (
         <div style={{ width: '100%', fontFamily: 'var(--rh-sans)', fontSize: 15, color: 'var(--rh-ink)', lineHeight: 1.5, fontWeight: 500 }}>
           <div style={{ fontFamily: 'var(--rh-mono)', fontSize: 10, color: 'var(--rh-ochre-deep)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10, fontWeight: 600 }}>✦ Draft</div>
@@ -270,8 +270,8 @@ function HowItWorks() {
         </div>
       ),
     },
-    { n: 'III', cat: 'Post', h: <>One tap. It's <em>published.</em></>,
-      p: 'The extension posts on whatever platform page you\'re on — no copy-paste, no tab juggling, no logins to remember. Median reply time: 12 seconds.',
+    { n: 'III', cat: t('landing.step3Cat', 'Post'), h: t('landing.step3H', "One tap. It's published."),
+      p: t('landing.step3P', "The extension posts on whatever platform page you're on — no copy-paste, no tab juggling, no logins to remember. Median reply time: 12 seconds."),
       illo: (
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontFamily: 'var(--rh-mono)', fontSize: 10, color: 'var(--rh-ink-3)', letterSpacing: '0.08em', marginBottom: 8 }}>MEDIAN</div>
