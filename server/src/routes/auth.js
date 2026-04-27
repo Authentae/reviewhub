@@ -221,10 +221,16 @@ router.post('/login', authAttemptLimiter, async (req, res) => {
     const user = get('SELECT * FROM users WHERE email = ?', [email]);
     if (!user) {
       // Burn a bcrypt cycle against a fixed dummy hash so response time for
-      // "unknown email" matches "bad password". Without this, the ~100ms
+      // "unknown email" matches "bad password". Without this, the
       // bcrypt.compare against a real user's hash creates a timing oracle
       // that lets an attacker enumerate valid emails.
-      await bcrypt.compare(password, '$2a$10$CwTycUXWue0Thq9StjUM0uJ8.pXx3cQc4nO0j8j8j8j8j8j8j8j8j');
+      //
+      // CRITICAL: the dummy hash MUST use the same cost factor as real
+      // user hashes (BCRYPT_COST = 12). Using a $2a$10$ dummy meant the
+      // "unknown" path ran ~4× faster than the "bad" path — restoring
+      // the very oracle this code was meant to close. Real cost-12 hash
+      // generated from `bcrypt.hashSync('dummy', 12)` and pinned below.
+      await bcrypt.compare(password, '$2a$12$G9SYBi06Urrz7Mvy8OhfIuMMIbpwo85fjcNSsfXegFBXJu8lkAcoO');
       logAudit(req, 'user.login_failed', { metadata: { reason: 'unknown_email' } });
       return res.status(401).json({ error: 'Invalid credentials' });
     }
