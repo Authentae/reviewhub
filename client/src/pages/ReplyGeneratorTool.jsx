@@ -70,7 +70,7 @@ const SAMPLES_TH = {
 export default function ReplyGeneratorTool() {
   const { t, lang } = useI18n();
   const SAMPLES = lang === 'th' ? SAMPLES_TH : SAMPLES_EN;
-  usePageTitle(t('page.tool', 'Free AI Review Reply Generator — ReviewHub'));
+  usePageTitle(t('page.tool', 'Free AI Review Reply Generator'));
 
   const [form, setForm] = useState({
     reviewer_name: '',

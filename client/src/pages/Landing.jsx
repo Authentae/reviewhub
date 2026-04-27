@@ -811,7 +811,7 @@ function GimmickLayer() {
 // ── Page wrapper: scroll-reveal + style block ─────────────────────────────
 export default function Landing() {
   const { t } = useI18n();
-  usePageTitle(t('page.landing', 'ReviewHub — The reply layer for local business'));
+  usePageTitle(t('page.landing', 'The reply layer for local business'));
 
   useEffect(() => {
     if (typeof IntersectionObserver === 'undefined') return;
