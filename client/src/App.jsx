@@ -53,11 +53,22 @@ function PublicOnlyRoute({ children }) {
   return isLoggedIn() ? <Navigate to="/dashboard" replace /> : children;
 }
 
-// Minimal skeleton while lazy chunks load
+// Minimal skeleton while lazy chunks load. Uses editorial palette
+// (rh-paper bg, rh-teal-deep spinner) so the very first paint after a
+// route transition stays on-brand instead of flashing blue.
 function PageLoader() {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center" role="status" aria-label="Loading page">
-      <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" aria-hidden="true" />
+    <div
+      className="min-h-screen flex items-center justify-center"
+      style={{ background: 'var(--rh-paper, #fbf8f1)' }}
+      role="status"
+      aria-label="Loading page"
+    >
+      <div
+        className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin"
+        style={{ borderColor: 'var(--rh-teal-deep, #1e4d5e)', borderTopColor: 'transparent' }}
+        aria-hidden="true"
+      />
     </div>
   );
 }
