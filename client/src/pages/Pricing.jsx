@@ -167,7 +167,7 @@ export default function Pricing() {
                     <div key={plan.id} className={'rh-pricing-card' + (highlighted ? ' featured' : '')}>
                       {highlighted && <span className="badge">{t('pricing.badge')}</span>}
                       <h2 className="plan-name">{plan.name}</h2>
-                      <p className="plan-sub">{plan.description}</p>
+                      <p className="plan-sub">{t(`pricing.${plan.id}Desc`, plan.description)}</p>
                       <div className="plan-price">
                         {isFree ? t('pricing.freePrice') : formatPrice(price, currency)}
                         {!isFree && <small>{perUnit}</small>}

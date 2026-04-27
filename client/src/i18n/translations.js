@@ -7412,6 +7412,10 @@ const th = {
   'landing.demoWordsLabel': 'คำ',
   'landing.demoTokensLabel': 'โทเค็น',
   'landing.demoUnlimited': 'รับร่างไม่จำกัด',
+  'pricing.freeDesc': 'ลอง ReviewHub — ไม่ต้องใช้บัตรเครดิต ไม่จำกัดเวลา',
+  'pricing.starterDesc': 'ทุกอย่างที่ร้านเดียวต้องการเพื่อตอบรีวิวอย่างรวดเร็ว',
+  'pricing.proDesc': 'สำหรับธุรกิจที่ยุ่งบนทุกแพลตฟอร์มหลัก',
+  'pricing.businessDesc': 'สำหรับธุรกิจหลายสาขาและเอเจนซี',
 
   // ReviewCard action affordances — pin, flag, status, sentiment override.
   // Visible on every review row in the dashboard.
