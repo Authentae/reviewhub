@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { isLoggedIn } from '../lib/auth';
 import usePageTitle from '../hooks/usePageTitle';
+import useNoIndex from '../hooks/useNoIndex';
 import { useI18n } from '../context/I18nContext';
 
 // Landing page after one-click unsubscribe via the email footer link.
@@ -31,6 +32,7 @@ export default function Unsubscribed() {
     ? t(`unsub.list.${list}`, fallback)
     : t('unsub.list.generic', fallback);
   usePageTitle(t('unsub.title') || 'Unsubscribed');
+  useNoIndex();
   const loggedIn = isLoggedIn();
 
   return (

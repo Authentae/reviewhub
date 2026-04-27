@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import api from '../lib/api';
 import usePageTitle from '../hooks/usePageTitle';
+import useNoIndex from '../hooks/useNoIndex';
 import { useI18n } from '../context/I18nContext';
 
 // Landing page for the email-change confirm link (CLIENT_URL/email-change?token=…).
@@ -12,6 +13,7 @@ import { useI18n } from '../context/I18nContext';
 export default function EmailChange() {
   const { t } = useI18n();
   usePageTitle(t('page.emailChange'));
+  useNoIndex();
   const [params] = useSearchParams();
   const token = params.get('token') || '';
   const [status, setStatus] = useState(() => (token ? 'pending' : 'missing'));

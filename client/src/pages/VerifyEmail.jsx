@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import api from '../lib/api';
 import usePageTitle from '../hooks/usePageTitle';
+import useNoIndex from '../hooks/useNoIndex';
 import { useI18n } from '../context/I18nContext';
 
 // Handles the landing of email verification links (CLIENT_URL/verify-email?token=...).
@@ -12,6 +13,7 @@ import { useI18n } from '../context/I18nContext';
 export default function VerifyEmail() {
   const { t } = useI18n();
   usePageTitle(t('page.verifyEmail'));
+  useNoIndex();
   const [params] = useSearchParams();
   const token = params.get('token') || '';
   // 'pending' | 'success' | 'error' | 'missing'

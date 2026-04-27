@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../lib/api';
 import usePageTitle from '../hooks/usePageTitle';
+import useNoIndex from '../hooks/useNoIndex';
 import { useI18n } from '../context/I18nContext';
 import AuthSideArt from '../components/AuthSideArt';
 import Logo from '../components/Logo';
@@ -12,6 +13,7 @@ import Logo from '../components/Logo';
 export default function ForgotPassword() {
   const { t } = useI18n();
   usePageTitle(t('page.forgotPassword'));
+  useNoIndex();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);

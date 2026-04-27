@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../lib/api';
 import PasswordStrength from '../components/PasswordStrength';
 import usePageTitle from '../hooks/usePageTitle';
+import useNoIndex from '../hooks/useNoIndex';
 import { useI18n } from '../context/I18nContext';
 import AuthSideArt from '../components/AuthSideArt';
 import Logo from '../components/Logo';
@@ -12,6 +13,7 @@ import Logo from '../components/Logo';
 export default function ResetPassword() {
   const { t } = useI18n();
   usePageTitle(t('page.resetPassword'));
+  useNoIndex();
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const token = params.get('token') || '';

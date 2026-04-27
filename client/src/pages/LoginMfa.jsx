@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import api from '../lib/api';
 import { setToken } from '../lib/auth';
 import usePageTitle from '../hooks/usePageTitle';
+import useNoIndex from '../hooks/useNoIndex';
 import { useI18n } from '../context/I18nContext';
 import AuthSideArt from '../components/AuthSideArt';
 import Logo from '../components/Logo';
@@ -20,6 +21,7 @@ import Logo from '../components/Logo';
 export default function LoginMfa() {
   const { t } = useI18n();
   usePageTitle(t('page.loginMfa'));
+  useNoIndex();
   const navigate = useNavigate();
   const location = useLocation();
   const pendingToken = location.state?.pendingToken;
