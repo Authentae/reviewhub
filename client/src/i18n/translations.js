@@ -7387,6 +7387,20 @@ const th = {
   'review.pinAria': 'ปักหมุดรีวิวนี้',
   'review.unpinAria': 'เลิกปักหมุดรีวิวนี้',
   'review.pinFailed': 'อัปเดตการปักหมุดไม่สำเร็จ',
+
+  // Keyboard-shortcut help dialog (`?` key opens it). Power-user surface
+  // but visible on-demand to anyone who pokes around.
+  'shortcuts.title': 'แป้นพิมพ์ลัด',
+  'shortcuts.showHelp': 'แสดงตัวช่วยนี้',
+  'shortcuts.focusSearch': 'โฟกัสที่ช่องค้นหา',
+  'shortcuts.closeDialogs': 'ปิดกล่องโต้ตอบและเมนู',
+  'shortcuts.goDashboard': 'ไปที่แดชบอร์ด',
+  'shortcuts.goAnalytics': 'ไปที่การวิเคราะห์',
+  'shortcuts.goRequests': 'ไปที่หน้าขอรีวิว',
+  'shortcuts.goSettings': 'ไปที่การตั้งค่า',
+  'shortcuts.goPricing': 'ไปที่ราคา',
+  'shortcuts.then': 'แล้ว',
+  'shortcuts.footerHint': 'แป้นพิมพ์ลัดถูกปิดในขณะที่คุณกำลังพิมพ์ในช่องข้อความ',
 };
 
 export const LANGUAGES = [
