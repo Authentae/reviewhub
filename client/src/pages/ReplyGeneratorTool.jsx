@@ -49,7 +49,7 @@ const SAMPLES = {
 
 export default function ReplyGeneratorTool() {
   const { t } = useI18n();
-  usePageTitle('Free AI Review Reply Generator — ReviewHub');
+  usePageTitle(t('page.tool', 'Free AI Review Reply Generator — ReviewHub'));
 
   const [form, setForm] = useState({
     reviewer_name: '',

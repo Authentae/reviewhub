@@ -7442,6 +7442,8 @@ const th = {
   'common.optional': 'ไม่บังคับ',
   'settings.apiKeyCreateFailed': 'สร้างคีย์ไม่สำเร็จ',
   'settings.apiKeyRevokeFailed': 'เพิกถอนคีย์ไม่สำเร็จ',
+  'page.landing': 'ReviewHub — ตอบรีวิว Google ใน 10 วินาที',
+  'page.tool': 'เครื่องมือร่างคำตอบรีวิวด้วย AI ฟรี — ReviewHub',
 
   // ReviewCard action affordances — pin, flag, status, sentiment override.
   // Visible on every review row in the dashboard.
