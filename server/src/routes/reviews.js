@@ -876,8 +876,18 @@ router.post('/', reviewCreateLimiter, async (req, res) => {
       if (rule.match_keywords) {
         try {
           const kws = JSON.parse(rule.match_keywords);
-          const text = (textClean || '').toLowerCase();
-          keywordMatch = kws.every(kw => text.includes(kw.toLowerCase()));
+          // Defensive shape check: a corrupted match_keywords cell (or one
+          // saved by an older buggy version) might be a non-array, or an
+          // array of non-strings. Treat anything that doesn't validate as
+          // "no keyword filter" — same as NULL — rather than throwing
+          // mid-iteration and causing this auto-rule to silently fail
+          // for every future review on the affected user.
+          if (Array.isArray(kws) && kws.length > 0) {
+            const text = (textClean || '').toLowerCase();
+            keywordMatch = kws.every((kw) =>
+              typeof kw === 'string' && text.includes(kw.toLowerCase())
+            );
+          }
         } catch { keywordMatch = true; }
       }
       if (platformMatch && ratingMinMatch && ratingMaxMatch && sentimentMatch && keywordMatch) {
