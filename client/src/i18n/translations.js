@@ -7416,6 +7416,14 @@ const th = {
   'pricing.starterDesc': 'ทุกอย่างที่ร้านเดียวต้องการเพื่อตอบรีวิวอย่างรวดเร็ว',
   'pricing.proDesc': 'สำหรับธุรกิจที่ยุ่งบนทุกแพลตฟอร์มหลัก',
   'pricing.businessDesc': 'สำหรับธุรกิจหลายสาขาและเอเจนซี',
+  'nav.howItWorks': 'วิธีใช้งาน',
+  'nav.aiDrafts': 'ร่างด้วย AI',
+  'nav.features': 'ฟีเจอร์',
+  'nav.faq': 'คำถามที่พบบ่อย',
+  'nav.freeTool': 'เครื่องมือฟรี',
+  'nav.freeToolTitle': 'เครื่องมือร่างคำตอบรีวิวด้วย AI ฟรี',
+  'nav.signIn': 'เข้าสู่ระบบ',
+  'nav.startFree': 'เริ่มฟรี',
 
   // ReviewCard action affordances — pin, flag, status, sentiment override.
   // Visible on every review row in the dashboard.

@@ -828,7 +828,13 @@ export default function Landing() {
       >
         Skip to main content
       </a>
-      <MarketingNav sections={LANDING_NAV_SECTIONS} />
+      <MarketingNav sections={[
+        { id: 'how', label: t('nav.howItWorks', 'How it works') },
+        { id: 'demo', label: t('nav.aiDrafts', 'AI drafts') },
+        { id: 'features', label: t('nav.features', 'Features') },
+        { id: 'pricing', label: t('nav.pricing', 'Pricing') },
+        { id: 'faq', label: t('nav.faq', 'FAQ') },
+      ]} />
       <main id="main-content">
         <Hero />
         <Marquee />

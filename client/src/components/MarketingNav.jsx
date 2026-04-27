@@ -14,6 +14,7 @@ import Logo from './Logo';
 // Pulls in the theme + language toggles from existing contexts so users get
 // the same controls regardless of which marketing page they land on.
 export default function MarketingNav({ sections = [] }) {
+  const { t } = useI18n();
   const linksRef = useRef(null);
   const pillRef = useRef(null);
   const [active, setActive] = useState('');
@@ -88,12 +89,12 @@ export default function MarketingNav({ sections = [] }) {
         <div className="rh-nav-cta">
           {/* "LIVE" indicator removed — the hero eyebrow already surfaces it
               with the rolling counter, so duplicating in the nav added clutter. */}
-          <Link to="/tools/review-reply-generator" className="rh-nav-tool" title="Free AI reply generator">Free tool</Link>
+          <Link to="/tools/review-reply-generator" className="rh-nav-tool" title={t('nav.freeToolTitle', 'Free AI reply generator')}>{t('nav.freeTool', 'Free tool')}</Link>
           <RhLangPicker />
           <RhThemeToggle />
-          <Link to="/login" className="rh-btn rh-btn-ghost">Sign in</Link>
+          <Link to="/login" className="rh-btn rh-btn-ghost">{t('nav.signIn', 'Sign in')}</Link>
           <Link to="/register" className="rh-btn rh-btn-amber">
-            Start free
+            {t('nav.startFree', 'Start free')}
             <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" width="14" height="14" aria-hidden="true"><path d="M3 7h8M8 4l3 3-3 3" /></svg>
           </Link>
         </div>
