@@ -7254,6 +7254,21 @@ const th = {
   'owner.upsellBody': 'เชื่อมต่อแพลตฟอร์มของคุณเพื่อดึงรีวิวทั้งหมดเข้ามาในแดชบอร์ดเดียว พร้อมร่างคำตอบด้วย AI',
   'owner.upsellCta': 'อัปเกรดเป็น Pro',
   'owner.upsellBadge': 'Pro',
+
+  // Settings → Website Review Badge — embed-code section in Settings.
+  // Visible to every owner who explores the widget feature on Thai locale.
+  'widget.title': 'แบดจ์รีวิวสำหรับเว็บไซต์',
+  'widget.subtitle': 'เพิ่มแบดจ์รีวิวแบบสดบนเว็บไซต์ของคุณ',
+  'widget.toggle': 'เปิดใช้งานแบดจ์สาธารณะ',
+  'widget.enableHint': 'เปิดใช้งานแบดจ์เพื่อรับโค้ดสำหรับฝัง',
+  'widget.embedCode': 'โค้ดสำหรับฝัง',
+  'widget.copy': 'คัดลอก',
+  'widget.copied': 'คัดลอกแล้ว!',
+  'widget.preview': 'ตัวอย่างแบบสด',
+  'widget.previewAria': 'ตัวอย่างแบดจ์รีวิวแบบสด',
+  'widget.enabled': 'เปิดใช้งานแบดจ์แล้ว',
+  'widget.disabled': 'ปิดใช้งานแบดจ์แล้ว',
+  'widget.saveFailed': 'บันทึกการตั้งค่าแบดจ์ไม่สำเร็จ',
 };
 
 export const LANGUAGES = [
