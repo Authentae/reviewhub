@@ -30,13 +30,17 @@ const PLATFORMS = [
 // Sample reviews for the "try with example" loaders. One negative + one
 // positive lets visitors see the AI's tone shift in two clicks, which is the
 // fastest demo of "this thing actually understands the review."
-const SAMPLES = {
+//
+// Thai locale gets Thai-language samples so a Thai SMB owner clicking the
+// "1-star sample" button sees a review that sounds like one they'd actually
+// receive — not an English template they have to mentally translate.
+const SAMPLES_EN = {
   negative: {
     reviewer_name: 'Marcus T.',
     rating: 1,
     platform: 'google',
     business_name: 'Corner Bistro',
-    review_text: 'Waited 45 minutes for a simple sandwich. Staff seemed disorganized and didn\'t even apologize for the wait. The sandwich itself was mediocre. Will not be returning.',
+    review_text: "Waited 45 minutes for a simple sandwich. Staff seemed disorganized and didn't even apologize for the wait. The sandwich itself was mediocre. Will not be returning.",
   },
   positive: {
     reviewer_name: 'Emily K.',
@@ -46,9 +50,26 @@ const SAMPLES = {
     review_text: 'Absolutely love this place! The staff is incredibly friendly and the food is always fresh. Best lunch spot in the neighborhood.',
   },
 };
+const SAMPLES_TH = {
+  negative: {
+    reviewer_name: 'สมชาย ก.',
+    rating: 1,
+    platform: 'google',
+    business_name: 'ร้านกาแฟริมทาง',
+    review_text: 'รอแซนวิช 45 นาที พนักงานดูยุ่งวุ่นวายไม่ขอโทษเรื่องเวลา ตัวแซนวิชก็ธรรมดามาก จะไม่กลับมาอีก',
+  },
+  positive: {
+    reviewer_name: 'พลอย ส.',
+    rating: 5,
+    platform: 'google',
+    business_name: 'ร้านกาแฟริมทาง',
+    review_text: 'ชอบร้านนี้มาก พนักงานเป็นมิตรสุดๆ อาหารสดใหม่ตลอด ที่กินกลางวันที่ดีที่สุดในย่านนี้',
+  },
+};
 
 export default function ReplyGeneratorTool() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
+  const SAMPLES = lang === 'th' ? SAMPLES_TH : SAMPLES_EN;
   usePageTitle(t('page.tool', 'Free AI Review Reply Generator — ReviewHub'));
 
   const [form, setForm] = useState({
