@@ -4,10 +4,13 @@ client/node_modules/
 server/data/
 server/backups/
 .env
+.env.local
+.env.*.local
 server/.env
 client/.env
 dist/
 client/dist/
+coverage/
 .security-backup/
 .safe-updates-backup/
 *.log
@@ -16,3 +19,15 @@ server-out.txt
 server-err.txt
 client-out.txt
 client-err.txt
+
+# OS metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
