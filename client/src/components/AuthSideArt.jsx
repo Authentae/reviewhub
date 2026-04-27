@@ -31,7 +31,7 @@ export default function AuthSideArt({ eyebrow, title }) {
             <div className="wm">Review<em>Hub</em></div>
           </Link>
           <div className="rh-auth-controls">
-            <Link to="/tools/review-reply-generator" className="rh-nav-tool">Free tool</Link>
+            <Link to="/tools/review-reply-generator" className="rh-nav-tool">{t('nav.freeTool', 'Free tool')}</Link>
             <RhLangPicker />
             <RhThemeToggle />
           </div>
