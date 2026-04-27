@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Claude Code Business Toolkit — from -10% to 100%</title>
+<style>
+  :root {
+    --paper: #fbf8f1;
+    --cream: #f3ecdb;
+    --ink: #1d242c;
+    --ink-2: #4b5560;
+    --rule: #e8dec7;
+    --teal: #2c7889;
+    --teal-deep: #1e4d5e;
+    --teal-soft: #d6e7eb;
+    --ochre: #c48a2c;
+    --ochre-soft: #f5e3bf;
+    --sage: #5d7a52;
+    --sage-soft: #d8e3d2;
+    --rose: #b54a4a;
+    --rose-soft: #f0d5d5;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter Tight', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.5;
+    font-size: 15px;
+  }
+  .serif { font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace; font-size: 0.92em; }
+
+  /* Layout */
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+
+  /* Hero */
+  .hero {
+    padding: 56px 0 40px;
+    border-bottom: 1px solid var(--rule);
+    background: linear-gradient(180deg, var(--cream) 0%, var(--paper) 100%);
+  }
+  .hero h1 {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-size: clamp(34px, 5vw, 54px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+  }
+  .hero h1 em { color: var(--teal-deep); font-style: italic; }
+  .hero p { color: var(--ink-2); max-width: 680px; font-size: 17px; margin-bottom: 24px; }
+  .hero .meta {
+    display: flex; gap: 18px; flex-wrap: wrap;
+    font-size: 12px; color: var(--ink-2);
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .hero .meta span:before {
+    content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--teal); margin-right: 8px; vertical-align: middle;
+  }
+
+  /* Search bar */
+  .search-bar {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+    padding: 14px 0;
+    backdrop-filter: blur(10px);
+    background: color-mix(in oklab, var(--paper) 92%, transparent);
+  }
+  .search-bar .row {
+    display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+  }
+  .search-bar input {
+    flex: 1; min-width: 240px;
+    border: 1px solid var(--rule);
+    background: white;
+    padding: 10px 14px; font-size: 14px; border-radius: 8px;
+    font-family: inherit; color: var(--ink);
+  }
+  .search-bar input:focus { outline: 2px solid var(--teal); outline-offset: -1px; border-color: var(--teal); }
+  .stage-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+  .stage-filters button {
+    border: 1px solid var(--rule); background: white;
+    padding: 6px 11px; border-radius: 999px; font-size: 12px; cursor: pointer;
+    color: var(--ink-2); font-family: inherit;
+    transition: all 0.15s;
+  }
+  .stage-filters button:hover { border-color: var(--teal); color: var(--teal-deep); }
+  .stage-filters button.active { background: var(--teal-deep); color: var(--paper); border-color: var(--teal-deep); }
+
+  /* Roadmap timeline */
+  .timeline {
+    padding: 36px 0 24px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .timeline-track {
+    display: grid;
+    grid-template-columns: repeat(13, minmax(0, 1fr));
+    gap: 4px;
+    position: relative;
+  }
+  .timeline-track .step {
+    height: 8px; border-radius: 2px;
+    background: linear-gradient(90deg, var(--rose) 0%, var(--ochre) 30%, var(--teal) 70%, var(--sage) 100%);
+    opacity: 0.15;
+  }
+  .timeline-labels {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin-top: 10px;
+    font-size: 11px; color: var(--ink-2);
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  .timeline-labels span:nth-child(2) { text-align: center; }
+  .timeline-labels span:nth-child(3) { text-align: right; }
+
+  /* Stages */
+  main { padding: 24px 0 60px; }
+  .stage {
+    margin: 36px 0;
+    scroll-margin-top: 80px;
+  }
+  .stage-header {
+    display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+  .stage-num {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px; color: var(--ink-2);
+    background: var(--cream); padding: 4px 9px; border-radius: 4px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .stage h2 {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-size: 30px; line-height: 1.1;
+  }
+  .stage .progress {
+    margin-left: auto; font-size: 12px; color: var(--ink-2);
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  .stage-blurb {
+    color: var(--ink-2); margin-bottom: 18px; max-width: 720px;
+  }
+
+  /* Command cards grid */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+  .card {
+    border: 1px solid var(--rule);
+    background: white;
+    border-radius: 10px;
+    padding: 14px 16px;
+    transition: all 0.15s;
+    display: flex; flex-direction: column;
+  }
+  .card:hover {
+    border-color: var(--teal);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(30, 77, 94, 0.08);
+  }
+  .card .cmd {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--teal-deep);
+    background: var(--teal-soft);
+    padding: 3px 8px; border-radius: 4px;
+    display: inline-block; align-self: flex-start;
+    margin-bottom: 8px; word-break: break-all;
+  }
+  .card .desc { font-size: 13.5px; color: var(--ink); line-height: 1.45; }
+  .card .when {
+    font-size: 11.5px; color: var(--ink-2);
+    margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--rule);
+  }
+
+  /* Stage color accents */
+  .stage[data-color="rose"] .stage-num { background: var(--rose-soft); color: var(--rose); }
+  .stage[data-color="ochre"] .stage-num { background: var(--ochre-soft); color: var(--ochre); }
+  .stage[data-color="teal"] .stage-num { background: var(--teal-soft); color: var(--teal-deep); }
+  .stage[data-color="sage"] .stage-num { background: var(--sage-soft); color: var(--sage); }
+
+  /* Playbook section */
+  .playbook {
+    background: var(--cream);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 48px 0;
+    margin-top: 48px;
+  }
+  .playbook h2 {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-size: 34px; line-height: 1.1; margin-bottom: 8px;
+  }
+  .playbook p.lead {
+    color: var(--ink-2); margin-bottom: 28px; max-width: 680px;
+  }
+  .playbook ol {
+    list-style: none; counter-reset: weeks;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+  }
+  .playbook li {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 18px 18px 16px;
+    counter-increment: weeks;
+    position: relative;
+  }
+  .playbook li:before {
+    content: counter(weeks);
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-size: 28px; line-height: 1;
+    color: var(--teal-deep);
+    position: absolute; top: 14px; right: 16px;
+  }
+  .playbook li h3 {
+    font-size: 14px; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--ink-2); margin-bottom: 8px; max-width: 80%;
+  }
+  .playbook li p { font-size: 13.5px; }
+  .playbook li code {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    background: var(--teal-soft); color: var(--teal-deep);
+    padding: 1px 5px; border-radius: 3px; font-size: 11.5px;
+  }
+
+  /* Footer */
+  footer {
+    padding: 36px 0 60px;
+    text-align: center;
+    color: var(--ink-2); font-size: 13px;
+  }
+  footer .em { font-style: italic; font-family: 'Instrument Serif', Georgia, serif; font-size: 16px; color: var(--ink); }
+
+  /* Hidden state for filtered cards */
+  .card.hidden { display: none; }
+  .stage.empty .cards:after {
+    content: "No commands match that filter.";
+    color: var(--ink-2); font-style: italic; font-size: 13px;
+  }
+  .stage.empty { opacity: 0.5; }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    .hero { padding: 36px 0 28px; }
+    .timeline-labels { font-size: 10px; }
+    .stage h2 { font-size: 24px; }
+    .stage .progress { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Claude Code Business Toolkit<br><em>from –10% to 100%</em></h1>
+    <p>Every command, mapped to a stage of your business. No coding required — describe what you want, Claude does it. Built for solo founders who came in with zero technical skills and are leaving with a shipped product.</p>
+    <div class="meta">
+      <span>168 commands</span>
+      <span>13 stages</span>
+      <span>1 founder · 0 prior coding</span>
+    </div>
+  </div>
+</header>
+
+<div class="search-bar">
+  <div class="wrap">
+    <div class="row">
+      <input id="search" type="text" placeholder="Search commands or descriptions… (e.g. &quot;contract&quot;, &quot;email&quot;, &quot;debug&quot;)" autocomplete="off">
+      <div class="stage-filters" id="stage-filters">
+        <button class="active" data-filter="all">All</button>
+        <button data-filter="rose">Idea + Validate</button>
+        <button data-filter="ochre">Build</button>
+        <button data-filter="teal">Sell + Market</button>
+        <button data-filter="sage">Operate + Scale</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <section class="timeline">
+    <div class="timeline-track">
+      <div class="step" style="opacity:0.7"></div><div class="step" style="opacity:0.7"></div><div class="step" style="opacity:0.5"></div>
+      <div class="step" style="opacity:0.6"></div><div class="step" style="opacity:0.5"></div><div class="step" style="opacity:0.6"></div>
+      <div class="step" style="opacity:0.7"></div><div class="step" style="opacity:0.5"></div><div class="step" style="opacity:0.7"></div>
+      <div class="step" style="opacity:0.5"></div><div class="step" style="opacity:0.6"></div><div class="step" style="opacity:0.7"></div>
+      <div class="step" style="opacity:0.8"></div>
+    </div>
+    <div class="timeline-labels">
+      <span>–10% · Idea</span>
+      <span>50% · Shipped</span>
+      <span>100% · Profitable</span>
+    </div>
+  </section>
+
+  <!-- Stage 0 -->
+  <section class="stage" data-color="rose" id="stage-0">
+    <div class="stage-header">
+      <span class="stage-num">Stage 00</span>
+      <h2>Figure out what to build</h2>
+      <span class="progress">–10% → 0%</span>
+    </div>
+    <p class="stage-blurb">Before code. Before a domain. Before anything: pressure-test the idea against reality.</p>
+    <div class="cards">
+      <div class="card"><span class="cmd">/product-management:product-brainstorming</span><div class="desc">Pressure-test an idea with a sharp thinking partner before committing.</div><div class="when">When you have a hunch but want it stress-tested.</div></div>
+      <div class="card"><span class="cmd">/product-management:competitive-brief</span><div class="desc">Research who already does it; find positioning gaps and threats.</div><div class="when">Before you commit to a market.</div></div>
+      <div class="card"><span class="cmd">/marketing:competitive-brief</span><div class="desc">Same idea, marketing angle: messaging gaps and content opportunities.</div><div class="when">When the gap might be in how it's sold, not what it does.</div></div>
+      <div class="card"><span class="cmd">/sales:account-research</span><div class="desc">Research one specific company you might serve.</div><div class="when">When validating with real prospects, not abstractions.</div></div>
+      <div class="card"><span class="cmd">/legal:compliance-check</span><div class="desc">Find out if your idea hits regulatory landmines (GDPR, HIPAA, financial).</div><div class="when">Before you build something that's illegal.</div></div>
+    </div>
+  </section>
+
+  <!-- Stage 1 -->
+  <section class="stage" data-color="rose" id="stage-1">
+    <div class="stage-header">
+      <span class="stage-num">Stage 01</span>
+      <h2>Validate before you build</h2>
+      <span class="progress">0% → 5%</span>
+    </div>
+    <p class="stage-blurb">Talk to humans. Look at any data you have. Decide if you're solving a real problem.</p>
+    <div class="cards">
+      <div class="card"><span class="cmd">/design:user-research</span><div class="desc">Design interview guides, surveys, usability tests.</div><div class="when">Plan customer interviews you'll actually run.</div></div>
+      <div class="card"><span class="cmd">/design:research-synthesis</span><div class="desc">Turn a pile of interview notes into themes and insights.</div><div class="when">After your first 5–10 interviews.</div></div>
+      <div class="card"><span class="cmd">/product-management:synthesize-research</span><div class="desc">Same idea, product angle: feature priorities from raw research.</div><div class="when">Translating research into a roadmap.</div></div>
+      <div class="card"><span class="cmd">/data:explore-data</span><div class="desc">Profile any spreadsheet/data you have — find what it tells you.</div><div class="when">When you have a CSV and don't know where to start.</div></div>
+    </div>
+  </section>
+
+  <!-- Stage 2 -->
+  <section class="stage" data-color="ochre" id="stage-2">
+    <div class="stage-header">
+      <span class="stage-num">Stage 02</span>
+      <h2>Build the thing</h2>
+      <span class="progress">5% → 30%</span>
+    </div>
+    <p class="stage-blurb">This is where you spent the night on ReviewHub. Claude writes, tests, debugs. You decide what to build.</p>
+    <div class="cards">
+      <div class="card"><span class="cmd">/init</span><div class="desc">Create CLAUDE.md so future sessions know your stack and conventions.</div><div class="when">First thing in a new repo.</div></div>
+      <div class="card"><span class="cmd">/tools:api-scaffold</span><div class="desc">Bootstrap a backend API from scratch.</div><div class="when">Starting the server side of a product.</div></div>
+      <div class="card"><span class="cmd">/workflows:full-stack-feature</span><div class="desc">Build a feature end-to-end: frontend + backend + tests.</div><div class="when">"Add login" / "add billing" / "add a dashboard".</div></div>
+      <div class="card"><span class="cmd">/workflows:feature-development</span><div class="desc">Single feature with proper agent coordination.</div><div class="when">Smaller scoped feature work.</div></div>
+      <div class="card"><span class="cmd">/tools:test-harness</span><div class="desc">Generate tests for code you can't read.</div><div class="when">Before refactoring something Claude wrote.</div></div>
+      <div class="card"><span class="cmd">/workflows:tdd-cycle</span><div class="desc">Tests first, code second — Claude does both.</div><div class="when">For load-bearing logic where bugs hurt.</div></div>
+      <div class="card"><span class="cmd">/engineering:debug</span><div class="desc">Structured debugging: reproduce, isolate, diagnose, fix.</div><div class="when">When something breaks and you don't know why.</div></div>
+      <div class="card"><span class="cmd">/engineering:architecture</span><div class="desc">Record big technical decisions as ADRs so they don't get lost.</div><div class="when">Choosing between Postgres vs SQLite, REST vs GraphQL, etc.</div></div>
+      <div class="card"><span class="cmd">/tools:code-explain</span><div class="desc">Plain-English explanation of code Claude wrote.</div><div class="when">When you need to understand what's running before you ship.</div></div>
+      <div class="card"><span class="cmd">/anthropic-skills:web-artifacts-builder</span><div class="desc">Build interactive HTML mockups in chat — no deploy needed.</div><div class="when">Demoing an idea before committing to building it.</div></div>
+    </div>
+  </section>
+
+  <!-- Stage 3 -->
+  <section class="stage" data-color="ochre" id="stage-3">
+    <div class="stage-header">
+      <span class="stage-num">Stage 03</span>
+      <h2>Make it not embarrassing</h2>
+      <span class="progress">30% → 50%</span>
+    </div>
+    <p class="stage-blurb">Polish. Accessibility. Security. Brand voice. The difference between a hobby and a product.</p>
+    <div class="cards">
+      <div class="card"><span class="cmd">/design:design-critique</span><div class="desc">Paste a screenshot, get structured feedback.</div><div class="when">Before showing anyone the UI.</div></div>
+      <div class="card"><span class="cmd">/design:accessibility-review</span><div class="desc">WCAG 2.1 AA audit of designs and pages.</div><div class="when">Before launch (and after — recurring).</div></div>
+      <div class="card"><span class="cmd">/design:ux-copy</span><div class="desc">Write button labels, error messages, empty states.</div><div class="when">When "Click here" or "Error occurred" is in your UI.</div></div>
+      <div class="card"><span class="cmd">/design:design-system</span><div class="desc">Keep colors, spacing, components consistent.</div><div class="when">When the same button has 3 different paddings.</div></div>
+      <div class="card"><span class="cmd">/design:design-handoff</span><div class="desc">Turn a design into engineering specs.</div><div class="when">Working with a designer or sub-contractor.</div></div>
+      <div class="card"><span class="cmd">/tools:accessibility-audit</span><div class="desc">Runtime/code-level a11y checks.</div><div class="when">After /design:accessibility-review caught the easy stuff.</div></div>
+      <div class="card"><span class="cmd">/security-review</span><div class="desc">Security review of pending changes on the current branch.</div><div class="when">Before merging anything that touches auth, payment, or user data.</div></div>
+      <div class="card"><span class="cmd">/tools:security-scan</span><div class="desc">Vulnerability assessment of dependencies and code.</div><div class="when">Quarterly / before launch / after a CVE alert.</div></div>
+      <div class="card"><span class="cmd">/review</span><div class="desc">Review a single PR before merging.</div><div class="when">Every PR you can't fully read yourself.</div></div>
+      <div class="card"><span class="cmd">/workflows:full-review</span><div class="desc">Multi-agent comprehensive review.</div><div class="when">Major releases. The version you'd show an investor.</div></div>
+    </div>
+  </section>
+
+  <!-- Stage 4 -->
+  <section class="stage" data-color="ochre" id="stage-4">
+    <div class="stage-header">
+      <span class="stage-num">Stage 04</span>
+      <h2>Ship it</h2>
+      <span class="progress">50% → 60%</span>
+    </div>
+    <p class="stage-blurb">Push to production. Set up monitoring. Have a plan for when it breaks.</p>
+    <div class="cards">
+      <div class="card"><span class="cmd">/engineering:deploy-checklist</span><div class="desc">Pre-flight before pushing to production.</div><div class="when">Every release of consequence.</div></div>
+      <div class="card"><span class="cmd">/tools:deploy-checklist</span><div class="desc">Companion: deployment checklist + config.</div><div class="when">First deploy of a service.</div></div>
+      <div class="card"><span class="cmd">/tools:docker-optimize</span><div class="desc">Shrink container images, reduce attack surface.</div><div class="when">When deploys are slow or images are huge.</div></div>
+      <div class="card"><span class="cmd">/tools:k8s-manifest</span><div class="desc">Kubernetes manifests if you ever need them.</div><div class="when">Outgrew Railway / Render / Fly. (Not soon.)</div></div>
+      <div class="card"><span class="cmd">/tools:monitor-setup</span><div class="desc">Wire up uptime monitoring, error tracking.</div><div class="when">Before the first paying customer.</div></div>
+      <div class="card"><span class="cmd">/engineering:incident-response</span><div class="desc">Triage, communicate, write postmortem.</div><div class="when">Production is down. Right now.</div></div>
+      <div class="card"><span class="cmd">/workflows:incident-response</span><div class="desc">Multi-agent coordinated incident workflow.</div><div class="when">Major outage with multiple components affected.</div></div>
+      <div class="card"><span class="cmd">/engineering:documentation</span><div class="desc">README, runbooks, onboarding guides.</div><div class="when">Anything you'd have to explain to your future self at 3am.</div></div>
+      <div class="card"><span class="cmd">/tools:doc-generate</span><div class="desc">Auto-generate API/code docs.</div><div class="when">Once the API has more than 5 endpoints.</div></div>
+    </div>
+  </section>
+
+  <!-- Stage 5 -->
+  <section class="stage" data-color="teal" id="stage-5">
+    <div class="stage-header">
+      <span class="stage-num">Stage 05</span>
+      <h2>Sell it</h2>
+      <span class="progress">60% → 75%</span>
+    </div>
+    <p class="stage-blurb">A built product nobody buys is a hobby. This is the daily-rep stuff.</p>
+    <div class="cards">
+      <div class="card"><span class="cmd">/sales:daily-briefing</span><div class="desc">Start your day with a prioritized sales todo.</div><div class="when">Every morning. Five minutes.</div></div>
+      <div class="card"><span class="cmd">/sales:account-research</span><div class="desc">Research a prospect company before reaching out.</div><div class="when">Before any cold email.</div></div>
+      <div class="card"><span class="cmd">/sales:draft-outreach</span><div class="desc">Write cold emails that don't sound cold.</div><div class="when">Outbound. Always.</div></div>
+      <div class="card"><span class="cmd">/sales:call-prep</span><div class="desc">Prep for a discovery or demo call.</div><div class="when">15 minutes before the call.</div></div>
+      <div class="card"><span class="cmd">/sales:call-summary</span><div class="desc">Process call notes, draft follow-up email.</div><div class="when">Right after every call, while it's fresh.</div></div>
+      <div class="card"><span class="cmd">/sales:create-an-asset</span><div class="desc">Generate landing pages, decks, one-pagers from deal context.</div><div class="when">Custom asset for a specific prospect.</div></div>
+      <div class="card"><span class="cmd">/sales:competitive-intelligence</span><div class="desc">Interactive battlecard HTML for sales calls.</div><div class="when">When prospects keep asking "how are you different from X".</div></div>
+      <div class="card"><span class="cmd">/sales:pipeline-review</span><div class="desc">Weekly pipeline triage; prioritize, flag risks.</div><div class="when">Friday afternoons.</div></div>
+      <div class="card"><span class="cmd">/sales:forecast</span><div class="desc">Quarterly revenue forecast: best/likely/worst.</div><div class="when">Board meetings, investor updates.</div></div>
+    </div>
+  </section>
+
+  <!-- Stage 6 -->
+  <section class="stage" data-color="teal" id="stage-6">
+    <div class="stage-header">
+      <span class="stage-num">Stage 06</span>
+      <h2>Market it</h2>
+      <span class="progress">60% → 80%</span>
+    </div>
+    <p class="stage-blurb">Launch campaigns, write content, build the email list, stay on-brand.</p>
+    <div class="cards">
+      <div class="card"><span class="cmd">/marketing:campaign-plan</span><div class="desc">Full launch brief: objectives, audience, channels, calendar.</div><div class="when">Product launch / lead-gen push.</div></div>
+      <div class="card"><span class="cmd">/marketing:content-creation</span><div class="desc">Blog, social, email, landing pages, press releases.</div><div class="when">Daily content rep.</div></div>
+      <div class="card"><span class="cmd">/marketing:draft-content</span><div class="desc">Single piece of content with channel-specific formatting.</div><div class="when">One blog post, one tweet, one newsletter.</div></div>
+      <div class="card"><span class="cmd">/marketing:email-sequence</span><div class="desc">Multi-email onboarding/nurture/win-back flows.</div><div class="when">Once you have an email list bigger than your phone.</div></div>
+      <div class="card"><span class="cmd">/marketing:seo-audit</span><div class="desc">Keywords, on-page SEO, content gaps, technical SEO.</div><div class="when">Quarterly. After major site changes.</div></div>
+      <div class="card"><span class="cmd">/marketing:performance-report</span><div class="desc">Campaign wrap-up with wins, misses, optimizations.</div><div class="when">After every campaign.</div></div>
+      <div class="card"><span class="cmd">/marketing:brand-review</span><div class="desc">Check content matches your voice, style guide, messaging.</div><div class="when">Before publishing anything customer-facing.</div></div>
+      <div class="card"><span class="cmd">/brand-voice:generate-guidelines</span><div class="desc">Create your style guide from existing materials.</div><div class="when">When team grows beyond you.</div></div>
+      <div class="card"><span class="cmd">/brand-voice:enforce-voice</span><div class="desc">Apply that style guide to new content automatically.</div><div class="when">Every piece of content from then on.</div></div>
+      <div class="card"><span class="cmd">/anthropic-skills:brand-guidelines</span><div class="desc">Anthropic's official look-and-feel for any artifact.</div><div class="when">Building tools alongside Anthropic's product.</div></div>
+    </div>
+  </section>
+
+  <!-- Stage 7 -->
+  <section class="stage" data-color="teal" id="stage-7">
+    <div class="stage-header">
+      <span class="stage-num">Stage 07</span>
+      <h2>Support customers</h2>
+      <span class="progress">60% → 80%</span>
+    </div>
+    <p class="stage-blurb">Tickets are conversations with paying customers. Treat them well.</p>
+    <div class="cards">
+      <div class="card"><span class="cmd">/customer-support:ticket-triage</span><div class="desc">Categorize and prioritize incoming tickets P1–P4.</div><div class="when">First touch on every new ticket.</div></div>
+      <div class="card"><span class="cmd">/customer-support:draft-response</span><div class="desc">Write a professional reply tailored to the situation.</div><div class="when">Most tickets, especially when delivering bad news.</div></div>
+      <div class="card"><span class="cmd">/customer-support:kb-article</span><div class="desc">Turn a ticket resolution into a help-center article.</div><div class="when">When the same question comes up twice.</div></div>
+      <div class="card"><span class="cmd">/customer-support:customer-research</span><div class="desc">Investigate whether others reported the same bug.</div><div class="when">Before saying "we'll look into it" — check first.</div></div>
+      <div class="card"><span class="cmd">/customer-support:customer-escalation</span><div class="desc">Package a bug for engineering with full context.</div><div class="when">Bug clearly needs engineering attention.</div></div>
+    </div>
+  </section>
+
+  <!-- Stage 8 -->
+  <section class="stage" data-color="sage" id="stage-8">
+    <div class="stage-header">
+      <span class="stage-num">Stage 08</span>
+      <h2>Operate the business</h2>
+      <span class="progress">75% → 90%</span>
+    </div>
+    <p class="stage-blurb">Recurring tasks. Process documentation. Vendor reviews. The unsexy spine.</p>
+    <div class="cards">
+      <div class="card"><span class="cmd">/operations:runbook</span><div class="desc">Document a recurring task once, run it forever.</div><div class="when">Anything you'll do more than 3 times.</div></div>
+      <div class="card"><span class="cmd">/operations:process-doc</span><div class="desc">Flowcharts, RACI matrices, SOPs.</div><div class="when">Formalizing a process before handing it off.</div></div>
+      <div class="card"><span class="cmd">/operations:process-optimization</span><div class="desc">Find and fix bottlenecks.</div><div class="when">When a workflow feels slow or breaks repeatedly.</div></div>
+      <div class="card"><span class="cmd">/operations:vendor-review</span><div class="desc">Evaluate a new tool/vendor before buying.</div><div class="when">Before any annual contract.</div></div>
+      <div class="card"><span class="cmd">/operations:capacity-plan</span><div class="desc">Should I hire? Quarterly resource planning.</div><div class="when">When you're considering your first hire.</div></div>
+      <div class="card"><span class="cmd">/operations:risk-assessment</span><div class="desc">What could blow up the business — severity x likelihood.</div><div class="when">Annual planning. Before raising.</div></div>
+      <div class="card"><span class="cmd">/operations:status-report</span><div class="desc">Weekly/monthly KPI summary for yourself or investors.</div><div class="when">Recurring. Pick a cadence and stick to it.</div></div>
+      <div class="card"><span class="cmd">/operations:change-request</span><div class="desc">Formal change management when team grows.</div><div class="when">Once you have a team of 5+.</div></div>
+      <div class="card"><span class="cmd">/operations:compliance-tracking</span><div class="desc">Track compliance requirements: SOC 2, ISO, GDPR, etc.</div><div class="when">When a customer asks for your SOC 2 report.</div></div>
+    </div>
+  </section>
+
+  <!-- Stage 9 -->
+  <section class="stage" data-color="sage" id="stage-9">
+    <div class="stage-header">
+      <span class="stage-num">Stage 09</span>
+      <h2>Money + legal</h2>
+      <span class="progress">75% → 95%</span>
+    </div>
+    <p class="stage-blurb">Bookkeeping monthly. Contracts as they arrive. Don't let either snowball.</p>
+    <div class="cards">
+      <div class="card"><span class="cmd">/finance:financial-statements</span><div class="desc">P&L, balance sheet, cash flow with period comparisons.</div><div class="when">Monthly. Then quarterly when stable.</div></div>
+      <div class="card"><span class="cmd">/finance:variance-analysis</span><div class="desc">Why we spent more (or less) than budgeted.</div><div class="when">After every monthly close.</div></div>
+      <div class="card"><span class="cmd">/finance:reconciliation</span><div class="desc">Match bank statements to books.</div><div class="when">Monthly bookkeeping.</div></div>
+      <div class="card"><span class="cmd">/finance:journal-entry</span><div class="desc">Book month-end accruals, depreciation, prepaid amortization.</div><div class="when">Monthly close.</div></div>
+      <div class="card"><span class="cmd">/finance:close-management</span><div class="desc">Sequence and track the month-end close calendar.</div><div class="when">Once close takes more than a day.</div></div>
+      <div class="card"><span class="cmd">/finance:audit-support</span><div class="desc">SOC/SOX testing, sample selection, workpapers.</div><div class="when">After raising your Series A.</div></div>
+      <div class="card"><span class="cmd">/legal:brief</span><div class="desc">Daily scan of legal-relevant items across email/calendar/docs.</div><div class="when">Mornings. Five minutes.</div></div>
+      <div class="card"><span class="cmd">/legal:review-contract</span><div class="desc">Paste a vendor contract, get redlines and risk flags.</div><div class="when">Before signing anything you didn't write.</div></div>
+      <div class="card"><span class="cmd">/legal:triage-nda</span><div class="desc">Green/yellow/red an incoming NDA in 60s.</div><div class="when">When sales sends you yet another NDA.</div></div>
+      <div class="card"><span class="cmd">/legal:vendor-check</span><div class="desc">What agreements exist with this vendor across all systems.</div><div class="when">Before renewing or replacing a contract.</div></div>
+      <div class="card"><span class="cmd">/legal:legal-risk-assessment</span><div class="desc">Quantify exposure on a contract or initiative.</div><div class="when">Before a big deal or product change.</div></div>
+      <div class="card"><span class="cmd">/legal:legal-response</span><div class="desc">Respond to data-subject requests, common inquiries.</div><div class="when">GDPR/CCPA requests, standard legal questions.</div></div>
+      <div class="card"><span class="cmd">/legal:signature-request</span><div class="desc">Pre-signature checklist + e-sign routing.</div><div class="when">Final step on every contract.</div></div>
+    </div>
+  </section>
+
+  <!-- Stage 10 -->
+  <section class="stage" data-color="sage" id="stage-10">
+    <div class="stage-header">
+      <span class="stage-num">Stage 10</span>
+      <h2>Decide with data</h2>
+      <span class="progress">75% → 100%</span>
+    </div>
+    <p class="stage-blurb">Vibes get you to product-market-fit. Data gets you past it.</p>
+    <div class="cards">
+      <div class="card"><span class="cmd">/data:analyze</span><div class="desc">Answer any data question — single metric to full investigation.</div><div class="when">Anytime someone asks "what's the number for X?"</div></div>
+      <div class="card"><span class="cmd">/data:explore-data</span><div class="desc">Profile a new dataset: distributions, nulls, quality.</div><div class="when">First time you touch a CSV or table.</div></div>
+      <div class="card"><span class="cmd">/data:write-query</span><div class="desc">SQL across any warehouse dialect, optimized.</div><div class="when">When you have a data question that lives in a database.</div></div>
+      <div class="card"><span class="cmd">/data:create-viz</span><div class="desc">Publication-quality charts.</div><div class="when">For decks, blog posts, investor updates.</div></div>
+      <div class="card"><span class="cmd">/data:build-dashboard</span><div class="desc">Self-contained interactive HTML dashboard.</div><div class="when">When stakeholders keep asking the same questions.</div></div>
+      <div class="card"><span class="cmd">/data:statistical-analysis</span><div class="desc">Significance tests, anomaly detection, trend analysis.</div><div class="when">A/B tests. Quarterly cohort analysis.</div></div>
+      <div class="card"><span class="cmd">/data:validate-data</span><div class="desc">QA an analysis before sharing.</div><div class="when">Before any number leaves your computer.</div></div>
+    </div>
+  </section>
+
+  <!-- Stage 11 -->
+  <section class="stage" data-color="sage" id="stage-11">
+    <div class="stage-header">
+      <span class="stage-num">Stage 11</span>
+      <h2>Product strategy as you grow</h2>
+      <span class="progress">80% → 100%</span>
+    </div>
+    <p class="stage-blurb">Once you have customers, what you ship next is the most important question.</p>
+    <div class="cards">
+      <div class="card"><span class="cmd">/product-management:write-spec</span><div class="desc">Turn a vague idea into a structured PRD.</div><div class="when">Before any feature bigger than a checkbox.</div></div>
+      <div class="card"><span class="cmd">/product-management:roadmap-update</span><div class="desc">Reprioritize as new info comes in.</div><div class="when">Monthly. After major customer feedback.</div></div>
+      <div class="card"><span class="cmd">/product-management:metrics-review</span><div class="desc">Weekly/monthly product metrics review.</div><div class="when">Recurring health-check on the product.</div></div>
+      <div class="card"><span class="cmd">/product-management:sprint-planning</span><div class="desc">Plan a sprint when you have a team.</div><div class="when">Once you're more than a one-person band.</div></div>
+      <div class="card"><span class="cmd">/product-management:stakeholder-update</span><div class="desc">Tailored update for leadership, board, or investors.</div><div class="when">Cadenced investor updates.</div></div>
+      <div class="card"><span class="cmd">/product-management:competitive-brief</span><div class="desc">Deep competitive analysis for strategic decisions.</div><div class="when">Before pivoting or expanding the market.</div></div>
+    </div>
+  </section>
+
+  <!-- Stage 12 -->
+  <section class="stage" data-color="sage" id="stage-12">
+    <div class="stage-header">
+      <span class="stage-num">Stage 12</span>
+      <h2>Engineering hygiene · continuous</h2>
+      <span class="progress">always</span>
+    </div>
+    <p class="stage-blurb">Small recurring sweeps that prevent the codebase from turning into a swamp.</p>
+    <div class="cards">
+      <div class="card"><span class="cmd">/engineering:tech-debt</span><div class="desc">Identify, categorize, prioritize technical debt.</div><div class="when">Quarterly. After a chaotic ship season.</div></div>
+      <div class="card"><span class="cmd">/tools:tech-debt</span><div class="desc">Companion: tech-debt analysis + remediation plan.</div><div class="when">When tech-debt list needs an action plan.</div></div>
+      <div class="card"><span class="cmd">/engineering:code-review</span><div class="desc">Review a PR or diff for security, perf, correctness.</div><div class="when">Every PR you can't fully read.</div></div>
+      <div class="card"><span class="cmd">/engineering:testing-strategy</span><div class="desc">Design test plans for a feature or service.</div><div class="when">Before TDD; or to fill gaps in existing tests.</div></div>
+      <div class="card"><span class="cmd">/tools:deps-audit</span><div class="desc">Security audit of dependencies (CVEs, abandoned packages).</div><div class="when">Quarterly. After CVE alerts.</div></div>
+      <div class="card"><span class="cmd">/tools:deps-upgrade</span><div class="desc">Strategy + patches for upgrading dependencies safely.</div><div class="when">After deps-audit. Or when stuck on an old major.</div></div>
+      <div class="card"><span class="cmd">/tools:db-migrate</span><div class="desc">Schema migrations that won't break in prod.</div><div class="when">Adding/changing a column on a real table.</div></div>
+      <div class="card"><span class="cmd">/tools:cost-optimize</span><div class="desc">Cloud cost analysis: where the money's going.</div><div class="when">When the AWS/Railway bill spikes.</div></div>
+      <div class="card"><span class="cmd">/tools:slo-implement</span><div class="desc">Formal SLOs once customers depend on uptime.</div><div class="when">After your first paying enterprise customer.</div></div>
+    </div>
+  </section>
+
+  <!-- Force multipliers -->
+  <section class="stage" data-color="teal" id="stage-mult">
+    <div class="stage-header">
+      <span class="stage-num">Force multipliers</span>
+      <h2>Use any time</h2>
+      <span class="progress">always</span>
+    </div>
+    <p class="stage-blurb">Tools that make every other tool work harder. The closest thing to cheat codes.</p>
+    <div class="cards">
+      <div class="card"><span class="cmd">/loop</span><div class="desc">Pick a task, let Claude self-pace iterations. (We just did this all night.)</div><div class="when">Overnight polish. Multi-hour grind work.</div></div>
+      <div class="card"><span class="cmd">/schedule</span><div class="desc">Same idea, cloud-side: runs while you sleep without keeping a session open.</div><div class="when">Daily/weekly recurring tasks.</div></div>
+      <div class="card"><span class="cmd">/anthropic-skills:schedule</span><div class="desc">Recurring task scheduler.</div><div class="when">Set-and-forget daily/weekly automation.</div></div>
+      <div class="card"><span class="cmd">/productivity:start</span><div class="desc">Set up TASKS.md and the productivity dashboard.</div><div class="when">First time using productivity tools.</div></div>
+      <div class="card"><span class="cmd">/productivity:update</span><div class="desc">Sync tasks; refresh memory from current activity.</div><div class="when">Mornings or after a meeting block.</div></div>
+      <div class="card"><span class="cmd">/productivity:task-management</span><div class="desc">Simple TASKS.md task tracking.</div><div class="when">Continuous: every "remind me to" goes here.</div></div>
+      <div class="card"><span class="cmd">/anthropic-skills:consolidate-memory</span><div class="desc">Clean up Claude's memory of you over time.</div><div class="when">Monthly. When memory feels stale or contradictory.</div></div>
+      <div class="card"><span class="cmd">/anthropic-skills:skill-creator</span><div class="desc">Create your own skill when you find a workflow you do often.</div><div class="when">After repeating the same prompt 3+ times.</div></div>
+      <div class="card"><span class="cmd">/cowork-plugin-management:create-cowork-plugin</span><div class="desc">Package a workflow into a shareable plugin.</div><div class="when">Workflows you want others to use.</div></div>
+      <div class="card"><span class="cmd">fewer-permission-prompts</span><div class="desc">Stop Claude asking permission for safe commands.</div><div class="when">Once you trust the basic workflow.</div></div>
+      <div class="card"><span class="cmd">update-config</span><div class="desc">Wire up hooks ("after every file edit, run prettier").</div><div class="when">Automating recurring post-action behavior.</div></div>
+      <div class="card"><span class="cmd">/anthropic-skills:setup-cowork</span><div class="desc">Guided setup — install matching plugin, try a skill, connect tools.</div><div class="when">First time onboarding to Claude Code.</div></div>
+    </div>
+  </section>
+
+  <!-- Document toolkit -->
+  <section class="stage" data-color="ochre" id="stage-docs">
+    <div class="stage-header">
+      <span class="stage-num">Documents</span>
+      <h2>Always available</h2>
+      <span class="progress">any</span>
+    </div>
+    <p class="stage-blurb">Read, write, edit any common business document format. No coding involved.</p>
+    <div class="cards">
+      <div class="card"><span class="cmd">anthropic-skills:docx</span><div class="desc">Word documents — read, write, edit, manipulate.</div><div class="when">Any .docx file.</div></div>
+      <div class="card"><span class="cmd">anthropic-skills:xlsx</span><div class="desc">Spreadsheets — open, read, edit, fix .xlsx/.xlsm/.csv/.tsv.</div><div class="when">Any spreadsheet input or output.</div></div>
+      <div class="card"><span class="cmd">anthropic-skills:pptx</span><div class="desc">PowerPoint decks — create, read, parse, edit.</div><div class="when">Pitch decks, slide decks, presentations.</div></div>
+      <div class="card"><span class="cmd">anthropic-skills:pdf</span><div class="desc">PDFs — read, extract text/tables, merge, split.</div><div class="when">Any PDF input or output.</div></div>
+    </div>
+  </section>
+
+</main>
+
+<section class="playbook">
+  <div class="wrap">
+    <h2>Practical "from zero" playbook</h2>
+    <p class="lead">If you were starting tomorrow with zero coding skills and one app to build, this is the order I'd run it. Each step is one week unless noted.</p>
+    <ol>
+      <li>
+        <h3>Idea + validate</h3>
+        <p><code>/product-management:product-brainstorming</code>, then <code>/marketing:competitive-brief</code>, then <code>/sales:account-research</code> on 5 target customers. Decide: am I building the right thing for a real person?</p>
+      </li>
+      <li>
+        <h3>MVP · weeks 2–4</h3>
+        <p><code>/init</code> to set up CLAUDE.md, then <code>/workflows:full-stack-feature</code> for each feature. Use <code>/loop</code> overnight.</p>
+      </li>
+      <li>
+        <h3>Polish · week 5</h3>
+        <p><code>/security-review</code>, <code>/design:accessibility-review</code>, <code>/design:ux-copy</code>, <code>/marketing:brand-review</code>.</p>
+      </li>
+      <li>
+        <h3>Launch · week 6</h3>
+        <p><code>/marketing:campaign-plan</code>, then <code>/marketing:content-creation</code> for blog/email/social. <code>/sales:create-an-asset</code> for the landing page.</p>
+      </li>
+      <li>
+        <h3>Operate + sell · week 7+</h3>
+        <p><code>/sales:daily-briefing</code> mornings · <code>/customer-support:ticket-triage</code> when tickets come · <code>/operations:status-report</code> weekly · <code>/finance:financial-statements</code> monthly.</p>
+      </li>
+      <li>
+        <h3>Continuously</h3>
+        <p><code>/loop</code> overnight on whatever's on fire. <code>/data:analyze</code> for decisions. <code>/anthropic-skills:skill-creator</code> when you've done a workflow 3+ times.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="em">"You don't need coding skills. You need to be specific about what you want, willing to test it, and willing to ship."</p>
+    <p style="margin-top:14px;">Generated for ReviewHub · open this file in any browser · no server, no build</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var search = document.getElementById('search');
+  var filterBtns = document.querySelectorAll('#stage-filters button');
+  var cards = document.querySelectorAll('.card');
+  var stages = document.querySelectorAll('.stage');
+  var activeFilter = 'all';
+
+  function apply() {
+    var q = search.value.trim().toLowerCase();
+    cards.forEach(function (c) {
+      var text = c.textContent.toLowerCase();
+      var stage = c.closest('.stage');
+      var color = stage ? stage.getAttribute('data-color') : '';
+      var matchesText = !q || text.indexOf(q) >= 0;
+      var matchesFilter = activeFilter === 'all' || color === activeFilter;
+      c.classList.toggle('hidden', !(matchesText && matchesFilter));
+    });
+    stages.forEach(function (s) {
+      var visible = s.querySelectorAll('.card:not(.hidden)').length;
+      s.classList.toggle('empty', visible === 0);
+    });
+  }
+
+  search.addEventListener('input', apply);
+  filterBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      filterBtns.forEach(function (x) { x.classList.remove('active'); });
+      b.classList.add('active');
+      activeFilter = b.getAttribute('data-filter');
+      apply();
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

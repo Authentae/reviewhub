@@ -126,24 +126,24 @@ function Hero() {
           </div>
         </div>
         <h1 className="rh-display">
-          Every review, answered in <span className="time">10 seconds.</span>
+          Every Google review, answered in <span className="time">10 seconds.</span>
         </h1>
         <div className="rh-hero-bottom">
           <div>
             <p className="rh-lede">
-              ReviewHub plugs into the review sites your customers actually use — <b>Google, Yelp, Facebook, TripAdvisor, Trustpilot</b>, with <b>Wongnai</b> in beta — drafts the reply <mark>in your voice</mark>, and posts it the moment you hit send.
+              ReviewHub pulls your <b>Google reviews</b> into one dashboard, drafts the reply <mark>in your voice</mark> — in Thai or English — and you tap copy. <b>Yelp, Facebook, TripAdvisor, Trustpilot, and Wongnai are coming soon</b>; today we ship Google.
             </p>
             <div className="rh-hero-cta">
-              <Link to="/register" className="rh-btn rh-btn-amber rh-btn-lg">Add to Chrome <Arrow /></Link>
+              <Link to="/register" className="rh-btn rh-btn-amber rh-btn-lg">Start free <Arrow /></Link>
               <a href="#demo" className="rh-btn rh-btn-ghost rh-btn-lg">See a live draft</a>
               <Link to="/tools/review-reply-generator" className="rh-hero-tool-link">
-                Or try the free tool first <Arrow />
+                Or try the free tool first — no signup <Arrow />
               </Link>
             </div>
             <div className="rh-hero-proof">
               <div className="metric"><div className="n">10<small> langs</small></div><div className="l">Including Thai natively</div></div>
-              <div className="metric"><div className="n">5<small> live</small></div><div className="l">Platforms · Wongnai beta</div></div>
-              <div className="metric"><div className="n">1<small>-click</small></div><div className="l">Post, no copy-paste</div></div>
+              <div className="metric"><div className="n">Google<small></small></div><div className="l">Today · others coming soon</div></div>
+              <div className="metric"><div className="n">10<small>s</small></div><div className="l">From review to drafted reply</div></div>
             </div>
           </div>
           <CardStack />
