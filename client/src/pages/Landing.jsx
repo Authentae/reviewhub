@@ -218,22 +218,25 @@ function CardStack() {
 // rating numbers (which previously read like ReviewHub's own ratings on
 // each platform — they weren't).
 function Marquee() {
+  const { t } = useI18n();
+  const liveLabel = t('marquee.liveToday', 'Live today');
+  const soonLabel = t('marquee.comingSoon', 'Coming soon');
   const platforms = [
-    { name: 'Google',      color: 'oklch(0.72 0.16 240)', status: 'Live today' },
-    { name: 'Yelp',        color: 'oklch(0.65 0.22 25)',  status: 'Coming soon' },
-    { name: 'Facebook',    color: 'oklch(0.62 0.15 255)', status: 'Coming soon' },
-    { name: 'TripAdvisor', color: 'oklch(0.68 0.16 155)', status: 'Coming soon' },
-    { name: 'Trustpilot',  color: 'oklch(0.68 0.16 155)', status: 'Coming soon' },
-    { name: 'Wongnai',     color: 'oklch(0.72 0.18 35)',  status: 'Coming soon' },
+    { name: 'Google',      color: 'oklch(0.72 0.16 240)', live: true },
+    { name: 'Yelp',        color: 'oklch(0.65 0.22 25)',  live: false },
+    { name: 'Facebook',    color: 'oklch(0.62 0.15 255)', live: false },
+    { name: 'TripAdvisor', color: 'oklch(0.68 0.16 155)', live: false },
+    { name: 'Trustpilot',  color: 'oklch(0.68 0.16 155)', live: false },
+    { name: 'Wongnai',     color: 'oklch(0.72 0.18 35)',  live: false },
   ];
   const Row = () => (
     <span>
       {platforms.map((p, i) => (
         <React.Fragment key={i}>
           <span className="chunk" style={{ '--platcolor': p.color }}>
-            <span className="star">{p.status === 'Live today' ? '★' : '○'}</span>
+            <span className="star">{p.live ? '★' : '○'}</span>
             <span className="plat">{p.name}</span>
-            <span className="count" style={{ opacity: p.status === 'Live today' ? 1 : 0.55 }}>{p.status}</span>
+            <span className="count" style={{ opacity: p.live ? 1 : 0.55 }}>{p.live ? liveLabel : soonLabel}</span>
           </span>
           {i < platforms.length - 1 && <span className="sep">—</span>}
         </React.Fragment>
