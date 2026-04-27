@@ -515,7 +515,7 @@ export default function Dashboard() {
         {/* Search + Filters — sticky on scroll */}
         <section aria-label={t('dashboard.filtersSection')} className="space-y-2 mb-4 sticky top-14 pt-2 pb-2 z-10 -mx-4 px-4" style={{ background: 'color-mix(in oklab, var(--rh-paper) 92%, transparent)', backdropFilter: 'blur(12px) saturate(160%)', WebkitBackdropFilter: 'blur(12px) saturate(160%)', borderBottom: '1px solid var(--rh-rule)' }}>
           <div className="relative">
-            <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
             <input
