@@ -109,8 +109,13 @@ async function forwardToSentry(record) {
   ].join(', ');
 
   // 2-second timeout so a slow Sentry doesn't back up the event loop.
+  // .unref() so a pending forward never blocks process shutdown — if SIGTERM
+  // arrives mid-flight, Node can exit cleanly rather than waiting up to 2s
+  // for the abort timer to fire. The fetch itself will still abort via the
+  // AbortController if the timer happens to win.
   const ctl = new AbortController();
   const t = setTimeout(() => ctl.abort(), 2000);
+  if (typeof t.unref === 'function') t.unref();
   try {
     await fetch(endpoint, {
       method: 'POST',
