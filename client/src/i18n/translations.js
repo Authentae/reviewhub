@@ -7487,6 +7487,9 @@ const th = {
   'landing.plan.chain4': 'API + webhook',
   'landing.plan.chain5': 'ฝ่ายสนับสนุนระดับพรีเมียม',
   'landing.plan.chooseChain': 'เลือก Chain · $59/เดือน',
+  'landing.pullQuote': 'จินตนาการดูว่าคุณเปลี่ยนจากเช้าวันจันทร์ที่กลัว เป็นเคลียร์รีวิวทั้งสัปดาห์เสร็จก่อนกาแฟเย็น',
+  'landing.pullQuoteAttribTitle': 'นี่คือสิ่งที่เรากำลังสร้าง',
+  'landing.pullQuoteAttribDesc': 'คำชมจริงจากลูกค้าเบต้ารุ่นแรกจะมาเร็วๆ นี้',
 
   // ReviewCard action affordances — pin, flag, status, sentiment override.
   // Visible on every review row in the dashboard.

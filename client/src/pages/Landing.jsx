@@ -443,17 +443,18 @@ function AiDemo() {
 
 // ── Pull quote — warm rose+amber gradient panel ───────────────────────────
 function PullQuote() {
+  const { t } = useI18n();
   return (
     <section className="rh-pullquote" aria-label="Customer testimonial">
       <div className="rh-shell">
         <div className="q rh-reveal">
-          Imagine going from <em>dreading</em> Monday morning to clearing <mark>the whole week's reviews</mark> with coffee still hot.
+          {t('landing.pullQuote', "Imagine going from dreading Monday morning to clearing the whole week's reviews with coffee still hot.")}
         </div>
         <div className="attrib rh-reveal">
           <div className="portrait" aria-hidden="true">¶</div>
           <div className="who">
-            <b>What we're building toward.</b>
-            <span>Real beta-customer testimonials will land here once the first cohort goes live.</span>
+            <b>{t('landing.pullQuoteAttribTitle', "What we're building toward.")}</b>
+            <span>{t('landing.pullQuoteAttribDesc', 'Real beta-customer testimonials will land here once the first cohort goes live.')}</span>
           </div>
         </div>
       </div>
