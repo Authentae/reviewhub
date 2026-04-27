@@ -19,6 +19,7 @@
 const { get, all, insert, run, transaction } = require('../db/schema');
 const { getProvider } = require('../lib/providers');
 const { analyzeSentiment } = require('../db/seed');
+const { captureException } = require('../lib/errorReporter');
 
 const VALID_PLATFORMS = ['google', 'yelp', 'facebook', 'mock'];
 
@@ -144,6 +145,7 @@ async function runSyncTickSafely(label) {
     }
   } catch (e) {
     console.error(`[SYNC] ${label} failed:`, e.message);
+    captureException(e, { job: 'syncReviews', op: label });
   } finally {
     _running = false;
   }

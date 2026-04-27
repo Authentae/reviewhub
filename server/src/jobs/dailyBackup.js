@@ -24,6 +24,7 @@
 const path = require('path');
 const fs = require('fs');
 const Database = require('better-sqlite3');
+const { captureException } = require('../lib/errorReporter');
 
 const DEFAULT_INTERVAL_HOURS = 24;
 const DEFAULT_RETENTION_DAYS = 30;
@@ -78,7 +79,12 @@ async function runBackup() {
 
     return { ok: true, dest };
   } catch (err) {
+    // Backup failure is high-severity: silent failures here mean we have
+    // no recovery point for the SQLite DB. Forward to Sentry so ops gets
+    // paged rather than only seeing it in stdout logs that may not be
+    // monitored.
     console.error(`[BACKUP] FAILED: ${err.message}`);
+    captureException(err, { job: 'dailyBackup', op: 'runBackup', dest });
     try { fs.unlinkSync(dest); } catch { /* ignore */ }
     return { ok: false, reason: err.message };
   } finally {
@@ -97,10 +103,18 @@ function startBackupScheduler() {
   // Run a backup ~60s after boot so a freshly-deployed container has a
   // recovery point even if it crashes within the first few hours. The cost
   // is one extra backup per deploy, which is fine.
-  setTimeout(() => { runBackup().catch((e) => console.error('[BACKUP] initial:', e.message)); }, 60_000).unref?.();
+  setTimeout(() => {
+    runBackup().catch((e) => {
+      console.error('[BACKUP] initial:', e.message);
+      captureException(e, { job: 'dailyBackup', op: 'initial' });
+    });
+  }, 60_000).unref?.();
 
   _handle = setInterval(() => {
-    runBackup().catch((e) => console.error('[BACKUP] tick:', e.message));
+    runBackup().catch((e) => {
+      console.error('[BACKUP] tick:', e.message);
+      captureException(e, { job: 'dailyBackup', op: 'tick' });
+    });
   }, intervalMs);
   _handle.unref?.();
   console.log(`[BACKUP] Scheduler active (every ${intervalHours}h)`);

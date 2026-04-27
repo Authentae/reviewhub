@@ -18,6 +18,7 @@ const { all, run } = require('../db/schema');
 const { sendReviewRequest } = require('../lib/email');
 const { generateToken } = require('../lib/tokens');
 const { planAllows } = require('../lib/billing/plans');
+const { captureException } = require('../lib/errorReporter');
 
 async function runFollowUp() {
   // One query joins review_requests → businesses → users → subscriptions and
@@ -79,6 +80,7 @@ async function runFollowUp() {
       sent++;
     } catch (err) {
       console.error(`[FOLLOW-UP] Failed for request ${rr.id}:`, err.message);
+      captureException(err, { job: 'followUpRequests', op: 'sendOne', requestId: rr.id });
     }
   }
 
@@ -98,13 +100,13 @@ function startFollowUpScheduler() {
   setTimeout(() => {
     runFollowUp().then(
       (r) => { if (r.sent > 0) console.log(`[FOLLOW-UP] initial: sent ${r.sent} follow-up(s)`); },
-      (e) => console.error('[FOLLOW-UP] initial failed:', e.message)
+      (e) => { console.error('[FOLLOW-UP] initial failed:', e.message); captureException(e, { job: 'followUpRequests', op: 'initial' }); }
     );
   }, 60_000).unref?.();
   _handle = setInterval(() => {
     runFollowUp().then(
       (r) => { if (r.sent > 0) console.log(`[FOLLOW-UP] sent ${r.sent} follow-up(s)`); },
-      (e) => console.error('[FOLLOW-UP] run failed:', e.message)
+      (e) => { console.error('[FOLLOW-UP] run failed:', e.message); captureException(e, { job: 'followUpRequests', op: 'tick' }); }
     );
   }, intervalMs);
   _handle.unref?.();

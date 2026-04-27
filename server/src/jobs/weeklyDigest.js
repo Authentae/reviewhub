@@ -18,6 +18,7 @@
 
 const { all, get, run } = require('../db/schema');
 const { sendWeeklyDigest } = require('../lib/email');
+const { captureException } = require('../lib/errorReporter');
 
 // Minimum hours between digests for the same user. Prevents duplicate sends
 // when the scheduler tick happens multiple times in a week (e.g. the operator
@@ -102,6 +103,7 @@ async function runWeeklyDigest() {
       sent.push(user.email);
     } catch (err) {
       console.error(`[DIGEST] Failed for ${user.email}:`, err.message);
+      captureException(err, { job: 'weeklyDigest', op: 'sendOne', userId: user.id });
     }
   }
   return { sent: sent.length, recipients: sent };
@@ -121,13 +123,13 @@ function startDigestScheduler() {
   setTimeout(() => {
     runWeeklyDigest().then(
       (r) => { if (r.sent > 0) console.log(`[DIGEST] initial: sent to ${r.sent} user(s)`); },
-      (e) => console.error('[DIGEST] initial failed:', e.message)
+      (e) => { console.error('[DIGEST] initial failed:', e.message); captureException(e, { job: 'weeklyDigest', op: 'initial' }); }
     );
   }, 30_000).unref?.();
   _digestHandle = setInterval(() => {
     runWeeklyDigest().then(
       (r) => { if (r.sent > 0) console.log(`[DIGEST] sent to ${r.sent} user(s)`); },
-      (e) => console.error('[DIGEST] run failed:', e.message)
+      (e) => { console.error('[DIGEST] run failed:', e.message); captureException(e, { job: 'weeklyDigest', op: 'tick' }); }
     );
   }, intervalMs);
   _digestHandle.unref?.();
