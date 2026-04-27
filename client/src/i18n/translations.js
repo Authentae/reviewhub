@@ -7044,6 +7044,36 @@ const th = {
   'settings.businessAddFailed': 'เพิ่มธุรกิจไม่สำเร็จ',
   'settings.changeEmail': 'เปลี่ยน',
   'settings.sending': 'กำลังส่ง…',
+
+  // Pricing & billing — conversion-critical surface, was rendering English
+  // strings on the Thai locale's primary purchase path.
+  'pricing.currency': 'สกุลเงิน',
+  'pricing.freePrice': 'ฟรี',
+  'pricing.ctaFree': 'เริ่มต้นฟรี',
+  'pricing.ctaStart': 'เลือกแพ็กเกจ',
+  'pricing.ctaUpgrade': 'อัปเกรด',
+  'pricing.ctaCurrentPlan': 'แพ็กเกจปัจจุบัน',
+  'pricing.loadError': 'โหลดแพ็กเกจไม่สำเร็จ กรุณารีเฟรช',
+  'pricing.platformsCount': '{n} แพลตฟอร์ม',
+  'pricing.aiDraftsLimited': 'ร่างคำตอบ AI {n} ครั้ง/เดือน',
+  'pricing.aiDraftsUnlimited': 'ร่างคำตอบ AI ไม่จำกัด',
+  'pricing.checkoutCancelled': 'ยกเลิกการชำระเงินแล้ว ไม่มีการเรียกเก็บเงิน เลือกแพ็กเกจได้เมื่อพร้อม',
+  'pricing.feature.ai_drafts': 'ร่างคำตอบด้วย AI',
+  'pricing.feature.email_alerts_new': 'แจ้งเตือนทางอีเมลเมื่อมีรีวิวใหม่',
+  'pricing.feature.email_alerts_negative': 'แจ้งเตือนรีวิวเชิงลบ',
+  'pricing.feature.weekly_digest': 'อีเมลสรุปประจำสัปดาห์',
+  'pricing.feature.csv_export': 'ส่งออก CSV',
+  'pricing.feature.templates': 'เทมเพลตคำตอบ',
+  'pricing.feature.trend_analytics': 'การวิเคราะห์แนวโน้ม',
+  'pricing.feature.multi_location': 'รองรับหลายสาขา',
+  'pricing.feature.priority_support': 'ฝ่ายสนับสนุนระดับพรีเมียม',
+  'pricing.feature.api_access': 'เข้าถึงผ่าน API',
+  'billing.aiUsageTitle': 'การใช้งาน AI เดือนนี้',
+  'billing.aiUsageAria': 'ใช้ร่าง AI ไปแล้ว {used} จาก {max} ครั้ง',
+  'billing.aiUsageExhausted': 'ใช้โควตาครบแล้ว — อัปเกรดเพื่อใช้ไม่จำกัด',
+  'billing.aiUsageResetHint': 'รีเซ็ตทุกวันที่ 1 ของเดือน',
+  'billing.pastDueBanner': 'การชำระเงินครั้งล่าสุดไม่สำเร็จ กรุณาอัปเดตบัตรเพื่อรักษาแพ็กเกจของคุณ',
+  'billing.cancelledBanner': 'แพ็กเกจของคุณจะสิ้นสุดในวันที่ {date} คุณยังคงใช้แพ็กเกจปัจจุบันได้จนถึงวันนั้น',
 };
 
 export const LANGUAGES = [
