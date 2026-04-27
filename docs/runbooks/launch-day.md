@@ -143,10 +143,23 @@ Drafts will work again within 30 seconds (no redeploy needed).
 railway logs | grep webhook
 ```
 
-Most common cause: `LEMONSQUEEZY_WEBHOOK_SECRET` doesn't match what's
-configured in LemonSqueezy → Settings → Webhooks. Re-copy and re-set
-the env var. **Manually upgrade affected users** to their paid plan
-via `/admin` while the webhook catches up.
+Two common causes — check both:
+
+1. **Wrong URL in LemonSqueezy webhook config.** The handler with raw-body
+   HMAC verification is at **`/api/billing/webhook`** — NOT
+   `/api/webhooks/lemonsqueezy`. If the URL is wrong, requests hit the
+   JSON parser first, the body bytes change, HMAC fails, every webhook
+   returns 401. Symptom in Railway logs: a stream of
+   `POST /api/webhooks/... 401` from User-Agent `LemonSqueezy-Hookshot`.
+
+2. **Secret mismatch.** `LEMONSQUEEZY_WEBHOOK_SECRET` doesn't match what's
+   configured in LemonSqueezy → Settings → Webhooks. The secret must be
+   ≤40 chars (LS API constraint). Re-copy and re-set the env var.
+
+Either way: **manually upgrade affected users** to their paid plan via
+`/admin` while the webhook catches up. Existing test subs whose
+`subscription_created` already failed past LS's retry window won't
+auto-recover — cancel + re-checkout for those.
 
 ### "Site is down (502/504)"
 
