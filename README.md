@@ -1,8 +1,10 @@
 # ReviewHub
 
-The review dashboard for local businesses. Aggregate Google, Yelp, Facebook,
-TripAdvisor, Trustpilot, and Wongnai reviews in one feed; reply with
-AI-drafted responses; track sentiment and ratings over time.
+The review dashboard for local businesses. Pull Google reviews into one
+feed; reply with AI-drafted responses (Thai or English); track sentiment
+and ratings over time. Yelp, Facebook, TripAdvisor, Trustpilot, and
+Wongnai integrations are scaffolded but not yet shipping reviews —
+treat the live product as **Google-only** until further notice.
 
 ## Stack
 
