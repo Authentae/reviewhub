@@ -7167,6 +7167,28 @@ const th = {
   'cookie.third_party.desc': 'การแบ่งปันกับแพลตฟอร์มรีวิว (Google, Facebook ฯลฯ) เมื่อคุณเชื่อมต่อ',
   'cookie.profiling.label': 'การปรับ AI ตามผู้ใช้',
   'cookie.profiling.desc': 'ใช้ประวัติรีวิวของคุณเพื่อปรับคำตอบที่ AI สร้างให้เข้ากับสไตล์ของคุณ',
+
+  // Onboarding checklist — every Thai user sees this on first dashboard load
+  'onboarding.title': 'เริ่มต้นใช้งาน ReviewHub',
+  'onboarding.subtitle': 'ดำเนินการแล้ว {done} จาก {total} ขั้นตอน',
+  'onboarding.dismiss': 'ปิด',
+  'onboarding.dismissAria': 'ปิดรายการเริ่มต้นใช้งาน',
+  'onboarding.stepAccount': 'สร้างบัญชีของคุณ',
+  'onboarding.stepBusiness': 'ตั้งชื่อธุรกิจ',
+  'onboarding.stepReviews': 'ดูรีวิวแรกของคุณ',
+  'onboarding.stepRespond': 'ตอบรีวิวสักรายการ',
+  'onboarding.bizNamePlaceholder': 'เช่น Sakura Coffee',
+  'onboarding.bizAdd': 'เพิ่มชื่อธุรกิจ',
+  'onboarding.bizRename': 'เปลี่ยนชื่อธุรกิจ',
+  'onboarding.bizSaved': 'บันทึกชื่อธุรกิจแล้ว',
+  'onboarding.bizSaveFailed': 'บันทึกชื่อธุรกิจไม่สำเร็จ',
+  'onboarding.bizNameTooShort': 'ชื่อธุรกิจต้องมีอย่างน้อย 2 ตัวอักษร',
+  'onboarding.saving': 'กำลังบันทึก…',
+  'onboarding.loading': 'กำลังโหลด…',
+  'onboarding.connectPlatform': 'เชื่อมต่อแพลตฟอร์ม',
+  'onboarding.tryDemo': 'ลองด้วยข้อมูลตัวอย่าง',
+  'onboarding.or': 'หรือ',
+  'onboarding.respondHint': 'คลิกรีวิวใดก็ได้ด้านล่างเพื่อร่างคำตอบ',
 };
 
 export const LANGUAGES = [
