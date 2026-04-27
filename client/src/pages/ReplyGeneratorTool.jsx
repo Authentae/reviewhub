@@ -311,8 +311,7 @@ export default function ReplyGeneratorTool() {
             Yes. This tool is free with no signup. We rate-limit to 20 drafts
             per hour per IP to keep the service available for everyone. If
             you need more, the free ReviewHub account gives you 3 AI drafts
-            per month through the Chrome extension or web dashboard, and paid
-            plans give unlimited.
+            per month from your dashboard, and paid plans give unlimited.
           </p>
         </section>
       </main>

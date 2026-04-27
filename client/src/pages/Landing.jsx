@@ -545,9 +545,9 @@ function Pricing() {
             <div className="plan-sub">One location, two platforms, all the basics.</div>
             <ul>
               <li><Check />Up to 50 reviews / month</li>
-              <li><Check />2 platforms of your choice</li>
+              <li><Check />Google today · Yelp, Facebook, Wongnai coming soon</li>
               <li><Check />AI drafts (template fallback)</li>
-              <li><Check />Chrome extension</li>
+              <li><Check />CSV import</li>
             </ul>
             <Link to="/register" className="rh-btn rh-btn-ghost">Start free</Link>
           </div>
