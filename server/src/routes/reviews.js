@@ -973,6 +973,13 @@ router.post('/:id/respond', respondLimiter, async (req, res) => {
         postError = err.message || 'post-back failed';
         // Don't fail the user's save — just surface the error alongside success.
         console.error(`[REPLY-POST] ${review.platform}:${review.external_id} failed: ${postError}`);
+        captureException(err, {
+          route: 'reviews',
+          op: 'reply-post-back',
+          platform: review.platform,
+          externalId: review.external_id,
+          userId: req.user.id,
+        });
       }
     }
 
