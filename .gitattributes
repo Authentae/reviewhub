@@ -1,0 +1,22 @@
+# Normalize all text files to LF in the repository regardless of the
+# contributor's platform. Combined with .editorconfig (end_of_line = lf),
+# this eliminates the "LF will be replaced by CRLF" warnings on Windows
+# checkouts and prevents diffs that are "really" just line-ending churn.
+#
+# `text=auto`  → git auto-detects text vs binary
+# `eol=lf`     → text files use LF in the working tree (Linux/Mac/CI),
+#                even on Windows
+* text=auto eol=lf
+
+# Lock binary file types — git must never apply line-ending normalization
+# to these or they'd corrupt.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.woff binary
+*.woff2 binary
+*.pdf  binary
+*.db   binary
+*.sqlite binary
