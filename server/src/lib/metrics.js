@@ -61,12 +61,26 @@ function snapshot() {
     .slice(0, latencyCount)
     .filter((v) => typeof v === 'number')
     .sort((a, b) => a - b);
+  // Keep the :unmatched-api / :unmatched buckets out of the top-routes
+  // ranking. After the cardinality fix they correctly bucket all 404 scan
+  // noise — but on a busy host, scan traffic dwarfs real routes and would
+  // push real route counts off the top-N list. Surface them separately
+  // so operators still see "there's scan noise" without losing route
+  // visibility.
+  const realRoutes = Object.fromEntries(
+    Object.entries(COUNT.by_route).filter(([k]) => !k.startsWith(':unmatched'))
+  );
+  const unmatchedCounts = {
+    api: COUNT.by_route[':unmatched-api'] || 0,
+    other: COUNT.by_route[':unmatched'] || 0,
+  };
   return {
     requests: {
       total: COUNT.total,
       by_status: { ...COUNT.by_status },
       by_method: { ...COUNT.by_method },
-      top_routes: topN(COUNT.by_route, 10),
+      top_routes: topN(realRoutes, 10),
+      unmatched: unmatchedCounts,
     },
     latency_ms: {
       sample_size: samples.length,

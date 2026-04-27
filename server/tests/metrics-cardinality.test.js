@@ -36,14 +36,14 @@ test('by_route stays bounded under a flood of unmatched paths', () => {
     fakeRun(`/wp-admin/${i}/setup.php`);
   }
   const snap = snapshot();
-  // top_routes is the top 10 — but the universe of buckets must be tiny.
-  // We accept up to 4 keys (buffer for matched routes from setup, plus the
-  // :unmatched-api and :unmatched buckets themselves).
+  // top_routes excludes the :unmatched* buckets (those live in
+  // requests.unmatched). After 400 distinct unmatched paths, top_routes
+  // should be near-empty — definitely not the unbounded explosion the
+  // pre-fix code would have shown.
   const keys = Object.keys(snap.requests.top_routes);
-  assert.ok(keys.length <= 4, `expected ≤4 buckets, got ${keys.length}: ${keys.join(', ')}`);
-  // All 400 unmatched runs landed in :unmatched-api OR :unmatched buckets.
-  const unmatchedApiCount = snap.requests.top_routes[':unmatched-api'] || 0;
-  const unmatchedCount = snap.requests.top_routes[':unmatched'] || 0;
-  assert.ok(unmatchedApiCount + unmatchedCount >= 400,
-    `expected ≥400 in :unmatched buckets, got api=${unmatchedApiCount} other=${unmatchedCount}`);
+  assert.ok(keys.length <= 2, `expected ≤2 real routes in top_routes, got ${keys.length}: ${keys.join(', ')}`);
+  // All 400 unmatched runs landed in the dedicated :unmatched aggregate.
+  const unmatchedTotal = snap.requests.unmatched.api + snap.requests.unmatched.other;
+  assert.ok(unmatchedTotal >= 400,
+    `expected ≥400 in unmatched buckets, got api=${snap.requests.unmatched.api} other=${snap.requests.unmatched.other}`);
 });
