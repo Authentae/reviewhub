@@ -1712,7 +1712,7 @@ function ApiKeysSection({ plan }) {
       setName('');
       toast.success(t('settings.apiKeyCreated'));
     } catch (err) {
-      toast.error(err?.response?.data?.error || 'Error creating key');
+      toast.error(err?.response?.data?.error || t('settings.apiKeyCreateFailed', 'Error creating key'));
     } finally {
       setCreating(false);
     }
@@ -1725,7 +1725,7 @@ function ApiKeysSection({ plan }) {
       setKeys(prev => prev.filter(k => k.id !== id));
       toast.success(t('settings.apiKeyRevoked'));
     } catch (err) {
-      toast.error(err?.response?.data?.error || 'Error revoking key');
+      toast.error(err?.response?.data?.error || t('settings.apiKeyRevokeFailed', 'Error revoking key'));
     } finally {
       setRevoking(null);
     }

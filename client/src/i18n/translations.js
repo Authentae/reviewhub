@@ -7440,6 +7440,8 @@ const th = {
   'tool.drafting': 'กำลังร่าง…',
   'tool.generate': '✨ ร่างคำตอบใน 10 วินาที',
   'common.optional': 'ไม่บังคับ',
+  'settings.apiKeyCreateFailed': 'สร้างคีย์ไม่สำเร็จ',
+  'settings.apiKeyRevokeFailed': 'เพิกถอนคีย์ไม่สำเร็จ',
 
   // ReviewCard action affordances — pin, flag, status, sentiment override.
   // Visible on every review row in the dashboard.
