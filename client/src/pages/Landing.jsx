@@ -315,10 +315,15 @@ function HowItWorks() {
 // /tools/review-reply-generator does work for any platform's review
 // text (it just rewords whatever you paste), but the Landing demo
 // shouldn't imply current Yelp/TripAdvisor pull-in support.
-const SAMPLE_REVIEWS = {
+const SAMPLE_REVIEWS_EN = {
   glowing: { name: 'Priya M.', plat: 'google', platLabel: 'Google', stars: 5, body: 'Came here on my anniversary. Staff noticed, brought out a little candle on the tiramisu. Small thing — made the night. Thank you.' },
   mixed:   { name: 'Dan T.',   plat: 'google', platLabel: 'Google', stars: 3, body: 'Pasta was excellent. Service took forever though — 40 minutes for the mains on a Tuesday. Wanted to love it more than I did.' },
   harsh:   { name: 'Anon.',    plat: 'google', platLabel: 'Google', stars: 1, body: 'Rude manager. Overpriced. Never coming back. Zero stars if I could.' },
+};
+const SAMPLE_REVIEWS_TH = {
+  glowing: { name: 'พลอย ส.', plat: 'google', platLabel: 'Google', stars: 5, body: 'มาฉลองครบรอบที่นี่ พนักงานสังเกตและเอาเทียนเล็กๆ มาให้บนทีรามิสุ เรื่องเล็กๆ — ทำให้คืนนั้นพิเศษ ขอบคุณค่ะ' },
+  mixed:   { name: 'สมชาย ก.', plat: 'google', platLabel: 'Google', stars: 3, body: 'พาสต้าอร่อยมาก แต่บริการช้าไปหน่อย — รออาหารหลัก 40 นาทีในวันอังคาร อยากชอบมากกว่านี้แต่...' },
+  harsh:   { name: 'ผู้รีวิว', plat: 'google', platLabel: 'Google', stars: 1, body: 'ผู้จัดการพูดจาไม่ดี ราคาแพงเกินไป จะไม่กลับมาอีก ถ้าให้ 0 ดาวได้ก็ให้' },
 };
 const TONE_PRESETS = [
   { id: 'warm', label: 'Warm' },
@@ -329,7 +334,8 @@ const TONE_PRESETS = [
 // Curated fallback drafts — used if the public endpoint is unreachable in dev,
 // rate-limited, or otherwise erroring. Keyed by review × tone so the demo
 // always shows something on-message instead of a generic error string.
-const DEMO_FALLBACKS = {
+// Thai versions match the Thai sample reviews above.
+const DEMO_FALLBACKS_EN = {
   glowing: {
     warm:   "Priya — that candle was the team's idea, and they were rooting for you both. Thanks for celebrating with us. Come back for the second anniversary, candle's on the house.",
     brisk:  "Priya — glad the team caught it. Thanks for the kind words. See you again soon.",
@@ -346,9 +352,28 @@ const DEMO_FALLBACKS = {
     formal: "We sincerely apologize for the experience you describe. We would like to address this personally — please contact owner@cornerbistro.example at your convenience.",
   },
 };
+const DEMO_FALLBACKS_TH = {
+  glowing: {
+    warm:   "ขอบคุณคุณพลอยมากค่ะ ทีมเราดีใจที่ได้เป็นส่วนหนึ่งของวันพิเศษ เทียนเล็กๆ นั้นเป็นไอเดียของทีมเอง รอพบคุณอีกในครบรอบปีหน้าค่ะ — ครั้งหน้าเทียนแถมให้",
+    brisk:  "ขอบคุณคุณพลอยค่ะ ดีใจที่ทีมสังเกตเห็น แล้วเจอกันใหม่ค่ะ",
+    formal: "ขอบคุณคุณพลอย ทางร้านยินดีที่พนักงานได้ร่วมในโอกาสพิเศษ หวังเป็นอย่างยิ่งว่าจะได้ต้อนรับคุณอีกครั้ง",
+  },
+  mixed: {
+    warm:   "ขอบคุณคุณสมชายค่ะ — 40 นาทีไม่ใช่มาตรฐานของเรา เรากำลังปรับครัววันอังคารแล้ว ดีใจที่พาสต้าผ่านเกณฑ์ กลับมาเร็วๆ นี้ครั้งหน้าเวลาจะเร็วเหมือนรสชาติ",
+    brisk:  "ขอบคุณคุณสมชาย เรื่องเวลารับมาแก้ไขแล้ว แวะมาใหม่ พาสต้าจะออกเร็วขึ้นค่ะ",
+    formal: "ขอบคุณคุณสมชาย เวลารอที่ท่านระบุต่ำกว่ามาตรฐานของเรา และเราอยู่ระหว่างแก้ไข หวังว่าพาสต้าจะดึงดูดให้ท่านกลับมา",
+  },
+  harsh: {
+    warm:   "ขออภัยอย่างจริงใจ — นั่นไม่ใช่ประสบการณ์ที่เราอยากให้ใครจำ อยากเข้าใจสิ่งที่เกิดขึ้นโดยตรง รบกวนอีเมลถึง owner@cornerbistro.example นะคะ — เจ้าของร้าน",
+    brisk:  "ไม่ใช่มาตรฐานของเรา รบกวนอีเมล owner@cornerbistro.example เพื่อให้เราแก้ไข — เจ้าของร้าน",
+    formal: "เราขออภัยอย่างจริงใจสำหรับประสบการณ์ที่คุณได้รับ อยากแก้ไขเรื่องนี้เป็นการส่วนตัว — กรุณาติดต่อ owner@cornerbistro.example ได้ตามสะดวก",
+  },
+};
 
 function AiDemo() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
+  const SAMPLE_REVIEWS = lang === 'th' ? SAMPLE_REVIEWS_TH : SAMPLE_REVIEWS_EN;
+  const DEMO_FALLBACKS = lang === 'th' ? DEMO_FALLBACKS_TH : DEMO_FALLBACKS_EN;
   const [which, setWhich] = useState('mixed');
   const [tone, setTone] = useState('warm');
   const [output, setOutput] = useState('');
