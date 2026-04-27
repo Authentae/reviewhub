@@ -347,12 +347,37 @@ function createApp() {
   }
 
   const { captureException } = require('./lib/errorReporter');
+  // Strip sensitive query-string params (verification/reset/unsub tokens)
+  // before forwarding the URL to error reports. The token=... form is the
+  // single-use credential for these flows; sending it to Sentry/logs would
+  // let anyone with log access replay-take-over the account. Whitelist of
+  // known token-bearing param names — anything else passes through so
+  // operators can still see ?page=2&sort=newest etc. for debugging.
+  const SENSITIVE_QUERY_PARAMS = new Set(['token', 'code', 'state', 'signature']);
+  function sanitizePath(originalUrl) {
+    if (typeof originalUrl !== 'string') return originalUrl;
+    const qIdx = originalUrl.indexOf('?');
+    if (qIdx < 0) return originalUrl;
+    const pathPart = originalUrl.slice(0, qIdx);
+    const queryPart = originalUrl.slice(qIdx + 1);
+    const cleaned = queryPart
+      .split('&')
+      .map((kv) => {
+        const eqIdx = kv.indexOf('=');
+        const key = eqIdx < 0 ? kv : kv.slice(0, eqIdx);
+        return SENSITIVE_QUERY_PARAMS.has(key.toLowerCase())
+          ? `${key}=[REDACTED]`
+          : kv;
+      })
+      .join('&');
+    return cleaned ? `${pathPart}?${cleaned}` : pathPart;
+  }
   app.use((err, req, res, next) => {
     const errorId = Date.now().toString(36);
     captureException(err, {
       errorId,
       method: req.method,
-      path: req.originalUrl,
+      path: sanitizePath(req.originalUrl),
       userId: req.user?.id,
       requestId: req.headers['x-request-id'] || undefined,
     });
