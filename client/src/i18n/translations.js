@@ -7424,6 +7424,22 @@ const th = {
   'nav.freeToolTitle': 'เครื่องมือร่างคำตอบรีวิวด้วย AI ฟรี',
   'nav.signIn': 'เข้าสู่ระบบ',
   'nav.startFree': 'เริ่มฟรี',
+  'tool.eyebrow': 'เครื่องมือฟรี · ไม่ต้องสมัคร',
+  'tool.kicker': 'เครื่องมือฟรี · ไม่ต้องสมัคร',
+  'tool.title': 'เครื่องมือร่างคำตอบรีวิวด้วย AI',
+  'tool.lede': 'วางรีวิวจาก Google, Yelp, Facebook, TripAdvisor หรือ Trustpilot รับคำตอบมืออาชีพที่เข้าใจบริบทใน 10 วินาที ขับเคลื่อนด้วย Claude',
+  'tool.reviewerName': 'ชื่อผู้รีวิว',
+  'tool.businessName': 'ชื่อร้านของคุณ',
+  'tool.platform': 'แพลตฟอร์ม',
+  'tool.rating': 'คะแนน',
+  'tool.reviewText': 'ข้อความรีวิว',
+  'tool.noReview': 'ไม่มีรีวิวพร้อม? ลอง:',
+  'tool.sample1Star': '★ ตัวอย่าง 1 ดาว',
+  'tool.sample5Star': '★★★★★ ตัวอย่าง 5 ดาว',
+  'tool.placeholder': 'วางข้อความรีวิวที่นี่…',
+  'tool.drafting': 'กำลังร่าง…',
+  'tool.generate': '✨ ร่างคำตอบใน 10 วินาที',
+  'common.optional': 'ไม่บังคับ',
 
   // ReviewCard action affordances — pin, flag, status, sentiment override.
   // Visible on every review row in the dashboard.

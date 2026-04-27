@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import api from '../lib/api';
 import usePageTitle from '../hooks/usePageTitle';
 import MarketingNav from '../components/MarketingNav';
+import { useI18n } from '../context/I18nContext';
 
 // Free, no-signup AI review-reply generator.
 //
@@ -47,6 +48,7 @@ const SAMPLES = {
 };
 
 export default function ReplyGeneratorTool() {
+  const { t } = useI18n();
   usePageTitle('Free AI Review Reply Generator — ReviewHub');
 
   const [form, setForm] = useState({
@@ -106,19 +108,18 @@ export default function ReplyGeneratorTool() {
 
         {/* SEO hero — editorial treatment matching Landing v2 */}
         <div className="rh-tool-hero">
-          <p className="rh-mono" style={{ marginBottom: 12, color: 'var(--rh-ochre-deep)' }}>FREE TOOL · NO SIGNUP</p>
+          <p className="rh-mono" style={{ marginBottom: 12, color: 'var(--rh-ochre-deep)' }}>{t('tool.eyebrow', 'FREE TOOL · NO SIGNUP')}</p>
           <div className="rh-section-head" style={{ marginBottom: 24 }}>
             <div className="kicker">
               <div className="num" style={{ color: 'var(--rh-ochre-deep)' }}>00</div>
-              <div className="cat">§ Free tool · No signup</div>
+              <div className="cat">§ {t('tool.kicker', 'Free tool · No signup')}</div>
             </div>
             <h1 style={{ fontFamily: 'var(--rh-serif)', fontWeight: 400, fontSize: 'clamp(40px, 5.6vw, 72px)', lineHeight: 1.0, letterSpacing: '-0.025em', margin: 0 }}>
-              AI <em style={{ fontStyle: 'italic', color: 'var(--rh-ochre-deep)' }}>review reply</em> generator.
+              {t('tool.title', 'AI review reply generator.')}
             </h1>
           </div>
           <p className="rh-lede" style={{ maxWidth: '60ch' }}>
-            Paste a Google, Yelp, Facebook, TripAdvisor, or Trustpilot review.
-            Get a professional, context-aware reply in <b>10 seconds.</b> Powered by Claude.
+            {t('tool.lede', 'Paste a Google, Yelp, Facebook, TripAdvisor, or Trustpilot review. Get a professional, context-aware reply in 10 seconds. Powered by Claude.')}
           </p>
         </div>
 
@@ -126,7 +127,7 @@ export default function ReplyGeneratorTool() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="rg-reviewer" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
-                Reviewer name <span className="text-gray-400 text-xs">(optional)</span>
+                {t('tool.reviewerName', 'Reviewer name')} <span className="text-gray-400 text-xs">({t('common.optional', 'optional')})</span>
               </label>
               <input
                 id="rg-reviewer" type="text" className="input"
@@ -137,7 +138,7 @@ export default function ReplyGeneratorTool() {
             </div>
             <div>
               <label htmlFor="rg-business" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
-                Your business name <span className="text-gray-400 text-xs">(optional)</span>
+                {t('tool.businessName', 'Your business name')} <span className="text-gray-400 text-xs">({t('common.optional', 'optional')})</span>
               </label>
               <input
                 id="rg-business" type="text" className="input"
@@ -151,7 +152,7 @@ export default function ReplyGeneratorTool() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="rg-platform" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
-                Platform
+                {t('tool.platform', 'Platform')}
               </label>
               <select
                 id="rg-platform" className="input"
@@ -163,7 +164,7 @@ export default function ReplyGeneratorTool() {
             </div>
             <div>
               <label htmlFor="rg-rating" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
-                Rating
+                {t('tool.rating', 'Rating')}
               </label>
               <select
                 id="rg-rating" className="input"
@@ -180,17 +181,17 @@ export default function ReplyGeneratorTool() {
           <div>
             <div className="flex items-center justify-between gap-2 mb-1 flex-wrap">
               <label htmlFor="rg-text" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                Review text <span className="text-red-500">*</span>
+                {t('tool.reviewText', 'Review text')} <span className="text-red-500">*</span>
               </label>
               <div className="flex items-center gap-2 text-xs">
-                <span className="text-gray-400 dark:text-gray-500">No review handy? Try:</span>
+                <span className="text-gray-400 dark:text-gray-500">{t('tool.noReview', 'No review handy? Try:')}</span>
                 <button
                   type="button"
                   onClick={() => { setForm(SAMPLES.negative); setDraft(null); setError(''); }}
                   className="hover:underline font-medium"
                   style={{ color: 'var(--rh-teal)' }}
                 >
-                  ★ 1-star sample
+                  {t('tool.sample1Star', '★ 1-star sample')}
                 </button>
                 <span style={{ color: 'var(--rh-ink-soft, #999)' }}>·</span>
                 <button
@@ -199,7 +200,7 @@ export default function ReplyGeneratorTool() {
                   className="hover:underline font-medium"
                   style={{ color: 'var(--rh-teal)' }}
                 >
-                  ★★★★★ 5-star sample
+                  {t('tool.sample5Star', '★★★★★ 5-star sample')}
                 </button>
               </div>
             </div>
@@ -208,7 +209,7 @@ export default function ReplyGeneratorTool() {
               rows={5} maxLength={2000}
               value={form.review_text}
               onChange={(e) => setForm(f => ({ ...f, review_text: e.target.value }))}
-              placeholder="Paste the review here…"
+              placeholder={t('tool.placeholder', 'Paste the review here…')}
               required
             />
             <p className={`text-xs mt-1 ${form.review_text.length > 1900 ? 'text-red-500' : form.review_text.length > 1500 ? 'text-amber-600 dark:text-amber-400' : 'text-gray-400'}`}>
@@ -226,7 +227,7 @@ export default function ReplyGeneratorTool() {
             type="submit" disabled={loading} aria-busy={loading}
             className="btn-primary w-full text-base py-3.5 disabled:opacity-60"
           >
-            {loading ? 'Drafting…' : '✨ Generate reply in 10 seconds'}
+            {loading ? t('tool.drafting', 'Drafting…') : t('tool.generate', '✨ Generate reply in 10 seconds')}
           </button>
         </form>
 
