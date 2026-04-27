@@ -129,7 +129,15 @@ router.get('/widget/:id/badge', widgetLimiter, (req, res) => {
   // render the iframe even if X-Frame-Options says ALLOWALL — the
   // strictest applicable directive wins.
   res.removeHeader('X-Frame-Options');
-  res.setHeader('Content-Security-Policy', "frame-ancestors *");
+  // Replacing helmet's CSP with only `frame-ancestors *` would also drop
+  // its script-src / object-src restrictions on this response. Be explicit:
+  // the badge is server-rendered HTML with zero JavaScript, so script-src
+  // 'none' is the correct hardening — even if business_name escaping
+  // somehow regressed, an injected <script> still wouldn't execute.
+  res.setHeader(
+    'Content-Security-Policy',
+    "default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; script-src 'none'; object-src 'none'; frame-ancestors *; base-uri 'none'"
+  );
   res.send(html);
 });
 
