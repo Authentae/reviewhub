@@ -7321,6 +7321,28 @@ const th = {
   'analytics.within7d': 'ภายใน 7 วัน',
   'analytics.responseTimeHours': '{h} ชม.',
   'analytics.responseTimeNoData': 'ยังไม่มีข้อมูลเวลาตอบ — เริ่มตอบรีวิวเพื่อเก็บสถิติ',
+
+  // Settings — top-of-page success/failure banners owners see right after
+  // OAuth, plan upgrade, weekly-digest unsubscribe. Plus the email-change
+  // wizard flow.
+  'settings.businessUpgrade': 'อัปเกรดเป็นแพ็กเกจ Business เพื่อจัดการหลายสาขา',
+  'settings.notif.upgradeRequired': 'อัปเกรดเพื่อเปิดใช้งาน',
+  'settings.notif.followUp': 'ติดตามผลอัตโนมัติ',
+  'settings.notif.followUpSub': 'ส่งซ้ำหนึ่งครั้งให้ลูกค้าที่ยังไม่คลิกลิงก์โดยอัตโนมัติ',
+  'settings.notif.followUpOff': 'ปิด',
+  'settings.notif.followUpDays': 'หลังจาก {n} วัน',
+  'settings.unsubbedDigest': 'คุณยกเลิกการรับอีเมลสรุปประจำสัปดาห์แล้ว เปิดใช้งานใหม่ได้ด้านล่างเมื่อต้องการ',
+  'settings.googleConnected': 'เชื่อมต่อ Google แล้ว เราจะเริ่มดึงรีวิวภายในไม่กี่นาที',
+  'settings.googleFailed': 'เชื่อมต่อ Google ไม่สำเร็จ ({reason}) กรุณาลองใหม่',
+  'settings.upgraded': 'ยินดีต้อนรับ! แพ็กเกจของคุณได้รับการอัปเกรดแล้ว ฟีเจอร์ที่ต้องชำระเงินใช้งานได้ทันที',
+  'settings.changeEmailTitle': 'เปลี่ยนที่อยู่อีเมล',
+  'settings.changeEmailHint': 'เราจะส่งลิงก์ยืนยันไปยังที่อยู่ใหม่ อีเมลของคุณจะยังคงเป็น {current} จนกว่าคุณจะคลิกลิงก์',
+  'settings.newEmail': 'ที่อยู่อีเมลใหม่',
+  'settings.sendConfirmLink': 'ส่งลิงก์ยืนยัน',
+  'settings.emailChangeSent': 'ส่งลิงก์ยืนยันแล้ว — โปรดตรวจสอบกล่องอีเมลใหม่',
+  'settings.emailChangeFailed': 'เริ่มเปลี่ยนอีเมลไม่สำเร็จ ตรวจสอบรหัสผ่านและลองใหม่',
+  'settings.emailChangeSentTitle': 'ตรวจสอบกล่องอีเมลใหม่ของคุณ',
+  'settings.emailChangeSentDesc': 'เราส่งลิงก์ยืนยันไปที่ {email} คลิกเพื่อยืนยันการเปลี่ยนอีเมล ลิงก์หมดอายุใน 1 ชั่วโมง',
 };
 
 export const LANGUAGES = [
