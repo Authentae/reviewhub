@@ -6994,6 +6994,26 @@ const th = {
   'webhooks.saving': 'กำลังบันทึก…',
   'webhooks.add': 'เพิ่ม Webhook',
   'webhooks.addBtn': 'เพิ่ม Webhook',
+
+  // High-frequency UI strings — keeping these untranslated meant Thai users
+  // saw English mid-page on every dashboard interaction. Auth-side strings
+  // and the navbar's "Owner" tab fall back to English without these keys.
+  'nav.owner': 'เจ้าของ',
+  'common.done': 'เสร็จสิ้น',
+  'common.cancel': 'ยกเลิก',
+  'common.add': 'เพิ่ม',
+  'common.save': 'บันทึก',
+  'common.copy': 'คัดลอก',
+  'common.copied': 'คัดลอกแล้ว!',
+  'common.loading': 'กำลังโหลด…',
+  'common.delete': 'ลบ',
+  'common.deleting': 'กำลังลบ…',
+  'common.edit': 'แก้ไข',
+  'common.yes': 'ใช่',
+  'common.no': 'ไม่',
+  'common.optional': 'ไม่บังคับ',
+  'common.rateLimitedWait': 'คุณดำเนินการเร็วเกินไป — ลองใหม่ในอีก {seconds} วินาที',
+  'auth.orDemo': 'หรือลองใช้เดโม',
 };
 
 export const LANGUAGES = [
