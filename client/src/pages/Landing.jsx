@@ -123,7 +123,7 @@ function Hero() {
           </div>
           <div className="rh-meta-right">
             <div className="avatars"><span>MP</span><span>PS</span><span>JR</span><span>+</span></div>
-            <div className="ct">Built for <b>independent shops</b></div>
+            <div className="ct">{t('landing.heroBuiltFor', 'Built for independent shops')}</div>
           </div>
         </div>
         <h1 className="rh-display">
@@ -135,16 +135,16 @@ function Hero() {
               {t('landing.heroSubtitle')}
             </p>
             <div className="rh-hero-cta">
-              <Link to="/register" className="rh-btn rh-btn-amber rh-btn-lg">Start free <Arrow /></Link>
-              <a href="#demo" className="rh-btn rh-btn-ghost rh-btn-lg">See a live draft</a>
+              <Link to="/register" className="rh-btn rh-btn-amber rh-btn-lg">{t('landing.heroCta')} <Arrow /></Link>
+              <a href="#demo" className="rh-btn rh-btn-ghost rh-btn-lg">{t('landing.ctaSecondary', 'See a live draft')}</a>
               <Link to="/tools/review-reply-generator" className="rh-hero-tool-link">
-                Or try the free tool first — no signup <Arrow />
+                {t('landing.heroTryFreeTool', 'Or try the free tool first — no signup')} <Arrow />
               </Link>
             </div>
             <div className="rh-hero-proof">
-              <div className="metric"><div className="n">10<small> langs</small></div><div className="l">Including Thai natively</div></div>
-              <div className="metric"><div className="n">Google<small></small></div><div className="l">Today · others coming soon</div></div>
-              <div className="metric"><div className="n">10<small>s</small></div><div className="l">From review to drafted reply</div></div>
+              <div className="metric"><div className="n">10<small> {t('landing.heroMetricLangsUnit', 'langs')}</small></div><div className="l">{t('landing.heroMetricLangs', 'Including Thai natively')}</div></div>
+              <div className="metric"><div className="n">Google</div><div className="l">{t('landing.heroMetricPlatform', 'Today · others coming soon')}</div></div>
+              <div className="metric"><div className="n">10<small>s</small></div><div className="l">{t('landing.heroMetricSpeed', 'From review to drafted reply')}</div></div>
             </div>
           </div>
           <CardStack />

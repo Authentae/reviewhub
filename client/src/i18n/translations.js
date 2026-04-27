@@ -7377,6 +7377,12 @@ const th = {
   'landing.ctaSubtitle': 'ร่วมกับธุรกิจท้องถิ่นหลายร้อยรายที่ประหยัดเวลาได้ทุกสัปดาห์',
   'landing.ctaButton': 'เริ่มฟรี',
   'landing.ctaSecondary': 'ดูตัวอย่างคำตอบ',
+  'landing.heroBuiltFor': 'สร้างมาเพื่อร้านอิสระ',
+  'landing.heroTryFreeTool': 'หรือลองเครื่องมือฟรีก่อน — ไม่ต้องสมัคร',
+  'landing.heroMetricLangsUnit': 'ภาษา',
+  'landing.heroMetricLangs': 'รวมภาษาไทยเต็มรูปแบบ',
+  'landing.heroMetricPlatform': 'วันนี้ · แพลตฟอร์มอื่นเร็วๆ นี้',
+  'landing.heroMetricSpeed': 'จากรีวิวถึงร่างคำตอบ',
 
   // ReviewCard action affordances — pin, flag, status, sentiment override.
   // Visible on every review row in the dashboard.
