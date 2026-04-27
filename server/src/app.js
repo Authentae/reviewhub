@@ -196,8 +196,20 @@ function createApp() {
   app.use(metrics.middleware());
 
   morgan.token('req-id', (req) => req.headers['x-request-id'] || '-');
+  // Override morgan's :url token to strip sensitive query params before
+  // logging. The default :url echoes req.originalUrl verbatim, which
+  // means /api/auth/unsubscribe?token=... and the OAuth callback's
+  // ?code=&state= get written to stdout (and onward to Railway's log
+  // aggregator, etc.). Reuse the same sanitizer the global error
+  // middleware uses so redaction is consistent across surfaces.
+  const { sanitizePath } = require('./lib/sanitizePath');
+  morgan.token('url', (req) => sanitizePath(req.originalUrl || req.url));
   // Skip request logging in tests — test runners render cleaner without it.
   if (process.env.NODE_ENV !== 'test') {
+    // Production uses a tweaked combined format: same fields as Apache
+    // combined, but the URL token is the redacted one. The default
+    // combined format inlines :method :url, so by overriding the :url
+    // token above we cover it without rewriting the format string.
     const logFormat = process.env.NODE_ENV === 'production'
       ? 'combined'
       : ':method :url :status :response-time ms [:req-id]';
@@ -367,7 +379,7 @@ function createApp() {
   }
 
   const { captureException } = require('./lib/errorReporter');
-  const { sanitizePath } = require('./lib/sanitizePath');
+  // sanitizePath was already required above for the morgan :url token.
   app.use((err, req, res, next) => {
     const errorId = Date.now().toString(36);
     captureException(err, {
