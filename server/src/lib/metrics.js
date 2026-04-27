@@ -31,10 +31,18 @@ function record(req, res, durationMs) {
   COUNT.by_status[statusBucket] = (COUNT.by_status[statusBucket] || 0) + 1;
   COUNT.by_method[req.method] = (COUNT.by_method[req.method] || 0) + 1;
 
-  // Bucket by the route template (if matched) or the raw path. The template
-  // keeps cardinality low — `/api/reviews/:id/respond` instead of one
-  // bucket per review id.
-  const route = req.route?.path ? `${req.baseUrl || ''}${req.route.path}` : req.path;
+  // Bucket by the route template (if matched) or a coarse fallback. The
+  // template keeps cardinality low — `/api/reviews/:id/respond` instead of
+  // one bucket per review id.
+  //
+  // For UNMATCHED routes (404s from random URL scans / attackers), we
+  // collapse them into a single `:unmatched` bucket. Otherwise every
+  // weird scan path (`/.env`, `/wp-admin/`, `/api/users/12345`, etc.)
+  // would add a new key to by_route — a slow memory leak that grows with
+  // attack noise rather than real traffic.
+  const route = req.route?.path
+    ? `${req.baseUrl || ''}${req.route.path}`
+    : (req.path && req.path.startsWith('/api/') ? ':unmatched-api' : ':unmatched');
   if (route) COUNT.by_route[route] = (COUNT.by_route[route] || 0) + 1;
 
   LATENCY_RING[latencyIdx] = durationMs;
