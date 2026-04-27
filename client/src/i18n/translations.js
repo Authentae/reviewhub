@@ -7081,6 +7081,39 @@ const th = {
   'unsub.list.new_review': 'การแจ้งเตือนรีวิวใหม่',
   'unsub.list.negative_alert': 'การแจ้งเตือนรีวิวเชิงลบ',
   'unsub.list.generic': 'รายการอีเมลนี้',
+
+  // Review-card actions + AI quota — visible on every review row
+  'review.reply': 'ตอบกลับ',
+  'review.replyAria': 'ตอบกลับ {name}',
+  'review.aiDraft': 'ร่างด้วย AI',
+  'review.draftRestored': 'กู้คืนร่างที่ยังไม่บันทึก',
+  'review.aiDraftTitle': 'สร้างร่างคำตอบด้วย AI (ใช้ 1 เครดิต AI)',
+  'review.drafting': 'กำลังร่าง…',
+  'review.aiQuotaBadge': 'เหลือ {n} ครั้ง',
+  'review.aiQuotaTitle': 'ใช้ร่าง AI ไปแล้ว {used} จาก {max} ครั้งในเดือนนี้',
+  'review.aiQuotaExhausted': 'คุณใช้ร่าง AI ครบ {max} ครั้งในเดือนนี้แล้ว',
+  'review.aiQuotaExhaustedHint': 'พิมพ์เอง เลือกเทมเพลต หรืออัปเกรดเพื่อใช้ไม่จำกัด',
+  'review.upgrade': 'อัปเกรด',
+
+  // Bulk actions in dashboard — confirmation dialogs are blocking, must be Thai
+  'bulk.deleteSelected': 'ลบที่เลือก {n} รายการ',
+  'bulk.deleteConfirm': 'ลบรีวิว {n} รายการ? การกระทำนี้ย้อนกลับไม่ได้',
+  'bulk.confirmYes': 'ใช่ ลบเลย',
+  'bulk.confirmNo': 'ยกเลิก',
+  'bulk.deleting': 'กำลังลบ…',
+  'bulk.deleteSuccess': 'ลบรีวิว {n} รายการแล้ว',
+  'bulk.deleteFailed': 'ลบไม่สำเร็จ กรุณาลองใหม่',
+  'bulk.tagSelected': 'ติดแท็ก {n} รายการ',
+  'bulk.tagPickerLabel': 'เลือกแท็กให้กับรีวิวที่เลือก',
+  'bulk.tagApplied': 'ติดแท็กให้รีวิว {n} รายการแล้ว',
+  'bulk.tagFailed': 'ติดแท็กไม่สำเร็จ กรุณาลองใหม่',
+  'bulk.noTags': 'ยังไม่มีแท็ก — สร้างแท็กในการตั้งค่า',
+  'bulk.untagSelected': 'นำแท็กออกจาก {n} รายการ',
+  'bulk.untagApplied': 'นำแท็กออกจากรีวิว {n} รายการแล้ว',
+  'bulk.untagFailed': 'นำแท็กออกไม่สำเร็จ กรุณาลองใหม่',
+  'bulk.setStatus': 'ตั้งสถานะ',
+  'bulk.statusApplied': 'อัปเดตสถานะของรีวิว {n} รายการแล้ว',
+  'bulk.statusFailed': 'อัปเดตสถานะไม่สำเร็จ กรุณาลองใหม่',
 };
 
 export const LANGUAGES = [
