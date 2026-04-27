@@ -71,7 +71,21 @@ const accountLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-router.post('/register', async (req, res) => {
+// Rate limiter for /register and /login — defends against credential stuffing
+// and account-enumeration spraying. 20 attempts / 15 min / IP is generous for a
+// real human (occasional typos, password manager misfires) but cuts off any
+// automated abuse. Skipped in tests so the timing-oracle test (which fires
+// 10+ logins in a tight loop) doesn't hit 429.
+const authAttemptLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  message: { error: 'Too many attempts, please try again later' },
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: () => process.env.NODE_ENV === 'test',
+});
+
+router.post('/register', authAttemptLimiter, async (req, res) => {
   const rawEmail = req.body.email;
   const rawPassword = req.body.password;
   if ((rawEmail !== undefined && rawEmail !== null && typeof rawEmail !== 'string') ||
@@ -181,7 +195,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-router.post('/login', async (req, res) => {
+router.post('/login', authAttemptLimiter, async (req, res) => {
   const rawEmail = req.body.email;
   const rawPassword = req.body.password;
   if ((rawEmail !== undefined && rawEmail !== null && typeof rawEmail !== 'string') ||
