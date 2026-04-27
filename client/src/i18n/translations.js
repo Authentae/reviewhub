@@ -7211,6 +7211,31 @@ const th = {
   'claim.submit': 'ส่งคำอ้างสิทธิ์',
   'claim.submitted': 'ส่งคำอ้างสิทธิ์แล้ว — เราจะพิจารณาให้เร็วที่สุด',
   'claim.failed': 'ส่งคำอ้างสิทธิ์ไม่สำเร็จ กรุณาลองใหม่',
+
+  // Owner response — what verified business owners post on their public
+  // business page. Critical surface: every owner-side interaction with
+  // the public review feed.
+  'ownerResponse.label': 'คำตอบจากเจ้าของ',
+  'ownerResponse.badge': 'คำตอบจากเจ้าของ',
+  'ownerResponse.placeholder': 'ขอบคุณผู้เขียนรีวิว ตอบคำติชม เชิญกลับมาอีกครั้ง…',
+  'ownerResponse.minHint': 'ขั้นต่ำ {n} ตัวอักษร',
+  'ownerResponse.maxHint': 'สูงสุด {n} ตัวอักษร',
+  'ownerResponse.publish': 'เผยแพร่คำตอบ',
+  'ownerResponse.saveEdit': 'บันทึกการแก้ไข',
+  'ownerResponse.saving': 'กำลังบันทึก…',
+  'ownerResponse.posted': 'เผยแพร่คำตอบแล้ว',
+  'ownerResponse.updated': 'อัปเดตคำตอบแล้ว',
+  'ownerResponse.deleted': 'ลบคำตอบแล้ว',
+  'ownerResponse.postFailed': 'เผยแพร่คำตอบไม่สำเร็จ',
+  'ownerResponse.updateFailed': 'อัปเดตคำตอบไม่สำเร็จ',
+  'ownerResponse.deleteFailed': 'ลบคำตอบไม่สำเร็จ',
+  'ownerResponse.editAria': 'แก้ไขคำตอบจากเจ้าของ',
+  'ownerResponse.deleteAria': 'ลบคำตอบจากเจ้าของ',
+  'ownerResponse.formAria': 'ตอบกลับในฐานะเจ้าของธุรกิจ',
+  'ownerResponse.regionAria': 'คำตอบจากเจ้าของ',
+  'ownerResponse.confirmDelete': 'ลบ?',
+  'ownerResponse.confirmDeleteAria': 'ยืนยันการลบ',
+  'ownerResponse.edited': 'แก้ไขแล้ว',
 };
 
 export const LANGUAGES = [
