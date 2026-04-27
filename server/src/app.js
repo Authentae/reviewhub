@@ -269,7 +269,15 @@ function createApp() {
       if (!row) overallOk = false;
     } catch (err) {
       components.db = 'error';
-      components.db_error = err.message;
+      // Never echo err.message to the public health endpoint in production —
+      // SQLite errors can include filesystem paths, table/column names, or
+      // schema metadata that help an attacker fingerprint the deployment. In
+      // dev/test we keep the detail to make debugging painless. The full
+      // error still flows through captureException via the global handler if
+      // the DB also fails on a real request.
+      if (process.env.NODE_ENV !== 'production') {
+        components.db_error = err.message;
+      }
       overallOk = false;
     }
 
