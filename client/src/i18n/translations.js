@@ -7146,6 +7146,27 @@ const th = {
   'rules.keywordsHint': 'กฎจะทำงานเมื่อพบคำสำคัญทุกคำในข้อความรีวิว เว้นว่างไว้เพื่อให้ตรงกับรีวิวใดก็ได้',
   'rules.applyTag': 'ติดแท็ก (ไม่บังคับ)',
   'rules.noTag': 'ไม่ติดแท็ก',
+
+  // Cookie consent banner — first interaction every user has with the app
+  'cookie.title': 'การตั้งค่าความเป็นส่วนตัวของคุณ',
+  'cookie.body': 'เราใช้คุกกี้และเทคโนโลยีที่คล้ายกันเพื่อให้ ReviewHub ทำงานได้ วัดการใช้งาน และปรับประสบการณ์ของคุณ คุณสามารถยอมรับทั้งหมด ปฏิเสธรายการที่ไม่จำเป็น หรือปรับแต่งได้',
+  'cookie.privacyLink': 'นโยบายความเป็นส่วนตัว',
+  'cookie.alwaysOn': '(เปิดเสมอ)',
+  'cookie.customize': 'ปรับแต่ง',
+  'cookie.declineNonEssential': 'ปฏิเสธรายการที่ไม่จำเป็น',
+  'cookie.acceptAll': 'ยอมรับทั้งหมด',
+  'cookie.back': 'ย้อนกลับ',
+  'cookie.savePrefs': 'บันทึกการตั้งค่า',
+  'cookie.essential.label': 'จำเป็น',
+  'cookie.essential.desc': 'จำเป็นสำหรับการเข้าสู่ระบบ ความปลอดภัย และการให้บริการหลัก ปิดไม่ได้',
+  'cookie.analytics.label': 'การวิเคราะห์',
+  'cookie.analytics.desc': 'สถิติการใช้งานแบบรวมเพื่อให้เราพัฒนาผลิตภัณฑ์ได้ดีขึ้น',
+  'cookie.marketing.label': 'การตลาด',
+  'cookie.marketing.desc': 'อีเมลแจ้งอัปเดตผลิตภัณฑ์และคำแนะนำเริ่มต้นใช้งาน',
+  'cookie.third_party.label': 'การเชื่อมต่อบุคคลที่สาม',
+  'cookie.third_party.desc': 'การแบ่งปันกับแพลตฟอร์มรีวิว (Google, Facebook ฯลฯ) เมื่อคุณเชื่อมต่อ',
+  'cookie.profiling.label': 'การปรับ AI ตามผู้ใช้',
+  'cookie.profiling.desc': 'ใช้ประวัติรีวิวของคุณเพื่อปรับคำตอบที่ AI สร้างให้เข้ากับสไตล์ของคุณ',
 };
 
 export const LANGUAGES = [
