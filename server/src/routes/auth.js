@@ -16,6 +16,16 @@ const {
 // whose terms_version_accepted != current will need to re-accept (handle in UI).
 // Stored on user row so we know WHICH version each user saw.
 const CURRENT_TERMS_VERSION = '2025-04-22';
+
+// Cheap-but-good-enough email shape check. Not RFC 5322 — that requires a
+// 6KB regex and rejects valid addresses anyway. We trust the SMTP delivery
+// step to be the actual proof-of-existence; this just blocks obvious junk.
+// Length cap matches RFC 5321's 254-char practical maximum.
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const EMAIL_MAX_LEN = 254;
+function isValidEmail(s) {
+  return typeof s === 'string' && s.length <= EMAIL_MAX_LEN && EMAIL_RE.test(s);
+}
 const { generateToken, hashToken, verifyUnsubToken } = require('../lib/tokens');
 const { sendVerificationEmail, sendPasswordResetEmail, sendMfaCode, sendEmailChangeAlert, sendEmailChangeConfirmation, portBlockHint } = require('../lib/email');
 const { logAudit } = require('../lib/audit');
@@ -102,8 +112,8 @@ router.post('/register', authAttemptLimiter, async (req, res) => {
   const ageConfirmed = req.body.ageConfirmed === true;
 
   if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
-  if (email.length > 254) return res.status(400).json({ error: 'Email address too long (max 254 characters)' });
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(400).json({ error: 'Invalid email address' });
+  if (email.length > EMAIL_MAX_LEN) return res.status(400).json({ error: `Email address too long (max ${EMAIL_MAX_LEN} characters)` });
+  if (!isValidEmail(email)) return res.status(400).json({ error: 'Invalid email address' });
   const pwCheck = validatePassword(password, { email });
   if (!pwCheck.ok) return res.status(400).json({ error: pwCheck.error });
   if (!acceptedTerms) return res.status(400).json({ error: 'You must agree to the Terms of Service and Privacy Policy to create an account' });
@@ -756,8 +766,7 @@ router.put('/email', emailChangeLimiter, authMiddleware, async (req, res) => {
     const newEmail = (rawEmail || '').trim().toLowerCase();
     const password = rawPassword || '';
     if (!newEmail || !password) return res.status(400).json({ error: 'new_email and password required' });
-    if (newEmail.length > 254) return res.status(400).json({ error: 'Email address too long' });
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
+    if (!isValidEmail(newEmail)) {
       return res.status(400).json({ error: 'Invalid email address' });
     }
 
@@ -1047,7 +1056,7 @@ router.post('/forgot-password', emailSendLimiter, (req, res) => {
       return res.json({ success: true });
     }
     const email = (rawEmail || '').trim().toLowerCase();
-    if (!email || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (!isValidEmail(email)) {
       // Same generic response — don't leak that the format was invalid.
       return res.json({ success: true });
     }
