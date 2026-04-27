@@ -76,6 +76,7 @@ function spawnBurst(x, y, count = 8) {
 
 // ── Hero with cursor-trail stars + live ticker + floating cards ───────────
 function Hero() {
+  const { t } = useI18n();
   const [replyCount, setReplyCount] = useState(2847);
   const lastSpawn = useRef(0);
 
@@ -118,7 +119,7 @@ function Hero() {
         <div className="rh-hero-meta">
           <div className="rh-eyebrow">
             <span className="dot" />
-            <span className="rh-mono">In private beta · join the waitlist</span>
+            <span className="rh-mono">{t('landing.heroBadge')}</span>
           </div>
           <div className="rh-meta-right">
             <div className="avatars"><span>MP</span><span>PS</span><span>JR</span><span>+</span></div>
@@ -126,12 +127,12 @@ function Hero() {
           </div>
         </div>
         <h1 className="rh-display">
-          Every Google review, answered in <span className="time">10 seconds.</span>
+          {t('landing.heroTitle')}
         </h1>
         <div className="rh-hero-bottom">
           <div>
             <p className="rh-lede">
-              ReviewHub pulls your <b>Google reviews</b> into one dashboard, drafts the reply <mark>in your voice</mark> — in Thai or English — and you tap copy. <b>Yelp, Facebook, TripAdvisor, Trustpilot, and Wongnai are coming soon</b>; today we ship Google.
+              {t('landing.heroSubtitle')}
             </p>
             <div className="rh-hero-cta">
               <Link to="/register" className="rh-btn rh-btn-amber rh-btn-lg">Start free <Arrow /></Link>

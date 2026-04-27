@@ -775,6 +775,7 @@
   color: var(--rh-ink-2);
   background: transparent; border: 0;
   transition: color .15s ease;
+  white-space: nowrap;
 }
 .rh-nav-tool::before {
   content: ""; display: inline-block;

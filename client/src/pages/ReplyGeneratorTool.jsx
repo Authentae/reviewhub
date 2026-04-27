@@ -254,13 +254,11 @@ export default function ReplyGeneratorTool() {
                 users don't have to scroll past 600+ pixels of SEO content
                 before they're invited to use this on their own reviews. */}
             <p className="mt-4 text-xs border-t pt-3" style={{ color: 'var(--rh-ink)', opacity: 0.7, borderColor: 'var(--rh-rule, rgba(0,0,0,0.1))' }}>
-              Like this? <a
-                href="https://chrome.google.com/webstore/detail/reviewhub"
-                target="_blank"
-                rel="noopener noreferrer"
+              Like this? <Link
+                to="/register"
                 className="font-medium hover:underline"
                 style={{ color: 'var(--rh-teal)' }}
-              >Get the Chrome extension</a> — same draft, on every review platform you visit, with one click. Free forever.
+              >Sign up free</Link> — connect your Google Business once and we'll draft replies for every new review. Free forever.
             </p>
           </section>
         )}
@@ -269,24 +267,20 @@ export default function ReplyGeneratorTool() {
         <aside className="mt-10 card p-6" style={{ background: 'var(--rh-paper)', borderColor: 'var(--rh-teal)', borderWidth: 1, borderStyle: 'solid' }}>
           <p className="rh-mono" style={{ marginBottom: 8, color: 'var(--rh-teal)' }}>UPGRADE</p>
           <h2 className="text-xl font-bold mb-2" style={{ color: 'var(--rh-ink)', fontFamily: 'var(--rh-serif)', fontWeight: 500 }}>
-            Want this button on every review platform?
+            Want a draft for every Google review automatically?
           </h2>
           <p className="text-sm mb-4 leading-relaxed" style={{ color: 'var(--rh-ink)', opacity: 0.85 }}>
-            Install the free ReviewHub Chrome extension. An ✨ AI Draft button
-            appears next to every review on Yelp, Facebook, TripAdvisor,
-            Trustpilot, Amazon, Etsy, and Google — no copy-pasting, no
-            separate dashboard, no retyping. Free plan forever.
+            Sign up free, connect your Google Business once, and ReviewHub
+            drafts a reply for every new review — in your voice, in Thai or
+            English. You read it, tap copy, paste on Google. Free plan forever,
+            no credit card. Yelp, Facebook, and more platforms coming soon.
           </p>
           <div className="flex items-center gap-3 flex-wrap">
-            <a
-              href="https://chrome.google.com/webstore/detail/reviewhub"
-              target="_blank" rel="noopener noreferrer"
-              className="btn-primary text-sm"
-            >
-              Install Chrome extension
-            </a>
-            <Link to="/register" className="btn-secondary text-sm">
+            <Link to="/register" className="btn-primary text-sm">
               Sign up free (no card needed)
+            </Link>
+            <Link to="/pricing" className="btn-secondary text-sm">
+              See pricing
             </Link>
           </div>
         </aside>
