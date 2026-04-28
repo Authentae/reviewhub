@@ -208,6 +208,23 @@ describe('CSV import', () => {
     assert.strictEqual(rows.length, 0);
   });
 
+  test('skips rows with unparseable created_at and reports error', async () => {
+    const u = await makeUserWithBusiness();
+    const body = csv(
+      HEADER,
+      'google,Valid,5,Good,,2026-04-15T09:30:00Z',
+      'yelp,Bad Date,4,Ok,,not-a-date'
+    );
+    const res = await request(app).post('/api/reviews/import')
+      .set('Authorization', `Bearer ${u.token}`)
+      .set('Content-Type', 'text/plain')
+      .send(body);
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.body.imported, 1);
+    assert.strictEqual(res.body.skipped, 1);
+    assert.ok(res.body.errors[0].error.includes('Invalid date'));
+  });
+
   test('accepts locale-specific platforms (tabelog, naver, dianping, wongnai)', async () => {
     // Lock in that the centralized platform registry covers the locale
     // platforms a Thai/Japanese/Korean/Chinese SMB would actually paste in.

@@ -1574,7 +1574,12 @@ router.post('/import', importLimiter, express.text({ type: ['text/plain', 'text/
       let createdAt = null;
       if (piCreatedAt !== -1 && r[piCreatedAt]) {
         const d = new Date(r[piCreatedAt]);
-        if (!isNaN(d.getTime())) createdAt = d.toISOString().replace('T', ' ').slice(0, 19);
+        if (isNaN(d.getTime())) {
+          errors.push({ row: rowNum, error: `Invalid date: "${r[piCreatedAt]}" — use ISO 8601 (e.g. 2026-04-15T09:30:00Z) or leave blank` });
+          skipped++;
+          continue;
+        }
+        createdAt = d.toISOString().replace('T', ' ').slice(0, 19);
       }
 
       const sentiment = analyzeSentiment(ratingNum, textRaw);
