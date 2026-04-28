@@ -1,11 +1,6 @@
 // Client-side mirror of server/src/lib/platforms.js. Kept in sync manually —
 // the platform list changes rarely, and avoiding a /api roundtrip keeps the
 // review entry form snappy.
-//
-// Client uses this for:
-//   - the platform <select> in the review entry form (filtered by locale)
-//   - the platform <select> on the auto-rules and outreach pages
-//   - display labels in the dashboard / reply tool / analytics
 
 export const GLOBAL_PLATFORMS = [
   'google',
@@ -13,6 +8,31 @@ export const GLOBAL_PLATFORMS = [
   'facebook',
   'tripadvisor',
   'trustpilot',
+];
+
+// Multi-region, vertical-specific platforms. Hotel-bookers, food-delivery,
+// B2B SaaS-review sites, etc. Mostly closed APIs; intake via email forwarding
+// or CSV; reply via copy/paste or extension auto-fill.
+export const INDUSTRY_PLATFORMS = [
+  // Hospitality
+  'booking', 'agoda', 'traveloka', 'airbnb', 'expedia', 'hotels',
+  'klook', 'tripcom', 'hostelworld',
+  // E-commerce
+  'shopee', 'lazada', 'tokopedia', 'aliexpress', 'amazon', 'etsy',
+  // Food delivery
+  'grabfood', 'foodpanda', 'lineman', 'robinhoodth', 'doordash', 'ubereats', 'deliveroo',
+  // B2B SaaS reviews
+  'g2', 'capterra', 'getapp', 'softwareadvice',
+  // Healthcare
+  'zocdoc', 'healthgrades', 'ratemds',
+  // Home services
+  'houzz', 'thumbtack', 'angi',
+  // Beauty / wellness
+  'fresha', 'booksy', 'mindbody', 'vagaro',
+  // Real estate
+  'zillow', 'realtor',
+  // Auto
+  'cars', 'autotrader', 'dealerrater',
 ];
 
 // locale → array of locale-specific platform identifiers
@@ -30,11 +50,73 @@ export const LOCAL_BY_LOCALE = {
 
 // Display labels — shown verbatim in the UI.
 export const PLATFORM_LABELS = {
+  // Global
   google: 'Google',
   yelp: 'Yelp',
   facebook: 'Facebook',
   tripadvisor: 'TripAdvisor',
   trustpilot: 'Trustpilot',
+
+  // Hospitality
+  booking: 'Booking.com',
+  agoda: 'Agoda',
+  traveloka: 'Traveloka',
+  airbnb: 'Airbnb',
+  expedia: 'Expedia',
+  hotels: 'Hotels.com',
+  klook: 'Klook',
+  tripcom: 'Trip.com',
+  hostelworld: 'Hostelworld',
+
+  // E-commerce
+  shopee: 'Shopee',
+  lazada: 'Lazada',
+  tokopedia: 'Tokopedia',
+  aliexpress: 'AliExpress',
+  amazon: 'Amazon',
+  etsy: 'Etsy',
+
+  // Food delivery
+  grabfood: 'GrabFood',
+  foodpanda: 'foodpanda',
+  lineman: 'LINE MAN',
+  robinhoodth: 'Robinhood (TH)',
+  doordash: 'DoorDash',
+  ubereats: 'Uber Eats',
+  deliveroo: 'Deliveroo',
+
+  // B2B SaaS
+  g2: 'G2',
+  capterra: 'Capterra',
+  getapp: 'GetApp',
+  softwareadvice: 'Software Advice',
+
+  // Healthcare
+  zocdoc: 'Zocdoc',
+  healthgrades: 'Healthgrades',
+  ratemds: 'RateMDs',
+
+  // Home services
+  houzz: 'Houzz',
+  thumbtack: 'Thumbtack',
+  angi: 'Angi',
+
+  // Beauty / wellness
+  fresha: 'Fresha',
+  booksy: 'Booksy',
+  mindbody: 'Mindbody',
+  vagaro: 'Vagaro',
+
+  // Real estate
+  zillow: 'Zillow',
+  realtor: 'Realtor.com',
+
+  // Auto
+  cars: 'Cars.com',
+  autotrader: 'AutoTrader',
+  dealerrater: 'DealerRater',
+
+  // Locale-specific
   wongnai: 'Wongnai',
   tabelog: 'Tabelog (食べログ)',
   retty: 'Retty',
@@ -55,12 +137,12 @@ export const PLATFORM_LABELS = {
   kununu: 'kununu',
   reclameaqui: 'Reclame Aqui',
   paginegialle: 'Pagine Gialle',
+
   manual: 'Manual entry',
 };
 
-// Flat list of every locale-specific platform (deduped), used to build
-// the "rest of the world" tail of the dropdown so a user always sees the
-// full registry — they just see their own locale's platforms first.
+// Flat list of every locale-specific platform (deduped). Used to build the
+// "rest of the world" tail of the dropdown.
 const ALL_LOCAL_PLATFORMS = (() => {
   const seen = new Set();
   const out = [];
@@ -74,16 +156,21 @@ const ALL_LOCAL_PLATFORMS = (() => {
 
 /**
  * Return the list of platform identifiers a user should see in dropdowns.
- * Order: globals first (Google/Yelp/Facebook/TripAdvisor/Trustpilot), then
- * the user's locale-specific platforms, then every other locale's platforms,
- * finally 'manual' as the escape hatch. A Thai SMB sees Wongnai near the
- * top; an English SMB sees the 5 globals + the long tail of every locale
- * platform we support — no platform is ever hidden by the locale picker.
+ * Order: globals first, then user's locale platforms, then industry platforms,
+ * then other locales' platforms, finally 'manual'. Total: ~60 entries; users
+ * see their own locale's relevant platforms ranked first but no platform is
+ * ever hidden.
  */
 export function platformsForLocale(locale) {
   const localFirst = LOCAL_BY_LOCALE[locale] || [];
-  const rest = ALL_LOCAL_PLATFORMS.filter((p) => !localFirst.includes(p));
-  return [...GLOBAL_PLATFORMS, ...localFirst, ...rest, 'manual'];
+  const otherLocales = ALL_LOCAL_PLATFORMS.filter((p) => !localFirst.includes(p));
+  return [
+    ...GLOBAL_PLATFORMS,
+    ...localFirst,
+    ...INDUSTRY_PLATFORMS,
+    ...otherLocales,
+    'manual',
+  ];
 }
 
 /** Display label for any platform id. Falls back to a Title-cased id. */

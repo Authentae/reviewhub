@@ -1,34 +1,90 @@
 // Single source of truth for review platform identifiers.
 //
-// Historically each route file defined its own VALID_PLATFORMS list, and
-// they drifted: reviews.js had wongnai but reviewRequests.js didn't,
-// syncReviews.js had 'mock' but autoRules.js didn't, etc. That meant a
-// review created with platform='wongnai' could be intercepted by an
-// auto-rule but the outreach Settings UI couldn't list it. Consolidate
-// here so adding a locale-specific platform is a one-file change.
+// Platforms split into four buckets:
 //
-// Platforms split into three buckets:
+//   GLOBAL    — multi-region, multi-industry (Google, Yelp, Facebook, TripAdvisor, Trustpilot)
+//   INDUSTRY  — multi-region but vertical-specific (hotels, e-commerce, food delivery,
+//               B2B SaaS, healthcare, home services, beauty)
+//   LOCAL     — single-locale platforms (Wongnai for TH, Tabelog for JA, etc.)
+//   INTERNAL  — non-user-facing markers (mock for tests, manual for human-typed entries)
 //
-//   GLOBAL    — multi-region review platforms (Google, Yelp, etc.)
-//   LOCAL     — single-locale platforms users may want to track manually
-//               even though we can't auto-sync them (most have closed APIs
-//               or partner-only access). Listing them lets a Wongnai or
-//               Tabelog review be ingested via the public API or webhook
-//               and routed through templates / outreach / responses.
-//   INTERNAL  — non-user-facing markers (mock for tests, manual for
-//               human-typed entries with no source platform).
-//
-// PLATFORM_META carries the locale and display name. The client uses these
-// for the platform <select> in the review entry form so each market sees
-// the platforms they actually use.
+// PLATFORM_META carries display name, locale, and industry. Locale strings match
+// the i18n locale codes used by the client (i18n/translations.js). Industry
+// is used to surface relevant platforms on the dropdown when the user has set
+// their business type (hotel owner sees Booking/Agoda first; salon sees Fresha).
 
 const GLOBAL = [
-  // Multi-region, listed first so they're the default options across all locales.
+  // Multi-region, multi-industry — listed first across every locale + industry.
   'google',
   'yelp',
   'facebook',
   'tripadvisor',
   'trustpilot',
+];
+
+// Vertical-specific platforms that span regions. Hotel-bookers, food-delivery
+// platforms, B2B SaaS-review sites, etc. Most have closed APIs (partner-only,
+// hotel-side) so review intake works via email forwarding + CSV import; reply
+// posting works via copy/paste or extension auto-fill.
+const INDUSTRY = [
+  // Hospitality / travel — huge in Asia
+  'booking',         // Booking.com — global hotel
+  'agoda',           // Booking-owned, dominant in SEA
+  'traveloka',       // Indonesia-based, huge across SEA
+  'airbnb',          // host-side reviews
+  'expedia',         // global hotel + flight
+  'hotels',          // Hotels.com (Expedia Group)
+  'klook',           // Asia-Pacific tours / activities
+  'tripcom',         // Trip.com / Ctrip — biggest Chinese OTA
+  'hostelworld',     // budget travel reviews
+
+  // Asian e-commerce — massive review surface
+  'shopee',          // dominant in SEA
+  'lazada',          // Alibaba's SEA arm
+  'tokopedia',       // Indonesia
+  'aliexpress',      // global reach
+  'amazon',          // already in extension; canonical here
+  'etsy',            // already in extension
+
+  // Food delivery — review-relevant for restaurants
+  'grabfood',        // GrabFood — biggest in SEA
+  'foodpanda',       // SEA + Asia
+  'lineman',         // Thailand (LINE MAN Wongnai)
+  'robinhoodth',     // Thailand-only delivery (no commission)
+  'doordash',        // US/CA
+  'ubereats',        // global
+  'deliveroo',       // UK + EU + APAC
+
+  // B2B SaaS reviews
+  'g2',              // G2 — biggest B2B software reviews
+  'capterra',        // Gartner-owned, sister to GetApp
+  'getapp',          // Gartner-owned
+  'softwareadvice',  // Gartner-owned
+
+  // Healthcare (US)
+  'zocdoc',
+  'healthgrades',
+  'ratemds',
+
+  // Home / professional services
+  'houzz',           // home design + contractors
+  'thumbtack',       // services marketplace
+  'angi',            // formerly Angie's List
+
+  // Beauty / wellness — common SMB segment
+  'fresha',          // beauty/wellness booking
+  'booksy',          // beauty/wellness booking
+  'mindbody',        // fitness/yoga/spa booking
+  'vagaro',          // beauty/fitness
+
+  // Real estate
+  'zillow',
+  'realtor',         // realtor.com
+
+  // Auto
+  'cars',            // cars.com
+  'autotrader',
+  'dealerrater',
 ];
 
 const LOCAL = [
@@ -74,50 +130,126 @@ const INTERNAL = [
   'manual',   // human-entered review with no original source platform
 ];
 
-const VALID_PLATFORMS = [...GLOBAL, ...LOCAL, ...INTERNAL];
+const VALID_PLATFORMS = [...GLOBAL, ...INDUSTRY, ...LOCAL, ...INTERNAL];
 
-// Display + locale metadata. Locale strings match the i18n locale codes used
-// by the client (i18n/translations.js). Used by the platform <select> on the
-// client to filter options to the user's current locale.
+// Display, locale, and industry metadata.
+//   locale:    i18n locale code, '*' for everywhere, '_internal' for hidden
+//   industry:  optional vertical tag — 'hospitality' | 'ecommerce' |
+//              'food_delivery' | 'saas' | 'healthcare' | 'home_services' |
+//              'beauty' | 'real_estate' | 'auto' | null (general)
 const PLATFORM_META = {
-  google:        { label: 'Google',           locale: '*' },
-  yelp:          { label: 'Yelp',             locale: '*' },
-  facebook:      { label: 'Facebook',         locale: '*' },
-  tripadvisor:   { label: 'TripAdvisor',      locale: '*' },
-  trustpilot:    { label: 'Trustpilot',       locale: '*' },
-  wongnai:       { label: 'Wongnai',          locale: 'th' },
-  tabelog:       { label: 'Tabelog (食べログ)', locale: 'ja' },
-  retty:         { label: 'Retty',            locale: 'ja' },
-  hotpepper:     { label: 'Hot Pepper',       locale: 'ja' },
-  gurunavi:      { label: 'Gurunavi (ぐるなび)', locale: 'ja' },
-  naver:         { label: 'Naver Place',      locale: 'ko' },
-  kakaomap:      { label: 'Kakao Map',        locale: 'ko' },
-  mangoplate:    { label: 'MangoPlate',       locale: 'ko' },
-  dianping:      { label: 'Dianping (大众点评)', locale: 'zh' },
-  meituan:       { label: 'Meituan (美团)',    locale: 'zh' },
-  xiaohongshu:   { label: 'Xiaohongshu (小红书)', locale: 'zh' },
-  thefork:       { label: 'TheFork',          locale: 'fr' }, // also es/it but display once
-  mercadolibre:  { label: 'Mercado Libre',    locale: 'es' },
-  pagesjaunes:   { label: 'Pages Jaunes',     locale: 'fr' },
-  avisverifies:  { label: 'Avis Vérifiés',    locale: 'fr' },
-  holidaycheck:  { label: 'HolidayCheck',     locale: 'de' },
-  ekomi:         { label: 'eKomi',            locale: 'de' },
-  kununu:        { label: 'kununu',           locale: 'de' },
-  reclameaqui:   { label: 'Reclame Aqui',     locale: 'pt' },
-  paginegialle:  { label: 'Pagine Gialle',    locale: 'it' },
-  mock:          { label: 'Mock',             locale: '_internal' },
-  manual:        { label: 'Manual entry',     locale: '*' },
+  // Global, all-industry
+  google:        { label: 'Google',              locale: '*',         industry: null },
+  yelp:          { label: 'Yelp',                locale: '*',         industry: null },
+  facebook:      { label: 'Facebook',            locale: '*',         industry: null },
+  tripadvisor:   { label: 'TripAdvisor',         locale: '*',         industry: 'hospitality' },
+  trustpilot:    { label: 'Trustpilot',          locale: '*',         industry: null },
+
+  // Hospitality
+  booking:       { label: 'Booking.com',         locale: '*',         industry: 'hospitality' },
+  agoda:         { label: 'Agoda',               locale: '*',         industry: 'hospitality' },
+  traveloka:     { label: 'Traveloka',           locale: '*',         industry: 'hospitality' },
+  airbnb:        { label: 'Airbnb',              locale: '*',         industry: 'hospitality' },
+  expedia:       { label: 'Expedia',             locale: '*',         industry: 'hospitality' },
+  hotels:        { label: 'Hotels.com',          locale: '*',         industry: 'hospitality' },
+  klook:         { label: 'Klook',               locale: '*',         industry: 'hospitality' },
+  tripcom:       { label: 'Trip.com',            locale: '*',         industry: 'hospitality' },
+  hostelworld:   { label: 'Hostelworld',         locale: '*',         industry: 'hospitality' },
+
+  // E-commerce
+  shopee:        { label: 'Shopee',              locale: '*',         industry: 'ecommerce' },
+  lazada:        { label: 'Lazada',              locale: '*',         industry: 'ecommerce' },
+  tokopedia:     { label: 'Tokopedia',           locale: '*',         industry: 'ecommerce' },
+  aliexpress:    { label: 'AliExpress',          locale: '*',         industry: 'ecommerce' },
+  amazon:        { label: 'Amazon',              locale: '*',         industry: 'ecommerce' },
+  etsy:          { label: 'Etsy',                locale: '*',         industry: 'ecommerce' },
+
+  // Food delivery
+  grabfood:      { label: 'GrabFood',            locale: '*',         industry: 'food_delivery' },
+  foodpanda:     { label: 'foodpanda',           locale: '*',         industry: 'food_delivery' },
+  lineman:       { label: 'LINE MAN',            locale: 'th',        industry: 'food_delivery' },
+  robinhoodth:   { label: 'Robinhood (TH)',      locale: 'th',        industry: 'food_delivery' },
+  doordash:      { label: 'DoorDash',            locale: '*',         industry: 'food_delivery' },
+  ubereats:      { label: 'Uber Eats',           locale: '*',         industry: 'food_delivery' },
+  deliveroo:     { label: 'Deliveroo',           locale: '*',         industry: 'food_delivery' },
+
+  // B2B SaaS reviews
+  g2:            { label: 'G2',                  locale: '*',         industry: 'saas' },
+  capterra:      { label: 'Capterra',            locale: '*',         industry: 'saas' },
+  getapp:        { label: 'GetApp',              locale: '*',         industry: 'saas' },
+  softwareadvice:{ label: 'Software Advice',     locale: '*',         industry: 'saas' },
+
+  // Healthcare
+  zocdoc:        { label: 'Zocdoc',              locale: '*',         industry: 'healthcare' },
+  healthgrades:  { label: 'Healthgrades',        locale: '*',         industry: 'healthcare' },
+  ratemds:       { label: 'RateMDs',             locale: '*',         industry: 'healthcare' },
+
+  // Home services
+  houzz:         { label: 'Houzz',               locale: '*',         industry: 'home_services' },
+  thumbtack:     { label: 'Thumbtack',           locale: '*',         industry: 'home_services' },
+  angi:          { label: 'Angi',                locale: '*',         industry: 'home_services' },
+
+  // Beauty / wellness
+  fresha:        { label: 'Fresha',              locale: '*',         industry: 'beauty' },
+  booksy:        { label: 'Booksy',              locale: '*',         industry: 'beauty' },
+  mindbody:      { label: 'Mindbody',            locale: '*',         industry: 'beauty' },
+  vagaro:        { label: 'Vagaro',              locale: '*',         industry: 'beauty' },
+
+  // Real estate
+  zillow:        { label: 'Zillow',              locale: '*',         industry: 'real_estate' },
+  realtor:       { label: 'Realtor.com',         locale: '*',         industry: 'real_estate' },
+
+  // Auto
+  cars:          { label: 'Cars.com',            locale: '*',         industry: 'auto' },
+  autotrader:    { label: 'AutoTrader',          locale: '*',         industry: 'auto' },
+  dealerrater:   { label: 'DealerRater',         locale: '*',         industry: 'auto' },
+
+  // Local — original locale-specific platforms
+  wongnai:       { label: 'Wongnai',             locale: 'th',        industry: null },
+  tabelog:       { label: 'Tabelog (食べログ)',  locale: 'ja',        industry: null },
+  retty:         { label: 'Retty',               locale: 'ja',        industry: null },
+  hotpepper:     { label: 'Hot Pepper',          locale: 'ja',        industry: null },
+  gurunavi:      { label: 'Gurunavi (ぐるなび)', locale: 'ja',        industry: null },
+  naver:         { label: 'Naver Place',         locale: 'ko',        industry: null },
+  kakaomap:      { label: 'Kakao Map',           locale: 'ko',        industry: null },
+  mangoplate:    { label: 'MangoPlate',          locale: 'ko',        industry: null },
+  dianping:      { label: 'Dianping (大众点评)', locale: 'zh',        industry: null },
+  meituan:       { label: 'Meituan (美团)',      locale: 'zh',        industry: null },
+  xiaohongshu:   { label: 'Xiaohongshu (小红书)', locale: 'zh',       industry: null },
+  thefork:       { label: 'TheFork',             locale: 'fr',        industry: null },
+  mercadolibre:  { label: 'Mercado Libre',       locale: 'es',        industry: 'ecommerce' },
+  pagesjaunes:   { label: 'Pages Jaunes',        locale: 'fr',        industry: null },
+  avisverifies:  { label: 'Avis Vérifiés',       locale: 'fr',        industry: null },
+  holidaycheck:  { label: 'HolidayCheck',        locale: 'de',        industry: 'hospitality' },
+  ekomi:         { label: 'eKomi',               locale: 'de',        industry: null },
+  kununu:        { label: 'kununu',              locale: 'de',        industry: null },
+  reclameaqui:   { label: 'Reclame Aqui',        locale: 'pt',        industry: null },
+  paginegialle:  { label: 'Pagine Gialle',       locale: 'it',        industry: null },
+
+  // Internal
+  mock:          { label: 'Mock',                locale: '_internal', industry: null },
+  manual:        { label: 'Manual entry',        locale: '*',         industry: null },
 };
 
 function isValidPlatform(p) {
   return typeof p === 'string' && VALID_PLATFORMS.includes(p);
 }
 
+// Return platforms tagged with the given industry, in registry order.
+function platformsForIndustry(industry) {
+  if (!industry) return [];
+  return Object.keys(PLATFORM_META).filter(
+    (id) => PLATFORM_META[id].industry === industry
+  );
+}
+
 module.exports = {
   VALID_PLATFORMS,
   GLOBAL,
+  INDUSTRY,
   LOCAL,
   INTERNAL,
   PLATFORM_META,
   isValidPlatform,
+  platformsForIndustry,
 };
