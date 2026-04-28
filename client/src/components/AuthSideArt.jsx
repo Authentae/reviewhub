@@ -61,11 +61,24 @@ export default function AuthSideArt({ eyebrow, title }) {
             </figcaption>
           </figure>
 
-          {/* Platform chips */}
+          {/* Platform chips — Google is live today, the rest are scaffolded
+              providers waiting on real API integration. Don't imply current
+              support for non-Google platforms; chip opacity downstreams the
+              status visually, screen readers get the explicit hint. */}
           <p className="rh-mono rh-auth-plat-label">{t('landing.platformsLabel')}</p>
           <div className="rh-auth-platforms">
-            {['Google', 'Yelp', 'Facebook', 'TripAdvisor', 'Trustpilot', 'Wongnai'].map((name) => (
-              <span key={name}>{name}</span>
+            {[
+              { name: 'Google', live: true },
+              { name: 'Yelp', live: false },
+              { name: 'Facebook', live: false },
+              { name: 'TripAdvisor', live: false },
+              { name: 'Trustpilot', live: false },
+              { name: 'Wongnai', live: false },
+            ].map(({ name, live }) => (
+              <span key={name} style={live ? undefined : { opacity: 0.55 }}
+                aria-label={live ? name : `${name} — ${t('marquee.comingSoon', 'Coming soon')}`}>
+                {name}
+              </span>
             ))}
           </div>
         </div>
