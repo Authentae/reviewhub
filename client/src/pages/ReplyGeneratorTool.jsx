@@ -293,21 +293,21 @@ export default function ReplyGeneratorTool() {
         {draft && (
           <section aria-labelledby="rg-result" className="mt-6 card p-6">
             <h2 id="rg-result" className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3">
-              Your drafted reply
+              {t('tool.resultTitle', 'Your drafted reply')}
             </h2>
             <textarea
               className="input resize-none mb-3"
               rows={6}
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
-              aria-label="Drafted reply (editable)"
+              aria-label={t('tool.resultAria', 'Drafted reply (editable)')}
             />
             <div className="flex items-center gap-2 flex-wrap">
               <button type="button" onClick={handleCopy} className="btn-primary text-sm">
-                {copied ? 'Copied ✓' : 'Copy reply'}
+                {copied ? t('tool.copied', 'Copied ✓') : t('tool.copyReply', 'Copy reply')}
               </button>
               <button type="button" onClick={() => { setDraft(null); setForm(f => ({ ...f, review_text: '' })); }} className="btn-secondary text-sm">
-                Draft another
+                {t('tool.draftAnother', 'Draft another')}
               </button>
             </div>
             {/* Inline conversion ask — shown right at the magic moment so
