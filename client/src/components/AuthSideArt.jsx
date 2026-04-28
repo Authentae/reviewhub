@@ -53,10 +53,10 @@ export default function AuthSideArt({ eyebrow, title }) {
             </div>
             <blockquote>"{t('landing.testimonial1')}"</blockquote>
             <figcaption>
-              <span className="portrait">M</span>
+              <span className="portrait">{t('landing.testimonialInitial', 'M')}</span>
               <span>
-                <b>Maria S.</b>
-                <span className="biz">Downtown Café</span>
+                <b>{t('landing.testimonialAuthor', 'Maria S.')}</b>
+                <span className="biz">{t('landing.testimonialBiz', 'Downtown Café')}</span>
               </span>
             </figcaption>
           </figure>
