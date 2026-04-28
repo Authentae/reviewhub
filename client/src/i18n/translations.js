@@ -7558,6 +7558,17 @@ const th = {
   'legal.terms.severability': '13. การแยกส่วน การสละสิทธิ การโอน',
   'legal.terms.changes': '14. การเปลี่ยนแปลงข้อกำหนดเหล่านี้',
   'legal.terms.contact': '15. ติดต่อ',
+  // Refund Policy section headings (Thai). Bodies stay English.
+  'legal.refund.intro': 'นโยบายการคืนเงิน',
+  'legal.refund.trial': '1. แพ็กเกจฟรี',
+  'legal.refund.firstMonth': '2. การรับประกันคืนเงินภายใน 30 วัน (เดือนแรกที่ชำระ)',
+  'legal.refund.ongoing': '3. การสมัครต่อเนื่อง — คิดตามสัดส่วนเมื่อยกเลิก ไม่มีการคืนเงิน',
+  'legal.refund.exceptions': '4. ข้อยกเว้น — กรณีที่เราจะคืนเงินหรือให้เครดิต',
+  'legal.refund.noRefund': '5. กรณีที่ไม่สามารถคืนเงินได้',
+  'legal.refund.process': '6. วิธีการขอคืนเงิน',
+  'legal.refund.chargeback': '7. การโต้แย้งการชำระเงิน',
+  'legal.refund.changes': '8. การเปลี่ยนแปลงนโยบายนี้',
+  'legal.refund.contact': '9. ติดต่อ',
 
   // ReviewCard action affordances — pin, flag, status, sentiment override.
   // Visible on every review row in the dashboard.
