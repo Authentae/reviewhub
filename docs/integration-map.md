@@ -42,6 +42,96 @@ This doc is a menu, not a roadmap. Pick what helps the next 100 paying customers
 | **App Store / Play Store reviews** | 🟢 | 🌏 | If customer ships an app. Both have official APIs. |
 | **G2 / Capterra** | 🟡 | 🌏 | Only matters if you're a B2B SaaS. Not your customer's first concern. |
 
+### Locale-specific review platforms (one row per language we ship)
+
+If we want to win in a market, we need to read THAT market's #1 review site. Google + Yelp won't do it everywhere.
+
+#### 🇯🇵 Japanese (`ja`)
+| Platform | Effort | Why |
+|---|---|---|
+| **Tabelog** (食べログ) | 🔴 | **#1 restaurant review site in Japan.** No public API; requires partner agreement. The Yelp of Japan but bigger. |
+| **Retty** | 🔴 | #2 restaurant reviews, mobile-first. Partner API only. |
+| **Hot Pepper Beauty / Gourmet** (Recruit) | 🔴 | Salons + restaurants. Recruit partner program. |
+| **Gurunavi** (ぐるなび) | 🔴 | Restaurants. Open API for booking; reviews behind partner. |
+| **Google JP** | `LIVE` | Google business reviews already covered — but in JA. |
+| **Indeed Japan** | 🟡 | Employer reviews if customer is recruiter. |
+
+#### 🇰🇷 Korean (`ko`)
+| Platform | Effort | Why |
+|---|---|---|
+| **Naver Place / Naver Map reviews** | 🔴 | **Korea's Google.** ~70% search share inside KR. Naver Search Open API + Naver Place partner. |
+| **Kakao Map reviews** | 🔴 | #2 map/place reviews after Naver. Kakao Developers API gated. |
+| **MangoPlate** | 🟡 | Restaurant reviews. Was acquired; API status uncertain. |
+| **Coupang seller reviews** | 🟡 | E-commerce equivalent of Shopee. |
+| **Google KR** | `LIVE` | Already covered. |
+
+#### 🇨🇳 Chinese (`zh`)
+| Platform | Effort | Why |
+|---|---|---|
+| **Dianping** (大众点评) | 🔴 | **China's #1 review site for everything local.** Owned by Meituan. Partner-only API; mainland China legal complexity. |
+| **Meituan reviews** | 🔴 | Same parent as Dianping; food delivery + reviews combined. |
+| **Xiaohongshu** (小红书 / Little Red Book) | 🔴 | Lifestyle reviews / UGC. Becoming dominant for Gen Z. No clean API. |
+| **Weibo brand mentions** | 🟡 | Search via API for your brand. Not strictly reviews. |
+| **WeChat Mini-program reviews** | 🔴 | Tencent ecosystem. Each brand needs its own mini-program. |
+| **Taobao / Tmall seller reviews** | 🟡 | Alibaba Open Platform. E-commerce sellers. |
+
+#### 🇪🇸 Spanish (`es`)
+| Platform | Effort | Why |
+|---|---|---|
+| **TheFork** (formerly El Tenedor) | 🟡 | TripAdvisor-owned restaurant booking + reviews across Spain/LATAM. Open API for partners. |
+| **Atrápalo** | 🔴 | Spain travel/leisure reviews. Niche. |
+| **Trustpilot ES** | `READY` | Same Trustpilot scaffold; works for ES locale. |
+| **MercadoLibre seller reviews** | 🟡 | LATAM e-commerce — Argentina, Brazil, Mexico, Chile dominant. Public API. |
+| **Yelp ES** | `READY` | Coverage is light in Spain proper, OK in US Hispanic. |
+| **Google ES** | `LIVE` | |
+
+#### 🇫🇷 French (`fr`)
+| Platform | Effort | Why |
+|---|---|---|
+| **TheFork (LaFourchette)** | 🟡 | **#1 restaurant booking/reviews in France.** Same partner channel as ES. |
+| **Pages Jaunes** | 🟡 | French Yellow Pages — has business reviews. API exists. |
+| **Doctolib** | 🔴 | Healthcare provider reviews. Closed API. |
+| **Trustpilot FR** | `READY` | |
+| **Google FR** | `LIVE` | |
+| **Avis Vérifiés** (Net Reviews / Skeepers) | 🟡 | French e-commerce review aggregator. Common on FR shops. |
+
+#### 🇩🇪 German (`de`)
+| Platform | Effort | Why |
+|---|---|---|
+| **HolidayCheck** | 🟡 | **#1 German hotel review site.** Travel-heavy. Partner API. |
+| **Yelp DE** | `READY` | Yelp has surprisingly real share in DE/AT/CH. |
+| **eKomi** | 🟡 | DE-headquartered SaaS for collected reviews. Customers might already be on it. |
+| **Trustpilot DE** | `READY` | |
+| **Kununu** | 🟡 | German employer reviews (Glassdoor-equivalent). Owned by XING/New Work. |
+| **Jameda** | 🔴 | Doctor reviews. Closed. |
+| **Google DE** | `LIVE` | |
+
+#### 🇵🇹 Portuguese (`pt`) — Brazil + Portugal
+| Platform | Effort | Why |
+|---|---|---|
+| **Reclame Aqui** | 🔴 | **Brazil's biggest complaint/review site.** Brand reputation lives here. Closed API; expensive partner program. Critical for any BR launch. |
+| **TripAdvisor BR/PT** | `READY` | TripAdvisor scaffold covers both. |
+| **Mercado Livre seller reviews** | 🟡 | Brazil e-commerce. Same MELI Open Platform as ES. |
+| **TheFork PT** | 🟡 | Restaurant booking, smaller than Spain side. |
+| **B2W/Submarino seller reviews** | 🟡 | BR e-commerce, niche. |
+| **Trustpilot PT/BR** | `READY` | |
+| **Google PT/BR** | `LIVE` | |
+
+#### 🇮🇹 Italian (`it`)
+| Platform | Effort | Why |
+|---|---|---|
+| **TheFork IT** | 🟡 | Same partner channel as FR/ES. |
+| **Trustpilot IT** | `READY` | |
+| **2Spaghi** | 🔴 | Niche IT restaurant reviews. Probably not worth it. |
+| **PagineGialle** | 🟡 | IT Yellow Pages with reviews. |
+| **Google IT** | `LIVE` | |
+
+#### 🇬🇧🇺🇸 English (`en`) — already comprehensive
+Yelp, TripAdvisor, Trustpilot, Google, Booking, Foursquare — covered above. No additional EN-specific platforms missing.
+
+#### 🇹🇭 Thai (`th`)
+Already detailed in main "review sources" section above. Wongnai, Grab, Foodpanda, Pantip, Shopee, Lazada, etc.
+
 ---
 
 ## 2. Communication — review-request channels (the output pipe — how we ASK for reviews)
