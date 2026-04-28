@@ -1415,6 +1415,22 @@ function parseCsv(text) {
   return result;
 }
 
+// GET /api/reviews/import/template — downloads a starter CSV with the
+// expected headers + 3 example rows (mixing English, Thai, and Japanese
+// to demonstrate UTF-8 + locale-platform support). Lowers the barrier
+// for SMBs who'd otherwise have to read the docs to figure out the format.
+router.get('/import/template', (req, res) => {
+  const lines = [
+    'platform,reviewer_name,rating,review_text,response_text,created_at',
+    'google,Alice Johnson,5,"Best coffee in town! Staff super friendly.",Thanks Alice — see you next morning!,2026-04-15T09:30:00Z',
+    'wongnai,สมชาย,4,"กาแฟอร่อย แต่รอนาน",ขอบคุณค่ะ จะปรับปรุงเรื่องเวลานะคะ,',
+    'tabelog,田中,3,"普通でした。場所はいい。",ご来店ありがとうございました。改善に努めます。,',
+  ];
+  res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+  res.setHeader('Content-Disposition', 'attachment; filename="reviewhub-import-template.csv"');
+  res.send(lines.join('\r\n') + '\r\n');
+});
+
 router.post('/import', importLimiter, express.text({ type: ['text/plain', 'text/csv'], limit: '500kb' }), (req, res) => {
   try {
     const business = getUserBusiness(req.user.id);
