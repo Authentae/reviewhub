@@ -71,7 +71,7 @@ router.get('/', limiter, (req, res) => {
 // POST /api/auto-rules
 router.post('/', limiter, (req, res) => {
   const count = get('SELECT COUNT(*) as n FROM auto_rules WHERE user_id = ?', [req.user.id]);
-  if (count.n >= MAX_RULES) return res.status(400).json({ error: `Maximum ${MAX_RULES} rules per account` });
+  if ((count?.n ?? 0) >= MAX_RULES) return res.status(400).json({ error: `Maximum ${MAX_RULES} rules per account` });
 
   const err = validateRule(req.body);
   if (err) return res.status(400).json({ error: err });

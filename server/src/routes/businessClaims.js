@@ -138,63 +138,78 @@ adminRouter.use((req, res, next) => {
 
 // GET /api/admin/claims?status=pending&limit=50
 adminRouter.get('/', (req, res) => {
-  const status = ['pending', 'approved', 'denied'].includes(req.query.status)
-    ? req.query.status : 'pending';
-  const limit = Math.min(200, Math.max(1, parseInt(req.query.limit, 10) || 50));
-  const rows = all(
-    `SELECT c.id, c.user_id, u.email AS user_email,
-            c.business_id, b.business_name,
-            c.status, c.evidence, c.denial_reason,
-            c.reviewed_by_user_id, c.reviewed_at, c.created_at
-     FROM business_claims c
-     LEFT JOIN users u ON u.id = c.user_id
-     LEFT JOIN businesses b ON b.id = c.business_id
-     WHERE c.status = ?
-     ORDER BY c.created_at DESC LIMIT ?`,
-    [status, limit]
-  );
-  res.setHeader('Cache-Control', 'no-store, private');
-  res.json({ rows, status, limit });
+  try {
+    const status = ['pending', 'approved', 'denied'].includes(req.query.status)
+      ? req.query.status : 'pending';
+    const limit = Math.min(200, Math.max(1, parseInt(req.query.limit, 10) || 50));
+    const rows = all(
+      `SELECT c.id, c.user_id, u.email AS user_email,
+              c.business_id, b.business_name,
+              c.status, c.evidence, c.denial_reason,
+              c.reviewed_by_user_id, c.reviewed_at, c.created_at
+       FROM business_claims c
+       LEFT JOIN users u ON u.id = c.user_id
+       LEFT JOIN businesses b ON b.id = c.business_id
+       WHERE c.status = ?
+       ORDER BY c.created_at DESC LIMIT ?`,
+      [status, limit]
+    );
+    res.setHeader('Cache-Control', 'no-store, private');
+    res.json({ rows, status, limit });
+  } catch (err) {
+    captureException(err, { route: 'admin.claims.list' });
+    res.status(500).json({ error: 'Server error' });
+  }
 });
 
 // POST /api/admin/claims/:id/approve
 adminRouter.post('/:id/approve', (req, res) => {
-  const id = parseId(req.params.id);
-  if (!id) return res.status(400).json({ error: 'Invalid claim ID' });
-  const claim = get('SELECT id, status FROM business_claims WHERE id = ?', [id]);
-  if (!claim) return res.status(404).json({ error: 'Claim not found' });
-  if (claim.status !== 'pending') {
-    return res.status(409).json({ error: `Claim is already ${claim.status}` });
+  try {
+    const id = parseId(req.params.id);
+    if (!id) return res.status(400).json({ error: 'Invalid claim ID' });
+    const claim = get('SELECT id, status FROM business_claims WHERE id = ?', [id]);
+    if (!claim) return res.status(404).json({ error: 'Claim not found' });
+    if (claim.status !== 'pending') {
+      return res.status(409).json({ error: `Claim is already ${claim.status}` });
+    }
+    run(
+      `UPDATE business_claims
+       SET status = 'approved', reviewed_by_user_id = ?, reviewed_at = datetime('now'),
+           denial_reason = NULL
+       WHERE id = ?`,
+      [req.user.id, id]
+    );
+    res.json({ id, status: 'approved' });
+  } catch (err) {
+    captureException(err, { route: 'admin.claims.approve' });
+    res.status(500).json({ error: 'Server error' });
   }
-  run(
-    `UPDATE business_claims
-     SET status = 'approved', reviewed_by_user_id = ?, reviewed_at = datetime('now'),
-         denial_reason = NULL
-     WHERE id = ?`,
-    [req.user.id, id]
-  );
-  res.json({ id, status: 'approved' });
 });
 
 // POST /api/admin/claims/:id/deny
 adminRouter.post('/:id/deny', (req, res) => {
-  const id = parseId(req.params.id);
-  if (!id) return res.status(400).json({ error: 'Invalid claim ID' });
-  const claim = get('SELECT id, status FROM business_claims WHERE id = ?', [id]);
-  if (!claim) return res.status(404).json({ error: 'Claim not found' });
-  if (claim.status !== 'pending') {
-    return res.status(409).json({ error: `Claim is already ${claim.status}` });
+  try {
+    const id = parseId(req.params.id);
+    if (!id) return res.status(400).json({ error: 'Invalid claim ID' });
+    const claim = get('SELECT id, status FROM business_claims WHERE id = ?', [id]);
+    if (!claim) return res.status(404).json({ error: 'Claim not found' });
+    if (claim.status !== 'pending') {
+      return res.status(409).json({ error: `Claim is already ${claim.status}` });
+    }
+    const r = asTrimmedString(req.body?.reason, 'reason', { maxLen: 1000, allowEmpty: true });
+    if (!r.ok) return res.status(400).json({ error: r.error });
+    run(
+      `UPDATE business_claims
+       SET status = 'denied', reviewed_by_user_id = ?, reviewed_at = datetime('now'),
+           denial_reason = ?
+       WHERE id = ?`,
+      [req.user.id, r.value || null, id]
+    );
+    res.json({ id, status: 'denied', denial_reason: r.value || null });
+  } catch (err) {
+    captureException(err, { route: 'admin.claims.deny' });
+    res.status(500).json({ error: 'Server error' });
   }
-  const r = asTrimmedString(req.body?.reason, 'reason', { maxLen: 1000, allowEmpty: true });
-  if (!r.ok) return res.status(400).json({ error: r.error });
-  run(
-    `UPDATE business_claims
-     SET status = 'denied', reviewed_by_user_id = ?, reviewed_at = datetime('now'),
-         denial_reason = ?
-     WHERE id = ?`,
-    [req.user.id, r.value || null, id]
-  );
-  res.json({ id, status: 'denied', denial_reason: r.value || null });
 });
 
 module.exports = router;
