@@ -49,7 +49,7 @@ const readLimiter = rateLimit({
   skip: () => process.env.NODE_ENV === 'test',
 });
 
-const VALID_PLATFORMS = ['google', 'yelp', 'facebook'];
+const { VALID_PLATFORMS } = require('../lib/platforms');
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function getUserBusiness(userId) {

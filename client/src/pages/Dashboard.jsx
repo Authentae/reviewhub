@@ -14,6 +14,7 @@ import ValueReceipt from '../components/ValueReceipt';
 import { useI18n } from '../context/I18nContext';
 import { useUser } from '../context/UserContext';
 import useSeedDemo from '../hooks/useSeedDemo';
+import { platformsForLocale, platformLabel } from '../lib/platforms';
 
 // Filter/sort options are translated inline via t() in the render
 
@@ -25,14 +26,25 @@ function isoOffset(days) {
 }
 
 // Module-level constants — defined once, never recreated on re-render
-const VALID_PLATFORMS_CLIENT = ['google', 'yelp', 'facebook'];
+// Platform list is locale-aware at render time via platformsForLocale().
+// This shorter list stays here only as a permissive validator for the URL
+// query param — accept anything we know about, fall through to '' otherwise.
+const ALL_KNOWN_PLATFORMS = [
+  'google', 'yelp', 'facebook', 'tripadvisor', 'trustpilot',
+  'wongnai', 'tabelog', 'retty', 'hotpepper', 'gurunavi',
+  'naver', 'kakaomap', 'mangoplate',
+  'dianping', 'meituan', 'xiaohongshu',
+  'thefork', 'mercadolibre', 'pagesjaunes', 'avisverifies',
+  'holidaycheck', 'ekomi', 'kununu', 'reclameaqui', 'paginegialle',
+  'manual',
+];
 const VALID_SENTIMENTS_CLIENT = ['positive', 'negative', 'neutral'];
 const VALID_SORT_CLIENT = ['newest', 'oldest', 'rating_asc', 'rating_desc', 'unresponded_first', 'pinned_first'];
 const VALID_RESPONDED_CLIENT = ['yes', 'no'];
 const VALID_RATINGS_CLIENT = ['1', '2', '3', '4', '5'];
 
 export default function Dashboard() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const toast = useToast();
   const { user, refresh: refreshUser } = useUser();
   // Optimistic flag so the checklist hides instantly on dismiss — the server
@@ -47,7 +59,7 @@ export default function Dashboard() {
   const rawSort = searchParams.get('sort') || 'newest';
   const rawRating = searchParams.get('rating') || '';
 
-  const [platform, setPlatform] = useState(VALID_PLATFORMS_CLIENT.includes(rawPlatform) ? rawPlatform : '');
+  const [platform, setPlatform] = useState(ALL_KNOWN_PLATFORMS.includes(rawPlatform) ? rawPlatform : '');
   const [sentiment, setSentiment] = useState(VALID_SENTIMENTS_CLIENT.includes(rawSentiment) ? rawSentiment : '');
   const [responded, setResponded] = useState(VALID_RESPONDED_CLIENT.includes(rawResponded) ? rawResponded : '');
   const [sort, setSort] = useState(VALID_SORT_CLIENT.includes(rawSort) ? rawSort : 'newest');
@@ -544,9 +556,9 @@ export default function Dashboard() {
           <div className="flex gap-2 flex-wrap items-center">
             <select aria-label={t('dashboard.filter.platformAriaLabel')} value={platform} onChange={handleFilterChange(setPlatform)} className="input w-auto text-sm">
               <option value="">{t('dashboard.filter.allPlatforms')}</option>
-              <option value="google">Google</option>
-              <option value="yelp">Yelp</option>
-              <option value="facebook">Facebook</option>
+              {platformsForLocale(lang).map((p) => (
+                <option key={p} value={p}>{platformLabel(p)}</option>
+              ))}
             </select>
             <select aria-label={t('dashboard.filter.sentimentAriaLabel')} value={sentiment} onChange={handleFilterChange(setSentiment)} className="input w-auto text-sm">
               <option value="">{t('dashboard.filter.allSentiments')}</option>

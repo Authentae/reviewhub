@@ -69,13 +69,13 @@ function createApp() {
         // plausible.io serves the analytics script tag <script defer src="...">
         // when Plausible is enabled. Allowed here so the snippet works without
         // a CSP redeploy.
-        scriptSrc: ["'self'", INLINE_SCRIPT_HASH, 'https://plausible.io'],
+        scriptSrc: ["'self'", INLINE_SCRIPT_HASH, 'https://plausible.io', 'https://widget.frill.co'],
         // Google Fonts: CSS from fonts.googleapis.com, woff2 from fonts.gstatic.com.
         // Without these in style-src/font-src, the editorial typography
         // (Instrument Serif / Inter Tight / JetBrains Mono) silently falls
         // back to system sans-serif on every page — visible regression.
         styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-        imgSrc: ["'self'", 'data:'],
+        imgSrc: ["'self'", 'data:', 'https://*.frill.co', 'https://*.frillcdn.com'],
         // connect-src additions:
         // - *.ingest.us.sentry.io / *.ingest.sentry.io: frontend Sentry SDK
         //   POST /envelope/ events from the browser. Without this the SDK
@@ -88,7 +88,9 @@ function createApp() {
           'https://*.ingest.us.sentry.io',
           'https://*.ingest.sentry.io',
           'https://plausible.io',
+          'https://api.frill.co',
         ],
+        // Frill loads suggestion images and avatars; allow data: + frill-cdn.
         fontSrc: ["'self'", 'https://fonts.gstatic.com'],
         objectSrc: ["'none'"],
         frameAncestors: ["'none'"],
@@ -289,6 +291,7 @@ function createApp() {
       sentry: 'unknown',
       analytics: 'unknown',
       line: 'unknown',
+      frill: 'unknown',
     };
     let overallOk = true;
 
@@ -368,6 +371,9 @@ function createApp() {
     components.line = (process.env.LINE_CHANNEL_ACCESS_TOKEN && process.env.LINE_OWNER_USER_ID)
       ? 'configured'
       : 'not-configured';
+
+    // Frill — feedback widget. Build-time env, but we can detect intent.
+    components.frill = process.env.VITE_FRILL_KEY ? 'configured' : 'not-configured';
 
     const payload = {
       ok: overallOk,

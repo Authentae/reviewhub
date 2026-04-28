@@ -5,6 +5,7 @@ import { useToast } from '../components/Toast';
 import { clearToken } from '../lib/auth';
 import usePageTitle from '../hooks/usePageTitle';
 import api from '../lib/api';
+import { platformsForLocale, platformLabel } from '../lib/platforms';
 import { invalidateTemplateCache, invalidateTagCache } from '../components/ReviewCard';
 import TagBadge from '../components/TagBadge';
 import { useTheme } from '../context/ThemeContext';
@@ -851,7 +852,7 @@ const RULE_SENTIMENTS = ['', 'positive', 'neutral', 'negative'];
 const BLANK_RULE = { name: '', platform: '', min_rating: '', max_rating: '', sentiment: '', response_text: '', enabled: true, match_keywords_text: '', tag_id: '' };
 
 function AutoRules() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const toast = useToast();
   const [rules, setRules] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -966,7 +967,7 @@ function AutoRules() {
             <label className="text-xs font-medium text-gray-600 dark:text-gray-300 block mb-0.5">{t('rules.platform')}</label>
             <select value={value.platform || ''} onChange={e => onChange({ ...value, platform: e.target.value })} className="input text-xs w-full">
               <option value="">{t('rules.anyPlatform')}</option>
-              {RULE_PLATFORMS.filter(Boolean).map(p => <option key={p} value={p}>{p.charAt(0).toUpperCase() + p.slice(1)}</option>)}
+              {platformsForLocale(lang).map(p => <option key={p} value={p}>{platformLabel(p)}</option>)}
             </select>
           </div>
           <div>

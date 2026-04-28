@@ -21,7 +21,11 @@ const { getProvider } = require('../lib/providers');
 const { analyzeSentiment } = require('../db/seed');
 const { captureException } = require('../lib/errorReporter');
 
-const VALID_PLATFORMS = ['google', 'yelp', 'facebook', 'mock'];
+// Only platforms with an implemented provider (lib/providers/*.js) belong
+// here — the cron job will skip rows whose platform isn't on this list.
+// This is intentionally narrower than lib/platforms.VALID_PLATFORMS, which
+// covers manual + webhook ingestion paths that don't need a provider class.
+const VALID_PLATFORMS = ['google', 'yelp', 'facebook', 'tripadvisor', 'trustpilot', 'wongnai', 'mock'];
 
 // Sync a single connection row. Returns { inserted, error }.
 async function syncOne(connectionId) {

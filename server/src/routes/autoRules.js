@@ -15,7 +15,7 @@ const limiter = rateLimit({
   skip: () => process.env.NODE_ENV === 'test',
 });
 
-const VALID_PLATFORMS = ['google', 'yelp', 'facebook', 'tripadvisor', 'trustpilot', 'wongnai'];
+const { VALID_PLATFORMS } = require('../lib/platforms');
 const VALID_SENTIMENTS = ['positive', 'negative', 'neutral'];
 const MAX_RULES = 20;
 

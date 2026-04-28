@@ -6,9 +6,7 @@ import { useToast } from '../components/Toast';
 import usePageTitle from '../hooks/usePageTitle';
 import api from '../lib/api';
 import { useI18n } from '../context/I18nContext';
-
-const PLATFORMS = ['google', 'yelp', 'facebook'];
-const PLATFORM_LABELS = { google: 'Google', yelp: 'Yelp', facebook: 'Facebook' };
+import { platformsForLocale, platformLabel } from '../lib/platforms';
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function StatCard({ label, value, color = '' }) {
@@ -219,8 +217,8 @@ export default function ReviewRequests() {
                   {t('requests.platform')}
                 </label>
                 <select value={platform} onChange={e => setPlatform(e.target.value)} className="input text-sm w-full">
-                  {PLATFORMS.map(p => (
-                    <option key={p} value={p}>{PLATFORM_LABELS[p]}</option>
+                  {platformsForLocale(lang).map(p => (
+                    <option key={p} value={p}>{platformLabel(p)}</option>
                   ))}
                 </select>
               </div>
@@ -275,7 +273,7 @@ export default function ReviewRequests() {
                   {t('requests.platform')}
                 </label>
                 <select value={bulkPlatform} onChange={e => setBulkPlatform(e.target.value)} className="input text-sm w-full">
-                  {PLATFORMS.map(p => <option key={p} value={p}>{PLATFORM_LABELS[p]}</option>)}
+                  {platformsForLocale(lang).map(p => <option key={p} value={p}>{platformLabel(p)}</option>)}
                 </select>
               </div>
             </div>
@@ -349,7 +347,7 @@ export default function ReviewRequests() {
                           <p className="text-xs text-gray-400 truncate max-w-[160px]">{rr.customer_email}</p>
                         </td>
                         <td className="px-4 py-3 hidden sm:table-cell">
-                          <span className="capitalize text-gray-600 dark:text-gray-300 text-xs">{PLATFORM_LABELS[rr.platform] || rr.platform}</span>
+                          <span className="capitalize text-gray-600 dark:text-gray-300 text-xs">{platformLabel(rr.platform)}</span>
                         </td>
                         <td className="px-4 py-3 hidden md:table-cell text-xs text-gray-500 dark:text-gray-400">
                           {formatDate(rr.sent_at)}

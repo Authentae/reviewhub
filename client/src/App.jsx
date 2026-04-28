@@ -5,6 +5,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import KeyboardShortcuts from './components/KeyboardShortcuts';
 import GlobalHotkeys from './components/GlobalHotkeys';
 import CookieConsent from './components/CookieConsent';
+import FrillWidget from './components/FrillWidget';
 
 // Eagerly load auth-adjacent pages (accessed immediately on first visit)
 import Landing from './pages/Landing';
@@ -79,6 +80,7 @@ export default function App() {
     <GlobalHotkeys />
     <KeyboardShortcuts />
     <CookieConsent />
+    <FrillWidget />
     <Suspense fallback={<PageLoader />}>
       <Routes>
         <Route path="/" element={<Landing />} />

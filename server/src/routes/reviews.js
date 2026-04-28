@@ -88,7 +88,7 @@ const readLimiter = rateLimit({
 // Platform whitelist for review CRUD + filters. Must include every provider
 // in lib/providers/index.js plus any legacy ones users may have reviews
 // against. Adding a new platform: add to this list and the provider registry.
-const VALID_PLATFORMS = ['google', 'yelp', 'facebook', 'tripadvisor', 'trustpilot', 'wongnai'];
+const { VALID_PLATFORMS } = require('../lib/platforms');
 const VALID_REVIEW_STATUSES = ['follow_up', 'resolved', 'escalated'];
 const ORDER_MAP = {
   newest: 'created_at DESC',
@@ -825,7 +825,7 @@ router.post('/', reviewCreateLimiter, async (req, res) => {
     }
     const platform = platformRaw.trim().toLowerCase();
     if (!platform || !reviewer_name || rating == null) return res.status(400).json({ error: 'platform, reviewer_name, and rating are required' });
-    if (!VALID_PLATFORMS.includes(platform)) return res.status(400).json({ error: 'platform must be google, yelp, or facebook' });
+    if (!VALID_PLATFORMS.includes(platform)) return res.status(400).json({ error: 'unknown platform' });
     const ratingNum = Number(rating);
     if (!Number.isInteger(ratingNum) || ratingNum < 1 || ratingNum > 5) return res.status(400).json({ error: 'rating must be an integer 1–5' });
     const nameClean = reviewer_name.trim().slice(0, 200);
