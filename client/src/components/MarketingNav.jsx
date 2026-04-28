@@ -80,6 +80,7 @@ export default function MarketingNav({ sections = [] }) {
             {sections.map((it) => (
               <a key={it.id} href={`#${it.id}`} data-id={it.id}
                  className={active === it.id ? 'active' : ''}
+                 aria-current={active === it.id ? 'true' : undefined}
                  onMouseEnter={(e) => movePill(e.currentTarget)}>
                 {it.label}
               </a>
