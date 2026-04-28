@@ -1036,7 +1036,7 @@ function AutoRules() {
 
   function ruleDescription(rule) {
     const parts = [];
-    if (rule.platform) parts.push(rule.platform.charAt(0).toUpperCase() + rule.platform.slice(1));
+    if (rule.platform) parts.push(platformLabel(rule.platform));
     if (rule.min_rating && rule.max_rating && rule.min_rating === rule.max_rating) parts.push(`${rule.min_rating}★`);
     else if (rule.min_rating) parts.push(`≥${rule.min_rating}★`);
     else if (rule.max_rating) parts.push(`≤${rule.max_rating}★`);
@@ -2139,7 +2139,7 @@ export default function Settings() {
       }
       await reloadBusiness();
       await reloadConnections();
-      toast(t('toast.platformConnected', { platform: platform.charAt(0).toUpperCase() + platform.slice(1) }), 'success');
+      toast(t('toast.platformConnected', { platform: platformLabel(platform) }), 'success');
     } catch {
       toast(t('toast.failedConnect'), 'error');
     }

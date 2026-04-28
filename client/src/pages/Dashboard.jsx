@@ -479,11 +479,11 @@ export default function Dashboard() {
                       key={p}
                       onClick={() => { setPlatform(isActive ? '' : p); setPage(1); }}
                       aria-pressed={isActive}
-                      aria-label={`${p.charAt(0).toUpperCase() + p.slice(1)}: ${count} reviews`}
+                      aria-label={`${platformLabel(p)}: ${count} reviews`}
                       className="rh-filter-chip"
                     >
                       <span aria-hidden="true">{icons[p]}</span>
-                      <span className="capitalize">{p}</span>
+                      <span>{platformLabel(p)}</span>
                       <span className="count">{count}</span>
                     </button>
                   );
