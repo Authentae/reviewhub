@@ -1,5 +1,13 @@
 const nodemailer = require('nodemailer');
 const { makeUnsubToken } = require('./tokens');
+const { PLATFORM_META } = require('./platforms');
+
+// Display label for a platform id (e.g. 'wongnai' → 'Wongnai',
+// 'tabelog' → 'Tabelog (食べログ)'). Falls back to the raw id when
+// unrecognised so the email never renders a blank string.
+function platformLabel(id) {
+  return PLATFORM_META[id]?.label || id || '';
+}
 
 function escapeHtml(str) {
   return String(str ?? '')
@@ -112,7 +120,7 @@ async function sendNewReviewNotification(userEmail, review, businessName) {
   // Strip newlines/carriage returns from values used in email headers to prevent header injection
   const stripHeaderChars = (s) => String(s ?? '').replace(/[\r\n]/g, ' ');
 
-  const safePlatform = escapeHtml(review.platform);
+  const safePlatform = escapeHtml(platformLabel(review.platform));
   const safeName = escapeHtml(review.reviewer_name);
   const safeText = escapeHtml(review.review_text || '(no text)');
   const safeSentiment = escapeHtml(review.sentiment);
@@ -120,7 +128,7 @@ async function sendNewReviewNotification(userEmail, review, businessName) {
   const safeClientUrl = escapeHtml(process.env.CLIENT_URL || 'http://localhost:5173');
 
   // Subject uses stripHeaderChars to prevent email header injection
-  const subject = `New ${stripHeaderChars(review.platform)} review for ${stripHeaderChars(businessName)} — ${stars}`;
+  const subject = `New ${stripHeaderChars(platformLabel(review.platform))} review for ${stripHeaderChars(businessName)} — ${stars}`;
   const html = `
     <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
       <h2 style="color:#2563eb">New Review on ${safePlatform}</h2>
@@ -143,7 +151,7 @@ async function sendNewReviewNotification(userEmail, review, businessName) {
   }
 
   const text = [
-    `New Review on ${review.platform}`,
+    `New Review on ${platformLabel(review.platform)}`,
     `${review.reviewer_name} left a ${review.rating}-star review for ${businessName}`,
     `"${review.review_text || '(no text)'}"`,
     `Sentiment: ${review.sentiment}`,
