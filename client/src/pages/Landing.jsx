@@ -5,14 +5,6 @@ import usePageTitle from '../hooks/usePageTitle';
 import { useI18n } from '../context/I18nContext';
 import MarketingNav from '../components/MarketingNav';
 
-const LANDING_NAV_SECTIONS = [
-  { id: 'how', label: 'How it works' },
-  { id: 'demo', label: 'AI drafts' },
-  { id: 'features', label: 'Features' },
-  { id: 'pricing', label: 'Pricing' },
-  { id: 'faq', label: 'FAQ' },
-];
-
 // Editorial-magazine landing page (v2 redesign per Claude Design bundle).
 // Uses an inline <style> block because the design relies on OKLCH custom
 // properties, custom fonts, and section-specific animations that don't map
