@@ -670,11 +670,18 @@ function ImportSection() {
   const [loading, setLoading] = useState(false);
   const fileRef = useRef(null);
 
+  // Mix locales so a Thai/Japanese SMB sees their own platform represented
+  // in the sample — much more useful than an all-EN template that doesn't
+  // mention Wongnai or Tabelog. The server's /import/template endpoint
+  // returns this same format; we generate client-side here so the download
+  // works offline if the user's tab is open.
   const SAMPLE_CSV = [
     'platform,reviewer_name,rating,review_text,response_text,created_at',
     'google,Jane Smith,5,"Excellent service!","Thank you Jane!",2024-01-10',
     'yelp,John Doe,4,Good food.,,2024-02-20',
-    'facebook,Maria Garcia,2,Waited too long.,,',
+    'wongnai,สมชาย,4,"กาแฟอร่อย แต่รอนาน",ขอบคุณค่ะ,',
+    'tabelog,田中,3,"普通でした。",ご来店ありがとうございました。,',
+    'naver,김민,5,"맛집!",,',
   ].join('\r\n');
 
   async function handleFile(e) {
