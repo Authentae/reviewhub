@@ -127,7 +127,7 @@ export default function ReplyGeneratorTool() {
     setError('');
     setDraft(null);
     if (!form.review_text.trim()) {
-      setError('Please paste the review you want to respond to.');
+      setError(t('tool.errorEmpty', 'Please paste the review you want to respond to.'));
       return;
     }
     setLoading(true);
@@ -137,9 +137,9 @@ export default function ReplyGeneratorTool() {
     } catch (err) {
       const status = err?.response?.status;
       if (status === 429) {
-        setError(err.response?.data?.error || 'Free tool rate limit reached. Sign up for unlimited drafts.');
+        setError(err.response?.data?.error || t('tool.errorRateLimit', 'Free tool rate limit reached. Sign up for unlimited drafts.'));
       } else {
-        setError(err?.response?.data?.error || 'Something went wrong. Try again in a moment.');
+        setError(err?.response?.data?.error || t('tool.errorGeneric', 'Something went wrong. Try again in a moment.'));
       }
     } finally {
       setLoading(false);
