@@ -856,6 +856,10 @@ router.post('/', reviewCreateLimiter, async (req, res) => {
           console.error('[EMAIL] Failed to send new review notification:', err.message);
           captureException(err, { kind: 'email.send_failed', label: 'new-review-notification', userId: user.id });
         });
+        // Mirror to LINE if configured. Fire-and-forget — LINE module
+        // never throws, so no .catch needed.
+        const line = require('../lib/notifications/line');
+        line.notifyNewReview(review, business.business_name);
       }
     }
 
