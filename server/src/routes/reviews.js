@@ -1498,11 +1498,16 @@ function parseCsv(text) {
 // to demonstrate UTF-8 + locale-platform support). Lowers the barrier
 // for SMBs who'd otherwise have to read the docs to figure out the format.
 router.get('/import/template', (req, res) => {
+  // Keep in sync with SAMPLE_CSV in client/src/pages/Settings.jsx.
   const lines = [
     'platform,reviewer_name,rating,review_text,response_text,created_at',
     'google,Alice Johnson,5,"Best coffee in town! Staff super friendly.",Thanks Alice — see you next morning!,2026-04-15T09:30:00Z',
+    'yelp,John Doe,4,Good food.,,2026-03-20',
+    'booking,Maria Garcia,5,"Beautiful hotel, great breakfast.","Thank you Maria! Hope to see you again.",',
+    'agoda,Somchai T.,4,"Room was clean. Staff helpful.",ขอบคุณครับ,',
     'wongnai,สมชาย,4,"กาแฟอร่อย แต่รอนาน",ขอบคุณค่ะ จะปรับปรุงเรื่องเวลานะคะ,',
     'tabelog,田中,3,"普通でした。場所はいい。",ご来店ありがとうございました。改善に努めます。,',
+    'naver,김민,5,"맛집!",,',
   ];
   res.setHeader('Content-Type', 'text/csv; charset=utf-8');
   res.setHeader('Content-Disposition', 'attachment; filename="reviewhub-import-template.csv"');

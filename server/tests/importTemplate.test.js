@@ -16,9 +16,9 @@ describe('CSV import template', () => {
     assert.strictEqual(res.status, 200);
     assert.match(res.headers['content-type'], /text\/csv/);
     assert.match(res.headers['content-disposition'], /reviewhub-import-template\.csv/);
-    // Header row + 3 example rows
+    // Header row + 7 example rows covering multiple platforms and locales
     const rows = res.text.split('\r\n').filter(Boolean);
-    assert.strictEqual(rows.length, 4);
+    assert.strictEqual(rows.length, 8);
     assert.match(rows[0], /^platform,reviewer_name,rating,review_text,response_text,created_at$/);
   });
 

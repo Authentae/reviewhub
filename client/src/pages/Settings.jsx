@@ -831,8 +831,10 @@ function ImportSection() {
   // works offline if the user's tab is open.
   const SAMPLE_CSV = [
     'platform,reviewer_name,rating,review_text,response_text,created_at',
-    'google,Jane Smith,5,"Excellent service!","Thank you Jane!",2024-01-10',
-    'yelp,John Doe,4,Good food.,,2024-02-20',
+    'google,Jane Smith,5,"Excellent service!","Thank you Jane!",2026-04-15',
+    'yelp,John Doe,4,Good food.,,2026-03-20',
+    'booking,Maria Garcia,5,"Beautiful hotel, great breakfast.","Thank you Maria!",',
+    'agoda,Somchai T.,4,"Room was clean. Staff helpful.",ขอบคุณครับ,',
     'wongnai,สมชาย,4,"กาแฟอร่อย แต่รอนาน",ขอบคุณค่ะ,',
     'tabelog,田中,3,"普通でした。",ご来店ありがとうございました。,',
     'naver,김민,5,"맛집!",,',
