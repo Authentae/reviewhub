@@ -1584,15 +1584,29 @@ router.post('/import', importLimiter, express.text({ type: ['text/plain', 'text/
 
       const sentiment = analyzeSentiment(ratingNum, textRaw);
 
-      if (createdAt) {
+      // When response_text is provided, also set responded_at so the review
+      // counts as responded in analytics and doesn't show in "needs response".
+      if (createdAt && responseRaw) {
+        insert(
+          `INSERT INTO reviews (business_id, platform, reviewer_name, rating, review_text, response_text, sentiment, created_at, responded_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))`,
+          [business.id, platformRaw, nameRaw, ratingNum, textRaw, responseRaw, sentiment, createdAt]
+        );
+      } else if (createdAt) {
         insert(
           'INSERT INTO reviews (business_id, platform, reviewer_name, rating, review_text, response_text, sentiment, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-          [business.id, platformRaw, nameRaw, ratingNum, textRaw, responseRaw || null, sentiment, createdAt]
+          [business.id, platformRaw, nameRaw, ratingNum, textRaw, null, sentiment, createdAt]
+        );
+      } else if (responseRaw) {
+        insert(
+          `INSERT INTO reviews (business_id, platform, reviewer_name, rating, review_text, response_text, sentiment, responded_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'))`,
+          [business.id, platformRaw, nameRaw, ratingNum, textRaw, responseRaw, sentiment]
         );
       } else {
         insert(
           'INSERT INTO reviews (business_id, platform, reviewer_name, rating, review_text, response_text, sentiment) VALUES (?, ?, ?, ?, ?, ?, ?)',
-          [business.id, platformRaw, nameRaw, ratingNum, textRaw, responseRaw || null, sentiment]
+          [business.id, platformRaw, nameRaw, ratingNum, textRaw, null, sentiment]
         );
       }
       imported++;

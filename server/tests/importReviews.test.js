@@ -151,7 +151,7 @@ describe('CSV import', () => {
     assert.strictEqual(res.body.imported, 1);
   });
 
-  test('imports response_text from CSV', async () => {
+  test('imports response_text from CSV and sets responded_at', async () => {
     const u = await makeUserWithBusiness();
     const body = csv(HEADER, 'google,Frank,5,Loved it.,Thanks Frank!,');
     await request(app).post('/api/reviews/import')
@@ -163,6 +163,22 @@ describe('CSV import', () => {
     const biz = get('SELECT id FROM businesses WHERE user_id = ?', [u.userId]);
     const rows = all("SELECT * FROM reviews WHERE business_id = ? AND reviewer_name = 'Frank'", [biz.id]);
     assert.strictEqual(rows[0].response_text, 'Thanks Frank!');
+    // responded_at must be set so the review doesn't appear in "needs response" counts.
+    assert.ok(rows[0].responded_at, 'responded_at should be set when response_text is imported');
+  });
+
+  test('does not set responded_at when no response_text', async () => {
+    const u = await makeUserWithBusiness();
+    const body = csv(HEADER, 'google,NoReply,4,Good place.,,');
+    await request(app).post('/api/reviews/import')
+      .set('Authorization', `Bearer ${u.token}`)
+      .set('Content-Type', 'text/plain')
+      .send(body);
+
+    const { all, get } = require('../src/db/schema');
+    const biz = get('SELECT id FROM businesses WHERE user_id = ?', [u.userId]);
+    const rows = all("SELECT * FROM reviews WHERE business_id = ? AND reviewer_name = 'NoReply'", [biz.id]);
+    assert.strictEqual(rows[0].responded_at, null);
   });
 
   test('assigns correct sentiment', async () => {

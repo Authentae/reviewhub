@@ -35,13 +35,13 @@ async function deliver(webhook, event, payload) {
     });
     clearTimeout(timer);
     status = res.status;
-    try {
-      const text = await res.text();
-      responseSnippet = text.slice(0, 500) || null;
-    } catch { /* ignore body read errors */ }
+    // Consume response body to free connection — but don't store it.
+    // Storing response bodies risks logging customer review content if the
+    // endpoint echoes back the webhook payload in its error message.
+    try { await res.arrayBuffer(); } catch { /* ignore */ }
   } catch (err) {
     status = 0; // network error / timeout
-    responseSnippet = err.name === 'AbortError' ? 'Timeout' : (err.message || 'Network error').slice(0, 500);
+    responseSnippet = err.name === 'AbortError' ? 'Timeout' : 'Network error';
   }
   // Best-effort update of delivery metadata and delivery log.
   try {
