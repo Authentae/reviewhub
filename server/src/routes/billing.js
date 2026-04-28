@@ -43,14 +43,6 @@ router.post('/checkout', checkoutLimiter, authMiddleware, async (req, res) => {
       return res.status(400).json({ error: 'Invalid cycle. Must be monthly or annual.' });
     }
 
-    const billing = getBilling();
-    if (!billing) {
-      return res.status(503).json({ error: 'Billing is not configured on this deployment' });
-    }
-    if (!billing.isConfigured) {
-      return res.status(503).json({ error: 'Billing provider credentials are not set' });
-    }
-
     const user = get('SELECT id, email FROM users WHERE id = ?', [req.user.id]);
     if (!user) return res.status(404).json({ error: 'User not found' });
 
@@ -72,6 +64,14 @@ router.post('/checkout', checkoutLimiter, authMiddleware, async (req, res) => {
         error: 'You already have an active paid subscription. Use "Manage billing" in Settings to change plan or cancel.',
         code: 'already_subscribed',
       });
+    }
+
+    const billing = getBilling();
+    if (!billing) {
+      return res.status(503).json({ error: 'Billing is not configured on this deployment' });
+    }
+    if (!billing.isConfigured) {
+      return res.status(503).json({ error: 'Billing provider credentials are not set' });
     }
 
     const base = process.env.CLIENT_URL || 'http://localhost:5173';
@@ -334,7 +334,7 @@ router.get('/promptpay', authMiddleware, (req, res) => {
     // Convert USD plan price → THB for the PromptPay amount. Use a fixed
     // rate from env to avoid runtime FX dependence; operator updates env
     // when the rate drifts >5%. Reasonable default: 1 USD ≈ 36 THB.
-    const usd = cycle === 'annual' ? plan.price_annual : plan.price_monthly;
+    const usd = cycle === 'annual' ? plan.priceAnnualUsd : plan.priceMonthlyUsd;
     const fx = parseFloat(process.env.PROMPTPAY_USD_THB || '36');
     const amountThb = Math.round(usd * fx);
     const payload = buildPayload({ id: process.env.PROMPTPAY_ID, amount: amountThb });
