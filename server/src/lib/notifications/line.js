@@ -84,6 +84,8 @@ async function sendOwnerPush(text) {
  */
 async function notifyNewReview(review, businessName) {
   if (!isConfigured()) return;
+  const { PLATFORM_META } = require('../platforms');
+  const platformLabel = PLATFORM_META[review.platform]?.label || review.platform || '';
   const stars = '★'.repeat(review.rating || 0) + '☆'.repeat(5 - (review.rating || 0));
   // DB column is `review_text`; accept either to stay robust to callers
   // passing a transformed shape.
@@ -91,7 +93,7 @@ async function notifyNewReview(review, businessName) {
   const snippet = fullText.slice(0, 200);
   const lines = [
     `🔔 New review for ${businessName}`,
-    `${stars} (${review.rating}/5) — ${review.reviewer_name || 'Anonymous'} on ${review.platform}`,
+    `${stars} (${review.rating}/5) — ${review.reviewer_name || 'Anonymous'} on ${platformLabel}`,
     '',
     snippet ? `"${snippet}${fullText.length > 200 ? '…' : ''}"` : '(no text)',
     '',
