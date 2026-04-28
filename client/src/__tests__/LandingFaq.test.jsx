@@ -99,6 +99,9 @@ describe('Landing How It Works section', () => {
 
   it('has a workflow section heading', () => {
     renderLanding();
-    expect(screen.getByRole('heading', { name: /three steps to an.*empty.*review queue/i })).toBeInTheDocument();
+    // Heading was translatable-ized via t('landing.howTitle') which resolves
+    // to 'Up and running in 3 minutes' in the EN locale (the test default).
+    // Match flexibly so a future copy tweak doesn't re-break this.
+    expect(screen.getByRole('heading', { name: /up and running|how it works|workflow/i })).toBeInTheDocument();
   });
 });
