@@ -320,7 +320,7 @@ export default function Dashboard() {
         <div className="rh-page-head">
           <div>
             <p className="rh-mono" style={{ fontSize: 11, color: 'var(--rh-ink-3)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>
-              № 01 · Inbox
+              № 01 · {t('dashboard.eyebrow', 'Inbox')}
             </p>
             <h1>
               {data?.business?.business_name || t('dashboard.title')}
