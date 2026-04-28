@@ -7469,6 +7469,7 @@ const th = {
   'tool.errorRateLimit': 'เครื่องมือฟรีถึงขีดจำกัดแล้ว สมัครเพื่อใช้แบบไม่จำกัด',
   'tool.errorGeneric': 'มีบางอย่างผิดพลาด ลองใหม่อีกครั้งในอีกสักครู่',
   'tool.platformOther': 'อื่นๆ',
+  'tool.starsCount': '{n} ดาว',
   'settings.apiKeyCreateFailed': 'สร้างคีย์ไม่สำเร็จ',
   'settings.apiKeyRevokeFailed': 'เพิกถอนคีย์ไม่สำเร็จ',
   'page.landing': 'ตอบรีวิว Google ใน 10 วินาที',

@@ -236,7 +236,7 @@ export default function ReplyGeneratorTool() {
                 onChange={(e) => setForm(f => ({ ...f, rating: Number(e.target.value) }))}
               >
                 {[5, 4, 3, 2, 1].map(n => (
-                  <option key={n} value={n}>{'★'.repeat(n) + '☆'.repeat(5 - n)} ({n} stars)</option>
+                  <option key={n} value={n}>{'★'.repeat(n) + '☆'.repeat(5 - n)} ({t('tool.starsCount', '{n} stars', { n })})</option>
                 ))}
               </select>
             </div>
