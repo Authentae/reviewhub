@@ -249,4 +249,62 @@ describe('inbound endpoint', () => {
       });
     assert.strictEqual(res.status, 400);
   });
+
+  test('POST /email rejects stale timestamp (replay protection)', async () => {
+    // Timestamp 10 minutes in the past — outside the 5-minute replay window.
+    const timestamp = String(Math.floor(Date.now() / 1000) - 600);
+    const token = 'tok' + crypto.randomBytes(8).toString('hex');
+    const signature = signMailgun(timestamp, token, signingKey);
+    const res = await request(app)
+      .post('/api/inbound/email')
+      .send({
+        timestamp, token, signature,
+        recipient: 'reviews+aabbcc00112233440000000000000000@reviewhub.test',
+        subject: 'x', 'body-plain': 'y',
+      });
+    assert.strictEqual(res.status, 401);
+    assert.strictEqual(res.body.reason, 'stale-timestamp');
+  });
+
+  test('POST /email returns 200 ignored when user has no businesses', async () => {
+    // Create a user without calling makeUserWithBusiness so they have no business.
+    const { makeUser } = require('./helpers');
+    const u = await makeUser();
+    // Provision the inbound address (triggers lazy secret creation).
+    const addrRes = await request(app)
+      .get('/api/inbound/address')
+      .set('Authorization', `Bearer ${u.token}`);
+    const recipient = addrRes.body.address;
+
+    const timestamp = String(Math.floor(Date.now() / 1000));
+    const token = 'tok' + crypto.randomBytes(8).toString('hex');
+    const signature = signMailgun(timestamp, token, signingKey);
+    const res = await request(app)
+      .post('/api/inbound/email')
+      .send({ timestamp, token, signature, recipient, subject: 'x', 'body-plain': 'y' });
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.body.ignored, true);
+    assert.strictEqual(res.body.reason, 'no-business');
+  });
+
+  test('POST /email tolerates malformed Message-Headers JSON', async () => {
+    const u = await makeUserWithBusiness('MalformedHeaders Co');
+    const addrRes = await request(app).get('/api/inbound/address').set('Authorization', `Bearer ${u.token}`);
+    const recipient = addrRes.body.address;
+
+    const timestamp = String(Math.floor(Date.now() / 1000));
+    const token = 'tok' + crypto.randomBytes(8).toString('hex');
+    const signature = signMailgun(timestamp, token, signingKey);
+    const res = await request(app)
+      .post('/api/inbound/email')
+      .send({
+        timestamp, token, signature, recipient,
+        subject: 'Test review 5/5',
+        'body-plain': 'Great place, really enjoyed the food.',
+        'Message-Headers': '{not-valid-json{{{{',
+      });
+    // Malformed headers should be silently ignored — review still processed.
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.body.ok, true);
+  });
 });
