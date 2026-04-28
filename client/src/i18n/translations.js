@@ -7030,7 +7030,7 @@ const th = {
   'dashboard.filter.preset90d': '90 วัน',
   'dashboard.exportJson': 'ส่งออกเป็น JSON',
   'dashboard.exportJsonAria': 'ส่งออกข้อมูลที่แสดงเป็น JSON',
-  'dashboard.noReviewsOnboardHint': 'เชื่อมต่อธุรกิจ Google ของคุณในการตั้งค่า — เราจะเริ่มดึงรีวิวของคุณภายในไม่กี่นาที Yelp, Facebook และแพลตฟอร์มอื่นๆ เร็วๆ นี้',
+  'dashboard.noReviewsOnboardHint': 'เชื่อมต่อธุรกิจ Google ของคุณในการตั้งค่า — เราจะเริ่มดึงรีวิวของคุณภายในไม่กี่นาที สำหรับ Wongnai, Yelp, Facebook, Tabelog และอีก 20+ แพลตฟอร์ม ใช้การนำเข้า CSV',
   'dashboard.connectAPlatform': 'เชื่อมต่อแพลตฟอร์ม →',
 
   // Settings page subtitle + business switcher (most-visited settings rows)
