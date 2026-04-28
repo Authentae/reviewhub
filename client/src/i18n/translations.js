@@ -7500,6 +7500,21 @@ const th = {
   'landing.toneWarm': 'อบอุ่น',
   'landing.toneBrisk': 'กระชับ',
   'landing.toneFormal': 'ทางการ',
+  // Acceptable Use Policy section headings only — bodies stay in English
+  // because legal text is dense and the English version is the canonical
+  // legal document (per legal/th-summary).
+  'legal.aup.intro': 'บทนำ',
+  'legal.aup.fakeReviews': '1. ห้ามรีวิวปลอม สนับสนุน หรือบิดเบือน',
+  'legal.aup.ownership': '2. คุณต้องเป็นเจ้าของหรือได้รับอนุญาตให้จัดการธุรกิจที่เชื่อมต่อ',
+  'legal.aup.platformCompliance': '3. ปฏิบัติตามข้อกำหนดของแต่ละแพลตฟอร์มที่เชื่อมต่อ',
+  'legal.aup.aiContent': '4. คำตอบที่ AI ร่างให้คือเนื้อหาของคุณ',
+  'legal.aup.responseConduct': '5. กฎการเขียนคำตอบ',
+  'legal.aup.security': '6. ห้ามโจมตีความปลอดภัย ละเมิด หรือรบกวน',
+  'legal.aup.apiLimits': '7. ปฏิบัติตาม API และขีดจำกัดการใช้งาน',
+  'legal.aup.resale': '8. ห้ามขายต่อหรือ repackage โดยไม่มีข้อตกลง',
+  'legal.aup.illegal': '9. ห้ามใช้งานผิดกฎหมายหรือก่อให้เกิดอันตราย',
+  'legal.aup.enforcement': '10. การบังคับใช้',
+  'legal.aup.reporting': '11. รายงานการละเมิด',
 
   // ReviewCard action affordances — pin, flag, status, sentiment override.
   // Visible on every review row in the dashboard.
