@@ -273,6 +273,7 @@ function createApp() {
   app.use('/api/apikeys', require('./routes/apiKeys'));
   app.use('/api/extension', require('./routes/extension'));
   app.use('/api/gdpr', require('./routes/gdpr'));
+  app.use('/api/owner', require('./routes/owner'));
 
   // Health check. Returns 200 when all critical dependencies respond, 503 when
   // any of them is down. Structure is stable so load balancers / uptime
