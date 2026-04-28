@@ -308,31 +308,23 @@ export default function ReplyGeneratorTool() {
         </aside>
 
         {/* SEO content — helps the page rank for long-tail review-reply queries */}
-        <section aria-label="How the AI review reply generator works" className="mt-10 prose prose-sm max-w-none" style={{ color: 'var(--rh-ink)' }}>
-          <p className="rh-mono" style={{ marginBottom: 8, color: 'var(--rh-sage)' }}>HOW IT WORKS</p>
+        <section aria-label={t('tool.seo.aria', 'How the AI review reply generator works')} className="mt-10 prose prose-sm max-w-none" style={{ color: 'var(--rh-ink)' }}>
+          <p className="rh-mono" style={{ marginBottom: 8, color: 'var(--rh-sage)' }}>{t('tool.seo.eyebrow', 'HOW IT WORKS')}</p>
           <h2 className="text-lg mt-0" style={{ color: 'var(--rh-ink)', fontFamily: 'var(--rh-serif)', fontWeight: 500 }}>
-            How the AI review reply generator works
+            {t('tool.seo.title', 'How the AI review reply generator works')}
           </h2>
           <p>
-            Paste a customer review above. Our AI (powered by Claude from
-            Anthropic) reads the review text, understands whether it's
-            positive, neutral, or negative, and drafts a professional reply
-            that matches the tone. The draft is <strong>editable</strong> —
-            make it sound more like you, then copy and paste into the review
-            platform.
+            {t('tool.seo.howIntro', "Paste a customer review above. Our AI (powered by Claude from Anthropic) reads the review text, understands whether it's positive, neutral, or negative, and drafts a professional reply that matches the tone. The draft is editable — make it sound more like you, then copy and paste into the review platform.")}
           </p>
-          <h3 className="font-semibold" style={{ color: 'var(--rh-ink)', fontFamily: 'var(--rh-serif)' }}>Why respond to online reviews?</h3>
+          <h3 className="font-semibold" style={{ color: 'var(--rh-ink)', fontFamily: 'var(--rh-serif)' }}>{t('tool.seo.whyTitle', 'Why respond to online reviews?')}</h3>
           <ul>
-            <li>Replies are visible to every future customer who reads the review — a good one turns a complaint into social proof of your responsiveness.</li>
-            <li>Google, Yelp, and TripAdvisor's algorithms favor businesses that engage with reviews — responding can lift your ranking.</li>
-            <li>Customers who get a thoughtful reply after a negative review frequently update their rating or delete the review.</li>
+            <li>{t('tool.seo.why1', 'Replies are visible to every future customer who reads the review — a good one turns a complaint into social proof of your responsiveness.')}</li>
+            <li>{t('tool.seo.why2', "Google, Yelp, and TripAdvisor's algorithms favor businesses that engage with reviews — responding can lift your ranking.")}</li>
+            <li>{t('tool.seo.why3', 'Customers who get a thoughtful reply after a negative review frequently update their rating or delete the review.')}</li>
           </ul>
-          <h3 className="font-semibold" style={{ color: 'var(--rh-ink)', fontFamily: 'var(--rh-serif)' }}>Is this free?</h3>
+          <h3 className="font-semibold" style={{ color: 'var(--rh-ink)', fontFamily: 'var(--rh-serif)' }}>{t('tool.seo.freeTitle', 'Is this free?')}</h3>
           <p>
-            Yes. This tool is free with no signup. We rate-limit to 20 drafts
-            per hour per IP to keep the service available for everyone. If
-            you need more, the free ReviewHub account gives you 3 AI drafts
-            per month from your dashboard, and paid plans give unlimited.
+            {t('tool.seo.freeBody', 'Yes. This tool is free with no signup. We rate-limit to 20 drafts per hour per IP to keep the service available for everyone. If you need more, the free ReviewHub account gives you 3 AI drafts per month from your dashboard, and paid plans give unlimited.')}
           </p>
         </section>
       </main>
