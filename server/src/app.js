@@ -292,6 +292,7 @@ function createApp() {
       analytics: 'unknown',
       line: 'unknown',
       frill: 'unknown',
+      promptpay: 'unknown',
     };
     let overallOk = true;
 
@@ -374,6 +375,9 @@ function createApp() {
 
     // Frill — feedback widget. Build-time env, but we can detect intent.
     components.frill = process.env.VITE_FRILL_KEY ? 'configured' : 'not-configured';
+
+    // PromptPay — Thai instant-transfer QR. Single env var.
+    components.promptpay = process.env.PROMPTPAY_ID ? 'configured' : 'not-configured';
 
     const payload = {
       ok: overallOk,

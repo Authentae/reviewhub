@@ -18,6 +18,9 @@ A single index of every external service ReviewHub plugs into. Three columns:
 | **UptimeRobot monitoring** | `/api/health` endpoint | See [`uptime-monitoring.md`](runbooks/uptime-monitoring.md) | 📖 RUNBOOK |
 | **Resend SMTP** | `server/src/lib/email.js` | Set `SMTP_*` env vars on Railway | ✅ ACTIVE |
 | **Google OAuth** (review platform) | `server/src/lib/providers/google.js` | Set `GOOGLE_CLIENT_ID/SECRET` | ✅ ACTIVE |
+| **Frill feedback widget** | `client/src/components/FrillWidget.jsx` | See [`frill-setup.md`](runbooks/frill-setup.md) | 🟡 READY |
+| **PromptPay (TH instant pay)** | `server/src/lib/promptpay.js` + `/api/billing/promptpay` | See [`promptpay-setup.md`](runbooks/promptpay-setup.md) | 🟡 READY |
+| **Locale platform registry** | `server/src/lib/platforms.js` + `client/src/lib/platforms.js` | None — auto-active per user locale | ✅ ACTIVE |
 
 ## Quick activation list (in order of leverage)
 
@@ -50,9 +53,7 @@ Don't waste pre-launch time on these:
 - **Wongnai partnership** — TH's #1 review site, but partner-only API. Approach after you have 50 paying TH SMBs as proof.
 - **Booking.com / Agoda** — hotel reviews need partner agreement.
 - **Naver Place / Dianping / Tabelog** — same partnership story per locale (KR / CN / JP).
-- **PromptPay payment** — only worth it once you have TH customers complaining about credit card fees.
-- **LINE Login** — frictionless TH signup, but builds nothing if there's no signup flow yet.
-- **Frill changelog** — boost trust signal, but customers don't care until they're paying.
+- **LINE Login** — frictionless TH signup; security-sensitive surface. Defer until paying-customer scale, then build with proper PKCE + account linking.
 - **Custom Zapier app** — outbound webhooks already cover the use case.
 - **Stripe / Paddle** — backup billing providers. Only switch from LemonSqueezy if LS becomes a problem.
 

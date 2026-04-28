@@ -309,5 +309,50 @@ function mapVariantIdToPlan(variantId) {
   return null;
 }
 
+// GET /api/billing/promptpay?plan=starter&cycle=monthly
+//
+// Returns an EMVCo PromptPay QR payload string for Thai customers paying
+// directly from a banking app. Inert (501) until PROMPTPAY_ID env is set.
+//
+// Note: this is a manual rail — we don't auto-confirm payment. The customer
+// pays, screenshots their banking-app receipt, and the operator manually
+// flips them to a paid plan via /admin. For low-volume Thai SMB accounts
+// this is significantly cheaper than card processing fees, even with the
+// reconciliation overhead.
+router.get('/promptpay', authMiddleware, (req, res) => {
+  try {
+    const { isConfigured, buildPayload } = require('../lib/promptpay');
+    if (!isConfigured()) {
+      return res.status(501).json({ error: 'PromptPay is not configured on this deployment' });
+    }
+    const planKey = String(req.query.plan || '').toLowerCase();
+    const cycle = req.query.cycle === 'annual' ? 'annual' : 'monthly';
+    if (!planKey || !PLANS[planKey] || planKey === 'free') {
+      return res.status(400).json({ error: 'Invalid plan' });
+    }
+    const plan = PLANS[planKey];
+    // Convert USD plan price → THB for the PromptPay amount. Use a fixed
+    // rate from env to avoid runtime FX dependence; operator updates env
+    // when the rate drifts >5%. Reasonable default: 1 USD ≈ 36 THB.
+    const usd = cycle === 'annual' ? plan.price_annual : plan.price_monthly;
+    const fx = parseFloat(process.env.PROMPTPAY_USD_THB || '36');
+    const amountThb = Math.round(usd * fx);
+    const payload = buildPayload({ id: process.env.PROMPTPAY_ID, amount: amountThb });
+    if (!payload) return res.status(500).json({ error: 'Failed to build QR payload' });
+    res.setHeader('Cache-Control', 'no-store, private');
+    res.json({
+      payload,
+      amount_thb: amountThb,
+      amount_usd: usd,
+      receiver_name: process.env.PROMPTPAY_NAME || 'ReviewHub',
+      plan: planKey,
+      cycle,
+    });
+  } catch (err) {
+    captureException(err, { route: 'billing.promptpay' });
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 module.exports = router;
 module.exports.webhookHandler = webhookHandler;
