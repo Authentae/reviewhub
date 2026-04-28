@@ -193,7 +193,7 @@ compounding asset, not a quick win.
 
 ### Free no-signup tool (optional amplifier)
 
-Build `reviewhub.app/tools/review-reply-generator` — paste a review,
+Build `reviewhub.review/tools/review-reply-generator` — paste a review,
 get a draft, no login. This:
 
 - Ranks for "review reply generator" SEO

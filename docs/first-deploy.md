@@ -156,7 +156,7 @@ Skip for launch. Your Free users can import via CSV. Only set this up after 3+ p
 Your app works perfectly on `reviewhub-xxx.up.railway.app`. If you want a real domain:
 
 1. Buy one at **Namecheap** or **Cloudflare** — search for `.com`, `.app`, `.co`. ~$10-15/year.
-2. In Railway, Service → Settings → Networking → **Custom Domain** → enter `reviewhub.app` (or whatever you bought)
+2. In Railway, Service → Settings → Networking → **Custom Domain** → enter `reviewhub.review` (or whatever you bought)
 3. Railway gives you a CNAME value. Go to your domain registrar's DNS settings → add a CNAME record pointing to Railway's value.
 4. Wait 5-30 minutes for DNS to propagate. Railway auto-issues the SSL cert.
 5. Update `CLIENT_URL` in Railway env vars to `https://yourdomain.com`. Redeploy.

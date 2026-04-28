@@ -186,7 +186,7 @@ _______________________________________________
 - `AUP.en.md` — นโยบายการใช้งาน ภาษาอังกฤษ (12 หัวข้อ)
 - `REFUND.en.md` — นโยบายการคืนเงิน ภาษาอังกฤษ (9 หัวข้อ)
 
-*เอกสารฉบับอังกฤษเข้าถึงได้ที่ reviewhub.app/terms, /privacy, /acceptable-use, /refund-policy*
+*เอกสารฉบับอังกฤษเข้าถึงได้ที่ reviewhub.review/terms, /privacy, /acceptable-use, /refund-policy*
 
 ---
 

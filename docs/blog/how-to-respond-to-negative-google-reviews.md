@@ -5,7 +5,7 @@ published: 2026-04-24
 author: ReviewHub
 description: A 2,000-word practical guide to responding to 1-star and 2-star Google reviews. Templates, real examples, and the one-click AI tool that does it for you.
 keywords: [respond to negative google reviews, how to respond to bad reviews, negative review response templates, google review reply examples, ai review reply]
-canonical: https://reviewhub.app/blog/how-to-respond-to-negative-google-reviews
+canonical: https://reviewhub.review/blog/how-to-respond-to-negative-google-reviews
 ---
 
 # How to Respond to Negative Google Reviews (With Templates + AI Examples)
@@ -247,7 +247,7 @@ Monday.
 
 ---
 
-*Written by the team at [ReviewHub](https://reviewhub.app) — a free
+*Written by the team at [ReviewHub](https://reviewhub.review) — a free
 Chrome extension + web dashboard that turns a 10-minute reply into a
 10-second one. [Try the free no-signup
 tool](/tools/review-reply-generator) or [install the

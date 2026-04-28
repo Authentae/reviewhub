@@ -55,7 +55,7 @@ pm2 list
 pm2 logs reviewhub --lines 100
 
 # Health ping
-curl -sS https://reviewhub.app/api/health || echo "UNHEALTHY"
+curl -sS https://reviewhub.review/api/health || echo "UNHEALTHY"
 ```
 
 Expected: `pm2 list` shows `reviewhub` in `online` state. Logs contain `Server running on http://localhost:3001` at boot and no unhandled rejections.
@@ -105,7 +105,7 @@ rclone copy b2:reviewhub-backups/latest.db /opt/reviewhub/reviewhub.db
 pm2 start reviewhub
 
 # 5. Verify
-curl -sS https://reviewhub.app/api/health
+curl -sS https://reviewhub.review/api/health
 ```
 
 Quarterly: verify backups actually restore. Spin up a scratch container, restore yesterday's backup, log in as a known test user, confirm review list renders.
@@ -251,7 +251,7 @@ If you need someone else to keep the service alive while you're unreachable:
 2. Point them at this file.
 3. Grant read-only LemonSqueezy dashboard access (Team settings).
 4. Grant read-only Google Cloud Console access if they may need to refresh OAuth credentials.
-5. Set an auto-reply on `support@reviewhub.app` with a timeline.
+5. Set an auto-reply on `support@reviewhub.review` with a timeline.
 
 Minimum skills to execute this runbook: basic shell, `sqlite3`, familiarity with `pm2`. No Node.js or React knowledge needed.
 
