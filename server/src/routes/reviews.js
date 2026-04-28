@@ -1062,7 +1062,7 @@ router.post('/:id/respond', respondLimiter, async (req, res) => {
           }
         }
       } catch (err) {
-        postError = err.message || 'post-back failed';
+        postError = 'Failed to post reply to platform';
         // Don't fail the user's save — just surface the error alongside success.
         console.error(`[REPLY-POST] ${review.platform}:${review.external_id} failed: ${postError}`);
         captureException(err, {

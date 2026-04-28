@@ -202,9 +202,10 @@ async function webhookHandler(req, res) {
     res.status(200).json({ ok: true, event: parsed.eventName });
   } catch (err) {
     // Signature-verify failures → 401. Parse failures → 400. Everything else → 500.
+    // Never echo err.message — can leak SDK internals or provider error payloads.
     const status = err.status || (err.message?.includes('signature') ? 401 : err.message?.includes('JSON') ? 400 : 500);
     captureException(err, { kind: 'billing.webhook' });
-    res.status(status).json({ error: err.message || 'Webhook error' });
+    res.status(status).json({ error: status === 401 ? 'Invalid signature' : status === 400 ? 'Invalid payload' : 'Webhook processing failed' });
   }
 }
 router.post('/webhook', webhookHandler);
