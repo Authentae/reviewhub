@@ -300,6 +300,7 @@ function createApp() {
   app.use('/api/extension', require('./routes/extension'));
   app.use('/api/gdpr', require('./routes/gdpr'));
   app.use('/api/owner', require('./routes/owner'));
+  app.use('/api/inbound', require('./routes/inbound'));
 
   // Health check. Returns 200 when all critical dependencies respond, 503 when
   // any of them is down. Structure is stable so load balancers / uptime
@@ -317,6 +318,7 @@ function createApp() {
       line: 'unknown',
       frill: 'unknown',
       promptpay: 'unknown',
+      inbound_email: 'unknown',
     };
     let overallOk = true;
 
@@ -402,6 +404,12 @@ function createApp() {
 
     // PromptPay — Thai instant-transfer QR. Single env var.
     components.promptpay = process.env.PROMPTPAY_ID ? 'configured' : 'not-configured';
+
+    // Inbound email — auto-import via forwarded review notifications.
+    // 'configured' = Mailgun signing key set; the endpoint will accept webhooks.
+    // 'not-configured' = endpoint returns 401 (intentional — secret-only addresses
+    //   still resolve via /api/inbound/address, just no live mail flow yet).
+    components.inbound_email = process.env.MAILGUN_WEBHOOK_SIGNING_KEY ? 'configured' : 'not-configured';
 
     const payload = {
       ok: overallOk,

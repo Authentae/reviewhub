@@ -306,6 +306,14 @@ function initSchema() {
   migrateAddColumn('users', 'terms_accept_ua', 'TEXT DEFAULT NULL');
   migrateAddColumn('users', 'age_confirmed', 'INTEGER NOT NULL DEFAULT 0');
 
+  // Inbound email forwarding secret. Per-user random hex used as the
+  // local part of the forwarding address: reviews+<secret>@reviewhub.review.
+  // When a review platform emails the SMB owner about a new review and the
+  // owner forwards that email to their personal alias, our inbound
+  // endpoint parses the message and ingests it as a review. Lazily
+  // generated on first request via /api/inbound/address (see routes/inbound.js).
+  migrateAddColumn('users', 'inbound_email_secret', 'TEXT DEFAULT NULL', true);
+
   // Password-change timestamp — used by the auth middleware to invalidate
   // JWTs issued BEFORE the user changed their password. Without this, an
   // attacker with a stolen-but-still-within-TTL JWT keeps access indefinitely

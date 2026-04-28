@@ -21,6 +21,7 @@ A single index of every external service ReviewHub plugs into. Three columns:
 | **Frill feedback widget** | `client/src/components/FrillWidget.jsx` | See [`frill-setup.md`](runbooks/frill-setup.md) | 🟡 READY |
 | **PromptPay (TH instant pay)** | `server/src/lib/promptpay.js` + `/api/billing/promptpay` | See [`promptpay-setup.md`](runbooks/promptpay-setup.md) | 🟡 READY |
 | **Locale platform registry** | `server/src/lib/platforms.js` + `client/src/lib/platforms.js` | None — auto-active per user locale | ✅ ACTIVE |
+| **Email forwarding (auto-import)** | `server/src/routes/inbound.js` + `server/src/lib/inbound/parsers.js` | See [`mailgun-inbound.md`](runbooks/mailgun-inbound.md) | 🟡 READY |
 
 ## Quick activation list (in order of leverage)
 

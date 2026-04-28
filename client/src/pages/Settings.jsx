@@ -695,6 +695,124 @@ function CsvOnlyPlatforms({ lang }) {
   );
 }
 
+// ─── Inbound email forwarding section ────────────────────────────────────────
+// Shows the user's personal forwarding address. They set up email forwarding
+// from their review-platform notification emails (Booking.com / Wongnai /
+// Tabelog / etc.) to this address; new reviews then auto-land on their
+// dashboard within ~30 seconds. Saves them from CSV-importing manually.
+function InboundForwardingSection() {
+  const { t } = useI18n();
+  const toast = useToast();
+  const [address, setAddress] = useState(null);
+  const [mailgunConfigured, setMailgunConfigured] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    api.get('/inbound/address')
+      .then(({ data }) => {
+        if (cancelled) return;
+        setAddress(data.address);
+        setMailgunConfigured(!!data.mailgun_configured);
+      })
+      .catch(() => { /* endpoint may 404 in older deploys; section just won't render */ })
+      .finally(() => !cancelled && setLoading(false));
+    return () => { cancelled = true; };
+  }, []);
+
+  async function handleCopy() {
+    try {
+      await navigator.clipboard.writeText(address);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      toast(t('inbound.copyFailed', 'Could not copy. Select and copy manually.'), 'error');
+    }
+  }
+
+  async function handleRegenerate() {
+    if (!confirm(t('inbound.regenerateConfirm',
+      'This will deactivate your current forwarding address. Any forwarding rules you set up will need to be updated. Continue?'))) return;
+    try {
+      const { data } = await api.post('/inbound/regenerate');
+      setAddress(data.address);
+      toast(t('inbound.regenerated', 'New forwarding address generated.'), 'success');
+    } catch {
+      toast(t('inbound.regenerateFailed', 'Could not regenerate. Try again.'), 'error');
+    }
+  }
+
+  if (loading) return null;
+  if (!address) return null;
+
+  return (
+    <section className="mb-6" aria-labelledby="settings-inbound">
+      <h2 id="settings-inbound" className="text-base font-semibold text-gray-700 dark:text-gray-300 mb-3">
+        {t('inbound.title', 'Email forwarding (auto-import reviews)')}
+      </h2>
+      <div className="card p-5 space-y-3">
+        <p className="text-sm text-gray-600 dark:text-gray-400">
+          {t('inbound.subtitle',
+            'Forward your review-notification emails (Booking.com, Wongnai, Tabelog, Yelp, etc.) to the address below — new reviews land on your dashboard within ~30 seconds. No CSV needed.')}
+        </p>
+        <div className="flex items-stretch gap-2">
+          <input
+            type="text"
+            value={address}
+            readOnly
+            onClick={(e) => e.target.select()}
+            className="input text-sm flex-1 font-mono"
+            aria-label={t('inbound.addressAria', 'Your forwarding address')}
+          />
+          <button
+            type="button"
+            onClick={handleCopy}
+            className="btn-primary text-sm py-1.5 px-3 whitespace-nowrap"
+          >
+            {copied ? t('inbound.copied', 'Copied ✓') : t('inbound.copy', 'Copy')}
+          </button>
+        </div>
+        <div className="text-xs text-gray-500 dark:text-gray-400 space-y-1">
+          <p className="font-medium">{t('inbound.howTitle', 'How to set it up:')}</p>
+          <ol className="list-decimal ml-4 space-y-0.5">
+            <li>
+              {t('inbound.howStep1',
+                'In Gmail, open Settings → Filters → Create a new filter. Filter for emails from your review platform (e.g. "from:noreply@booking.com").')}
+            </li>
+            <li>
+              {t('inbound.howStep2',
+                'Click Create filter → check "Forward it to" → add this address.')}
+            </li>
+            <li>
+              {t('inbound.howStep3',
+                'Repeat for each platform (Wongnai, Tabelog, Yelp, etc.). Reviews start auto-importing.')}
+            </li>
+          </ol>
+        </div>
+        {!mailgunConfigured && (
+          <p className="text-xs text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-900/20 px-3 py-2 rounded-lg">
+            {t('inbound.mailgunPending',
+              'Note: the inbound mail gateway is not yet activated on this deployment. Your address is reserved — emails will start flowing once the operator wires up the inbound webhook.')}
+          </p>
+        )}
+        <div className="pt-2 border-t border-gray-100 dark:border-gray-700 flex justify-between items-center">
+          <span className="text-xs text-gray-400">
+            {t('inbound.regenerateHint', 'If your address ever leaks, regenerate it.')}
+          </span>
+          <button
+            type="button"
+            onClick={handleRegenerate}
+            className="text-xs text-red-600 dark:text-red-400 hover:underline"
+          >
+            {t('inbound.regenerate', 'Regenerate')}
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ─── CSV Import sub-component ────────────────────────────────────────────────
 function ImportSection() {
   const { t } = useI18n();
@@ -2396,6 +2514,9 @@ export default function Settings() {
 
         {/* Outbound Webhooks */}
         <WebhooksSection />
+
+        {/* Inbound email forwarding (auto-import via email) */}
+        <InboundForwardingSection />
 
         {/* CSV Import */}
         <ImportSection />
