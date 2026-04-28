@@ -14,6 +14,30 @@ const crypto = require('crypto');
 const fs = require('fs');
 const pathLib = require('path');
 
+// Resolve the app version once at boot. Priority:
+//   1. APP_VERSION env (Railway can set this from $RAILWAY_GIT_COMMIT_SHA)
+//   2. server/package.json#version (semantic version string)
+//   3. 'dev' as the last-resort fallback
+// Cached at module load — version doesn't change at runtime.
+let _appVersion = null;
+function getAppVersion() {
+  if (_appVersion) return _appVersion;
+  if (process.env.APP_VERSION) {
+    _appVersion = process.env.APP_VERSION;
+    return _appVersion;
+  }
+  try {
+    const pkgPath = pathLib.join(__dirname, '..', 'package.json');
+    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+    if (pkg.version) {
+      _appVersion = pkg.version;
+      return _appVersion;
+    }
+  } catch { /* fall through */ }
+  _appVersion = 'dev';
+  return _appVersion;
+}
+
 // Compute the SHA-256 hash of the inline theme-flash script in client/index.html
 // at boot time, so CSP automatically tracks edits to that script (no manual
 // hash bumping). Falls back to a hardcoded hash if the file isn't present
@@ -383,7 +407,7 @@ function createApp() {
       ok: overallOk,
       ts: new Date().toISOString(),
       uptime_seconds: Math.floor(process.uptime()),
-      version: process.env.APP_VERSION || 'dev',
+      version: getAppVersion(),
       components,
     };
     res.status(overallOk ? 200 : 503).json(payload);
