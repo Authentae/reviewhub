@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../lib/api';
 import usePageTitle from '../hooks/usePageTitle';
@@ -71,6 +71,44 @@ export default function ReplyGeneratorTool() {
   const { t, lang } = useI18n();
   const SAMPLES = lang === 'th' ? SAMPLES_TH : SAMPLES_EN;
   usePageTitle(t('page.tool', 'Free AI Review Reply Generator'));
+
+  // Inject HowTo + WebApplication structured data so Google can show this
+  // page as a rich result for queries like "how to reply to google review"
+  // or "review reply generator". The script is injected into <head> and
+  // cleaned up on unmount so the schema only applies to this route.
+  useEffect(() => {
+    const schema = {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'WebApplication',
+          'name': 'ReviewHub Free Reply Generator',
+          'url': 'https://reviewhub.review/tools/review-reply-generator',
+          'applicationCategory': 'BusinessApplication',
+          'operatingSystem': 'Web',
+          'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'USD' },
+          'description': 'Free AI tool that drafts professional replies to Google, Yelp, Facebook, TripAdvisor and Trustpilot reviews in seconds. No signup required.',
+        },
+        {
+          '@type': 'HowTo',
+          'name': 'How to draft a professional reply to a customer review',
+          'description': 'Use AI to generate a context-aware response to any online review in 10 seconds.',
+          'totalTime': 'PT10S',
+          'step': [
+            { '@type': 'HowToStep', 'position': 1, 'name': 'Paste the review', 'text': 'Copy the review text from Google, Yelp, Facebook, TripAdvisor or Trustpilot and paste it into the form.' },
+            { '@type': 'HowToStep', 'position': 2, 'name': 'Pick rating + platform', 'text': 'Select the star rating and which platform the review is on. Optionally enter the reviewer name and your business name for a personalized reply.' },
+            { '@type': 'HowToStep', 'position': 3, 'name': 'Generate reply', 'text': 'Click Generate. AI (Claude by Anthropic) drafts a tone-matched reply in 10 seconds.' },
+            { '@type': 'HowToStep', 'position': 4, 'name': 'Copy + paste', 'text': 'Edit if you want, then copy the draft and paste it as your reply on the original review platform.' },
+          ],
+        },
+      ],
+    };
+    const el = document.createElement('script');
+    el.type = 'application/ld+json';
+    el.textContent = JSON.stringify(schema);
+    document.head.appendChild(el);
+    return () => { document.head.removeChild(el); };
+  }, []);
 
   const [form, setForm] = useState({
     reviewer_name: '',
