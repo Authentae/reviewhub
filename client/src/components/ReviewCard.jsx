@@ -5,6 +5,7 @@ import StarRating from './StarRating';
 import TagBadge from './TagBadge';
 import { useToast } from './Toast';
 import api from '../lib/api';
+import { platformLabel as registryPlatformLabel } from '../lib/platforms';
 import { useI18n } from '../context/I18nContext';
 import { useUser } from '../context/UserContext';
 import { Link } from 'react-router-dom';
@@ -360,8 +361,7 @@ function ReviewCard({ review, highlight, onResponseSaved }) {
       //   posted === false + no err → feature not enabled; user needs to manually post (existing flow)
       clearDraft(review.id);
       if (data?.posted) {
-        const platformLabel = review.platform.charAt(0).toUpperCase() + review.platform.slice(1);
-        toast(t('toast.responsePosted', { platform: platformLabel }), 'success');
+        toast(t('toast.responsePosted', { platform: registryPlatformLabel(review.platform) }), 'success');
       } else if (data?.postError) {
         toast(t('toast.responseSavedPostFailed', { err: data.postError }), 'warning');
         setShowPostReminder(true);
@@ -813,7 +813,7 @@ function ReviewCard({ review, highlight, onResponseSaved }) {
             <div className="mt-2 flex items-start gap-2 p-2.5 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg text-xs text-amber-800 dark:text-amber-300">
               <span aria-hidden="true">💡</span>
               <span className="flex-1">
-                {t('review.postReminder', { platform: review.platform.charAt(0).toUpperCase() + review.platform.slice(1) })}
+                {t('review.postReminder', { platform: registryPlatformLabel(review.platform) })}
               </span>
               <button
                 type="button"
