@@ -853,7 +853,8 @@ function WidgetSection({ business, onUpdate }) {
 }
 
 // ─── Auto-respond Rules sub-component ────────────────────────────────────────
-const RULE_PLATFORMS = ['', 'google', 'yelp', 'facebook'];
+// Platform options now come from platformsForLocale(lang) inside RuleForm —
+// the dropdown is locale-aware and stays in sync with lib/platforms.js.
 const RULE_SENTIMENTS = ['', 'positive', 'neutral', 'negative'];
 
 const BLANK_RULE = { name: '', platform: '', min_rating: '', max_rating: '', sentiment: '', response_text: '', enabled: true, match_keywords_text: '', tag_id: '' };
