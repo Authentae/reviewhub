@@ -2,13 +2,20 @@
 // Supported variables:
 //   {reviewer_name}  — reviewer's display name
 //   {rating}         — numeric rating (1–5)
-//   {platform}       — platform with first letter capitalised (Google, Yelp, Facebook)
+//   {platform}       — platform with proper display name (Google, Yelp,
+//                      Wongnai, Tabelog (食べログ), Naver Place, …)
 //   {business_name}  — business display name
 //
 // Unknown placeholders are left as-is so a typo (e.g. {Rating}) is visible to
 // the user rather than silently swallowed.
 
-const PLATFORM_DISPLAY = { google: 'Google', yelp: 'Yelp', facebook: 'Facebook' };
+// Single source of truth for display labels lives in lib/platforms.js — pull
+// from there so {platform} substitution stays in sync with the registry as
+// new locale platforms are added.
+const { PLATFORM_META } = require('./platforms');
+const PLATFORM_DISPLAY = Object.fromEntries(
+  Object.entries(PLATFORM_META).map(([id, meta]) => [id, meta.label])
+);
 
 function substituteVars(text, review, business) {
   if (!text || typeof text !== 'string') return text;
