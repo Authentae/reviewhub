@@ -314,11 +314,11 @@ export default function ReplyGeneratorTool() {
                 users don't have to scroll past 600+ pixels of SEO content
                 before they're invited to use this on their own reviews. */}
             <p className="mt-4 text-xs border-t pt-3" style={{ color: 'var(--rh-ink)', opacity: 0.7, borderColor: 'var(--rh-rule, rgba(0,0,0,0.1))' }}>
-              Like this? <Link
+              {t('tool.likeThisLead', 'Like this?')} <Link
                 to="/register"
                 className="font-medium hover:underline"
                 style={{ color: 'var(--rh-teal)' }}
-              >Sign up free</Link> — connect your Google Business once and we'll draft replies for every new review. Free forever.
+              >{t('tool.likeThisCta', 'Sign up free')}</Link> {t('tool.likeThisAfter', "— connect your Google Business once and we'll draft replies for every new review. Free forever.")}
             </p>
           </section>
         )}
