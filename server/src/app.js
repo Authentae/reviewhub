@@ -66,14 +66,29 @@ function createApp() {
         // above), so editing the inline script no longer requires manually
         // bumping the hash here — would silently re-block the theme-flash
         // and re-introduce the white-flash regression for dark-mode users.
-        scriptSrc: ["'self'", INLINE_SCRIPT_HASH],
+        // plausible.io serves the analytics script tag <script defer src="...">
+        // when Plausible is enabled. Allowed here so the snippet works without
+        // a CSP redeploy.
+        scriptSrc: ["'self'", INLINE_SCRIPT_HASH, 'https://plausible.io'],
         // Google Fonts: CSS from fonts.googleapis.com, woff2 from fonts.gstatic.com.
         // Without these in style-src/font-src, the editorial typography
         // (Instrument Serif / Inter Tight / JetBrains Mono) silently falls
         // back to system sans-serif on every page — visible regression.
         styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
         imgSrc: ["'self'", 'data:'],
-        connectSrc: ["'self'"],
+        // connect-src additions:
+        // - *.ingest.us.sentry.io / *.ingest.sentry.io: frontend Sentry SDK
+        //   POST /envelope/ events from the browser. Without this the SDK
+        //   tries the request and is silently blocked by the browser.
+        // - plausible.io: Plausible analytics script POSTs page-views to
+        //   /api/event. Pre-allowed so the user can drop in the snippet
+        //   without redeploying CSP.
+        connectSrc: [
+          "'self'",
+          'https://*.ingest.us.sentry.io',
+          'https://*.ingest.sentry.io',
+          'https://plausible.io',
+        ],
         fontSrc: ["'self'", 'https://fonts.gstatic.com'],
         objectSrc: ["'none'"],
         frameAncestors: ["'none'"],
