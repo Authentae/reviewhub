@@ -336,9 +336,11 @@ export default function ReplyGeneratorTool() {
           </h2>
           <p className="text-sm mb-4 leading-relaxed" style={{ color: 'var(--rh-ink)', opacity: 0.85 }}>
             Sign up free, connect your Google Business once, and ReviewHub
-            drafts a reply for every new review — in your voice, in Thai or
-            English. You read it, tap copy, paste on Google. Free plan forever,
-            no credit card. Yelp, Facebook, and more platforms coming soon.
+            drafts a reply for every new review — in your voice, in 10
+            languages including Thai, Japanese, Korean and Chinese. Tap copy,
+            paste on Google. Free plan forever, no credit card. Import
+            reviews from 25+ platforms via CSV (Wongnai, Tabelog, Naver,
+            Dianping, TripAdvisor…).
           </p>
           <div className="flex items-center gap-3 flex-wrap">
             <Link to="/register" className="btn-primary text-sm">
