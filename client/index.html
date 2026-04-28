@@ -133,11 +133,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
     <title>ReviewHub — Local Business Review Manager</title>
     <script>
-      // Prevent the dark/light flash on first paint. ThemeContext does the
-      // same detection once React mounts, but running it here too means the
-      // <html> class is set BEFORE any styles apply — no white flash for
-      // dark-mode users, no dark flash for light-mode users.
-      // Keep this tiny and in sync with ThemeContext's logic.
+      // Two responsibilities, kept inline so they run before React mounts:
+      //
+      // 1. Prevent the dark/light flash on first paint. ThemeContext does the
+      //    same detection once React mounts; doing it here too means the
+      //    <html> class is set BEFORE any styles apply — no white flash for
+      //    dark-mode users, no dark flash for light-mode users.
+      //
+      // 2. Inject Plausible analytics on the live production hostname only.
+      //    To activate: sign up at plausible.io and add reviewhub.review as
+      //    a site. CSP for plausible.io is already pre-allowed in
+      //    server/src/app.js (scriptSrc + connectSrc).
+      //
+      // CSP enforces a sha256 of THIS exact <script> body. Don't change the
+      // contents without redeploying — the server hashes the inline block
+      // at boot. (See server/src/app.js computeInlineScriptHash.)
       (function () {
         try {
           var stored = localStorage.getItem('reviewhub_theme');
@@ -145,34 +155,18 @@
             || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches);
           if (dark) document.documentElement.classList.add('dark');
         } catch (e) { /* ignore */ }
+        try {
+          var h = window.location.hostname;
+          if (h === 'reviewhub.review' || h === 'www.reviewhub.review') {
+            var s = document.createElement('script');
+            s.defer = true;
+            s.setAttribute('data-domain', 'reviewhub.review');
+            s.src = 'https://plausible.io/js/script.js';
+            document.head.appendChild(s);
+          }
+        } catch (e) { /* analytics is optional — never crash the page */ }
       })();
     </script>
-
-    <!-- ============================================================
-         ANALYTICS PLACEHOLDER — drop your snippet RIGHT HERE
-         ============================================================
-         When you sign up for Plausible or Umami, paste their script
-         tag right after this comment block.
-
-         For Plausible Cloud (recommended):
-           <script defer data-domain="reviewhub.review"
-                   src="https://plausible.io/js/script.js"></script>
-
-         For Umami self-hosted:
-           <script defer src="https://your-umami-host/script.js"
-                   data-website-id="YOUR-ID"></script>
-
-         IMPORTANT — also update server/src/app.js helmet CSP:
-           - add the analytics origin to scriptSrc
-             e.g. scriptSrc: ["'self'", INLINE_SCRIPT_HASH,
-                              'https://plausible.io']
-           - add the same origin to connectSrc so the tracker can POST
-             events back:  connectSrc: ["'self'", 'https://plausible.io']
-
-         Without those CSP changes the tracker will load BUT the
-         browser will block the outbound event request (you'll see
-         the script in DevTools but no data in the dashboard).
-         ============================================================ -->
 
   </head>
   <body>
