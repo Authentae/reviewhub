@@ -45,6 +45,43 @@ export default function Pricing() {
     setCurrency(c);
   }
 
+  // Inject Product+Offer JSON-LD when plans load. Lets Google show the
+  // pricing page as a rich result with starting price; helps capture
+  // bottom-of-funnel "reviewhub price" / "reviewhub starter cost" queries.
+  useEffect(() => {
+    if (!plans || !plans.length) return;
+    const offers = plans
+      .filter(p => p.id !== 'free')
+      .map(p => ({
+        '@type': 'Offer',
+        'name': p.name,
+        'price': String(p.price?.monthly ?? 0),
+        'priceCurrency': 'USD',
+        'availability': 'https://schema.org/InStock',
+        'url': 'https://reviewhub.review/pricing',
+      }));
+    const schema = {
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      'name': 'ReviewHub',
+      'description': 'AI review reply tool for local businesses. Drafts replies for every Google review in 10 seconds.',
+      'brand': { '@type': 'Brand', 'name': 'ReviewHub' },
+      'offers': {
+        '@type': 'AggregateOffer',
+        'lowPrice': '14',
+        'highPrice': '59',
+        'priceCurrency': 'USD',
+        'offerCount': offers.length,
+        'offers': offers,
+      },
+    };
+    const el = document.createElement('script');
+    el.type = 'application/ld+json';
+    el.textContent = JSON.stringify(schema);
+    document.head.appendChild(el);
+    return () => { try { document.head.removeChild(el); } catch { /* removed elsewhere */ } };
+  }, [plans]);
+
   // Surface cancel-checkout redirect. LS bounces back to /pricing?checkout=cancelled
   // when the user closes the hosted checkout without paying.
   useEffect(() => {
