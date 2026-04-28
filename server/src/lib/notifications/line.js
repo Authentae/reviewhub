@@ -85,12 +85,15 @@ async function sendOwnerPush(text) {
 async function notifyNewReview(review, businessName) {
   if (!isConfigured()) return;
   const stars = '★'.repeat(review.rating || 0) + '☆'.repeat(5 - (review.rating || 0));
-  const snippet = String(review.text || '').slice(0, 200);
+  // DB column is `review_text`; accept either to stay robust to callers
+  // passing a transformed shape.
+  const fullText = String(review.review_text ?? review.text ?? '');
+  const snippet = fullText.slice(0, 200);
   const lines = [
     `🔔 New review for ${businessName}`,
     `${stars} (${review.rating}/5) — ${review.reviewer_name || 'Anonymous'} on ${review.platform}`,
     '',
-    snippet ? `"${snippet}${review.text && review.text.length > 200 ? '…' : ''}"` : '(no text)',
+    snippet ? `"${snippet}${fullText.length > 200 ? '…' : ''}"` : '(no text)',
     '',
     'Reply in your dashboard: https://reviewhub.review/dashboard',
   ];

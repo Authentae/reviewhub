@@ -67,4 +67,75 @@ describe('LINE notifications', () => {
     await assert.doesNotReject(line.sendOwnerPush(null));
     await assert.doesNotReject(line.sendOwnerPush(undefined));
   });
+
+  test('notifyNewReview formats message with snippet from review_text', async () => {
+    process.env.LINE_CHANNEL_ACCESS_TOKEN = 'test-token';
+    process.env.LINE_OWNER_USER_ID = 'U1234567890abcdef';
+    const originalFetch = global.fetch;
+    let captured = null;
+    global.fetch = async (url, opts) => {
+      captured = { url, body: JSON.parse(opts.body) };
+      return { ok: true, status: 200 };
+    };
+    try {
+      await line.notifyNewReview(
+        { rating: 5, reviewer_name: 'Alice', platform: 'google', review_text: 'Loved it' },
+        'Coffee Shop'
+      );
+      assert.equal(captured.url, 'https://api.line.me/v2/bot/message/push');
+      assert.equal(captured.body.to, 'U1234567890abcdef');
+      const text = captured.body.messages[0].text;
+      assert.match(text, /Coffee Shop/);
+      assert.match(text, /Alice/);
+      assert.match(text, /5\/5/);
+      assert.match(text, /Loved it/);
+    } finally {
+      global.fetch = originalFetch;
+    }
+  });
+
+  test('notifyNewReview handles long text by truncating to 200 chars + ellipsis', async () => {
+    process.env.LINE_CHANNEL_ACCESS_TOKEN = 'test-token';
+    process.env.LINE_OWNER_USER_ID = 'U1234567890abcdef';
+    const originalFetch = global.fetch;
+    let captured = null;
+    global.fetch = async (url, opts) => {
+      captured = JSON.parse(opts.body);
+      return { ok: true };
+    };
+    try {
+      const longText = 'x'.repeat(500);
+      await line.notifyNewReview(
+        { rating: 1, reviewer_name: 'Bob', platform: 'google', review_text: longText },
+        'Biz'
+      );
+      const text = captured.messages[0].text;
+      assert.match(text, /…/);
+      // Should contain exactly 200 x's followed by ellipsis
+      assert.ok(text.includes('x'.repeat(200) + '…'));
+      assert.ok(!text.includes('x'.repeat(201)));
+    } finally {
+      global.fetch = originalFetch;
+    }
+  });
+
+  test('notifyNewReview shows "(no text)" when review has no body', async () => {
+    process.env.LINE_CHANNEL_ACCESS_TOKEN = 'test-token';
+    process.env.LINE_OWNER_USER_ID = 'U1234567890abcdef';
+    const originalFetch = global.fetch;
+    let captured = null;
+    global.fetch = async (url, opts) => {
+      captured = JSON.parse(opts.body);
+      return { ok: true };
+    };
+    try {
+      await line.notifyNewReview(
+        { rating: 4, reviewer_name: 'Eve', platform: 'google', review_text: '' },
+        'Biz'
+      );
+      assert.match(captured.messages[0].text, /\(no text\)/);
+    } finally {
+      global.fetch = originalFetch;
+    }
+  });
 });
