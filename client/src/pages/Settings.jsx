@@ -662,11 +662,10 @@ function WebhooksSection() {
   );
 }
 
-// ─── CSV-only platforms ──────────────────────────────────────────────────────
-// Shown under the auto-sync cards (Google/Yelp/Facebook) to make clear that
-// the registry covers 22+ other platforms via CSV import, even though they
-// don't have an OAuth/API connection card. Without this section, users see
-// only 3 cards and assume that's the entire surface area.
+// ─── Other supported platforms ───────────────────────────────────────────────
+// Shown under the auto-sync cards (Google/Yelp/Facebook) so users see the
+// full surface area. With email forwarding shipped, most of these auto-import
+// in real time too — they're not CSV-only anymore.
 function CsvOnlyPlatforms({ lang }) {
   const { t } = useI18n();
   const all = platformsForLocale(lang).filter(
@@ -677,7 +676,7 @@ function CsvOnlyPlatforms({ lang }) {
       <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
         {t(
           'settings.csvOnlyPlatforms',
-          '+ {n} more platforms supported via CSV import (no OAuth/API needed). Use the Import section below.',
+          '+ {n} more platforms supported. Auto-import via email forwarding (set up below) for real-time, or upload a CSV anytime — no OAuth or API keys needed.',
           { n: all.length }
         )}
       </p>
