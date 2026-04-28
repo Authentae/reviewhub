@@ -49,7 +49,7 @@ WHY IT'S DIFFERENT
 HOW IT WORKS
 
 1. Install the extension
-2. Sign up free at reviewhub.app (no credit card)
+2. Sign up free at reviewhub.review (no credit card)
 3. Generate an extension token in Settings → Browser Extension
 4. Paste it into the extension popup
 5. Visit any review page → click the ✨ button next to any review
@@ -60,7 +60,7 @@ PRIVACY
   button — never before, never passively
 • We don't store reviews — only the drafts you request
 • Your extension token lives only in Chrome's encrypted local storage
-• Full privacy policy: reviewhub.app/privacy
+• Full privacy policy: reviewhub.review/privacy
 
 SUPPORTED PLATFORMS
 
@@ -68,12 +68,12 @@ Currently: Yelp, Facebook, TripAdvisor, Trustpilot
 Coming soon: Amazon Seller, Etsy, Booking.com, Airbnb, Google Play, App Store
 
 Full multi-platform review dashboard + analytics + weekly digest + bulk
-review request campaigns available at reviewhub.app.
+review request campaigns available at reviewhub.review.
 
 ---
 
-Questions? Feedback? hello@reviewhub.app
-Full product: https://reviewhub.app
+Questions? Feedback? hello@reviewhub.review
+Full product: https://reviewhub.review
 ```
 
 ## Tagline variants (A/B test these)

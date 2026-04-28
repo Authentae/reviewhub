@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "ReviewHub — AI Review Replies",
   "short_name": "ReviewHub",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Reply to Google, Yelp, Facebook, TripAdvisor, and Trustpilot reviews in 10 seconds with AI — right inside the review platform.",
   "author": "ReviewHub",
   "permissions": [
@@ -24,7 +24,8 @@
     "https://*.amazon.ca/*",
     "https://sellercentral.amazon.com/*",
     "https://*.etsy.com/*",
-    "https://reviewhub.app/*",
+    "https://reviewhub.review/*",
+    "https://www.reviewhub.review/*",
     "http://localhost:3001/*"
   ],
   "background": {

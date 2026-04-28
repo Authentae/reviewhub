@@ -16,7 +16,7 @@ While the extension is pre-publication:
 ## Configure
 
 1. Click the extension icon
-2. Go to [ReviewHub Settings → Browser Extension](https://reviewhub.app/settings)
+2. Go to [ReviewHub Settings → Browser Extension](https://reviewhub.review/settings)
 3. Generate a token and paste it into the extension popup
 4. Click **Connect**
 

@@ -9,7 +9,7 @@
 //   - Never store the token on any page's window/localStorage — only in
 //     chrome.storage.local, which is isolated per extension.
 
-const DEFAULT_API_BASE = 'https://reviewhub.app';
+const DEFAULT_API_BASE = 'https://reviewhub.review';
 
 async function getConfig() {
   const { apiBase, token } = await chrome.storage.local.get(['apiBase', 'token']);

@@ -12,7 +12,7 @@
 // so the quota + billing surfaces work identically to an inline click on
 // Yelp / Facebook / TripAdvisor / etc.
 
-const DEFAULT_API_BASE = 'https://reviewhub.app';
+const DEFAULT_API_BASE = 'https://reviewhub.review';
 const TOKEN_PREFIX = 'rh_ext_';
 
 // ─── Platform metadata (icon letter + brand color + demo date) ────────
