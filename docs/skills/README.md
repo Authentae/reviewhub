@@ -22,9 +22,9 @@ SaaS copy.
 
 | File | When to use |
 |---|---|
+| [`onboarding-email.md`](onboarding-email.md) | Drafting any of the post-signup nudge emails |
 | [`support-response.md`](support-response.md) | Replying to a customer email, chat, or LINE message |
 | [`thai-smb-outreach.md`](thai-smb-outreach.md) | Writing cold LINE / Facebook DM / email to a Thai SMB |
-| [`onboarding-email.md`](onboarding-email.md) | Drafting any of the post-signup nudge emails |
 
 ## When to update these
 

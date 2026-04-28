@@ -147,7 +147,7 @@ function Hero() {
             </div>
             <div className="rh-hero-proof">
               <div className="metric"><div className="n">10<small> {t('landing.heroMetricLangsUnit', 'langs')}</small></div><div className="l">{t('landing.heroMetricLangs', 'Including Thai natively')}</div></div>
-              <div className="metric"><div className="n">25+</div><div className="l">{t('landing.heroMetricPlatform', 'Platforms tracked')}</div></div>
+              <div className="metric"><div className="n">60+</div><div className="l">{t('landing.heroMetricPlatform', 'Platforms tracked')}</div></div>
               <div className="metric"><div className="n">10<small>s</small></div><div className="l">{t('landing.heroMetricSpeed', 'From review to drafted reply')}</div></div>
             </div>
           </div>
@@ -231,7 +231,7 @@ function CardStack() {
 // Honest framing: Google syncs automatically via OAuth ("Auto-sync"); every
 // other platform is tracked via CSV import or manual entry ("Manual / CSV"),
 // which is a real, working capability — not a "coming soon" promise. The
-// platform registry covers 25+ platforms across 10 locales.
+// platform registry covers 60+ platforms across 10 locales.
 function Marquee() {
   const { t } = useI18n();
   const liveLabel = t('marquee.liveToday', 'Auto-sync');
@@ -599,7 +599,7 @@ function Pricing() {
             <div className="plan-sub">{t('landing.plan.soloSub', 'One location, two platforms, all the basics.')}</div>
             <ul>
               <li><Check />{t('landing.plan.solo1', 'Up to 50 reviews / month')}</li>
-              <li><Check />{t('landing.plan.solo2', 'Google auto-sync · 25+ platforms via CSV')}</li>
+              <li><Check />{t('landing.plan.solo2', 'Google auto-sync · 60+ platforms via CSV')}</li>
               <li><Check />{t('landing.plan.solo3', 'AI drafts (template fallback)')}</li>
               <li><Check />{t('landing.plan.solo4', 'CSV import')}</li>
             </ul>
@@ -613,7 +613,7 @@ function Pricing() {
             <div className="plan-sub">{t('landing.plan.shopSub', 'For the place you actually show up to every morning.')}</div>
             <ul>
               <li><Check />{t('landing.plan.shop1', 'Unlimited reviews')}</li>
-              <li><Check />{t('landing.plan.shop2', 'Google auto-sync · 25+ platforms via CSV')}</li>
+              <li><Check />{t('landing.plan.shop2', 'Google auto-sync · 60+ platforms via CSV')}</li>
               <li><Check />{t('landing.plan.shop3', 'Claude-powered drafts, 10 languages')}</li>
               <li><Check />{t('landing.plan.shop4', 'Sentiment, trends, weekly digest')}</li>
               <li><Check />{t('landing.plan.shop5', '3 teammates')}</li>

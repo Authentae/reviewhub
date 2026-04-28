@@ -8,20 +8,20 @@ A single index of every external service ReviewHub plugs into. Three columns:
 | Service | Code shipped | Setup needed | Status |
 |---|---|---|---|
 | **Anthropic Claude** | `server/src/lib/aiResponseGenerator.js` | Set `ANTHROPIC_API_KEY` on Railway | ✅ ACTIVE |
-| **LemonSqueezy billing** | `server/src/lib/billing/lemonsqueezy.js` | Set `LEMONSQUEEZY_API_KEY` + 5 more env vars | ✅ ACTIVE |
-| **Sentry (server)** | `server/src/lib/errorReporter.js` | Set `SENTRY_DSN` on Railway | ✅ ACTIVE |
-| **Sentry (frontend)** | `client/src/main.jsx` | Set `VITE_SENTRY_DSN` at build time | 🟡 READY |
-| **Plausible analytics** | `client/index.html` (auto-injects on prod hostname) | Sign up at plausible.io, register `reviewhub.review` | 🟡 READY |
-| **LINE Messaging push** | `server/src/lib/notifications/line.js` | See [`line-setup.md`](runbooks/line-setup.md) | 🟡 READY |
-| **Outbound webhooks** | `server/src/lib/webhookDelivery.js` + Settings UI | Already in product. Customers wire their own URLs. | ✅ ACTIVE |
-| **Zapier / Make / n8n** | (uses outbound webhooks above) | See [`webhooks-zapier.md`](runbooks/webhooks-zapier.md) | 📖 RUNBOOK |
-| **UptimeRobot monitoring** | `/api/health` endpoint | See [`uptime-monitoring.md`](runbooks/uptime-monitoring.md) | 📖 RUNBOOK |
-| **Resend SMTP** | `server/src/lib/email.js` | Set `SMTP_*` env vars on Railway | ✅ ACTIVE |
-| **Google OAuth** (review platform) | `server/src/lib/providers/google.js` | Set `GOOGLE_CLIENT_ID/SECRET` | ✅ ACTIVE |
-| **Frill feedback widget** | `client/src/components/FrillWidget.jsx` | See [`frill-setup.md`](runbooks/frill-setup.md) | 🟡 READY |
-| **PromptPay (TH instant pay)** | `server/src/lib/promptpay.js` + `/api/billing/promptpay` | See [`promptpay-setup.md`](runbooks/promptpay-setup.md) | 🟡 READY |
-| **Locale platform registry** | `server/src/lib/platforms.js` + `client/src/lib/platforms.js` | None — auto-active per user locale | ✅ ACTIVE |
 | **Email forwarding (auto-import)** | `server/src/routes/inbound.js` + `server/src/lib/inbound/parsers.js` | See [`mailgun-inbound.md`](runbooks/mailgun-inbound.md) | 🟡 READY |
+| **Frill feedback widget** | `client/src/components/FrillWidget.jsx` | See [`frill-setup.md`](runbooks/frill-setup.md) | 🟡 READY |
+| **Google OAuth** (review platform) | `server/src/lib/providers/google.js` | Set `GOOGLE_CLIENT_ID/SECRET` | ✅ ACTIVE |
+| **LemonSqueezy billing** | `server/src/lib/billing/lemonsqueezy.js` | Set `LEMONSQUEEZY_API_KEY` + 5 more env vars | ✅ ACTIVE |
+| **LINE Messaging push** | `server/src/lib/notifications/line.js` | See [`line-setup.md`](runbooks/line-setup.md) | 🟡 READY |
+| **Locale platform registry** | `server/src/lib/platforms.js` + `client/src/lib/platforms.js` | None — auto-active per user locale | ✅ ACTIVE |
+| **Outbound webhooks** | `server/src/lib/webhookDelivery.js` + Settings UI | Already in product. Customers wire their own URLs. | ✅ ACTIVE |
+| **Plausible analytics** | `client/index.html` (auto-injects on prod hostname) | Sign up at plausible.io, register `reviewhub.review` | 🟡 READY |
+| **PromptPay (TH instant pay)** | `server/src/lib/promptpay.js` + `/api/billing/promptpay` | See [`promptpay-setup.md`](runbooks/promptpay-setup.md) | 🟡 READY |
+| **Resend SMTP** | `server/src/lib/email.js` | Set `SMTP_*` env vars on Railway | ✅ ACTIVE |
+| **Sentry (frontend)** | `client/src/main.jsx` | Set `VITE_SENTRY_DSN` at build time | 🟡 READY |
+| **Sentry (server)** | `server/src/lib/errorReporter.js` | Set `SENTRY_DSN` on Railway | ✅ ACTIVE |
+| **UptimeRobot monitoring** | `/api/health` endpoint | See [`uptime-monitoring.md`](runbooks/uptime-monitoring.md) | 📖 RUNBOOK |
+| **Zapier / Make / n8n** | (uses outbound webhooks above) | See [`webhooks-zapier.md`](runbooks/webhooks-zapier.md) | 📖 RUNBOOK |
 
 ## Quick activation list (in order of leverage)
 

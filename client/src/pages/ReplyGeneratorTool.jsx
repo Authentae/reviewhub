@@ -339,7 +339,7 @@ export default function ReplyGeneratorTool() {
             drafts a reply for every new review — in your voice, in 10
             languages including Thai, Japanese, Korean and Chinese. Tap copy,
             paste on Google. Free plan forever, no credit card. Import
-            reviews from 25+ platforms via CSV (Wongnai, Tabelog, Naver,
+            reviews from 60+ platforms via CSV (Wongnai, Tabelog, Naver,
             Dianping, TripAdvisor…).
           </p>
           <div className="flex items-center gap-3 flex-wrap">

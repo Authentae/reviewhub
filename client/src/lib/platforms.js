@@ -156,19 +156,22 @@ const ALL_LOCAL_PLATFORMS = (() => {
 
 /**
  * Return the list of platform identifiers a user should see in dropdowns.
- * Order: globals first, then user's locale platforms, then industry platforms,
- * then other locales' platforms, finally 'manual'. Total: ~60 entries; users
- * see their own locale's relevant platforms ranked first but no platform is
- * ever hidden.
+ * Order:
+ *   1. Globals — fixed (Google, Yelp, Facebook, TripAdvisor, Trustpilot)
+ *   2. User's locale — fixed (Wongnai for th, Tabelog/Retty/etc for ja...)
+ *   3. Everything else — alphabetical by display label so the long tail
+ *      is scannable instead of clustered by industry/region
+ *   4. 'manual' last
  */
 export function platformsForLocale(locale) {
   const localFirst = LOCAL_BY_LOCALE[locale] || [];
   const otherLocales = ALL_LOCAL_PLATFORMS.filter((p) => !localFirst.includes(p));
+  const tail = [...INDUSTRY_PLATFORMS, ...otherLocales]
+    .sort((a, b) => platformLabel(a).localeCompare(platformLabel(b)));
   return [
     ...GLOBAL_PLATFORMS,
     ...localFirst,
-    ...INDUSTRY_PLATFORMS,
-    ...otherLocales,
+    ...tail,
     'manual',
   ];
 }

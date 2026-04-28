@@ -63,7 +63,7 @@ export default function AuthSideArt({ eyebrow, title }) {
 
           {/* Platform chips — Google syncs automatically; the rest are tracked
               via CSV import or manual entry today (which the platform registry
-              covers across 25+ identifiers). Chip opacity reflects auto-sync vs
+              covers across 60+ identifiers). Chip opacity reflects auto-sync vs
               manual; screen readers get the explicit hint. */}
           <p className="rh-mono rh-auth-plat-label">{t('landing.platformsLabel')}</p>
           <div className="rh-auth-platforms">

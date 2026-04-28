@@ -668,9 +668,13 @@ function WebhooksSection() {
 // in real time too — they're not CSV-only anymore.
 function CsvOnlyPlatforms({ lang }) {
   const { t } = useI18n();
-  const all = platformsForLocale(lang).filter(
-    (p) => !['google', 'yelp', 'facebook', 'manual'].includes(p)
-  );
+  // Chip cloud: alphabetical by display label so users can scan A→Z.
+  // (Dropdown ordering elsewhere stays locale-relevance-first; this chip
+  // cloud is a "what's supported" browse view, where A→Z reads cleaner.)
+  const all = platformsForLocale(lang)
+    .filter((p) => !['google', 'yelp', 'facebook', 'manual'].includes(p))
+    .slice()
+    .sort((a, b) => platformLabel(a).localeCompare(platformLabel(b)));
   return (
     <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
       <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
