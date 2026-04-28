@@ -119,7 +119,19 @@ function Hero() {
           </div>
         </div>
         <h1 className="rh-display">
-          {t('landing.heroTitle')}
+          {(() => {
+            // Restore the orange visual highlight on the time portion (e.g.
+            // "10 seconds" / "10 วินาที"). The translated string always
+            // contains "10" followed by a time-unit word — split on "10" and
+            // wrap the trailing chunk in <span class="time"> so the editorial
+            // highlight survives across locales.
+            const title = t('landing.heroTitle');
+            const idx = title.indexOf('10');
+            if (idx === -1) return title;
+            const before = title.slice(0, idx);
+            const after = title.slice(idx);
+            return (<>{before}<span className="time">{after}</span></>);
+          })()}
         </h1>
         <div className="rh-hero-bottom">
           <div>
