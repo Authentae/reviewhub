@@ -1327,9 +1327,9 @@ const es = {
 
   // Landing page
   'landing.pageTitle': 'Todas tus reseñas. Un panel inteligente.',
-  'landing.heroBadge': 'Plan gratuito para siempre · Sin tarjeta de crédito',
+  'landing.heroBadge': 'Plan gratuito para siempre · Sin tarjeta · 10 idiomas',
   'landing.heroTitle': 'Responde a cada reseña de Google en 10 segundos.',
-  'landing.heroSubtitle': 'Reúne todas tus reseñas de Google en un único panel. La IA redacta una respuesta profesional con tu voz. Tú copias y pegas en Google. Listo. Yelp, Facebook y más plataformas próximamente.',
+  'landing.heroSubtitle': 'Reúne todas tus reseñas de Google en un único panel. La IA redacta una respuesta profesional con tu voz — en 10 idiomas. Importa desde 25+ plataformas vía CSV (TheFork, Mercado Libre, TripAdvisor, Trustpilot…).',
   'landing.heroCta': 'Empezar gratis — planes desde $14/mes',
   'landing.heroNote': 'Gratis para siempre · Sin tarjeta de crédito',
   'landing.featuresTitle': 'Todo lo que necesitas para gestionar reseñas',
@@ -1978,9 +1978,9 @@ const fr = {
 
   // Landing page
   'landing.pageTitle': 'Tous vos avis. Un tableau de bord intelligent.',
-  'landing.heroBadge': 'Plan gratuit à vie · Sans carte de crédit',
+  'landing.heroBadge': 'Plan gratuit à vie · Sans carte · 10 langues',
   'landing.heroTitle': 'Répondez à chaque avis Google en 10 secondes.',
-  'landing.heroSubtitle': 'Réunissez tous vos avis Google dans un seul tableau de bord. L\'IA rédige une réponse professionnelle dans votre voix. Vous copiez, collez sur Google, terminé. Yelp, Facebook et d\'autres plateformes bientôt.',
+  'landing.heroSubtitle': 'Réunissez tous vos avis Google dans un seul tableau de bord. L\'IA rédige une réponse professionnelle dans votre voix — en 10 langues. Importez depuis 25+ plateformes via CSV (TheFork, Pages Jaunes, Avis Vérifiés, TripAdvisor…).',
   'landing.heroCta': 'Commencer gratuitement — à partir de 14 $/mois',
   'landing.heroNote': 'Gratuit pour toujours · Sans carte bancaire',
   'landing.featuresTitle': 'Tout ce qu\'il faut pour gérer vos avis',
@@ -2604,9 +2604,9 @@ const de = {
 
   // Landing page
   'landing.pageTitle': 'Alle Bewertungen. Ein smartes Dashboard.',
-  'landing.heroBadge': 'Für immer kostenlos · Keine Kreditkarte nötig',
+  'landing.heroBadge': 'Für immer kostenlos · Keine Kreditkarte · 10 Sprachen',
   'landing.heroTitle': 'Antworte auf jede Google-Bewertung in 10 Sekunden.',
-  'landing.heroSubtitle': 'Bündle alle deine Google-Bewertungen in einem Dashboard. KI entwirft eine professionelle Antwort in deiner Stimme. Du kopierst, fügst auf Google ein, fertig. Yelp, Facebook und weitere Plattformen folgen.',
+  'landing.heroSubtitle': 'Bündle alle deine Google-Bewertungen in einem Dashboard. KI entwirft eine professionelle Antwort in deiner Stimme — in 10 Sprachen. Importiere von 25+ Plattformen per CSV (HolidayCheck, kununu, eKomi, TripAdvisor…).',
   'landing.heroCta': 'Kostenlos starten — ab $14/Monat',
   'landing.heroNote': 'Für immer kostenlos · Keine Kreditkarte erforderlich',
   'landing.featuresTitle': 'Alles, was Sie für die Bewertungsverwaltung brauchen',
@@ -3230,9 +3230,9 @@ const pt = {
 
   // Landing page
   'landing.pageTitle': 'Todas as suas avaliações. Um painel inteligente.',
-  'landing.heroBadge': 'Plano grátis para sempre · Sem cartão de crédito',
+  'landing.heroBadge': 'Plano grátis para sempre · Sem cartão · 10 idiomas',
   'landing.heroTitle': 'Responda a cada avaliação do Google em 10 segundos.',
-  'landing.heroSubtitle': 'Reúna todas as suas avaliações do Google em um único painel. A IA redige uma resposta profissional com a sua voz. Você copia, cola no Google, pronto. Yelp, Facebook e mais plataformas em breve.',
+  'landing.heroSubtitle': 'Reúna todas as suas avaliações do Google em um único painel. A IA redige uma resposta profissional com a sua voz — em 10 idiomas. Importe de 25+ plataformas via CSV (Reclame Aqui, TripAdvisor, Trustpilot, Mercado Livre…).',
   'landing.heroCta': 'Comece grátis — planos a partir de $14/mês',
   'landing.heroNote': 'Grátis para sempre · Sem cartão de crédito',
   'landing.featuresTitle': 'Tudo que você precisa para gerenciar avaliações',
@@ -3856,9 +3856,9 @@ const it = {
 
   // Landing page
   'landing.pageTitle': 'Tutte le tue recensioni. Un cruscotto intelligente.',
-  'landing.heroBadge': 'Piano gratuito per sempre · Nessuna carta di credito',
+  'landing.heroBadge': 'Piano gratuito per sempre · Nessuna carta · 10 lingue',
   'landing.heroTitle': 'Rispondi a ogni recensione Google in 10 secondi.',
-  'landing.heroSubtitle': 'Riunisci tutte le tue recensioni Google in un unico cruscotto. L\'IA redige una risposta professionale nel tuo stile. Tu copi, incolli su Google, fatto. Yelp, Facebook e altre piattaforme presto.',
+  'landing.heroSubtitle': 'Riunisci tutte le tue recensioni Google in un unico cruscotto. L\'IA redige una risposta professionale nel tuo stile — in 10 lingue. Importa da 25+ piattaforme via CSV (TheFork, Pagine Gialle, TripAdvisor, Trustpilot…).',
   'landing.heroCta': 'Inizia gratis — piani da $14/mese',
   'landing.heroNote': 'Gratis per sempre · Nessuna carta di credito richiesta',
   'landing.featuresTitle': 'Tutto il necessario per gestire le recensioni',
@@ -4482,9 +4482,9 @@ const ja = {
 
   // Landing page
   'landing.pageTitle': 'すべての口コミを一か所に。スマートなダッシュボード。',
-  'landing.heroBadge': '永久無料 · クレジットカード不要',
+  'landing.heroBadge': '永久無料 · クレジットカード不要 · 10言語対応',
   'landing.heroTitle': 'すべてのGoogle口コミに10秒で返信。',
-  'landing.heroSubtitle': 'すべてのGoogle口コミを1つのダッシュボードに集約。AIがあなたの声でプロフェッショナルな返信を下書きします。コピーしてGoogleに貼り付けるだけ。Yelp、Facebookなど他のプラットフォームも近日対応予定。',
+  'landing.heroSubtitle': 'すべてのGoogle口コミを1つのダッシュボードに集約。AIがあなたの声でプロフェッショナルな返信を下書きします — 10言語対応（日本語、韓国語、中国語含む）。食べログ、Retty、ホットペッパー、ぐるなびなど25以上のプラットフォームからCSVで取り込み可能。',
   'landing.heroCta': '無料で開始 — プランは月$14から',
   'landing.heroNote': '永久無料 · クレジットカード不要',
   'landing.featuresTitle': '口コミ管理に必要なすべてが揃っています',
@@ -5108,9 +5108,9 @@ const zh = {
 
   // Landing page
   'landing.pageTitle': '所有评价，一个智能仪表盘。',
-  'landing.heroBadge': '永久免费 · 无需信用卡',
+  'landing.heroBadge': '永久免费 · 无需信用卡 · 支持10种语言',
   'landing.heroTitle': '10秒内回复每条Google评价。',
-  'landing.heroSubtitle': '将所有Google评价汇集到一个仪表盘。AI以您的语气起草专业回复。您只需复制粘贴到Google，搞定。Yelp、Facebook等其他平台即将推出。',
+  'landing.heroSubtitle': '将所有Google评价汇集到一个仪表盘。AI以您的语气起草专业回复 — 支持10种语言（含中文、日文、韩文、泰文）。可通过CSV从25+平台导入（大众点评、美团、小红书、TripAdvisor…）。',
   'landing.heroCta': '免费开始 — 套餐从 $14/月起',
   'landing.heroNote': '永久免费 · 无需信用卡',
   'landing.featuresTitle': '管理评价所需的一切',
@@ -5745,9 +5745,9 @@ const ko = {
 
   // Landing page
   'landing.pageTitle': '모든 리뷰를 하나의 스마트 대시보드로.',
-  'landing.heroBadge': '평생 무료 · 신용카드 불필요',
+  'landing.heroBadge': '평생 무료 · 신용카드 불필요 · 10개 언어 지원',
   'landing.heroTitle': '모든 Google 리뷰에 10초 안에 답변하세요.',
-  'landing.heroSubtitle': '모든 Google 리뷰를 하나의 대시보드로 모으세요. AI가 당신의 어조로 전문적인 답변을 초안합니다. 복사해서 Google에 붙여넣기만 하면 됩니다. Yelp, Facebook 등 다른 플랫폼도 곧 추가됩니다.',
+  'landing.heroSubtitle': '모든 Google 리뷰를 하나의 대시보드로 모으세요. AI가 당신의 어조로 전문적인 답변을 초안합니다 — 한국어, 일본어, 중국어 포함 10개 언어 지원. 네이버 플레이스, 카카오맵, 망고플레이트 등 25개 이상 플랫폼에서 CSV로 가져오기.',
   'landing.heroCta': '무료로 시작 — $14/월부터 시작하는 요금제',
   'landing.heroNote': '평생 무료 · 신용카드 필요 없음',
   'landing.featuresTitle': '리뷰 관리에 필요한 모든 것',
@@ -6382,9 +6382,9 @@ const th = {
 
   // Landing page
   'landing.pageTitle': 'รวมรีวิวทั้งหมด ในแดชบอร์ดเดียว',
-  'landing.heroBadge': 'ฟรีตลอดไป · ไม่ต้องใช้บัตรเครดิต · ภาษาไทยหรืออังกฤษ',
+  'landing.heroBadge': 'ฟรีตลอดไป · ไม่ต้องใช้บัตรเครดิต · 10 ภาษา',
   'landing.heroTitle': 'ตอบทุกรีวิว Google ภายใน 10 วินาที',
-  'landing.heroSubtitle': 'รวมรีวิว Google ของคุณไว้ในแดชบอร์ดเดียว AI ร่างคำตอบมืออาชีพในสไตล์ของคุณ — ภาษาไทยหรืออังกฤษ คุณแค่กดคัดลอก แปะบน Google เสร็จเลย Yelp, Facebook และแพลตฟอร์มอื่นๆ เร็วๆ นี้',
+  'landing.heroSubtitle': 'รวมรีวิว Google ของคุณไว้ในแดชบอร์ดเดียว AI ร่างคำตอบมืออาชีพในสไตล์ของคุณ — ใน 10 ภาษา รวมไทย ญี่ปุ่น เกาหลี จีน นำเข้ารีวิวจาก 25+ แพลตฟอร์มผ่าน CSV (Wongnai, Tabelog, Naver, Dianping, TripAdvisor…)',
   'landing.heroCta': 'เริ่มต้นฟรี — แพ็กเกจเริ่มต้น $14/เดือน',
   'landing.heroNote': 'ฟรีตลอดไป · ไม่ต้องใช้บัตรเครดิต',
   'landing.featuresTitle': 'ทุกอย่างที่จำเป็นในการจัดการรีวิว',
