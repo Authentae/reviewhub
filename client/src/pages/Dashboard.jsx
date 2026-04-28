@@ -764,7 +764,7 @@ export default function Dashboard() {
                     </div>
                   )}
                   <div className={`flex-1 min-w-0 ${selectMode && selectedIds.has(review.id) ? 'ring-2 ring-blue-500 rounded-xl' : ''}`}>
-                    <ReviewCard review={review} highlight={search} onResponseSaved={async () => {
+                    <ReviewCard review={review} business={data.business} highlight={search} onResponseSaved={async () => {
                       const res = await fetchReviews(page);
                       // If the current page is now empty but reviews remain elsewhere, go back a page
                       if (res && res.reviews?.length === 0 && res.total > 0 && page > 1) {

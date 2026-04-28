@@ -6,6 +6,7 @@ import TagBadge from './TagBadge';
 import { useToast } from './Toast';
 import api from '../lib/api';
 import { platformLabel as registryPlatformLabel } from '../lib/platforms';
+import { platformLink, platformLinkLabel } from '../lib/platformLinks';
 import { useI18n } from '../context/I18nContext';
 import { useUser } from '../context/UserContext';
 import { Link } from 'react-router-dom';
@@ -124,7 +125,7 @@ function fetchTemplatesOnce() {
 // Expose a reset so Settings can invalidate after CRUD operations
 export function invalidateTemplateCache() { _templateCache = null; _templateFetch = null; }
 
-function ReviewCard({ review, highlight, onResponseSaved }) {
+function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
   const toast = useToast();
   const { t, lang } = useI18n();
   const { subscription, refresh: refreshUser } = useUser();
@@ -144,6 +145,11 @@ function ReviewCard({ review, highlight, onResponseSaved }) {
   const [saved, setSaved] = useState(!!review.response_text);
   const [optimisticResponse, setOptimisticResponse] = useState(review.response_text || null);
   const [expanded, setExpanded] = useState(false);
+  // Translation state — translated text replaces the original visually until
+  // the user toggles back. Lazy-loaded; never fetched until user clicks 🌐.
+  const [translatedText, setTranslatedText] = useState(null);
+  const [translating, setTranslating] = useState(false);
+  const [showTranslated, setShowTranslated] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [showPostReminder, setShowPostReminder] = useState(false);
@@ -604,8 +610,31 @@ function ReviewCard({ review, highlight, onResponseSaved }) {
     return rtf.format(-Math.floor(days / 365), 'year');
   };
 
-  const text = review.review_text || '';
+  const rawText = review.review_text || '';
+  const text = (showTranslated && translatedText) ? translatedText : rawText;
   const isTruncatable = text.length > TEXT_LIMIT;
+  // Best-effort link to the original review on the source platform.
+  // Null when we have no usable URL (e.g. manual entry).
+  const externalLink = platformLink({ review, business });
+
+  async function handleTranslate() {
+    if (translating) return;
+    if (translatedText) {
+      setShowTranslated((v) => !v);
+      return;
+    }
+    setTranslating(true);
+    try {
+      const { data } = await api.post(`/reviews/${review.id}/translate`);
+      setTranslatedText(data.translated_text);
+      setShowTranslated(true);
+    } catch (err) {
+      const msg = err?.response?.data?.error || t('review.translateFailed', 'Translation failed. Try again later.');
+      toast(msg, 'error');
+    } finally {
+      setTranslating(false);
+    }
+  }
   const displayText = isTruncatable && !expanded ? text.slice(0, TEXT_LIMIT) + '…' : text;
 
   return (
@@ -786,6 +815,39 @@ function ReviewCard({ review, highlight, onResponseSaved }) {
                   {expanded ? t('review.showLess') : t('review.showMore')}
                 </button>
               )}
+              {/* QoL action row — translate + open on source platform.
+                  Both are no-ops for manual entries. */}
+              <div className="mt-2 flex items-center gap-3 text-xs">
+                {rawText && (
+                  <button
+                    type="button"
+                    onClick={handleTranslate}
+                    disabled={translating}
+                    aria-pressed={showTranslated}
+                    className="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1 disabled:opacity-50"
+                    title={showTranslated
+                      ? t('review.showOriginal', 'Show original')
+                      : t('review.translateAria', 'Translate to your language')}
+                  >
+                    <span aria-hidden="true">🌐</span>
+                    {translating
+                      ? t('review.translating', 'Translating…')
+                      : showTranslated
+                      ? t('review.showOriginalShort', 'Original')
+                      : t('review.translate', 'Translate')}
+                  </button>
+                )}
+                {externalLink && (
+                  <a
+                    href={externalLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"
+                  >
+                    {platformLinkLabel(review.platform)}
+                  </a>
+                )}
+              </div>
             </div>
           )}
 

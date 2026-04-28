@@ -931,6 +931,84 @@ router.post('/', reviewCreateLimiter, async (req, res) => {
   }
 });
 
+// POST /api/reviews/:id/translate
+//
+// Translate a single review's text into the caller's preferred language
+// (defaults to the user's locale). Doesn't store the translation — runs
+// fresh on each request so users can re-translate after the underlying
+// review_text changes (e.g. owner-edited).
+//
+// Cheap rate limiter to discourage abuse: 30 translations / 5 min.
+const translateLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000,
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: () => process.env.NODE_ENV === 'test',
+});
+
+router.post('/:id/translate', translateLimiter, async (req, res) => {
+  try {
+    const reviewId = parseId(req.params.id);
+    if (!reviewId) return res.status(400).json({ error: 'Invalid review ID' });
+    const business = getUserBusiness(req.user.id);
+    if (!business) return res.status(404).json({ error: 'No business found' });
+    const review = get(
+      'SELECT id, review_text FROM reviews WHERE id = ? AND business_id = ?',
+      [reviewId, business.id]
+    );
+    if (!review) return res.status(404).json({ error: 'Review not found' });
+    if (!review.review_text) return res.status(400).json({ error: 'Review has no text to translate' });
+
+    // Target language: user-preferred via ?to=, otherwise the user's locale,
+    // otherwise English. Locked to known languages to avoid prompt-injection.
+    const validLangs = ['en', 'th', 'ja', 'ko', 'zh', 'es', 'fr', 'de', 'pt', 'it'];
+    const target = validLangs.includes(req.query.to) ? req.query.to
+      : validLangs.includes(req.user.preferred_lang) ? req.user.preferred_lang
+      : 'en';
+    const langName = {
+      en: 'English', th: 'Thai', ja: 'Japanese', ko: 'Korean', zh: 'Chinese',
+      es: 'Spanish', fr: 'French', de: 'German', pt: 'Portuguese', it: 'Italian',
+    }[target];
+
+    // Reuse the AI client from aiDrafts. Falls back to mock client when
+    // ANTHROPIC_API_KEY is unset (returns the original text in dev).
+    const Anthropic = require('@anthropic-ai/sdk');
+    const { createMockClient, shouldUseMock } = require('../lib/mockAnthropic');
+    let client;
+    if (shouldUseMock()) {
+      client = createMockClient();
+    } else if (process.env.ANTHROPIC_API_KEY) {
+      client = new Anthropic.default({ apiKey: process.env.ANTHROPIC_API_KEY });
+    } else {
+      // No AI configured — return the source as-is rather than 500.
+      return res.json({ translated_text: review.review_text, target, untranslated: true });
+    }
+
+    const model = process.env.ANTHROPIC_MODEL || 'claude-opus-4-7';
+    let translated;
+    try {
+      const out = await client.messages.create({
+        model,
+        max_tokens: 1500,
+        system: `You are a translator. Translate the user's text into ${langName}. Return ONLY the translation — no preamble, no notes, no quotes around it. Preserve the original tone and any star/emoji glyphs.`,
+        messages: [{ role: 'user', content: review.review_text }],
+      });
+      translated = (out?.content?.[0]?.text || '').trim();
+    } catch (err) {
+      captureException(err, { kind: 'anthropic.translate_failed', reviewId });
+      return res.status(503).json({ error: 'Translation service unavailable' });
+    }
+    if (!translated) translated = review.review_text;
+
+    res.setHeader('Cache-Control', 'no-store, private');
+    res.json({ translated_text: translated, target });
+  } catch (err) {
+    captureException(err, { route: 'reviews.translate' });
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 router.post('/:id/respond', respondLimiter, async (req, res) => {
   try {
     const reviewId = parseId(req.params.id);
