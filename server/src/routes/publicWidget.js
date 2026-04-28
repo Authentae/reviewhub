@@ -254,4 +254,21 @@ router.post('/review-reply-generator', freeToolLimiter, async (req, res) => {
   }
 });
 
+// GET /api/public/platforms — public catalogue of supported review platforms.
+//
+// Lets external tools (chrome extension, Zapier integrations, the future
+// public docs site) discover the canonical set of platform identifiers
+// without scraping the client bundle. Cached at the edge for 1h since
+// the registry changes rarely.
+router.get('/platforms', widgetLimiter, (_req, res) => {
+  const { GLOBAL, LOCAL, INTERNAL, PLATFORM_META } = require('../lib/platforms');
+  res.setHeader('Cache-Control', 'public, max-age=3600');
+  res.json({
+    global: GLOBAL,
+    local: LOCAL,
+    internal: INTERNAL,
+    meta: PLATFORM_META,
+  });
+});
+
 module.exports = router;
