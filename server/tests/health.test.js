@@ -29,6 +29,11 @@ test('health endpoint', async (t) => {
     assert.ok(typeof c.smtp === 'string');
     assert.ok(typeof c.ai === 'string');
     assert.ok(typeof c.billing === 'string');
+    // Integration components — advisory; just verify presence + string shape
+    // so monitors pattern-matching on `components.sentry` etc. don't break.
+    assert.ok(typeof c.sentry === 'string');
+    assert.ok(typeof c.analytics === 'string');
+    assert.ok(typeof c.line === 'string');
   });
 
   await t.test('response is uncacheable so monitors get fresh data', async () => {

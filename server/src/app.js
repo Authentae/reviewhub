@@ -285,6 +285,9 @@ function createApp() {
       smtp: 'unknown',
       ai: 'unknown',
       billing: 'unknown',
+      sentry: 'unknown',
+      analytics: 'unknown',
+      line: 'unknown',
     };
     let overallOk = true;
 
@@ -346,6 +349,24 @@ function createApp() {
     } else {
       components.billing = 'free-only';
     }
+
+    // Sentry — advisory. Frontend SDK reads VITE_SENTRY_DSN at build time;
+    // server forwarder uses SENTRY_DSN at runtime. Either being set means
+    // error reporting is wired. Operators see drift if env vars get unset.
+    components.sentry = (process.env.SENTRY_DSN || process.env.VITE_SENTRY_DSN)
+      ? 'configured'
+      : 'not-configured';
+
+    // Plausible — auto-injects on production hostname only. We can only
+    // confirm intent via NODE_ENV; the actual injection happens client-side.
+    components.analytics = process.env.NODE_ENV === 'production'
+      ? 'plausible-auto-inject'
+      : 'dev-disabled';
+
+    // LINE Messaging — owner push notifications. Both env vars required.
+    components.line = (process.env.LINE_CHANNEL_ACCESS_TOKEN && process.env.LINE_OWNER_USER_ID)
+      ? 'configured'
+      : 'not-configured';
 
     const payload = {
       ok: overallOk,
