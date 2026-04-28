@@ -32,39 +32,45 @@ function escHtml(s) {
 
 // GET /api/public/widget/:id — JSON data for custom widget integrations
 router.get('/widget/:id', widgetLimiter, (req, res) => {
-  const bizId = parseInt(req.params.id, 10);
-  if (!bizId || bizId <= 0) return res.status(400).json({ error: 'Invalid ID' });
+  try {
+    const bizId = parseInt(req.params.id, 10);
+    if (!bizId || bizId <= 0) return res.status(400).json({ error: 'Invalid ID' });
 
-  const biz = get('SELECT id, business_name, widget_enabled FROM businesses WHERE id = ?', [bizId]);
-  if (!biz || !biz.widget_enabled) return res.status(404).json({ error: 'Widget not found' });
+    const biz = get('SELECT id, business_name, widget_enabled FROM businesses WHERE id = ?', [bizId]);
+    if (!biz || !biz.widget_enabled) return res.status(404).json({ error: 'Widget not found' });
 
-  const stats = get(
-    `SELECT ROUND(AVG(CAST(rating AS REAL)), 1) as avg_rating, COUNT(*) as total
-     FROM reviews WHERE business_id = ?`,
-    [biz.id]
-  );
-  const recent = all(
-    `SELECT reviewer_name, rating, review_text FROM reviews
-     WHERE business_id = ? AND (response_text IS NOT NULL AND response_text != '') AND sentiment = 'positive'
-     ORDER BY created_at DESC LIMIT 3`,
-    [biz.id]
-  );
+    const stats = get(
+      `SELECT ROUND(AVG(CAST(rating AS REAL)), 1) as avg_rating, COUNT(*) as total
+       FROM reviews WHERE business_id = ?`,
+      [biz.id]
+    );
+    const recent = all(
+      `SELECT reviewer_name, rating, review_text FROM reviews
+       WHERE business_id = ? AND (response_text IS NOT NULL AND response_text != '') AND sentiment = 'positive'
+       ORDER BY created_at DESC LIMIT 3`,
+      [biz.id]
+    );
 
-  res.setHeader('Cache-Control', 'public, max-age=300'); // 5-min cache on CDN
-  res.json({
-    business_name: biz.business_name,
-    avg_rating: stats?.avg_rating ?? null,
-    total: stats?.total ?? 0,
-    recent_reviews: recent.map(r => ({
-      reviewer_name: r.reviewer_name,
-      rating: r.rating,
-      review_text: r.review_text ? r.review_text.slice(0, 200) : null,
-    })),
-  });
+    res.setHeader('Cache-Control', 'public, max-age=300');
+    res.json({
+      business_name: biz.business_name,
+      avg_rating: stats?.avg_rating ?? null,
+      total: stats?.total ?? 0,
+      recent_reviews: recent.map(r => ({
+        reviewer_name: r.reviewer_name,
+        rating: r.rating,
+        review_text: r.review_text ? r.review_text.slice(0, 200) : null,
+      })),
+    });
+  } catch (err) {
+    captureException(err, { route: 'public.widget.json' });
+    res.status(500).json({ error: 'Server error' });
+  }
 });
 
 // GET /api/public/widget/:id/badge — self-contained HTML badge for iframe embedding
 router.get('/widget/:id/badge', widgetLimiter, (req, res) => {
+  try {
   const bizId = parseInt(req.params.id, 10);
   if (!bizId || bizId <= 0) return res.status(400).send('Invalid ID');
 
@@ -139,6 +145,10 @@ router.get('/widget/:id/badge', widgetLimiter, (req, res) => {
     "default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; script-src 'none'; object-src 'none'; frame-ancestors *; base-uri 'none'"
   );
   res.send(html);
+  } catch (err) {
+    captureException(err, { route: 'public.widget.badge' });
+    res.status(500).send('Server error');
+  }
 });
 
 // GET /api/public/businesses/:id/reviews — public-facing review feed for the
@@ -147,51 +157,56 @@ router.get('/widget/:id/badge', widgetLimiter, (req, res) => {
 // second round-trip. Unlike the widget endpoints, this one does NOT require
 // widget_enabled — it's the canonical public business page.
 router.get('/businesses/:id/reviews', widgetLimiter, (req, res) => {
-  const bizId = parseInt(req.params.id, 10);
-  if (!bizId || bizId <= 0) return res.status(400).json({ error: 'Invalid ID' });
+  try {
+    const bizId = parseInt(req.params.id, 10);
+    if (!bizId || bizId <= 0) return res.status(400).json({ error: 'Invalid ID' });
 
-  const biz = get('SELECT id, business_name FROM businesses WHERE id = ?', [bizId]);
-  if (!biz) return res.status(404).json({ error: 'Business not found' });
+    const biz = get('SELECT id, business_name FROM businesses WHERE id = ?', [bizId]);
+    if (!biz) return res.status(404).json({ error: 'Business not found' });
 
-  const limit = Math.min(100, Math.max(1, parseInt(req.query.limit, 10) || 25));
+    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit, 10) || 25));
 
-  // LEFT JOIN so reviews without a response come through as well, with
-  // the response_* columns NULL.
-  const rows = all(
-    `SELECT r.id, r.platform, r.reviewer_name, r.rating, r.review_text,
-            r.sentiment, r.created_at,
-            rr.id AS resp_id, rr.response_text AS resp_text,
-            rr.created_at AS resp_created_at, rr.updated_at AS resp_updated_at
-     FROM reviews r
-     LEFT JOIN review_responses rr ON rr.review_id = r.id
-     WHERE r.business_id = ?
-     ORDER BY r.created_at DESC
-     LIMIT ?`,
-    [biz.id, limit]
-  );
+    // LEFT JOIN so reviews without a response come through as well, with
+    // the response_* columns NULL.
+    const rows = all(
+      `SELECT r.id, r.platform, r.reviewer_name, r.rating, r.review_text,
+              r.sentiment, r.created_at,
+              rr.id AS resp_id, rr.response_text AS resp_text,
+              rr.created_at AS resp_created_at, rr.updated_at AS resp_updated_at
+       FROM reviews r
+       LEFT JOIN review_responses rr ON rr.review_id = r.id
+       WHERE r.business_id = ?
+       ORDER BY r.created_at DESC
+       LIMIT ?`,
+      [biz.id, limit]
+    );
 
-  const reviews = rows.map(r => ({
-    id: r.id,
-    platform: r.platform,
-    reviewer_name: r.reviewer_name,
-    rating: r.rating,
-    review_text: r.review_text,
-    sentiment: r.sentiment,
-    created_at: r.created_at,
-    owner_response: r.resp_id ? {
-      id: r.resp_id,
-      response_text: r.resp_text,
-      created_at: r.resp_created_at,
-      updated_at: r.resp_updated_at,
-    } : null,
-  }));
+    const reviews = rows.map(r => ({
+      id: r.id,
+      platform: r.platform,
+      reviewer_name: r.reviewer_name,
+      rating: r.rating,
+      review_text: r.review_text,
+      sentiment: r.sentiment,
+      created_at: r.created_at,
+      owner_response: r.resp_id ? {
+        id: r.resp_id,
+        response_text: r.resp_text,
+        created_at: r.resp_created_at,
+        updated_at: r.resp_updated_at,
+      } : null,
+    }));
 
-  res.setHeader('Cache-Control', 'public, max-age=60');
-  res.json({
-    business: { id: biz.id, business_name: biz.business_name },
-    reviews,
-    limit,
-  });
+    res.setHeader('Cache-Control', 'public, max-age=60');
+    res.json({
+      business: { id: biz.id, business_name: biz.business_name },
+      reviews,
+      limit,
+    });
+  } catch (err) {
+    captureException(err, { route: 'public.businesses.reviews' });
+    res.status(500).json({ error: 'Server error' });
+  }
 });
 
 // ─── Free, no-signup AI reply generator ─────────────────────────────────
@@ -261,14 +276,19 @@ router.post('/review-reply-generator', freeToolLimiter, async (req, res) => {
 // without scraping the client bundle. Cached at the edge for 1h since
 // the registry changes rarely.
 router.get('/platforms', widgetLimiter, (_req, res) => {
-  const { GLOBAL, LOCAL, INTERNAL, PLATFORM_META } = require('../lib/platforms');
-  res.setHeader('Cache-Control', 'public, max-age=3600');
-  res.json({
-    global: GLOBAL,
-    local: LOCAL,
-    internal: INTERNAL,
-    meta: PLATFORM_META,
-  });
+  try {
+    const { GLOBAL, LOCAL, INTERNAL, PLATFORM_META } = require('../lib/platforms');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    res.json({
+      global: GLOBAL,
+      local: LOCAL,
+      internal: INTERNAL,
+      meta: PLATFORM_META,
+    });
+  } catch (err) {
+    captureException(err, { route: 'public.platforms' });
+    res.status(500).json({ error: 'Server error' });
+  }
 });
 
 module.exports = router;

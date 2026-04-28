@@ -12,21 +12,26 @@ const router = express.Router();
 // Click-tracking redirect — public, no auth. Must be registered BEFORE
 // authMiddleware so unauthenticated customers can click the link.
 router.get('/track/:token', (req, res) => {
-  const hash = hashToken(req.params.token);
-  const rr = get('SELECT * FROM review_requests WHERE token_hash = ?', [hash]);
-  if (!rr) return res.status(404).send('Link not found or expired.');
+  try {
+    const hash = hashToken(req.params.token);
+    const rr = get('SELECT * FROM review_requests WHERE token_hash = ?', [hash]);
+    if (!rr) return res.status(404).send('Link not found or expired.');
 
-  // Record click (idempotent — only store the first click time)
-  if (!rr.clicked_at) {
-    run("UPDATE review_requests SET clicked_at = datetime('now') WHERE id = ?", [rr.id]);
+    // Record click (idempotent — only store the first click time)
+    if (!rr.clicked_at) {
+      run("UPDATE review_requests SET clicked_at = datetime('now') WHERE id = ?", [rr.id]);
+    }
+
+    // Build the platform review URL from the business's stored IDs
+    const biz = get('SELECT * FROM businesses WHERE id = ?', [rr.business_id]);
+    const redirectUrl = buildReviewUrl(rr.platform, biz);
+    if (!redirectUrl) return res.status(410).send('Review link is no longer available.');
+
+    res.redirect(302, redirectUrl);
+  } catch (err) {
+    captureException(err, { route: 'reviewRequests.track' });
+    res.status(500).send('Server error');
   }
-
-  // Build the platform review URL from the business's stored IDs
-  const biz = get('SELECT * FROM businesses WHERE id = ?', [rr.business_id]);
-  const redirectUrl = buildReviewUrl(rr.platform, biz);
-  if (!redirectUrl) return res.status(410).send('Review link is no longer available.');
-
-  res.redirect(302, redirectUrl);
 });
 
 router.use(authMiddleware);

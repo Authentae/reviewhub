@@ -6,10 +6,16 @@
 const express = require('express');
 const router = express.Router();
 const { PLANS } = require('../lib/billing/plans');
+const { captureException } = require('../lib/errorReporter');
 
 router.get('/', (_req, res) => {
-  res.setHeader('Cache-Control', 'public, max-age=300'); // plans change rarely
-  res.json({ plans: Object.values(PLANS) });
+  try {
+    res.setHeader('Cache-Control', 'public, max-age=300'); // plans change rarely
+    res.json({ plans: Object.values(PLANS) });
+  } catch (err) {
+    captureException(err, { route: 'plans' });
+    res.status(500).json({ error: 'Server error' });
+  }
 });
 
 module.exports = router;
