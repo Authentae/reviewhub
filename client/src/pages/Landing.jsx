@@ -409,7 +409,7 @@ function AiDemo() {
         reviewer_name: review.name,
         rating: review.stars,
         platform: review.plat,
-        business_name: 'Corner Bistro',
+        business_name: lang === 'th' ? 'ร้านกาแฟริมทาง' : 'Corner Bistro',
         review_text: review.body,
         tone,
       });
@@ -776,7 +776,7 @@ function GimmickLayer() {
         reviewer_name: pick.name,
         rating: pick.stars,
         platform: pick.plat,
-        business_name: 'Corner Bistro',
+        business_name: lang === 'th' ? 'ร้านกาแฟริมทาง' : 'Corner Bistro',
         review_text: pick.body,
         tone: 'warm',
       });
