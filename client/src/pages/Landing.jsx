@@ -833,17 +833,17 @@ function GimmickLayer() {
   return (
     <>
       <div className="rh-toast-dock" aria-live="polite">
-        {toasts.map((t) => (
-          <div key={t.id} className={'rh-draft-toast' + (t.out ? ' out' : '')}>
+        {toasts.map((toast) => (
+          <div key={toast.id} className={'rh-draft-toast' + (toast.out ? ' out' : '')}>
             <div className="dt-accent" />
             <div className="dt-head">
-              <div className="ttl">✦ Drafting · {t.review.platLabel}</div>
-              <button className="close" onClick={() => closeToast(t.id)} aria-label="Close">×</button>
+              <div className="ttl">✦ {t('landing.toastDrafting', 'Drafting')} · {toast.review.platLabel}</div>
+              <button className="close" onClick={() => closeToast(toast.id)} aria-label={t('common.close', 'Close')}>×</button>
             </div>
             <div className="dt-body">
-              <div className="review"><b>{t.review.name}</b> · {'★'.repeat(t.review.stars)}<br />"{t.review.body}"</div>
-              <div className="dt-label">AI draft</div>
-              <div className={'draft' + (t.typing ? ' typing' : '')}>{t.draft}</div>
+              <div className="review"><b>{toast.review.name}</b> · {'★'.repeat(toast.review.stars)}<br />"{toast.review.body}"</div>
+              <div className="dt-label">{t('landing.toastAiDraft', 'AI draft')}</div>
+              <div className={'draft' + (toast.typing ? ' typing' : '')}>{toast.draft}</div>
             </div>
           </div>
         ))}

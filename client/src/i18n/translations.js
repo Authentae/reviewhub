@@ -1004,6 +1004,7 @@ const en = {
   'common.copy': 'Copy',
   'common.copied': 'Copied!',
   'common.loading': 'Loading…',
+  'common.close': 'Close',
 
   // Browser extension token section
   'settings.extension.title': 'Browser Extension',
@@ -7412,6 +7413,9 @@ const th = {
   'landing.demoWordsLabel': 'คำ',
   'landing.demoTokensLabel': 'โทเค็น',
   'landing.demoUnlimited': 'รับร่างไม่จำกัด',
+  'common.close': 'ปิด',
+  'landing.toastDrafting': 'กำลังร่าง',
+  'landing.toastAiDraft': 'ร่าง AI',
   'pricing.freeDesc': 'ลอง ReviewHub — ไม่ต้องใช้บัตรเครดิต ไม่จำกัดเวลา',
   'pricing.starterDesc': 'ทุกอย่างที่ร้านเดียวต้องการเพื่อตอบรีวิวอย่างรวดเร็ว',
   'pricing.proDesc': 'สำหรับธุรกิจที่ยุ่งบนทุกแพลตฟอร์มหลัก',
