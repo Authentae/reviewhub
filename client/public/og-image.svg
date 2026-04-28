@@ -29,7 +29,7 @@
   <text x="96" y="438" font-family="'Inter Tight', -apple-system, system-ui, sans-serif" font-size="64" font-weight="700" fill="#1e4d5e">one editorial dashboard.</text>
 
   <!-- Sub-line -->
-  <text x="96" y="510" font-family="'Inter Tight', -apple-system, system-ui, sans-serif" font-size="28" font-weight="400" fill="#1d242c" opacity="0.7">Google reviews · AI drafts in Thai or English · Yelp + Facebook coming soon.</text>
+  <text x="96" y="510" font-family="'Inter Tight', -apple-system, system-ui, sans-serif" font-size="28" font-weight="400" fill="#1d242c" opacity="0.7">Google reviews · AI drafts in 10 languages · 25+ platforms via CSV import.</text>
 
   <!-- Footer URL -->
   <text x="96" y="580" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="22" fill="#1d242c" opacity="0.55">reviewhub.review</text>

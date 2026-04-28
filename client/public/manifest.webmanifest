@@ -1,7 +1,7 @@
 {
   "name": "ReviewHub — Reply to every Google review in 10 seconds",
   "short_name": "ReviewHub",
-  "description": "Pull all your Google reviews into one dashboard. AI drafts a reply in your voice — Thai or English. Yelp, Facebook, and more coming soon.",
+  "description": "All your reviews in one dashboard. AI drafts replies in 10 languages including Thai, Japanese, Korean, Chinese. Import from 25+ platforms (Google, Wongnai, Tabelog, Naver, Dianping, TripAdvisor…). Free plan, no card.",
   "start_url": "/dashboard",
   "scope": "/",
   "display": "standalone",

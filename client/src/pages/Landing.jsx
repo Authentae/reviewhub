@@ -147,7 +147,7 @@ function Hero() {
             </div>
             <div className="rh-hero-proof">
               <div className="metric"><div className="n">10<small> {t('landing.heroMetricLangsUnit', 'langs')}</small></div><div className="l">{t('landing.heroMetricLangs', 'Including Thai natively')}</div></div>
-              <div className="metric"><div className="n">Google</div><div className="l">{t('landing.heroMetricPlatform', 'Today · others coming soon')}</div></div>
+              <div className="metric"><div className="n">25+</div><div className="l">{t('landing.heroMetricPlatform', 'Platforms tracked')}</div></div>
               <div className="metric"><div className="n">10<small>s</small></div><div className="l">{t('landing.heroMetricSpeed', 'From review to drafted reply')}</div></div>
             </div>
           </div>
@@ -227,23 +227,28 @@ function CardStack() {
   );
 }
 
-// ── Marquee — platforms we connect to (live + coming soon) ─────────────────
-// Honest framing: ReviewHub is Google-only at launch. The other platforms
-// have scaffolded providers but no live API integration yet, so we label
-// them as "coming soon" rather than implying current support with fake
-// rating numbers (which previously read like ReviewHub's own ratings on
-// each platform — they weren't).
+// ── Marquee — platforms we connect to ──────────────────────────────────────
+// Honest framing: Google syncs automatically via OAuth ("Auto-sync"); every
+// other platform is tracked via CSV import or manual entry ("Manual / CSV"),
+// which is a real, working capability — not a "coming soon" promise. The
+// platform registry covers 25+ platforms across 10 locales.
 function Marquee() {
   const { t } = useI18n();
-  const liveLabel = t('marquee.liveToday', 'Live today');
-  const soonLabel = t('marquee.comingSoon', 'Coming soon');
+  const liveLabel = t('marquee.liveToday', 'Auto-sync');
+  const manualLabel = t('marquee.manualImport', 'Manual / CSV');
   const platforms = [
-    { name: 'Google',      color: 'oklch(0.72 0.16 240)', live: true },
-    { name: 'Yelp',        color: 'oklch(0.65 0.22 25)',  live: false },
-    { name: 'Facebook',    color: 'oklch(0.62 0.15 255)', live: false },
-    { name: 'TripAdvisor', color: 'oklch(0.68 0.16 155)', live: false },
-    { name: 'Trustpilot',  color: 'oklch(0.68 0.16 155)', live: false },
-    { name: 'Wongnai',     color: 'oklch(0.72 0.18 35)',  live: false },
+    { name: 'Google',       color: 'oklch(0.72 0.16 240)', live: true },
+    { name: 'Yelp',         color: 'oklch(0.65 0.22 25)',  live: false },
+    { name: 'Facebook',     color: 'oklch(0.62 0.15 255)', live: false },
+    { name: 'TripAdvisor',  color: 'oklch(0.68 0.16 155)', live: false },
+    { name: 'Trustpilot',   color: 'oklch(0.68 0.16 155)', live: false },
+    { name: 'Wongnai',      color: 'oklch(0.72 0.18 35)',  live: false },
+    { name: 'Tabelog',      color: 'oklch(0.65 0.20 30)',  live: false },
+    { name: 'Naver Place',  color: 'oklch(0.68 0.18 145)', live: false },
+    { name: 'Dianping',     color: 'oklch(0.65 0.22 25)',  live: false },
+    { name: 'TheFork',      color: 'oklch(0.65 0.22 25)',  live: false },
+    { name: 'HolidayCheck', color: 'oklch(0.72 0.16 240)', live: false },
+    { name: 'Reclame Aqui', color: 'oklch(0.65 0.20 30)',  live: false },
   ];
   const Row = () => (
     <span>
@@ -252,7 +257,7 @@ function Marquee() {
           <span className="chunk" style={{ '--platcolor': p.color }}>
             <span className="star">{p.live ? '★' : '○'}</span>
             <span className="plat">{p.name}</span>
-            <span className="count" style={{ opacity: p.live ? 1 : 0.55 }}>{p.live ? liveLabel : soonLabel}</span>
+            <span className="count" style={{ opacity: p.live ? 1 : 0.7 }}>{p.live ? liveLabel : manualLabel}</span>
           </span>
           {i < platforms.length - 1 && <span className="sep">—</span>}
         </React.Fragment>
@@ -594,7 +599,7 @@ function Pricing() {
             <div className="plan-sub">{t('landing.plan.soloSub', 'One location, two platforms, all the basics.')}</div>
             <ul>
               <li><Check />{t('landing.plan.solo1', 'Up to 50 reviews / month')}</li>
-              <li><Check />{t('landing.plan.solo2', 'Google today · Yelp, Facebook, Wongnai coming soon')}</li>
+              <li><Check />{t('landing.plan.solo2', 'Google auto-sync · 25+ platforms via CSV')}</li>
               <li><Check />{t('landing.plan.solo3', 'AI drafts (template fallback)')}</li>
               <li><Check />{t('landing.plan.solo4', 'CSV import')}</li>
             </ul>
@@ -608,7 +613,7 @@ function Pricing() {
             <div className="plan-sub">{t('landing.plan.shopSub', 'For the place you actually show up to every morning.')}</div>
             <ul>
               <li><Check />{t('landing.plan.shop1', 'Unlimited reviews')}</li>
-              <li><Check />{t('landing.plan.shop2', 'Google today · Yelp, Facebook, Wongnai coming soon')}</li>
+              <li><Check />{t('landing.plan.shop2', 'Google auto-sync · 25+ platforms via CSV')}</li>
               <li><Check />{t('landing.plan.shop3', 'Claude-powered drafts, 10 languages')}</li>
               <li><Check />{t('landing.plan.shop4', 'Sentiment, trends, weekly digest')}</li>
               <li><Check />{t('landing.plan.shop5', '3 teammates')}</li>
