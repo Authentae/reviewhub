@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="ReviewHub — manage your Google reviews in one dashboard, reply faster with AI-drafted responses (Thai or English), track ratings over time. Yelp, Facebook, and more coming soon." />
+    <meta name="description" content="ReviewHub — manage your Google reviews in one dashboard, reply faster with AI-drafted responses in 10 languages, import reviews from Yelp, Facebook, TripAdvisor, Wongnai, Tabelog, Naver, and 20+ other platforms via CSV." />
     <!-- Mobile browsers use this to tint the URL bar. Match the editorial
          brand teal (rh-teal-deep) — was #2563eb (legacy blue) before the
          brand reskin, which made the mobile URL bar disagree with every
@@ -19,7 +19,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="application-name" content="ReviewHub" />
     <meta property="og:title" content="ReviewHub — Reply to every Google review in 10 seconds" />
-    <meta property="og:description" content="Pull all your Google reviews into one dashboard. AI drafts a reply in your voice — Thai or English. You tap copy, paste on Google, done. Yelp, Facebook, and more coming soon. Free plan, no credit card." />
+    <meta property="og:description" content="Pull all your Google reviews into one dashboard. AI drafts a reply in your voice — in 10 languages including Thai, Japanese, Korean, Chinese. Import from 25+ platforms via CSV (Wongnai, Tabelog, Naver, Dianping, TripAdvisor…). Free plan, no card." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://reviewhub.review/" />
     <meta property="og:site_name" content="ReviewHub" />
@@ -41,9 +41,28 @@
          and is also what LinkedIn / Slack / LINE / Discord render as a hero card. -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="ReviewHub — Reply to every Google review in 10 seconds" />
-    <meta name="twitter:description" content="Pull all your Google reviews into one dashboard. AI drafts a reply in your voice — Thai or English. Free plan, no card." />
+    <meta name="twitter:description" content="All your reviews in one dashboard. AI drafts replies in 10 languages. Import from 25+ platforms (Google, Wongnai, Tabelog, Naver, Dianping…). Free plan, no card." />
     <meta name="twitter:image" content="https://reviewhub.review/og-image.svg" />
     <link rel="canonical" href="https://reviewhub.review/" />
+    <!-- Hreflang alternates: ReviewHub ships in 10 languages via the in-app
+         language switcher. The site uses a single URL for all locales (the
+         language is selected client-side, persisted in localStorage), so
+         every alternate points at the canonical. Including this tag still
+         tells Google "this page exists in language X" — improves SERP
+         targeting for searches in those languages and reduces duplicate-
+         content suspicion from auto-translated index entries.
+         x-default = root URL for users whose language we don't ship. -->
+    <link rel="alternate" hreflang="en" href="https://reviewhub.review/" />
+    <link rel="alternate" hreflang="th" href="https://reviewhub.review/" />
+    <link rel="alternate" hreflang="ja" href="https://reviewhub.review/" />
+    <link rel="alternate" hreflang="ko" href="https://reviewhub.review/" />
+    <link rel="alternate" hreflang="zh" href="https://reviewhub.review/" />
+    <link rel="alternate" hreflang="es" href="https://reviewhub.review/" />
+    <link rel="alternate" hreflang="fr" href="https://reviewhub.review/" />
+    <link rel="alternate" hreflang="de" href="https://reviewhub.review/" />
+    <link rel="alternate" hreflang="pt" href="https://reviewhub.review/" />
+    <link rel="alternate" hreflang="it" href="https://reviewhub.review/" />
+    <link rel="alternate" hreflang="x-default" href="https://reviewhub.review/" />
     <!-- Structured data for Google's Knowledge Graph + rich snippets. SoftwareApplication
          lets Google show price + rating in search results once we have aggregate reviews
          to attach. Organization establishes the brand entity. Both are inert until Google
@@ -58,7 +77,7 @@
           "applicationCategory": "BusinessApplication",
           "operatingSystem": "Web",
           "url": "https://reviewhub.review/",
-          "description": "Manage Google reviews in one dashboard with AI-drafted replies (Thai or English). Yelp, Facebook, and more platforms coming soon.",
+          "description": "Manage Google reviews in one dashboard with AI-drafted replies in 10 languages. Import reviews from 25+ platforms including Yelp, Facebook, TripAdvisor, Wongnai (TH), Tabelog (JP), Naver Place (KR), Dianping (CN).",
           "offers": [
             { "@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "USD" },
             { "@type": "Offer", "name": "Starter", "price": "14", "priceCurrency": "USD" },
@@ -88,7 +107,7 @@
               "name": "Which review platforms do you support?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Today, Google is fully supported via OAuth — reviews sync automatically. Yelp, Facebook, TripAdvisor, Trustpilot, and Wongnai are coming soon. You can also import reviews via CSV today, or use our API/webhooks on the Business plan."
+                "text": "Google is fully supported via OAuth — reviews sync automatically. We also support manual entry and CSV import for 25+ other platforms including Yelp, Facebook, TripAdvisor, Trustpilot, Wongnai (Thailand), Tabelog (Japan), Naver Place (Korea), Dianping (China), TheFork (France/Spain/Italy), HolidayCheck (Germany), Reclame Aqui (Brazil), and more. The Business plan unlocks outbound webhooks (Zapier-compatible) and our REST API."
               }
             },
             {

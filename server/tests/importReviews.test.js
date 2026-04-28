@@ -207,4 +207,25 @@ describe('CSV import', () => {
     const rows = all('SELECT * FROM reviews WHERE business_id = ?', [biz2.id]);
     assert.strictEqual(rows.length, 0);
   });
+
+  test('accepts locale-specific platforms (tabelog, naver, dianping, wongnai)', async () => {
+    // Lock in that the centralized platform registry covers the locale
+    // platforms a Thai/Japanese/Korean/Chinese SMB would actually paste in.
+    const u = await makeUserWithBusiness();
+    const body = csv(
+      HEADER,
+      'wongnai,Som,5,อร่อยมาก,,',
+      'tabelog,Tanaka,4,おいしかったです,,',
+      'naver,Kim,5,맛집!,,',
+      'dianping,Wang,3,一般般,,',
+      'reclameaqui,Silva,2,Atendimento ruim,,'
+    );
+    const res = await request(app).post('/api/reviews/import')
+      .set('Authorization', `Bearer ${u.token}`)
+      .set('Content-Type', 'text/plain')
+      .send(body);
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.body.imported, 5);
+    assert.strictEqual(res.body.skipped, 0);
+  });
 });
