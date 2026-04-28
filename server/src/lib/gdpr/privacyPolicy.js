@@ -21,14 +21,14 @@ class PrivacyPolicyManager {
 
 **ReviewHub**
 Data Controller and Data Protection Contact
-Email: privacy@reviewhub.com
-Website: https://reviewhub.com
+Email: privacy@reviewhub.review
+Website: https://reviewhub.review
 
 ## 2. What Information We Collect
 
 ### Personal Data Categories:
 - **Account Information**: Email address, encrypted password, account preferences
-- **Business Information**: Business name, platform connections (Google, Yelp, Facebook)
+- **Business Information**: Business name, platform connections (Google via OAuth; CSV/manual import for 25+ platforms including Yelp, Facebook, TripAdvisor, Trustpilot, Wongnai, Tabelog, Naver Place, Dianping, TheFork, HolidayCheck, Reclame Aqui)
 - **Review Data**: Reviews and responses managed through our platform
 - **Usage Data**: Application usage patterns and feature interactions
 - **Communication Data**: Customer support interactions and feedback
@@ -67,8 +67,9 @@ We process personal data for:
 - Data shared: Contact details, billing information, purchase history
 
 ### Review Platforms:
-- **Google My Business**, **Yelp**, **Facebook**: Response posting via APIs
-- Data shared: Business identifiers, review responses you authorize
+- **Google My Business**: OAuth-authenticated review pull + response posting via the Google My Business API
+- **Other review platforms** (Yelp, Facebook, TripAdvisor, Trustpilot, Wongnai, Tabelog, Naver, Dianping, etc.): no automated API connection; reviews are imported manually via CSV. We do not transmit any data to these platforms on your behalf.
+- Data shared with Google: Business identifiers, review responses you explicitly authorize
 
 ### Service Providers:
 - **Hosting Providers**: Infrastructure and data storage
@@ -123,7 +124,7 @@ Protection against solely automated decision-making with significant effects.
 
 ## 9. How to Exercise Your Rights
 
-**Email**: privacy@reviewhub.com
+**Email**: privacy@reviewhub.review
 **Response Time**: Within 30 days
 **Verification**: Identity verification required for security
 **Fee**: Generally free (reasonable fee for excessive requests)
@@ -175,7 +176,7 @@ Cookie settings available in your account dashboard.
 ## 15. Data Protection Officer
 
 For privacy-related questions:
-**Email**: dpo@reviewhub.com
+**Email**: dpo@reviewhub.review
 **Role**: Independent oversight of data protection practices
 
 ## 16. Supervisory Authority
@@ -193,10 +194,10 @@ Policy changes:
 
 ## 18. Contact Information
 
-**General Privacy Questions**: privacy@reviewhub.com
-**Data Protection Officer**: dpo@reviewhub.com
-**Security Issues**: security@reviewhub.com
-**Legal Department**: legal@reviewhub.com
+**General Privacy Questions**: privacy@reviewhub.review
+**Data Protection Officer**: dpo@reviewhub.review
+**Security Issues**: security@reviewhub.review
+**Legal Department**: legal@reviewhub.review
 
 ---
 
