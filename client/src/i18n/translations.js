@@ -29,9 +29,9 @@ const en = {
 
   // Landing page
   'landing.pageTitle': 'All Your Reviews. One Smart Dashboard.',
-  'landing.heroBadge': 'Free plan forever · No credit card · Thai or English',
+  'landing.heroBadge': 'Free plan forever · No credit card · 10 languages',
   'landing.heroTitle': 'Reply to every Google review in 10 seconds.',
-  'landing.heroSubtitle': 'Pull all your Google reviews into one dashboard. AI drafts a professional reply in your voice — in Thai or English. You tap copy, paste on Google, done. Yelp, Facebook, and more platforms coming soon.',
+  'landing.heroSubtitle': 'Pull all your Google reviews into one dashboard. AI drafts a professional reply in your voice — in 10 languages including Thai, Japanese, Korean, and Chinese. Import from 25+ platforms via CSV (Wongnai, Tabelog, Naver, Dianping, TripAdvisor…).',
   'landing.heroCtaPrimary': 'Get the Chrome Extension',
   'landing.heroCtaSecondary': 'Try free — no signup',
   'landing.heroCtaPrimaryNewTab': '(opens in a new tab)',

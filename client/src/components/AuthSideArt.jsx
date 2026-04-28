@@ -61,10 +61,10 @@ export default function AuthSideArt({ eyebrow, title }) {
             </figcaption>
           </figure>
 
-          {/* Platform chips — Google is live today, the rest are scaffolded
-              providers waiting on real API integration. Don't imply current
-              support for non-Google platforms; chip opacity downstreams the
-              status visually, screen readers get the explicit hint. */}
+          {/* Platform chips — Google syncs automatically; the rest are tracked
+              via CSV import or manual entry today (which the platform registry
+              covers across 25+ identifiers). Chip opacity reflects auto-sync vs
+              manual; screen readers get the explicit hint. */}
           <p className="rh-mono rh-auth-plat-label">{t('landing.platformsLabel')}</p>
           <div className="rh-auth-platforms">
             {[
@@ -72,11 +72,12 @@ export default function AuthSideArt({ eyebrow, title }) {
               { name: 'Yelp', live: false },
               { name: 'Facebook', live: false },
               { name: 'TripAdvisor', live: false },
-              { name: 'Trustpilot', live: false },
               { name: 'Wongnai', live: false },
+              { name: 'Tabelog', live: false },
+              { name: 'Naver', live: false },
             ].map(({ name, live }) => (
-              <span key={name} style={live ? undefined : { opacity: 0.55 }}
-                aria-label={live ? name : `${name} — ${t('marquee.comingSoon', 'Coming soon')}`}>
+              <span key={name} style={live ? undefined : { opacity: 0.7 }}
+                aria-label={live ? name : `${name} — ${t('marquee.manualImport', 'Manual / CSV')}`}>
                 {name}
               </span>
             ))}
