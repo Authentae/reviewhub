@@ -662,6 +662,39 @@ function WebhooksSection() {
   );
 }
 
+// ─── CSV-only platforms ──────────────────────────────────────────────────────
+// Shown under the auto-sync cards (Google/Yelp/Facebook) to make clear that
+// the registry covers 22+ other platforms via CSV import, even though they
+// don't have an OAuth/API connection card. Without this section, users see
+// only 3 cards and assume that's the entire surface area.
+function CsvOnlyPlatforms({ lang }) {
+  const { t } = useI18n();
+  const all = platformsForLocale(lang).filter(
+    (p) => !['google', 'yelp', 'facebook', 'manual'].includes(p)
+  );
+  return (
+    <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+      <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+        {t(
+          'settings.csvOnlyPlatforms',
+          '+ {n} more platforms supported via CSV import (no OAuth/API needed). Use the Import section below.',
+          { n: all.length }
+        )}
+      </p>
+      <div className="flex flex-wrap gap-1.5">
+        {all.map((p) => (
+          <span
+            key={p}
+            className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300"
+          >
+            {platformLabel(p)}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ─── CSV Import sub-component ────────────────────────────────────────────────
 function ImportSection() {
   const { t } = useI18n();
@@ -2345,6 +2378,11 @@ export default function Settings() {
             <ConnectCard platform="yelp" icon={<span aria-hidden="true">🔴</span>} color="bg-red-50" connected={business?.yelp_business_id} onConnect={handleConnect} syncStatus={connections.yelp} />
             <ConnectCard platform="facebook" icon={<span aria-hidden="true">🟣</span>} color="bg-indigo-50" connected={business?.facebook_page_id} onConnect={handleConnect} syncStatus={connections.facebook} />
           </div>
+          {/* CSV-imported platforms — shown so users see the full registry
+              and don't think we only support 3 platforms. The "Connected"
+              cards above are auto-sync; everything below works via the CSV
+              Import section further down on this page. */}
+          <CsvOnlyPlatforms lang={lang} />
         </section>
 
         {/* Review Tags */}
