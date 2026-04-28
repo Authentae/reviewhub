@@ -21,7 +21,7 @@ const CONSENT_FALLBACKS = {
   essential:   { label: 'Essential',                description: 'Required for login, security, and core service. Cannot be disabled.' },
   analytics:   { label: 'Analytics',                description: 'Aggregate usage stats so we can improve the product.' },
   marketing:   { label: 'Marketing',                description: 'Product update emails and onboarding nudges.' },
-  third_party: { label: 'Third-party integrations', description: 'Sharing with review platforms (Google, Facebook, etc.) when you connect them.' },
+  third_party: { label: 'Third-party integrations', description: 'Sharing with Google when you connect your Google Business Profile via OAuth. Reviews from other platforms are imported manually via CSV — no outbound data flow.' },
   profiling:   { label: 'AI personalization',       description: 'Use your review history to tailor AI-generated reply suggestions.' },
 };
 
