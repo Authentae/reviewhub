@@ -117,9 +117,14 @@ function getTemplateDraft(review) {
 }
 
 function buildUserMessage({ review, businessName }) {
+  // Use the registry's display label so the AI sees "Wongnai" / "Tabelog
+  // (食べログ)" / "Dianping (大众点评)" instead of bare lowercase IDs —
+  // helps the model adapt tone to the platform's audience and convention.
+  const { PLATFORM_META } = require('./platforms');
+  const platformLabel = PLATFORM_META[review.platform]?.label || review.platform || '';
   return [
     `Business: ${businessName || 'this business'}`,
-    `Platform: ${review.platform}`,
+    `Platform: ${platformLabel}`,
     `Reviewer: ${review.reviewer_name}`,
     `Rating: ${review.rating} out of 5 stars`,
     `Review text: ${review.review_text ? `"${review.review_text}"` : '(none provided)'}`,
