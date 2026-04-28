@@ -58,14 +58,32 @@ export const PLATFORM_LABELS = {
   manual: 'Manual entry',
 };
 
+// Flat list of every locale-specific platform (deduped), used to build
+// the "rest of the world" tail of the dropdown so a user always sees the
+// full registry — they just see their own locale's platforms first.
+const ALL_LOCAL_PLATFORMS = (() => {
+  const seen = new Set();
+  const out = [];
+  for (const list of Object.values(LOCAL_BY_LOCALE)) {
+    for (const p of list) {
+      if (!seen.has(p)) { seen.add(p); out.push(p); }
+    }
+  }
+  return out;
+})();
+
 /**
- * Return the list of platform identifiers a user should see in dropdowns,
- * given their current i18n locale. Globals always come first; the user's
- * locale-specific platforms come next; then 'manual' as a final escape hatch.
+ * Return the list of platform identifiers a user should see in dropdowns.
+ * Order: globals first (Google/Yelp/Facebook/TripAdvisor/Trustpilot), then
+ * the user's locale-specific platforms, then every other locale's platforms,
+ * finally 'manual' as the escape hatch. A Thai SMB sees Wongnai near the
+ * top; an English SMB sees the 5 globals + the long tail of every locale
+ * platform we support — no platform is ever hidden by the locale picker.
  */
 export function platformsForLocale(locale) {
-  const local = LOCAL_BY_LOCALE[locale] || [];
-  return [...GLOBAL_PLATFORMS, ...local, 'manual'];
+  const localFirst = LOCAL_BY_LOCALE[locale] || [];
+  const rest = ALL_LOCAL_PLATFORMS.filter((p) => !localFirst.includes(p));
+  return [...GLOBAL_PLATFORMS, ...localFirst, ...rest, 'manual'];
 }
 
 /** Display label for any platform id. Falls back to a Title-cased id. */
