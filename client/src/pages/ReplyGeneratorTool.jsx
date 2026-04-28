@@ -16,16 +16,17 @@ import { useI18n } from '../context/I18nContext';
 // The server enforces 20 drafts/hour/IP (see publicWidget.js). When the
 // user hits the limit or wants more, the conversion path is "sign up free."
 
-const PLATFORMS = [
-  { value: 'google', label: 'Google' },
-  { value: 'yelp', label: 'Yelp' },
-  { value: 'facebook', label: 'Facebook' },
-  { value: 'tripadvisor', label: 'TripAdvisor' },
-  { value: 'trustpilot', label: 'Trustpilot' },
-  { value: 'amazon', label: 'Amazon' },
-  { value: 'etsy', label: 'Etsy' },
-  { value: 'other', label: 'Other' },
-];
+// Brand names stay English; only the catch-all 'other' is translatable.
+const PLATFORM_LABELS = {
+  google: 'Google',
+  yelp: 'Yelp',
+  facebook: 'Facebook',
+  tripadvisor: 'TripAdvisor',
+  trustpilot: 'Trustpilot',
+  amazon: 'Amazon',
+  etsy: 'Etsy',
+};
+const PLATFORM_VALUES = ['google', 'yelp', 'facebook', 'tripadvisor', 'trustpilot', 'amazon', 'etsy', 'other'];
 
 // Sample reviews for the "try with example" loaders. One negative + one
 // positive lets visitors see the AI's tone shift in two clicks, which is the
@@ -218,7 +219,11 @@ export default function ReplyGeneratorTool() {
                 value={form.platform}
                 onChange={(e) => setForm(f => ({ ...f, platform: e.target.value }))}
               >
-                {PLATFORMS.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
+                {PLATFORM_VALUES.map(v => (
+                  <option key={v} value={v}>
+                    {v === 'other' ? t('tool.platformOther', 'Other') : PLATFORM_LABELS[v]}
+                  </option>
+                ))}
               </select>
             </div>
             <div>
