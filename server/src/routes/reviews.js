@@ -473,9 +473,13 @@ router.get('/', readLimiter, (req, res) => {
     if (date_from && ISO_DATE_RE.test(date_from)) { where += ' AND created_at >= ?'; params.push(date_from); }
     if (date_to   && ISO_DATE_RE.test(date_to))   { where += ' AND created_at < ?';  params.push(date_to + 'T23:59:59'); }
     if (search) {
-      const q = `%${search.trim().slice(0, 200)}%`;
+      // Escape SQL LIKE metacharacters so a customer searching for an
+      // underscore name (e.g. "John_Smith") doesn't match "John Smith"
+      // by accident. \\ is the chosen escape char; ESCAPE '\' tells SQLite.
+      const escaped = search.trim().slice(0, 200).replace(/[\\%_]/g, '\\$&');
+      const q = `%${escaped}%`;
       // Include private note in search — notes are only visible to the owner
-      where += ' AND (reviewer_name LIKE ? OR review_text LIKE ? OR response_text LIKE ? OR note LIKE ?)';
+      where += " AND (reviewer_name LIKE ? ESCAPE '\\' OR review_text LIKE ? ESCAPE '\\' OR response_text LIKE ? ESCAPE '\\' OR note LIKE ? ESCAPE '\\')";
       params.push(q, q, q, q);
     }
     // Tag filter has to live in the WHERE clause so LIMIT/OFFSET pagination
@@ -1393,8 +1397,11 @@ function buildExportWhere(businessId, query) {
   if (query.date_from && ISO_DATE_RE_EXP.test(query.date_from)) { where += ' AND created_at >= ?'; params.push(query.date_from); }
   if (query.date_to   && ISO_DATE_RE_EXP.test(query.date_to))   { where += ' AND created_at < ?';  params.push(query.date_to + 'T23:59:59'); }
   if (search && typeof search === 'string') {
-    const q = `%${search.trim().slice(0, 200)}%`;
-    where += ' AND (reviewer_name LIKE ? OR review_text LIKE ? OR response_text LIKE ? OR note LIKE ?)';
+    // Escape SQL LIKE metacharacters — same as the dashboard search path
+    // so an export ?search=John_Smith doesn't pull in "John Smith" too.
+    const escaped = search.trim().slice(0, 200).replace(/[\\%_]/g, '\\$&');
+    const q = `%${escaped}%`;
+    where += " AND (reviewer_name LIKE ? ESCAPE '\\' OR review_text LIKE ? ESCAPE '\\' OR response_text LIKE ? ESCAPE '\\' OR note LIKE ? ESCAPE '\\')";
     params.push(q, q, q, q);
   }
   return { where, params };

@@ -65,6 +65,37 @@ describe('reviews + businesses', () => {
     assert.strictEqual(res.status, 400);
   });
 
+  // Regression: SQL LIKE wildcards in user search input used to match
+  // unintended rows — searching "John_Smith" pulled in "John Smith" too.
+  test('search escapes SQL LIKE wildcards (underscore is literal)', async () => {
+    const u = await makeUserWithBusiness();
+    for (const name of ['John_Smith', 'John Smith', 'Johnny_Doe']) {
+      await request(app).post('/api/reviews').set('Authorization', `Bearer ${u.token}`)
+        .send({ platform: 'google', reviewer_name: name, rating: 5, review_text: 'Great' });
+    }
+    const res = await request(app)
+      .get('/api/reviews?search=' + encodeURIComponent('John_Smith'))
+      .set('Authorization', `Bearer ${u.token}`);
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.body.total, 1, 'underscore should be a literal, not a wildcard');
+    assert.strictEqual(res.body.reviews[0].reviewer_name, 'John_Smith');
+  });
+
+  test('search escapes SQL LIKE percent wildcards', async () => {
+    const u = await makeUserWithBusiness();
+    for (const name of ['100%Pure', '100Pure', '100% off']) {
+      await request(app).post('/api/reviews').set('Authorization', `Bearer ${u.token}`)
+        .send({ platform: 'google', reviewer_name: name, rating: 5, review_text: 'ok' });
+    }
+    const res = await request(app)
+      .get('/api/reviews?search=' + encodeURIComponent('100%P'))
+      .set('Authorization', `Bearer ${u.token}`);
+    assert.strictEqual(res.status, 200);
+    // Only "100%Pure" should match (literal %P), NOT "100% off"
+    assert.strictEqual(res.body.total, 1);
+    assert.strictEqual(res.body.reviews[0].reviewer_name, '100%Pure');
+  });
+
   test('filter by sentiment and rating works', async () => {
     const u = await makeUserWithBusiness();
     for (const [name, rating, txt] of [
