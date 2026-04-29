@@ -275,13 +275,25 @@
    global look elsewhere. */
 .rh-design.rh-app .card,
 .rh-design .rh-app .card {
-  background: var(--rh-paper);
+  /* paper-2 (slightly cooler cream) lifts cards off the page bg without
+     resorting to Material drop-shadows — same trick landing uses for the
+     navbar pill and rh-bento .b/.c variants. Pairs with a hairline 1px
+     inset shadow so the card edge reads as a real surface, not just a
+     border. */
+  background: var(--rh-paper-2);
   border: 1px solid var(--rh-rule);
   border-radius: 12px;
-  box-shadow: none;
+  box-shadow: 0 1px 0 0 color-mix(in oklab, var(--rh-ink) 4%, transparent);
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
 }
 .rh-design.rh-app .card:hover,
-.rh-design .rh-app .card:hover { border-color: var(--rh-rule-2); }
+.rh-design .rh-app .card:hover {
+  /* Mirror the landing bento's hover-lift (-3px there, -2px here for the
+     denser workspace) so cards feel like the same product. */
+  border-color: var(--rh-rule-2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px -6px color-mix(in oklab, var(--rh-ink) 18%, transparent);
+}
 
 /* Sage success / rose danger / ochre warning text helpers */
 .rh-app .text-success { color: var(--rh-sage); }
