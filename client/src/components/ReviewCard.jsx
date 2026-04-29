@@ -773,14 +773,29 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
                 )}
               </div>
               {confirmDelete ? (
-                <span className="flex items-center gap-1">
-                  <span className="text-xs text-red-600 font-medium">{deleting ? t('review.deleting') : t('review.deleteConfirm')}</span>
-                  <button type="button" ref={confirmYesRef} onClick={handleDelete} disabled={deleting} aria-busy={deleting} className="text-xs text-red-600 font-semibold hover:underline px-1 disabled:opacity-50">{t('review.yes')}</button>
+                // Visual hierarchy: "No" is now a real button (border + padding)
+                // so it doesn't read as a tiny gray footnote next to a bold red
+                // "Yes". Focus still lands on Yes via confirmYesRef (preserves
+                // the keyboard power-user flow: ✕ → Enter to confirm). This
+                // matches GitHub's "Delete branch?" pattern where Cancel has
+                // visual weight but focus is on Confirm so Enter completes the
+                // action; mouse users tend to read first, then click — and now
+                // No is no longer mistakable for inert label text.
+                <span className="flex items-center gap-1.5">
+                  <span className="text-xs text-red-700 dark:text-red-400 font-medium mr-1">{deleting ? t('review.deleting') : t('review.deleteConfirm')}</span>
+                  <button
+                    type="button"
+                    ref={confirmYesRef}
+                    onClick={handleDelete}
+                    disabled={deleting}
+                    aria-busy={deleting}
+                    className="text-xs font-semibold text-red-700 dark:text-red-300 hover:underline px-1 disabled:opacity-50"
+                  >{t('review.yes')}</button>
                   <button
                     type="button"
                     onClick={() => setConfirmDelete(false)}
                     disabled={deleting}
-                    className="text-xs text-gray-400 hover:text-gray-600 px-1 disabled:opacity-50"
+                    className="text-xs font-semibold border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 px-2.5 py-1 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors disabled:opacity-50"
                   >{t('review.no')}</button>
                 </span>
               ) : (

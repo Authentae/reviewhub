@@ -399,7 +399,7 @@ export default function Analytics() {
               />
               <StatCard
                 label={t('analytics.responseRate')}
-                value={`${ov.response_rate}%`}
+                value={ov.total > 0 && ov.response_rate != null ? `${ov.response_rate}%` : '—'}
                 sub={`${ov.responded} / ${ov.total}`}
                 color="text-blue-600 dark:text-blue-400"
                 delta={periodTotals.responseRateDelta}
@@ -487,7 +487,7 @@ export default function Analytics() {
                   {t('analytics.platformBreakdown')}
                 </h2>
                 {data.platforms.length === 0 ? (
-                  <p className="text-xs text-gray-400">{t('analytics.noTopReviewers')}</p>
+                  <p className="text-xs text-gray-400">{t('analytics.noPlatformData', 'No platform data yet')}</p>
                 ) : (
                   <div className="space-y-3">
                     {data.platforms.map(p => {
@@ -665,7 +665,7 @@ export default function Analytics() {
               </h2>
               <p className="text-xs text-gray-400 dark:text-gray-500 mb-4">{t('analytics.responseTimeDesc')}</p>
               {data.responseTime ? (
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div className="card p-4 bg-gray-50 dark:bg-gray-800/50">
                     <dl>
                       <dt className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t('analytics.avgResponseTime')}</dt>

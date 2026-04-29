@@ -55,6 +55,18 @@ export default function BulkActionBar({ selectedIds, onSent, onDeleted, onTagged
     el.style.height = `${el.scrollHeight}px`;
   }, [responseText]);
 
+  // Auto-focus the textarea the moment the bar appears with selections.
+  // ReviewCard's reply path already auto-focuses; bulk should match so a
+  // user who just selected 30 reviews can start typing immediately
+  // (Cmd/Ctrl+Enter still sends — see onKeyDown below). Without this they
+  // had to mouse-click the textarea before typing — extra step on the
+  // hottest power-user path.
+  useEffect(() => {
+    if (count > 0) {
+      requestAnimationFrame(() => textareaRef.current?.focus());
+    }
+  }, [count]);
+
   async function handleSend() {
     const text = responseText.trim();
     if (!text) { toast(t('bulk.noText'), 'error'); return; }

@@ -1059,6 +1059,15 @@ function AutoRules() {
     if (!newRule.name.trim() || !newRule.response_text.trim()) {
       toast(t('rules.fieldsRequired'), 'error'); return;
     }
+    // Logical-impossibility guard: min > max can never match a real review
+    // (a rating cannot be both ≥4 and ≤2). The server happily stored such
+    // rules but they sat there silently doing nothing forever.
+    const minN = newRule.min_rating ? parseInt(newRule.min_rating, 10) : null;
+    const maxN = newRule.max_rating ? parseInt(newRule.max_rating, 10) : null;
+    if (minN != null && maxN != null && minN > maxN) {
+      toast(t('rules.minMaxRatingError', 'Min rating cannot be higher than max rating'), 'error');
+      return;
+    }
     setSaving(true);
     try {
       const kwText = (newRule.match_keywords_text || '').trim();
@@ -1088,6 +1097,12 @@ function AutoRules() {
   async function handleUpdate() {
     if (!editRule.name.trim() || !editRule.response_text.trim()) {
       toast(t('rules.fieldsRequired'), 'error'); return;
+    }
+    const minN = editRule.min_rating ? parseInt(editRule.min_rating, 10) : null;
+    const maxN = editRule.max_rating ? parseInt(editRule.max_rating, 10) : null;
+    if (minN != null && maxN != null && minN > maxN) {
+      toast(t('rules.minMaxRatingError', 'Min rating cannot be higher than max rating'), 'error');
+      return;
     }
     setSaving(true);
     try {
