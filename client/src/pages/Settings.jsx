@@ -1677,6 +1677,7 @@ function PendingEmailBanner({ refreshUserCtx, t }) {
   const { user } = useUser();
   const toast = useToast();
   const [cancelling, setCancelling] = useState(false);
+  const [resending, setResending] = useState(false);
   const pending = user?.pending_email;
   if (!pending?.address) return null;
 
@@ -1693,6 +1694,18 @@ function PendingEmailBanner({ refreshUserCtx, t }) {
     }
   }
 
+  async function resend() {
+    setResending(true);
+    try {
+      await api.post('/auth/email/resend-confirm');
+      toast(t('settings.emailChangeResent', 'Confirmation email re-sent.'), 'success');
+    } catch (err) {
+      toast(err.response?.data?.error || t('settings.emailChangeResendFailed', 'Could not re-send confirmation.'), 'error');
+    } finally {
+      setResending(false);
+    }
+  }
+
   return (
     <div className="mt-2 flex items-start gap-2 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg text-xs" role="status">
       <span aria-hidden="true" className="text-amber-600">⏳</span>
@@ -1701,15 +1714,26 @@ function PendingEmailBanner({ refreshUserCtx, t }) {
           {t('settings.emailChangePending', { email: pending.address })}
         </p>
       </div>
-      <button
-        type="button"
-        onClick={cancel}
-        disabled={cancelling}
-        aria-busy={cancelling}
-        className="flex-shrink-0 text-xs text-amber-700 dark:text-amber-300 underline hover:text-amber-900 dark:hover:text-amber-100 disabled:opacity-50"
-      >
-        {cancelling ? t('common.cancel') + '…' : t('settings.cancelEmailChange')}
-      </button>
+      <div className="flex-shrink-0 flex items-center gap-3">
+        <button
+          type="button"
+          onClick={resend}
+          disabled={resending || cancelling}
+          aria-busy={resending}
+          className="text-xs text-amber-700 dark:text-amber-300 underline hover:text-amber-900 dark:hover:text-amber-100 disabled:opacity-50"
+        >
+          {resending ? t('settings.emailChangeResending', 'Resending…') : t('settings.emailChangeResend', 'Resend')}
+        </button>
+        <button
+          type="button"
+          onClick={cancel}
+          disabled={cancelling || resending}
+          aria-busy={cancelling}
+          className="text-xs text-amber-700 dark:text-amber-300 underline hover:text-amber-900 dark:hover:text-amber-100 disabled:opacity-50"
+        >
+          {cancelling ? t('common.cancel') + '…' : t('settings.cancelEmailChange')}
+        </button>
+      </div>
     </div>
   );
 }

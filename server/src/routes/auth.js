@@ -936,6 +936,41 @@ router.post('/email/confirm', emailChangeLimiter, async (req, res) => {
   }
 });
 
+// Resend the confirmation email for a pending email change. The original
+// link expires after PENDING_EMAIL_EXPIRY_HOURS — without a resend route
+// the only recovery was "cancel + restart from scratch" which forces the
+// user to re-enter their password. This rotates the token, bumps the
+// expiry, and re-sends to the SAME pending_email (typo recovery is still
+// cancel + restart so we don't accidentally email a wrong address again).
+router.post('/email/resend-confirm', emailChangeLimiter, authMiddleware, async (req, res) => {
+  try {
+    const user = get(
+      'SELECT id, pending_email FROM users WHERE id = ?',
+      [req.user.id]
+    );
+    if (!user || !user.pending_email) {
+      return res.status(400).json({ error: 'No pending email change to resend' });
+    }
+    const change = generateToken();
+    const expiresAt = new Date(Date.now() + PENDING_EMAIL_EXPIRY_HOURS * 3600 * 1000)
+      .toISOString().slice(0, 19).replace('T', ' ');
+    run(
+      `UPDATE users SET pending_email_token_hash = ?, pending_email_expires_at = ? WHERE id = ?`,
+      [change.hash, expiresAt, user.id]
+    );
+    sendEmailInBackground(
+      sendEmailChangeConfirmation(user.pending_email, clientUrl(`/confirm-email-change?token=${change.plaintext}`)),
+      'email-change-resend'
+    );
+    logAudit(req, 'user.email_change_resent', { userId: user.id });
+    res.setHeader('Cache-Control', 'no-store');
+    res.json({ success: true });
+  } catch (err) {
+    captureException(err, { route: 'auth' });
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 router.put('/password', pwChangeLimiter, authMiddleware, async (req, res) => {
   const rawCurrent = req.body.current;
   const rawNext = req.body.next;

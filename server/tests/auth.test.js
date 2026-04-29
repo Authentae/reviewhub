@@ -371,6 +371,39 @@ describe('auth: email change', () => {
     assert.strictEqual(after.email, u.email, 'u.email must not have been flipped');
     assert.strictEqual(after.pending_email, null, 'pending_email must be cleared');
   });
+
+  // Resend the confirmation email when the original link expired —
+  // the user shouldn't have to cancel and re-enter their password just
+  // because they didn't click within the window.
+  test('POST /email/resend-confirm rotates the token + bumps expiry', async () => {
+    const u = await makeUser();
+    // Stash a pending change manually so we don't need to drive the PUT flow
+    run(
+      `UPDATE users SET pending_email = ?, pending_email_token_hash = 'oldhash', pending_email_expires_at = '2020-01-01 00:00:00' WHERE id = ?`,
+      [`resend-${Date.now()}@t.co`, u.userId]
+    );
+    const res = await request(app)
+      .post('/api/auth/email/resend-confirm')
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({});
+    assert.strictEqual(res.status, 200);
+    const after = get(
+      `SELECT pending_email_token_hash, pending_email_expires_at FROM users WHERE id = ?`,
+      [u.userId]
+    );
+    assert.notStrictEqual(after.pending_email_token_hash, 'oldhash', 'token should rotate');
+    assert.ok(after.pending_email_expires_at > '2025-01-01', 'expiry should be in the future');
+  });
+
+  test('POST /email/resend-confirm 400s when no pending change exists', async () => {
+    const u = await makeUser();
+    const res = await request(app)
+      .post('/api/auth/email/resend-confirm')
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({});
+    assert.strictEqual(res.status, 400);
+    assert.match(res.body.error, /pending/i);
+  });
 });
 
 describe('auth: password rotation revokes old sessions', () => {
