@@ -27,6 +27,11 @@ export default function ReviewRequests() {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [resending, setResending] = useState(null);
+  // Inline-confirm gates so the ↺ / ✕ icons in the table don't fall back
+  // to a native window.confirm() dialog (matches the rest of the app's
+  // destructive-action pattern). Tracked by row id; null = no confirm open.
+  const [confirmResendId, setConfirmResendId] = useState(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
   const [bulkFile, setBulkFile] = useState(null);
   const [bulkPlatform, setBulkPlatform] = useState('google');
   const [bulkMessage, setBulkMessage] = useState('');
@@ -113,16 +118,8 @@ export default function ReviewRequests() {
     }
   }
 
-  async function handleResend(id, customerEmail) {
-    // Confirm before re-sending — the icon-only button (↺) is easy to
-    // misclick on a dense table row, and resend pings a real customer's
-    // inbox. The 24h server-side cooldown stops same-day double-sends
-    // but doesn't catch a row from last week. Echo the recipient back
-    // so the user sees who the email is going to.
-    const ok = window.confirm(
-      t('requests.resendConfirm', 'Re-send this review request to {email}?').replace('{email}', customerEmail || 'this customer')
-    );
-    if (!ok) return;
+  async function handleResend(id) {
+    setConfirmResendId(null);
     setResending(id);
     try {
       await api.post(`/review-requests/${id}/resend`);
@@ -135,14 +132,8 @@ export default function ReviewRequests() {
     }
   }
 
-  async function handleDelete(id, customerEmail) {
-    // Confirm — the ✕ button sits next to ↺ in a dense row, easy to
-    // hit the wrong icon. Deletion clears the click-tracking history,
-    // which the operator might want for retention metrics.
-    const ok = window.confirm(
-      t('requests.deleteConfirm', 'Delete the review request for {email} from history?').replace('{email}', customerEmail || 'this customer')
-    );
-    if (!ok) return;
+  async function handleDelete(id) {
+    setConfirmDeleteId(null);
     try {
       await api.delete(`/review-requests/${id}`);
       toast(t('requests.deleted'), 'info');
@@ -384,24 +375,55 @@ export default function ReviewRequests() {
                           )}
                         </td>
                         <td className="px-4 py-3 text-right">
-                          <div className="flex items-center justify-end gap-2">
-                            <button
-                              type="button"
-                              onClick={() => handleResend(rr.id, rr.customer_email)}
-                              disabled={resending === rr.id}
-                              aria-label={t('requests.resendAria', { name: rr.customer_name })}
-                              className="text-gray-400 hover:text-blue-500 dark:text-gray-600 dark:hover:text-blue-400 text-xs px-1 disabled:opacity-40"
-                              title={t('requests.resend')}
-                            >
-                              {resending === rr.id ? '…' : '↺'}
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => handleDelete(rr.id, rr.customer_email)}
-                              aria-label={t('requests.deleteAria', { name: rr.customer_name })}
-                              className="text-gray-300 hover:text-red-400 dark:text-gray-600 dark:hover:text-red-400 text-xs px-1"
-                            >✕</button>
-                          </div>
+                          {confirmResendId === rr.id ? (
+                            <div className="flex items-center justify-end gap-1.5 text-xs">
+                              <span className="text-blue-600 dark:text-blue-400">{t('requests.resendShort') || 'Re-send?'}</span>
+                              <button
+                                type="button"
+                                onClick={() => handleResend(rr.id)}
+                                disabled={resending === rr.id}
+                                className="text-blue-600 font-semibold hover:underline px-1 disabled:opacity-50"
+                              >{t('tags.yes')}</button>
+                              <button
+                                type="button"
+                                onClick={() => setConfirmResendId(null)}
+                                className="text-gray-400 hover:text-gray-600 px-1"
+                              >{t('tags.no')}</button>
+                            </div>
+                          ) : confirmDeleteId === rr.id ? (
+                            <div className="flex items-center justify-end gap-1.5 text-xs">
+                              <span className="text-red-600 dark:text-red-400">{t('requests.deleteShort') || 'Delete?'}</span>
+                              <button
+                                type="button"
+                                onClick={() => handleDelete(rr.id)}
+                                className="text-red-600 font-semibold hover:underline px-1"
+                              >{t('tags.yes')}</button>
+                              <button
+                                type="button"
+                                onClick={() => setConfirmDeleteId(null)}
+                                className="text-gray-400 hover:text-gray-600 px-1"
+                              >{t('tags.no')}</button>
+                            </div>
+                          ) : (
+                            <div className="flex items-center justify-end gap-2">
+                              <button
+                                type="button"
+                                onClick={() => setConfirmResendId(rr.id)}
+                                disabled={resending === rr.id}
+                                aria-label={t('requests.resendAria', { name: rr.customer_name })}
+                                className="text-gray-400 hover:text-blue-500 dark:text-gray-600 dark:hover:text-blue-400 text-xs px-1 disabled:opacity-40"
+                                title={t('requests.resend')}
+                              >
+                                {resending === rr.id ? '…' : '↺'}
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setConfirmDeleteId(rr.id)}
+                                aria-label={t('requests.deleteAria', { name: rr.customer_name })}
+                                className="text-gray-300 hover:text-red-400 dark:text-gray-600 dark:hover:text-red-400 text-xs px-1"
+                              >✕</button>
+                            </div>
+                          )}
                         </td>
                       </tr>
                     ))}

@@ -170,6 +170,8 @@ const en = {
   'tags.colorPickerAria': 'Tag colour',
   'settings.apiKeyRevokeShort': 'Revoke?',
   'inbound.regenerateShort': 'Regenerate?',
+  'requests.resendShort': 'Re-send?',
+  'requests.deleteShort': 'Delete?',
   'dashboard.clearDemoData': 'Clear demo data',
   'dashboard.clearingDemoData': 'Clearing…',
   'dashboard.clearDemoConfirm': 'Remove all {n} demo reviews? Your real reviews will be kept.',
