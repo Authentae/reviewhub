@@ -1195,11 +1195,27 @@ const mfaVerifyLimiter = rateLimit({
 // POST /auth/mfa/enable — begins the enablement flow. Generates a code,
 // stores its hash with a 10-minute expiry, and emails it to the user's
 // verified address. Requires an authenticated session.
-router.post('/mfa/enable', mfaChallengeLimiter, authMiddleware, (req, res) => {
+router.post('/mfa/enable', mfaChallengeLimiter, authMiddleware, async (req, res) => {
   try {
-    const user = get('SELECT id, email, mfa_enabled FROM users WHERE id = ?', [req.user.id]);
+    // Require password re-auth to start the MFA-enable flow. Without this,
+    // a hijacked session combined with email-account access (e.g. stolen
+    // cookies + an over-broad SSO grant) is enough for an attacker to bind
+    // a TOTP secret they control and lock the legitimate owner out. Mirror
+    // /mfa/disable's gate so enable + disable are symmetric.
+    const rawPw = req.body.password;
+    if (rawPw !== undefined && rawPw !== null && typeof rawPw !== 'string') {
+      return res.status(400).json({ error: 'password must be a string' });
+    }
+    const password = rawPw || '';
+    if (!password) return res.status(400).json({ error: 'Password required' });
+    const user = get('SELECT id, email, password_hash, mfa_enabled FROM users WHERE id = ?', [req.user.id]);
     if (!user) return res.status(404).json({ error: 'User not found' });
     if (user.mfa_enabled) return res.status(409).json({ error: 'Two-factor is already enabled' });
+    const valid = await bcrypt.compare(password, user.password_hash);
+    if (!valid) {
+      logAudit(req, 'user.mfa_enable_failed', { userId: user.id, metadata: { reason: 'bad_password' } });
+      return res.status(401).json({ error: 'Incorrect password' });
+    }
 
     const otp = generateOtp();
     run(

@@ -40,13 +40,33 @@ describe('mfa: enable flow', () => {
   test('POST /mfa/enable rejects when already enabled', async () => {
     const u = await makeUser();
     enableMfaDirectly(u.userId);
-    const res = await request(app).post('/api/auth/mfa/enable').set('Authorization', `Bearer ${u.token}`);
+    const res = await request(app).post('/api/auth/mfa/enable')
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({ password: u.password });
     assert.strictEqual(res.status, 409);
+  });
+
+  test('POST /mfa/enable requires password', async () => {
+    const u = await makeUser();
+    const res = await request(app).post('/api/auth/mfa/enable')
+      .set('Authorization', `Bearer ${u.token}`);
+    assert.strictEqual(res.status, 400);
+    assert.match(res.body.error, /password/i);
+  });
+
+  test('POST /mfa/enable rejects wrong password', async () => {
+    const u = await makeUser();
+    const res = await request(app).post('/api/auth/mfa/enable')
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({ password: 'wrong-password' });
+    assert.strictEqual(res.status, 401);
   });
 
   test('POST /mfa/enable writes a pending hash to the user row', async () => {
     const u = await makeUser();
-    const res = await request(app).post('/api/auth/mfa/enable').set('Authorization', `Bearer ${u.token}`);
+    const res = await request(app).post('/api/auth/mfa/enable')
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({ password: u.password });
     assert.strictEqual(res.status, 200);
     const row = get('SELECT mfa_code_hash, mfa_code_expires_at FROM users WHERE id = ?', [u.userId]);
     assert.ok(row.mfa_code_hash, 'code hash should be set');

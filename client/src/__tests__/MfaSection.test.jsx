@@ -45,12 +45,17 @@ describe('MfaSection', () => {
     expect(screen.getByRole('button', { name: /disable/i })).toBeInTheDocument();
   });
 
-  it('Enable → email sent → shows code entry form', async () => {
+  it('Enable → password prompt → email sent → shows code entry form', async () => {
     api.post.mockResolvedValue({ data: { success: true } });
     renderSection({ mfaEnabled: false, onMfaChange: vi.fn() });
     const user = userEvent.setup();
     await user.click(screen.getByRole('button', { name: /enable/i }));
-    expect(api.post).toHaveBeenCalledWith('/auth/mfa/enable');
+    // Password prompt step appears (no API call yet)
+    expect(api.post).not.toHaveBeenCalled();
+    const pwInput = await screen.findByLabelText(/password/i);
+    await user.type(pwInput, 'TestPass-9f2A!xQ');
+    await user.click(screen.getByRole('button', { name: /continue/i }));
+    expect(api.post).toHaveBeenCalledWith('/auth/mfa/enable', { password: 'TestPass-9f2A!xQ' });
     // Code input now visible
     await waitFor(() =>
       expect(screen.getByPlaceholderText('000000')).toBeInTheDocument()
@@ -67,6 +72,9 @@ describe('MfaSection', () => {
     renderSection({ mfaEnabled: false, onMfaChange });
     const user = userEvent.setup();
     await user.click(screen.getByRole('button', { name: /enable/i }));
+    const pwInput = await screen.findByLabelText(/password/i);
+    await user.type(pwInput, 'TestPass-9f2A!xQ');
+    await user.click(screen.getByRole('button', { name: /continue/i }));
     const code = await screen.findByPlaceholderText('000000');
     await user.type(code, '123456');
     await user.click(screen.getByRole('button', { name: /^confirm$/i }));
@@ -88,6 +96,8 @@ describe('MfaSection', () => {
     renderSection({ mfaEnabled: false, onMfaChange: vi.fn() });
     const user = userEvent.setup();
     await user.click(screen.getByRole('button', { name: /enable/i }));
+    await user.type(await screen.findByLabelText(/password/i), 'pw');
+    await user.click(screen.getByRole('button', { name: /continue/i }));
     await user.type(await screen.findByPlaceholderText('000000'), '123456');
     await user.click(screen.getByRole('button', { name: /^confirm$/i }));
 
@@ -105,6 +115,8 @@ describe('MfaSection', () => {
     renderSection({ mfaEnabled: false, onMfaChange: vi.fn() });
     const user = userEvent.setup();
     await user.click(screen.getByRole('button', { name: /enable/i }));
+    await user.type(await screen.findByLabelText(/password/i), 'pw');
+    await user.click(screen.getByRole('button', { name: /continue/i }));
     await user.type(await screen.findByPlaceholderText('000000'), '123456');
     await user.click(screen.getByRole('button', { name: /^confirm$/i }));
     await user.click(await screen.findByRole('button', { name: /saved/i }));
@@ -140,13 +152,16 @@ describe('MfaSection', () => {
     expect(screen.getByLabelText(/current password/i)).toBeInTheDocument();
   });
 
-  it('Enable-begin error surfaces and user stays on disabled state', async () => {
+  it('Enable-begin error surfaces and user stays on the password prompt', async () => {
     api.post.mockRejectedValue({ response: { data: { error: 'Too many requests' } } });
     renderSection({ mfaEnabled: false, onMfaChange: vi.fn() });
     const user = userEvent.setup();
     await user.click(screen.getByRole('button', { name: /enable/i }));
+    await user.type(await screen.findByLabelText(/password/i), 'pw');
+    await user.click(screen.getByRole('button', { name: /continue/i }));
     expect(await screen.findByRole('alert')).toHaveTextContent(/too many requests/i);
-    // Still in disabled state — no code input
+    // Still on the password prompt — no code input
     expect(screen.queryByPlaceholderText('000000')).not.toBeInTheDocument();
+    expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
   });
 });

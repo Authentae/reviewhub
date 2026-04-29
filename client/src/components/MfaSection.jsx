@@ -48,11 +48,25 @@ export default function MfaSection({ mfaEnabled, onMfaChange }) {
     }
   }, [mfaEnabled, state]);
 
-  async function handleBeginEnable() {
+  // Step 1: user clicks "Enable" — show password prompt (don't send email yet).
+  function handleEnableStart() {
+    setError('');
+    setPassword('');
+    setState('enable-pw');
+  }
+
+  // Step 2: user submits password — server emails the OTP and we move on.
+  async function handleBeginEnable(e) {
+    if (e?.preventDefault) e.preventDefault();
+    if (!password) {
+      setError(t('mfa.passwordRequired') || 'Password is required');
+      return;
+    }
     setBusy(true);
     setError('');
     try {
-      await api.post('/auth/mfa/enable');
+      await api.post('/auth/mfa/enable', { password });
+      setPassword('');
       setState('enabling');
     } catch (err) {
       setError(err.response?.data?.error || t('mfa.enableError'));
@@ -166,14 +180,49 @@ export default function MfaSection({ mfaEnabled, onMfaChange }) {
             </div>
             <button
               type="button"
-              onClick={handleBeginEnable}
+              onClick={handleEnableStart}
               disabled={busy}
               aria-busy={busy}
               className="btn-primary text-sm disabled:opacity-60"
             >
-              {busy ? t('mfa.sending') : t('mfa.enable')}
+              {t('mfa.enable')}
             </button>
           </div>
+        )}
+
+        {state === 'enable-pw' && (
+          <form onSubmit={handleBeginEnable} className="space-y-3">
+            <div>
+              <p className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">{t('mfa.confirmPasswordTitle') || 'Confirm your password'}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">{t('mfa.confirmPasswordDesc') || 'Enter your password to start two-factor setup.'}</p>
+            </div>
+            <div>
+              <label htmlFor="mfa-enable-pw" className="sr-only">{t('mfa.passwordLabel') || 'Password'}</label>
+              <input
+                id="mfa-enable-pw"
+                type="password"
+                autoComplete="current-password"
+                required
+                autoFocus
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="input max-w-xs"
+              />
+            </div>
+            <div className="flex gap-2">
+              <button type="submit" disabled={busy || !password} aria-busy={busy} className="btn-primary text-sm">
+                {busy ? t('mfa.sending') : (t('mfa.continue') || 'Continue')}
+              </button>
+              <button
+                type="button"
+                onClick={() => { setState('disabled'); setPassword(''); setError(''); }}
+                disabled={busy}
+                className="btn-secondary text-sm"
+              >
+                {t('common.cancel') || 'Cancel'}
+              </button>
+            </div>
+          </form>
         )}
 
         {state === 'enabling' && (
