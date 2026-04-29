@@ -1398,6 +1398,19 @@ router.delete('/:id', deleteLimiter, (req, res) => {
   }
 });
 
+// Validate export query date range. Returns a string error or null.
+// Mirrors the inverted-range guard on GET /api/reviews so the export
+// surface fails loud instead of silently returning an empty CSV.
+function validateExportDateRange(query) {
+  const ISO = /^\d{4}-\d{2}-\d{2}$/;
+  if (query.date_from && ISO.test(query.date_from)
+      && query.date_to && ISO.test(query.date_to)
+      && query.date_from > query.date_to) {
+    return 'date_from must be on or before date_to';
+  }
+  return null;
+}
+
 // Shared filter builder — CSV and JSON exports stay in sync, and any filter
 // added to GET / naturally ports here by editing one place.
 function buildExportWhere(businessId, query) {
@@ -1442,6 +1455,9 @@ router.get('/export/csv', exportLimiter, (req, res) => {
     const business = getUserBusiness(req.user.id);
     if (!business) return res.status(404).json({ error: 'No business found' });
 
+    const dateErr = validateExportDateRange(req.query);
+    if (dateErr) return res.status(400).json({ error: dateErr });
+
     const { where, params } = buildExportWhere(business.id, req.query);
     const LIMIT = 10000;
     const totalRow = get(`SELECT COUNT(*) AS n FROM reviews ${where}`, params);
@@ -1480,6 +1496,9 @@ router.get('/export/json', exportLimiter, (req, res) => {
     }
     const business = getUserBusiness(req.user.id);
     if (!business) return res.status(404).json({ error: 'No business found' });
+
+    const dateErr = validateExportDateRange(req.query);
+    if (dateErr) return res.status(400).json({ error: dateErr });
 
     const { where, params } = buildExportWhere(business.id, req.query);
     // Count the TRUE total first so we can surface a `truncated: true` flag
