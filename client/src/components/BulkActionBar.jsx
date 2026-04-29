@@ -32,7 +32,9 @@ export default function BulkActionBar({ selectedIds, onSent, onDeleted, onTagged
     api.get('/tags').then(({ data }) => setTags(Array.isArray(data) ? data : (data?.tags || []))).catch(() => {});
   }, []);
 
-  // Close dropdowns on outside click
+  // Close dropdowns on outside click OR Escape — keyboard parity for the
+  // three bulk-bar dropdowns. Without it, opening one with the keyboard
+  // had no escape hatch except clicking somewhere else.
   useEffect(() => {
     if (!showTemplates && !showTagPicker && !showStatusPicker) return;
     function onClickOutside(e) {
@@ -46,8 +48,18 @@ export default function BulkActionBar({ selectedIds, onSent, onDeleted, onTagged
         setShowStatusPicker(false);
       }
     }
+    function onKey(e) {
+      if (e.key !== 'Escape') return;
+      if (showTemplates) setShowTemplates(false);
+      if (showTagPicker) setShowTagPicker(false);
+      if (showStatusPicker) setShowStatusPicker(false);
+    }
     document.addEventListener('mousedown', onClickOutside);
-    return () => document.removeEventListener('mousedown', onClickOutside);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onClickOutside);
+      document.removeEventListener('keydown', onKey);
+    };
   }, [showTemplates, showTagPicker, showStatusPicker]);
 
   // Auto-resize textarea

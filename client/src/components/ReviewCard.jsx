@@ -521,7 +521,8 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
     }
   }
 
-  // Close status picker on outside click
+  // Close status picker on outside click OR Escape — keyboard parity
+  // with the sentiment + tag pickers.
   useEffect(() => {
     if (!showStatusPicker) return;
     function onClickOutside(e) {
@@ -529,11 +530,20 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
         setShowStatusPicker(false);
       }
     }
+    function onKey(e) {
+      if (e.key === 'Escape') setShowStatusPicker(false);
+    }
     document.addEventListener('mousedown', onClickOutside);
-    return () => document.removeEventListener('mousedown', onClickOutside);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onClickOutside);
+      document.removeEventListener('keydown', onKey);
+    };
   }, [showStatusPicker]);
 
-  // Close tag picker when clicking outside
+  // Close tag picker on outside click OR Escape key. Without the Escape
+  // branch, keyboard users couldn't dismiss the picker — same gap that
+  // existed on the sentiment picker before the recent polish pass.
   useEffect(() => {
     if (!showTagPicker) return;
     function onClickOutside(e) {
@@ -541,8 +551,15 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
         setShowTagPicker(false);
       }
     }
+    function onKey(e) {
+      if (e.key === 'Escape') setShowTagPicker(false);
+    }
     document.addEventListener('mousedown', onClickOutside);
-    return () => document.removeEventListener('mousedown', onClickOutside);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onClickOutside);
+      document.removeEventListener('keydown', onKey);
+    };
   }, [showTagPicker]);
 
   async function handleOpenTagPicker() {
