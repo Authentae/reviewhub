@@ -35,9 +35,16 @@ function safeParseEvents(raw) {
 }
 
 // GET /api/webhooks — list all webhooks for the authenticated user
+// NOTE: explicitly NOT selecting `secret` — signing secrets should be
+// shown to the user once at creation time and then treated as
+// "shown-once" credentials. Returning them on every list call meant
+// they sat in browser memory + any client-side cache forever.
 router.get('/', webhookLimiter, (req, res) => {
   try {
-    const rows = all('SELECT * FROM webhooks WHERE user_id = ? ORDER BY created_at DESC', [req.user.id]);
+    const rows = all(
+      'SELECT id, user_id, url, events, enabled, created_at, last_triggered_at, last_status FROM webhooks WHERE user_id = ? ORDER BY created_at DESC',
+      [req.user.id]
+    );
     res.json({ webhooks: rows.map(w => ({ ...w, events: safeParseEvents(w.events) })) });
   } catch (err) {
     captureException(err, { route: 'webhooks' });

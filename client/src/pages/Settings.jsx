@@ -477,6 +477,14 @@ function WebhooksSection() {
   const [showDeliveries, setShowDeliveries] = useState({}); // id → bool
   const [deliveries, setDeliveries] = useState({}); // id → array
   const [loadingDeliveries, setLoadingDeliveries] = useState({}); // id → bool
+  // Last-created secret. Stored only in component memory and cleared
+  // once the user dismisses or navigates away — server returns secrets
+  // ONLY on the create response, never on the list, so this is the
+  // user's one chance to copy it for their receiver service. Without
+  // showing it here the user couldn't verify HMAC signatures on
+  // incoming webhook deliveries.
+  const [revealedSecret, setRevealedSecret] = useState(null);
+  const [secretCopied, setSecretCopied] = useState(false);
 
   useEffect(() => {
     api.get('/webhooks').then(({ data }) => setHooks(data.webhooks || [])).catch(() => {}).finally(() => setLoading(false));
@@ -490,11 +498,36 @@ function WebhooksSection() {
       const { data } = await api.post('/webhooks', { url: newUrl.trim(), events: newEvents });
       setHooks(prev => [data, ...prev]);
       setNewUrl(''); setNewEvents(['review.created']); setAdding(false);
+      // Surface the signing secret immediately — it's in `data.secret`
+      // ONCE; the GET /webhooks list now omits it for security.
+      if (data.secret) setRevealedSecret({ id: data.id, secret: data.secret, url: data.url });
       toast(t('webhooks.created'), 'success');
     } catch (err) {
       toast(err?.response?.data?.error || t('webhooks.createFailed'), 'error');
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function copySecret() {
+    if (!revealedSecret?.secret) return;
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(revealedSecret.secret);
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = revealedSecret.secret;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+      }
+      setSecretCopied(true);
+      setTimeout(() => setSecretCopied(false), 1500);
+    } catch {
+      toast(t('webhooks.secretCopyFailed', 'Could not copy. Select and copy manually.'), 'error');
     }
   }
 
@@ -564,6 +597,38 @@ function WebhooksSection() {
       <h2 id="settings-webhooks" className="text-base font-semibold text-gray-700 dark:text-gray-300 mb-3">{t('webhooks.title')}</h2>
       <div className="card p-5 space-y-4">
         <p className="text-sm text-gray-600 dark:text-gray-400">{t('webhooks.subtitle')}</p>
+
+        {/* One-time signing-secret reveal banner. Shown only after a fresh
+            create — server doesn't return secrets on the list endpoint, so
+            the user MUST copy it now or rotate the webhook. */}
+        {revealedSecret && (
+          <div role="alert" className="rounded-lg border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 p-4 space-y-2">
+            <p className="text-sm font-semibold text-amber-900 dark:text-amber-100">
+              {t('webhooks.secretShownOnceTitle', 'Save this signing secret — you won\'t see it again')}
+            </p>
+            <p className="text-xs text-amber-800 dark:text-amber-200">
+              {t('webhooks.secretShownOnceBody', 'Use this to verify the X-ReviewHub-Signature header on incoming deliveries. Copy and store it in your receiver\'s environment now.')}
+            </p>
+            <div className="flex items-center gap-2">
+              <code className="flex-1 text-xs font-mono bg-white dark:bg-gray-900 border border-amber-200 dark:border-amber-800 rounded p-2 break-all text-gray-800 dark:text-gray-100">
+                {revealedSecret.secret}
+              </code>
+              <button
+                type="button"
+                onClick={copySecret}
+                className="btn-secondary text-xs py-1.5 px-3 flex-shrink-0"
+              >
+                {secretCopied ? '✓ ' + t('webhooks.copied', 'Copied') : t('webhooks.copy', 'Copy')}
+              </button>
+              <button
+                type="button"
+                onClick={() => { setRevealedSecret(null); setSecretCopied(false); }}
+                aria-label={t('common.dismiss', 'Dismiss')}
+                className="text-amber-800 dark:text-amber-200 hover:text-amber-900 dark:hover:text-white text-lg leading-none px-2"
+              >×</button>
+            </div>
+          </div>
+        )}
 
         {loading ? (
           <p className="text-sm text-gray-400">{t('common.loading')}</p>

@@ -38,6 +38,25 @@ describe('webhooks', () => {
     assert.strictEqual(res.body.webhooks.length, 2);
   });
 
+  // Signing secrets must be returned ONLY on the create response — GET
+  // list should omit them so they aren't sitting in browser memory /
+  // shared cache after every fetch. The UI shows the secret once at
+  // creation time and the user copies it into their receiver service.
+  test('GET /api/webhooks does NOT include the signing secret', async () => {
+    const u = await makeUserWithBusiness();
+    const create = await request(app).post('/api/webhooks')
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({ url: 'https://example.com/secret-test' });
+    assert.ok(create.body.secret, 'create response must include secret');
+
+    const res = await request(app).get('/api/webhooks')
+      .set('Authorization', `Bearer ${u.token}`);
+    assert.strictEqual(res.status, 200);
+    for (const hook of res.body.webhooks) {
+      assert.strictEqual(hook.secret, undefined, 'GET list must omit secret');
+    }
+  });
+
   test('requires auth', async () => {
     const res = await request(app).get('/api/webhooks');
     assert.strictEqual(res.status, 401);

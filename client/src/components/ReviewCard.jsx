@@ -148,6 +148,7 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
   // Translation state — translated text replaces the original visually until
   // the user toggles back. Lazy-loaded; never fetched until user clicks 🌐.
   const [translatedText, setTranslatedText] = useState(null);
+  const [translatedTarget, setTranslatedTarget] = useState(null);
   const [translating, setTranslating] = useState(false);
   const [showTranslated, setShowTranslated] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -627,6 +628,11 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
     try {
       const { data } = await api.post(`/reviews/${review.id}/translate`);
       setTranslatedText(data.translated_text);
+      // Capture the target language so we can show a "Translated to X"
+      // badge — without it the review text just silently swaps and the
+      // user has no signal which language they're reading. Server returns
+      // an ISO code like 'en', 'th', 'ja' in `target`.
+      setTranslatedTarget(data.target || null);
       setShowTranslated(true);
     } catch (err) {
       const msg = err?.response?.data?.error || t('review.translateFailed', 'Translation failed. Try again later.');
@@ -634,6 +640,13 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
     } finally {
       setTranslating(false);
     }
+  }
+  // Map ISO code → display label so the user sees "Thai" not "th".
+  // Reuse the i18n locale display names if available, fall back to upper-cased code.
+  function targetLangLabel(code) {
+    if (!code) return null;
+    const labels = { en: 'English', es: 'Spanish', fr: 'French', de: 'German', pt: 'Portuguese', it: 'Italian', th: 'Thai', ja: 'Japanese', zh: 'Chinese', ko: 'Korean' };
+    return labels[code] || code.toUpperCase();
   }
   const displayText = isTruncatable && !expanded ? text.slice(0, TEXT_LIMIT) + '…' : text;
 
@@ -814,6 +827,14 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
 
           {text && (
             <div className="mb-2">
+              {/* "Translated to X" badge — without this, the review text
+                  silently swaps language with no signal which one is on
+                  screen. */}
+              {showTranslated && translatedText && (
+                <p className="text-[10px] font-mono uppercase tracking-wide text-blue-600 dark:text-blue-400 mb-1">
+                  {t('review.translatedTo', 'Translated to')} {targetLangLabel(translatedTarget) || ''}
+                </p>
+              )}
               {/* whitespace-pre-wrap preserves the reviewer's paragraph breaks
                   (common in long Google reviews). Without it, \n collapses
                   and multi-paragraph reviews read as one wall of text. */}
