@@ -164,6 +164,7 @@ const en = {
   'dashboard.seedFailed': 'Failed to load demo data',
   'dashboard.seedCleared': 'Removed {n} demo reviews',
   'dashboard.seedClearFailed': 'Failed to clear demo data',
+  'dashboard.ratingClear': 'Clear rating filter',
   'dashboard.clearDemoData': 'Clear demo data',
   'dashboard.clearingDemoData': 'Clearing…',
   'dashboard.clearDemoConfirm': 'Remove all {n} demo reviews? Your real reviews will be kept.',

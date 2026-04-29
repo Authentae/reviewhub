@@ -961,7 +961,21 @@ const RatingDistribution = React.memo(function RatingDistribution({ stats, activ
     <section aria-labelledby={headingId} className="card p-4 mb-6">
       <h2 id={headingId} className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wide">
         {t('dashboard.ratingBreakdown')}
-        {activeRating && <span className="ml-2 text-blue-500 normal-case font-normal">{t('dashboard.ratingOnly', { stars: activeRating })}</span>}
+        {activeRating && (
+          // Clicking the bar toggles, but that's not discoverable — many users
+          // looked at "5★ only" expecting it to be the off-switch. Make the
+          // label itself a clear button so the affordance matches expectation.
+          <button
+            type="button"
+            onClick={() => onRatingClick?.(Number(activeRating))}
+            className="ml-2 inline-flex items-center gap-1 text-blue-500 hover:text-blue-700 normal-case font-normal cursor-pointer"
+            title={t('dashboard.ratingClear') || 'Clear rating filter'}
+            aria-label={t('dashboard.ratingClear') || 'Clear rating filter'}
+          >
+            <span>{t('dashboard.ratingOnly', { stars: activeRating })}</span>
+            <span aria-hidden="true">✕</span>
+          </button>
+        )}
       </h2>
       <div className="space-y-1.5">
         {rows.map(({ stars, count, color, activeColor }) => {
