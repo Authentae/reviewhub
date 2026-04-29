@@ -534,9 +534,15 @@ export default function Dashboard() {
         {stats && !loading && (
           <section aria-label={t('dashboard.statsSection')} className="mb-6">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <StatCard label={t('dashboard.stats.total')} value={stats.total} />
+              {/* Number stats run through toLocaleString(lang) so 12,345
+                  shows the user's locale separators — matches the
+                  Analytics page (Analytics.jsx:386 uses the same pattern).
+                  Without this Dashboard rendered "12345" while Analytics
+                  rendered "12,345" for the SAME total, which looked like
+                  a bug. */}
+              <StatCard label={t('dashboard.stats.total')} value={(stats.total ?? 0).toLocaleString(lang)} />
               <StatCard label={t('dashboard.stats.avgRating')} value={stats.avg_rating ? `${stats.avg_rating} ★` : '—'} />
-              <StatCard label={t('dashboard.stats.positive')} value={stats.positive} color="text-green-600 dark:text-green-400" />
+              <StatCard label={t('dashboard.stats.positive')} value={(stats.positive ?? 0).toLocaleString(lang)} color="text-green-600 dark:text-green-400" />
               <StatCard
                 label={t('dashboard.stats.responseRate')}
                 value={stats.total > 0 && stats.responded != null ? `${Math.round((stats.responded / stats.total) * 100)}%` : '—'}
@@ -906,9 +912,11 @@ export default function Dashboard() {
                 </button>
                 <span className="text-sm text-gray-500 dark:text-gray-400" aria-live="polite" aria-atomic="true">
                   {t('dashboard.paginationInfo', {
-                    from: (page - 1) * 10 + 1,
-                    to: Math.min(page * 10, data.total),
-                    total: data.total,
+                    // Localised number formatting so "Showing 1-10 of 12,345"
+                    // uses the user's locale separators instead of bare digits.
+                    from: ((page - 1) * 10 + 1).toLocaleString(lang),
+                    to: Math.min(page * 10, data.total).toLocaleString(lang),
+                    total: data.total.toLocaleString(lang),
                   })}
                 </span>
                 <button
