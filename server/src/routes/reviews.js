@@ -1156,7 +1156,7 @@ router.put('/:id/pin', respondLimiter, (req, res) => {
     if (!review) return res.status(404).json({ error: 'Review not found' });
 
     const newPinned = review.pinned ? 0 : 1;
-    run('UPDATE reviews SET pinned = ? WHERE id = ?', [newPinned, review.id]);
+    run("UPDATE reviews SET pinned = ?, updated_at = datetime('now') WHERE id = ?", [newPinned, review.id]);
     res.json({ success: true, pinned: !!newPinned });
   } catch (err) {
     captureException(err, { route: 'reviews' });
@@ -1176,7 +1176,7 @@ router.put('/:id/flag', respondLimiter, (req, res) => {
     if (!review) return res.status(404).json({ error: 'Review not found' });
 
     const newFlagged = review.flagged ? 0 : 1;
-    run('UPDATE reviews SET flagged = ? WHERE id = ?', [newFlagged, review.id]);
+    run("UPDATE reviews SET flagged = ?, updated_at = datetime('now') WHERE id = ?", [newFlagged, review.id]);
     res.json({ success: true, flagged: !!newFlagged });
   } catch (err) {
     captureException(err, { route: 'reviews' });
