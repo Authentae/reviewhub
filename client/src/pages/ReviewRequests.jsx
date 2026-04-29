@@ -113,7 +113,16 @@ export default function ReviewRequests() {
     }
   }
 
-  async function handleResend(id) {
+  async function handleResend(id, customerEmail) {
+    // Confirm before re-sending — the icon-only button (↺) is easy to
+    // misclick on a dense table row, and resend pings a real customer's
+    // inbox. The 24h server-side cooldown stops same-day double-sends
+    // but doesn't catch a row from last week. Echo the recipient back
+    // so the user sees who the email is going to.
+    const ok = window.confirm(
+      t('requests.resendConfirm', 'Re-send this review request to {email}?').replace('{email}', customerEmail || 'this customer')
+    );
+    if (!ok) return;
     setResending(id);
     try {
       await api.post(`/review-requests/${id}/resend`);
@@ -126,7 +135,14 @@ export default function ReviewRequests() {
     }
   }
 
-  async function handleDelete(id) {
+  async function handleDelete(id, customerEmail) {
+    // Confirm — the ✕ button sits next to ↺ in a dense row, easy to
+    // hit the wrong icon. Deletion clears the click-tracking history,
+    // which the operator might want for retention metrics.
+    const ok = window.confirm(
+      t('requests.deleteConfirm', 'Delete the review request for {email} from history?').replace('{email}', customerEmail || 'this customer')
+    );
+    if (!ok) return;
     try {
       await api.delete(`/review-requests/${id}`);
       toast(t('requests.deleted'), 'info');
@@ -371,7 +387,7 @@ export default function ReviewRequests() {
                           <div className="flex items-center justify-end gap-2">
                             <button
                               type="button"
-                              onClick={() => handleResend(rr.id)}
+                              onClick={() => handleResend(rr.id, rr.customer_email)}
                               disabled={resending === rr.id}
                               aria-label={t('requests.resendAria', { name: rr.customer_name })}
                               className="text-gray-400 hover:text-blue-500 dark:text-gray-600 dark:hover:text-blue-400 text-xs px-1 disabled:opacity-40"
@@ -381,7 +397,7 @@ export default function ReviewRequests() {
                             </button>
                             <button
                               type="button"
-                              onClick={() => handleDelete(rr.id)}
+                              onClick={() => handleDelete(rr.id, rr.customer_email)}
                               aria-label={t('requests.deleteAria', { name: rr.customer_name })}
                               className="text-gray-300 hover:text-red-400 dark:text-gray-600 dark:hover:text-red-400 text-xs px-1"
                             >✕</button>
