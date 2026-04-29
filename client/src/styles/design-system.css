@@ -445,7 +445,14 @@
 
 /* PULL QUOTE */
 .rh-pullquote { padding: 120px 0; background: linear-gradient(135deg, color-mix(in oklab, var(--rh-rose) 12%, var(--rh-cream)), color-mix(in oklab, var(--rh-ochre) 12%, var(--rh-cream))); border-top: 1px solid var(--rh-rule); border-bottom: 1px solid var(--rh-rule); position: relative; overflow: hidden; }
-.rh-pullquote::before { content: "\\201C"; position: absolute; top: -40px; left: 40px; font-family: var(--rh-serif); font-size: 360px; line-height: 1; color: color-mix(in oklab, var(--rh-rose) 25%, transparent); font-style: italic; pointer-events: none; }
+/* Decorative giant left curly-quote behind the pull quote. Was using
+   `content: "\\201C"` which CSS parses as the literal 5-char string
+   "201C" (the double-backslash escapes one slash, leaving "\201C"
+   in the value, which then renders as text since it's not a valid
+   escape sequence). Fixed by either using the unicode character
+   directly (more readable) or the proper single-backslash escape
+   with a trailing space terminator. Going with the literal char. */
+.rh-pullquote::before { content: "“"; position: absolute; top: -40px; left: 40px; font-family: var(--rh-serif); font-size: 360px; line-height: 1; color: color-mix(in oklab, var(--rh-rose) 25%, transparent); font-style: italic; pointer-events: none; }
 .rh-pullquote .rh-shell { position: relative; z-index: 1; }
 .rh-pullquote .q { font-family: var(--rh-serif); font-size: clamp(36px, 5vw, 72px); line-height: 1.08; letter-spacing: -0.02em; color: var(--rh-ink); max-width: 24ch; text-wrap: balance; margin: 0 0 48px; }
 .rh-pullquote .q em { font-style: italic; color: var(--rh-rose); }
