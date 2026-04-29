@@ -53,14 +53,23 @@ export default function ReviewResponseForm({
     e.preventDefault();
     if (!canSubmit) return;
     setSubmitting(true);
-    const payload = { text: text.trim() };
+    // Server's POST/PUT /api/reviews/:id/response expect { response_text },
+    // matching the column name on review_responses. The earlier { text }
+    // payload silently failed server sanitization (sanitizeResponseText
+    // returned '' for the missing field) and tripped the MIN_LEN=10 check
+    // — every submission errored. Map the server's `response_text` field
+    // to the parent's `text` shape on the way out.
+    const trimmed = text.trim();
+    const payload = { response_text: trimmed };
     try {
       const verb = mode === 'edit' ? 'put' : 'post';
       const { data } = await api[verb](`/reviews/${reviewId}/response`, payload);
-      // Server may echo back the canonical response object; if not, synthesize
-      // an optimistic shape so the parent can render without a refetch.
-      const response = data?.response || {
-        text: payload.text,
+      const serverRow = data?.response;
+      const response = serverRow ? {
+        ...serverRow,
+        text: serverRow.response_text ?? trimmed,
+      } : {
+        text: trimmed,
         owner_name: data?.owner_name || null,
         created_at: data?.created_at || new Date().toISOString(),
         updated_at: data?.updated_at || new Date().toISOString(),
