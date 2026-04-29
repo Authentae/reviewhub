@@ -202,6 +202,58 @@ describe('tags', () => {
     assert.deepStrictEqual(found.tags, []);
   });
 
+  test('GET /reviews?tag_id=X returns accurate total and full pages', async () => {
+    // Regression: tag filtering used to be applied post-LIMIT in JS, which
+    // made `total` reflect untagged rows and produced partial pages.
+    const u = await makeUserWithBusiness();
+    const tag = await makeTag(u, 'PaginationTag');
+
+    // 8 reviews total: 5 tagged, 3 untagged. With limit=10 and tag filter,
+    // we should get exactly the 5 tagged reviews and total=5.
+    const tagged = [];
+    for (let i = 0; i < 5; i++) tagged.push(await makeReview(u));
+    for (let i = 0; i < 3; i++) await makeReview(u);
+    for (const r of tagged) {
+      await request(app).put(`/api/reviews/${r.id}/tags`)
+        .set('Authorization', `Bearer ${u.token}`).send({ tag_ids: [tag.id] });
+    }
+
+    const res = await request(app)
+      .get(`/api/reviews?tag_id=${tag.id}&limit=10`)
+      .set('Authorization', `Bearer ${u.token}`);
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.body.total, 5, 'total should reflect tag filter');
+    assert.strictEqual(res.body.reviews.length, 5, 'should return all 5 tagged reviews');
+    for (const r of res.body.reviews) {
+      assert.ok(r.tags.some(t => t.id === tag.id), `review ${r.id} should carry the tag`);
+    }
+  });
+
+  test('GET /reviews?tag_id=X paginates correctly', async () => {
+    const u = await makeUserWithBusiness();
+    const tag = await makeTag(u, 'BigTag');
+    // 7 tagged reviews, plus 5 untagged distractors that should not steal slots.
+    const tagged = [];
+    for (let i = 0; i < 7; i++) tagged.push(await makeReview(u));
+    for (let i = 0; i < 5; i++) await makeReview(u);
+    for (const r of tagged) {
+      await request(app).put(`/api/reviews/${r.id}/tags`)
+        .set('Authorization', `Bearer ${u.token}`).send({ tag_ids: [tag.id] });
+    }
+
+    const page1 = await request(app)
+      .get(`/api/reviews?tag_id=${tag.id}&limit=5&page=1`)
+      .set('Authorization', `Bearer ${u.token}`);
+    assert.strictEqual(page1.body.total, 7);
+    assert.strictEqual(page1.body.reviews.length, 5);
+
+    const page2 = await request(app)
+      .get(`/api/reviews?tag_id=${tag.id}&limit=5&page=2`)
+      .set('Authorization', `Bearer ${u.token}`);
+    assert.strictEqual(page2.body.total, 7);
+    assert.strictEqual(page2.body.reviews.length, 2, 'page 2 should have remaining 2 tagged reviews');
+  });
+
   test('POST /tags rejects with 400 once user hits the per-account cap', async () => {
     // Cap is 50; we go up to that, then assert the next POST is rejected.
     // Direct DB inserts would skip the route's check and let us seed faster,

@@ -478,6 +478,15 @@ router.get('/', readLimiter, (req, res) => {
       where += ' AND (reviewer_name LIKE ? OR review_text LIKE ? OR response_text LIKE ? OR note LIKE ?)';
       params.push(q, q, q, q);
     }
+    // Tag filter has to live in the WHERE clause so LIMIT/OFFSET pagination
+    // and the COUNT(*) total stay consistent. Doing this in JS post-fetch
+    // (the previous behavior) shrunk the page after LIMIT was applied,
+    // breaking page totals and producing partial pages.
+    const tagIdFilter = req.query.tag_id ? parseId(req.query.tag_id) : null;
+    if (tagIdFilter) {
+      where += ' AND id IN (SELECT review_id FROM review_tags WHERE tag_id = ?)';
+      params.push(tagIdFilter);
+    }
 
     const reviews = all(
       `SELECT * FROM reviews ${where} ORDER BY ${ORDER_MAP[sort]} LIMIT ${limit} OFFSET ${offset}`,
@@ -494,7 +503,7 @@ router.get('/', readLimiter, (req, res) => {
     );
     const platformCounts = Object.fromEntries(platformRows.map(r => [r.platform, Number(r.count)]));
 
-    const hasFilters = platform || sentiment || responded || ratingFilter || search || pinned || date_from || date_to;
+    const hasFilters = platform || sentiment || responded || ratingFilter || search || pinned || date_from || date_to || tagIdFilter;
     const filteredStats = hasFilters ? get(`${STATS_SELECT} ${where}`, params) : null;
 
     // Batch-load tags for all reviews on this page in a single query
@@ -516,14 +525,9 @@ router.get('/', readLimiter, (req, res) => {
       reviewsWithTags = reviews.map(r => ({ ...r, tags: tagsByReview[r.id] || [] }));
     }
 
-    // Tag filter — applied post-fetch when tag_id param is present
-    const tagIdFilter = req.query.tag_id ? parseId(req.query.tag_id) : null;
-    const finalReviews = tagIdFilter
-      ? reviewsWithTags.filter(r => r.tags.some(t => t.id === tagIdFilter))
-      : reviewsWithTags;
-
+    // tag_id is now applied in the WHERE clause above; no post-fetch trim.
     res.setHeader('Cache-Control', 'no-store, private');
-    res.json({ reviews: finalReviews, business, stats: globalStats, filteredStats, platformCounts, total: totalRow?.total ?? 0, page, limit, sort });
+    res.json({ reviews: reviewsWithTags, business, stats: globalStats, filteredStats, platformCounts, total: totalRow?.total ?? 0, page, limit, sort });
   } catch (err) {
     captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
