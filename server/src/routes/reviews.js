@@ -503,7 +503,7 @@ router.get('/', readLimiter, (req, res) => {
     );
     const platformCounts = Object.fromEntries(platformRows.map(r => [r.platform, Number(r.count)]));
 
-    const hasFilters = platform || sentiment || responded || ratingFilter || search || pinned || date_from || date_to || tagIdFilter;
+    const hasFilters = platform || sentiment || responded || ratingFilter || search || pinned || flagged || status || date_from || date_to || tagIdFilter;
     const filteredStats = hasFilters ? get(`${STATS_SELECT} ${where}`, params) : null;
 
     // Batch-load tags for all reviews on this page in a single query
