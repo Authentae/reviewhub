@@ -26,7 +26,10 @@ export default function BulkActionBar({ selectedIds, onSent, onDeleted, onTagged
 
   useEffect(() => {
     api.get('/templates').then(({ data }) => setTemplates(data.templates || [])).catch(() => {});
-    api.get('/tags').then(({ data }) => setTags(data.tags || [])).catch(() => {});
+    // GET /api/tags returns the array directly (res.json(rows)), not { tags: [...] }
+    // — the previous `data.tags || []` always silently fell to [], so the
+    // bulk-action tag picker was empty regardless of how many tags the user had.
+    api.get('/tags').then(({ data }) => setTags(Array.isArray(data) ? data : (data?.tags || []))).catch(() => {});
   }, []);
 
   // Close dropdowns on outside click

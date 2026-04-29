@@ -1177,7 +1177,9 @@ function AutoRules() {
       api.get('/tags'),
     ]).then(([{ data: rulesData }, { data: tagsData }]) => {
       setRules(rulesData || []);
-      setTags(tagsData?.tags || []);
+      // GET /api/tags returns the array directly. Reading `.tags` off it
+      // silently fell to [] and the auto-rules tag picker was always empty.
+      setTags(Array.isArray(tagsData) ? tagsData : (tagsData?.tags || []));
     }).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
