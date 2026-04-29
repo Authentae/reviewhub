@@ -173,7 +173,7 @@ const en = {
   'requests.resendShort': 'Re-send?',
   'requests.deleteShort': 'Delete?',
   'dashboard.exportNothingHint': 'No reviews match the current filters',
-  'landing.heroOriginCredit': 'Built solo · Chiang Mai',
+  'landing.heroOriginCredit': 'AI drafts · in your voice',
   'dashboard.clearDemoData': 'Clear demo data',
   'dashboard.clearingDemoData': 'Clearing…',
   'dashboard.clearDemoConfirm': 'Remove all {n} demo reviews? Your real reviews will be kept.',

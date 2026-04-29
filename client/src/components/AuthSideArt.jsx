@@ -23,7 +23,7 @@ export default function AuthSideArt({ eyebrow, title }) {
       <div className="rh-hero-coords">
         <span className="cx">N 18°47′</span>
         <span className="cy">E 98°59′</span>
-        <span className="cn">{t('landing.heroOriginCredit', 'Built solo · Chiang Mai')}</span>
+        <span className="cn">{t('landing.heroOriginCredit', 'AI drafts · in your voice')}</span>
       </div>
 
       <div className="rh-auth-aside-inner">

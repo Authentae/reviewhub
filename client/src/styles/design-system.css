@@ -448,20 +448,26 @@
 .rh-demo-section .rh-btn-ghost:hover { background: color-mix(in oklab, var(--rh-paper) 10%, transparent); border-color: var(--rh-paper); }
 
 /* PULL QUOTE */
-.rh-pullquote { padding: 120px 0; background: linear-gradient(135deg, color-mix(in oklab, var(--rh-rose) 12%, var(--rh-cream)), color-mix(in oklab, var(--rh-ochre) 12%, var(--rh-cream))); border-top: 1px solid var(--rh-rule); border-bottom: 1px solid var(--rh-rule); position: relative; overflow: hidden; }
-/* Decorative giant left curly-quote behind the pull quote. Was using
-   `content: "\\201C"` which CSS parses as the literal 5-char string
-   "201C" (the double-backslash escapes one slash, leaving "\201C"
-   in the value, which then renders as text since it's not a valid
-   escape sequence). Fixed by either using the unicode character
-   directly (more readable) or the proper single-backslash escape
-   with a trailing space terminator. Going with the literal char. */
-.rh-pullquote::before { content: "“"; position: absolute; top: -40px; left: 40px; font-family: var(--rh-serif); font-size: 360px; line-height: 1; color: color-mix(in oklab, var(--rh-rose) 25%, transparent); font-style: italic; pointer-events: none; }
+.rh-pullquote { padding: 96px 0; background: linear-gradient(135deg, color-mix(in oklab, var(--rh-rose) 12%, var(--rh-cream)), color-mix(in oklab, var(--rh-ochre) 12%, var(--rh-cream))); border-top: 1px solid var(--rh-rule); border-bottom: 1px solid var(--rh-rule); position: relative; overflow: hidden; }
+/* Decorative giant left curly-quote — sized + positioned to read as a
+   FLAG sitting at the start of the quote, not as a corner ornament
+   floating away from the text. User feedback: previous version
+   (top:-40px, left:40px, 360px) put the " in the upper-left corner
+   while the quote sat in the lower-middle, leaving a large empty
+   diagonal gap. Tightened: " moved into the section (top:60px),
+   sized down (220px) so the quote can tuck right under it. */
+.rh-pullquote::before { content: "“"; position: absolute; top: 60px; left: clamp(24px, 6vw, 100px); font-family: var(--rh-serif); font-size: clamp(160px, 18vw, 220px); line-height: 0.8; color: color-mix(in oklab, var(--rh-rose) 35%, transparent); font-style: italic; pointer-events: none; }
 .rh-pullquote .rh-shell { position: relative; z-index: 1; }
-.rh-pullquote .q { font-family: var(--rh-serif); font-size: clamp(36px, 5vw, 72px); line-height: 1.08; letter-spacing: -0.02em; color: var(--rh-ink); max-width: 24ch; text-wrap: balance; margin: 0 0 48px; }
+/* Quote text now indents from the left so it sits next to / just under
+   the giant " instead of drifting to the centre. Increased max-width
+   so the rhythm of the lines matches the larger anchor. */
+.rh-pullquote .q { font-family: var(--rh-serif); font-size: clamp(36px, 5vw, 72px); line-height: 1.08; letter-spacing: -0.02em; color: var(--rh-ink); max-width: 28ch; text-wrap: balance; margin: 96px 0 32px; padding-left: clamp(0px, 8vw, 140px); }
 .rh-pullquote .q em { font-style: italic; color: var(--rh-rose); }
 .rh-pullquote .q mark { background: color-mix(in oklab, var(--rh-ochre) 55%, transparent); color: var(--rh-ink); padding: 0 6px; border-radius: 4px; }
-.rh-pullquote .attrib { display: flex; align-items: center; gap: 16px; }
+/* Attribution row indented to match the quote text, so the title /
+   description sit under the same left edge as the quote — visually
+   anchored as ONE unit instead of drifting back to the section left. */
+.rh-pullquote .attrib { display: flex; align-items: center; gap: 16px; padding-left: clamp(0px, 8vw, 140px); }
 .rh-pullquote .portrait { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, var(--rh-rose), var(--rh-ochre-deep)); display: grid; place-items: center; color: white; font-weight: 700; font-size: 20px; font-family: var(--rh-serif); font-style: italic; box-shadow: 0 8px 24px -6px color-mix(in oklab, var(--rh-rose) 50%, transparent); }
 .rh-pullquote .who b { display: block; font-size: 15px; font-weight: 600; }
 .rh-pullquote .who span { display: block; font-size: 13px; color: var(--rh-ink-2); margin-top: 2px; }

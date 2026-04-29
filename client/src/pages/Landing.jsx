@@ -119,7 +119,7 @@ function Hero() {
       <div className="rh-hero-coords" aria-hidden="true">
         <span className="cx">N 18°47′</span>
         <span className="cy">E 98°59′</span>
-        <span className="cn">{t('landing.heroOriginCredit', 'Built solo · Chiang Mai')}</span>
+        <span className="cn">{t('landing.heroOriginCredit', 'AI drafts · in your voice')}</span>
       </div>
       <div className="rh-shell rh-hero-inner">
         <div className="rh-hero-meta">
@@ -508,13 +508,17 @@ function PullQuote() {
     <section className="rh-pullquote" aria-label="Customer testimonial">
       <div className="rh-shell">
         <div className="q rh-reveal">
-          {t('landing.pullQuote', "Imagine going from dreading Monday morning to clearing the whole week's reviews with coffee still hot.")}
+          {t('landing.pullQuote', "Every review, drafted in your voice — before the coffee cools.")}
         </div>
         <div className="attrib rh-reveal">
-          <div className="portrait" aria-hidden="true">¶</div>
+          {/* Portrait glyph swapped from ¶ (paragraph mark — confusing
+              decoration) to ★ (the same star used in star ratings, in
+              the redesigned hero, and in the in-app rating UI) so the
+              attribution chip ties back to the product visually. */}
+          <div className="portrait" aria-hidden="true">★</div>
           <div className="who">
-            <b>{t('landing.pullQuoteAttribTitle', "What we're building toward.")}</b>
-            <span>{t('landing.pullQuoteAttribDesc', 'Real beta-customer testimonials will land here once the first cohort goes live.')}</span>
+            <b>{t('landing.pullQuoteAttribTitle', 'The ReviewHub promise.')}</b>
+            <span>{t('landing.pullQuoteAttribDesc', 'Every review platform you live on, drafted in the voice your customers already know — ready to send in seconds.')}</span>
           </div>
         </div>
       </div>
