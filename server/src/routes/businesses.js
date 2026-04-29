@@ -32,7 +32,10 @@ router.use(authMiddleware);
 router.get('/', bizReadLimiter, (req, res) => {
   try {
     const user = get('SELECT active_business_id FROM users WHERE id = ?', [req.user.id]);
-    const businesses = all('SELECT * FROM businesses WHERE user_id = ? ORDER BY id ASC', [req.user.id]);
+    // Order: alphabetical by name so a Business-plan user with 5 locations
+    // sees them in a predictable list rather than database-id-creation order.
+    // COLLATE NOCASE folds case so "Bangkok" and "bangkok" sort together.
+    const businesses = all('SELECT * FROM businesses WHERE user_id = ? ORDER BY business_name COLLATE NOCASE ASC', [req.user.id]);
     const activeId = user?.active_business_id || (businesses[0]?.id ?? null);
     res.setHeader('Cache-Control', 'no-store, private');
     res.json({ businesses, active_business_id: activeId });
