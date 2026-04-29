@@ -44,9 +44,12 @@ export default function LoginMfa() {
 
   // If someone reloads this page (state is lost on reload in react-router),
   // there's nothing to do — send them back to /login to re-authenticate.
+  // Pass a flag so Login can surface "MFA session expired — please sign
+  // in again" instead of silently dropping the user on the login form
+  // with no explanation.
   useEffect(() => {
     if (!pendingToken) {
-      navigate('/login', { replace: true });
+      navigate('/login', { replace: true, state: { mfaExpired: true } });
     }
   }, [pendingToken, navigate]);
 

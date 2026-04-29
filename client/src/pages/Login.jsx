@@ -22,7 +22,14 @@ export default function Login() {
     : '/dashboard';
   const [form, setForm] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
+  // Surface "MFA session expired" when the user landed back on /login from
+  // /login/mfa (refresh / browser back). Pre-populating the error keeps
+  // them oriented instead of silently dropping them on a blank form.
+  const [error, setError] = useState(
+    location.state?.mfaExpired
+      ? 'Your two-factor session expired — please sign in again.'
+      : ''
+  );
   const [loading, setLoading] = useState(false);
   const emailRef = useRef(null);
   const errorRef = useRef(null);

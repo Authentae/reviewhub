@@ -190,6 +190,23 @@ export default function Dashboard() {
       // Ignore stale responses if a newer fetch has already started
       if (fetchId !== fetchIdRef.current) return null;
       setData(res);
+      // Page-clamp guard: if a deep-link / stale URL puts the user on
+      // page 5 but the filter only has 1 page of results, the response
+      // comes back with reviews=[] and total>0 — user sees an empty
+      // list and assumes "no matches" when really we just over-paged.
+      // Snap back to page 1 and refetch. The bigger filter-change path
+      // already calls setPage(1); this catches the "deep link with
+      // out-of-range page" edge case and any race where filters and
+      // page change in the wrong order.
+      const pages = Math.max(1, Math.ceil((res.total || 0) / 10));
+      if (p > pages && (res.total || 0) > 0) {
+        setPage(1);
+        // Pagination is updated manually elsewhere (filter changes call
+        // fetchReviews(1) directly), so explicitly re-fetch with page=1
+        // here too — otherwise the user sees the empty page-5 result.
+        // Defer to next tick so React commits the setPage first.
+        Promise.resolve().then(() => fetchReviews(1));
+      }
       return res;
     } catch (err) {
       if (fetchId !== fetchIdRef.current) return null;
