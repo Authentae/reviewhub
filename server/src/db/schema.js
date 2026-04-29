@@ -418,6 +418,37 @@ function initSchema() {
     }
   }
 
+  // One-shot: backfill is_demo=1 for rows that were inserted by the demo
+  // seed BEFORE the is_demo column existed. Without this, the "Clear demo
+  // data" button never appears for users who clicked "Try with demo data"
+  // before today's deploy — their seeded rows have is_demo=0 (the column
+  // default at migration time) so demo_count is 0 and the button stays
+  // hidden, leaving them stuck. Signal: the seed always creates a business
+  // named exactly 'The Corner Bistro' and the seeded reviewer_names are a
+  // closed set (Sarah M., James T., Emily R., Marcus D., Linda K.,
+  // Chris B., Angela W., David P., Michelle S., Tom H., Rachel N.,
+  // Kevin L.). Both signals together avoid false positives if a real
+  // business happens to be called The Corner Bistro.
+  {
+    const flag = db.prepare(`SELECT 1 FROM schema_meta WHERE key = 'is_demo_backfill_v1'`).get();
+    if (!flag) {
+      const info = db.prepare(
+        `UPDATE reviews
+           SET is_demo = 1
+         WHERE is_demo = 0
+           AND business_id IN (SELECT id FROM businesses WHERE business_name = 'The Corner Bistro')
+           AND reviewer_name IN (
+             'Sarah M.','James T.','Emily R.','Marcus D.','Linda K.','Chris B.',
+             'Angela W.','David P.','Michelle S.','Tom H.','Rachel N.','Kevin L.'
+           )`
+      ).run();
+      db.prepare(`INSERT INTO schema_meta (key, value) VALUES ('is_demo_backfill_v1', ?)`).run(String(info.changes));
+      if (info.changes > 0) {
+        console.log(`[DB] One-shot: marked ${info.changes} pre-existing demo-seed review(s) as is_demo=1 so the "Clear demo data" button surfaces for users who tried demo before the column existed`);
+      }
+    }
+  }
+
   // Onboarding checklist: dismissed_at set when user clicks "dismiss" or when
   // all steps complete. NULL = still show on dashboard.
   migrateAddColumn('users', 'onboarding_dismissed_at', 'TEXT DEFAULT NULL');
