@@ -472,7 +472,7 @@ function AiDemo() {
               <div className="rh-mono" style={{ color: 'var(--rh-ochre)' }}>✦ Claude Haiku</div>
             </div>
             <div className={'out-text body' + (loading ? ' typing' : '')}>
-              {output || <span style={{ color: 'color-mix(in oklab, var(--rh-paper) 55%, transparent)' }}>{t('landing.demoEmptyHint', 'Hit Draft reply to see a real response from our drafting model. Change the tone or pick a different review — each run is live.')}</span>}
+              {output || <span style={{ color: 'color-mix(in oklab, var(--rh-paper) 78%, transparent)' }}>{t('landing.demoEmptyHint', 'Hit Draft reply to see a real response from our drafting model. Change the tone or pick a different review — each run is live.')}</span>}
             </div>
             <div className="demo-foot">
               <div className="rh-mono" style={{ color: 'color-mix(in oklab, var(--rh-paper) 55%, transparent)' }}>
