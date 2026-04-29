@@ -358,7 +358,12 @@ export default function Dashboard() {
     <div className="rh-design rh-app min-h-screen">
       <Navbar />
 
-      <main id="main-content" className={`rh-page ${selectMode && selectedIds.size > 0 ? 'pb-40' : ''}`}>
+      {/* scroll-mt-16 makes the skip-to-main-content target land below the
+          sticky 60px navbar instead of being covered by it — without this,
+          a keyboard user pressing Tab → Enter on "Skip to main content"
+          jumped to the page-head section but the navbar still hovered over
+          the first 60px of content. */}
+      <main id="main-content" className={`rh-page scroll-mt-16 ${selectMode && selectedIds.size > 0 ? 'pb-40' : ''}`}>
         {/* Editorial page head — eyebrow + serif title + mono subtitle, matches
             the Landing/Pricing voice so the app and marketing feel like one
             product. */}
@@ -397,7 +402,8 @@ export default function Dashboard() {
                 type="button"
                 onClick={() => handleExport('csv')}
                 disabled={exporting || loading || !data?.total}
-                className="bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-100 text-sm font-semibold px-3 py-2 flex items-center gap-1.5 disabled:opacity-60"
+                title={!data?.total ? t('dashboard.exportNothingHint') : undefined}
+                className="bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-100 text-sm font-semibold px-3 py-2 flex items-center gap-1.5 disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {exporting ? (
                   <svg className="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24" aria-hidden="true">
@@ -412,8 +418,8 @@ export default function Dashboard() {
                 onClick={() => handleExport('json')}
                 disabled={exporting || loading || !data?.total}
                 aria-label={t('dashboard.exportJsonAria')}
-                title={t('dashboard.exportJson')}
-                className="bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-500 dark:text-gray-300 text-[11px] font-mono px-2 py-2 border-l border-gray-300 dark:border-gray-600 disabled:opacity-60"
+                title={!data?.total ? t('dashboard.exportNothingHint') : t('dashboard.exportJson')}
+                className="bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-500 dark:text-gray-300 text-[11px] font-mono px-2 py-2 border-l border-gray-300 dark:border-gray-600 disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 JSON
               </button>

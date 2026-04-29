@@ -172,6 +172,7 @@ const en = {
   'inbound.regenerateShort': 'Regenerate?',
   'requests.resendShort': 'Re-send?',
   'requests.deleteShort': 'Delete?',
+  'dashboard.exportNothingHint': 'No reviews match the current filters',
   'dashboard.clearDemoData': 'Clear demo data',
   'dashboard.clearingDemoData': 'Clearing…',
   'dashboard.clearDemoConfirm': 'Remove all {n} demo reviews? Your real reviews will be kept.',

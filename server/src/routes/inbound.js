@@ -75,11 +75,19 @@ function verifyMailgunSignature(req) {
   const { timestamp, token, signature } = req.body || {};
   if (!timestamp || !token || !signature) return { ok: false, reason: 'missing-fields' };
   // Reject replay attacks: signature timestamp must be within 5 minutes.
-  const age = Math.abs(Date.now() / 1000 - parseInt(timestamp, 10));
+  // Mailgun normally sends timestamp as a string, but a future SDK / proxy
+  // could marshal it as a JSON number — coerce via Number() so both work
+  // (parseInt on a number returns the number; on a numeric string returns
+  // the parsed int; on anything else NaN, which the !isFinite gate catches).
+  const tsNum = Number(timestamp);
+  const age = Math.abs(Date.now() / 1000 - tsNum);
   if (!Number.isFinite(age) || age > 300) return { ok: false, reason: 'stale-timestamp' };
+  // The HMAC payload must be the EXACT bytes Mailgun signed — they sign the
+  // string-form timestamp, so coerce to string for the HMAC even if the
+  // request came in as a number.
   const expected = crypto
     .createHmac('sha256', key)
-    .update(timestamp + token)
+    .update(String(timestamp) + String(token))
     .digest('hex');
   // Constant-time compare to avoid timing side-channels.
   const a = Buffer.from(expected, 'hex');
