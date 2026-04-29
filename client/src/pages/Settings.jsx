@@ -859,6 +859,32 @@ function ImportSection() {
   async function handleFile(e) {
     const file = e.target.files[0];
     if (!file) return;
+    // Client-side file-type guard. Excel (.xlsx) is the most common
+    // wrong-format pick — non-technical users export reviews from a
+    // spreadsheet without re-saving as CSV. Catch it before the round-
+    // trip with a clear "Save as CSV first" message instead of letting
+    // the server return a generic 400.
+    const name = (file.name || '').toLowerCase();
+    const isXlsx = name.endsWith('.xlsx') || name.endsWith('.xls') || file.type.includes('spreadsheet');
+    const isJson = name.endsWith('.json') || file.type === 'application/json';
+    const isObviouslyNotCsv = isXlsx || isJson;
+    if (isObviouslyNotCsv) {
+      toast(
+        isXlsx
+          ? t('import.errorXlsx', 'Excel files aren\'t supported — open in Excel/Sheets and save as CSV first.')
+          : t('import.errorWrongType', 'This doesn\'t look like a CSV. Use the sample as a template.'),
+        'error'
+      );
+      if (fileRef.current) fileRef.current.value = '';
+      return;
+    }
+    // Empty-file early exit — server returns "empty CSV" but a friendlier
+    // local message saves a round-trip.
+    if (file.size === 0) {
+      toast(t('import.errorEmpty', 'That file is empty.'), 'error');
+      if (fileRef.current) fileRef.current.value = '';
+      return;
+    }
     setResult(null);
     setLoading(true);
     try {
@@ -994,7 +1020,7 @@ function WidgetSection({ business, onUpdate }) {
             <div>
               <p className="text-xs font-medium text-gray-600 dark:text-gray-300 mb-2">{t('widget.embedCode')}</p>
               <div className="flex gap-2 items-start">
-                <code className="flex-1 text-xs bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-2 font-mono break-all text-gray-700 dark:text-gray-300">
+                <code className="flex-1 text-xs bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-2 font-mono break-words whitespace-pre-wrap text-gray-700 dark:text-gray-300">
                   {iframeCode}
                 </code>
                 <button
@@ -1151,6 +1177,30 @@ function AutoRules() {
   }
 
   function RuleForm({ value, onChange, onSubmit, onCancel, submitLabel, availableTags }) {
+    const responseTextareaRef = useRef(null);
+    // Insert a template variable at the textarea's caret position rather
+    // than appending to the end. Power users writing "Thanks {reviewer_name}
+    // for the kind words" want to drop the variable mid-sentence; the old
+    // behavior forced them to backspace and retype.
+    function insertVar(v) {
+      const ta = responseTextareaRef.current;
+      const cur = value.response_text || '';
+      if (!ta) {
+        onChange({ ...value, response_text: cur + v });
+        return;
+      }
+      const start = ta.selectionStart ?? cur.length;
+      const end = ta.selectionEnd ?? cur.length;
+      const next = cur.slice(0, start) + v + cur.slice(end);
+      onChange({ ...value, response_text: next });
+      requestAnimationFrame(() => {
+        if (ta && document.contains(ta)) {
+          const pos = start + v.length;
+          ta.focus();
+          try { ta.setSelectionRange(pos, pos); } catch { /* ignore */ }
+        }
+      });
+    }
     return (
       <form onSubmit={onSubmit} className="space-y-2 pt-2 pb-1">
         <div className="grid grid-cols-2 gap-2">
@@ -1211,11 +1261,11 @@ function AutoRules() {
         </div>
         <div>
           <label className="text-xs font-medium text-gray-600 dark:text-gray-300 block mb-0.5">{t('rules.responseText')} *</label>
-          <textarea value={value.response_text} onChange={e => onChange({ ...value, response_text: e.target.value })} rows={2} maxLength={1000} className="input text-xs w-full resize-none" placeholder={t('rules.responseTextPlaceholder')} />
+          <textarea ref={responseTextareaRef} value={value.response_text} onChange={e => onChange({ ...value, response_text: e.target.value })} rows={2} maxLength={1000} className="input text-xs w-full resize-none" placeholder={t('rules.responseTextPlaceholder')} />
           <div className="flex flex-wrap gap-1 mt-1 items-center">
             <span className="text-[10px] text-gray-400 dark:text-gray-500">{t('templateVars.hint')}</span>
             {['{reviewer_name}', '{rating}', '{platform}', '{business_name}'].map(v => (
-              <button key={v} type="button" onClick={() => onChange({ ...value, response_text: value.response_text + v })}
+              <button key={v} type="button" onClick={() => insertVar(v)}
                 className="text-[10px] font-mono bg-gray-100 dark:bg-gray-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-300 rounded px-1 py-0.5 border border-gray-200 dark:border-gray-600 transition-colors">{v}</button>
             ))}
             <span className="ml-auto text-[10px] text-gray-400">{value.response_text.length}/1000</span>
@@ -1331,6 +1381,30 @@ function ResponseTemplates() {
   const [editForm, setEditForm] = useState({ title: '', body: '' });
   const [editSaving, setEditSaving] = useState(false);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+  const editBodyRef = useRef(null);
+  const addBodyRef = useRef(null);
+
+  // Insert a template variable at the textarea caret instead of appending
+  // to the end. Power users writing "Thanks {name}, glad you enjoyed
+  // {platform}" need to drop variables mid-sentence.
+  function insertVarAtCaret(textareaRef, currentValue, varText, setBody) {
+    const ta = textareaRef.current;
+    if (!ta) {
+      setBody(currentValue + varText);
+      return;
+    }
+    const start = ta.selectionStart ?? currentValue.length;
+    const end = ta.selectionEnd ?? currentValue.length;
+    const next = currentValue.slice(0, start) + varText + currentValue.slice(end);
+    setBody(next);
+    requestAnimationFrame(() => {
+      if (ta && document.contains(ta)) {
+        const pos = start + varText.length;
+        ta.focus();
+        try { ta.setSelectionRange(pos, pos); } catch { /* ignore */ }
+      }
+    });
+  }
 
   useEffect(() => {
     api.get('/templates')
@@ -1425,6 +1499,7 @@ function ResponseTemplates() {
                   autoFocus
                 />
                 <textarea
+                  ref={editBodyRef}
                   value={editForm.body}
                   onChange={e => setEditForm(f => ({ ...f, body: e.target.value }))}
                   className="input text-sm resize-none"
@@ -1437,7 +1512,8 @@ function ResponseTemplates() {
                 <div className="flex flex-wrap gap-1 items-center mt-1">
                   <span className="text-[10px] text-gray-400 dark:text-gray-500">{t('templateVars.hint')}</span>
                   {['{reviewer_name}', '{rating}', '{platform}', '{business_name}'].map(v => (
-                    <button key={v} type="button" onClick={() => setEditForm(f => ({ ...f, body: f.body + v }))}
+                    <button key={v} type="button"
+                      onClick={() => insertVarAtCaret(editBodyRef, editForm.body, v, (newBody) => setEditForm(f => ({ ...f, body: newBody })))}
                       className="text-[10px] font-mono bg-gray-100 dark:bg-gray-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-300 rounded px-1 py-0.5 border border-gray-200 dark:border-gray-600 transition-colors">{v}</button>
                   ))}
                 </div>
@@ -1517,6 +1593,7 @@ function ResponseTemplates() {
               autoFocus
             />
             <textarea
+              ref={addBodyRef}
               value={form.body}
               onChange={e => setForm(f => ({ ...f, body: e.target.value }))}
               className="input text-sm resize-none"
@@ -1529,7 +1606,8 @@ function ResponseTemplates() {
             <div className="flex flex-wrap gap-1 items-center mt-1">
               <span className="text-[10px] text-gray-400 dark:text-gray-500">{t('templateVars.hint')}</span>
               {['{reviewer_name}', '{rating}', '{platform}', '{business_name}'].map(v => (
-                <button key={v} type="button" onClick={() => setForm(f => ({ ...f, body: f.body + v }))}
+                <button key={v} type="button"
+                  onClick={() => insertVarAtCaret(addBodyRef, form.body, v, (newBody) => setForm(f => ({ ...f, body: newBody })))}
                   className="text-[10px] font-mono bg-gray-100 dark:bg-gray-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-300 rounded px-1 py-0.5 border border-gray-200 dark:border-gray-600 transition-colors">{v}</button>
               ))}
             </div>
