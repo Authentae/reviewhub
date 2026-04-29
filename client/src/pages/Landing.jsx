@@ -103,11 +103,23 @@ function Hero() {
       <div className="rh-hero-bg" />
       <div className="rh-hero-grid" />
       <div className="rh-hero-vignette" />
-      <div className="rh-hero-amp" aria-hidden="true">&amp;</div>
+      {/* Editorial flourish — was a giant "&" + Sukhumvit/BKK coordinates,
+          which (a) didn't tie into the product theme, (b) pointed at
+          Bangkok while the operator is actually based in Chiang Mai, and
+          (c) read as decorative jargon without context. Redesigned:
+          - Symbol → ★ (the universal review icon — same glyph used in
+            star ratings throughout the app, so it visually anchors the
+            hero to the product).
+          - Coordinates → Chiang Mai (18°47′N 98°59′E), matching the
+            "Made solo in Chiang Mai" credit in the footer.
+          - Label → "Built solo · Chiang Mai" framed as a credit so a
+            visitor reads it as "indie maker behind this product"
+            rather than "what's at this location?". */}
+      <div className="rh-hero-amp" aria-hidden="true">★</div>
       <div className="rh-hero-coords" aria-hidden="true">
-        <span className="cx">N 13°44′</span>
-        <span className="cy">E 100°31′</span>
-        <span className="cn">SUKHUMVIT · BKK</span>
+        <span className="cx">N 18°47′</span>
+        <span className="cy">E 98°59′</span>
+        <span className="cn">{t('landing.heroOriginCredit', 'Built solo · Chiang Mai')}</span>
       </div>
       <div className="rh-shell rh-hero-inner">
         <div className="rh-hero-meta">

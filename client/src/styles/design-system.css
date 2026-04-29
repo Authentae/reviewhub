@@ -147,7 +147,11 @@
   font-family: var(--rh-serif); font-style: italic;
   font-size: clamp(220px, 24vw, 420px);
   line-height: 0.8; letter-spacing: -0.04em;
-  color: color-mix(in oklab, var(--rh-teal) 12%, transparent);
+  /* Tinted with brand ochre (the same gold used in star ratings across
+     the app) so the giant ★ behind the hero reads as "reviews" at a
+     glance, not as a generic decorative element. Alpha kept low so it
+     stays a subtle background flourish. */
+  color: color-mix(in oklab, var(--rh-ochre) 16%, transparent);
   user-select: none;
 }
 .rh-hero-coords {
