@@ -169,4 +169,28 @@ describe('follow-up review requests job', () => {
       .send({ follow_up_after_days: 99 });
     assert.strictEqual(res.status, 400);
   });
+
+  // Regression: a non-boolean wire value (e.g. the JSON string "false") used
+  // to silently flip the notification flag ON because non-empty strings are
+  // truthy in JS. Now we require a real boolean (or 0/1 for forms).
+  test('PUT /auth/notifications rejects non-boolean notif_new_review', async () => {
+    const u = await makeUserWithBusiness('NotifBool Co', 'starter');
+    const res = await request(app)
+      .put('/api/auth/notifications')
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({ notif_new_review: 'false' });
+    assert.strictEqual(res.status, 400);
+    assert.match(res.body.error, /boolean/i);
+  });
+
+  test('PUT /auth/notifications accepts true / false / 0 / 1', async () => {
+    const u = await makeUserWithBusiness('NotifBool2 Co', 'starter');
+    for (const v of [true, false, 0, 1]) {
+      const res = await request(app)
+        .put('/api/auth/notifications')
+        .set('Authorization', `Bearer ${u.token}`)
+        .send({ notif_new_review: v });
+      assert.strictEqual(res.status, 200, `value ${JSON.stringify(v)} should be accepted`);
+    }
+  });
 });

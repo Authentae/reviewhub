@@ -735,8 +735,17 @@ router.put('/notifications', notifLimiter, authMiddleware, (req, res) => {
     const params = [];
     for (const key of BOOL_ALLOWED) {
       if (key in req.body) {
+        const val = req.body[key];
+        // Strict boolean check — a JSON `"false"` string is truthy in JS,
+        // so a third-party API caller sending {"notif_new_review":"false"}
+        // would silently FLIP the flag ON. Demand the wire-format value
+        // be a real boolean (or 0/1 for tolerance with form serializers).
+        let normalised;
+        if (val === true || val === 1) normalised = 1;
+        else if (val === false || val === 0) normalised = 0;
+        else return res.status(400).json({ error: `${key} must be a boolean` });
         fields.push(`${key} = ?`);
-        params.push(req.body[key] ? 1 : 0);
+        params.push(normalised);
       }
     }
     // follow_up_after_days is an integer: 0 (off), 3, 5, 7, or 14
