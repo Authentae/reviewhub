@@ -737,7 +737,7 @@ const en = {
   'templates.deleteAria': 'Delete template: {title}',
 
   // Auth extra
-  'auth.pwMinCharsHint': 'At least 6 characters',
+  'auth.pwMinCharsHint': 'At least 8 characters',
 
   // Sentiment labels
   'sentiment.positive': 'Positive',
@@ -1758,7 +1758,7 @@ const es = {
   'templates.deleteAria': 'Eliminar plantilla: {title}',
 
   // Auth extra
-  'auth.pwMinCharsHint': 'Al menos 6 caracteres',
+  'auth.pwMinCharsHint': 'Al menos 8 caracteres',
 
   // Sentiment labels
   'sentiment.positive': 'Positivo',
@@ -2409,7 +2409,7 @@ const fr = {
   'templates.deleteAria': 'Supprimer le modèle : {title}',
 
   // Auth extra
-  'auth.pwMinCharsHint': 'Au moins 6 caractères',
+  'auth.pwMinCharsHint': 'Au moins 8 caractères',
 
   // Sentiment labels
   'sentiment.positive': 'Positif',
@@ -3035,7 +3035,7 @@ const de = {
   'templates.deleteAria': 'Vorlage löschen: {title}',
 
   // Auth extra
-  'auth.pwMinCharsHint': 'Mindestens 6 Zeichen',
+  'auth.pwMinCharsHint': 'Mindestens 8 Zeichen',
 
   // Sentiment labels
   'sentiment.positive': 'Positiv',
@@ -3661,7 +3661,7 @@ const pt = {
   'templates.deleteAria': 'Excluir modelo: {title}',
 
   // Auth extra
-  'auth.pwMinCharsHint': 'Pelo menos 6 caracteres',
+  'auth.pwMinCharsHint': 'Pelo menos 8 caracteres',
 
   // Sentiment labels
   'sentiment.positive': 'Positivo',
@@ -4287,7 +4287,7 @@ const it = {
   'templates.deleteAria': 'Elimina modello: {title}',
 
   // Auth extra
-  'auth.pwMinCharsHint': 'Almeno 6 caratteri',
+  'auth.pwMinCharsHint': 'Almeno 8 caratteri',
 
   // Sentiment labels
   'sentiment.positive': 'Positivo',
@@ -4913,7 +4913,7 @@ const ja = {
   'templates.deleteAria': 'テンプレートを削除: {title}',
 
   // Auth extra
-  'auth.pwMinCharsHint': '6文字以上',
+  'auth.pwMinCharsHint': '8文字以上',
 
   // Sentiment labels
   'sentiment.positive': 'ポジティブ',
@@ -5518,7 +5518,7 @@ const zh = {
   'auth.termsNote': '注册即表示您同意我们的服务条款和隐私政策。',
   'auth.loginFailed': '登录失败，请重试。',
   'auth.registerFailed': '注册失败，请重试。',
-  'auth.pwMinCharsHint': '至少6个字符',
+  'auth.pwMinCharsHint': '至少8个字符',
 
   // Common
   'common.retry': '重试',
@@ -6155,7 +6155,7 @@ const ko = {
   'auth.termsNote': '가입하면 서비스 약관 및 개인정보 처리방침에 동의하는 것입니다.',
   'auth.loginFailed': '로그인에 실패했습니다. 다시 시도하세요.',
   'auth.registerFailed': '회원가입에 실패했습니다. 다시 시도하세요.',
-  'auth.pwMinCharsHint': '최소 6자리',
+  'auth.pwMinCharsHint': '최소 8자리',
 
   // Common
   'common.retry': '재시도',
@@ -6629,7 +6629,7 @@ const th = {
   'auth.termsNote': 'การสมัครสมาชิกถือว่าคุณยอมรับข้อกำหนดการใช้บริการและนโยบายความเป็นส่วนตัว',
   'auth.loginFailed': 'เข้าสู่ระบบล้มเหลว กรุณาลองใหม่',
   'auth.registerFailed': 'สมัครสมาชิกล้มเหลว กรุณาลองใหม่',
-  'auth.pwMinCharsHint': 'อย่างน้อย 6 ตัวอักษร',
+  'auth.pwMinCharsHint': 'อย่างน้อย 8 ตัวอักษร',
 
   // Email verification
   'verify.verifying': 'กำลังยืนยันอีเมล…',

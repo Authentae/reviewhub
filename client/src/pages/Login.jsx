@@ -25,18 +25,22 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const emailRef = useRef(null);
+  const errorRef = useRef(null);
 
-  // Move focus to email field when an error occurs so keyboard users notice it
+  // Move focus to the error banner itself (not the email field) so keyboard
+  // and screen-reader users hear the message before re-typing. Focusing the
+  // input was jarring — the error appeared above but focus jumped past it.
   useEffect(() => {
-    if (error) emailRef.current?.focus();
+    if (error) errorRef.current?.focus();
   }, [error]);
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+  async function handleSubmit(e, overrideCreds) {
+    if (e?.preventDefault) e.preventDefault();
     setError('');
     setLoading(true);
+    const creds = overrideCreds || form;
     try {
-      const { data } = await api.post('/auth/login', form);
+      const { data } = await api.post('/auth/login', creds);
       if (data.mfaRequired) {
         // Two-factor path: route to the challenge page, pass the pending
         // token in location state so the URL doesn't contain it (the token
@@ -60,8 +64,16 @@ export default function Login() {
     }
   }
 
-  function fillDemo() {
-    setForm({ email: 'demo@reviewhub.review', password: 'demo123' });
+  // Demo-account button: fill the form AND immediately submit. The previous
+  // behaviour just populated the inputs and left the user staring at a
+  // pre-filled form wondering what to do next — clicking "Use demo account"
+  // is itself the intent to sign in, so we shouldn't make them click "Sign
+  // in" a second time. Pass creds explicitly because setForm is async and
+  // handleSubmit would otherwise read the stale state on the same tick.
+  async function fillDemo() {
+    const demoCreds = { email: 'demo@reviewhub.review', password: 'demo123' };
+    setForm(demoCreds);
+    await handleSubmit(null, demoCreds);
   }
 
   return (
@@ -89,7 +101,7 @@ export default function Login() {
           </div>
 
           {error && (
-            <div id="login-error" role="alert" className="flex items-start gap-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/70 text-red-700 dark:text-red-300 text-sm px-4 py-3 rounded-xl mb-5">
+            <div id="login-error" role="alert" tabIndex={-1} ref={errorRef} className="flex items-start gap-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/70 text-red-700 dark:text-red-300 text-sm px-4 py-3 rounded-xl mb-5 focus:outline-none focus:ring-2 focus:ring-red-400">
               <svg className="w-4 h-4 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
               <span>{error}</span>
             </div>

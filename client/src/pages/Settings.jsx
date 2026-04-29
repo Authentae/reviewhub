@@ -2106,6 +2106,11 @@ export default function Settings() {
   const [deleting, setDeleting] = useState(false);
   const [deletePassword, setDeletePassword] = useState('');
   const [deleteError, setDeleteError] = useState('');
+  // Type-to-confirm phrase. Industry-standard for irreversible destructive
+  // actions (GitHub repo delete, Slack workspace delete, AWS console).
+  // The password gate alone catches credential abuse but doesn't catch the
+  // legit owner who clicked Delete by reflex.
+  const [deleteConfirmPhrase, setDeleteConfirmPhrase] = useState('');
   const confirmDeleteRef = useRef(null);
   const [notifPrefs, setNotifPrefs] = useState(() => {
     try { return JSON.parse(localStorage.getItem(NOTIF_KEY)) || {}; } catch { return {}; }
@@ -2377,6 +2382,12 @@ export default function Settings() {
   async function deleteAccount() {
     if (!deletePassword) {
       setDeleteError(t('settings.deletePasswordRequired', 'Password is required'));
+      return;
+    }
+    // Industry-standard typed confirmation. Stops reflex-clicks on
+    // irreversible deletion. Phrase intentionally case-sensitive.
+    if (deleteConfirmPhrase !== 'DELETE') {
+      setDeleteError(t('settings.deleteTypeDelete', 'Type DELETE (in capitals) to confirm'));
       return;
     }
     setDeleting(true);
@@ -2838,6 +2849,18 @@ export default function Settings() {
                     aria-label={t('settings.deletePasswordPlaceholder', 'Enter password to confirm')}
                     className="text-xs px-2.5 py-1.5 rounded-lg border border-red-300 dark:border-red-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500"
                   />
+                  <input
+                    type="text"
+                    placeholder={t('settings.deletePhrasePlaceholder', 'Type DELETE to confirm')}
+                    value={deleteConfirmPhrase}
+                    onChange={(e) => { setDeleteConfirmPhrase(e.target.value); setDeleteError(''); }}
+                    disabled={deleting}
+                    aria-label={t('settings.deletePhrasePlaceholder', 'Type DELETE to confirm')}
+                    autoCapitalize="characters"
+                    autoCorrect="off"
+                    spellCheck={false}
+                    className="text-xs font-mono px-2.5 py-1.5 rounded-lg border border-red-300 dark:border-red-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  />
                   {deleteError && (
                     <p role="alert" className="text-xs text-red-600 dark:text-red-400">{deleteError}</p>
                   )}
@@ -2846,7 +2869,7 @@ export default function Settings() {
                       type="button"
                       ref={confirmDeleteRef}
                       onClick={deleteAccount}
-                      disabled={deleting || !deletePassword}
+                      disabled={deleting || !deletePassword || deleteConfirmPhrase !== 'DELETE'}
                       aria-busy={deleting}
                       className="text-xs font-semibold text-white bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded-lg transition-colors disabled:opacity-60"
                     >
@@ -2854,7 +2877,7 @@ export default function Settings() {
                     </button>
                     <button
                       type="button"
-                      onClick={() => { setConfirmDelete(false); setDeletePassword(''); setDeleteError(''); }}
+                      onClick={() => { setConfirmDelete(false); setDeletePassword(''); setDeleteConfirmPhrase(''); setDeleteError(''); }}
                       className="text-xs font-medium text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-600 px-3 py-1.5 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                     >
                       {t('settings.cancel')}

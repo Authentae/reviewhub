@@ -102,6 +102,19 @@ export default function Pricing() {
     return () => { cancelled = true; };
   }, []);
 
+  // Fetch the user's current plan (logged-in only) so we can mark the
+  // matching card as "Current plan" instead of showing a misleading
+  // "Upgrade" CTA on the plan they're already on.
+  const [currentPlanId, setCurrentPlanId] = useState(null);
+  useEffect(() => {
+    if (!loggedIn) return;
+    let cancelled = false;
+    api.get('/auth/me')
+      .then(({ data }) => { if (!cancelled) setCurrentPlanId(data.subscription?.plan || 'free'); })
+      .catch(() => { /* silent — fall back to default copy */ });
+    return () => { cancelled = true; };
+  }, [loggedIn]);
+
   const faqs = [
     { q: t('pricing.faq1q'), a: t('pricing.faq1a') },
     { q: t('pricing.faq2q'), a: t('pricing.faq2a') },
@@ -230,15 +243,37 @@ export default function Pricing() {
                         ))}
                       </ul>
 
-                      <Link
-                        to={loggedIn ? '/settings' : '/register'}
-                        className={'rh-btn ' + (highlighted ? 'rh-btn-amber' : 'rh-btn-ghost')}
-                        style={{ justifyContent: 'center', width: '100%' }}
-                      >
-                        {isFree
-                          ? (loggedIn ? t('pricing.ctaCurrentPlan') : t('pricing.ctaFree'))
-                          : (loggedIn ? t('pricing.ctaUpgrade') : t('pricing.ctaStart'))}
-                      </Link>
+                      {(() => {
+                        const isCurrent = loggedIn && currentPlanId === plan.id;
+                        // Current plan → disabled "Current plan ✓" button that
+                        // routes to Settings (where they can manage billing /
+                        // change plan via the LS portal). Other plans → upgrade/
+                        // start CTA. Removes the "Upgrade to Starter" copy that
+                        // appeared even when the user was already on Starter.
+                        if (isCurrent) {
+                          return (
+                            <Link
+                              to="/settings"
+                              className={'rh-btn rh-btn-ghost'}
+                              style={{ justifyContent: 'center', width: '100%', opacity: 0.85 }}
+                              aria-current="true"
+                            >
+                              {t('pricing.ctaCurrentPlan', 'Current plan ✓')}
+                            </Link>
+                          );
+                        }
+                        return (
+                          <Link
+                            to={loggedIn ? '/settings' : '/register'}
+                            className={'rh-btn ' + (highlighted ? 'rh-btn-amber' : 'rh-btn-ghost')}
+                            style={{ justifyContent: 'center', width: '100%' }}
+                          >
+                            {isFree
+                              ? (loggedIn ? t('pricing.ctaCurrentPlan') : t('pricing.ctaFree'))
+                              : (loggedIn ? t('pricing.ctaUpgrade') : t('pricing.ctaStart'))}
+                          </Link>
+                        );
+                      })()}
                     </div>
                   );
                 })}
