@@ -435,7 +435,10 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
     }
   }
 
-  // Close sentiment picker on outside click
+  // Close sentiment picker on outside click OR Escape key. The earlier
+  // Escape-handler effect above only fires for the draft / template /
+  // delete states — without this branch, an open sentiment picker
+  // ignored Escape, leaving keyboard users stuck.
   useEffect(() => {
     if (!showSentimentPicker) return;
     function onClose(e) {
@@ -443,8 +446,15 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
         setShowSentimentPicker(false);
       }
     }
+    function onKey(e) {
+      if (e.key === 'Escape') setShowSentimentPicker(false);
+    }
     document.addEventListener('mousedown', onClose);
-    return () => document.removeEventListener('mousedown', onClose);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onClose);
+      document.removeEventListener('keydown', onKey);
+    };
   }, [showSentimentPicker]);
 
   async function handleTogglePin() {
@@ -618,7 +628,10 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
     if (isNaN(ts)) return '';
     const diffMs = Date.now() - ts;
     const seconds = Math.floor(Math.abs(diffMs) / 1000);
-    if (seconds < 60)   return rtf.format(0, 'second');
+    // Skip the rtf "0 seconds ago" output — most locales render it
+    // awkwardly ("0 seconds ago" / "in 0 seconds"). "Just now" reads
+    // better and matches what every modern feed does.
+    if (seconds < 60)   return t('common.justNow') || 'just now';
     const minutes = Math.floor(seconds / 60);
     if (minutes < 60)   return rtf.format(-minutes, 'minute');
     const hours = Math.floor(minutes / 60);
@@ -739,7 +752,7 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
               {saved && !drafting && (
                 <button type="button" onClick={() => { setDraftText(optimisticResponse || ''); setDrafting(true); fetchTemplatesOnce().then(setTemplates); }}
                   aria-label={t('review.editReplyAria', { name: review.reviewer_name })}
-                  className="text-xs text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 py-1.5 px-2 whitespace-nowrap">
+                  className="text-xs text-gray-500 hover:text-gray-800 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-700/60 py-1.5 px-2 rounded whitespace-nowrap transition-colors">
                   {t('review.editReply')}
                 </button>
               )}
@@ -836,7 +849,11 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
                   ref={deleteTriggerRef}
                   onClick={() => setConfirmDelete(true)}
                   aria-label={t('review.deleteAria')}
-                  className="text-xs text-gray-300 hover:text-red-400 py-1.5 px-2"
+                  // 32x32 minimum hit target — the previous py-1.5 px-2 was
+                  // ~16x14, far below WCAG 2.5.5 + Apple/Google guidance.
+                  // Hover gets a subtle red wash so it reads as the delete
+                  // affordance, not just a stray glyph.
+                  className="inline-flex items-center justify-center min-w-[32px] min-h-[32px] text-sm text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors"
                 >
                   ✕
                 </button>

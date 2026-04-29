@@ -166,6 +166,7 @@ const en = {
   'dashboard.seedClearFailed': 'Failed to clear demo data',
   'dashboard.ratingClear': 'Clear rating filter',
   'auth.passwordMatches': 'Passwords match',
+  'common.justNow': 'just now',
   'dashboard.clearDemoData': 'Clear demo data',
   'dashboard.clearingDemoData': 'Clearing…',
   'dashboard.clearDemoConfirm': 'Remove all {n} demo reviews? Your real reviews will be kept.',

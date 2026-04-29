@@ -2104,9 +2104,15 @@ function ExtensionTokenSection() {
 }
 
 function ApiKeysSection({ plan }) {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const toast = useToast();
   const hasPlan = plan === 'business';
+  // Same Intl.RelativeTimeFormat memo pattern used by ConnectCard above so
+  // the "last used" label reads "2 hours ago" instead of a raw 2026-04-29.
+  const rtf = useMemo(() => {
+    try { return new Intl.RelativeTimeFormat(lang, { numeric: 'auto' }); }
+    catch { return new Intl.RelativeTimeFormat('en', { numeric: 'auto' }); }
+  }, [lang]);
   const [keys, setKeys] = useState([]);
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState('');
@@ -2233,7 +2239,7 @@ function ApiKeysSection({ plan }) {
                         <span className="font-mono">{k.key_prefix}</span>
                         {' · '}
                         {k.last_used_at
-                          ? t('settings.apiKeyLastUsed', { when: new Date(k.last_used_at.replace(' ', 'T') + 'Z').toLocaleDateString() })
+                          ? t('settings.apiKeyLastUsed', { when: formatSyncAgo(k.last_used_at, rtf, t) })
                           : t('settings.apiKeyNeverUsed')}
                       </p>
                     </div>
