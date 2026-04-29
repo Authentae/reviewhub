@@ -2940,7 +2940,7 @@ export default function Settings() {
                 <input
                   id="pw-next"
                   name="new-password"
-                  type={showPw ? 'text' : 'password'} required className="input" minLength={6} maxLength={128}
+                  type={showPw ? 'text' : 'password'} required className="input" minLength={8} maxLength={128}
                   autoComplete="new-password"
                   value={pwForm.next}
                   onChange={(e) => setPwForm(f => ({ ...f, next: e.target.value }))}

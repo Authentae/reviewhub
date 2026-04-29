@@ -99,7 +99,7 @@ export default function ResetPassword() {
                     name="new-password"
                     type={showPassword ? 'text' : 'password'}
                     required
-                    minLength={6}
+                    minLength={8}
                     maxLength={128}
                     autoComplete="new-password"
                     className="input pr-20"

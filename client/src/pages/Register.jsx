@@ -111,7 +111,7 @@ export default function Register() {
                 <input
                   id="reg-password"
                   name="password"
-                  type={showPassword ? 'text' : 'password'} required className="input pr-20" minLength={6} maxLength={128} autoComplete="new-password"
+                  type={showPassword ? 'text' : 'password'} required className="input pr-20" minLength={8} maxLength={128} autoComplete="new-password"
                   aria-describedby={error ? 'reg-error' : undefined}
                   value={form.password}
                   onChange={(e) => setForm({ ...form, password: e.target.value })}
