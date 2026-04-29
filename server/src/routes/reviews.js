@@ -599,12 +599,16 @@ router.post('/bulk-respond', bulkRespondLimiter, (req, res) => {
       return res.json({ updated: 0, skipped: review_ids.length });
     }
 
+    // Fetch full review rows once so we can both substitute vars (when
+    // the template needs them) AND fire webhooks afterwards. Targets are
+    // first-response only, so every row here is a true unanswered → answered
+    // transition — exactly when review.responded should fire.
+    const fullReviews = all(
+      `SELECT * FROM reviews WHERE id IN (${targets.map(() => '?').join(',')})`,
+      targets.map(r => r.id)
+    );
+
     if (hasVars(text)) {
-      // Template has variables — substitute per-review, then update individually.
-      const fullReviews = all(
-        `SELECT * FROM reviews WHERE id IN (${targets.map(() => '?').join(',')})`,
-        targets.map(r => r.id)
-      );
       for (const review of fullReviews) {
         const substituted = substituteVars(text, review, business);
         run(
@@ -613,12 +617,25 @@ router.post('/bulk-respond', bulkRespondLimiter, (req, res) => {
         );
       }
     } else {
-      const targetIds = targets.map(r => r.id);
+      const targetIds = fullReviews.map(r => r.id);
       const ph2 = targetIds.map(() => '?').join(',');
       run(
         `UPDATE reviews SET response_text = ?, responded_at = datetime('now'), updated_at = datetime('now') WHERE id IN (${ph2})`,
         [text, ...targetIds]
       );
+    }
+
+    // Fire review.responded for each newly-answered review. Single-respond
+    // fires this; bulk-respond previously didn't, so Slack/Zapier integrations
+    // missed every bulk reply event.
+    for (const review of fullReviews) {
+      fireWebhooks(req.user.id, 'review.responded', {
+        id: review.id,
+        platform: review.platform,
+        reviewer_name: review.reviewer_name,
+        rating: review.rating,
+        response_text: hasVars(text) ? substituteVars(text, review, business) : text,
+      });
     }
 
     res.json({ updated: targets.length, skipped: review_ids.length - targets.length });

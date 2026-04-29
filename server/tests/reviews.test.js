@@ -295,4 +295,32 @@ describe('bulk-respond', () => {
     // updated=0 because the ID doesn't belong to user A's business
     assert.strictEqual(res.body.updated, 0);
   });
+
+  // Regression: bulk-respond used to silently skip the review.responded
+  // webhook firing — only single-respond fired it, so Slack/Zapier
+  // integrations never saw bulk events.
+  test('bulk-respond fires review.responded webhook per updated review', async () => {
+    const u = await makeUserWithBusiness();
+    const hookRes = await request(app).post('/api/webhooks')
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({ url: 'http://127.0.0.1:1/hook', events: ['review.responded'] });
+    const hookId = hookRes.body.id;
+
+    const id1 = await makeReview(u);
+    const id2 = await makeReview(u);
+
+    await request(app).post('/api/reviews/bulk-respond')
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({ review_ids: [id1, id2], response_text: 'Thanks for the feedback!' });
+
+    // Drain fire-and-forget delivery
+    await new Promise(r => setTimeout(r, 6000));
+
+    const { all } = require('../src/db/schema');
+    const deliveries = all(
+      "SELECT * FROM webhook_deliveries WHERE webhook_id = ? AND event = 'review.responded'",
+      [hookId]
+    );
+    assert.strictEqual(deliveries.length, 2, `expected 2 deliveries (one per review), got ${deliveries.length}`);
+  });
 });
