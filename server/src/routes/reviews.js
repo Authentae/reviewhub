@@ -470,6 +470,15 @@ router.get('/', readLimiter, (req, res) => {
     // Date range: accept ISO date strings (YYYY-MM-DD) and compare against
     // created_at which is stored as 'YYYY-MM-DD HH:MM:SS' in SQLite.
     const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+    // Reject inverted date ranges with a clear 400 — silent empty results
+    // make it look like there are no reviews when the range was just typed
+    // backwards. Strings compare lexicographically the same way ISO dates
+    // sort, so "2026-04-21" > "2026-04-20" works without parsing to Date.
+    if (date_from && ISO_DATE_RE.test(date_from)
+        && date_to && ISO_DATE_RE.test(date_to)
+        && date_from > date_to) {
+      return res.status(400).json({ error: 'date_from must be on or before date_to' });
+    }
     if (date_from && ISO_DATE_RE.test(date_from)) { where += ' AND created_at >= ?'; params.push(date_from); }
     if (date_to   && ISO_DATE_RE.test(date_to))   { where += ' AND created_at < ?';  params.push(date_to + 'T23:59:59'); }
     if (search) {

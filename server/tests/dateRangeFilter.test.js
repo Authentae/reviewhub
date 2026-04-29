@@ -97,4 +97,24 @@ describe('date range filter', () => {
     assert.ok(res.body.filteredStats);
     assert.strictEqual(res.body.filteredStats.total, 2);
   });
+
+  // Regression: an inverted range used to silently return zero rows,
+  // making the user think there are no reviews when the dates were
+  // just typed backwards. Now 400 with an explicit error.
+  test('rejects inverted date range with 400', async () => {
+    const u = await makeUserWithBusiness();
+    const res = await request(app)
+      .get('/api/reviews?date_from=2026-04-21&date_to=2026-04-20')
+      .set('Authorization', `Bearer ${u.token}`);
+    assert.strictEqual(res.status, 400);
+    assert.match(res.body.error, /date_from.*before.*date_to/i);
+  });
+
+  test('accepts equal date_from and date_to (single-day filter)', async () => {
+    const u = await makeUserWithBusiness();
+    const res = await request(app)
+      .get('/api/reviews?date_from=2026-04-20&date_to=2026-04-20')
+      .set('Authorization', `Bearer ${u.token}`);
+    assert.strictEqual(res.status, 200);
+  });
 });
