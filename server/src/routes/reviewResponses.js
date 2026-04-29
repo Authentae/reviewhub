@@ -25,6 +25,7 @@ const { get, all, insert, run } = require('../db/schema');
 const { authMiddleware } = require('../middleware/auth');
 
 const { captureException } = require('../lib/errorReporter');
+const { fireWebhooks } = require('../lib/webhookDelivery');
 const router = express.Router();
 router.use(authMiddleware);
 
@@ -191,6 +192,24 @@ router.post('/:id/response', responseMutateLimiter, (req, res) => {
        FROM review_responses WHERE id = ?`,
       [id]
     );
+
+    // Fire review.responded for the business owner — that's whose webhook
+    // feed represents this business. Edits go through PUT and don't fire
+    // (state transition only happens once per review).
+    const fullReview = get(
+      'SELECT platform, reviewer_name, rating FROM reviews WHERE id = ?',
+      [reviewId]
+    );
+    if (fullReview) {
+      fireWebhooks(ctx.business.user_id, 'review.responded', {
+        id: reviewId,
+        platform: fullReview.platform,
+        reviewer_name: fullReview.reviewer_name,
+        rating: fullReview.rating,
+        response_text: text,
+      });
+    }
+
     res.status(201).json({ response: row });
   } catch (err) {
     captureException(err, { route: 'reviewResponses' });
