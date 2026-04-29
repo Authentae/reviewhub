@@ -204,7 +204,16 @@ async function webhookHandler(req, res) {
     // Signature-verify failures → 401. Parse failures → 400. Everything else → 500.
     // Never echo err.message — can leak SDK internals or provider error payloads.
     const status = err.status || (err.message?.includes('signature') ? 401 : err.message?.includes('JSON') ? 400 : 500);
-    captureException(err, { kind: 'billing.webhook' });
+    // Don't page on 401 — a bad signature usually means a misconfigured
+    // webhook secret in Railway, not a code defect, and LemonSqueezy will
+    // retry on every event so a single bad-secret minute can flood Sentry.
+    // Still log a warning-level breadcrumb (downgraded from exception) so
+    // the operator sees it; just doesn't trip alert routing.
+    if (status === 401) {
+      console.warn('[billing.webhook] signature verification failed — check LEMONSQUEEZY_WEBHOOK_SECRET');
+    } else {
+      captureException(err, { kind: 'billing.webhook', status });
+    }
     res.status(status).json({ error: status === 401 ? 'Invalid signature' : status === 400 ? 'Invalid payload' : 'Webhook processing failed' });
   }
 }

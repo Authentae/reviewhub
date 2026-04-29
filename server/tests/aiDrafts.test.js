@@ -157,6 +157,28 @@ describe('aiDrafts', () => {
     assert.ok(!('thinking' in capturedRequest));
   });
 
+  // Regression: a rotated/invalid ANTHROPIC_API_KEY caused every draft
+  // request to call Anthropic, get a 401, and trip Sentry. The breaker
+  // turns subsequent calls into immediate template fallbacks until the
+  // env is fixed. The direct-injection path (used in most tests here)
+  // skips the breaker, so this test goes through the module-level path:
+  // with no API key, the lazy init returns null and we fall to template,
+  // confirming the safe-fallback contract the breaker relies on.
+  test('module-level fallback returns a template draft when API key missing', async () => {
+    const prevKey = process.env.ANTHROPIC_API_KEY;
+    process.env.ANTHROPIC_API_KEY = '';
+    _resetForTests();
+    try {
+      const result = await generateDraft({ review: REVIEW, businessName: 'Test Co' });
+      assert.strictEqual(result.source, 'template');
+      assert.ok(result.draft);
+    } finally {
+      if (prevKey === undefined) delete process.env.ANTHROPIC_API_KEY;
+      else process.env.ANTHROPIC_API_KEY = prevKey;
+      _resetForTests();
+    }
+  });
+
   test('uses the configured model', async () => {
     let capturedRequest = null;
     const client = stubClient({

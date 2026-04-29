@@ -64,6 +64,17 @@ Hard constraints:
 let _client = null;
 let _clientInitAttempted = false;
 
+// Auth-failure circuit breaker. When the Anthropic API returns 401, a
+// rotated/invalid ANTHROPIC_API_KEY is the cause — every subsequent call
+// will fail the same way until the env var is fixed. Without this, every
+// draft request burns ~200ms calling the SDK to get a 401, AND each
+// failure spams Sentry with a duplicate auth event. After a single 401
+// we mark the client cold for 5 minutes; during that window draft
+// requests skip the network call and short-circuit to the template
+// fallback. Cleared automatically on next attempt after the cooldown.
+let _authBreakerUntil = 0;
+const AUTH_BREAKER_COOLDOWN_MS = 5 * 60 * 1000;
+
 function getDefaultClient() {
   if (_clientInitAttempted) return _client;
   _clientInitAttempted = true;
@@ -142,6 +153,14 @@ async function generateDraft({ review, businessName }, { client } = {}) {
     return { draft: getTemplateDraft(review), source: 'template' };
   }
 
+  // Auth circuit breaker — short-circuit during the cooldown window so a
+  // rotated/invalid API key doesn't burn round-trips on every draft and
+  // doesn't keep tripping Sentry alerts. Tests inject a client directly,
+  // so the breaker only applies when we're using the module-level client.
+  if (!client && Date.now() < _authBreakerUntil) {
+    return { draft: getTemplateDraft(review), source: 'template' };
+  }
+
   try {
     const response = await anthropic.messages.create({
       model: MODEL,
@@ -181,6 +200,28 @@ async function generateDraft({ review, businessName }, { client } = {}) {
       : err instanceof Anthropic.default.AuthenticationError ? 'auth'
       : err instanceof Anthropic.default.APIError ? `api_${err.status}`
       : 'unknown';
+
+    // Auth failures = bad ANTHROPIC_API_KEY in env. Trip the breaker so
+    // the next 5 minutes of draft requests skip Anthropic entirely, AND
+    // log to Sentry only ONCE per cooldown window — without this, every
+    // user clicking "Draft with AI" produces a duplicate Sentry event for
+    // the same root cause (the env var).
+    if (errorKind === 'auth') {
+      const breakerWasOpen = Date.now() < _authBreakerUntil;
+      _authBreakerUntil = Date.now() + AUTH_BREAKER_COOLDOWN_MS;
+      if (!breakerWasOpen) {
+        console.warn('[aiDrafts] Anthropic auth failed — check ANTHROPIC_API_KEY in env. Falling back to templates for the next 5 min.');
+        captureException(err, {
+          kind: 'anthropic.draft_failed',
+          errorKind,
+          reviewId: review.id,
+          model: MODEL,
+          breaker: 'tripped',
+        });
+      }
+      return { draft: getTemplateDraft(review), source: 'template' };
+    }
+
     captureException(err, {
       kind: 'anthropic.draft_failed',
       errorKind,
@@ -192,10 +233,11 @@ async function generateDraft({ review, businessName }, { client } = {}) {
 }
 
 // Reset for tests — clears the lazy client so setting ANTHROPIC_API_KEY in a
-// test env takes effect.
+// test env takes effect, and re-arms the auth circuit breaker.
 function _resetForTests() {
   _client = null;
   _clientInitAttempted = false;
+  _authBreakerUntil = 0;
 }
 
 module.exports = { generateDraft, getTemplateDraft, _resetForTests };
