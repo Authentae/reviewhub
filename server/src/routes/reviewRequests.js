@@ -160,6 +160,26 @@ router.post('/', sendLimiter, async (req, res) => {
     const email = customer_email.trim().toLowerCase().slice(0, 320);
     const msg = message ? message.trim().slice(0, 500) : null;
 
+    // Per-customer cooldown: don't email the same address twice in 24h for
+    // the same business + platform. Without this, a stray double-click on
+    // "Send" or a script re-running could spam a customer's inbox. Using
+    // sent_at (most recent) and 24h window matches what most review-request
+    // tools enforce (Birdeye, Podium etc.).
+    const recent = get(
+      `SELECT sent_at FROM review_requests
+       WHERE business_id = ? AND customer_email = ? AND platform = ?
+         AND sent_at >= datetime('now', '-1 day')
+       ORDER BY sent_at DESC LIMIT 1`,
+      [business.id, email, platform]
+    );
+    if (recent) {
+      return res.status(409).json({
+        error: 'A review request was already sent to this customer in the last 24 hours.',
+        code: 'duplicate_recent',
+        last_sent_at: recent.sent_at,
+      });
+    }
+
     const { plaintext, hash } = generateToken();
     const baseUrl = process.env.CLIENT_URL || 'http://localhost:5173';
     // The tracking URL goes through the server (not the SPA) so it can do a

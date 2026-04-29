@@ -91,6 +91,50 @@ describe('review-requests', () => {
     assert.strictEqual(res.body.requests[0].customer_name, 'Bob');
   });
 
+  // Regression: a stray double-click on the Send button used to fire two
+  // emails to the same customer. Now blocked with 409 within a 24h window.
+  test('POST /review-requests blocks duplicate within 24h', async () => {
+    const u = await makeUserWithBusiness();
+    await setBizPlatformId(u, 'google_place_id', 'ChIJduptest');
+
+    const first = await request(app).post('/api/review-requests')
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({ customer_name: 'Dup', customer_email: 'dup@example.com', platform: 'google' });
+    assert.strictEqual(first.status, 201);
+
+    const second = await request(app).post('/api/review-requests')
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({ customer_name: 'Dup', customer_email: 'dup@example.com', platform: 'google' });
+    assert.strictEqual(second.status, 409);
+    assert.strictEqual(second.body.code, 'duplicate_recent');
+    assert.ok(second.body.last_sent_at);
+  });
+
+  test('duplicate check is case-insensitive on email', async () => {
+    const u = await makeUserWithBusiness();
+    await setBizPlatformId(u, 'google_place_id', 'ChIJcasetest');
+    await request(app).post('/api/review-requests')
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({ customer_name: 'Casey', customer_email: 'casey@example.com', platform: 'google' });
+    const second = await request(app).post('/api/review-requests')
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({ customer_name: 'Casey', customer_email: 'CASEY@example.com', platform: 'google' });
+    assert.strictEqual(second.status, 409);
+  });
+
+  test('duplicate check does NOT block a different platform', async () => {
+    const u = await makeUserWithBusiness();
+    await setBizPlatformId(u, 'google_place_id', 'ChIJxplat');
+    await setBizPlatformId(u, 'yelp_business_id', 'ylp-1');
+    await request(app).post('/api/review-requests')
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({ customer_name: 'X', customer_email: 'x@example.com', platform: 'google' });
+    const yelp = await request(app).post('/api/review-requests')
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({ customer_name: 'X', customer_email: 'x@example.com', platform: 'yelp' });
+    assert.strictEqual(yelp.status, 201);
+  });
+
   test('POST /review-requests rejects missing customer_name', async () => {
     const u = await makeUserWithBusiness();
     const res = await request(app).post('/api/review-requests').set('Authorization', `Bearer ${u.token}`)
