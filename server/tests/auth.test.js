@@ -451,6 +451,29 @@ describe('auth: email verification', () => {
     assert.strictEqual(me.body.user.email_verified, true);
   });
 
+  // Regression: clicking the same verification link twice (or reloading the
+  // verify-email page) used to 400 with "Invalid or expired" because the
+  // token hash was NULL'd on first verify, so the second SELECT returned
+  // no user and the alreadyVerified branch was unreachable.
+  test('verify-email is idempotent on a second click', async () => {
+    const user = await makeUser();
+    const plaintext = crypto.randomBytes(32).toString('hex');
+    run(
+      `UPDATE users SET email_verify_token_hash = ?, email_verify_sent_at = datetime('now') WHERE id = ?`,
+      [hashToken(plaintext), user.userId]
+    );
+    const first = await request(app).post('/api/auth/verify-email').send({ token: plaintext });
+    assert.strictEqual(first.status, 200);
+    assert.strictEqual(first.body.success, true);
+    assert.ok(!first.body.alreadyVerified);
+
+    // Second click on the same link
+    const second = await request(app).post('/api/auth/verify-email').send({ token: plaintext });
+    assert.strictEqual(second.status, 200);
+    assert.strictEqual(second.body.success, true);
+    assert.strictEqual(second.body.alreadyVerified, true);
+  });
+
   test('verify-email rejects expired token', async () => {
     const user = await makeUser();
     const plaintext = crypto.randomBytes(32).toString('hex');

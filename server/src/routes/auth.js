@@ -1026,10 +1026,14 @@ router.post('/verify-email', tokenLimiter, (req, res) => {
       return res.status(400).json({ error: 'Verification link has expired. Request a new one.' });
     }
 
+    // Keep email_verify_token_hash around (instead of NULL-ing) so that a
+    // second click on the same link — page reload, browser preview, email
+    // client retry — finds the user and returns the friendly already-
+    // verified branch above, not a scary "Invalid or expired" 400. The
+    // token's 24h expiry already bounds reuse risk; treating it as a
+    // single-use credential here just turns idempotent UX into noise.
     run(
-      `UPDATE users SET email_verified_at = datetime('now'),
-                         email_verify_token_hash = NULL,
-                         email_verify_sent_at = NULL
+      `UPDATE users SET email_verified_at = datetime('now')
        WHERE id = ?`,
       [user.id]
     );
