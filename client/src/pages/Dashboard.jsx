@@ -665,17 +665,23 @@ export default function Dashboard() {
           </div>
           {/* Tag filter row — only shown when user has tags */}
           {userTags.length > 0 && (
-            <div className="flex items-center gap-1.5 flex-wrap pt-1">
-              <span className="text-xs text-gray-400 dark:text-gray-500 mr-0.5">{t('tags.filterBy')}:</span>
-              {userTags.map(tag => (
-                <TagBadge
-                  key={tag.id}
-                  tag={tag}
-                  small
-                  selected={tagFilter === tag.id}
-                  onClick={() => { setTagFilter(prev => prev === tag.id ? null : tag.id); setPage(1); }}
-                />
-              ))}
+            <div className="flex items-center gap-1.5 flex-wrap pt-1" role="group" aria-label={t('tags.filterBy') + ':'}>
+              <span className="text-xs text-gray-500 dark:text-gray-300 mr-0.5">{t('tags.filterBy')}:</span>
+              {userTags.map(tag => {
+                const isActive = tagFilter === tag.id;
+                return (
+                  <TagBadge
+                    key={tag.id}
+                    tag={tag}
+                    small
+                    selected={isActive}
+                    onClick={() => { setTagFilter(prev => prev === tag.id ? null : tag.id); setPage(1); }}
+                    ariaLabel={isActive
+                      ? t('tags.removeFilterAria', `Remove filter: ${tag.name}`).replace('${tag.name}', tag.name)
+                      : t('tags.applyFilterAria', `Filter by tag: ${tag.name}`).replace('${tag.name}', tag.name)}
+                  />
+                );
+              })}
             </div>
           )}
         </section>

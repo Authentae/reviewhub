@@ -1,6 +1,9 @@
 // Colored pill chip for a review tag. color is a hex string like '#6b7280'.
 // Clicking fires onRemove if provided (edit mode), otherwise it's static display.
-export default function TagBadge({ tag, onRemove, onClick, small, selected }) {
+// ariaLabel: optional explicit label when the visible text alone (just the tag
+// name) doesn't convey the action — e.g. "Filter by tag: VIP" when the chip
+// is a filter toggle, or "Remove filter: VIP" when already active.
+export default function TagBadge({ tag, onRemove, onClick, small, selected, ariaLabel }) {
   const hex = tag.color || '#6b7280';
   const style = selected
     ? { backgroundColor: hex, borderColor: hex, color: '#fff' }
@@ -26,7 +29,14 @@ export default function TagBadge({ tag, onRemove, onClick, small, selected }) {
 
   if (onClick) {
     return (
-      <button type="button" onClick={onClick} className={`${base} cursor-pointer hover:opacity-80`} style={style}>
+      <button
+        type="button"
+        onClick={onClick}
+        aria-label={ariaLabel || tag.name}
+        aria-pressed={selected}
+        className={`${base} cursor-pointer hover:opacity-80`}
+        style={style}
+      >
         {tag.name}
       </button>
     );

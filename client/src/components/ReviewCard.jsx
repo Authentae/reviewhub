@@ -1090,7 +1090,31 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
                           type="button"
                           role="menuitem"
                           ref={el => { templateItemRefs.current[idx] = el; }}
-                          onClick={() => { setDraftText(tmpl.body); setShowTemplates(false); }}
+                          onClick={() => {
+                            // Insert template at the caret instead of replacing
+                            // the entire draft. The previous behaviour silently
+                            // wiped any in-progress text — a user who'd typed
+                            // half a personalised reply lost it the moment they
+                            // peeked at the template menu.
+                            const ta = draftTextareaRef.current;
+                            const cur = draftText || '';
+                            if (!ta || !cur) {
+                              setDraftText(tmpl.body);
+                            } else {
+                              const start = ta.selectionStart ?? cur.length;
+                              const end = ta.selectionEnd ?? cur.length;
+                              const next = cur.slice(0, start) + tmpl.body + cur.slice(end);
+                              setDraftText(next);
+                              requestAnimationFrame(() => {
+                                if (ta && document.contains(ta)) {
+                                  const pos = start + tmpl.body.length;
+                                  ta.focus();
+                                  try { ta.setSelectionRange(pos, pos); } catch { /* ignore */ }
+                                }
+                              });
+                            }
+                            setShowTemplates(false);
+                          }}
                           className="w-full text-left px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 focus:bg-gray-50 dark:focus:bg-gray-700 focus:outline-none transition-colors"
                         >
                           <p className="text-xs font-semibold text-gray-800 dark:text-gray-100 truncate">{tmpl.title}</p>

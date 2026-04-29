@@ -1042,6 +1042,18 @@ function WidgetSection({ business, onUpdate }) {
                 className="border border-gray-200 dark:border-gray-700 rounded-lg"
                 style={{ display: 'block' }}
               />
+              {/* Open the badge URL standalone so the user can verify how
+                  it looks in a real browser tab (full devtools, sharing,
+                  device-mode preview) without screen-grabbing the tiny
+                  iframe inside Settings. */}
+              <a
+                href={badgeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-blue-600 dark:text-blue-400 hover:underline mt-2 inline-block"
+              >
+                {t('widget.openInNewTab', 'Open preview in new tab ↗')}
+              </a>
             </div>
           </>
         )}

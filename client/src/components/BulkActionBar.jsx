@@ -319,7 +319,30 @@ export default function BulkActionBar({ selectedIds, onSent, onDeleted, onTagged
                         key={tmpl.id}
                         type="button"
                         role="menuitem"
-                        onClick={() => { setResponseText(tmpl.body); setShowTemplates(false); }}
+                        onClick={() => {
+                          // Insert at caret rather than replacing — same fix
+                          // as ReviewCard. A user mid-draft of a bulk reply
+                          // who peeks at the template menu shouldn't lose
+                          // what they typed.
+                          const ta = textareaRef.current;
+                          const cur = responseText || '';
+                          if (!ta || !cur) {
+                            setResponseText(tmpl.body);
+                          } else {
+                            const start = ta.selectionStart ?? cur.length;
+                            const end = ta.selectionEnd ?? cur.length;
+                            const next = cur.slice(0, start) + tmpl.body + cur.slice(end);
+                            setResponseText(next);
+                            requestAnimationFrame(() => {
+                              if (ta && document.contains(ta)) {
+                                const pos = start + tmpl.body.length;
+                                ta.focus();
+                                try { ta.setSelectionRange(pos, pos); } catch { /* ignore */ }
+                              }
+                            });
+                          }
+                          setShowTemplates(false);
+                        }}
                         className="w-full text-left px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 focus:bg-gray-50 dark:focus:bg-gray-700 focus:outline-none transition-colors"
                       >
                         <p className="text-xs font-semibold text-gray-800 dark:text-gray-100 truncate">{tmpl.title}</p>
