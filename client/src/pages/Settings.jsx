@@ -2249,8 +2249,16 @@ export default function Settings() {
 
   async function reloadBusiness() {
     const { data } = await api.get('/businesses');
-    const biz = data.businesses[0] || null;
+    // Honour active_business_id rather than blindly taking businesses[0].
+    // GET /businesses now returns alphabetically-sorted entries, so picking
+    // [0] silently switched the Settings view to a different business after
+    // every save for Business-plan users with multiple locations. Mirrors
+    // the pattern used by the initial-load effect above.
+    const activeId = data.active_business_id;
+    const biz = (activeId ? data.businesses.find(b => b.id === activeId) : null)
+      || data.businesses[0] || null;
     setBusiness(biz);
+    setAllBusinesses(data.businesses || []);
     if (biz) setName(biz.business_name);
     return biz;
   }
