@@ -1194,6 +1194,7 @@ const en = {
   'webhooks.createFailed': 'Failed to create webhook',
   'webhooks.deleted': 'Webhook deleted',
   'webhooks.deleteFailed': 'Failed to delete webhook',
+  'webhooks.deleteConfirm': 'Delete this webhook?',
   'webhooks.updateFailed': 'Failed to update webhook',
   'webhooks.test': 'Test',
   'webhooks.testOk': 'Test delivered — HTTP {status}',

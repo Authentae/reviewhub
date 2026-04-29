@@ -477,6 +477,11 @@ function WebhooksSection() {
   const [showDeliveries, setShowDeliveries] = useState({}); // id → bool
   const [deliveries, setDeliveries] = useState({}); // id → array
   const [loadingDeliveries, setLoadingDeliveries] = useState({}); // id → bool
+  // Inline confirm gate for the destructive ✕ button. Webhooks are critical
+  // infrastructure — a misclick silently breaks every configured integration
+  // (and the secret can't be recovered). Match the inline-yes/no pattern used
+  // for tags / auto-rules / templates so the UX feels consistent.
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
   // Last-created secret. Stored only in component memory and cleared
   // once the user dismisses or navigates away — server returns secrets
   // ONLY on the create response, never on the list, so this is the
@@ -660,9 +665,28 @@ function WebhooksSection() {
                           className={`text-xs px-1.5 py-0.5 rounded border transition-colors ${hook.enabled ? 'border-green-300 text-green-700 bg-green-50 dark:border-green-700 dark:text-green-400 dark:bg-green-900/20 hover:bg-green-100' : 'border-gray-200 text-gray-400 hover:bg-gray-50 dark:border-gray-600'}`}>
                           {hook.enabled ? t('webhooks.active') : t('webhooks.disabled')}
                         </button>
-                        <button type="button" onClick={() => handleDelete(hook.id)}
-                          aria-label={t('webhooks.deleteAria') || 'Delete webhook'}
-                          className="text-xs text-gray-300 hover:text-red-400 px-1">✕</button>
+                        {confirmDeleteId === hook.id ? (
+                          <>
+                            <span className="text-xs text-red-600 dark:text-red-400 font-medium">{t('webhooks.deleteConfirm')}</span>
+                            <button
+                              type="button"
+                              onClick={() => { handleDelete(hook.id); setConfirmDeleteId(null); }}
+                              className="text-xs text-red-600 font-semibold hover:underline px-1"
+                            >{t('tags.yes')}</button>
+                            <button
+                              type="button"
+                              onClick={() => setConfirmDeleteId(null)}
+                              className="text-xs text-gray-400 hover:text-gray-600 px-1"
+                            >{t('tags.no')}</button>
+                          </>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => setConfirmDeleteId(hook.id)}
+                            aria-label={t('webhooks.deleteAria') || 'Delete webhook'}
+                            className="text-xs text-gray-300 hover:text-red-400 px-1"
+                          >✕</button>
+                        )}
                       </div>
                     </div>
                     {showDeliveries[hook.id] && (
