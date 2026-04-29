@@ -2772,7 +2772,7 @@ export default function Settings() {
         <div className="rh-page-head">
           <div>
             <p className="rh-mono" style={{ fontSize: 11, color: 'var(--rh-ink-3)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>
-              № 03 · {t('settings.eyebrow', 'Settings')}
+              {t('settings.eyebrow', 'Settings')}
             </p>
             <h1>{t('settings.title')}</h1>
             <p className="rh-page-sub">{t('settings.subtitle', 'Account, business, integrations')}</p>

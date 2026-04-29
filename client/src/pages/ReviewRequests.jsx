@@ -163,7 +163,7 @@ export default function ReviewRequests() {
         <div className="rh-page-head">
           <div>
             <p className="rh-mono" style={{ fontSize: 11, color: 'var(--rh-ink-3)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>
-              № 05 · {t('requests.eyebrow', 'Outreach')}
+              {t('requests.eyebrow', 'Outreach')}
             </p>
             <h1>{t('requests.title')}</h1>
             <p className="rh-page-sub">{t('requests.subtitle')}</p>

@@ -1070,6 +1070,7 @@ const en = {
   'shortcuts.showHelp': 'Show this help',
   'shortcuts.focusSearch': 'Focus search',
   'shortcuts.closeDialogs': 'Close dialogs and menus',
+  'shortcuts.goHome': 'Go to Home',
   'shortcuts.goDashboard': 'Go to Dashboard',
   'shortcuts.goAnalytics': 'Go to Analytics',
   'shortcuts.goSettings': 'Go to Settings',

@@ -90,7 +90,12 @@ export default function MarketingNav({ sections = [] }) {
         <div className="rh-nav-cta">
           {/* "LIVE" indicator removed — the hero eyebrow already surfaces it
               with the rolling counter, so duplicating in the nav added clutter. */}
-          <Link to="/tools/review-reply-generator" className="rh-nav-tool" title={t('nav.freeToolTitle', 'Free AI reply generator')}>{t('nav.freeTool', 'Free tool')}</Link>
+          {/* Renamed from "Free tool" — the previous label sat right next
+              to the "Start free →" CTA and both used the word "free", so
+              first-time visitors couldn't tell whether the link was the
+              standalone demo or the sign-up flow. "AI generator" reads as
+              the standalone tool unambiguously. */}
+          <Link to="/tools/review-reply-generator" className="rh-nav-tool" title={t('nav.freeToolTitle', 'Free AI reply generator')}>{t('nav.freeTool', 'AI generator')}</Link>
           <RhLangPicker />
           <RhThemeToggle />
           <Link to="/login" className="rh-btn rh-btn-ghost">{t('nav.signIn', 'Sign in')}</Link>

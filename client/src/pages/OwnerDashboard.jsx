@@ -72,7 +72,7 @@ export default function OwnerDashboard() {
         <div className="rh-page-head">
           <div>
             <p className="rh-mono" style={{ fontSize: 11, color: 'var(--rh-ink-3)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>
-              № 06 · {t('owner.eyebrow', 'Owner replies')}
+              {t('owner.eyebrow', 'Owner replies')}
             </p>
             <h1>{t('owner.heading', 'Your claimed businesses')}</h1>
             <p className="rh-page-sub">

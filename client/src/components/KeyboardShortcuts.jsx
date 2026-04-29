@@ -15,6 +15,7 @@ const SHORTCUTS = [
   { keys: ['?'],      descKey: 'shortcuts.showHelp' },
   { keys: ['/'],      descKey: 'shortcuts.focusSearch' },
   { keys: ['Esc'],    descKey: 'shortcuts.closeDialogs' },
+  { keys: ['g','h'],  descKey: 'shortcuts.goHome' },
   { keys: ['g','d'],  descKey: 'shortcuts.goDashboard' },
   { keys: ['g','a'],  descKey: 'shortcuts.goAnalytics' },
   { keys: ['g','s'],  descKey: 'shortcuts.goSettings' },
