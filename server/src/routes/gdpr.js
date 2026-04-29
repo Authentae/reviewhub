@@ -5,7 +5,7 @@ const express = require('express');
 const { ConsentManager } = require('../lib/gdpr/consentManager');
 const { DataSubjectRights } = require('../lib/gdpr/dataSubjectRights');
 const { authMiddleware: requireAuth } = require('../middleware/auth');
-const { get, run, insert } = require('../db/schema');
+const { get, all, run, insert } = require('../db/schema');
 const crypto = require('crypto');
 const rateLimit = require('express-rate-limit');
 const { captureException } = require('../lib/errorReporter');
@@ -256,8 +256,12 @@ router.post('/processing-restriction', requireAuth, gdprRateLimit, async (req, r
 // GET /api/gdpr/breach-notification - Data breach notifications (Article 33/34)
 router.get('/breach-notification', async (req, res) => {
   try {
-    // Public endpoint for breach notifications
-    const breaches = get(`
+    // Public endpoint. Previously used get() — which returns the FIRST row
+    // only — and packed it into `breaches: <singleObjectOrNull>`. The
+    // contract is an array, and Article 34 obviously requires surfacing
+    // ALL public breach notifications, not just the most recent one.
+    // Fixed to use all() and fall back to [] when the table is empty.
+    const breaches = all(`
       SELECT incident_id, notification_date, description, affected_data,
              mitigation_measures, contact_dpo
       FROM breach_notifications
