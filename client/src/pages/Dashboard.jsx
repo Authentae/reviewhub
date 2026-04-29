@@ -364,8 +364,11 @@ export default function Dashboard() {
             product. */}
         <div className="rh-page-head">
           <div>
+            {/* Editorial "№ 01" prefix removed — repeated user feedback that
+                it read as an unread/notification count rather than a section
+                number. Just the section label is enough. */}
             <p className="rh-mono" style={{ fontSize: 11, color: 'var(--rh-ink-3)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>
-              № 01 · {t('dashboard.eyebrow', 'Inbox')}
+              {t('dashboard.eyebrow', 'Inbox')}
             </p>
             <h1>
               {data?.business?.business_name || t('dashboard.title')}
@@ -732,7 +735,14 @@ export default function Dashboard() {
               🚩 {t('dashboard.filter.flaggedOnly')}
             </button>
             {(hasFilters || sort !== 'newest') && (
-              <button type="button" onClick={clearFilters} className="text-sm text-gray-500 hover:text-gray-700 px-2">
+              // Active-state styling: when there ARE filters to clear, the
+              // button used to look like inert helper text. Bump to a real
+              // chip with subtle red tint so it reads as the off-switch.
+              <button
+                type="button"
+                onClick={clearFilters}
+                className="text-sm px-2.5 py-1 rounded-lg border border-red-200 dark:border-red-800/60 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 font-medium"
+              >
                 ✕ {t('dashboard.filter.clearAll')}
               </button>
             )}
@@ -831,7 +841,7 @@ export default function Dashboard() {
               {t('dashboard.reviewCount', { n: data.total })}
               {hasFilters ? ` ${t('dashboard.filtered')}` : ''}
             </p>
-            <ul className="space-y-3 list-none" role="list" aria-label={t('dashboard.reviewsListAria')}>
+            <ul id="reviews-list" className="space-y-3 list-none scroll-mt-32" role="list" aria-label={t('dashboard.reviewsListAria')}>
               {data.reviews.map(review => (
                 <li key={review.id} className={selectMode ? 'flex items-start gap-2' : undefined}>
                   {selectMode && (
@@ -877,7 +887,10 @@ export default function Dashboard() {
                   onClick={() => {
                     setPage(p => p - 1);
                     fetchReviews(page - 1);
-                    document.getElementById('main-content')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Scroll to the top of the reviews list (just below the
+                    // sticky filter bar) so users see the new page's first
+                    // card without being thrown to the very top of the page.
+                    document.getElementById('reviews-list')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                   }}
                   disabled={page === 1}
                   aria-label={t('dashboard.prevPageAria')}
@@ -897,7 +910,10 @@ export default function Dashboard() {
                   onClick={() => {
                     setPage(p => p + 1);
                     fetchReviews(page + 1);
-                    document.getElementById('main-content')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Scroll to the top of the reviews list (just below the
+                    // sticky filter bar) so users see the new page's first
+                    // card without being thrown to the very top of the page.
+                    document.getElementById('reviews-list')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                   }}
                   disabled={page >= totalPages}
                   aria-label={t('dashboard.nextPageAria')}
