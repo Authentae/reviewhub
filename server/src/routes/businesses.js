@@ -76,7 +76,23 @@ router.post('/', bizMutateLimiter, (req, res) => {
     }
 
     const id = insert('INSERT INTO businesses (user_id, business_name) VALUES (?, ?)', [req.user.id, business_name]);
-    res.json({ id, business_name, user_id: req.user.id });
+    // First business → make it active immediately. Without this the user row
+    // sits with active_business_id = NULL and every downstream call that
+    // resolves "the user's active business" has to paper over it with a
+    // fallback ("first business if none set"). Set the canonical value once
+    // here so the DB state matches the logical state. For 2nd+ businesses
+    // (Business plan), keep whatever the user's active selection is — this
+    // route only creates, switching is via PUT /active.
+    const isFirst = existingList.length === 0;
+    if (isFirst) {
+      run('UPDATE users SET active_business_id = ? WHERE id = ?', [id, req.user.id]);
+    }
+    res.json({
+      id,
+      business_name,
+      user_id: req.user.id,
+      ...(isFirst ? { active_business_id: id } : {}),
+    });
   } catch (err) {
     captureException(err, { route: 'businesses' });
     res.status(500).json({ error: 'Server error' });

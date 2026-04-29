@@ -33,6 +33,22 @@ describe('businesses', () => {
 
   // ── Create with plan limits ───────────────────────────────────────────────
 
+  // Regression: first business creation now stamps active_business_id on
+  // the user row instead of relying on the GET-side fallback. Verifies
+  // both the response shape and the DB column.
+  test('POST /businesses sets active_business_id when creating first business', async () => {
+    const u = await makeUser();
+    const res = await request(app).post('/api/businesses')
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({ business_name: 'My First Shop' });
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.body.active_business_id, res.body.id, 'response should echo active_business_id');
+
+    const { get } = require('../src/db/schema');
+    const userRow = get('SELECT active_business_id FROM users WHERE id = ?', [u.userId]);
+    assert.strictEqual(userRow.active_business_id, res.body.id, 'user row must be updated');
+  });
+
   test('POST /businesses second business blocked on Free plan', async () => {
     const u = await makeUserWithBusiness('First');
     const res = await request(app).post('/api/businesses')
