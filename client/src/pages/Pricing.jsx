@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import MarketingNav from '../components/MarketingNav';
+import Navbar from '../components/Navbar';
 import { useToast } from '../components/Toast';
 import { isLoggedIn } from '../lib/auth';
 import usePageTitle from '../hooks/usePageTitle';
@@ -144,7 +145,13 @@ export default function Pricing() {
       >
         Skip to main content
       </a>
-      <MarketingNav />
+      {/* When the user is logged in (e.g. clicked Pricing from the dashboard
+          to upgrade), show the in-app Navbar — the marketing nav has
+          "Sign in" / "Start free" CTAs which are nonsense to an authed
+          user and create a "did I just get logged out?" moment. The
+          Pricing page below adapts its CTAs the same way (loggedIn ?
+          Upgrade : Start free) — this keeps the chrome consistent. */}
+      {loggedIn ? <Navbar /> : <MarketingNav />}
 
       <main id="main-content">
         {/* Editorial header — cream paper backdrop, big serif headline */}
@@ -153,8 +160,11 @@ export default function Pricing() {
           <div className="rh-hero-grid" />
           <div className="rh-shell rh-pricing-hero-inner">
             <div className="rh-section-head" style={{ marginBottom: 32 }}>
+              {/* Editorial "04" numeral removed — same complaint pattern as
+                  the dashboard "№ 01" eyebrow: reads as a count or status
+                  indicator rather than an editorial section number. The
+                  "§ Pricing" kicker on its own still anchors the page. */}
               <div className="kicker">
-                <div className="num" style={{ color: 'var(--rh-sage)' }}>04</div>
                 <div className="cat">§ Pricing</div>
               </div>
               <h1 style={{ color: 'var(--rh-ink)' }}>{t('pricing.headline').split(/[—.]/, 1)[0] || t('pricing.headline')}<em style={{ color: 'var(--rh-sage)' }}>.</em></h1>
