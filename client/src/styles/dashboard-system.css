@@ -129,7 +129,19 @@
   padding-bottom: 18px; margin-bottom: 24px;
   border-bottom: 2px solid color-mix(in oklab, var(--rh-ochre) 55%, var(--rh-rule));
 }
-.rh-app .rh-page-head h1 { margin: 0; }
+.rh-app .rh-page-head h1 {
+  margin: 0;
+  /* Match the landing's editorial voice — same Instrument Serif as
+     .rh-display, just scaled down for a workspace heading. Keeps the
+     dashboard feeling like the same product as the marketing site. */
+  font-family: var(--rh-serif);
+  font-weight: 400;
+  font-size: clamp(34px, 4.4vw, 56px);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  color: var(--rh-ink);
+  text-wrap: balance;
+}
 .rh-app .rh-page-head .rh-page-sub {
   font-size: 13.5px; color: var(--rh-ink-3);
   font-family: var(--rh-mono); letter-spacing: 0.04em; text-transform: uppercase;
