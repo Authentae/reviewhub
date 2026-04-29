@@ -150,4 +150,45 @@ describe('webhooks', () => {
     const { sign } = require('../src/lib/webhookDelivery');
     assert.notStrictEqual(sign('s', 'body1'), sign('s', 'body2'));
   });
+
+  // The review.responded webhook represents a one-time state transition
+  // (review went from unanswered → answered). Edits to an existing
+  // response are typo fixes, not new business events, and should not
+  // re-notify Slack/Zapier integrations.
+  test('review.responded fires only on first response, not on edits', async () => {
+    const u = await makeUserWithBusiness();
+    const hookRes = await request(app).post('/api/webhooks')
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({ url: 'http://127.0.0.1:1/hook', events: ['review.responded'] });
+    assert.strictEqual(hookRes.status, 201);
+    const hookId = hookRes.body.id;
+
+    const reviewRes = await request(app).post('/api/reviews')
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({ platform: 'google', reviewer_name: 'Alice', rating: 5, review_text: 'Great!' });
+    assert.strictEqual(reviewRes.status, 201, `review create: ${JSON.stringify(reviewRes.body)}`);
+    const reviewId = reviewRes.body.review.id;
+
+    // First response — webhook should fire (1 delivery row)
+    const r1 = await request(app).post(`/api/reviews/${reviewId}/respond`)
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({ response_text: 'Thank you Alice!' });
+    assert.strictEqual(r1.status, 200, `first respond: ${JSON.stringify(r1.body)}`);
+
+    // Edit response — webhook should NOT fire again (still 1 delivery row)
+    const r2 = await request(app).post(`/api/reviews/${reviewId}/respond`)
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({ response_text: 'Thanks so much, Alice!' });
+    assert.strictEqual(r2.status, 200, `edit respond: ${JSON.stringify(r2.body)}`);
+
+    // Drain fire-and-forget delivery (5s connect timeout on the worker)
+    await new Promise(r => setTimeout(r, 6000));
+
+    const { all } = require('../src/db/schema');
+    const deliveries = all(
+      "SELECT * FROM webhook_deliveries WHERE webhook_id = ? AND event = 'review.responded'",
+      [hookId]
+    );
+    assert.strictEqual(deliveries.length, 1, `expected exactly 1 delivery row, got ${deliveries.length}`);
+  });
 });

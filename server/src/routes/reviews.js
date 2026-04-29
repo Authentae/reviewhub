@@ -1075,13 +1075,19 @@ router.post('/:id/respond', respondLimiter, async (req, res) => {
       }
     }
 
-    fireWebhooks(req.user.id, 'review.responded', {
-      id: review.id,
-      platform: review.platform,
-      reviewer_name: review.reviewer_name,
-      rating: review.rating,
-      response_text,
-    });
+    // Fire `review.responded` only on the FIRST response. Edits to an
+    // existing response shouldn't re-notify Slack/Zapier integrations —
+    // the customer's review only transitions from "unanswered" to
+    // "answered" once; subsequent typo fixes aren't a new event.
+    if (isFirstResponse) {
+      fireWebhooks(req.user.id, 'review.responded', {
+        id: review.id,
+        platform: review.platform,
+        reviewer_name: review.reviewer_name,
+        rating: review.rating,
+        response_text,
+      });
+    }
     res.json({ success: true, response_text, posted, postError });
   } catch (err) {
     captureException(err, { route: 'reviews' });
