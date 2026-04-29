@@ -27,6 +27,10 @@ export default function KeyboardShortcuts() {
   const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const closeBtnRef = useRef(null);
+  const dialogRef = useRef(null);
+  // Where focus was BEFORE the dialog opened — so we can restore it on
+  // close and the user lands back where they invoked "?".
+  const previouslyFocusedRef = useRef(null);
 
   // Global `?` listener. Skip when focus is in an input so typing "?"
   // in a search box doesn't pop the modal.
@@ -48,10 +52,44 @@ export default function KeyboardShortcuts() {
     return () => document.removeEventListener('keydown', onKey);
   }, [open]);
 
-  // Focus the close button when the dialog opens so Esc / Enter / Space
-  // all do the right thing without a mouse.
+  // Capture the previously-focused element when opening, restore it on close.
   useEffect(() => {
-    if (open) closeBtnRef.current?.focus();
+    if (open) {
+      previouslyFocusedRef.current = document.activeElement;
+      closeBtnRef.current?.focus();
+    } else if (previouslyFocusedRef.current) {
+      // Use setTimeout 0 so the dialog has unmounted before we move focus —
+      // otherwise focus moves while the dialog still owns it and is lost.
+      const target = previouslyFocusedRef.current;
+      setTimeout(() => { try { target.focus(); } catch { /* element gone */ } }, 0);
+      previouslyFocusedRef.current = null;
+    }
+  }, [open]);
+
+  // Focus trap — keep Tab cycling between the dialog's focusables instead of
+  // escaping back to the page underneath. Without this, Shift+Tab from the
+  // close button jumps to whatever was focusable before the dialog,
+  // partially defeating aria-modal="true".
+  useEffect(() => {
+    if (!open) return;
+    function onTab(e) {
+      if (e.key !== 'Tab' || !dialogRef.current) return;
+      const focusables = dialogRef.current.querySelectorAll(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+    document.addEventListener('keydown', onTab);
+    return () => document.removeEventListener('keydown', onTab);
   }, [open]);
 
   if (!open) return null;
@@ -62,7 +100,7 @@ export default function KeyboardShortcuts() {
       className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
       onClick={(e) => { if (e.target === e.currentTarget) setOpen(false); }}
     >
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 max-w-md w-full overflow-hidden animate-fade-in">
+      <div ref={dialogRef} className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 max-w-md w-full overflow-hidden animate-fade-in">
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 dark:border-gray-700">
           <h2 id="kbd-help-title" className="text-base font-semibold text-gray-900 dark:text-gray-100">
             {t('shortcuts.title')}
