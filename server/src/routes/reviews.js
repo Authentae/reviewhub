@@ -939,6 +939,17 @@ router.post('/', reviewCreateLimiter, async (req, res) => {
     }
 
     const finalReview = get('SELECT * FROM reviews WHERE id = ?', [id]);
+    // Pull the (possibly auto-applied) tags so subscribers can route on
+    // them — e.g. an auto-rule that tags 1-star reviews "urgent" lets a
+    // Zapier flow page the on-call from the same review.created event.
+    // Without this the receiver would have to round-trip back to
+    // /api/reviews/:id/tags to discover them.
+    const reviewTags = all(
+      `SELECT t.id, t.name, t.color
+       FROM tags t JOIN review_tags rt ON rt.tag_id = t.id
+       WHERE rt.review_id = ?`,
+      [id]
+    );
     // Fire outbound webhooks async — never blocks the response.
     fireWebhooks(req.user.id, 'review.created', {
       id: finalReview.id,
@@ -948,6 +959,7 @@ router.post('/', reviewCreateLimiter, async (req, res) => {
       sentiment: finalReview.sentiment,
       review_text: finalReview.review_text,
       created_at: finalReview.created_at,
+      tags: reviewTags,
     });
     // If an auto-rule answered this review, fire review.responded too —
     // matches single-respond and bulk-respond semantics so integrations
