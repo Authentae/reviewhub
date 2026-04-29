@@ -18,48 +18,6 @@
   }
 }
 
-/* True-dark mode overrides for the in-app Tailwind surfaces.
- *
- * Tailwind's gray-900 (#111827, ~oklch 0.21) is fine for "muted dim mode"
- * but OLED users / late-night users want NEAR-BLACK so the screen actually
- * stops emitting light. These rules push the four main app-surface shades
- * darker without touching brand colours (blue, green, ochre, etc.) or
- * light-mode at all.
- *
- * Mapping (Tailwind hex → true-dark hex):
- *   gray-900  #111827  →  #0a0a0d   (page bg / app shell)
- *   gray-800  #1f2937  →  #15161a   (cards, inputs, popovers)
- *   gray-700  #374151  →  #22242b   (raised surfaces, hovers, secondary btn)
- *   gray-600  #4B5563  →  #2e3038   (borders on raised surfaces)
- *
- * Scoped to `.dark` so light mode is unaffected. Limited to bg/border to
- * avoid flipping text colours on dark badges that intentionally use
- * darker greys. Per-element opt-out: any element that needs the lighter
- * Tailwind grey can re-declare its bg in component CSS.
- */
-.dark .bg-gray-900 { background-color: #0a0a0d; }
-.dark .bg-gray-800 { background-color: #15161a; }
-.dark .bg-gray-700 { background-color: #22242b; }
-.dark body { background-color: #0a0a0d; }
-
-/* Borders that ride on top of these darker surfaces — keep just enough
- * contrast that cards still read as separate from the page bg. */
-.dark .border-gray-700 { border-color: #2a2c33; }
-.dark .border-gray-600 { border-color: #353841; }
-
-/* Hover states on true-dark surfaces — Tailwind's hover:bg-gray-700 was
- * mapping to #374151 which is now too light next to the new gray-800.
- * Re-tint hovers to a subtle lift above the base. */
-.dark .hover\:bg-gray-700:hover { background-color: #1f2128; }
-.dark .hover\:bg-gray-600:hover { background-color: #2a2c33; }
-
-/* Translucent overlays Tailwind uses for tinted dark cards (e.g. red-900/20
- * for danger banners). These looked OK on the lighter gray-900 but get
- * lost on near-black — bump the alpha so the tint still reads. */
-.dark .bg-gray-800\/50  { background-color: rgba(21, 22, 26, 0.5); }
-.dark .bg-gray-900\/40  { background-color: rgba(10, 10, 13, 0.55); }
-.dark .bg-gray-900\/50  { background-color: rgba(10, 10, 13, 0.65); }
-
 /* ┌──────────────────────────────────────────────────────────────────────┐
  * │ Design system — component classes                                    │
  * │                                                                      │
