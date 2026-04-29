@@ -168,6 +168,8 @@ const en = {
   'auth.passwordMatches': 'Passwords match',
   'common.justNow': 'just now',
   'tags.colorPickerAria': 'Tag colour',
+  'settings.apiKeyRevokeShort': 'Revoke?',
+  'inbound.regenerateShort': 'Regenerate?',
   'dashboard.clearDemoData': 'Clear demo data',
   'dashboard.clearingDemoData': 'Clearing…',
   'dashboard.clearDemoConfirm': 'Remove all {n} demo reviews? Your real reviews will be kept.',

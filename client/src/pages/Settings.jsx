@@ -834,6 +834,9 @@ function InboundForwardingSection() {
   const [mailgunConfigured, setMailgunConfigured] = useState(false);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  // Inline-confirm gate so regenerating the inbound forwarding secret
+  // doesn't fall through to a native window.confirm() dialog.
+  const [confirmingRegenerate, setConfirmingRegenerate] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -859,8 +862,7 @@ function InboundForwardingSection() {
   }
 
   async function handleRegenerate() {
-    if (!confirm(t('inbound.regenerateConfirm',
-      'This will deactivate your current forwarding address. Any forwarding rules you set up will need to be updated. Continue?'))) return;
+    setConfirmingRegenerate(false);
     try {
       const { data } = await api.post('/inbound/regenerate');
       setAddress(data.address);
@@ -927,13 +929,32 @@ function InboundForwardingSection() {
           <span className="text-xs text-gray-400">
             {t('inbound.regenerateHint', 'If your address ever leaks, regenerate it.')}
           </span>
-          <button
-            type="button"
-            onClick={handleRegenerate}
-            className="text-xs text-red-600 dark:text-red-400 hover:underline"
-          >
-            {t('inbound.regenerate', 'Regenerate')}
-          </button>
+          {confirmingRegenerate ? (
+            <div className="flex items-center gap-2 text-xs">
+              <span className="text-red-600 dark:text-red-400 font-medium">
+                {t('inbound.regenerateShort') || 'Regenerate?'}
+              </span>
+              <button
+                type="button"
+                onClick={handleRegenerate}
+                className="text-red-600 font-semibold hover:underline px-1"
+              >{t('tags.yes')}</button>
+              <button
+                type="button"
+                onClick={() => setConfirmingRegenerate(false)}
+                className="text-gray-400 hover:text-gray-600 px-1"
+              >{t('tags.no')}</button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setConfirmingRegenerate(true)}
+              className="text-xs text-red-600 dark:text-red-400 hover:underline"
+              title={t('inbound.regenerateConfirm')}
+            >
+              {t('inbound.regenerate', 'Regenerate')}
+            </button>
+          )}
         </div>
       </div>
     </section>
@@ -2139,6 +2160,10 @@ function ApiKeysSection({ plan }) {
   const [newKey, setNewKey] = useState(null);
   const [copied, setCopied] = useState(false);
   const [revoking, setRevoking] = useState(null);
+  // Inline-confirm gate so revoking an API key uses the same Yes/No pattern
+  // as webhooks/tags/auto-rules instead of breaking out of the polished
+  // settings UI into a native browser dialog.
+  const [confirmRevokeId, setConfirmRevokeId] = useState(null);
 
   useEffect(() => {
     if (!hasPlan) { setLoading(false); return; }
@@ -2162,21 +2187,19 @@ function ApiKeysSection({ plan }) {
     }
   }
 
-  async function handleRevoke(id, name) {
-    // Confirm — revoke is destructive (any client using this key loses
-    // access immediately and can't be reversed). Native confirm() echoes
-    // the key name so the user sees which one they're killing.
-    const ok = window.confirm(
-      t('settings.apiKeyRevokeConfirm', 'Revoke API key "{name}"? Any client using it will stop working immediately.').replace('{name}', name || 'this key')
-    );
-    if (!ok) return;
+  async function handleRevoke(id) {
+    // Inline yes/no — the previous window.confirm() echoed the key name
+    // but yanked the user out of the styled settings UI. The button row
+    // already shows the key name beside it, so the inline confirm has
+    // the same context without the system-dialog jank.
+    setConfirmRevokeId(null);
     setRevoking(id);
     try {
       await api.delete(`/apikeys/${id}`);
       setKeys(prev => prev.filter(k => k.id !== id));
-      toast.success(t('settings.apiKeyRevoked'));
+      toast(t('settings.apiKeyRevoked'), 'success');
     } catch (err) {
-      toast.error(err?.response?.data?.error || t('settings.apiKeyRevokeFailed', 'Error revoking key'));
+      toast(err?.response?.data?.error || t('settings.apiKeyRevokeFailed', 'Error revoking key'), 'error');
     } finally {
       setRevoking(null);
     }
@@ -2262,14 +2285,34 @@ function ApiKeysSection({ plan }) {
                           : t('settings.apiKeyNeverUsed')}
                       </p>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => handleRevoke(k.id, k.name)}
-                      disabled={revoking === k.id}
-                      className="text-xs text-red-600 dark:text-red-400 hover:underline shrink-0 disabled:opacity-50"
-                    >
-                      {revoking === k.id ? t('settings.apiKeyRevoking') : t('settings.apiKeyRevoke')}
-                    </button>
+                    {confirmRevokeId === k.id ? (
+                      <div className="flex items-center gap-2 text-xs shrink-0">
+                        <span className="text-red-600 dark:text-red-400 font-medium">
+                          {t('settings.apiKeyRevokeShort') || 'Revoke?'}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleRevoke(k.id)}
+                          disabled={revoking === k.id}
+                          className="text-red-600 font-semibold hover:underline px-1 disabled:opacity-50"
+                        >{t('tags.yes')}</button>
+                        <button
+                          type="button"
+                          onClick={() => setConfirmRevokeId(null)}
+                          disabled={revoking === k.id}
+                          className="text-gray-400 hover:text-gray-600 px-1"
+                        >{t('tags.no')}</button>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setConfirmRevokeId(k.id)}
+                        disabled={revoking === k.id}
+                        className="text-xs text-red-600 dark:text-red-400 hover:underline shrink-0 disabled:opacity-50"
+                      >
+                        {revoking === k.id ? t('settings.apiKeyRevoking') : t('settings.apiKeyRevoke')}
+                      </button>
+                    )}
                   </li>
                 ))}
               </ul>
