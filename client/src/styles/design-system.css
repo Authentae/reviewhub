@@ -386,12 +386,15 @@
 .rh-bigstep:nth-child(3) .illo { background: color-mix(in oklab, var(--rh-sage) 6%, var(--rh-paper)); }
 
 /* AI DEMO */
-/* Use the brand's defined dark token (var(--rh-ink) = oklch 0.18 0.02 220).
-   The earlier oklch(0.10) override was too dark — the navy-leaning brand
-   dark is on-palette and keeps the chip / body text readable against it.
-   The teal+ochre gradient blobs from ::before still pop because the
-   gradient stops use color-mix on top of this base. */
-.rh-demo-section { background: var(--rh-ink); color: var(--rh-paper); position: relative; overflow: hidden; }
+/* Hard-coded oklch(0.18 0.02 220) — the brand's deep navy at exactly
+   the value var(--rh-ink) holds in LIGHT mode. We can't use the token
+   itself because --rh-ink is a *text-colour* token: it flips to near-
+   white in dark mode (so light text reads on dark bg). Using it as a
+   section background therefore flipped this section to near-white in
+   dark mode — which is exactly what the user reported.
+   The literal value below stays brand-navy in BOTH modes, which is what
+   "always dark surface" wants. Same approach used on .rh-big-cta below. */
+.rh-demo-section { background: oklch(0.18 0.02 220); color: oklch(0.985 0.006 85); position: relative; overflow: hidden; }
 .rh-demo-section::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.7;
   background:
     radial-gradient(ellipse 700px 400px at 20% 10%, color-mix(in oklab, var(--rh-teal) 35%, transparent), transparent 65%),
@@ -539,10 +542,11 @@
 .rh-faq .faq-panel { font-size: 16px; line-height: 1.65; color: var(--rh-ink-2); margin: 16px 0 0; max-width: 65ch; }
 
 /* BIG CTA */
-/* Use the brand's defined dark token (--rh-ink) — see .rh-demo-section
-   above for the same reasoning: oklch(0.10) was too dark and broke text
-   contrast on the chip + body copy. */
-.rh-big-cta { padding: 140px 0; text-align: center; background: var(--rh-ink); color: var(--rh-paper); position: relative; overflow: hidden; }
+/* Hard-coded brand navy — see .rh-demo-section above for why we don't
+   use var(--rh-ink) here: it flips to light in dark mode and turns this
+   section into a cream block. The literal oklch keeps the section dark
+   in both modes, which is the design intent. */
+.rh-big-cta { padding: 140px 0; text-align: center; background: oklch(0.18 0.02 220); color: oklch(0.985 0.006 85); position: relative; overflow: hidden; }
 .rh-big-cta::before { content: ""; position: absolute; inset: 0; opacity: 0.6; pointer-events: none;
   background:
     radial-gradient(ellipse 700px 380px at 20% 30%, color-mix(in oklab, var(--rh-teal) 38%, transparent), transparent 65%),
