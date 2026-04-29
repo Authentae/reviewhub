@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import api from '../lib/api';
 import usePageTitle from '../hooks/usePageTitle';
 import MarketingNav from '../components/MarketingNav';
+import Navbar from '../components/Navbar';
+import { isLoggedIn } from '../lib/auth';
 import { useI18n } from '../context/I18nContext';
 
 // Free, no-signup AI review-reply generator.
@@ -182,7 +184,10 @@ export default function ReplyGeneratorTool() {
       >
         Skip to main content
       </a>
-      <MarketingNav />
+      {/* Same logged-in-vs-visitor split as the Landing + Pricing pages —
+          a logged-in user playing with the free tool shouldn't see
+          "Sign in / Start free" CTAs as if they had no account. */}
+      {isLoggedIn() ? <Navbar /> : <MarketingNav />}
       <main id="main-content" className="rh-shell" style={{ padding: '64px 48px 80px', maxWidth: 880 }}>
 
         {/* SEO hero — editorial treatment matching Landing v2 */}

@@ -4,6 +4,8 @@ import api from '../lib/api';
 import usePageTitle from '../hooks/usePageTitle';
 import { useI18n } from '../context/I18nContext';
 import MarketingNav from '../components/MarketingNav';
+import Navbar from '../components/Navbar';
+import { isLoggedIn } from '../lib/auth';
 
 // Editorial-magazine landing page (v2 redesign per Claude Design bundle).
 // Uses an inline <style> block because the design relies on OKLCH custom
@@ -891,13 +893,19 @@ export default function Landing() {
       >
         {t('a11y.skipToMain', 'Skip to main content')}
       </a>
-      <MarketingNav sections={[
-        { id: 'how', label: t('nav.howItWorks', 'How it works') },
-        { id: 'demo', label: t('nav.aiDrafts', 'AI drafts') },
-        { id: 'features', label: t('nav.features', 'Features') },
-        { id: 'pricing', label: t('nav.pricing', 'Pricing') },
-        { id: 'faq', label: t('nav.faq', 'FAQ') },
-      ]} />
+      {/* Logged-in users who land on `/` (clicked the logo from the dashboard,
+          or just typed the bare domain) shouldn't see "Sign in / Start free"
+          CTAs as if they were strangers — show their account chrome instead.
+          The marketing nav stays for the truly-new visitor. */}
+      {isLoggedIn() ? <Navbar /> : (
+        <MarketingNav sections={[
+          { id: 'how', label: t('nav.howItWorks', 'How it works') },
+          { id: 'demo', label: t('nav.aiDrafts', 'AI drafts') },
+          { id: 'features', label: t('nav.features', 'Features') },
+          { id: 'pricing', label: t('nav.pricing', 'Pricing') },
+          { id: 'faq', label: t('nav.faq', 'FAQ') },
+        ]} />
+      )}
       <main id="main-content">
         <Hero />
         <Marquee />
