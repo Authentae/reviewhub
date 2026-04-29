@@ -484,7 +484,7 @@ function TagManager() {
 const WEBHOOK_EVENTS = ['review.created', 'review.responded'];
 
 function WebhooksSection() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const toast = useToast();
   const [hooks, setHooks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -727,7 +727,7 @@ function WebhooksSection() {
                             <tbody>
                               {(deliveries[hook.id] || []).map(d => (
                                 <tr key={d.id} className="border-t border-gray-100 dark:border-gray-800">
-                                  <td className="pr-3 py-1 text-gray-500 whitespace-nowrap">{new Date(d.triggered_at).toLocaleString()}</td>
+                                  <td className="pr-3 py-1 text-gray-500 whitespace-nowrap">{new Date(d.triggered_at).toLocaleString(lang)}</td>
                                   <td className="pr-3 py-1 font-mono text-gray-600 dark:text-gray-400">{d.event}</td>
                                   <td className={`pr-3 py-1 font-semibold ${d.status >= 200 && d.status < 300 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                                     {d.status || 'err'}

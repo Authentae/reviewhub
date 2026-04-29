@@ -76,7 +76,7 @@ export default function BillingSection({ subscription, onRefresh }) {
               <p className="text-xs text-amber-600 dark:text-amber-400 mt-0.5">
                 {t('billing.status')}: <strong>{status}</strong>
                 {subscription?.cancel_at && (
-                  <> · {t('billing.endsOn', { date: new Date(subscription.cancel_at).toLocaleDateString() })}</>
+                  <> · {t('billing.endsOn', { date: new Date(subscription.cancel_at).toLocaleDateString(lang) })}</>
                 )}
               </p>
             )}

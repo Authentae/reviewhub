@@ -20,7 +20,7 @@ import { useUser } from '../context/UserContext';
 const DISMISSED_KEY = 'reviewhub_sub_status_dismissed';
 
 export default function PastDueBanner() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const { subscription } = useUser();
   const status = subscription?.status;
   const cancelAt = subscription?.cancel_at;
@@ -44,7 +44,7 @@ export default function PastDueBanner() {
     : 'bg-amber-50 dark:bg-amber-900/30 border-amber-200 dark:border-amber-700 text-amber-800 dark:text-amber-200';
   const message = showPastDue
     ? t('billing.pastDueBanner')
-    : t('billing.cancelledBanner', { date: new Date(cancelAt).toLocaleDateString() });
+    : t('billing.cancelledBanner', { date: new Date(cancelAt).toLocaleDateString(lang) });
 
   return (
     <div role={isError ? 'alert' : 'status'} className={`border-b px-4 py-2 flex items-center justify-between gap-3 text-sm ${cls}`}>
