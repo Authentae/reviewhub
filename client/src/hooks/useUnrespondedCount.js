@@ -46,8 +46,21 @@ export default function useUnrespondedCount() {
         stopPoll();
       }
     }
+    // Custom event hook: any code that mutates review state (respond,
+    // bulk-respond, delete, etc.) can dispatch this and the badge
+    // refreshes immediately instead of waiting up to 60s for the next
+    // poll. Saves the user from staring at a stale "12 unresponded"
+    // after they just bulk-cleared 5 of them.
+    function onMutated() {
+      if (document.visibilityState === 'visible') loadCount();
+    }
     document.addEventListener('visibilitychange', onVisible);
-    return () => { stopPoll(); document.removeEventListener('visibilitychange', onVisible); };
+    window.addEventListener('reviewhub:reviews-mutated', onMutated);
+    return () => {
+      stopPoll();
+      document.removeEventListener('visibilitychange', onVisible);
+      window.removeEventListener('reviewhub:reviews-mutated', onMutated);
+    };
   }, [loadCount]);
 
   return count;

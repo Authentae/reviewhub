@@ -154,7 +154,14 @@ export default function BulkActionBar({ selectedIds, onSent, onDeleted, onTagged
       <div className="max-w-5xl mx-auto px-4 py-3 space-y-2">
         {/* Header row */}
         <div className="flex items-center justify-between gap-3">
-          <span className="text-sm font-semibold text-blue-700 dark:text-blue-300">
+          {/* aria-live so screen readers announce the count when the user
+              checks/unchecks reviews — without it the count silently
+              ticks and SR users have to Tab over to hear the change. */}
+          <span
+            className="text-sm font-semibold text-blue-700 dark:text-blue-300"
+            aria-live="polite"
+            aria-atomic="true"
+          >
             {t('bulk.selected', { n: count })}
           </span>
           <div className="flex items-center gap-3">

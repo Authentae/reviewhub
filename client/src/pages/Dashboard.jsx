@@ -775,6 +775,9 @@ export default function Dashboard() {
                   <div className={`flex-1 min-w-0 ${selectMode && selectedIds.has(review.id) ? 'ring-2 ring-blue-500 rounded-xl' : ''}`}>
                     <ReviewCard review={review} business={data.business} highlight={search} onResponseSaved={async () => {
                       const res = await fetchReviews(page);
+                      // Refresh the navbar unresponded-count badge immediately
+                      // (skip the 60s polling delay).
+                      window.dispatchEvent(new CustomEvent('reviewhub:reviews-mutated'));
                       // If the current page is now empty but reviews remain elsewhere, go back a page
                       if (res && res.reviews?.length === 0 && res.total > 0 && page > 1) {
                         const prev = page - 1;
@@ -828,10 +831,16 @@ export default function Dashboard() {
           onSent={async () => {
             exitSelectMode();
             await fetchReviews(page);
+            // Tell the navbar's unresponded-count hook to refresh now
+            // instead of waiting for its 60s poll. Without this, a user
+            // who just bulk-replied to 5 reviews would see a stale "12"
+            // badge for up to a minute.
+            window.dispatchEvent(new CustomEvent('reviewhub:reviews-mutated'));
           }}
           onDeleted={async () => {
             exitSelectMode();
             await fetchReviews(page);
+            window.dispatchEvent(new CustomEvent('reviewhub:reviews-mutated'));
           }}
           onDeselectAll={() => setSelectedIds(new Set())}
           onCancel={exitSelectMode}
