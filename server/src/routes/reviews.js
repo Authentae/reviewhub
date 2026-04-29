@@ -918,7 +918,7 @@ router.post('/', reviewCreateLimiter, async (req, res) => {
       if (platformMatch && ratingMinMatch && ratingMaxMatch && sentimentMatch && keywordMatch) {
         const autoText = substituteVars(rule.response_text, review, business);
         run(
-          "UPDATE reviews SET response_text = ?, updated_at = datetime('now') WHERE id = ?",
+          "UPDATE reviews SET response_text = ?, responded_at = datetime('now'), updated_at = datetime('now') WHERE id = ?",
           [autoText, id]
         );
         if (rule.tag_id) {
@@ -945,6 +945,18 @@ router.post('/', reviewCreateLimiter, async (req, res) => {
       review_text: finalReview.review_text,
       created_at: finalReview.created_at,
     });
+    // If an auto-rule answered this review, fire review.responded too —
+    // matches single-respond and bulk-respond semantics so integrations
+    // see the unanswered → answered transition regardless of source.
+    if (finalReview?.response_text) {
+      fireWebhooks(req.user.id, 'review.responded', {
+        id: finalReview.id,
+        platform: finalReview.platform,
+        reviewer_name: finalReview.reviewer_name,
+        rating: finalReview.rating,
+        response_text: finalReview.response_text,
+      });
+    }
     res.status(201).json({ review: finalReview, autoResponded: finalReview?.response_text ? true : false });
   } catch (err) {
     captureException(err, { route: 'reviews' });
