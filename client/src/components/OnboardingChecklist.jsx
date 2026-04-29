@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../lib/api';
 import { useI18n } from '../context/I18nContext';
@@ -79,6 +79,18 @@ export default function OnboardingChecklist({
     api.post('/auth/onboarding/dismiss').catch(() => {});
   }
 
+  // Auto-hide once the user has completed every step. Without this the
+  // checklist sat on the dashboard forever after onboarding finished —
+  // visual clutter that pushed the actual review feed below the fold.
+  // Treat completion the same as an explicit dismiss so the server flag
+  // also flips (no banner re-emerges on next /me fetch).
+  useEffect(() => {
+    if (pct === 100) {
+      handleDismiss();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pct]);
+
   return (
     <section
       aria-labelledby="onboarding-title"
@@ -96,7 +108,7 @@ export default function OnboardingChecklist({
         <button
           type="button"
           onClick={handleDismiss}
-          className="text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
+          className="text-xs text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-white underline-offset-2 hover:underline"
           aria-label={t('onboarding.dismissAria')}
         >
           {t('onboarding.dismiss')}
