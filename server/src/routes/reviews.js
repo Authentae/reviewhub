@@ -1253,7 +1253,7 @@ router.put('/:id/note', respondLimiter, (req, res) => {
     const note = (rawNote ?? '').trim();
     if (note.length > 2000) return res.status(400).json({ error: 'Note too long (max 2000 chars)' });
 
-    run('UPDATE reviews SET note = ? WHERE id = ?', [note || null, review.id]);
+    run("UPDATE reviews SET note = ?, updated_at = datetime('now') WHERE id = ?", [note || null, review.id]);
     res.json({ success: true, note: note || null });
   } catch (err) {
     captureException(err, { route: 'reviews' });
