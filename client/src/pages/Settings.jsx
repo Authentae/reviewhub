@@ -2139,8 +2139,17 @@ export default function Settings() {
     const next = { ...notifPrefs, [key]: newValue };
     localStorage.setItem(NOTIF_KEY, JSON.stringify(next));
     setNotifPrefs(next);
-    // Map UI key → server column name and sync server-side preference (best-effort)
-    api.put('/auth/notifications', { [`notif_${key}`]: newValue }).catch(() => {});
+    // Sync server-side. Optimistic UI is already applied above; if the
+    // PUT fails we revert the local state and surface a toast so the
+    // user doesn't see "ON" in the UI when the server still says OFF.
+    api.put('/auth/notifications', { [`notif_${key}`]: newValue })
+      .catch((err) => {
+        const reverted = { ...next, [key]: cur };
+        localStorage.setItem(NOTIF_KEY, JSON.stringify(reverted));
+        setNotifPrefs(reverted);
+        const msg = err?.response?.data?.error || t('toast.failedSaveNotificationPref', 'Failed to save preference');
+        toast(msg, 'error');
+      });
   }
 
   // Load platform_connections, keyed by provider string for O(1) lookups.
@@ -2736,10 +2745,18 @@ export default function Settings() {
                       onChange={(e) => {
                         if (!followUpAllowed) return;
                         const days = Number(e.target.value);
+                        const prev = notifPrefs.follow_up_after_days;
                         const next = { ...notifPrefs, follow_up_after_days: days };
                         localStorage.setItem(NOTIF_KEY, JSON.stringify(next));
                         setNotifPrefs(next);
-                        api.put('/auth/notifications', { follow_up_after_days: days }).catch(() => {});
+                        api.put('/auth/notifications', { follow_up_after_days: days })
+                          .catch((err) => {
+                            const reverted = { ...next, follow_up_after_days: prev };
+                            localStorage.setItem(NOTIF_KEY, JSON.stringify(reverted));
+                            setNotifPrefs(reverted);
+                            const msg = err?.response?.data?.error || t('toast.failedSaveNotificationPref', 'Failed to save preference');
+                            toast(msg, 'error');
+                          });
                       }}
                       className="text-sm border border-gray-200 dark:border-gray-600 rounded-md px-2 py-1 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 disabled:cursor-not-allowed"
                       aria-label={t('settings.notif.followUp')}
