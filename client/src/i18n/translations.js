@@ -809,7 +809,7 @@ const en = {
   'bulk.tagPickerLabel': 'Apply tag to selected reviews',
   'bulk.tagApplied': 'Tag applied to {n} reviews',
   'bulk.tagFailed': 'Tagging failed. Please try again.',
-  'bulk.noTags': 'No tags yet — create tags in Settings',
+  'bulk.noTags': "No tags yet. Create your first tag in Settings → Tags.",
   'bulk.untagSelected': 'Remove tag from {n}',
   'bulk.untagApplied': 'Tag removed from {n} reviews',
   'bulk.untagFailed': 'Tag removal failed. Please try again.',
