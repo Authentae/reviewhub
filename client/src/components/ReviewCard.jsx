@@ -160,6 +160,9 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
   const templateDropdownRef = useRef(null);
   const templateTriggerRef = useRef(null);
   const templateItemRefs = useRef([]);
+  // Ref to the review-card root for click-outside detection on the
+  // inline delete-confirm (escape from a transient destructive prompt).
+  const cardRef = useRef(null);
   const confirmYesRef = useRef(null);
   const deleteTriggerRef = useRef(null);
   const draftTextareaRef = useRef(null);
@@ -282,8 +285,24 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
         setDrafting(false);
       }
     }
+    // Click-outside dismissal for the inline delete-confirm. Without
+    // this the only way out is Escape or the No button — mouse users
+    // expect clicking elsewhere to bail out of a transient confirm.
+    function onClick(e) {
+      if (!confirmDelete) return;
+      // The confirm renders inline inside the review card. If the
+      // click target is OUTSIDE this review card's root, dismiss.
+      const card = cardRef.current;
+      if (card && !card.contains(e.target)) {
+        setConfirmDelete(false);
+      }
+    }
     document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
+    document.addEventListener('mousedown', onClick);
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.removeEventListener('mousedown', onClick);
+    };
   }, [confirmDelete, drafting, showTemplates]);
 
   // AI disclaimer gate. First time the user clicks "Quick Reply" on any card
@@ -651,7 +670,7 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
   const displayText = isTruncatable && !expanded ? text.slice(0, TEXT_LIMIT) + '…' : text;
 
   return (
-    <div className="card p-4 hover:shadow-md transition-shadow dark:hover:shadow-gray-700/40">
+    <div ref={cardRef} className="card p-4 hover:shadow-md transition-shadow dark:hover:shadow-gray-700/40">
       <div className="flex items-start gap-3">
         {/* Avatar */}
         <div className={`flex-shrink-0 w-9 h-9 rounded-full ${getAvatarColor(review.reviewer_name)} flex items-center justify-center text-white text-xs font-bold`}>

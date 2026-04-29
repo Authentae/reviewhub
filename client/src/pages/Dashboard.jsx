@@ -815,12 +815,21 @@ export default function Dashboard() {
             {/* Pagination */}
             {totalPages > 1 && (
               <div className="flex items-center justify-center gap-2 mt-6">
+                {/* Disabled state: opacity-40 left buttons looking clickable.
+                    Add cursor-not-allowed and explicit pointer-events so the
+                    boundary is unambiguous. Also scroll the page-head back
+                    into view on prev/next so users see fresh data from the
+                    top instead of staying scrolled mid-list of the OLD page. */}
                 <button
                   type="button"
-                  onClick={() => { setPage(p => p - 1); fetchReviews(page - 1); }}
+                  onClick={() => {
+                    setPage(p => p - 1);
+                    fetchReviews(page - 1);
+                    document.getElementById('main-content')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }}
                   disabled={page === 1}
                   aria-label={t('dashboard.prevPageAria')}
-                  className="btn-secondary text-sm px-3 py-1.5 disabled:opacity-40"
+                  className="btn-secondary text-sm px-3 py-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   {t('dashboard.prevPage')}
                 </button>
@@ -833,10 +842,14 @@ export default function Dashboard() {
                 </span>
                 <button
                   type="button"
-                  onClick={() => { setPage(p => p + 1); fetchReviews(page + 1); }}
+                  onClick={() => {
+                    setPage(p => p + 1);
+                    fetchReviews(page + 1);
+                    document.getElementById('main-content')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }}
                   disabled={page >= totalPages}
                   aria-label={t('dashboard.nextPageAria')}
-                  className="btn-secondary text-sm px-3 py-1.5 disabled:opacity-40"
+                  className="btn-secondary text-sm px-3 py-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   {t('dashboard.nextPage')}
                 </button>
