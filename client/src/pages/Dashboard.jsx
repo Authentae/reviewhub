@@ -111,6 +111,9 @@ export default function Dashboard() {
   const [error, setError] = useState('');
   const { seed: seedDemo, seeding, clear: clearDemo, clearing } = useSeedDemo();
   const [seedMsg, setSeedMsg] = useState('');
+  // Inline-confirm gate for the destructive "Clear demo data" button — avoids
+  // the ugly native window.confirm() that breaks the polished dashboard look.
+  const [confirmingClearDemo, setConfirmingClearDemo] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [showBackTop, setShowBackTop] = useState(false);
   const searchTimeout = useRef(null);
@@ -254,10 +257,7 @@ export default function Dashboard() {
   async function handleClearDemo() {
     const demoCount = data?.demo_count ?? 0;
     if (demoCount === 0) return;
-    // Destructive — confirm before wiping. Wording emphasises that real
-    // reviews survive so a user with a mixed account isn't scared off.
-    const ok = window.confirm(t('dashboard.clearDemoConfirm', { n: demoCount }));
-    if (!ok) return;
+    setConfirmingClearDemo(false);
     const removed = await clearDemo();
     if (removed != null) {
       setPage(1);
@@ -434,19 +434,39 @@ export default function Dashboard() {
             )}
             {/* Clear demo data — visible whenever there's anything seeded by
                 /reviews/seed. Real reviews stay; only is_demo=1 rows go.
-                Closes the loop on the "I clicked demo and now I'm stuck"
-                onboarding trap. */}
+                Inline-confirm (Yes/No) instead of native window.confirm() so
+                the polished dashboard look isn't broken by a system dialog. */}
             {(data?.demo_count ?? 0) > 0 && (
-              <button
-                type="button"
-                onClick={handleClearDemo}
-                disabled={clearing}
-                className="btn-secondary text-sm flex items-center gap-2"
-                title={t('dashboard.clearDemoData')}
-              >
-                <span aria-hidden="true">🧹</span>
-                {clearing ? t('dashboard.clearingDemoData') : t('dashboard.clearDemoData')}
-              </button>
+              confirmingClearDemo ? (
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-red-600 dark:text-red-400 font-medium">
+                    {t('dashboard.clearDemoConfirm', { n: data.demo_count })}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={handleClearDemo}
+                    disabled={clearing}
+                    className="text-red-600 font-semibold hover:underline px-1 disabled:opacity-50"
+                  >{t('tags.yes')}</button>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmingClearDemo(false)}
+                    disabled={clearing}
+                    className="text-gray-400 hover:text-gray-600 px-1"
+                  >{t('tags.no')}</button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setConfirmingClearDemo(true)}
+                  disabled={clearing}
+                  className="btn-secondary text-sm flex items-center gap-2"
+                  title={t('dashboard.clearDemoData')}
+                >
+                  <span aria-hidden="true">🧹</span>
+                  {clearing ? t('dashboard.clearingDemoData') : t('dashboard.clearDemoData')}
+                </button>
+              )
             )}
           </div>
         </div>

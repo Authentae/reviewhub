@@ -163,7 +163,17 @@ export default function LoginMfa() {
                 maxLength={mode === 'otp' ? 6 : 20}
                 required
                 value={code}
-                onChange={(e) => setCode(e.target.value)}
+                onChange={(e) => {
+                  const v = e.target.value;
+                  setCode(v);
+                  // Auto-submit when the OTP is fully typed. Saves the user a
+                  // click — Google / Apple / banks all do this on 6-digit OTPs.
+                  // We only auto-submit in OTP mode (not recovery, which is
+                  // 2x4 alphanumeric and people often paste with the dash).
+                  if (mode === 'otp' && /^[0-9]{6}$/.test(v) && !loading && pendingToken) {
+                    e.target.form?.requestSubmit?.();
+                  }
+                }}
                 placeholder={mode === 'otp' ? '000000' : 'XXXX-XXXX'}
                 className="input text-lg tracking-widest text-center font-mono"
                 aria-describedby="mfa-hint"

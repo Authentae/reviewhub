@@ -126,11 +126,28 @@ export default function Register() {
                 id="reg-confirm"
                 name="confirm"
                 type={showPassword ? 'text' : 'password'} required className="input" autoComplete="new-password"
-                aria-describedby={error ? 'reg-error' : undefined}
+                aria-describedby={
+                  error ? 'reg-error'
+                    : (form.confirm && form.password !== form.confirm ? 'reg-confirm-mismatch' : undefined)
+                }
+                aria-invalid={!!(form.confirm && form.password !== form.confirm)}
                 value={form.confirm}
                 onChange={(e) => setForm({ ...form, confirm: e.target.value })}
                 placeholder="••••••••"
               />
+              {/* Real-time mismatch hint — saves users from submitting the
+                  form, getting an error toast, and going back to retype.
+                  Only shown once they've started typing the confirm field. */}
+              {form.confirm && form.password !== form.confirm && (
+                <p id="reg-confirm-mismatch" className="mt-1 text-xs text-red-600 dark:text-red-400">
+                  {t('toast.pwMismatch')}
+                </p>
+              )}
+              {form.confirm && form.password && form.password === form.confirm && (
+                <p className="mt-1 text-xs text-green-600 dark:text-green-400">
+                  ✓ {t('auth.passwordMatches') || 'Passwords match'}
+                </p>
+              )}
             </div>
 
             {/* Required attestations. Order matters for accessibility — the
