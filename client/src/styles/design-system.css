@@ -29,20 +29,25 @@
   text-rendering: optimizeLegibility;
 }
 .dark .rh-design {
-  --rh-paper: oklch(0.15 0.015 220);
-  --rh-paper-2: oklch(0.20 0.018 220);
-  --rh-cream: oklch(0.23 0.025 75);
+  /* True-dark palette — pushed from oklch(0.15/0.20/0.23) down to
+     near-black (~oklch 0.07/0.11/0.14) so OLED-screen users get
+     eye-comfort darkness while the brand colours (teal, ochre, sage,
+     rose) keep their warmth. Rule borders are also darker so the
+     surfaces don't look "outlined" against the deep backdrop. */
+  --rh-paper: oklch(0.07 0.008 220);     /* main bg — near pure black */
+  --rh-paper-2: oklch(0.11 0.012 220);   /* card / inset surfaces */
+  --rh-cream: oklch(0.14 0.022 75);      /* warm-tinted dark for cream */
   --rh-ink: oklch(0.97 0.008 85);
   --rh-ink-2: oklch(0.85 0.012 220);
   --rh-ink-3: oklch(0.62 0.02 220);
-  --rh-rule: oklch(0.28 0.02 220);
-  --rh-rule-2: oklch(0.38 0.02 220);
+  --rh-rule: oklch(0.20 0.018 220);
+  --rh-rule-2: oklch(0.30 0.02 220);
   --rh-teal: oklch(0.68 0.12 220);
-  --rh-teal-soft: oklch(0.28 0.06 220);
+  --rh-teal-soft: oklch(0.22 0.06 220);
   --rh-ochre: oklch(0.80 0.12 75);
   --rh-ochre-deep: oklch(0.72 0.13 70);
-  --rh-sage-soft: oklch(0.26 0.05 155);
-  --rh-rose-soft: oklch(0.28 0.07 32);
+  --rh-sage-soft: oklch(0.20 0.05 155);
+  --rh-rose-soft: oklch(0.22 0.07 32);
 }
 .rh-design ::selection { background: var(--rh-teal); color: var(--rh-paper); }
 .rh-shell { max-width: 1320px; margin: 0 auto; padding: 0 48px; position: relative; }
