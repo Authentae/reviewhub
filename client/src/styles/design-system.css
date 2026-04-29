@@ -386,7 +386,11 @@
 .rh-bigstep:nth-child(3) .illo { background: color-mix(in oklab, var(--rh-sage) 6%, var(--rh-paper)); }
 
 /* AI DEMO */
-.rh-demo-section { background: var(--rh-ink); color: var(--rh-paper); position: relative; overflow: hidden; }
+/* User-requested: darker than var(--rh-ink) (oklch 0.18) — explicit
+   near-black so the section reads as a clear "lights out" break in
+   the otherwise cream landing-page rhythm. Brand teal/ochre gradient
+   blobs sit on top, so the deeper bg makes them pop more, not less. */
+.rh-demo-section { background: oklch(0.10 0.012 220); color: var(--rh-paper); position: relative; overflow: hidden; }
 .rh-demo-section::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.7;
   background:
     radial-gradient(ellipse 700px 400px at 20% 10%, color-mix(in oklab, var(--rh-teal) 35%, transparent), transparent 65%),
@@ -534,7 +538,9 @@
 .rh-faq .faq-panel { font-size: 16px; line-height: 1.65; color: var(--rh-ink-2); margin: 16px 0 0; max-width: 65ch; }
 
 /* BIG CTA */
-.rh-big-cta { padding: 140px 0; text-align: center; background: var(--rh-ink); color: var(--rh-paper); position: relative; overflow: hidden; }
+/* Same near-black treatment as .rh-demo-section so the final CTA
+   feels like a clean "stage lights" close to the landing scroll. */
+.rh-big-cta { padding: 140px 0; text-align: center; background: oklch(0.10 0.012 220); color: var(--rh-paper); position: relative; overflow: hidden; }
 .rh-big-cta::before { content: ""; position: absolute; inset: 0; opacity: 0.6; pointer-events: none;
   background:
     radial-gradient(ellipse 700px 380px at 20% 30%, color-mix(in oklab, var(--rh-teal) 38%, transparent), transparent 65%),
