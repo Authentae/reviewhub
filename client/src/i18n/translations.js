@@ -174,6 +174,8 @@ const en = {
   'requests.deleteShort': 'Delete?',
   'dashboard.exportNothingHint': 'No reviews match the current filters',
   'landing.heroOriginCredit': 'AI drafts · in your voice',
+  'billing.renewsOn': 'Renews on {date}',
+  'onboarding.respondCta': 'Reply to your first review →',
   'dashboard.clearDemoData': 'Clear demo data',
   'dashboard.clearingDemoData': 'Clearing…',
   'dashboard.clearDemoConfirm': 'Remove all {n} demo reviews? Your real reviews will be kept.',

@@ -46,9 +46,15 @@ export default function BillingSection({ subscription, onRefresh }) {
     try {
       const { data } = await api.post('/billing/portal');
       if (!data?.url) throw new Error('No portal URL');
-      window.location.href = data.url;
+      // Open the LemonSqueezy portal in a NEW tab (was full-page redirect).
+      // Popup blockers don't block window.open() inside a direct user-click
+      // handler, and a new tab means the user comes back to ReviewHub
+      // when they're done managing card / cancelling — they don't have to
+      // hit "back" through the LS host's own pages to get back here.
+      window.open(data.url, '_blank', 'noopener,noreferrer');
     } catch (err) {
       toast(err.response?.data?.error || t('billing.portalFailed'), 'error');
+    } finally {
       setBusy(false);
     }
   }
@@ -78,6 +84,16 @@ export default function BillingSection({ subscription, onRefresh }) {
                 {subscription?.cancel_at && (
                   <> · {t('billing.endsOn', { date: new Date(subscription.cancel_at).toLocaleDateString(lang) })}</>
                 )}
+              </p>
+            )}
+            {/* Renewal-date hint for active paid plans — answers the
+                "when does this charge me again?" question without making
+                the user dig into the billing portal. Skipped on Free
+                (no renewal) and on cancelled/past_due (the amber line
+                above already shows the relevant date). */}
+            {status === 'active' && !isFree && subscription?.renewal_date && (
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                {t('billing.renewsOn', { date: new Date(subscription.renewal_date).toLocaleDateString(lang) })}
               </p>
             )}
           </div>

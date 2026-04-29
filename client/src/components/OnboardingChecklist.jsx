@@ -215,7 +215,27 @@ export default function OnboardingChecklist({
         </li>
 
         {/* Step 4: Respond to a review */}
-        <Step done={steps[3].done} label={steps[3].label} hint={!steps[3].done && hasReviews ? t('onboarding.respondHint') : null} />
+        {/* Custom row instead of <Step/> so we can include a CTA. The
+            previous version showed only a hint string when hasReviews,
+            with no action — leaving the user reading a tooltip and
+            wondering "where do I go?". The link drops them straight into
+            the dashboard pre-filtered to unresponded reviews. */}
+        <li className="flex items-start gap-3">
+          <StepBullet done={steps[3].done} />
+          <div className="flex-1 min-w-0">
+            <p className={`text-sm font-medium ${steps[3].done ? 'text-gray-400 dark:text-gray-500 line-through' : 'text-gray-800 dark:text-gray-100'}`}>
+              {steps[3].label}
+            </p>
+            {!steps[3].done && hasReviews && (
+              <div className="mt-2 flex items-center gap-2 flex-wrap">
+                <Link to="/dashboard?responded=no" className="btn-primary text-xs">
+                  {t('onboarding.respondCta', 'Reply to your first review →')}
+                </Link>
+                <span className="text-xs text-gray-500 dark:text-gray-400">{t('onboarding.respondHint')}</span>
+              </div>
+            )}
+          </div>
+        </li>
       </ol>
     </section>
   );
