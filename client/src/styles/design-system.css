@@ -386,15 +386,27 @@
 .rh-bigstep:nth-child(3) .illo { background: color-mix(in oklab, var(--rh-sage) 6%, var(--rh-paper)); }
 
 /* AI DEMO */
-/* Hard-coded oklch(0.18 0.02 220) — the brand's deep navy at exactly
-   the value var(--rh-ink) holds in LIGHT mode. We can't use the token
-   itself because --rh-ink is a *text-colour* token: it flips to near-
-   white in dark mode (so light text reads on dark bg). Using it as a
-   section background therefore flipped this section to near-white in
-   dark mode — which is exactly what the user reported.
-   The literal value below stays brand-navy in BOTH modes, which is what
-   "always dark surface" wants. Same approach used on .rh-big-cta below. */
-.rh-demo-section { background: oklch(0.18 0.02 220); color: oklch(0.985 0.006 85); position: relative; overflow: hidden; }
+/* These two editorial sections (Live demo + final CTA) are "always
+   dark" surfaces — they should look the same regardless of the user's
+   theme. The design tokens (--rh-paper, --rh-ink) flip between light
+   and dark modes for the rest of the app, so using them inside these
+   sections caused everything to invert in dark mode (background went
+   cream, text went dark — unreadable).
+   Solution: re-pin the tokens to their light-mode values *within these
+   two scopes only*. Every existing `var(--rh-paper)` / `var(--rh-ink)`
+   reference inside the section keeps working, but resolves to the
+   light-mode value regardless of the active theme. Brand colours
+   (ochre, teal) don't need re-pinning because they're already mostly
+   stable across modes. */
+.rh-demo-section,
+.rh-big-cta {
+  --rh-paper: oklch(0.985 0.006 85);
+  --rh-paper-2: oklch(0.965 0.010 82);
+  --rh-ink: oklch(0.18 0.02 220);
+  --rh-ink-2: oklch(0.34 0.025 220);
+  --rh-ink-3: oklch(0.54 0.02 220);
+}
+.rh-demo-section { background: var(--rh-ink); color: var(--rh-paper); position: relative; overflow: hidden; }
 .rh-demo-section::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.7;
   background:
     radial-gradient(ellipse 700px 400px at 20% 10%, color-mix(in oklab, var(--rh-teal) 35%, transparent), transparent 65%),
@@ -542,11 +554,10 @@
 .rh-faq .faq-panel { font-size: 16px; line-height: 1.65; color: var(--rh-ink-2); margin: 16px 0 0; max-width: 65ch; }
 
 /* BIG CTA */
-/* Hard-coded brand navy — see .rh-demo-section above for why we don't
-   use var(--rh-ink) here: it flips to light in dark mode and turns this
-   section into a cream block. The literal oklch keeps the section dark
-   in both modes, which is the design intent. */
-.rh-big-cta { padding: 140px 0; text-align: center; background: oklch(0.18 0.02 220); color: oklch(0.985 0.006 85); position: relative; overflow: hidden; }
+/* Tokens re-pinned at the .rh-demo-section/.rh-big-cta block above so
+   `var(--rh-ink)` stays brand-navy and `var(--rh-paper)` stays cream
+   inside this section even in dark mode. */
+.rh-big-cta { padding: 140px 0; text-align: center; background: var(--rh-ink); color: var(--rh-paper); position: relative; overflow: hidden; }
 .rh-big-cta::before { content: ""; position: absolute; inset: 0; opacity: 0.6; pointer-events: none;
   background:
     radial-gradient(ellipse 700px 380px at 20% 30%, color-mix(in oklab, var(--rh-teal) 38%, transparent), transparent 65%),
