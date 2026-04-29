@@ -21,7 +21,7 @@
 
 const express = require('express');
 const rateLimit = require('express-rate-limit');
-const { get, all, insert, run } = require('../db/schema');
+const { get, all, insert, run, transaction } = require('../db/schema');
 const { authMiddleware } = require('../middleware/auth');
 
 const { captureException } = require('../lib/errorReporter');
@@ -174,23 +174,38 @@ router.post('/:id/response', responseMutateLimiter, (req, res) => {
     // claims multiple locations isn't throttled to ~10 replies/day per
     // location. Abuse risk is per-business anyway — review volume is
     // attached to a specific business.
-    const cnt = get(
-      `SELECT COUNT(*) AS n FROM review_responses
-       WHERE owner_user_id = ? AND business_id = ? AND created_at >= datetime('now', '-1 day')`,
-      [req.user.id, ctx.business.id]
-    )?.n || 0;
-    if (cnt >= DAILY_LIMIT) {
+    //
+    // The count + insert is wrapped in a transaction so two concurrent
+    // POSTs can't both see cnt=49 and both insert — better-sqlite3's
+    // single-writer semantics + BEGIN IMMEDIATE serialise the txn block,
+    // making the limit check actually authoritative. Previously the count
+    // was a separate SELECT outside any txn, so a parallel race could let
+    // 2-3 inserts squeak past DAILY_LIMIT under burst traffic.
+    let id, raceLimited = false;
+    try {
+      transaction((tx) => {
+        const cnt = get(
+          `SELECT COUNT(*) AS n FROM review_responses
+           WHERE owner_user_id = ? AND business_id = ? AND created_at >= datetime('now', '-1 day')`,
+          [req.user.id, ctx.business.id]
+        )?.n || 0;
+        if (cnt >= DAILY_LIMIT) { raceLimited = true; return; }
+        id = tx.insert(
+          `INSERT INTO review_responses (review_id, owner_user_id, business_id, response_text)
+           VALUES (?, ?, ?, ?)`,
+          [reviewId, req.user.id, ctx.business.id, text]
+        );
+      });
+    } catch (e) {
+      captureException(e, { route: 'reviewResponses.create', kind: 'txn' });
+      return res.status(500).json({ error: 'Server error' });
+    }
+    if (raceLimited) {
       return res.status(429).json({
         error: `Daily response limit reached (${DAILY_LIMIT}/day per business). Try again tomorrow.`,
         limit: DAILY_LIMIT,
       });
     }
-
-    const id = insert(
-      `INSERT INTO review_responses (review_id, owner_user_id, business_id, response_text)
-       VALUES (?, ?, ?, ?)`,
-      [reviewId, req.user.id, ctx.business.id, text]
-    );
     const row = get(
       `SELECT id, review_id, owner_user_id, business_id, response_text, created_at, updated_at
        FROM review_responses WHERE id = ?`,

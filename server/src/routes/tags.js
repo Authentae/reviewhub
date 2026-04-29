@@ -39,6 +39,9 @@ router.get('/', tagLimiter, (req, res) => {
        ORDER BY t.name ASC`,
       [req.user.id]
     );
+    // Tags are user-specific (per-account taxonomy with custom names &
+    // colours). no-store/private to keep them out of any shared cache.
+    res.setHeader('Cache-Control', 'no-store, private');
     res.json(rows);
   } catch (err) {
     captureException(err, { route: 'tags.list' });

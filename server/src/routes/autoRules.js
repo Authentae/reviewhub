@@ -67,6 +67,10 @@ router.get('/', limiter, (req, res) => {
       'SELECT * FROM auto_rules WHERE user_id = ? ORDER BY created_at ASC',
       [req.user.id]
     );
+    // no-store, private — auto-rules contain response_text + match_keywords
+    // which are user-specific. Caching them in a shared CDN/proxy would
+    // serve one user's rules to another.
+    res.setHeader('Cache-Control', 'no-store, private');
     res.json(rules);
   } catch (err) {
     captureException(err, { route: 'autoRules.list' });

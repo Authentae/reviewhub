@@ -160,7 +160,15 @@ router.get('/users', (req, res) => {
                FROM users u
                LEFT JOIN subscriptions s ON s.user_id = u.id`;
     const params = [];
-    if (q) { sql += ' WHERE LOWER(u.email) LIKE ?'; params.push(`%${q}%`); }
+    if (q) {
+      // Escape SQL LIKE wildcards so a query like "user_admin" or "%test"
+      // matches only the literal characters instead of acting as the
+      // single-char/multi-char wildcards. Backslash chosen as the ESCAPE
+      // char (matches the canonical LIKE escape pattern).
+      const safeQ = q.replace(/[\\%_]/g, '\\$&');
+      sql += " WHERE LOWER(u.email) LIKE ? ESCAPE '\\'";
+      params.push(`%${safeQ}%`);
+    }
     sql += ' ORDER BY u.created_at DESC LIMIT ?';
     params.push(limit);
     const rows = all(sql, params);
