@@ -24,6 +24,19 @@ class ErrorBoundaryInner extends React.Component {
 
   componentDidCatch(error, info) {
     console.error('[ErrorBoundary]', error, info?.componentStack);
+    // Forward to Sentry if it's loaded. window.onerror / unhandledrejection
+    // are auto-instrumented by @sentry/react, but errors caught here in a
+    // React render boundary never bubble to those handlers — without this
+    // explicit forward, "white screen" crashes silently disappear from
+    // production telemetry. Optional chain in case Sentry's dynamic import
+    // (main.jsx) hasn't completed yet or VITE_SENTRY_DSN was unset.
+    try {
+      if (typeof window !== 'undefined' && window.Sentry?.captureException) {
+        window.Sentry.captureException(error, {
+          contexts: { react: { componentStack: info?.componentStack } },
+        });
+      }
+    } catch { /* swallowing — telemetry is best-effort */ }
   }
 
   render() {

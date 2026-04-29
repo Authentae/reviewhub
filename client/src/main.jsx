@@ -29,6 +29,10 @@ if (import.meta.env.PROD && import.meta.env.VITE_SENTRY_DSN) {
       replaysOnErrorSampleRate: 0,
       sendDefaultPii: false,
     });
+    // Expose on window so ErrorBoundary's componentDidCatch can forward
+    // React render crashes — Sentry's window.onerror auto-instrumentation
+    // doesn't see those because React swallows them inside the boundary.
+    window.Sentry = Sentry;
   }).catch(() => { /* SDK load failed — silently fall back to no telemetry */ });
 }
 
