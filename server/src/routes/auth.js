@@ -313,6 +313,14 @@ router.get('/me', accountLimiter, authMiddleware, (req, res) => {
        FROM users WHERE id = ?`,
       [req.user.id]
     );
+    // If the JWT validates but the underlying user row is gone — account
+    // self-deleted on another device, admin-removed, or DB cleanup —
+    // the session is stale. Clear the cookie and return 401 so the
+    // client redirects to /login instead of rendering a half-empty page.
+    if (!user) {
+      clearSessionCookie(res);
+      return res.status(401).json({ error: 'Session no longer valid' });
+    }
     const sub = get('SELECT * FROM subscriptions WHERE user_id = ?', [req.user.id]);
     // Hydrate plan metadata (name, price, features) so the client doesn't
     // have to keep a parallel copy of the plan catalogue.

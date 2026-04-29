@@ -161,6 +161,18 @@ describe('auth: registration + login', () => {
     assert.strictEqual(res.body.user.email, user.email);
     assert.strictEqual(res.headers['cache-control'], 'no-store, private');
   });
+
+  // Regression: a JWT that validates but whose underlying user row is gone
+  // (deleted on another device / admin-removed) used to return 200 with
+  // user:null. The client rendered a half-empty page instead of redirecting
+  // to login. Now the endpoint surfaces 401 so the api interceptor logs out.
+  test('/me returns 401 if the underlying user row was deleted', async () => {
+    const user = await makeUser();
+    // Direct DB delete simulates account-removed-on-another-device.
+    run('DELETE FROM users WHERE id = ?', [user.userId]);
+    const res = await request(app).get('/api/auth/me').set('Authorization', `Bearer ${user.token}`);
+    assert.strictEqual(res.status, 401);
+  });
 });
 
 describe('auth: email change', () => {
