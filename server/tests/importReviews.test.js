@@ -181,6 +181,29 @@ describe('CSV import', () => {
     assert.strictEqual(rows[0].responded_at, null);
   });
 
+  // Regression: historical imports used to set responded_at = now even when
+  // created_at was years in the past, polluting the response-time analytics
+  // (avg_hours showed thousands of hours, % within 24h showed 0%).
+  test('historical CSV import anchors responded_at to created_at, not now', async () => {
+    const u = await makeUserWithBusiness();
+    const body = csv(HEADER, 'google,Historical,5,Loved it,Thanks!,2023-06-01T00:00:00Z');
+    await request(app).post('/api/reviews/import')
+      .set('Authorization', `Bearer ${u.token}`)
+      .set('Content-Type', 'text/plain')
+      .send(body);
+
+    const { all, get } = require('../src/db/schema');
+    const biz = get('SELECT id FROM businesses WHERE user_id = ?', [u.userId]);
+    const row = get(
+      "SELECT created_at, responded_at FROM reviews WHERE business_id = ? AND reviewer_name = 'Historical'",
+      [biz.id]
+    );
+    assert.ok(row.responded_at, 'responded_at should be set');
+    // Must match created_at (not be near "now") so analytics treat the row
+    // as zero response time, not multi-year.
+    assert.strictEqual(row.responded_at, row.created_at);
+  });
+
   test('assigns correct sentiment', async () => {
     const u = await makeUserWithBusiness();
     const body = csv('platform,reviewer_name,rating', 'google,Alice,5', 'yelp,Bob,1');

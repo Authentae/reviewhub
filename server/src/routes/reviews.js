@@ -1625,11 +1625,19 @@ router.post('/import', importLimiter, express.text({ type: ['text/plain', 'text/
 
       // When response_text is provided, also set responded_at so the review
       // counts as responded in analytics and doesn't show in "needs response".
+      //
+      // For historical imports (createdAt in the past), we anchor responded_at
+      // to created_at rather than now — otherwise the response-time analytics
+      // ("avg_hours", "% within 24h") would treat a 2-year-old reply as if
+      // it were sent today, polluting the dashboard with absurd response
+      // times. Imported rows lack the true historical reply timestamp, so
+      // matching created_at is the correct neutral default: counts as
+      // responded, contributes 0h to the average.
       if (createdAt && responseRaw) {
         insert(
           `INSERT INTO reviews (business_id, platform, reviewer_name, rating, review_text, response_text, sentiment, created_at, responded_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))`,
-          [business.id, platformRaw, nameRaw, ratingNum, textRaw, responseRaw, sentiment, createdAt]
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          [business.id, platformRaw, nameRaw, ratingNum, textRaw, responseRaw, sentiment, createdAt, createdAt]
         );
       } else if (createdAt) {
         insert(
@@ -1637,6 +1645,8 @@ router.post('/import', importLimiter, express.text({ type: ['text/plain', 'text/
           [business.id, platformRaw, nameRaw, ratingNum, textRaw, null, sentiment, createdAt]
         );
       } else if (responseRaw) {
+        // No createdAt → DB default puts created_at at now, so responded_at = now
+        // matches that with zero response-time skew.
         insert(
           `INSERT INTO reviews (business_id, platform, reviewer_name, rating, review_text, response_text, sentiment, responded_at)
            VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'))`,
