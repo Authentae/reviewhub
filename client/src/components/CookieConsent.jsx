@@ -91,10 +91,25 @@ export default function CookieConsent() {
     setVisible(false);
   }
 
+  // Esc on a cookie banner = "decline non-essential" (the conservative
+  // default — same outcome as the explicit Decline button). Without this
+  // keyboard users had no way to dismiss the banner without mousing.
+  useEffect(() => {
+    if (!visible) return;
+    function onKey(e) {
+      if (e.key === 'Escape') decide(false);
+    }
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [visible]); // decide is stable wrt closure for this purpose
   return (
+    // Non-blocking banner, not a true modal — role="region" with a label
+    // is the accurate ARIA semantic. The previous role="dialog" + aria-
+    // modal="false" was the worst of both: assistive tech announced a
+    // dialog while not trapping focus, leaving SR users disoriented.
     <div
-      role="dialog"
-      aria-modal="false"
+      role="region"
+      aria-label={t('cookie.title', 'Your privacy choices')}
       aria-labelledby="cookie-consent-title"
       className="fixed bottom-0 inset-x-0 z-50 p-4 sm:p-6"
     >

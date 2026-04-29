@@ -1633,10 +1633,28 @@ function EmailChangeButton({ currentEmail, t }) {
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
   const cancelBtnRef = useRef(null);
+  // Hold a reference to whatever was focused BEFORE the modal opened so
+  // we can restore focus there on close. Previously the Escape handler
+  // tried to focus cancelBtnRef AFTER setOpen(false), but that ref points
+  // at a button inside the just-unmounted modal — focus landed nowhere
+  // and screen-reader users lost their place in the page.
+  const triggerRef = useRef(null);
 
   useEffect(() => {
     if (!open) return;
-    function onKey(e) { if (e.key === 'Escape') { setOpen(false); cancelBtnRef.current?.focus(); } }
+    triggerRef.current = document.activeElement;
+    function onKey(e) {
+      if (e.key === 'Escape') {
+        setOpen(false);
+        // Defer until after the modal unmounts, otherwise focus targets
+        // an element React is about to remove.
+        requestAnimationFrame(() => {
+          if (triggerRef.current && document.contains(triggerRef.current)) {
+            triggerRef.current.focus();
+          }
+        });
+      }
+    }
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
   }, [open]);
