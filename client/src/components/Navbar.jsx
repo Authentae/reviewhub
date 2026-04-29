@@ -175,8 +175,10 @@ export default function Navbar() {
                 <Link to="/analytics" className={isActive('/analytics') ? 'active' : ''} aria-current={isActive('/analytics') ? 'page' : undefined}>{t('nav.analytics')}</Link>
                 <Link to="/review-requests" className={isActive('/review-requests') ? 'active' : ''} aria-current={isActive('/review-requests') ? 'page' : undefined}>{t('nav.reviewRequests')}</Link>
                 <Link to="/owner" className={isActive('/owner') ? 'active' : ''} aria-current={isActive('/owner') ? 'page' : undefined}>{t('nav.owner') || 'Owner'}</Link>
-                <Link to="/settings" className={isActive('/settings') ? 'active' : ''} aria-current={isActive('/settings') ? 'page' : undefined}>{t('nav.settings')}</Link>
                 <Link to="/pricing" className={isActive('/pricing') ? 'active' : ''} aria-current={isActive('/pricing') ? 'page' : undefined}>{t('nav.pricing')}</Link>
+                {/* Settings lives in the user-avatar dropdown — see below.
+                    Putting it here too created a duplicate hit-target with
+                    identical destination and clutter on the nav row. */}
               </div>
             ) : (
               <div className="rh-app-nav-links">

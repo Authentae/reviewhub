@@ -2707,6 +2707,26 @@ export default function Settings() {
         <section className="mb-6" aria-labelledby="settings-notif">
           <h2 id="settings-notif" className="text-base font-semibold text-gray-700 dark:text-gray-300 mb-3">{t('settings.emailNotifications')}</h2>
           <div className="card p-5 space-y-3">
+            {/* Single upgrade banner when ANY notification toggle is plan-gated.
+                Previously each gated row + the follow-up row each rendered its
+                own "Upgrade required" link, so a Free-tier user saw 4 nearly-
+                identical links stacked in the same card. One banner is clearer. */}
+            {(() => {
+              const anyGated =
+                NOTIF_ITEMS.some(n => n.planFeature && !subscription?.plan_meta?.features?.[n.planFeature]) ||
+                !subscription?.plan_meta?.features?.templates;
+              if (!anyGated) return null;
+              return (
+                <div className="flex items-center justify-between gap-3 px-3 py-2 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/60">
+                  <p className="text-xs text-amber-800 dark:text-amber-200">
+                    {t('settings.notif.upgradeBanner', 'Email notifications + follow-up reminders are part of paid plans.')}
+                  </p>
+                  <Link to="/pricing" className="text-xs font-semibold text-amber-900 dark:text-amber-100 underline hover:no-underline whitespace-nowrap">
+                    {t('settings.notif.upgradeCta', 'View plans →')}
+                  </Link>
+                </div>
+              );
+            })()}
             {NOTIF_ITEMS.map((n) => {
               const planAllowed = !n.planFeature || !!subscription?.plan_meta?.features?.[n.planFeature];
               return (
@@ -2714,11 +2734,6 @@ export default function Settings() {
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-gray-100">{n.label}</p>
                     <p className="text-xs text-gray-400 dark:text-gray-500">{n.sub}</p>
-                    {!planAllowed && (
-                      <p className="text-xs text-amber-600 dark:text-amber-400 mt-0.5">
-                        <Link to="/pricing" className="underline hover:no-underline">{t('settings.notif.upgradeRequired')}</Link>
-                      </p>
-                    )}
                   </div>
                   <input
                     type="checkbox"
@@ -2741,11 +2756,8 @@ export default function Settings() {
                     <div>
                       <p className="text-sm font-medium text-gray-800 dark:text-gray-100">{t('settings.notif.followUp')}</p>
                       <p className="text-xs text-gray-400 dark:text-gray-500">{t('settings.notif.followUpSub')}</p>
-                      {!followUpAllowed && (
-                        <p className="text-xs text-amber-600 dark:text-amber-400 mt-0.5">
-                          <Link to="/pricing" className="underline hover:no-underline">{t('settings.notif.upgradeRequired')}</Link>
-                        </p>
-                      )}
+                      {/* Upgrade link removed — single banner at top of the card
+                          covers both notification toggles + follow-up gating. */}
                     </div>
                     <select
                       value={followUpAllowed ? currentDays : 0}
