@@ -75,7 +75,12 @@ function ConnectCard({ platform, icon, color, connected, onConnect, syncStatus }
   async function handleSave() {
     setSaving(true);
     try {
-      await onConnect(platform, id, { attested: !connected ? true : undefined });
+      // Trim the ID — copy-paste from Google Maps / Yelp dashboards
+      // commonly captures leading/trailing whitespace, and the server
+      // either rejects or stores the whitespace, breaking later lookups.
+      // Trim once at the boundary so the user doesn't have to notice.
+      const cleanId = (id || '').trim();
+      await onConnect(platform, cleanId, { attested: !connected ? true : undefined });
       setOpen(false);
       setShowAttest(false);
       setId('');
@@ -1909,10 +1914,21 @@ function ApiKeysSection({ plan }) {
 
   function handleCopy() {
     if (!newKey) return;
-    navigator.clipboard.writeText(newKey).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+    // The API key is shown ONCE — if clipboard.writeText silently rejects
+    // (insecure context, blocked by enterprise policy, etc.) the user is
+    // stuck with no recourse. Add a .catch that toasts so they know to
+    // hand-select the key before navigating away.
+    Promise.resolve()
+      .then(() => navigator.clipboard?.writeText
+        ? navigator.clipboard.writeText(newKey)
+        : Promise.reject(new Error('clipboard unavailable')))
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      })
+      .catch(() => {
+        toast(t('settings.apiKeyCopyFailed', 'Could not copy. Select the key and copy manually.'), 'error');
+      });
   }
 
   return (

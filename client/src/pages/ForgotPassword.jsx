@@ -63,7 +63,24 @@ export default function ForgotPassword() {
             <div className="text-center py-4">
               <p className="text-5xl mb-4" aria-hidden="true">📨</p>
               <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">{t('forgot.sentTitle')}</h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">{t('forgot.sentDesc')}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{t('forgot.sentDesc')}</p>
+              {/* Echo back the address so a typo (exmple@ instead of
+                  example@) is obvious before the user spends 5 minutes
+                  refreshing an inbox that will never receive the email. */}
+              {email && (
+                <p className="text-sm text-gray-700 dark:text-gray-200 mb-1 font-mono break-all">{email}</p>
+              )}
+              <p className="text-xs text-gray-400 dark:text-gray-500 mb-6">
+                {t('forgot.typoHint', "If that's not right, ")}
+                <button
+                  type="button"
+                  onClick={() => { setSubmitted(false); setEmail(''); }}
+                  className="underline hover:no-underline text-blue-600 dark:text-blue-400"
+                >
+                  {t('forgot.tryAgain', 'try again')}
+                </button>
+                .
+              </p>
               <Link to="/login" className="btn-secondary text-sm inline-block">{t('forgot.backToLogin')}</Link>
             </div>
           ) : (

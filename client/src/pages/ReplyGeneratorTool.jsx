@@ -148,11 +148,30 @@ export default function ReplyGeneratorTool() {
   }
 
   async function handleCopy() {
+    // navigator.clipboard requires a secure context (HTTPS / localhost).
+    // Public free-tool URLs are HTTPS in production, but a self-hosted
+    // dev/staging on plain HTTP would silently no-op the copy. Fall back
+    // to the legacy execCommand path so the user always gets feedback.
     try {
-      await navigator.clipboard.writeText(draft);
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(draft);
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = draft;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+      }
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
-    } catch { /* noop */ }
+    } catch {
+      // Last-resort feedback: surface the error in the existing error slot
+      // so the user knows the action didn't succeed and can hand-copy.
+      setError(t('tool.errorCopy', 'Could not copy to clipboard — select the text and copy manually.'));
+    }
   }
 
   return (
