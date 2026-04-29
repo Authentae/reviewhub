@@ -2093,6 +2093,8 @@ export default function Settings() {
   // Account deletion confirmation
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [deletePassword, setDeletePassword] = useState('');
+  const [deleteError, setDeleteError] = useState('');
   const confirmDeleteRef = useRef(null);
   const [notifPrefs, setNotifPrefs] = useState(() => {
     try { return JSON.parse(localStorage.getItem(NOTIF_KEY)) || {}; } catch { return {}; }
@@ -2345,15 +2347,26 @@ export default function Settings() {
   }
 
   async function deleteAccount() {
+    if (!deletePassword) {
+      setDeleteError(t('settings.deletePasswordRequired', 'Password is required'));
+      return;
+    }
     setDeleting(true);
+    setDeleteError('');
     try {
-      await api.delete('/auth/me');
+      // axios DELETE: body must travel via the `data` config field
+      await api.delete('/auth/me', { data: { password: deletePassword } });
       clearToken();
       navigate('/');
-    } catch {
-      toast(t('toast.failedDeleteAccount'), 'error');
+    } catch (err) {
+      const status = err?.response?.status;
+      const msg = err?.response?.data?.error || err?.message || t('toast.failedDeleteAccount');
+      if (status === 401) {
+        setDeleteError(t('settings.deleteIncorrectPassword', 'Incorrect password'));
+      } else {
+        toast(msg, 'error');
+      }
       setDeleting(false);
-      setConfirmDelete(false);
     }
   }
 
@@ -2765,14 +2778,27 @@ export default function Settings() {
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{t('settings.deleteAccountDesc')}</p>
               </div>
               {confirmDelete ? (
-                <div className="flex flex-col gap-2 flex-shrink-0">
+                <div className="flex flex-col gap-2 flex-shrink-0 w-full sm:w-auto">
                   <p className="text-xs font-semibold text-red-600 dark:text-red-400">{t('settings.confirmDelete')}</p>
+                  <input
+                    type="password"
+                    autoComplete="current-password"
+                    placeholder={t('settings.deletePasswordPlaceholder', 'Enter password to confirm')}
+                    value={deletePassword}
+                    onChange={(e) => { setDeletePassword(e.target.value); setDeleteError(''); }}
+                    disabled={deleting}
+                    aria-label={t('settings.deletePasswordPlaceholder', 'Enter password to confirm')}
+                    className="text-xs px-2.5 py-1.5 rounded-lg border border-red-300 dark:border-red-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  />
+                  {deleteError && (
+                    <p role="alert" className="text-xs text-red-600 dark:text-red-400">{deleteError}</p>
+                  )}
                   <div className="flex gap-2">
                     <button
                       type="button"
                       ref={confirmDeleteRef}
                       onClick={deleteAccount}
-                      disabled={deleting}
+                      disabled={deleting || !deletePassword}
                       aria-busy={deleting}
                       className="text-xs font-semibold text-white bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded-lg transition-colors disabled:opacity-60"
                     >
@@ -2780,7 +2806,7 @@ export default function Settings() {
                     </button>
                     <button
                       type="button"
-                      onClick={() => setConfirmDelete(false)}
+                      onClick={() => { setConfirmDelete(false); setDeletePassword(''); setDeleteError(''); }}
                       className="text-xs font-medium text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-600 px-3 py-1.5 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                     >
                       {t('settings.cancel')}

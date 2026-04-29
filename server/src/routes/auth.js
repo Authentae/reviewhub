@@ -499,6 +499,25 @@ router.get('/me/export', accountLimiter, authMiddleware, (req, res) => {
 router.delete('/me', accountLimiter, authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
+
+    // Require password re-auth for permanent account deletion. A hijacked
+    // session token alone shouldn't be enough to wipe the account — this
+    // matches the same gate used by /mfa/disable. The Settings UI prompts
+    // the user for their password before sending this request.
+    const rawPw = req.body?.password;
+    if (rawPw !== undefined && rawPw !== null && typeof rawPw !== 'string') {
+      return res.status(400).json({ error: 'password must be a string' });
+    }
+    const password = rawPw || '';
+    if (!password) return res.status(400).json({ error: 'Password required to delete account' });
+    const userRow = get('SELECT id, password_hash FROM users WHERE id = ?', [userId]);
+    if (!userRow) return res.status(404).json({ error: 'User not found' });
+    const valid = await bcrypt.compare(password, userRow.password_hash);
+    if (!valid) {
+      logAudit(req, 'user.delete_failed', { userId, metadata: { reason: 'bad_password' } });
+      return res.status(401).json({ error: 'Incorrect password' });
+    }
+
     // Log BEFORE delete — cascade will remove the audit rows too (FK ON DELETE CASCADE),
     // but having the event recorded at deletion time in application logs is useful for
     // operators. The audit-log row itself cascades away with the user.

@@ -555,4 +555,52 @@ describe('auth: password reset', () => {
     const res = await request(app).post('/api/auth/reset-password').send({ token: plaintext, password: 'NewPass-mfa!9' });
     assert.strictEqual(res.status, 400);
   });
+
+  // Account deletion requires password re-auth — a hijacked session alone
+  // shouldn't be enough to permanently nuke the account.
+  test('DELETE /auth/me requires password', async () => {
+    const user = await makeUser();
+    const res = await request(app)
+      .delete('/api/auth/me')
+      .set('Authorization', `Bearer ${user.token}`)
+      .send({});
+    assert.strictEqual(res.status, 400);
+    assert.match(res.body.error, /password/i);
+    const stillThere = get('SELECT id FROM users WHERE id = ?', [user.userId]);
+    assert.ok(stillThere, 'user must not be deleted without password');
+  });
+
+  test('DELETE /auth/me rejects wrong password and audits the failure', async () => {
+    const user = await makeUser();
+    const res = await request(app)
+      .delete('/api/auth/me')
+      .set('Authorization', `Bearer ${user.token}`)
+      .send({ password: 'wrong-password' });
+    assert.strictEqual(res.status, 401);
+    const stillThere = get('SELECT id FROM users WHERE id = ?', [user.userId]);
+    assert.ok(stillThere);
+    const failAudit = get(
+      `SELECT COUNT(*) AS n FROM audit_log WHERE user_id = ? AND event = 'user.delete_failed'`,
+      [user.userId]
+    );
+    assert.strictEqual(failAudit.n, 1);
+  });
+
+  test('DELETE /auth/me succeeds with correct password', async () => {
+    const user = await makeUser();
+    const res = await request(app)
+      .delete('/api/auth/me')
+      .set('Authorization', `Bearer ${user.token}`)
+      .send({ password: user.password });
+    assert.strictEqual(res.status, 200);
+    const gone = get('SELECT id FROM users WHERE id = ?', [user.userId]);
+    assert.strictEqual(gone, null);
+  });
+
+  test('DELETE /auth/me without auth returns 401', async () => {
+    const res = await request(app)
+      .delete('/api/auth/me')
+      .send({ password: 'anything' });
+    assert.strictEqual(res.status, 401);
+  });
 });
