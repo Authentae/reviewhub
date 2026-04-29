@@ -20,7 +20,11 @@ export default function ResetPassword() {
   const tokenValid = /^[a-f0-9]{64}$/.test(token);
 
   const [form, setForm] = useState({ password: '', confirm: '' });
+  // Independent reveal toggles per field. Sharing one toggle let a user
+  // see both passwords side-by-side and just visually copy — defeats
+  // the point of a separate confirm field.
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
@@ -113,17 +117,24 @@ export default function ResetPassword() {
               </div>
               <div>
                 <label htmlFor="reset-confirm" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">{t('reset.confirmPassword')}</label>
-                <input
-                  id="reset-confirm"
-                  name="confirm-password"
-                  type={showPassword ? 'text' : 'password'}
-                  required
-                  autoComplete="new-password"
-                  className="input"
-                  value={form.confirm}
-                  onChange={(e) => setForm((f) => ({ ...f, confirm: e.target.value }))}
-                  placeholder="••••••••"
-                />
+                <div className="relative">
+                  <input
+                    id="reset-confirm"
+                    name="confirm-password"
+                    type={showConfirm ? 'text' : 'password'}
+                    required
+                    autoComplete="new-password"
+                    className="input pr-20"
+                    value={form.confirm}
+                    onChange={(e) => setForm((f) => ({ ...f, confirm: e.target.value }))}
+                    placeholder="••••••••"
+                  />
+                  <button type="button" onClick={() => setShowConfirm((v) => !v)}
+                    aria-label={showConfirm ? t('auth.hidePassword') : t('auth.showPassword')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-xs font-medium">
+                    {showConfirm ? t('auth.hidePassword') : t('auth.showPassword')}
+                  </button>
+                </div>
               </div>
               <button
                 type="submit" disabled={loading} aria-busy={loading}

@@ -19,7 +19,12 @@ export default function Register() {
   // Terms?" starts with this checkbox being literally clicked.
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [ageConfirmed, setAgeConfirmed] = useState(false);
+  // Independent reveal for the password and confirm fields. Sharing one
+  // toggle defeated the point of having a confirm field — clicking
+  // "Show" on the password also unmasked the confirm, so a user could
+  // visually copy from one to the other instead of re-typing it.
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const emailRef = useRef(null);
@@ -122,19 +127,26 @@ export default function Register() {
             </div>
             <div>
               <label htmlFor="reg-confirm" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">{t('auth.confirmPassword')}</label>
-              <input
-                id="reg-confirm"
-                name="confirm"
-                type={showPassword ? 'text' : 'password'} required className="input" autoComplete="new-password"
-                aria-describedby={
-                  error ? 'reg-error'
-                    : (form.confirm && form.password !== form.confirm ? 'reg-confirm-mismatch' : undefined)
-                }
-                aria-invalid={!!(form.confirm && form.password !== form.confirm)}
-                value={form.confirm}
-                onChange={(e) => setForm({ ...form, confirm: e.target.value })}
-                placeholder="••••••••"
-              />
+              <div className="relative">
+                <input
+                  id="reg-confirm"
+                  name="confirm"
+                  type={showConfirm ? 'text' : 'password'} required className="input pr-20" autoComplete="new-password"
+                  aria-describedby={
+                    error ? 'reg-error'
+                      : (form.confirm && form.password !== form.confirm ? 'reg-confirm-mismatch' : undefined)
+                  }
+                  aria-invalid={!!(form.confirm && form.password !== form.confirm)}
+                  value={form.confirm}
+                  onChange={(e) => setForm({ ...form, confirm: e.target.value })}
+                  placeholder="••••••••"
+                />
+                <button type="button" onClick={() => setShowConfirm(v => !v)}
+                  aria-label={showConfirm ? t('auth.hidePassword') : t('auth.showPassword')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-xs font-medium">
+                  {showConfirm ? t('auth.hidePassword') : t('auth.showPassword')}
+                </button>
+              </div>
               {/* Real-time mismatch hint — saves users from submitting the
                   form, getting an error toast, and going back to retype.
                   Only shown once they've started typing the confirm field. */}

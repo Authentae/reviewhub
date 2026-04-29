@@ -19,12 +19,14 @@ const CURRENCY_META = {
   USD: { symbol: '$', position: 'prefix' },
   THB: { symbol: '฿', position: 'prefix' },
 };
-function formatPrice(n, currency) {
+function formatPrice(n, currency, lang) {
   const m = CURRENCY_META[currency] || CURRENCY_META.USD;
-  // Thai baht prices are whole numbers; USD might be whole. Use locale
-  // formatter for thousand separators when needed.
+  // Thai baht prices are whole numbers; USD might be whole. Use the user's
+  // locale (was hardcoded 'en-US') so Thai readers see "฿1,234" with the
+  // separators their OS uses, German users see "1.234", etc. Fall back to
+  // 'en-US' when lang isn't supplied so existing callers don't break.
   const rounded = Math.round(n * 100) / 100;
-  const body = rounded.toLocaleString('en-US', { maximumFractionDigits: 2 });
+  const body = rounded.toLocaleString(lang || 'en-US', { maximumFractionDigits: 2 });
   return m.position === 'prefix' ? `${m.symbol}${body}` : `${body}${m.symbol}`;
 }
 
@@ -229,12 +231,12 @@ export default function Pricing() {
                       <h2 className="plan-name">{plan.name}</h2>
                       <p className="plan-sub">{t(`pricing.${plan.id}Desc`, plan.description)}</p>
                       <div className="plan-price">
-                        {isFree ? t('pricing.freePrice') : formatPrice(price, currency)}
+                        {isFree ? t('pricing.freePrice') : formatPrice(price, currency, lang)}
                         {!isFree && <small>{perUnit}</small>}
                       </div>
                       {!isFree && cycle === 'annual' && priceMonthly > 0 && (
                         <p className="plan-effective">
-                          ≈ {formatPrice(Math.round((priceAnnual / 12) * 100) / 100, currency)}/mo
+                          ≈ {formatPrice(Math.round((priceAnnual / 12) * 100) / 100, currency, lang)}/mo
                         </p>
                       )}
                       <p className="plan-meta">
