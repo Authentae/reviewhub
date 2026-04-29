@@ -14,6 +14,7 @@ export default function useSeedDemo() {
   const { t } = useI18n();
   const toast = useToast();
   const [seeding, setSeeding] = useState(false);
+  const [clearing, setClearing] = useState(false);
 
   async function seed() {
     setSeeding(true);
@@ -31,5 +32,25 @@ export default function useSeedDemo() {
     }
   }
 
-  return { seed, seeding };
+  // Counterpart to `seed`. Used by the Dashboard "Clear demo data" affordance
+  // so a user who tried demo data can return their account to a clean slate
+  // without manually deleting 12 fake reviews one-by-one.
+  async function clear() {
+    setClearing(true);
+    try {
+      const { data } = await api.delete('/reviews/seed');
+      const removed = data?.removed ?? 0;
+      if (removed > 0) {
+        toast(t('dashboard.seedCleared', { n: removed }), 'success');
+      }
+      return removed;
+    } catch {
+      toast(t('dashboard.seedClearFailed'), 'error');
+      return null;
+    } finally {
+      setClearing(false);
+    }
+  }
+
+  return { seed, seeding, clear, clearing };
 }

@@ -368,6 +368,11 @@ function initSchema() {
   migrateAddColumn('reviews', 'sentiment_override', 'INTEGER NOT NULL DEFAULT 0');
   migrateAddColumn('reviews', 'status', 'TEXT DEFAULT NULL');
   migrateAddColumn('reviews', 'responded_at', 'TEXT DEFAULT NULL');
+  // Marks a row as injected by the demo-seed (POST /reviews/seed). Lets the
+  // clear-demo endpoint wipe just the seeded rows without touching real
+  // reviews, and lets the dashboard surface a "Clear demo data" button only
+  // when there's something to clear.
+  migrateAddColumn('reviews', 'is_demo', 'INTEGER NOT NULL DEFAULT 0');
   migrateAddColumn('users', 'active_business_id', 'INTEGER DEFAULT NULL');
   migrateAddColumn('auto_rules', 'tag_id', 'INTEGER DEFAULT NULL');
   // Auto follow-up: if a review request hasn't been clicked after N days, resend once.

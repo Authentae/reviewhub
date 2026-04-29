@@ -26,6 +26,7 @@ const seedLimiter = rateLimit({
   message: { error: 'Too many seed requests' },
   standardHeaders: true,
   legacyHeaders: false,
+  skip: () => process.env.NODE_ENV === 'test',
 });
 
 const draftLimiter = rateLimit({
@@ -131,13 +132,20 @@ function parseId(param) {
 router.get('/summary', summaryLimiter, (req, res) => {
   try {
     const business = getUserBusiness(req.user.id);
-    if (!business) return res.json({ unresponded: 0 });
+    if (!business) return res.json({ unresponded: 0, demo_count: 0 });
     const row = get(
       "SELECT COUNT(*) as n FROM reviews WHERE business_id = ? AND (response_text IS NULL OR response_text = '')",
       [business.id]
     );
+    // Tell the dashboard whether ANY demo-seeded rows are still present
+    // so it can show a "Clear demo data" button. Cheap COUNT, runs every
+    // 60s alongside the unresponded count.
+    const demoRow = get(
+      'SELECT COUNT(*) as n FROM reviews WHERE business_id = ? AND is_demo = 1',
+      [business.id]
+    );
     res.setHeader('Cache-Control', 'no-store, private');
-    res.json({ unresponded: row?.n ?? 0 });
+    res.json({ unresponded: row?.n ?? 0, demo_count: demoRow?.n ?? 0 });
   } catch (err) {
     captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
@@ -548,8 +556,14 @@ router.get('/', readLimiter, (req, res) => {
     }
 
     // tag_id is now applied in the WHERE clause above; no post-fetch trim.
+    // demo_count lets the dashboard surface a "Clear demo data" affordance
+    // even when the user has paged past the seeded rows or filtered them out.
+    const demoRow = get(
+      'SELECT COUNT(*) as n FROM reviews WHERE business_id = ? AND is_demo = 1',
+      [business.id]
+    );
     res.setHeader('Cache-Control', 'no-store, private');
-    res.json({ reviews: reviewsWithTags, business, stats: globalStats, filteredStats, platformCounts, total: totalRow?.total ?? 0, page, limit, sort });
+    res.json({ reviews: reviewsWithTags, business, stats: globalStats, filteredStats, platformCounts, total: totalRow?.total ?? 0, demo_count: demoRow?.n ?? 0, page, limit, sort });
   } catch (err) {
     captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
@@ -575,6 +589,33 @@ router.post('/seed', seedLimiter, (req, res) => {
     }
     const result = seedDemoData(req.user.id);
     res.json(result);
+  } catch (err) {
+    captureException(err, { route: 'reviews' });
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Clear demo data — wipe ONLY the rows the seed inserted (is_demo = 1),
+// leaving any real reviews the user has imported / received untouched.
+// Without this endpoint a user who clicked "Try with demo data" had no way
+// to get back to a clean account; they were stuck looking at "The Corner
+// Bistro" reviews on their actual business forever.
+router.delete('/seed', seedLimiter, (req, res) => {
+  try {
+    const business = getUserBusiness(req.user.id);
+    if (!business) return res.status(404).json({ error: 'No business found' });
+    // Count first so we can return how many were wiped — `run()` doesn't
+    // surface .changes through our schema helper. FK on review_tags has
+    // ON DELETE CASCADE so tag links go with the parent rows.
+    const before = get(
+      'SELECT COUNT(*) as n FROM reviews WHERE business_id = ? AND is_demo = 1',
+      [business.id]
+    );
+    run(
+      'DELETE FROM reviews WHERE business_id = ? AND is_demo = 1',
+      [business.id]
+    );
+    res.json({ success: true, removed: before?.n ?? 0 });
   } catch (err) {
     captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });

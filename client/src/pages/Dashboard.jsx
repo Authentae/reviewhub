@@ -109,7 +109,7 @@ export default function Dashboard() {
   );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const { seed: seedDemo, seeding } = useSeedDemo();
+  const { seed: seedDemo, seeding, clear: clearDemo, clearing } = useSeedDemo();
   const [seedMsg, setSeedMsg] = useState('');
   const [exporting, setExporting] = useState(false);
   const [showBackTop, setShowBackTop] = useState(false);
@@ -248,6 +248,22 @@ export default function Dashboard() {
     } else if (added === 0) {
       setSeedMsg(t('dashboard.seedAlreadyLoaded'));
       setTimeout(() => setSeedMsg(''), 3000);
+    }
+  }
+
+  async function handleClearDemo() {
+    const demoCount = data?.demo_count ?? 0;
+    if (demoCount === 0) return;
+    // Destructive — confirm before wiping. Wording emphasises that real
+    // reviews survive so a user with a mixed account isn't scared off.
+    const ok = window.confirm(t('dashboard.clearDemoConfirm', { n: demoCount }));
+    if (!ok) return;
+    const removed = await clearDemo();
+    if (removed != null) {
+      setPage(1);
+      await fetchReviews(1);
+      // Tell the rest of the app (badges, analytics) reviews changed
+      window.dispatchEvent(new Event('reviewhub:reviews-mutated'));
     }
   }
 
@@ -414,6 +430,22 @@ export default function Dashboard() {
               >
                 <span aria-hidden="true">🧪</span>
                 {seeding ? t('dashboard.loading') : t('dashboard.loadTestData')}
+              </button>
+            )}
+            {/* Clear demo data — visible whenever there's anything seeded by
+                /reviews/seed. Real reviews stay; only is_demo=1 rows go.
+                Closes the loop on the "I clicked demo and now I'm stuck"
+                onboarding trap. */}
+            {(data?.demo_count ?? 0) > 0 && (
+              <button
+                type="button"
+                onClick={handleClearDemo}
+                disabled={clearing}
+                className="btn-secondary text-sm flex items-center gap-2"
+                title={t('dashboard.clearDemoData')}
+              >
+                <span aria-hidden="true">🧹</span>
+                {clearing ? t('dashboard.clearingDemoData') : t('dashboard.clearDemoData')}
               </button>
             )}
           </div>

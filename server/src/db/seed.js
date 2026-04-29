@@ -54,7 +54,7 @@ function seedDemoData(userId) {
       date.setDate(date.getDate() - (dayOffsets[i] ?? i * 3));
       const responseDate = r.response_text ? new Date(date.getTime() + 3600000) : null; // 1hr after review
       tx.run(
-        'INSERT INTO reviews (business_id, platform, reviewer_name, rating, review_text, sentiment, response_text, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        'INSERT INTO reviews (business_id, platform, reviewer_name, rating, review_text, sentiment, response_text, created_at, updated_at, is_demo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)',
         [business.id, r.platform, r.reviewer_name, r.rating, r.review_text, analyzeSentiment(r.rating, r.review_text), r.response_text || null, date.toISOString(), responseDate ? responseDate.toISOString() : date.toISOString()]
       );
     });
