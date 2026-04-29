@@ -60,7 +60,7 @@ export default function ValueReceipt({ stats }) {
   return (
     <section
       className="mb-4 rounded-xl border border-emerald-200 dark:border-emerald-800/60 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 px-4 py-3 sm:px-5 sm:py-4 flex items-center gap-3 sm:gap-4"
-      aria-label={t('value.receiptAria') || 'Monthly value summary'}
+      aria-label={t('value.receiptAria', 'Monthly value summary')}
     >
       <div
         aria-hidden="true"
@@ -70,7 +70,7 @@ export default function ValueReceipt({ stats }) {
       </div>
       <div className="flex-1 min-w-0">
         <p className="text-xs font-semibold text-emerald-700 dark:text-emerald-300 uppercase tracking-wide">
-          {t('value.thisMonthLabel') || 'This month with ReviewHub'}
+          {t('value.thisMonthLabel', 'This month with ReviewHub')}
         </p>
         <p className="text-sm text-emerald-900 dark:text-emerald-100 mt-0.5">
           {t('value.receiptBody', { responded, hours: hoursLabel })
@@ -80,7 +80,7 @@ export default function ValueReceipt({ stats }) {
       <button
         type="button"
         onClick={handleDismiss}
-        aria-label={t('common.dismiss') || 'Dismiss'}
+        aria-label={t('common.dismiss', 'Dismiss')}
         className="flex-shrink-0 text-emerald-400 dark:text-emerald-500 hover:text-emerald-700 dark:hover:text-emerald-300 text-lg leading-none px-1"
       >
         ✕

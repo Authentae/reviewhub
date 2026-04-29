@@ -31,7 +31,7 @@ export default function Unsubscribed() {
   const label = list
     ? t(`unsub.list.${list}`, fallback)
     : t('unsub.list.generic', fallback);
-  usePageTitle(t('unsub.title') || 'Unsubscribed');
+  usePageTitle(t('unsub.title', 'Unsubscribed'));
   useNoIndex();
   const loggedIn = isLoggedIn();
 
@@ -41,19 +41,19 @@ export default function Unsubscribed() {
       <main id="main-content" className="flex flex-col items-center justify-center py-32 px-4 text-center">
         <p className="text-5xl mb-4" aria-hidden="true">✉️</p>
         <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-          {t('unsub.title') || 'You\'re unsubscribed'}
+          {t('unsub.title', "You're unsubscribed")}
         </h1>
         <p className="text-gray-500 dark:text-gray-400 mb-2 max-w-md">
-          {t('unsub.body', { list: label }) || `We won't send you ${label} anymore.`}
+          {t('unsub.body', "We won't send you {list} anymore.", { list: label })}
         </p>
         <p className="text-xs text-gray-400 dark:text-gray-500 mb-8 max-w-md">
-          {t('unsub.note') || 'You can re-subscribe anytime from Settings → Notifications.'}
+          {t('unsub.note', 'You can re-subscribe anytime from Settings → Notifications.')}
         </p>
         <div className="flex gap-3 flex-wrap justify-center">
-          <Link to="/" className="btn-secondary">{t('notFound.goHome') || 'Home'}</Link>
+          <Link to="/" className="btn-secondary">{t('notFound.goHome', 'Home')}</Link>
           {loggedIn && (
             <Link to="/settings" className="btn-primary">
-              {t('unsub.openSettings') || 'Notification settings'}
+              {t('unsub.openSettings', 'Notification settings')}
             </Link>
           )}
         </div>

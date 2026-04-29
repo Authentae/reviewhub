@@ -399,7 +399,7 @@ function TagManager() {
                   autoFocus
                   onKeyDown={e => { if (e.key === 'Escape') setEditingId(null); }}
                 />
-                <div className="flex gap-1 flex-shrink-0" role="radiogroup" aria-label={t('tags.colorPickerAria') || 'Tag colour'}>
+                <div className="flex gap-1 flex-shrink-0" role="radiogroup" aria-label={t('tags.colorPickerAria', 'Tag colour')}>
                   {PRESET_COLORS.map(c => (
                     <button
                       key={c.hex}
@@ -436,7 +436,7 @@ function TagManager() {
                   <button
                     type="button"
                     onClick={() => setConfirmDeleteId(tag.id)}
-                    aria-label={t('tags.deleteAria') || 'Delete tag'}
+                    aria-label={t('tags.deleteAria', 'Delete tag')}
                     className="text-xs text-gray-300 hover:text-red-400 px-1"
                   >✕</button>
                 </div>
@@ -456,7 +456,7 @@ function TagManager() {
               autoFocus
               onKeyDown={e => { if (e.key === 'Escape') { setAdding(false); setNewName(''); } }}
             />
-            <div className="flex gap-1 flex-shrink-0" role="radiogroup" aria-label={t('tags.colorPickerAria') || 'Tag colour'}>
+            <div className="flex gap-1 flex-shrink-0" role="radiogroup" aria-label={t('tags.colorPickerAria', 'Tag colour')}>
               {PRESET_COLORS.map(c => (
                 <button
                   key={c.hex}
@@ -702,7 +702,7 @@ function WebhooksSection() {
                           <button
                             type="button"
                             onClick={() => setConfirmDeleteId(hook.id)}
-                            aria-label={t('webhooks.deleteAria') || 'Delete webhook'}
+                            aria-label={t('webhooks.deleteAria', 'Delete webhook')}
                             className="text-xs text-gray-300 hover:text-red-400 px-1"
                           >✕</button>
                         )}
@@ -932,7 +932,7 @@ function InboundForwardingSection() {
           {confirmingRegenerate ? (
             <div className="flex items-center gap-2 text-xs">
               <span className="text-red-600 dark:text-red-400 font-medium">
-                {t('inbound.regenerateShort') || 'Regenerate?'}
+                {t('inbound.regenerateShort', 'Regenerate?')}
               </span>
               <button
                 type="button"
@@ -1497,7 +1497,7 @@ function AutoRules() {
                     setEditingId(rule.id);
                     setEditRule({ ...rule, platform: rule.platform || '', min_rating: rule.min_rating ?? '', max_rating: rule.max_rating ?? '', sentiment: rule.sentiment || '', match_keywords_text: kwText, tag_id: rule.tag_id ?? '' });
                   }} className="text-xs text-gray-400 hover:text-blue-600 px-1">{t('review.editNote')}</button>
-                  <button type="button" onClick={() => setConfirmDeleteId(rule.id)} aria-label={t('autoRules.deleteAria') || 'Delete rule'} className="text-xs text-gray-300 hover:text-red-400 px-1">✕</button>
+                  <button type="button" onClick={() => setConfirmDeleteId(rule.id)} aria-label={t('autoRules.deleteAria', 'Delete rule')} className="text-xs text-gray-300 hover:text-red-400 px-1">✕</button>
                 </div>
               </div>
             )}
@@ -2102,7 +2102,7 @@ function ExtensionTokenSection() {
                     disabled={busy}
                     className="text-gray-500 dark:text-gray-400 hover:underline px-1 disabled:opacity-50"
                   >
-                    {t('review.cancel') || 'Cancel'}
+                    {t('review.cancel', 'Cancel')}
                   </button>
                 </span>
               ) : (
@@ -2288,7 +2288,7 @@ function ApiKeysSection({ plan }) {
                     {confirmRevokeId === k.id ? (
                       <div className="flex items-center gap-2 text-xs shrink-0">
                         <span className="text-red-600 dark:text-red-400 font-medium">
-                          {t('settings.apiKeyRevokeShort') || 'Revoke?'}
+                          {t('settings.apiKeyRevokeShort', 'Revoke?')}
                         </span>
                         <button
                           type="button"
