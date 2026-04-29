@@ -485,10 +485,15 @@ export default function Dashboard() {
             {/* Per-platform breakdown — always shows global counts for full context */}
             {data?.platformCounts && Object.keys(data.platformCounts).length > 0 && (
               <div className="flex gap-3 mt-3 flex-wrap">
-                {['google', 'yelp', 'facebook'].map(p => {
-                  const count = data.platformCounts[p];
-                  if (!count) return null;
-                  const icons = { google: '🔵', yelp: '🔴', facebook: '🟣' };
+                {/* Show every platform with reviews, sorted by count desc.
+                    The previous hardcoded ['google','yelp','facebook'] list
+                    silently hid distribution for SMBs whose reviews mostly
+                    live on Trustpilot / Tabelog / Wongnai / etc. */}
+                {Object.entries(data.platformCounts)
+                  .filter(([, count]) => count > 0)
+                  .sort(([, a], [, b]) => b - a)
+                  .map(([p, count]) => {
+                  const icons = { google: '🔵', yelp: '🔴', facebook: '🟣', tripadvisor: '🟢', trustpilot: '⭐', wongnai: '🟡', tabelog: '🟠', naver: '🟩', dianping: '🔶' };
                   const isActive = platform === p;
                   return (
                     <button
@@ -499,7 +504,7 @@ export default function Dashboard() {
                       aria-label={`${platformLabel(p)}: ${count} reviews`}
                       className="rh-filter-chip"
                     >
-                      <span aria-hidden="true">{icons[p]}</span>
+                      <span aria-hidden="true">{icons[p] || '⚪'}</span>
                       <span>{platformLabel(p)}</span>
                       <span className="count">{count}</span>
                     </button>
