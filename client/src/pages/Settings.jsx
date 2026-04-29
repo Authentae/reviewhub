@@ -286,7 +286,20 @@ function ConnectCard({ platform, icon, color, connected, onConnect, syncStatus }
 const MAX_TEMPLATES = 10;
 
 // ─── Tag Manager sub-component ───────────────────────────────────────────────
-const PRESET_COLORS = ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6','#ec4899','#14b8a6','#f97316','#6b7280'];
+// Hex + human-readable name. The previous `aria-label={c}` announced
+// "#3b82f6" to screen readers, which is meaningless. Pair each colour
+// with its tailwind-name equivalent so VoiceOver / NVDA say "Blue" etc.
+const PRESET_COLORS = [
+  { hex: '#3b82f6', name: 'Blue' },
+  { hex: '#10b981', name: 'Green' },
+  { hex: '#f59e0b', name: 'Amber' },
+  { hex: '#ef4444', name: 'Red' },
+  { hex: '#8b5cf6', name: 'Violet' },
+  { hex: '#ec4899', name: 'Pink' },
+  { hex: '#14b8a6', name: 'Teal' },
+  { hex: '#f97316', name: 'Orange' },
+  { hex: '#6b7280', name: 'Gray' },
+];
 
 function TagManager() {
   const { t } = useI18n();
@@ -295,7 +308,7 @@ function TagManager() {
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
   const [newName, setNewName] = useState('');
-  const [newColor, setNewColor] = useState(PRESET_COLORS[0]);
+  const [newColor, setNewColor] = useState(PRESET_COLORS[0].hex);
   const [saving, setSaving] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [editName, setEditName] = useState('');
@@ -386,15 +399,18 @@ function TagManager() {
                   autoFocus
                   onKeyDown={e => { if (e.key === 'Escape') setEditingId(null); }}
                 />
-                <div className="flex gap-1 flex-shrink-0">
+                <div className="flex gap-1 flex-shrink-0" role="radiogroup" aria-label={t('tags.colorPickerAria') || 'Tag colour'}>
                   {PRESET_COLORS.map(c => (
                     <button
-                      key={c}
+                      key={c.hex}
                       type="button"
-                      onClick={() => setEditColor(c)}
+                      onClick={() => setEditColor(c.hex)}
+                      role="radio"
+                      aria-checked={editColor === c.hex}
                       className="w-4 h-4 rounded-full border-2 flex-shrink-0"
-                      style={{ backgroundColor: c, borderColor: editColor === c ? '#1d4ed8' : 'transparent' }}
-                      aria-label={c}
+                      style={{ backgroundColor: c.hex, borderColor: editColor === c.hex ? '#1d4ed8' : 'transparent' }}
+                      aria-label={c.name}
+                      title={c.name}
                     />
                   ))}
                 </div>
@@ -440,15 +456,18 @@ function TagManager() {
               autoFocus
               onKeyDown={e => { if (e.key === 'Escape') { setAdding(false); setNewName(''); } }}
             />
-            <div className="flex gap-1 flex-shrink-0">
+            <div className="flex gap-1 flex-shrink-0" role="radiogroup" aria-label={t('tags.colorPickerAria') || 'Tag colour'}>
               {PRESET_COLORS.map(c => (
                 <button
-                  key={c}
+                  key={c.hex}
                   type="button"
-                  onClick={() => setNewColor(c)}
+                  onClick={() => setNewColor(c.hex)}
+                  role="radio"
+                  aria-checked={newColor === c.hex}
                   className="w-4 h-4 rounded-full border-2 flex-shrink-0"
-                  style={{ backgroundColor: c, borderColor: newColor === c ? '#1d4ed8' : 'transparent' }}
-                  aria-label={c}
+                  style={{ backgroundColor: c.hex, borderColor: newColor === c.hex ? '#1d4ed8' : 'transparent' }}
+                  aria-label={c.name}
+                  title={c.name}
                 />
               ))}
             </div>
