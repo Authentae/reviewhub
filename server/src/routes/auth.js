@@ -1093,21 +1093,38 @@ router.post('/forgot-password', emailSendLimiter, (req, res) => {
       return res.json({ success: true });
     }
 
-    const user = get('SELECT id, email FROM users WHERE email = ?', [email]);
+    const user = get('SELECT id, email, password_reset_expires_at FROM users WHERE email = ?', [email]);
     if (user) {
-      const reset = generateToken();
-      const expiresAt = new Date(Date.now() + RESET_EXPIRY_MINUTES * 60 * 1000)
-        .toISOString()
-        .slice(0, 19)
-        .replace('T', ' ');
-      run(
-        `UPDATE users SET password_reset_token_hash = ?, password_reset_expires_at = ? WHERE id = ?`,
-        [reset.hash, expiresAt, user.id]
-      );
-      sendEmailInBackground(
-        sendPasswordResetEmail(user.email, clientUrl(`/reset-password?token=${reset.plaintext}`)),
-        'password-reset'
-      );
+      // Per-email cooldown: don't issue more than one password-reset email
+      // per 5 minutes for the same address even if the per-IP limiter would
+      // allow it. The user's password_reset_expires_at always sits 60 minutes
+      // in the future when fresh, so anything within the last 5 minutes (i.e.
+      // expiry > 55 min from now) is a same-window resend we should suppress.
+      // No-ops returns the same generic response — the attacker can't tell
+      // whether their request actually sent mail.
+      let cooldownActive = false;
+      if (user.password_reset_expires_at) {
+        const expiresMs = new Date(user.password_reset_expires_at + 'Z').getTime();
+        const minutesUntilExpiry = (expiresMs - Date.now()) / 60000;
+        if (minutesUntilExpiry > RESET_EXPIRY_MINUTES - 5) {
+          cooldownActive = true;
+        }
+      }
+      if (!cooldownActive) {
+        const reset = generateToken();
+        const expiresAt = new Date(Date.now() + RESET_EXPIRY_MINUTES * 60 * 1000)
+          .toISOString()
+          .slice(0, 19)
+          .replace('T', ' ');
+        run(
+          `UPDATE users SET password_reset_token_hash = ?, password_reset_expires_at = ? WHERE id = ?`,
+          [reset.hash, expiresAt, user.id]
+        );
+        sendEmailInBackground(
+          sendPasswordResetEmail(user.email, clientUrl(`/reset-password?token=${reset.plaintext}`)),
+          'password-reset'
+        );
+      }
     }
 
     // Generic response whether or not the address exists.

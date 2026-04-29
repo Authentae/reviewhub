@@ -494,6 +494,23 @@ describe('auth: password reset', () => {
     assert.ok(row.password_reset_expires_at);
   });
 
+  // Per-email cooldown: a second forgot-password within the cooldown window
+  // for the same address must not issue a new token. Same generic 200 to the
+  // caller (no-enumeration), but the row's token hash stays the SAME.
+  test('forgot-password is suppressed within the per-email cooldown', async () => {
+    const user = await makeUser();
+    await request(app).post('/api/auth/forgot-password').send({ email: user.email });
+    const first = get('SELECT password_reset_token_hash FROM users WHERE id = ?', [user.userId]);
+    assert.ok(first.password_reset_token_hash);
+
+    // Second request immediately after — must not re-issue a fresh token
+    const res = await request(app).post('/api/auth/forgot-password').send({ email: user.email });
+    assert.strictEqual(res.status, 200);
+    const second = get('SELECT password_reset_token_hash FROM users WHERE id = ?', [user.userId]);
+    assert.strictEqual(second.password_reset_token_hash, first.password_reset_token_hash,
+      'cooldown should suppress a fresh token within 5 minutes');
+  });
+
   test('reset-password consumes token and sets new password', async () => {
     const user = await makeUser();
     const plaintext = crypto.randomBytes(32).toString('hex');
