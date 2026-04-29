@@ -311,7 +311,7 @@ function HowItWorks() {
     <section className="rh-section rh-how" id="how" aria-label="How it works">
       <div className="rh-shell">
         <div className="rh-section-head">
-          <div className="kicker"><div className="cat">§ {t('landing.howEyebrow')}</div></div>
+          <div className="kicker"><div className="num">01</div><div className="cat">§ {t('landing.howEyebrow')}</div></div>
           <h2 className="rh-reveal">{t('landing.howTitle')}</h2>
         </div>
         <div className="rh-bigsteps">
@@ -439,7 +439,7 @@ function AiDemo() {
     <section className="rh-section rh-demo-section" id="demo" aria-label="AI drafts demo">
       <div className="rh-shell">
         <div className="rh-section-head">
-          <div className="kicker"><div className="cat">§ {t('landing.demoEyebrow', 'Live demo')}</div></div>
+          <div className="kicker"><div className="num">02</div><div className="cat">§ {t('landing.demoEyebrow', 'Live demo')}</div></div>
           <h2 className="rh-reveal">{t('landing.demoTitle', "Draft one right now. It's really running.")}</h2>
         </div>
         <div className="rh-demo rh-reveal">
@@ -522,7 +522,7 @@ function FeatureGrid() {
     <section className="rh-section rh-features" id="features" aria-label="Product features">
       <div className="rh-shell">
         <div className="rh-section-head">
-          <div className="kicker"><div className="cat">§ {t('landing.featuresEyebrow')}</div></div>
+          <div className="kicker"><div className="num">03</div><div className="cat">§ {t('landing.featuresEyebrow')}</div></div>
           <h2 className="rh-reveal">{t('landing.featuresTitle')}</h2>
         </div>
         <div className="rh-bento">
@@ -590,7 +590,7 @@ function Pricing() {
     <section className="rh-section rh-pricing" id="pricing" aria-label="Pricing plans">
       <div className="rh-shell">
         <div className="rh-section-head">
-          <div className="kicker"><div className="cat">§ {t('landing.pricingEyebrow', 'Pricing')}</div></div>
+          <div className="kicker"><div className="num">04</div><div className="cat">§ {t('landing.pricingEyebrow', 'Pricing')}</div></div>
           <h2 className="rh-reveal">{t('landing.pricingTitle', 'Simple, honest pricing.')}</h2>
         </div>
         <div className="rh-price-grid rh-reveal">
@@ -657,7 +657,7 @@ function Faq({ t }) {
     <section className="rh-section rh-faq-section" id="faq" aria-label="Frequently asked questions">
       <div className="rh-shell">
         <div className="rh-section-head">
-          <div className="kicker"><div className="cat">§ {t('landing.faqEyebrow')}</div></div>
+          <div className="kicker"><div className="num">05</div><div className="cat">§ {t('landing.faqEyebrow')}</div></div>
           <h2 className="rh-reveal">{t('landing.faqTitle')}</h2>
         </div>
         <div className="rh-faq">
