@@ -39,14 +39,19 @@ router.get('/widget/:id', widgetLimiter, (req, res) => {
     const biz = get('SELECT id, business_name, widget_enabled FROM businesses WHERE id = ?', [bizId]);
     if (!biz || !biz.widget_enabled) return res.status(404).json({ error: 'Widget not found' });
 
+    // Public surfaces must NEVER include demo-seed rows. A user who clicked
+    // "Try with demo data" while exploring and then enabled the widget
+    // would otherwise broadcast "Sarah M. / The Corner Bistro" 5-stars to
+    // every site embedding their badge. Filter is_demo on every public read.
     const stats = get(
       `SELECT ROUND(AVG(CAST(rating AS REAL)), 1) as avg_rating, COUNT(*) as total
-       FROM reviews WHERE business_id = ?`,
+       FROM reviews WHERE business_id = ? AND is_demo = 0`,
       [biz.id]
     );
     const recent = all(
       `SELECT reviewer_name, rating, review_text FROM reviews
-       WHERE business_id = ? AND (response_text IS NOT NULL AND response_text != '') AND sentiment = 'positive'
+       WHERE business_id = ? AND is_demo = 0
+         AND (response_text IS NOT NULL AND response_text != '') AND sentiment = 'positive'
        ORDER BY created_at DESC LIMIT 3`,
       [biz.id]
     );
@@ -77,9 +82,11 @@ router.get('/widget/:id/badge', widgetLimiter, (req, res) => {
   const biz = get('SELECT id, business_name, widget_enabled FROM businesses WHERE id = ?', [bizId]);
   if (!biz || !biz.widget_enabled) return res.status(404).send('Widget not found or disabled.');
 
+  // Same demo-row exclusion as the JSON endpoint above — the badge is the
+  // most user-visible public surface and a stray demo row would scream.
   const stats = get(
     `SELECT ROUND(AVG(CAST(rating AS REAL)), 1) as avg_rating, COUNT(*) as total
-     FROM reviews WHERE business_id = ?`,
+     FROM reviews WHERE business_id = ? AND is_demo = 0`,
     [biz.id]
   );
 
