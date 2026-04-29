@@ -110,13 +110,20 @@ router.put('/:id', webhookLimiter, (req, res) => {
       fields.push('enabled = ?'); params.push(req.body.enabled ? 1 : 0);
     }
 
+    // Strip `secret` from edit responses. It's a "shown once at creation"
+    // credential — re-emitting it on every toggle/url-change defeats the
+    // whole point and means a stale browser tab keeps the secret in memory
+    // forever after a user thought they'd dismissed it.
     if (fields.length === 0) {
-      const current = { ...hook, events: safeParseEvents(hook.events) };
-      return res.json(current);
+      const { secret: _omit, ...safe } = hook;
+      return res.json({ ...safe, events: safeParseEvents(hook.events) });
     }
     params.push(hook.id);
     run(`UPDATE webhooks SET ${fields.join(', ')} WHERE id = ?`, params);
-    const updated = get('SELECT * FROM webhooks WHERE id = ?', [hook.id]);
+    const updated = get(
+      'SELECT id, user_id, url, events, enabled, created_at, last_triggered_at, last_status FROM webhooks WHERE id = ?',
+      [hook.id]
+    );
     res.json({ ...updated, events: safeParseEvents(updated.events) });
   } catch (err) {
     captureException(err, { route: 'webhooks' });

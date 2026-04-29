@@ -99,6 +99,30 @@ describe('webhooks', () => {
     assert.deepStrictEqual(res.body.events, ['review.created', 'review.responded']);
   });
 
+  test('PUT does NOT re-emit the signing secret', async () => {
+    // Regression: previously every edit (toggle enabled, change url) returned
+    // the full row including `secret`, defeating the "shown once at creation"
+    // guarantee and keeping the secret in browser memory long after the user
+    // dismissed the reveal banner.
+    const u = await makeUserWithBusiness();
+    const created = await request(app).post('/api/webhooks')
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({ url: 'https://example.com/old' });
+    assert.ok(created.body.secret);
+
+    // No-op update (no fields)
+    const noop = await request(app).put(`/api/webhooks/${created.body.id}`)
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({});
+    assert.strictEqual(noop.body.secret, undefined, 'no-op PUT must not leak secret');
+
+    // Real update
+    const real = await request(app).put(`/api/webhooks/${created.body.id}`)
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({ enabled: false });
+    assert.strictEqual(real.body.secret, undefined, 'PUT response must not leak secret');
+  });
+
   test('PUT can disable a webhook', async () => {
     const u = await makeUserWithBusiness();
     const created = await request(app).post('/api/webhooks')
