@@ -1861,7 +1861,7 @@ function EmailChangeButton({ currentEmail, t }) {
     return (
       <button
         type="button"
-        onClick={() => { setOpen(true); setSent(false); }}
+        onClick={() => { setOpen(true); setSent(false); setNewEmail(''); setPassword(''); }}
         className="btn-secondary text-xs px-3"
         aria-label={t('settings.changeEmail')}
       >
@@ -1904,7 +1904,7 @@ function EmailChangeButton({ currentEmail, t }) {
                 <button type="submit" disabled={busy} aria-busy={busy} className="btn-primary text-sm disabled:opacity-60">
                   {busy ? t('settings.sending') : t('settings.sendConfirmLink')}
                 </button>
-                <button type="button" onClick={() => setOpen(false)} className="btn-secondary text-sm">{t('common.cancel')}</button>
+                <button type="button" onClick={() => { setOpen(false); setNewEmail(''); setPassword(''); }} className="btn-secondary text-sm">{t('common.cancel')}</button>
               </div>
             </form>
           )}
@@ -2111,7 +2111,14 @@ function ApiKeysSection({ plan }) {
     }
   }
 
-  async function handleRevoke(id) {
+  async function handleRevoke(id, name) {
+    // Confirm — revoke is destructive (any client using this key loses
+    // access immediately and can't be reversed). Native confirm() echoes
+    // the key name so the user sees which one they're killing.
+    const ok = window.confirm(
+      t('settings.apiKeyRevokeConfirm', 'Revoke API key "{name}"? Any client using it will stop working immediately.').replace('{name}', name || 'this key')
+    );
+    if (!ok) return;
     setRevoking(id);
     try {
       await api.delete(`/apikeys/${id}`);
@@ -2206,7 +2213,7 @@ function ApiKeysSection({ plan }) {
                     </div>
                     <button
                       type="button"
-                      onClick={() => handleRevoke(k.id)}
+                      onClick={() => handleRevoke(k.id, k.name)}
                       disabled={revoking === k.id}
                       className="text-xs text-red-600 dark:text-red-400 hover:underline shrink-0 disabled:opacity-50"
                     >
