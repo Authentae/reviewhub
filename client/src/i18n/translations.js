@@ -371,7 +371,7 @@ const en = {
   'verify.errorTitle': 'Verification failed',
   'verify.genericError': "We couldn't verify this link. It may have expired.",
   'verify.missingTitle': 'Check your email',
-  'verify.missingDesc': 'Open the verification email and click the link to confirm your address.',
+  'verify.missingDesc': "Open the verification email and click the link to confirm your address. Don't see it? Check your spam or promotions folder.",
   'verify.backToLogin': 'Back to login',
   'verify.goDashboard': 'Go to dashboard',
   'verify.bannerText': 'Please verify your email address to secure your account.',
@@ -386,7 +386,7 @@ const en = {
   'forgot.sendLink': 'Send reset link',
   'forgot.sending': 'Sending…',
   'forgot.sentTitle': 'Check your inbox',
-  'forgot.sentDesc': "If an account exists for that email, we've sent password reset instructions. The link is valid for 1 hour.",
+  'forgot.sentDesc': "If an account exists for that email, we've sent password reset instructions. The link is valid for 1 hour. Don't see it? Check your spam or promotions folder.",
   'forgot.backToLogin': 'Back to login',
   'forgot.genericError': 'Something went wrong. Please try again.',
 
