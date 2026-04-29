@@ -264,6 +264,30 @@ describe('review-requests', () => {
     assert.strictEqual(res.status, 400);
   });
 
+  // Regression: bulk-import used to silently double-send to a customer the
+  // operator had emailed earlier the same day. Now skipped with a row-level
+  // error matching the per-customer 24h cooldown on the single-send path.
+  test('POST /review-requests/bulk skips duplicates within 24h', async () => {
+    const u = await makeUserWithBusiness('Bulk Dup Co', 'starter');
+    await setBizPlatformId(u, 'google_place_id', 'ChIJbulkdup');
+    // Send a single request first
+    const first = await request(app).post('/api/review-requests')
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({ customer_name: 'Carl', customer_email: 'carl@bulk.com', platform: 'google' });
+    assert.strictEqual(first.status, 201);
+
+    // Now bulk-upload a CSV that includes Carl alongside a fresh address
+    const csv = 'customer_name,customer_email\nCarl,carl@bulk.com\nDana,dana@bulk.com';
+    const bulk = await request(app).post('/api/review-requests/bulk?platform=google')
+      .set('Authorization', `Bearer ${u.token}`)
+      .set('Content-Type', 'text/csv')
+      .send(csv);
+    assert.strictEqual(bulk.status, 200);
+    assert.strictEqual(bulk.body.sent, 1, 'only Dana should be sent');
+    assert.strictEqual(bulk.body.skipped, 1, 'Carl should be skipped');
+    assert.match(bulk.body.errors[0].reason, /already sent.*24 hours/i);
+  });
+
   test('POST /review-requests/bulk returns 422 when platform ID not configured', async () => {
     const u = await makeUserWithBusiness('Bulk3 Co', 'starter');
     const res = await request(app).post('/api/review-requests/bulk?platform=google')

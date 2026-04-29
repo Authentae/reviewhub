@@ -285,6 +285,24 @@ router.post('/bulk', sendLimiter, expressText({ type: ['text/csv', 'text/plain',
         results.errors.push({ row: i + (hasHeader ? 2 : 1), reason: `Invalid email: ${customerEmail}` });
         continue;
       }
+      // Mirror the per-customer 24h cooldown that the single-send endpoint
+      // enforces. A CSV that re-includes a customer the operator emailed
+      // earlier today should silently skip that row, not double-send.
+      const recent = get(
+        `SELECT 1 AS exists_flag FROM review_requests
+         WHERE business_id = ? AND customer_email = ? AND platform = ?
+           AND sent_at >= datetime('now', '-1 day')
+         LIMIT 1`,
+        [business.id, customerEmail, platform]
+      );
+      if (recent) {
+        results.skipped++;
+        results.errors.push({
+          row: i + (hasHeader ? 2 : 1),
+          reason: `Skipped: review request already sent to ${customerEmail} in the last 24 hours`,
+        });
+        continue;
+      }
       try {
         const { plaintext, hash } = generateToken();
         const trackUrl = `${baseUrl}/api/review-requests/track/${plaintext}`;
