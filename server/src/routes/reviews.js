@@ -1157,7 +1157,10 @@ router.put('/:id/pin', respondLimiter, (req, res) => {
 
     const newPinned = review.pinned ? 0 : 1;
     run("UPDATE reviews SET pinned = ?, updated_at = datetime('now') WHERE id = ?", [newPinned, review.id]);
-    res.json({ success: true, pinned: !!newPinned });
+    // Return the fresh updated_at so the UI's "Updated X ago" line refreshes
+    // immediately on toggle, instead of waiting for a refetch.
+    const fresh = get('SELECT updated_at FROM reviews WHERE id = ?', [review.id]);
+    res.json({ success: true, pinned: !!newPinned, updated_at: fresh?.updated_at });
   } catch (err) {
     captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
@@ -1177,7 +1180,8 @@ router.put('/:id/flag', respondLimiter, (req, res) => {
 
     const newFlagged = review.flagged ? 0 : 1;
     run("UPDATE reviews SET flagged = ?, updated_at = datetime('now') WHERE id = ?", [newFlagged, review.id]);
-    res.json({ success: true, flagged: !!newFlagged });
+    const fresh = get('SELECT updated_at FROM reviews WHERE id = ?', [review.id]);
+    res.json({ success: true, flagged: !!newFlagged, updated_at: fresh?.updated_at });
   } catch (err) {
     captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
@@ -1254,7 +1258,8 @@ router.put('/:id/note', respondLimiter, (req, res) => {
     if (note.length > 2000) return res.status(400).json({ error: 'Note too long (max 2000 chars)' });
 
     run("UPDATE reviews SET note = ?, updated_at = datetime('now') WHERE id = ?", [note || null, review.id]);
-    res.json({ success: true, note: note || null });
+    const fresh = get('SELECT updated_at FROM reviews WHERE id = ?', [review.id]);
+    res.json({ success: true, note: note || null, updated_at: fresh?.updated_at });
   } catch (err) {
     captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
