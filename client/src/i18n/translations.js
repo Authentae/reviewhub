@@ -292,7 +292,7 @@ const en = {
   'settings.dangerZone': 'Delete Account',
   'settings.deleteAccount': 'Delete account',
   'settings.deleteAccountDesc': 'Permanently removes your account, business, and all reviews. This cannot be undone.',
-  'settings.confirmDelete': 'Are you absolutely sure?',
+  'settings.confirmDelete': 'This will permanently delete your account, all reviews, and all data. This cannot be undone.',
   'settings.yesDelete': 'Yes, delete everything',
   'settings.deleting': 'Deleting…',
   'settings.updating': 'Updating…',
