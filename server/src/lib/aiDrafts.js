@@ -103,24 +103,51 @@ function getDefaultClient() {
 // Template pool — used when AI path isn't available or fails. Same
 // style/sentiment mapping as the previous hard-coded drafts route.
 function getTemplateDraft(review) {
-  const drafts = {
+  // Fallback when reviewer_name is null/undefined/empty — drops it cleanly
+  // out of the greeting instead of letting "Hi, null" or "Hi, " ship into
+  // a customer-facing reply. The two pools are written so the with-name
+  // and without-name forms each read naturally; the ai-draft path uses
+  // its own SYSTEM_PROMPT with a similar fallback baked into prompt-time.
+  const hasName = typeof review.reviewer_name === 'string' && review.reviewer_name.trim().length > 0;
+  const name = hasName ? review.reviewer_name : null;
+
+  const drafts = hasName ? {
     positive: [
-      `Thank you so much, ${review.reviewer_name}! We're thrilled you had a great experience and look forward to welcoming you back soon.`,
-      `We really appreciate your kind words, ${review.reviewer_name}! It means the world to our team. See you next time!`,
-      `Wonderful to hear this, ${review.reviewer_name}! Reviews like yours motivate our whole team. Hope to see you again soon!`,
-      `Your feedback made our day, ${review.reviewer_name}! We work hard to deliver great experiences and it's so rewarding to know it shows.`,
+      `Thank you so much, ${name}! We're thrilled you had a great experience and look forward to welcoming you back soon.`,
+      `We really appreciate your kind words, ${name}! It means the world to our team. See you next time!`,
+      `Wonderful to hear this, ${name}! Reviews like yours motivate our whole team. Hope to see you again soon!`,
+      `Your feedback made our day, ${name}! We work hard to deliver great experiences and it's so rewarding to know it shows.`,
     ],
     negative: [
-      `We're truly sorry to hear about your experience, ${review.reviewer_name}. This is not up to our standards and we'd love to make it right. Please contact us directly.`,
-      `Thank you for bringing this to our attention, ${review.reviewer_name}. We take all feedback seriously and are working to improve.`,
-      `We sincerely apologize, ${review.reviewer_name}. Your experience does not reflect the standard we hold ourselves to. Please reach out so we can resolve this for you.`,
-      `We hear you, ${review.reviewer_name}, and we're sorry we let you down. Please give us another chance to make things right — contact us directly.`,
+      `We're truly sorry to hear about your experience, ${name}. This is not up to our standards and we'd love to make it right. Please contact us directly.`,
+      `Thank you for bringing this to our attention, ${name}. We take all feedback seriously and are working to improve.`,
+      `We sincerely apologize, ${name}. Your experience does not reflect the standard we hold ourselves to. Please reach out so we can resolve this for you.`,
+      `We hear you, ${name}, and we're sorry we let you down. Please give us another chance to make things right — contact us directly.`,
     ],
     neutral: [
-      `Thank you for your feedback, ${review.reviewer_name}! We hope to exceed your expectations on your next visit.`,
-      `Thanks for stopping by and leaving a review, ${review.reviewer_name}. Your feedback helps us improve!`,
-      `We appreciate you taking the time to share your thoughts, ${review.reviewer_name}. We'd love to earn a 5-star visit for you next time!`,
-      `Thank you, ${review.reviewer_name}! We value your honest feedback and are always looking for ways to do better. We hope to see you again soon.`,
+      `Thank you for your feedback, ${name}! We hope to exceed your expectations on your next visit.`,
+      `Thanks for stopping by and leaving a review, ${name}. Your feedback helps us improve!`,
+      `We appreciate you taking the time to share your thoughts, ${name}. We'd love to earn a 5-star visit for you next time!`,
+      `Thank you, ${name}! We value your honest feedback and are always looking for ways to do better. We hope to see you again soon.`,
+    ],
+  } : {
+    positive: [
+      `Thank you so much! We're thrilled you had a great experience and look forward to welcoming you back soon.`,
+      `We really appreciate your kind words! It means the world to our team. See you next time!`,
+      `Wonderful to hear this! Reviews like yours motivate our whole team. Hope to see you again soon!`,
+      `Your feedback made our day! We work hard to deliver great experiences and it's so rewarding to know it shows.`,
+    ],
+    negative: [
+      `We're truly sorry to hear about your experience. This is not up to our standards and we'd love to make it right. Please contact us directly.`,
+      `Thank you for bringing this to our attention. We take all feedback seriously and are working to improve.`,
+      `We sincerely apologize. Your experience does not reflect the standard we hold ourselves to. Please reach out so we can resolve this for you.`,
+      `We hear you, and we're sorry we let you down. Please give us another chance to make things right — contact us directly.`,
+    ],
+    neutral: [
+      `Thank you for your feedback! We hope to exceed your expectations on your next visit.`,
+      `Thanks for stopping by and leaving a review. Your feedback helps us improve!`,
+      `We appreciate you taking the time to share your thoughts. We'd love to earn a 5-star visit for you next time!`,
+      `Thank you! We value your honest feedback and are always looking for ways to do better. We hope to see you again soon.`,
     ],
   };
   const options = drafts[review.sentiment] || drafts.neutral;

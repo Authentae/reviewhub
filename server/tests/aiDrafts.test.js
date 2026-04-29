@@ -39,6 +39,20 @@ describe('aiDrafts', () => {
     assert.ok(draft.includes(REVIEW.reviewer_name));
   });
 
+  // Regression: when reviewer_name is null/undefined/empty, the old template
+  // path produced "Thank you, null!" or "Thanks for stopping by, !" — both
+  // shipped to customer-facing replies. The fix uses a name-less variant
+  // so the greeting reads naturally regardless of whether a name is present.
+  for (const v of [null, undefined, '', '   ']) {
+    test(`getTemplateDraft handles reviewer_name = ${JSON.stringify(v)} gracefully`, () => {
+      const draft = getTemplateDraft({ ...REVIEW, reviewer_name: v });
+      assert.ok(typeof draft === 'string' && draft.length > 0);
+      assert.ok(!/null|undefined/.test(draft), `draft must not contain "null" or "undefined": ${draft}`);
+      // No stray ", !" or ", ." that would be left if we just dropped the name token
+      assert.ok(!/,\s*[!?.]/.test(draft), `draft must not have orphaned comma+punctuation: ${draft}`);
+    });
+  }
+
   test('returns template when no client and no API key configured', async () => {
     const prev = process.env.ANTHROPIC_API_KEY;
     delete process.env.ANTHROPIC_API_KEY;
