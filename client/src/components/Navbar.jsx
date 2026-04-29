@@ -174,7 +174,7 @@ export default function Navbar() {
                 </Link>
                 <Link to="/analytics" className={isActive('/analytics') ? 'active' : ''} aria-current={isActive('/analytics') ? 'page' : undefined}>{t('nav.analytics')}</Link>
                 <Link to="/review-requests" className={isActive('/review-requests') ? 'active' : ''} aria-current={isActive('/review-requests') ? 'page' : undefined}>{t('nav.reviewRequests')}</Link>
-                <Link to="/owner" className={isActive('/owner') ? 'active' : ''} aria-current={isActive('/owner') ? 'page' : undefined}>{t('nav.owner') || 'Owner'}</Link>
+                <Link to="/owner" className={isActive('/owner') ? 'active' : ''} aria-current={isActive('/owner') ? 'page' : undefined}>{t('nav.owner', 'Owner')}</Link>
                 <Link to="/pricing" className={isActive('/pricing') ? 'active' : ''} aria-current={isActive('/pricing') ? 'page' : undefined}>{t('nav.pricing')}</Link>
                 {/* Settings lives in the user-avatar dropdown — see below.
                     Putting it here too created a duplicate hit-target with
@@ -288,7 +288,7 @@ export default function Navbar() {
                 <MobileLink to="/dashboard" label={t('nav.dashboard')} active={isActive('/dashboard')} badge={unresponded} />
                 <MobileLink to="/analytics" label={t('nav.analytics')} active={isActive('/analytics')} />
                 <MobileLink to="/review-requests" label={t('nav.reviewRequests')} active={isActive('/review-requests')} />
-                <MobileLink to="/owner" label={t('nav.owner') || 'Owner'} active={isActive('/owner')} />
+                <MobileLink to="/owner" label={t('nav.owner', 'Owner')} active={isActive('/owner')} />
                 <MobileLink to="/settings" label={t('nav.settings')} active={isActive('/settings')} />
                 <MobileLink to="/pricing" label={t('nav.pricing')} active={isActive('/pricing')} />
                 <div style={{ display: 'flex', gap: 8, padding: '8px 4px' }}>

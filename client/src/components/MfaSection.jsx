@@ -59,7 +59,7 @@ export default function MfaSection({ mfaEnabled, onMfaChange }) {
   async function handleBeginEnable(e) {
     if (e?.preventDefault) e.preventDefault();
     if (!password) {
-      setError(t('mfa.passwordRequired') || 'Password is required');
+      setError(t('mfa.passwordRequired', 'Password is required'));
       return;
     }
     setBusy(true);
@@ -193,11 +193,11 @@ export default function MfaSection({ mfaEnabled, onMfaChange }) {
         {state === 'enable-pw' && (
           <form onSubmit={handleBeginEnable} className="space-y-3">
             <div>
-              <p className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">{t('mfa.confirmPasswordTitle') || 'Confirm your password'}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">{t('mfa.confirmPasswordDesc') || 'Enter your password to start two-factor setup.'}</p>
+              <p className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">{t('mfa.confirmPasswordTitle', 'Confirm your password')}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">{t('mfa.confirmPasswordDesc', 'Enter your password to start two-factor setup.')}</p>
             </div>
             <div>
-              <label htmlFor="mfa-enable-pw" className="sr-only">{t('mfa.passwordLabel') || 'Password'}</label>
+              <label htmlFor="mfa-enable-pw" className="sr-only">{t('mfa.passwordLabel', 'Password')}</label>
               <input
                 id="mfa-enable-pw"
                 type="password"
@@ -211,7 +211,7 @@ export default function MfaSection({ mfaEnabled, onMfaChange }) {
             </div>
             <div className="flex gap-2">
               <button type="submit" disabled={busy || !password} aria-busy={busy} className="btn-primary text-sm">
-                {busy ? t('mfa.sending') : (t('mfa.continue') || 'Continue')}
+                {busy ? t('mfa.sending') : t('mfa.continue', 'Continue')}
               </button>
               <button
                 type="button"
@@ -219,7 +219,7 @@ export default function MfaSection({ mfaEnabled, onMfaChange }) {
                 disabled={busy}
                 className="btn-secondary text-sm"
               >
-                {t('common.cancel') || 'Cancel'}
+                {t('common.cancel', 'Cancel')}
               </button>
             </div>
           </form>
@@ -258,7 +258,7 @@ export default function MfaSection({ mfaEnabled, onMfaChange }) {
                 disabled={busy}
                 className="btn-secondary text-sm"
               >
-                {t('common.cancel') || 'Cancel'}
+                {t('common.cancel', 'Cancel')}
               </button>
             </div>
           </form>
@@ -335,7 +335,7 @@ export default function MfaSection({ mfaEnabled, onMfaChange }) {
                 disabled={busy}
                 className="btn-secondary text-sm"
               >
-                {t('common.cancel') || 'Cancel'}
+                {t('common.cancel', 'Cancel')}
               </button>
             </div>
           </form>

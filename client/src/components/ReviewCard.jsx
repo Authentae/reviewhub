@@ -648,7 +648,7 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
     // Skip the rtf "0 seconds ago" output — most locales render it
     // awkwardly ("0 seconds ago" / "in 0 seconds"). "Just now" reads
     // better and matches what every modern feed does.
-    if (seconds < 60)   return t('common.justNow') || 'just now';
+    if (seconds < 60)   return t('common.justNow', 'just now');
     const minutes = Math.floor(seconds / 60);
     if (minutes < 60)   return rtf.format(-minutes, 'minute');
     const hours = Math.floor(minutes / 60);

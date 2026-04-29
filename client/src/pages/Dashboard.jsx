@@ -1011,8 +1011,8 @@ const RatingDistribution = React.memo(function RatingDistribution({ stats, activ
             type="button"
             onClick={() => onRatingClick?.(Number(activeRating))}
             className="ml-2 inline-flex items-center gap-1 text-blue-500 hover:text-blue-700 normal-case font-normal cursor-pointer"
-            title={t('dashboard.ratingClear') || 'Clear rating filter'}
-            aria-label={t('dashboard.ratingClear') || 'Clear rating filter'}
+            title={t('dashboard.ratingClear', 'Clear rating filter')}
+            aria-label={t('dashboard.ratingClear', 'Clear rating filter')}
           >
             <span>{t('dashboard.ratingOnly', { stars: activeRating })}</span>
             <span aria-hidden="true">✕</span>

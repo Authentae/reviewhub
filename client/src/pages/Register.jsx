@@ -157,7 +157,7 @@ export default function Register() {
               )}
               {form.confirm && form.password && form.password === form.confirm && (
                 <p className="mt-1 text-xs text-green-600 dark:text-green-400">
-                  ✓ {t('auth.passwordMatches') || 'Passwords match'}
+                  ✓ {t('auth.passwordMatches', 'Passwords match')}
                 </p>
               )}
             </div>

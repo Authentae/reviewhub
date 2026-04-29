@@ -377,7 +377,7 @@ export default function ReviewRequests() {
                         <td className="px-4 py-3 text-right">
                           {confirmResendId === rr.id ? (
                             <div className="flex items-center justify-end gap-1.5 text-xs">
-                              <span className="text-blue-600 dark:text-blue-400">{t('requests.resendShort') || 'Re-send?'}</span>
+                              <span className="text-blue-600 dark:text-blue-400">{t('requests.resendShort', 'Re-send?')}</span>
                               <button
                                 type="button"
                                 onClick={() => handleResend(rr.id)}
@@ -392,7 +392,7 @@ export default function ReviewRequests() {
                             </div>
                           ) : confirmDeleteId === rr.id ? (
                             <div className="flex items-center justify-end gap-1.5 text-xs">
-                              <span className="text-red-600 dark:text-red-400">{t('requests.deleteShort') || 'Delete?'}</span>
+                              <span className="text-red-600 dark:text-red-400">{t('requests.deleteShort', 'Delete?')}</span>
                               <button
                                 type="button"
                                 onClick={() => handleDelete(rr.id)}
