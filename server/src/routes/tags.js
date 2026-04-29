@@ -102,6 +102,12 @@ router.delete('/:id', tagLimiter, (req, res) => {
   try {
     const tag = get('SELECT id FROM tags WHERE id = ? AND user_id = ?', [req.params.id, req.user.id]);
     if (!tag) return res.status(404).json({ error: 'Tag not found' });
+    // auto_rules.tag_id was added via migrateAddColumn, which can't attach an
+    // ON DELETE SET NULL FK after table creation. So before dropping the tag,
+    // null out any auto_rule pointing at it — otherwise those rules end up
+    // referencing a non-existent tag and the rules engine quietly stops
+    // matching for them. (review_tags has a real FK with ON DELETE CASCADE.)
+    run('UPDATE auto_rules SET tag_id = NULL WHERE tag_id = ? AND user_id = ?', [tag.id, req.user.id]);
     run('DELETE FROM tags WHERE id = ?', [tag.id]);
     res.json({ deleted: true });
   } catch (err) {

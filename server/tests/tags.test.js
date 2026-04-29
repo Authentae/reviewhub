@@ -107,6 +107,34 @@ describe('tags', () => {
     assert.strictEqual(list.body.length, 0);
   });
 
+  test('DELETE /tags/:id nulls out auto_rules that reference the tag', async () => {
+    // Regression: auto_rules.tag_id was added via migrateAddColumn (no real
+    // FK), so deleting a tag previously left orphan tag_id pointers and the
+    // rules engine quietly stopped matching for those rules.
+    const u = await makeUserWithBusiness();
+    const tag = await makeTag(u, 'WillDelete');
+    const ruleRes = await request(app)
+      .post('/api/auto-rules')
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({
+        name: 'Auto-thanks tagged reviews',
+        sentiment: 'positive',
+        response_text: 'Thank you for the kind words!',
+        tag_id: tag.id,
+      });
+    assert.strictEqual(ruleRes.status, 201, `expected 201, got ${ruleRes.status}: ${JSON.stringify(ruleRes.body)}`);
+    assert.strictEqual(ruleRes.body.tag_id, tag.id);
+
+    const del = await request(app).delete(`/api/tags/${tag.id}`).set('Authorization', `Bearer ${u.token}`);
+    assert.strictEqual(del.status, 200);
+
+    const rules = await request(app).get('/api/auto-rules').set('Authorization', `Bearer ${u.token}`);
+    assert.strictEqual(rules.status, 200);
+    const rule = rules.body.find(r => r.id === ruleRes.body.id);
+    assert.ok(rule, 'rule should still exist');
+    assert.strictEqual(rule.tag_id, null, 'rule.tag_id should be nulled when the tag is deleted');
+  });
+
   test('DELETE /tags/:id returns 404 for another user\'s tag', async () => {
     const u1 = await makeUserWithBusiness();
     const u2 = await makeUserWithBusiness();
