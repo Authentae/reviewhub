@@ -169,15 +169,19 @@ router.post('/:id/response', responseMutateLimiter, (req, res) => {
       return res.status(409).json({ error: 'A response already exists. Use PUT to edit it.' });
     }
 
-    // Daily rate cap: count THIS owner's responses created in the last 24h.
+    // Daily rate cap: count THIS owner's responses on THIS business in the
+    // last 24h. Per-business (not global) so a Business-plan operator who
+    // claims multiple locations isn't throttled to ~10 replies/day per
+    // location. Abuse risk is per-business anyway — review volume is
+    // attached to a specific business.
     const cnt = get(
       `SELECT COUNT(*) AS n FROM review_responses
-       WHERE owner_user_id = ? AND created_at >= datetime('now', '-1 day')`,
-      [req.user.id]
+       WHERE owner_user_id = ? AND business_id = ? AND created_at >= datetime('now', '-1 day')`,
+      [req.user.id, ctx.business.id]
     )?.n || 0;
     if (cnt >= DAILY_LIMIT) {
       return res.status(429).json({
-        error: `Daily response limit reached (${DAILY_LIMIT}/day). Try again tomorrow.`,
+        error: `Daily response limit reached (${DAILY_LIMIT}/day per business). Try again tomorrow.`,
         limit: DAILY_LIMIT,
       });
     }

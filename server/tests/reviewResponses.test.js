@@ -260,6 +260,37 @@ describe('review responses: rate limit', () => {
     assert.strictEqual(res.status, 429);
     assert.strictEqual(res.body.limit, 50);
   });
+
+  // Regression: the daily cap is per-business, not global per owner.
+  // Previously a Business-plan operator with 5 locations was capped at 50
+  // responses TOTAL per day (~10 per location); now each business gets its
+  // own 50/day budget.
+  test('daily cap is per-business — second business retains its 50/day budget', async () => {
+    const owner = await makeUserWithBusiness('BizA', 'business');
+    // Add a second business owned by the same user
+    const { run: dbRun, insert: dbInsert, get: dbGet } = require('../src/db/schema');
+    const bizBId = dbInsert('INSERT INTO businesses (user_id, business_name) VALUES (?, ?)', [owner.userId, 'BizB']);
+
+    // Saturate Business A's daily cap (50 pre-seeded responses).
+    for (let i = 0; i < 50; i++) {
+      const rid = seedReview(owner.businessId);
+      dbRun(
+        `INSERT INTO review_responses (review_id, owner_user_id, business_id, response_text)
+         VALUES (?, ?, ?, ?)`,
+        [rid, owner.userId, owner.businessId, `Saturating biz A response ${i}`]
+      );
+    }
+
+    // Posting to a review on Business B should still succeed — its budget is independent.
+    const ridB = dbInsert(
+      'INSERT INTO reviews (business_id, platform, reviewer_name, rating, review_text, sentiment) VALUES (?, ?, ?, ?, ?, ?)',
+      [bizBId, 'google', 'CrossBiz', 5, 'Loved BizB!', 'positive']
+    );
+    const res = await request(app).post(`/api/reviews/${ridB}/response`)
+      .set('Authorization', `Bearer ${owner.token}`)
+      .send({ response_text: 'BizB has its own daily budget; this should go through.' });
+    assert.strictEqual(res.status, 201, `unexpected: ${JSON.stringify(res.body)}`);
+  });
 });
 
 describe('public business reviews include nested responses', () => {
