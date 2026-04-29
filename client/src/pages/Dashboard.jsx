@@ -595,7 +595,7 @@ export default function Dashboard() {
               aria-label={t('dashboard.search.ariaLabel')}
               autoComplete="off"
               maxLength={200}
-              className="input pl-9 text-sm w-full"
+              className="input pl-10 pr-9 text-sm w-full"
               placeholder={t('dashboard.search.placeholder')}
               title={t('dashboard.search.shortcutHint')}
             />
