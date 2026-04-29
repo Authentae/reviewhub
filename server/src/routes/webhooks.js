@@ -170,6 +170,8 @@ router.post('/:id/test', webhookLimiter, async (req, res) => {
 
     let status = null;
     let ok = false;
+    let responseSnippet = null;
+    let errorReason = null;
     try {
       const ctrl = new AbortController();
       const timer = setTimeout(() => ctrl.abort(), 5000);
@@ -187,10 +189,21 @@ router.post('/:id/test', webhookLimiter, async (req, res) => {
       clearTimeout(timer);
       status = r.status;
       ok = r.ok;
-    } catch {
+      // For the TEST endpoint specifically, capture a small slice of the
+      // response body so the operator can debug "200 OK but my receiver is
+      // actually broken" cases (signature version mismatch, etc.). This is
+      // the user explicitly asking to see what their endpoint returned —
+      // unlike the production fire-and-forget path where we drop bodies
+      // to avoid PII leakage in webhook_deliveries logs.
+      try {
+        const text = await r.text();
+        responseSnippet = text ? text.slice(0, 500) : null;
+      } catch { /* ignore body read errors */ }
+    } catch (err) {
       status = 0;
+      errorReason = err?.name === 'AbortError' ? 'Timeout after 5s' : 'Network error (DNS/connection refused)';
     }
-    res.json({ ok, status });
+    res.json({ ok, status, responseSnippet, errorReason });
   } catch (err) {
     captureException(err, { route: 'webhooks' });
     res.status(500).json({ error: 'Server error' });

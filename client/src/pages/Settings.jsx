@@ -516,7 +516,18 @@ function WebhooksSection() {
     setTesting(prev => ({ ...prev, [id]: true }));
     try {
       const { data } = await api.post(`/webhooks/${id}/test`);
-      toast(data.ok ? t('webhooks.testOk', { status: data.status }) : t('webhooks.testFailed', { status: data.status || 0 }), data.ok ? 'success' : 'error');
+      // Build a more useful toast — include the response snippet (for "200
+      // but actually broken" cases where the receiver's body explains the
+      // problem) or the connection-error reason (timeout, DNS, refused).
+      const baseMsg = data.ok
+        ? t('webhooks.testOk', { status: data.status })
+        : t('webhooks.testFailed', { status: data.status || 0 });
+      const detail = data.errorReason
+        ? ` — ${data.errorReason}`
+        : (!data.ok && data.responseSnippet
+            ? ` — ${data.responseSnippet.slice(0, 200)}`
+            : '');
+      toast(baseMsg + detail, data.ok ? 'success' : 'error');
     } catch {
       toast(t('webhooks.testError'), 'error');
     } finally {
