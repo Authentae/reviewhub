@@ -136,6 +136,18 @@ adminRouter.use((req, res, next) => {
   next();
 });
 
+// Bound admin write traffic. Even with the email gate above, a leaked
+// admin token shouldn't be able to spam approve/deny for thousands of
+// claims in a few seconds — and a buggy admin UI shouldn't either.
+const adminMutateLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 60,
+  message: { error: 'Too many requests' },
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: () => process.env.NODE_ENV === 'test',
+});
+
 // GET /api/admin/claims?status=pending&limit=50
 adminRouter.get('/', (req, res) => {
   try {
@@ -163,7 +175,7 @@ adminRouter.get('/', (req, res) => {
 });
 
 // POST /api/admin/claims/:id/approve
-adminRouter.post('/:id/approve', (req, res) => {
+adminRouter.post('/:id/approve', adminMutateLimiter, (req, res) => {
   try {
     const id = parseId(req.params.id);
     if (!id) return res.status(400).json({ error: 'Invalid claim ID' });
@@ -187,7 +199,7 @@ adminRouter.post('/:id/approve', (req, res) => {
 });
 
 // POST /api/admin/claims/:id/deny
-adminRouter.post('/:id/deny', (req, res) => {
+adminRouter.post('/:id/deny', adminMutateLimiter, (req, res) => {
   try {
     const id = parseId(req.params.id);
     if (!id) return res.status(400).json({ error: 'Invalid claim ID' });
