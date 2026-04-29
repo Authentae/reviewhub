@@ -726,6 +726,14 @@
 .rh-pricing-card.featured li { color: color-mix(in oklab, var(--rh-paper) 78%, transparent); }
 .rh-pricing-card.featured .plan-price { color: var(--rh-paper); }
 .rh-pricing-card.featured li svg { color: var(--rh-ochre); }
+/* Ghost button override on the dark/featured pricing card. Without this
+   the default rh-btn-ghost color (var(--rh-ink), dark) was rendering
+   onto the featured card's dark background — the button looked completely
+   empty. Same fix already exists for .rh-demo-section .rh-btn-ghost and
+   .rh-big-cta .rh-btn-ghost; this just extends it here. Hits the
+   "Current plan ✓" CTA when a Pro-tier user views Pricing. */
+.rh-pricing-card.featured .rh-btn-ghost { color: var(--rh-paper); border-color: color-mix(in oklab, var(--rh-paper) 25%, transparent); }
+.rh-pricing-card.featured .rh-btn-ghost:hover { background: color-mix(in oklab, var(--rh-paper) 10%, transparent); border-color: var(--rh-paper); }
 .rh-pricing-card .plan-name { font-family: var(--rh-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rh-teal); margin-bottom: 8px; font-weight: 600; }
 .rh-pricing-card .plan-sub { font-size: 13px; color: var(--rh-ink-3); min-height: 36px; margin: 0 0 18px; line-height: 1.45; }
 .rh-pricing-card .plan-price { font-family: var(--rh-serif); font-size: 56px; line-height: 1; letter-spacing: -0.03em; color: var(--rh-ink); margin-bottom: 6px; }
