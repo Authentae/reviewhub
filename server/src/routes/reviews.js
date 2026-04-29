@@ -424,6 +424,15 @@ router.get('/keywords', summaryLimiter, (req, res) => {
     const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
     const { date_from, date_to } = req.query;
 
+    // Reject inverted date range — same guard as the main /api/reviews endpoint
+    // so analytics tools surface a clear error instead of silently returning
+    // an empty keyword list.
+    if (date_from && ISO_DATE_RE.test(date_from)
+        && date_to && ISO_DATE_RE.test(date_to)
+        && date_from > date_to) {
+      return res.status(400).json({ error: 'date_from must be on or before date_to' });
+    }
+
     let where = 'WHERE business_id = ? AND review_text IS NOT NULL AND review_text != \'\'';
     const params = [business.id];
 
