@@ -161,15 +161,29 @@ export default function Pricing() {
           <div className="rh-hero-bg" />
           <div className="rh-hero-grid" />
           <div className="rh-shell rh-pricing-hero-inner">
-            <div className="rh-section-head" style={{ marginBottom: 32 }}>
-              {/* Editorial "04" numeral removed — same complaint pattern as
-                  the dashboard "№ 01" eyebrow: reads as a count or status
-                  indicator rather than an editorial section number. The
-                  "§ Pricing" kicker on its own still anchors the page. */}
+            {/* Editorial "04" numeral removed (read as a notification count).
+                Stacked layout overrides the .rh-section-head 2-column grid
+                — without the big serif numeral in column 1 the grid left
+                an awkward empty 220px gutter and the headline drifted right.
+                Inline grid-template-columns: 1fr forces a single-column
+                stack so kicker + h1 sit naturally above the controls. */}
+            <div className="rh-section-head" style={{ marginBottom: 32, gridTemplateColumns: '1fr', gap: 16, alignItems: 'flex-start' }}>
               <div className="kicker">
                 <div className="cat">§ Pricing</div>
               </div>
-              <h1 style={{ color: 'var(--rh-ink)' }}>{t('pricing.headline').split(/[—.]/, 1)[0] || t('pricing.headline')}<em style={{ color: 'var(--rh-sage)' }}>.</em></h1>
+              <h1 style={{
+                color: 'var(--rh-ink)',
+                fontFamily: 'var(--rh-serif)',
+                fontWeight: 400,
+                fontSize: 'clamp(40px, 5.2vw, 72px)',
+                lineHeight: 1.0,
+                letterSpacing: '-0.025em',
+                margin: 0,
+                maxWidth: '22ch',
+                textWrap: 'balance',
+              }}>
+                {t('pricing.headline').split(/[—.]/, 1)[0] || t('pricing.headline')}<em style={{ color: 'var(--rh-sage)', fontStyle: 'italic' }}>.</em>
+              </h1>
             </div>
             <p className="rh-lede" style={{ maxWidth: '60ch' }}>{t('pricing.subheadline')}</p>
 
