@@ -88,7 +88,12 @@ router.post('/', limiter, (req, res) => {
     if (err) return res.status(400).json({ error: err });
 
     const { name, platform, min_rating, max_rating, sentiment, response_text } = req.body;
-    const enabled = req.body.enabled === false || req.body.enabled === 0 ? 0 : 1;
+    // Strict boolean coercion — accept literal false/0/'false'/'0'/null as
+    // off; anything else is on. Without the string variants, an HTML form
+    // submission of "0" became enabled=1 (string "0" is truthy in JS),
+    // which surprised users. Default to ON when the field is undefined.
+    const enabledRaw = req.body.enabled;
+    const enabled = (enabledRaw === false || enabledRaw === 0 || enabledRaw === '0' || enabledRaw === 'false' || enabledRaw === null) ? 0 : 1;
     const keywords = parseKeywords(req.body.match_keywords);
     const tagId = req.body.tag_id != null ? (parseInt(req.body.tag_id, 10) || null) : null;
 
@@ -127,8 +132,12 @@ router.put('/:id', limiter, (req, res) => {
     if (err) return res.status(400).json({ error: err });
 
     const { name, platform, min_rating, max_rating, sentiment, response_text } = merged;
-    const enabled = req.body.enabled === false || req.body.enabled === 0 ? 0
-      : req.body.enabled === true || req.body.enabled === 1 ? 1
+    // Strict boolean coercion — same set of off-values as POST. Untouched
+    // when the field isn't in req.body so a partial PUT doesn't accidentally
+    // toggle the rule.
+    const eRaw = req.body.enabled;
+    const enabled = (eRaw === false || eRaw === 0 || eRaw === '0' || eRaw === 'false' || eRaw === null) ? 0
+      : (eRaw === true || eRaw === 1 || eRaw === '1' || eRaw === 'true') ? 1
       : rule.enabled;
     // Allow explicitly clearing keywords by sending null/empty; otherwise fall back to existing value.
     // Defensive: corrupted match_keywords JSON in the row would otherwise throw
