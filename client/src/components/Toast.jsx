@@ -41,8 +41,15 @@ export function ToastProvider({ children }) {
     armTimer(id, type === 'error' ? ERROR_TTL_MS : DEFAULT_TTL_MS);
   }, [armTimer]);
 
+  // Monotonic counter so two toasts created in the same millisecond can't
+  // collide. Date.now() + Math.random() *can* technically collide (random
+  // values are 52-bit floats and the same numeric sum is achievable in
+  // edge cases), and a collision overwrites the earlier toast's timer in
+  // timersRef — leaking the original timer and orphaning the toast.
+  const idCounterRef = useRef(0);
   const show = useCallback((message, type = 'success') => {
-    const id = Date.now() + Math.random();
+    idCounterRef.current += 1;
+    const id = `${Date.now()}-${idCounterRef.current}`;
     setToasts(prev => [...prev, { id, message, type }]);
     armTimer(id, type === 'error' ? ERROR_TTL_MS : DEFAULT_TTL_MS);
   }, [armTimer]);
