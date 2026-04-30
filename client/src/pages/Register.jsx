@@ -185,13 +185,13 @@ export default function Register() {
                 />
                 <span id="reg-terms-desc">
                   {t('auth.acceptTermsPrefix')}{' '}
-                  <Link to="/terms" target="_blank" rel="noopener" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">{t('legal.termsTitle')}</Link>
+                  <Link to="/terms" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">{t('legal.termsTitle')}</Link>
                   {', '}
-                  <Link to="/privacy" target="_blank" rel="noopener" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">{t('legal.privacyTitle')}</Link>
+                  <Link to="/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">{t('legal.privacyTitle')}</Link>
                   {', '}
-                  <Link to="/acceptable-use" target="_blank" rel="noopener" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">{t('legal.aupTitle')}</Link>
+                  <Link to="/acceptable-use" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">{t('legal.aupTitle')}</Link>
                   {', '}{t('auth.acceptTermsAnd')}{' '}
-                  <Link to="/refund-policy" target="_blank" rel="noopener" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">{t('legal.refundTitle')}</Link>.
+                  <Link to="/refund-policy" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">{t('legal.refundTitle')}</Link>.
                 </span>
               </label>
               <label className="flex items-start gap-2.5 text-xs text-gray-600 dark:text-gray-300 cursor-pointer leading-relaxed">
