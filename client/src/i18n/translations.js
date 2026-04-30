@@ -7423,7 +7423,6 @@ const th = {
   'landing.footerTerms': 'ข้อกำหนด',
   'landing.footerAcceptable': 'การใช้งานที่ยอมรับได้',
   'landing.footerRefunds': 'การคืนเงิน',
-  'landing.footerMadeSolo': 'พัฒนาคนเดียวจากกรุงเทพฯ',
   'landing.footerStatus': 'ทุกระบบทำงานปกติ',
   'landing.demoReviewLabel': 'รีวิว',
   'landing.demoTone': 'น้ำเสียง',

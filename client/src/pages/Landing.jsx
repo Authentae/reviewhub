@@ -105,9 +105,7 @@ function Hero() {
       <div className="rh-hero-grid" />
       <div className="rh-hero-vignette" />
       {/* Editorial flourish — large ★ glyph anchors the hero to the
-          star-rating motif used throughout the app. Decorative location
-          coordinates and "Built solo" credit were removed — they exposed
-          founder context without adding product value. */}
+          star-rating motif used throughout the app. */}
       <div className="rh-hero-amp" aria-hidden="true">★</div>
       <div className="rh-shell rh-hero-inner">
         <div className="rh-hero-meta">
