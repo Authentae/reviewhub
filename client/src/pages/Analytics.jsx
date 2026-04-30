@@ -142,7 +142,11 @@ function ChartCard({ title, desc, children }) {
   );
 }
 
-function DeltaBadge({ delta }) {
+// `unit` is explicit ('%' for percentage deltas, '' for raw deltas like
+// star-rating diff). Was previously inferring `%` from `Number.isInteger(delta)`,
+// which broke when a rating delta happened to be exactly 1.0 → rendered as
+// "1%" instead of "1". Caller now states intent.
+function DeltaBadge({ delta, unit = '%' }) {
   if (delta == null) return null;
   const pos = delta > 0;
   const zero = delta === 0;
@@ -153,19 +157,19 @@ function DeltaBadge({ delta }) {
         : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'}`}
       title="vs prior 12 weeks"
     >
-      {pos ? '▲' : zero ? '–' : '▼'} {Math.abs(delta)}{typeof delta === 'number' && Number.isInteger(delta) ? '%' : ''}
+      {pos ? '▲' : zero ? '–' : '▼'} {Math.abs(delta)}{unit}
     </span>
   );
 }
 
-function StatCard({ label, value, sub, color = 'text-gray-900 dark:text-gray-100', delta }) {
+function StatCard({ label, value, sub, color = 'text-gray-900 dark:text-gray-100', delta, deltaUnit }) {
   return (
     <div className="card p-4">
       <dl>
         <dt className="text-xs text-gray-500 dark:text-gray-400 mb-1">{label}</dt>
         <dd className={`text-2xl font-bold ${color} flex items-baseline flex-wrap gap-0.5`}>
           {value ?? '—'}
-          <DeltaBadge delta={delta} />
+          <DeltaBadge delta={delta} unit={deltaUnit} />
         </dd>
         {sub && <dd className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{sub}</dd>}
       </dl>
@@ -389,6 +393,7 @@ export default function Analytics() {
                 value={ov.avg_rating ? `${ov.avg_rating} ★` : '—'}
                 color="text-amber-600 dark:text-amber-400"
                 delta={periodTotals.ratingDelta}
+                deltaUnit=""
               />
               <StatCard
                 label={t('analytics.positiveRate')}
