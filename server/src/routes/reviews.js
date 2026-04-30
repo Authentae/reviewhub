@@ -323,13 +323,20 @@ router.get('/analytics', summaryLimiter, (req, res) => {
       response_rate: r.count > 0 ? Math.round((Number(r.responded) / Number(r.count)) * 100) : 0,
     }));
 
-    // Top reviewers by review count
+    // Top reviewers by review count. Number() coercion mirrors the platforms
+    // and tagStats mappings just above so the response shape is uniform —
+    // every count/avg_rating in the analytics payload is a real JS number,
+    // not "looks-like-a-number" string the client has to coerce.
     const topReviewers = all(
       `SELECT reviewer_name, COUNT(*) as count, ROUND(AVG(CAST(rating AS REAL)), 1) as avg_rating
        FROM reviews WHERE business_id = ?
        GROUP BY reviewer_name ORDER BY count DESC LIMIT 10`,
       [business.id]
-    );
+    ).map(r => ({
+      reviewer_name: r.reviewer_name,
+      count: Number(r.count),
+      avg_rating: r.avg_rating != null ? Number(r.avg_rating) : null,
+    }));
 
     // All-time overview
     const ov = get(`${STATS_SELECT} WHERE business_id = ?`, [business.id]);
