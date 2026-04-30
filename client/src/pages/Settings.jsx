@@ -559,8 +559,8 @@ function WebhooksSection() {
     try {
       const { data } = await api.put(`/webhooks/${hook.id}`, { enabled: !hook.enabled });
       setHooks(prev => prev.map(h => h.id === hook.id ? data : h));
-    } catch {
-      toast(t('webhooks.updateFailed'), 'error');
+    } catch (err) {
+      toast(err?.response?.data?.error || t('webhooks.updateFailed'), 'error');
     }
   }
 
@@ -569,8 +569,8 @@ function WebhooksSection() {
       await api.delete(`/webhooks/${id}`);
       setHooks(prev => prev.filter(h => h.id !== id));
       toast(t('webhooks.deleted'), 'info');
-    } catch {
-      toast(t('webhooks.deleteFailed'), 'error');
+    } catch (err) {
+      toast(err?.response?.data?.error || t('webhooks.deleteFailed'), 'error');
     }
   }
 
@@ -590,8 +590,8 @@ function WebhooksSection() {
             ? ` — ${data.responseSnippet.slice(0, 200)}`
             : '');
       toast(baseMsg + detail, data.ok ? 'success' : 'error');
-    } catch {
-      toast(t('webhooks.testError'), 'error');
+    } catch (err) {
+      toast(err?.response?.data?.error || t('webhooks.testError'), 'error');
     } finally {
       setTesting(prev => ({ ...prev, [id]: false }));
     }
