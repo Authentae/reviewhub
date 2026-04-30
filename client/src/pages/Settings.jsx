@@ -408,7 +408,7 @@ function TagManager() {
                       role="radio"
                       aria-checked={editColor === c.hex}
                       className="w-4 h-4 rounded-full border-2 flex-shrink-0"
-                      style={{ backgroundColor: c.hex, borderColor: editColor === c.hex ? '#1d4ed8' : 'transparent' }}
+                      style={{ backgroundColor: c.hex, borderColor: editColor === c.hex ? 'var(--rh-teal)' : 'transparent' }}
                       aria-label={c.name}
                       title={c.name}
                     />
@@ -465,7 +465,7 @@ function TagManager() {
                   role="radio"
                   aria-checked={newColor === c.hex}
                   className="w-4 h-4 rounded-full border-2 flex-shrink-0"
-                  style={{ backgroundColor: c.hex, borderColor: newColor === c.hex ? '#1d4ed8' : 'transparent' }}
+                  style={{ backgroundColor: c.hex, borderColor: newColor === c.hex ? 'var(--rh-teal)' : 'transparent' }}
                   aria-label={c.name}
                   title={c.name}
                 />

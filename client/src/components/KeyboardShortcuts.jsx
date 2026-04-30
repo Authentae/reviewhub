@@ -97,7 +97,7 @@ export default function KeyboardShortcuts() {
   return (
     <div
       role="dialog" aria-modal="true" aria-labelledby="kbd-help-title"
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+      className="rh-design rh-app fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
       onClick={(e) => { if (e.target === e.currentTarget) setOpen(false); }}
     >
       <div ref={dialogRef} className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 max-w-md w-full overflow-hidden animate-fade-in">

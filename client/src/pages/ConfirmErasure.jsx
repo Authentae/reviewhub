@@ -89,7 +89,7 @@ export default function ConfirmErasure() {
               type="button"
               onClick={confirmDelete}
               className="btn-primary"
-              style={{ background: '#dc2626', borderColor: '#dc2626' }}
+              style={{ background: 'var(--rh-rose)', borderColor: 'var(--rh-rose)' }}
             >
               {t('confirmErasure.cta', 'Yes, delete my account')}
             </button>

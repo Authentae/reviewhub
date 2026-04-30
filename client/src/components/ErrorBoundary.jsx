@@ -49,7 +49,7 @@ class ErrorBoundaryInner extends React.Component {
         ? (this.state.error?.message || String(this.state.error) || this.props.unknownError)
         : this.props.unknownError;
       return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center px-4" role="alert">
+        <div className="rh-design rh-app min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center px-4" role="alert">
           <div className="card p-8 max-w-md text-center">
             <p className="text-4xl mb-4" aria-hidden="true">⚠️</p>
             <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">{this.props.title}</h2>
