@@ -810,7 +810,7 @@ const en = {
   'bulk.tagApplied': 'Tag applied to {n} reviews',
   'bulk.tagFailed': 'Tagging failed. Please try again.',
   'bulk.noTags': "No tags yet. Create your first tag in Settings → Tags.",
-  'bulk.untagSelected': 'Remove tag from {n}',
+  'bulk.untagSelected': 'Remove tag from {n} reviews',
   'bulk.untagApplied': 'Tag removed from {n} reviews',
   'bulk.untagFailed': 'Tag removal failed. Please try again.',
   'bulk.setStatus': 'Set status',
