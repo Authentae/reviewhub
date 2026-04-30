@@ -7,8 +7,8 @@ import '../styles/design-system.css';
 
 // Marketing-side panel shown next to the Login/Register/Forgot/Reset forms on
 // lg+ screens. Uses the editorial v2 aesthetic — cream paper, giant italic
-// ampersand, ochre coordinates marker, sage LIVE ping — so auth flows feel
-// like the same brand as the Landing page. Hidden on mobile.
+// ampersand, sage LIVE ping — so auth flows feel like the same brand as the
+// Landing page. Hidden on mobile.
 export default function AuthSideArt({ eyebrow, title }) {
   const { t } = useI18n();
   return (
