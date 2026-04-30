@@ -23,11 +23,16 @@ function stars(rating) {
 }
 
 function escHtml(s) {
+  // Defence-in-depth: escape ' as well as the common four. Current callers
+  // only render into double-quoted attributes / text content, where a bare
+  // ' is harmless — but a future copy-paste into a single-quoted attribute
+  // would silently regress XSS-safety. The 5-char escape costs nothing.
   return String(s ?? '')
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 // GET /api/public/widget/:id — JSON data for custom widget integrations
