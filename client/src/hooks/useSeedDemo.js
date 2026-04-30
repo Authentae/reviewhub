@@ -24,8 +24,8 @@ export default function useSeedDemo() {
         toast(t('dashboard.seedLoaded', { n: data.reviews_added }), 'success');
       }
       return data.reviews_added ?? 0;
-    } catch {
-      toast(t('dashboard.seedFailed'), 'error');
+    } catch (err) {
+      toast(err?.response?.data?.error || t('dashboard.seedFailed'), 'error');
       return null;
     } finally {
       setSeeding(false);
@@ -44,8 +44,8 @@ export default function useSeedDemo() {
         toast(t('dashboard.seedCleared', { n: removed }), 'success');
       }
       return removed;
-    } catch {
-      toast(t('dashboard.seedClearFailed'), 'error');
+    } catch (err) {
+      toast(err?.response?.data?.error || t('dashboard.seedClearFailed'), 'error');
       return null;
     } finally {
       setClearing(false);

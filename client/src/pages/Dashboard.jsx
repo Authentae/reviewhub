@@ -312,8 +312,8 @@ export default function Dashboard() {
       // Defer revoke to give browser time to start the download
       setTimeout(() => URL.revokeObjectURL(url), 1000);
       toast(t('dashboard.exportDone', { n: data?.total ?? '' }), 'success');
-    } catch {
-      toast(t('dashboard.exportFailed'), 'error');
+    } catch (err) {
+      toast(err?.response?.data?.error || t('dashboard.exportFailed'), 'error');
     } finally {
       setExporting(false);
     }

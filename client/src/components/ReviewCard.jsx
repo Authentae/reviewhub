@@ -396,11 +396,11 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
         setShowPostReminder(true);
       }
       onResponseSaved?.();
-    } catch {
+    } catch (err) {
       setOptimisticResponse(review.response_text || null);
       setSaved(!!review.response_text);
       setDrafting(true);
-      toast(t('toast.failedResponse'), 'error');
+      toast(err?.response?.data?.error || t('toast.failedResponse'), 'error');
     } finally {
       setLoading(false);
     }
@@ -412,8 +412,8 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
       await api.delete(`/reviews/${review.id}`);
       toast(t('toast.reviewDeleted'), 'info');
       onResponseSaved?.();
-    } catch {
-      toast(t('toast.failedDelete'), 'error');
+    } catch (err) {
+      toast(err?.response?.data?.error || t('toast.failedDelete'), 'error');
       setConfirmDelete(false);
       setDeleting(false);
     }
@@ -427,9 +427,9 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
     setShowSentimentPicker(false);
     try {
       await api.put(`/reviews/${review.id}/sentiment`, { sentiment: newSentiment });
-    } catch {
+    } catch (err) {
       setSentiment(prev);
-      toast(t('review.sentimentFailed'), 'error');
+      toast(err?.response?.data?.error || t('review.sentimentFailed'), 'error');
     } finally {
       setSavingSentiment(false);
     }
