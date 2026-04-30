@@ -2625,8 +2625,8 @@ export default function Settings() {
       document.body.removeChild(a);
       setTimeout(() => URL.revokeObjectURL(url), 1000);
       toast(t('settings.exportDone'), 'success');
-    } catch {
-      toast(t('settings.exportFailed'), 'error');
+    } catch (err) {
+      toast(err?.response?.data?.error || t('settings.exportFailed'), 'error');
     } finally {
       setExportingData(false);
     }
@@ -2643,8 +2643,8 @@ export default function Settings() {
       }
       await reloadBusiness();
       toast(t('toast.profileSaved'), 'success');
-    } catch {
-      toast(t('toast.failedProfile'), 'error');
+    } catch (err) {
+      toast(err?.response?.data?.error || t('toast.failedProfile'), 'error');
     } finally {
       setSaving(false);
     }
@@ -2668,8 +2668,8 @@ export default function Settings() {
       await reloadBusiness();
       await reloadConnections();
       toast(t('toast.platformConnected', { platform: platformLabel(platform) }), 'success');
-    } catch {
-      toast(t('toast.failedConnect'), 'error');
+    } catch (err) {
+      toast(err?.response?.data?.error || t('toast.failedConnect'), 'error');
     }
   }
 
