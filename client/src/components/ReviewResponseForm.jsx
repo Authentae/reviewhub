@@ -109,6 +109,10 @@ export default function ReviewResponseForm({
           if (e.key === 'Escape' && onCancel) onCancel();
         }}
         rows={3}
+        // minLength matches the JS validation (canSubmit) so a programmatic
+        // .submit() (or future native submit shortcut) is also blocked, not
+        // just the disabled-button + Ctrl+Enter guards.
+        minLength={MIN_LEN}
         maxLength={MAX_LEN + 100} // soft hard-cap; server enforces real limit
         className="input text-sm resize-none overflow-hidden"
         style={{ minHeight: '88px' }}
