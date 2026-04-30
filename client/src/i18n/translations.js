@@ -172,6 +172,7 @@ const en = {
   'inbound.regenerateShort': 'Regenerate?',
   'requests.resendShort': 'Re-send?',
   'requests.deleteShort': 'Delete?',
+  'tags.removeAria': 'Remove tag {name}',
   'dashboard.exportNothingHint': 'No reviews match the current filters',
   'landing.heroOriginCredit': 'AI drafts · in your voice',
   'billing.renewsOn': 'Renews on {date}',

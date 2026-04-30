@@ -3,7 +3,10 @@
 // ariaLabel: optional explicit label when the visible text alone (just the tag
 // name) doesn't convey the action — e.g. "Filter by tag: VIP" when the chip
 // is a filter toggle, or "Remove filter: VIP" when already active.
+import { useI18n } from '../context/I18nContext';
+
 export default function TagBadge({ tag, onRemove, onClick, small, selected, ariaLabel }) {
+  const { t } = useI18n();
   const hex = tag.color || '#6b7280';
   const style = selected
     ? { backgroundColor: hex, borderColor: hex, color: '#fff' }
@@ -20,7 +23,7 @@ export default function TagBadge({ tag, onRemove, onClick, small, selected, aria
         <button
           type="button"
           onClick={onRemove}
-          aria-label={`Remove tag ${tag.name}`}
+          aria-label={t('tags.removeAria', 'Remove tag {name}', { name: tag.name })}
           className="ml-0.5 opacity-70 hover:opacity-100 leading-none"
         >×</button>
       </span>
