@@ -16,13 +16,18 @@ export default function VerifyEmail() {
   useNoIndex();
   const [params] = useSearchParams();
   const token = params.get('token') || '';
+  // Validate the token's shape client-side before showing the spinner.
+  // Server expects exactly 64 hex chars (auth.js:1051) — without this guard
+  // a malformed link briefly shows "Verifying…" before the inevitable error,
+  // confusing the user. Bad shape → render the "missing" state directly.
+  const tokenLooksValid = /^[a-f0-9]{64}$/.test(token);
   // 'pending' | 'success' | 'error' | 'missing'
-  const [status, setStatus] = useState(() => (token ? 'pending' : 'missing'));
+  const [status, setStatus] = useState(() => (tokenLooksValid ? 'pending' : 'missing'));
   const [error, setError] = useState('');
   const submitted = useRef(false);
 
   useEffect(() => {
-    if (!token || submitted.current) return;
+    if (!tokenLooksValid || submitted.current) return;
     submitted.current = true;
     api.post('/auth/verify-email', { token })
       .then(() => setStatus('success'))
