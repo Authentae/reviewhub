@@ -100,8 +100,11 @@ export default function BulkActionBar({ selectedIds, onSent, onDeleted, onTagged
       }
       setResponseText('');
       onSent?.();
-    } catch {
-      toast(t('bulk.failed'), 'error');
+    } catch (err) {
+      // Surface the server's error message if it provided one (rate-limited,
+      // plan-gated, validation, etc.) — was just showing a generic
+      // "bulk failed" toast that hid the actual reason.
+      toast(err?.response?.data?.error || t('bulk.failed'), 'error');
     } finally {
       setSending(false);
     }
@@ -117,8 +120,8 @@ export default function BulkActionBar({ selectedIds, onSent, onDeleted, onTagged
       });
       toast(t('bulk.statusApplied', { n: data.updated }), 'success');
       onTagged?.(); // reuse callback to trigger list refresh
-    } catch {
-      toast(t('bulk.statusFailed'), 'error');
+    } catch (err) {
+      toast(err?.response?.data?.error || t('bulk.statusFailed'), 'error');
     } finally {
       setSettingStatus(false);
     }
@@ -137,8 +140,8 @@ export default function BulkActionBar({ selectedIds, onSent, onDeleted, onTagged
       const n = isRemove ? data.untagged : data.tagged;
       toast(t(isRemove ? 'bulk.untagApplied' : 'bulk.tagApplied', { n }), 'success');
       onTagged?.();
-    } catch {
-      toast(t(isRemove ? 'bulk.untagFailed' : 'bulk.tagFailed'), 'error');
+    } catch (err) {
+      toast(err?.response?.data?.error || t(isRemove ? 'bulk.untagFailed' : 'bulk.tagFailed'), 'error');
     } finally {
       setTagging(false);
     }
@@ -153,8 +156,8 @@ export default function BulkActionBar({ selectedIds, onSent, onDeleted, onTagged
       toast(t('bulk.deleteSuccess', { n: data.deleted }), 'info');
       setConfirmDelete(false);
       onDeleted?.();
-    } catch {
-      toast(t('bulk.deleteFailed'), 'error');
+    } catch (err) {
+      toast(err?.response?.data?.error || t('bulk.deleteFailed'), 'error');
     } finally {
       setDeleting(false);
     }
