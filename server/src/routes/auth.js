@@ -108,7 +108,7 @@ const authAttemptLimiter = rateLimit({
   skip: () => process.env.NODE_ENV === 'test',
 });
 
-router.post('/register', authAttemptLimiter, async (req, res) => {
+router.post('/register', authAttemptLimiter, require('../middleware/honeypot').honeypot({ fakeBody: { ok: true } }), async (req, res) => {
   const rawEmail = req.body.email;
   const rawPassword = req.body.password;
   if ((rawEmail !== undefined && rawEmail !== null && typeof rawEmail !== 'string') ||
@@ -1135,7 +1135,7 @@ router.post('/resend-verification', emailSendLimiter, authMiddleware, (req, res)
 
 // Request a password-reset email. Always responds 200 with a generic message
 // regardless of whether the email exists, to avoid account-enumeration.
-router.post('/forgot-password', emailSendLimiter, (req, res) => {
+router.post('/forgot-password', emailSendLimiter, require('../middleware/honeypot').honeypot({ fakeBody: { success: true } }), (req, res) => {
   try {
     const rawEmail = req.body.email;
     // Non-string body field → same generic response to preserve the

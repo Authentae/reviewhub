@@ -7,6 +7,7 @@ import usePageTitle from '../hooks/usePageTitle';
 import { useI18n } from '../context/I18nContext';
 import AuthSideArt from '../components/AuthSideArt';
 import Logo from '../components/Logo';
+import HoneypotField from '../components/HoneypotField';
 
 export default function Register() {
   const { t } = useI18n();
@@ -27,6 +28,9 @@ export default function Register() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  // Honeypot — see HoneypotField.jsx + server/middleware/honeypot.js. Real
+  // users never touch this; bots that fill all fields trigger a fake-200.
+  const [honeypot, setHoneypot] = useState('');
   const emailRef = useRef(null);
 
   // Move focus to email field when an error occurs so keyboard users notice it
@@ -45,6 +49,10 @@ export default function Register() {
       const { data } = await api.post('/auth/register', {
         email: form.email,
         password: form.password,
+        // Honeypot field — sent verbatim. Real users always send '';
+        // bots that fill all inputs send a value, and the server's
+        // honeypot middleware fake-200s without creating a row.
+        website: honeypot,
         // Server records these verbatim into the audit trail. The `true`
         // booleans are more than UI state — they're the contractual assent.
         acceptedTerms: true,
@@ -92,6 +100,7 @@ export default function Register() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
+            <HoneypotField value={honeypot} onChange={setHoneypot} />
             <div>
               <label htmlFor="reg-email" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">{t('auth.emailAddress')}</label>
               <input

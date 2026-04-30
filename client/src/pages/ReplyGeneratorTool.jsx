@@ -6,6 +6,7 @@ import MarketingNav from '../components/MarketingNav';
 import Navbar from '../components/Navbar';
 import { isLoggedIn } from '../lib/auth';
 import { useI18n } from '../context/I18nContext';
+import HoneypotField from '../components/HoneypotField';
 
 // Free, no-signup AI review-reply generator.
 //
@@ -124,6 +125,11 @@ export default function ReplyGeneratorTool() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
+  // Honeypot — see HoneypotField + server middleware. Crucial here because
+  // this is the most expensive endpoint (calls Anthropic) and a bot drain
+  // would burn API credits fast. Empty for real users; bots that fill all
+  // inputs get a fake-200 with a generic stub draft and no API call.
+  const [honeypot, setHoneypot] = useState('');
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -135,7 +141,7 @@ export default function ReplyGeneratorTool() {
     }
     setLoading(true);
     try {
-      const { data } = await api.post('/public/review-reply-generator', form);
+      const { data } = await api.post('/public/review-reply-generator', { ...form, website: honeypot });
       setDraft(data.draft);
     } catch (err) {
       const status = err?.response?.status;
@@ -208,6 +214,7 @@ export default function ReplyGeneratorTool() {
         </div>
 
         <form onSubmit={handleSubmit} className="card p-6 space-y-4">
+          <HoneypotField value={honeypot} onChange={setHoneypot} />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="rg-reviewer" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">

@@ -6,6 +6,7 @@ import useNoIndex from '../hooks/useNoIndex';
 import { useI18n } from '../context/I18nContext';
 import AuthSideArt from '../components/AuthSideArt';
 import Logo from '../components/Logo';
+import HoneypotField from '../components/HoneypotField';
 
 // "Forgot password?" entry point. Collects an email, asks the server to send a
 // reset link, then shows a generic confirmation message (same regardless of
@@ -18,6 +19,9 @@ export default function ForgotPassword() {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
+  // Honeypot — see HoneypotField + server middleware. Empty for real users,
+  // bots that fill all inputs trip a fake-200 with no email actually sent.
+  const [honeypot, setHoneypot] = useState('');
   const emailRef = useRef(null);
 
   // Move focus to the field on mount so keyboard users can type immediately.
@@ -28,7 +32,7 @@ export default function ForgotPassword() {
     setLoading(true);
     setError('');
     try {
-      await api.post('/auth/forgot-password', { email });
+      await api.post('/auth/forgot-password', { email, website: honeypot });
       setSubmitted(true);
     } catch (err) {
       if (err.isRateLimited && err.retryAfterSeconds) {
@@ -85,6 +89,7 @@ export default function ForgotPassword() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
+              <HoneypotField value={honeypot} onChange={setHoneypot} />
               {error && (
                 <div role="alert" className="flex items-start gap-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/70 text-red-700 dark:text-red-300 text-sm px-4 py-3 rounded-xl">
                   <svg className="w-4 h-4 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>

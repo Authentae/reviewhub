@@ -236,7 +236,7 @@ const freeToolLimiter = rateLimit({
   skip: () => process.env.NODE_ENV === 'test',
 });
 
-router.post('/review-reply-generator', freeToolLimiter, async (req, res) => {
+router.post('/review-reply-generator', freeToolLimiter, require('../middleware/honeypot').honeypot({ fakeBody: { draft: 'Thanks for your review! We appreciate your feedback.', source: 'cached' } }), async (req, res) => {
   try {
     const { reviewer_name, rating, review_text, business_name, platform } = req.body || {};
 
