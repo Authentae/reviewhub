@@ -33,7 +33,13 @@ function parseKeywords(raw) {
   } else {
     return null;
   }
+  // Reject non-primitive elements before coercion. Without this, an array
+  // like ["valid", { evil: 1 }, "good"] would coerce {evil:1} to the
+  // literal "[object Object]" string and store it as a keyword. Numbers
+  // are accepted (they round-trip cleanly via String()); everything else
+  // (objects, arrays, functions) is dropped.
   const cleaned = arr
+    .filter(k => typeof k === 'string' || typeof k === 'number')
     .map(k => String(k).trim().toLowerCase().slice(0, 50))
     .filter(k => k.length > 0);
   return cleaned.length > 0 ? cleaned.slice(0, 10) : null;
