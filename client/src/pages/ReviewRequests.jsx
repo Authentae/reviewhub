@@ -138,8 +138,8 @@ export default function ReviewRequests() {
       await api.delete(`/review-requests/${id}`);
       toast(t('requests.deleted'), 'info');
       fetchData(page);
-    } catch {
-      toast(t('requests.deleteFailed'), 'error');
+    } catch (err) {
+      toast(err?.response?.data?.error || t('requests.deleteFailed'), 'error');
     }
   }
 

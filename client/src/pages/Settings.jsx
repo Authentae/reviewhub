@@ -366,8 +366,8 @@ function TagManager() {
       setConfirmDeleteId(null);
       invalidateTagCache();
       toast(t('tags.deleted'), 'info');
-    } catch {
-      toast(t('tags.deleteFailed'), 'error');
+    } catch (err) {
+      toast(err?.response?.data?.error || t('tags.deleteFailed'), 'error');
     }
   }
 
@@ -605,8 +605,8 @@ function WebhooksSection() {
     try {
       const { data } = await api.get(`/webhooks/${id}/deliveries`);
       setDeliveries(prev => ({ ...prev, [id]: data.deliveries || [] }));
-    } catch {
-      toast(t('webhooks.deliveriesError'), 'error');
+    } catch (err) {
+      toast(err?.response?.data?.error || t('webhooks.deliveriesError'), 'error');
     } finally {
       setLoadingDeliveries(prev => ({ ...prev, [id]: false }));
     }
@@ -867,8 +867,8 @@ function InboundForwardingSection() {
       const { data } = await api.post('/inbound/regenerate');
       setAddress(data.address);
       toast(t('inbound.regenerated', 'New forwarding address generated.'), 'success');
-    } catch {
-      toast(t('inbound.regenerateFailed', 'Could not regenerate. Try again.'), 'error');
+    } catch (err) {
+      toast(err?.response?.data?.error || t('inbound.regenerateFailed', 'Could not regenerate. Try again.'), 'error');
     }
   }
 
@@ -1105,8 +1105,8 @@ function WidgetSection({ business, onUpdate }) {
       await api.put(`/businesses/${business.id}`, { widget_enabled: !enabled });
       onUpdate({ widget_enabled: !enabled ? 1 : 0 });
       toast(enabled ? t('widget.disabled') : t('widget.enabled'), 'success');
-    } catch {
-      toast(t('widget.saveFailed'), 'error');
+    } catch (err) {
+      toast(err?.response?.data?.error || t('widget.saveFailed'), 'error');
     } finally {
       setSaving(false);
     }

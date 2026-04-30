@@ -514,8 +514,8 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
       setNote(noteText);
       setEditingNote(false);
       toast(noteText.trim() ? t('toast.noteSaved') : t('toast.noteCleared'), 'success');
-    } catch {
-      toast(t('toast.failedNote'), 'error');
+    } catch (err) {
+      toast(err?.response?.data?.error || t('toast.failedNote'), 'error');
     } finally {
       setSavingNote(false);
     }
