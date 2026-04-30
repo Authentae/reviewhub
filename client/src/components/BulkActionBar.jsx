@@ -195,12 +195,14 @@ export default function BulkActionBar({ selectedIds, onSent, onDeleted, onTagged
                 disabled={settingStatus}
                 aria-expanded={showStatusPicker}
                 aria-haspopup="menu"
+                aria-controls="bulk-status-menu"
                 className="text-xs text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 disabled:opacity-50 flex items-center gap-1"
               >
                 <span aria-hidden="true">◎</span> {settingStatus ? '…' : t('bulk.setStatus')}
               </button>
               {showStatusPicker && (
                 <div
+                  id="bulk-status-menu"
                   role="menu"
                   className="absolute right-0 bottom-6 z-40 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg py-1"
                 >
@@ -227,6 +229,7 @@ export default function BulkActionBar({ selectedIds, onSent, onDeleted, onTagged
                 disabled={tagging}
                 aria-expanded={showTagPicker}
                 aria-haspopup="menu"
+                aria-controls="bulk-tag-menu"
                 aria-label={t('bulk.tagPickerLabel')}
                 className="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 disabled:opacity-50 flex items-center gap-1"
               >
@@ -234,6 +237,7 @@ export default function BulkActionBar({ selectedIds, onSent, onDeleted, onTagged
               </button>
               {showTagPicker && (
                 <div
+                  id="bulk-tag-menu"
                   role="dialog"
                   aria-label={t('bulk.tagPickerLabel')}
                   className="absolute right-0 bottom-6 z-40 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg overflow-hidden"
@@ -326,12 +330,14 @@ export default function BulkActionBar({ selectedIds, onSent, onDeleted, onTagged
                   onClick={() => setShowTemplates(v => !v)}
                   aria-expanded={showTemplates}
                   aria-haspopup="menu"
+                  aria-controls="bulk-templates-menu"
                   className="text-xs text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1"
                 >
                   <span aria-hidden="true">📋</span> {t('bulk.insertTemplate')} ({templates.length})
                 </button>
                 {showTemplates && (
                   <div
+                    id="bulk-templates-menu"
                     role="menu"
                     aria-label={t('bulk.insertTemplate')}
                     className="absolute left-0 bottom-6 z-40 w-72 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg py-1 max-h-48 overflow-y-auto"
