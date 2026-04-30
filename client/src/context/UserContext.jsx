@@ -43,8 +43,14 @@ export function UserProvider({ children }) {
         sessionExpires: data.session_expires_at || null,
         loading: false,
       });
-    } catch {
-      // Silent — api.js interceptor handles 401 globally.
+    } catch (err) {
+      // 401 is handled globally by api.js (redirect to /login). Network /
+      // 5xx errors here would leave the app with user: null but no signal
+      // about why — log to Sentry if available so silent dashboard-blank
+      // states are debuggable.
+      if (typeof window !== 'undefined' && window.Sentry?.captureException && err?.response?.status !== 401) {
+        try { window.Sentry.captureException(err, { tags: { source: 'UserContext.fetchMe' } }); } catch { /* best-effort */ }
+      }
       setState((s) => ({ ...s, loading: false }));
     }
   }, []);
