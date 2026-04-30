@@ -14,12 +14,18 @@ export default function Login() {
   const location = useLocation();
   // If PrivateRoute redirected us here, it stashed the intended destination.
   // Only accept same-origin paths (open-redirect defence) — anything starting
-  // with "/" and not "//" is a safe path.
-  const intended = typeof location.state?.from === 'string'
-    && location.state.from.startsWith('/')
-    && !location.state.from.startsWith('//')
-    ? location.state.from
-    : '/dashboard';
+  // with "/" and not "//" is a safe path. Two sources, in priority order:
+  //   1. location.state.from — set by PrivateRoute on a React Router redirect
+  //      (initial visit to a protected page while logged out).
+  //   2. ?next= URL param — set by api.js when a 401 mid-session does a
+  //      hard window.location.href to /login (state can't survive that).
+  // Either way, validate the path is local before honoring it.
+  function safePath(p) {
+    return typeof p === 'string' && p.startsWith('/') && !p.startsWith('//') ? p : null;
+  }
+  const fromState = safePath(location.state?.from);
+  const fromQuery = safePath(new URLSearchParams(location.search).get('next'));
+  const intended = fromState || fromQuery || '/dashboard';
   const [form, setForm] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   // Surface "MFA session expired" when the user landed back on /login from

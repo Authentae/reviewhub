@@ -67,10 +67,17 @@ api.interceptors.response.use(
     const url = err.config?.url || '';
     if (err.response?.status === 401 && shouldRedirectOn401(url)) {
       // Session expired (or cookie missing). Clear any legacy localStorage
-      // token and bounce to /login. On successful re-auth the user lands
-      // back via PrivateRoute's `from` state preservation.
+      // token and bounce to /login. Preserve the current path as ?next=
+      // so a successful re-auth lands the user back exactly where their
+      // session timed out, not on /dashboard. PrivateRoute's `from`
+      // state preservation only fires when React Router triggers the
+      // redirect — when api.js does a hard window.location.href no
+      // state is passed, so we encode it in the URL instead.
       clearToken();
-      window.location.href = '/login';
+      const here = window.location.pathname + window.location.search;
+      // Don't loop: never set next=/login (would cycle).
+      const next = here && !here.startsWith('/login') ? `?next=${encodeURIComponent(here)}` : '';
+      window.location.href = `/login${next}`;
     }
     if (err.response?.status === 429) {
       err.isRateLimited = true;
