@@ -19,9 +19,14 @@ async function deliver(webhook, event, payload) {
   const sig = sign(webhook.secret, body);
   let status = null;
   let responseSnippet = null;
+  // Hoisted out of try so the catch + finally can both see it. The timer
+  // was previously cleared only on the success path — if fetch() rejected
+  // (network error, DNS failure, abort), the setTimeout handle leaked,
+  // accumulating stray timers in the Node timer heap on busy webhook
+  // failure modes.
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
   try {
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
     const res = await fetch(webhook.url, {
       method: 'POST',
       headers: {
@@ -33,7 +38,6 @@ async function deliver(webhook, event, payload) {
       body,
       signal: ctrl.signal,
     });
-    clearTimeout(timer);
     status = res.status;
     // Consume response body to free connection — but don't store it.
     // Storing response bodies risks logging customer review content if the
@@ -42,6 +46,8 @@ async function deliver(webhook, event, payload) {
   } catch (err) {
     status = 0; // network error / timeout
     responseSnippet = err.name === 'AbortError' ? 'Timeout' : 'Network error';
+  } finally {
+    clearTimeout(timer);
   }
   // Best-effort update of delivery metadata and delivery log.
   try {
