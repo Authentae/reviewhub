@@ -40,11 +40,18 @@ export default function EmailVerifyBanner() {
   if (verified !== false || dismissed) return null;
 
   return (
+    // .rh-banner.warning lives in dashboard-system.css and renders as a
+    // soft ochre-on-paper tint that flows seamlessly into the Navbar (which
+    // uses the same --rh-paper token). Earlier this used raw Tailwind
+    // `bg-amber-50 dark:bg-amber-900/30` which clashed with the editorial
+    // navbar — created a visible "two-tone" stripe across the top of every
+    // page for unverified users.
     <div
       role="status"
-      className="bg-amber-50 dark:bg-amber-900/30 border-b border-amber-200 dark:border-amber-700 px-4 py-2 flex items-center justify-between gap-3 text-sm"
+      className="rh-design rh-app rh-banner warning"
+      style={{ justifyContent: 'space-between' }}
     >
-      <span className="text-amber-800 dark:text-amber-200 flex items-center gap-2 min-w-0">
+      <span className="flex items-center gap-2 min-w-0">
         <span aria-hidden="true">✉️</span>
         <span className="truncate">{t('verify.bannerText')}</span>
       </span>
@@ -54,7 +61,8 @@ export default function EmailVerifyBanner() {
           onClick={handleResend}
           disabled={sending}
           aria-busy={sending}
-          className="text-xs font-semibold text-amber-700 dark:text-amber-300 underline hover:text-amber-900 dark:hover:text-amber-100 disabled:opacity-50"
+          className="text-xs font-semibold underline disabled:opacity-50"
+          style={{ color: 'var(--rh-ochre-deep)' }}
         >
           {sending ? t('verify.resending') : t('verify.resendAction')}
         </button>
@@ -62,7 +70,8 @@ export default function EmailVerifyBanner() {
           type="button"
           onClick={handleDismiss}
           aria-label={t('common.dismiss')}
-          className="text-amber-600 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-200 text-xs"
+          className="text-xs"
+          style={{ color: 'var(--rh-ink-3)' }}
         >
           ✕
         </button>
