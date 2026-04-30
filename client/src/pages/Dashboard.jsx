@@ -707,13 +707,18 @@ export default function Dashboard() {
                 );
               })}
             </div>
+            {/* Date filters — drop the redundant aria-label since the
+                <label> + sr-only span already associates the visible-but-
+                screen-reader-only text with the input. Having BOTH made
+                screen readers announce the label twice (or worse, get
+                confused which one to use). WCAG 2.1 §1.3.1 — pick one
+                labeling pattern per control. */}
             <label className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
               <span className="sr-only">{t('dashboard.filter.dateFrom')}</span>
               <input
                 type="date"
                 value={dateFrom}
                 onChange={e => { setDateFrom(e.target.value); setPage(1); }}
-                aria-label={t('dashboard.filter.dateFrom')}
                 max={dateTo || undefined}
                 className="input text-sm w-36"
               />
@@ -725,7 +730,6 @@ export default function Dashboard() {
                 type="date"
                 value={dateTo}
                 onChange={e => { setDateTo(e.target.value); setPage(1); }}
-                aria-label={t('dashboard.filter.dateTo')}
                 min={dateFrom || undefined}
                 className="input text-sm w-36"
               />
