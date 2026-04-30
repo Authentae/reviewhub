@@ -1478,7 +1478,12 @@ function buildExportWhere(businessId, query) {
   if (query.pinned === 'true')  { where += ' AND pinned = 1'; }
   if (query.flagged === 'true') { where += ' AND flagged = 1'; }
   if (query.status && VALID_REVIEW_STATUSES.includes(query.status)) { where += ' AND status = ?'; params.push(query.status); }
-  const tagIdExport = parseInt(query.tag, 10);
+  // Accept BOTH `tag_id` (canonical, matches the list endpoint at line 516)
+  // AND legacy `tag` (the export endpoint historically used this shorter
+  // name; client still sends it). New callers should use tag_id; old
+  // bookmarks / curl scripts using tag still work.
+  const tagRaw = query.tag_id != null ? query.tag_id : query.tag;
+  const tagIdExport = parseInt(tagRaw, 10);
   if (Number.isFinite(tagIdExport) && tagIdExport > 0) {
     where += ' AND id IN (SELECT review_id FROM review_tags WHERE tag_id = ?)';
     params.push(tagIdExport);

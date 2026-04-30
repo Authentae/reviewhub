@@ -285,7 +285,10 @@ export default function Dashboard() {
       if (statusFilter) params.set('status', statusFilter);
       if (dateFrom) params.set('date_from', dateFrom);
       if (dateTo) params.set('date_to', dateTo);
-      if (tagFilter) params.set('tag', tagFilter);
+      // Use canonical tag_id name (matches the list endpoint). Server's
+      // buildExportWhere accepts both for back-compat with old curl scripts
+      // and bookmarks, but new client code should send the canonical form.
+      if (tagFilter) params.set('tag_id', tagFilter);
       // `credentials: 'include'` so cookie-only clients (post-migration)
       // auth correctly. Bearer header is still sent for legacy localStorage
       // tokens. Sending both is fine — server prefers the cookie.
