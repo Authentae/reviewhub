@@ -745,7 +745,7 @@ function Footer() {
           </div>
         </div>
         <div className="copy">
-          <div>© 2026 ReviewHub</div>
+          <div>© 2026 ReviewHub · <span style={{ opacity: 0.75 }}>🇹🇭 {t('landing.footerOriginBadge', 'Made in Thailand · Used everywhere')}</span></div>
           <div className="status rh-mono">{t('landing.footerStatus', 'all systems nominal')}</div>
         </div>
       </div>
@@ -873,7 +873,7 @@ function GimmickLayer() {
 // ── Page wrapper: scroll-reveal + style block ─────────────────────────────
 export default function Landing() {
   const { t } = useI18n();
-  usePageTitle(t('page.landing', 'The review dashboard built for Thai businesses'));
+  usePageTitle(t('page.landing', 'AI review replies in 10 languages'));
 
   useEffect(() => {
     if (typeof IntersectionObserver === 'undefined') return;
