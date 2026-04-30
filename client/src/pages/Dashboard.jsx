@@ -579,7 +579,7 @@ export default function Dashboard() {
                       key={p}
                       onClick={() => { setPlatform(isActive ? '' : p); setPage(1); }}
                       aria-pressed={isActive}
-                      aria-label={`${platformLabel(p)}: ${count} reviews`}
+                      aria-label={t('dashboard.platformChipAria', '{platform}: {n} reviews', { platform: platformLabel(p), n: count })}
                       className="rh-filter-chip"
                     >
                       <span aria-hidden="true">{icons[p] || '⚪'}</span>
