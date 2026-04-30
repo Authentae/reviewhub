@@ -59,7 +59,10 @@ export default function Register() {
         ageConfirmed: true,
       });
       setToken(data.token);
-      navigate('/dashboard');
+      // replace: true so clicking back doesn't return to /register
+      // (PublicOnlyRoute would bounce them anyway, but adding the flag
+      // matches Login's pattern and avoids the redirect flash).
+      navigate('/dashboard', { replace: true });
     } catch (err) {
       if (err.isRateLimited && err.retryAfterSeconds) {
         setError(t('common.rateLimitedWait', { seconds: err.retryAfterSeconds }));
