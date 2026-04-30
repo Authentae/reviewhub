@@ -285,7 +285,12 @@ export default function Analytics() {
     }
     return {
       totalDelta: pct(cur.total, pri.total),
-      ratingDelta: pri.avg_rating ? +(cur.avg_rating - pri.avg_rating).toFixed(1) : null,
+      // Both sides must be present — `cur.avg_rating` is null when this
+       // period has zero reviews; subtracting null produces NaN which then
+       // renders as "NaN" in the DeltaBadge.
+      ratingDelta: (pri.avg_rating != null && cur.avg_rating != null)
+        ? +(cur.avg_rating - pri.avg_rating).toFixed(1)
+        : null,
       posRateDelta: pri.positive && pri.total
         ? pct(cur.total ? cur.positive / cur.total : 0, pri.positive / pri.total)
         : null,
