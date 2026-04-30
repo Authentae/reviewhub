@@ -467,8 +467,9 @@ router.get('/', readLimiter, (req, res) => {
 
     const { platform, sentiment, responded, search, pinned, flagged, date_from, date_to, status } = req.query;
     const sort = ORDER_MAP[req.query.sort] ? req.query.sort : 'newest';
-    const page = Math.max(1, parseInt(req.query.page) || 1);
-    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 20));
+    // Radix 10 explicit — see reviewRequests.js note about hex coercion.
+    const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit, 10) || 20));
     const offset = (page - 1) * limit;
 
     let where = 'WHERE business_id = ?';

@@ -91,8 +91,10 @@ router.get('/', readLimiter, (req, res) => {
     const business = getUserBusiness(req.user.id);
     if (!business) return res.json({ requests: [], stats: null, total: 0 });
 
-    const page = Math.max(1, parseInt(req.query.page) || 1);
-    const limit = Math.min(50, Math.max(1, parseInt(req.query.limit) || 20));
+    // Radix 10 explicit so a query like ?page=0x10 doesn't get hex-parsed
+    // to 16 (parseInt without radix infers from prefix).
+    const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+    const limit = Math.min(50, Math.max(1, parseInt(req.query.limit, 10) || 20));
     const offset = (page - 1) * limit;
 
     const requests = all(
