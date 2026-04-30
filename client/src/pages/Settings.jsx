@@ -2242,7 +2242,7 @@ function ApiKeysSection({ plan }) {
                   <button type="button" onClick={handleCopy} className="text-xs font-medium text-green-700 dark:text-green-400 hover:underline shrink-0">
                     {copied ? t('settings.apiKeyCopied') : t('settings.apiKeyCopy')}
                   </button>
-                  <button type="button" onClick={() => setNewKey(null)} aria-label="Dismiss" className="text-gray-400 hover:text-gray-600 text-base leading-none">×</button>
+                  <button type="button" onClick={() => setNewKey(null)} aria-label={t('common.dismiss')} className="text-gray-400 hover:text-gray-600 text-base leading-none">×</button>
                 </div>
               </div>
             )}
