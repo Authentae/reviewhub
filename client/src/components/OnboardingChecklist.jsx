@@ -162,6 +162,7 @@ export default function OnboardingChecklist({
                       type="button"
                       onClick={saveBusinessName}
                       disabled={saving}
+                      aria-busy={saving}
                       className="btn-primary text-xs disabled:opacity-60"
                     >
                       {saving ? t('onboarding.saving') : t('common.save')}
@@ -205,6 +206,7 @@ export default function OnboardingChecklist({
                   type="button"
                   onClick={loadDemo}
                   disabled={seeding}
+                  aria-busy={seeding}
                   className="btn-secondary text-xs disabled:opacity-60"
                 >
                   {seeding ? t('onboarding.loading') : t('onboarding.tryDemo')}
