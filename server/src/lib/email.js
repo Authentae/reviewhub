@@ -39,7 +39,7 @@ function getTransporter() {
     // still surfacing port-block issues quickly.
     _transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT || '587'),
+      port: parseInt(process.env.SMTP_PORT || '587', 10),
       secure: process.env.SMTP_SECURE === 'true',
       auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
       connectionTimeout: 8_000,
@@ -65,7 +65,7 @@ function _portBlockHint(err) {
     msg.includes('connect etimedout') ||
     msg.includes('connect econnrefused');
   if (!isTimeoutOrRefused) return '';
-  const port = parseInt(process.env.SMTP_PORT || '587');
+  const port = parseInt(process.env.SMTP_PORT || '587', 10);
   const host = String(process.env.SMTP_HOST || '');
   if (port === 587 && /resend\.com$/.test(host)) {
     return ' — Railway/Fly/many PaaS providers block outbound :587 by default. Switch SMTP_PORT to 2587 (Resend\'s alternate) and redeploy.';
