@@ -115,7 +115,13 @@ class DataSubjectRights {
       // 4. Schedule backup deletion
       await this.scheduleBackupDeletion(userId);
 
-      // 5. Store minimal erasure record for legal compliance
+      // 5. Store minimal erasure record for legal compliance.
+      // completed_at is the ACTUAL completion timestamp (now) — was
+      // previously inserting `erasureLog.requested_at` which is set at
+      // the top of this method, before any data was erased. The column
+      // is named completed_at, so it must record completion time, not
+      // request time, otherwise the audit trail is wrong for any
+      // downstream "how long did the erasure take?" report.
       const erasureId = tx.insert(`
         INSERT INTO data_erasures (user_id, categories_erased,
                                    retention_justifications, completed_at)
@@ -124,7 +130,7 @@ class DataSubjectRights {
         userId,
         JSON.stringify(erasureLog.data_categories),
         JSON.stringify(erasureLog.retention_justifications),
-        erasureLog.requested_at
+        new Date().toISOString()
       ]);
 
       erasureLog.erasure_id = erasureId;
