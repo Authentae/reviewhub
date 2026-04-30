@@ -31,6 +31,27 @@ export function setToken(t) {
 export function clearToken() {
   localStorage.removeItem(LEGACY_TOKEN_KEY);
   localStorage.removeItem(MARKER_KEY);
+  // Clear per-user data so a different user on the same device can't read
+  // the previous user's drafts / acks via DevTools. Preferences like theme,
+  // language, currency are intentionally NOT cleared — those are device-
+  // level UX choices, not user data.
+  //
+  // `try` because some sandboxed contexts (Safari private mode) throw on
+  // localStorage writes. Logout must not crash if storage is unavailable.
+  try {
+    // Per-user data — must NOT survive a logout on a shared device:
+    localStorage.removeItem('reviewhub_inprogress_drafts');     // ReviewCard draft auto-save
+    localStorage.removeItem('reviewhub_ai_disclaimer_acked');   // AI-tool one-time disclaimer ack
+    localStorage.removeItem('reviewhub_notif_prefs');           // Settings notification toggles
+    localStorage.removeItem('reviewhub_value_receipt_dismissed_month'); // ValueReceipt dismissal
+    sessionStorage.removeItem('reviewhub_verify_banner_dismissed');  // verify-email banner
+    sessionStorage.removeItem('reviewhub_sub_status_dismissed');     // past-due / cancelled banner
+    // Intentionally KEPT (device-level UX, not user data):
+    //   reviewhub_theme       — light/dark choice
+    //   reviewhub_lang        — UI language
+    //   reviewhub_currency    — pricing display preference
+    //   rh_consent_v1         — cookie consent (legal record per device)
+  } catch { /* storage unavailable — non-fatal */ }
 }
 
 // Synchronous check used by route guards.
