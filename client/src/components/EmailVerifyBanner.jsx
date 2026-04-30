@@ -48,7 +48,7 @@ export default function EmailVerifyBanner() {
     // page for unverified users.
     <div
       role="status"
-      className="rh-design rh-app rh-banner warning"
+      className="rh-banner warning"
       style={{ justifyContent: 'space-between' }}
     >
       <span className="flex items-center gap-2 min-w-0">
