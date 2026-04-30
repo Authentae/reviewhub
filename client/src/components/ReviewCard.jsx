@@ -578,9 +578,9 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
     try {
       const { data } = await api.put(`/reviews/${review.id}/tags`, { tag_ids: newTags.map(t => t.id) });
       setTags(data.tags);
-    } catch {
+    } catch (err) {
       setTags(tags); // rollback
-      toast(t('tags.saveFailed'), 'error');
+      toast(err?.response?.data?.error || t('tags.saveFailed'), 'error');
     } finally {
       setSavingTags(false);
     }
