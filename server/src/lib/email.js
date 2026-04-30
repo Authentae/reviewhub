@@ -131,14 +131,14 @@ async function sendNewReviewNotification(userEmail, review, businessName) {
   const subject = `New ${stripHeaderChars(platformLabel(review.platform))} review for ${stripHeaderChars(businessName)} — ${stars}`;
   const html = `
     <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-      <h2 style="color:#2563eb">New Review on ${safePlatform}</h2>
+      <h2 style="color:#1e4d5e">New Review on ${safePlatform}</h2>
       <div style="background:#f9fafb;border-radius:8px;padding:16px;margin:16px 0">
         <p><strong>${safeName}</strong> left a <strong>${review.rating}-star</strong> review for <strong>${safeBizName}</strong></p>
         <p style="color:#374151">&ldquo;${safeText}&rdquo;</p>
         <p style="font-size:12px;color:#6b7280">Sentiment: ${safeSentiment} · ${new Date().toLocaleDateString()}</p>
       </div>
       <a href="${safeClientUrl}/dashboard"
-         style="background:#2563eb;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block">
+         style="background:#1e4d5e;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block">
         View &amp; Respond
       </a>
       <p style="font-size:11px;color:#9ca3af;margin-top:24px">ReviewHub · Manage notifications in Settings</p>
@@ -186,10 +186,22 @@ async function sendVerificationEmail(userEmail, verifyUrl) {
       <tr><td style="padding-bottom:24px;">
         <table cellpadding="0" cellspacing="0" border="0">
           <tr>
-            <td style="width:36px;vertical-align:middle;" bgcolor="#1e4d5e">
-              <div style="width:36px;height:36px;border-radius:8px;background-color:#1e4d5e;text-align:center;line-height:36px;">
-                <span style="color:#fbf8f1;font-size:18px;font-weight:700;">★</span>
-              </div>
+            <td style="width:36px;vertical-align:middle;">
+              <!-- Editorial brand mark — sparkle on teal-deep, matches the
+                   website logo (client/src/components/Logo.jsx + favicon.svg).
+                   Inline SVG renders in Gmail/Apple Mail/Outlook web/iOS Mail.
+                   Outlook desktop strips SVG but the bgcolor tile underneath
+                   stays — still recognisably on-brand even when the sparkle
+                   doesn't render. The earlier ★ glyph was the retired Star+Spark
+                   logo and clashed with the website's editorial sparkle mark. -->
+              <table cellpadding="0" cellspacing="0" border="0" style="border-radius:8px;background-color:#1e4d5e;" bgcolor="#1e4d5e">
+                <tr><td align="center" valign="middle" width="36" height="36" style="width:36px;height:36px;line-height:36px;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 64 64" style="vertical-align:middle;display:inline-block;" aria-label="ReviewHub">
+                    <path d="M32 10c1.5 10 4 12.5 14 14-10 1.5-12.5 4-14 14-1.5-10-4-12.5-14-14 10-1.5 12.5-4 14-14z" fill="#fbf8f1"/>
+                    <path d="M48 40c.7 4 1.6 4.9 5.5 5.5-3.9.6-4.8 1.5-5.5 5.5-.6-4-1.5-4.9-5.5-5.5 4-.6 4.9-1.5 5.5-5.5z" fill="#fbf8f1" opacity="0.95"/>
+                  </svg>
+                </td></tr>
+              </table>
             </td>
             <td style="padding-left:10px;vertical-align:middle;font-size:17px;font-weight:700;color:#1d242c;letter-spacing:-0.01em;">ReviewHub</td>
           </tr>
@@ -215,7 +227,7 @@ async function sendVerificationEmail(userEmail, verifyUrl) {
       <tr><td style="padding-bottom:24px;font-size:13px;color:#7a8189;line-height:1.55;">
         Or paste this into your browser:<br><span style="color:#1e4d5e;word-break:break-all;">${safeUrl}</span>
       </td></tr>
-      <tr><td style="border-top:1px solid #e2e8f0;padding-top:20px;padding-bottom:32px;font-size:12px;color:#94a3b8;line-height:1.55;">
+      <tr><td style="border-top:1px solid #e6dfce;padding-top:20px;padding-bottom:32px;font-size:12px;color:#7a8189;line-height:1.55;">
         Didn't sign up? You can safely ignore this email — no account will be created.
       </td></tr>
     </table>
@@ -251,11 +263,11 @@ async function sendPasswordResetEmail(userEmail, resetUrl) {
   const safeUrl = escapeHtml(resetUrl);
   const html = `
     <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-      <h2 style="color:#2563eb">Password reset</h2>
+      <h2 style="color:#1e4d5e">Password reset</h2>
       <p>We received a request to reset the password for your ReviewHub account. This link is valid for 1 hour.</p>
       <p style="margin:24px 0">
         <a href="${safeUrl}"
-           style="background:#2563eb;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block">
+           style="background:#1e4d5e;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block">
           Reset password
         </a>
       </p>
@@ -319,14 +331,14 @@ async function sendWeeklyDigest(userEmail, stats) {
     const posPct = Math.round((positive / total) * 100);
     const negPct = Math.round((negative / total) * 100);
     const neuPct = Math.max(0, 100 - posPct - negPct);
-    return `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f1f5f9;border-radius:8px;overflow:hidden;">
+    return `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f4eee0;border-radius:8px;overflow:hidden;">
       <tr>
-        ${posPct > 0 ? `<td width="${posPct}%" height="6" style="background:#22c55e;font-size:0;line-height:0;">&nbsp;</td>` : ''}
-        ${neuPct > 0 ? `<td width="${neuPct}%" height="6" style="background:#f59e0b;font-size:0;line-height:0;">&nbsp;</td>` : ''}
-        ${negPct > 0 ? `<td width="${negPct}%" height="6" style="background:#dc2626;font-size:0;line-height:0;">&nbsp;</td>` : ''}
+        ${posPct > 0 ? `<td width="${posPct}%" height="6" style="background:#7a9b78;font-size:0;line-height:0;">&nbsp;</td>` : ''}
+        ${neuPct > 0 ? `<td width="${neuPct}%" height="6" style="background:#c48a2c;font-size:0;line-height:0;">&nbsp;</td>` : ''}
+        ${negPct > 0 ? `<td width="${negPct}%" height="6" style="background:#b85450;font-size:0;line-height:0;">&nbsp;</td>` : ''}
       </tr>
     </table>
-    <div style="font-size:11px;color:#94a3b8;margin-top:6px;">${positive} positive · ${total - positive - negative} neutral · ${negative} critical</div>`;
+    <div style="font-size:11px;color:#7a8189;margin-top:6px;">${positive} positive · ${total - positive - negative} neutral · ${negative} critical</div>`;
   })() : '';
 
   // Critical callout — most negative unresponded review, if one exists. Uses
@@ -334,17 +346,17 @@ async function sendWeeklyDigest(userEmail, stats) {
   const criticalReview = recentReviews.find(r => r.rating <= 2 && !r.response_text);
   const criticalBlock = criticalReview ? `
     <tr><td style="padding:0 28px 16px;">
-      <div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">⚠ Needs a reply</div>
+      <div style="font-size:11px;font-weight:700;color:#7a8189;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">⚠ Needs a reply</div>
       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;">
         <tr><td style="padding:14px 16px;">
           <table cellpadding="0" cellspacing="0" border="0" width="100%">
             <tr>
-              <td style="font-size:13px;color:#991b1b;font-weight:700;">${escapeHtml(criticalReview.reviewer_name || 'Anonymous')} · ${'★'.repeat(criticalReview.rating)}${'☆'.repeat(5 - criticalReview.rating)}</td>
-              <td align="right" style="font-size:11px;color:#991b1b;">${escapeHtml(criticalReview.platform.charAt(0).toUpperCase() + criticalReview.platform.slice(1))}</td>
+              <td style="font-size:13px;color:#a06d1c;font-weight:700;">${escapeHtml(criticalReview.reviewer_name || 'Anonymous')} · ${'★'.repeat(criticalReview.rating)}${'☆'.repeat(5 - criticalReview.rating)}</td>
+              <td align="right" style="font-size:11px;color:#a06d1c;">${escapeHtml(criticalReview.platform.charAt(0).toUpperCase() + criticalReview.platform.slice(1))}</td>
             </tr>
           </table>
           <div style="font-size:13px;color:#7f1d1d;line-height:1.5;margin-top:6px;">"${escapeHtml((criticalReview.review_text || '').slice(0, 160))}${(criticalReview.review_text || '').length > 160 ? '…' : ''}"</div>
-          <a href="${safeUrl}/dashboard?responded=no" style="display:inline-block;margin-top:12px;background:#dc2626;color:#fff;font-size:12px;font-weight:700;text-decoration:none;padding:8px 14px;border-radius:7px;">✨ Draft reply</a>
+          <a href="${safeUrl}/dashboard?responded=no" style="display:inline-block;margin-top:12px;background:#b85450;color:#fff;font-size:12px;font-weight:700;text-decoration:none;padding:8px 14px;border-radius:7px;">✨ Draft reply</a>
         </td></tr>
       </table>
     </td></tr>` : '';
@@ -353,7 +365,7 @@ async function sendWeeklyDigest(userEmail, stats) {
   const highlightReview = recentReviews.find(r => r.rating >= 5);
   const highlightBlock = highlightReview ? `
     <tr><td style="padding:0 28px 24px;">
-      <div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">✨ Highlight of the week</div>
+      <div style="font-size:11px;font-weight:700;color:#7a8189;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">✨ Highlight of the week</div>
       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;">
         <tr><td style="padding:14px 16px;font-size:13px;color:#166534;line-height:1.5;">
           <b>${escapeHtml(highlightReview.reviewer_name || 'Anonymous')} · ★★★★★</b> — <i>"${escapeHtml((highlightReview.review_text || '').slice(0, 140))}${(highlightReview.review_text || '').length > 140 ? '…' : ''}"</i>
@@ -368,10 +380,10 @@ async function sendWeeklyDigest(userEmail, stats) {
   const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const weekLabel = `Week of ${monthNames[weekStart.getMonth()]} ${weekStart.getDate()} – ${now.getDate()}`;
 
-  const html = `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f8fafc;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  const html = `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f4eee0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
   <tr><td align="center" style="padding:24px 16px;">
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;background:#fff;border-radius:12px;overflow:hidden;">
-      <tr><td style="background:linear-gradient(135deg,#1e3a8a,#4338ca);padding:28px 28px 24px;">
+      <tr><td style="background-color:#1e4d5e;padding:28px 28px 24px;">
         <table cellpadding="0" cellspacing="0" border="0" width="100%">
           <tr>
             <td style="font-size:12px;color:rgba(255,255,255,0.7);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;">${weekLabel}</td>
@@ -383,9 +395,9 @@ async function sendWeeklyDigest(userEmail, stats) {
       <tr><td style="padding:24px 28px 8px;">
         <table width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr>
-            <td width="33%"><div style="font-size:28px;font-weight:800;color:#0f172a;letter-spacing:-0.02em;">${total}</div><div style="font-size:12px;color:#64748b;margin-top:2px;">new reviews</div></td>
-            <td width="33%"><div style="font-size:28px;font-weight:800;color:#f59e0b;letter-spacing:-0.02em;">${avg_rating != null ? avg_rating : '—'} ★</div><div style="font-size:12px;color:#64748b;margin-top:2px;">avg rating</div></td>
-            <td width="33%"><div style="font-size:28px;font-weight:800;color:#dc2626;letter-spacing:-0.02em;">${unresponded}</div><div style="font-size:12px;color:#64748b;margin-top:2px;">need a reply</div></td>
+            <td width="33%"><div style="font-size:28px;font-weight:800;color:#1d242c;letter-spacing:-0.02em;">${total}</div><div style="font-size:12px;color:#7a8189;margin-top:2px;">new reviews</div></td>
+            <td width="33%"><div style="font-size:28px;font-weight:800;color:#c48a2c;letter-spacing:-0.02em;">${avg_rating != null ? avg_rating : '—'} ★</div><div style="font-size:12px;color:#7a8189;margin-top:2px;">avg rating</div></td>
+            <td width="33%"><div style="font-size:28px;font-weight:800;color:#b85450;letter-spacing:-0.02em;">${unresponded}</div><div style="font-size:12px;color:#7a8189;margin-top:2px;">need a reply</div></td>
           </tr>
         </table>
       </td></tr>
@@ -393,10 +405,10 @@ async function sendWeeklyDigest(userEmail, stats) {
       ${criticalBlock}
       ${highlightBlock}
       <tr><td align="center" style="padding:0 28px 32px;">
-        <a href="${safeUrl}/dashboard" style="display:inline-block;background:#0f172a;color:#fff;font-size:14px;font-weight:700;text-decoration:none;padding:13px 24px;border-radius:10px;">Open dashboard →</a>
+        <a href="${safeUrl}/dashboard" style="display:inline-block;background:#1d242c;color:#fff;font-size:14px;font-weight:700;text-decoration:none;padding:13px 24px;border-radius:10px;">Open dashboard →</a>
       </td></tr>
-      <tr><td style="border-top:1px solid #e2e8f0;padding:18px 28px;font-size:11px;color:#94a3b8;line-height:1.55;" align="center">
-        You get this every Monday. <a href="${safeUrl}/settings" style="color:#94a3b8;">Change frequency</a> · <a href="${escapeHtml(oneClickUnsubUrl)}" style="color:#94a3b8;">Unsubscribe</a>
+      <tr><td style="border-top:1px solid #e6dfce;padding:18px 28px;font-size:11px;color:#7a8189;line-height:1.55;" align="center">
+        You get this every Monday. <a href="${safeUrl}/settings" style="color:#7a8189;">Change frequency</a> · <a href="${escapeHtml(oneClickUnsubUrl)}" style="color:#7a8189;">Unsubscribe</a>
       </td></tr>
     </table>
   </td></tr>
@@ -478,7 +490,7 @@ async function sendReviewRequest({ customerEmail, customerName, businessName, pl
   const html = `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
   <tr><td align="center" style="padding:${isFollowUp ? '40' : '36'}px 24px 16px;">
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:520px;">
-      <tr><td style="font-family:Georgia,serif;font-size:${isFollowUp ? '26' : '28'}px;color:#0f172a;line-height:1.3;letter-spacing:-0.01em;padding-bottom:18px;">
+      <tr><td style="font-family:Georgia,serif;font-size:${isFollowUp ? '26' : '28'}px;color:#1d242c;line-height:1.3;letter-spacing:-0.01em;padding-bottom:18px;">
         Hi ${safeName},
       </td></tr>
       <tr><td style="font-size:16px;color:#334155;line-height:1.6;padding-bottom:16px;">
@@ -488,17 +500,17 @@ async function sendReviewRequest({ customerEmail, customerName, businessName, pl
         ${escapeHtml(asksText)}
       </td></tr>
       ${safeMsg ? `<tr><td style="padding-bottom:20px;">
-        <blockquote style="border-left:3px solid #2563eb;margin:0;padding:10px 16px;color:#4b5563;font-style:italic;background:#f8fafc;border-radius:4px;">${safeMsg}</blockquote>
+        <blockquote style="border-left:3px solid #1e4d5e;margin:0;padding:10px 16px;color:#4b5563;font-style:italic;background:#f4eee0;border-radius:4px;">${safeMsg}</blockquote>
       </td></tr>` : ''}
       ${isFollowUp ? `
       <tr><td align="center" style="padding:8px 0 24px;">
         <table cellpadding="0" cellspacing="0" border="0">
           <tr>
             <td style="padding:0 6px;">
-              <a href="${safeUrl}" style="display:inline-block;background:linear-gradient(135deg,#2563eb,#6366f1);color:#fff;font-size:14px;font-weight:700;text-decoration:none;padding:12px 22px;border-radius:10px;">Leave a ${safePlatform} review</a>
+              <a href="${safeUrl}" style="display:inline-block;background-color:#1e4d5e;color:#fff;font-size:14px;font-weight:700;text-decoration:none;padding:12px 22px;border-radius:10px;">Leave a ${safePlatform} review</a>
             </td>
             <td style="padding:0 6px;">
-              <a href="mailto:support@reviewhub.review?subject=Feedback%20about%20${encodeURIComponent(businessName)}" style="display:inline-block;background:#f1f5f9;color:#0f172a;font-size:14px;font-weight:600;text-decoration:none;padding:12px 22px;border-radius:10px;">Tell me privately</a>
+              <a href="mailto:support@reviewhub.review?subject=Feedback%20about%20${encodeURIComponent(businessName)}" style="display:inline-block;background:#f4eee0;color:#1d242c;font-size:14px;font-weight:600;text-decoration:none;padding:12px 22px;border-radius:10px;">Tell me privately</a>
             </td>
           </tr>
         </table>
@@ -506,22 +518,22 @@ async function sendReviewRequest({ customerEmail, customerName, businessName, pl
       <tr><td align="center" style="padding:8px 0 24px;">
         <table cellpadding="0" cellspacing="0" border="0">
           <tr>
-            <td style="padding:0 4px;"><a href="${safeUrl}" style="text-decoration:none;font-size:32px;color:#f59e0b;">★</a></td>
-            <td style="padding:0 4px;"><a href="${safeUrl}" style="text-decoration:none;font-size:32px;color:#f59e0b;">★</a></td>
-            <td style="padding:0 4px;"><a href="${safeUrl}" style="text-decoration:none;font-size:32px;color:#f59e0b;">★</a></td>
-            <td style="padding:0 4px;"><a href="${safeUrl}" style="text-decoration:none;font-size:32px;color:#f59e0b;">★</a></td>
-            <td style="padding:0 4px;"><a href="${safeUrl}" style="text-decoration:none;font-size:32px;color:#f59e0b;">★</a></td>
+            <td style="padding:0 4px;"><a href="${safeUrl}" style="text-decoration:none;font-size:32px;color:#c48a2c;">★</a></td>
+            <td style="padding:0 4px;"><a href="${safeUrl}" style="text-decoration:none;font-size:32px;color:#c48a2c;">★</a></td>
+            <td style="padding:0 4px;"><a href="${safeUrl}" style="text-decoration:none;font-size:32px;color:#c48a2c;">★</a></td>
+            <td style="padding:0 4px;"><a href="${safeUrl}" style="text-decoration:none;font-size:32px;color:#c48a2c;">★</a></td>
+            <td style="padding:0 4px;"><a href="${safeUrl}" style="text-decoration:none;font-size:32px;color:#c48a2c;">★</a></td>
           </tr>
         </table>
-        <div style="font-size:12px;color:#94a3b8;margin-top:8px;">Tap a star to leave a review on ${safePlatform}</div>
+        <div style="font-size:12px;color:#7a8189;margin-top:8px;">Tap a star to leave a review on ${safePlatform}</div>
       </td></tr>`}
       <tr><td style="font-size:${isFollowUp ? '14' : '16'}px;color:#${isFollowUp ? '64748b' : '334155'};line-height:1.6;padding-bottom:8px;">
         ${isFollowUp ? 'Either way — thanks for being here.' : 'Either way, thanks for being here.'}
       </td></tr>
-      <tr><td style="font-family:Georgia,serif;font-size:17px;color:#0f172a;padding-bottom:32px;font-style:italic;">
+      <tr><td style="font-family:Georgia,serif;font-size:17px;color:#1d242c;padding-bottom:32px;font-style:italic;">
         — ${safeBiz}
       </td></tr>
-      <tr><td style="border-top:1px solid #e2e8f0;padding-top:16px;padding-bottom:24px;font-size:11px;color:#94a3b8;line-height:1.55;" align="center">
+      <tr><td style="border-top:1px solid #e6dfce;padding-top:16px;padding-bottom:24px;font-size:11px;color:#7a8189;line-height:1.55;" align="center">
         You received this because ${safeBiz} invited you to share your experience.<br>
         <span style="color:#cbd5e1;">Sent via ReviewHub</span>
       </td></tr>
@@ -568,7 +580,7 @@ async function sendMfaCode(userEmail, code, purpose = 'login') {
     : 'Enter this code to finish signing in:';
   const html = `
     <div style="font-family:sans-serif;max-width:480px;margin:0 auto">
-      <h2 style="color:#2563eb">${purpose === 'enable' ? 'Enable 2FA' : 'Sign-in code'}</h2>
+      <h2 style="color:#1e4d5e">${purpose === 'enable' ? 'Enable 2FA' : 'Sign-in code'}</h2>
       <p>${intro}</p>
       <p style="font-size:32px;letter-spacing:6px;font-weight:700;background:#f3f4f6;padding:16px;text-align:center;border-radius:8px;font-family:monospace">
         ${safeCode}
@@ -607,12 +619,12 @@ async function sendEmailChangeConfirmation(newEmail, confirmUrl) {
   const safeUrl = escapeHtml(confirmUrl);
   const html = `
     <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-      <h2 style="color:#2563eb">Confirm your new email</h2>
+      <h2 style="color:#1e4d5e">Confirm your new email</h2>
       <p>We received a request to change the email on your ReviewHub account to this address. Click the button below to confirm the change.</p>
       <p>The link is valid for 1 hour. If you didn't request this, you can safely ignore this email — your existing email will stay as it is.</p>
       <p style="margin:24px 0">
         <a href="${safeUrl}"
-           style="background:#2563eb;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block">
+           style="background:#1e4d5e;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block">
           Confirm email change
         </a>
       </p>
@@ -656,14 +668,14 @@ async function sendEmailChangeAlert(oldEmail, newEmail) {
     <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
       <h2 style="color:#b45309">Email change requested</h2>
       <p>Someone just requested to change the email on your ReviewHub account to:</p>
-      <p style="background:#fef3c7;border-left:4px solid #f59e0b;padding:12px 16px;margin:16px 0;font-family:monospace">
+      <p style="background:#fef3c7;border-left:4px solid #c48a2c;padding:12px 16px;margin:16px 0;font-family:monospace">
         ${safeNew}
       </p>
       <p>If that was you, you can ignore this message — the change only takes effect after you click the confirm link we sent to the new address.</p>
       <p><strong>If it wasn't you</strong>, your account may be compromised. Sign in and change your password immediately:</p>
       <p style="margin:16px 0">
         <a href="${safeUrl}/forgot-password"
-           style="background:#dc2626;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block">
+           style="background:#b85450;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block">
           Secure your account
         </a>
       </p>
@@ -707,11 +719,11 @@ async function sendErasureConfirmation(userEmail, confirmUrl) {
   const safeUrl = escapeHtml(confirmUrl);
   const html = `
     <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-      <h2 style="color:#dc2626">Confirm account deletion</h2>
+      <h2 style="color:#b85450">Confirm account deletion</h2>
       <p>You requested permanent deletion of your ReviewHub account and all associated data. This action is irreversible — once confirmed, your reviews, settings, audit trail, and connected platforms are removed and cannot be recovered.</p>
       <p style="margin:24px 0">
         <a href="${safeUrl}"
-           style="background:#dc2626;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block">
+           style="background:#b85450;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block">
           Confirm deletion
         </a>
       </p>
