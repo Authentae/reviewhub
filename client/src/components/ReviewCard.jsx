@@ -721,6 +721,7 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
                     onClick={() => setShowSentimentPicker(v => !v)}
                     aria-haspopup="menu"
                     aria-expanded={showSentimentPicker}
+                    aria-controls={`sentiment-menu-${review.id}`}
                     aria-label={t('review.overrideSentimentAria')}
                     title={t('review.overrideSentimentAria')}
                     className="focus:outline-none"
@@ -729,6 +730,7 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
                   </button>
                   {showSentimentPicker && (
                     <div
+                      id={`sentiment-menu-${review.id}`}
                       role="menu"
                       aria-label={t('review.overrideSentimentAria')}
                       className="absolute left-0 top-7 z-20 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg py-1 min-w-[130px]"
@@ -801,6 +803,7 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
                   disabled={savingStatus}
                   aria-expanded={showStatusPicker}
                   aria-haspopup="menu"
+                  aria-controls={`status-menu-${review.id}`}
                   aria-label={t('review.statusAriaLabel')}
                   title={reviewStatus ? t(`review.status.${reviewStatus}`) : t('review.status.none')}
                   className={`text-xs py-1 px-1.5 rounded transition-colors disabled:opacity-50 ${
@@ -814,6 +817,7 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
                 </button>
                 {showStatusPicker && (
                   <div
+                    id={`status-menu-${review.id}`}
                     role="menu"
                     aria-label={t('review.statusAriaLabel')}
                     className="absolute right-0 top-7 z-20 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg py-1 min-w-[130px]"
@@ -1047,13 +1051,15 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
                 onClick={handleOpenTagPicker}
                 aria-label={t('tags.addTag')}
                 aria-expanded={showTagPicker}
+                aria-controls={`tag-menu-${review.id}`}
+                aria-haspopup="menu"
                 aria-busy={savingTags}
                 className="inline-flex items-center gap-0.5 text-[10px] text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 border border-dashed border-gray-300 dark:border-gray-600 rounded-full px-1.5 py-0.5 leading-none"
               >
                 {savingTags ? '…' : '+ ' + t('tags.addTag')}
               </button>
               {showTagPicker && (
-                <div className="absolute left-0 top-6 z-20 min-w-[160px] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg py-1 max-h-48 overflow-y-auto">
+                <div id={`tag-menu-${review.id}`} role="menu" className="absolute left-0 top-6 z-20 min-w-[160px] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg py-1 max-h-48 overflow-y-auto">
                   {allTags && allTags.length === 0 && (
                     <p className="px-3 py-2 text-xs text-gray-400">{t('tags.noTags')}</p>
                   )}
@@ -1147,12 +1153,14 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
                     onClick={() => setShowTemplates(v => !v)}
                     aria-expanded={showTemplates}
                     aria-haspopup="menu"
+                    aria-controls={`templates-menu-${review.id}`}
                     className="text-xs text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1"
                   >
                     <span aria-hidden="true">📋</span> {t('templates.insertBtn')} ({templates.length})
                   </button>
                   {showTemplates && (
                     <div
+                      id={`templates-menu-${review.id}`}
                       role="menu"
                       aria-label={t('templates.insertBtn')}
                       onKeyDown={handleTemplateMenuKeyDown}
