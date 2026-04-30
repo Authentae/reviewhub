@@ -764,6 +764,13 @@ function insert(sql, params = []) {
 //
 // We wrap with better-sqlite3's db.transaction() which handles BEGIN/COMMIT/ROLLBACK
 // and nested savepoints correctly.
+//
+// IMPORTANT: better-sqlite3's transactions are SYNCHRONOUS. If `fn` is an
+// async function (returns a Promise), the transaction commits the moment the
+// Promise is RETURNED — before any of its `await` chain has actually run.
+// All the awaited writes then happen OUTSIDE the transaction, defeating the
+// atomicity guarantee. Detect this and throw loudly instead of silently
+// corrupting data — the calling code needs to refactor to sync.
 function transaction(fn) {
   const wrapped = db.transaction((innerFn) => {
     const tx = {
@@ -775,7 +782,15 @@ function transaction(fn) {
         return toNumber(info.lastInsertRowid);
       },
     };
-    return innerFn(tx);
+    const result = innerFn(tx);
+    if (result && typeof result.then === 'function') {
+      throw new Error(
+        'transaction() callback returned a Promise. better-sqlite3 transactions ' +
+        'are synchronous — async work inside the callback runs AFTER commit, ' +
+        'breaking atomicity. Refactor the callback to be synchronous.'
+      );
+    }
+    return result;
   });
   return wrapped(fn);
 }

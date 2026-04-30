@@ -102,20 +102,26 @@ class DataSubjectRights {
       retention_justifications: []
     };
 
-    await transaction(async (tx) => {
-      // 1. Personal data erasure
-      await this.erasePersonalData(tx, userId, erasureLog);
+    // The transaction body MUST be synchronous — better-sqlite3 commits the
+    // moment the callback returns. Async work inside the callback runs
+    // AFTER commit and breaks atomicity. The previous version used
+    // `async (tx) => { await ... }` which silently committed before the
+    // erasure ran — every erasure happened OUTSIDE the transaction.
+    //
+    // Schema.transaction() now throws on Promise return, so a regression
+    // here would surface immediately instead of silently corrupting data.
+    //
+    // Side-effect calls that ARE genuinely async (fs.writeFile for the
+    // backup schedule) and idempotent third-party notifications are moved
+    // OUT of the transaction below — they don't need atomic guarantees.
+    transaction((tx) => {
+      // 1. Personal data erasure (sync DB writes)
+      this.erasePersonalData(tx, userId, erasureLog);
 
-      // 2. Anonymize user-generated content (legal requirement to retain)
-      await this.anonymizeUserContent(tx, userId, erasureLog);
+      // 2. Anonymize user-generated content (sync DB writes)
+      this.anonymizeUserContent(tx, userId, erasureLog);
 
-      // 3. Remove from third-party services
-      await this.notifyThirdPartyProcessors(userId);
-
-      // 4. Schedule backup deletion
-      await this.scheduleBackupDeletion(userId);
-
-      // 5. Store minimal erasure record for legal compliance.
+      // 3. Store minimal erasure record for legal compliance.
       // completed_at is the ACTUAL completion timestamp (now) — was
       // previously inserting `erasureLog.requested_at` which is set at
       // the top of this method, before any data was erased. The column
@@ -136,10 +142,21 @@ class DataSubjectRights {
       erasureLog.erasure_id = erasureId;
     });
 
+    // Side-effect work runs AFTER the transaction commits — these don't
+    // need atomicity (third-party notifications are idempotent; the backup
+    // schedule file is write-append). If they fail, the user data is
+    // already erased; the most we lose is a log entry.
+    try { await this.notifyThirdPartyProcessors(userId); } catch { /* best-effort */ }
+    try { await this.scheduleBackupDeletion(userId); } catch { /* best-effort */ }
+
     return erasureLog;
   }
 
-  async erasePersonalData(tx, userId, log) {
+  // Sync because it must run inside the transaction. Despite no actual
+  // async work, the prior `async` keyword caused the wrapping caller to
+  // `await` it, returning a Promise from the transaction callback —
+  // committing before the writes ran. Now plainly sync.
+  erasePersonalData(tx, userId, log) {
     // Delete user account and cascade to related data
     tx.run('DELETE FROM users WHERE id = ?', [userId]);
     log.data_categories.push('user_profile');
@@ -150,7 +167,8 @@ class DataSubjectRights {
     log.data_categories.push('audit_log');
   }
 
-  async anonymizeUserContent(tx, userId, log) {
+  // Sync — see erasePersonalData above for the same async-removal reason.
+  anonymizeUserContent(tx, userId, log) {
     // Anonymize review requests (retain for business analytics)
     tx.run(`
       UPDATE review_requests
@@ -198,9 +216,10 @@ class DataSubjectRights {
     };
   }
 
-  // Article 18 - Right to Restriction of Processing
+  // Article 18 - Right to Restriction of Processing.
+  // Transaction body is SYNC — see processErasureRequest comment above.
   async restrictProcessing(userId, restrictions) {
-    await transaction(async (tx) => {
+    transaction((tx) => {
       // Add processing restrictions
       for (const restriction of restrictions) {
         tx.insert(`
