@@ -111,7 +111,7 @@ export default function CookieConsent() {
       role="region"
       aria-label={t('cookie.title', 'Your privacy choices')}
       aria-labelledby="cookie-consent-title"
-      className="fixed bottom-0 inset-x-0 z-50 p-4 sm:p-6"
+      className="rh-design rh-app fixed bottom-0 inset-x-0 z-50 p-4 sm:p-6"
     >
       <div className="mx-auto max-w-3xl rounded-2xl bg-white dark:bg-gray-800 shadow-2xl ring-1 ring-black/10 dark:ring-white/10 overflow-hidden">
         <div className="p-5 sm:p-6">

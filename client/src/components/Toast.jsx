@@ -70,7 +70,7 @@ export function ToastProvider({ children }) {
   return (
     <ToastContext.Provider value={show}>
       {children}
-      <div className="fixed bottom-5 right-5 flex flex-col gap-2 z-50 pointer-events-none">
+      <div className="rh-design rh-app fixed bottom-5 right-5 flex flex-col gap-2 z-50 pointer-events-none">
         {toasts.map(toast => (
           <div
             key={toast.id}
