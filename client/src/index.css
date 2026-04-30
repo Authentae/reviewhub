@@ -2,19 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Editorial design system — palette, typography, and primitives shared by
-   the marketing surfaces (Landing, Auth, Pricing). Wrap a page in
-   `<div className="rh-design">` to opt into the cream-paper + teal +
-   ochre look with Instrument Serif display type. */
-@import './styles/design-system.css';
-
-/* Dashboard / app-shell layer — adds .rh-app workspace primitives on top
-   of the editorial palette. Wrap a logged-in page in `.rh-design.rh-app`. */
-@import './styles/dashboard-system.css';
+/* The editorial design system (design-system.css) + dashboard layer
+   (dashboard-system.css) are imported from main.jsx instead of @import-ed
+   here. PostCSS was silently dropping the second @import after the @tailwind
+   directives, which left the .rh-app workspace primitives missing from the
+   bundled CSS. Importing from JS guarantees both files end up in the build. */
 
 @layer base {
   body {
-    @apply bg-gray-50 text-gray-900 antialiased dark:bg-gray-900 dark:text-gray-100;
+    /* Editorial cream paper as the default body background, matches the
+       --rh-paper token from design-system.css. Falls back to bg-gray-50
+       only if design-system.css somehow doesn't load (defensive). */
+    background-color: oklch(0.985 0.006 85);
+    @apply text-gray-900 antialiased dark:bg-gray-900 dark:text-gray-100;
   }
 }
 

@@ -357,6 +357,14 @@
 .rh-design .rh-app .bg-gray-50 { background-color: var(--rh-paper-2) !important; }
 .rh-design.rh-app .bg-gray-100,
 .rh-design .rh-app .bg-gray-100 { background-color: var(--rh-paper-2) !important; }
+/* Skeleton-loader greys → softer paper-mix so the pulse animation reads on
+   cream instead of a flat blueish slab. */
+.rh-design.rh-app .bg-gray-200,
+.rh-design .rh-app .bg-gray-200 { background-color: color-mix(in oklab, var(--rh-rule) 60%, var(--rh-paper-2)) !important; }
+.rh-design.rh-app .bg-gray-600,
+.rh-design .rh-app .bg-gray-600,
+.rh-design.rh-app .bg-gray-700,
+.rh-design .rh-app .bg-gray-700 { background-color: color-mix(in oklab, var(--rh-ink) 35%, var(--rh-rule)) !important; }
 .rh-design.rh-app .bg-gray-800,
 .rh-design .rh-app .bg-gray-800 { background-color: var(--rh-ink) !important; }
 .rh-design.rh-app .bg-gray-900,

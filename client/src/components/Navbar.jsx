@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { clearToken, isLoggedIn, getToken } from '../lib/auth';
 import api from '../lib/api';
-import { useTheme } from '../context/ThemeContext';
 import { useUser } from '../context/UserContext';
 import useUnrespondedCount from '../hooks/useUnrespondedCount';
 import SessionExpiryBanner from './SessionExpiryBanner';
@@ -41,7 +40,6 @@ export default function Navbar() {
   const menuTriggerRef = useRef(null);
   const menuItemRefs = useRef([]);
   const mobileMenuRef = useRef(null);
-  const { dark } = useTheme();
   const { t } = useI18n();
   const unresponded = useUnrespondedCount();
 
