@@ -226,7 +226,7 @@ function ConnectCard({ platform, icon, color, connected, onConnect, syncStatus }
                 maxLength={500}
                 required
               />
-              <button type="submit" disabled={saving} className="btn-primary text-xs py-2 px-4">
+              <button type="submit" disabled={saving} aria-busy={saving} className="btn-primary text-xs py-2 px-4">
                 {saving ? t('settings.saving2') : t('settings.save')}
               </button>
               <button type="button" onClick={() => setOpen(false)} className="btn-secondary text-xs py-2 px-3">
@@ -471,7 +471,7 @@ function TagManager() {
                 />
               ))}
             </div>
-            <button type="submit" disabled={saving || !newName.trim()} className="btn-primary text-xs py-1 px-2 disabled:opacity-50">{t('tags.create')}</button>
+            <button type="submit" disabled={saving || !newName.trim()} aria-busy={saving} className="btn-primary text-xs py-1 px-2 disabled:opacity-50">{t('tags.create')}</button>
             <button type="button" onClick={() => { setAdding(false); setNewName(''); }} className="btn-secondary text-xs py-1 px-2">{t('tags.cancel')}</button>
           </form>
         )}
@@ -767,7 +767,7 @@ function WebhooksSection() {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <button type="submit" disabled={saving || newEvents.length === 0} className="btn-primary text-xs py-1 px-3 disabled:opacity-50">
+                  <button type="submit" disabled={saving || newEvents.length === 0} aria-busy={saving} className="btn-primary text-xs py-1 px-3 disabled:opacity-50">
                     {saving ? t('webhooks.saving') : t('webhooks.add')}
                   </button>
                   <button type="button" onClick={() => { setAdding(false); setNewUrl(''); setNewEvents(['review.created']); }}
@@ -1415,7 +1415,7 @@ function AutoRules() {
           </div>
         </div>
         <div className="flex gap-1.5">
-          <button type="submit" disabled={saving} className="btn-primary text-xs py-1 px-2 disabled:opacity-50">{saving ? '…' : submitLabel}</button>
+          <button type="submit" disabled={saving} aria-busy={saving} className="btn-primary text-xs py-1 px-2 disabled:opacity-50">{saving ? '…' : submitLabel}</button>
           <button type="button" onClick={onCancel} className="btn-secondary text-xs py-1 px-2">{t('tags.cancel')}</button>
         </div>
       </form>
@@ -1663,7 +1663,7 @@ function ResponseTemplates() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-gray-400" aria-live="polite" aria-atomic="true">{editForm.body.length}/1000</span>
                   <div className="flex gap-2">
-                    <button type="submit" disabled={editSaving} className="btn-primary text-xs py-1 px-2">
+                    <button type="submit" disabled={editSaving} aria-busy={editSaving} className="btn-primary text-xs py-1 px-2">
                       {editSaving ? t('templates.saving') : t('templates.save')}
                     </button>
                     <button type="button" onClick={() => setEditingId(null)} className="btn-secondary text-xs py-1 px-2">
