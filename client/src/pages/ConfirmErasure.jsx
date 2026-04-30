@@ -26,7 +26,13 @@ export default function ConfirmErasure() {
   const userId = params.get('userId') || '';
   const token = params.get('token') || '';
 
-  const valid = userId && /^[a-f0-9]{64}$/.test(token);
+  // Validate BOTH params before treating the page as "ready to confirm".
+  // userId must be a positive integer (matches the server gate at
+  // gdpr.js:198) — accepting any truthy string previously meant "abc"
+  // got past the client check, then Number('abc') = NaN, then the
+  // server rejected with a confusing "Invalid user id" after the
+  // user already saw the in-progress spinner.
+  const valid = /^[1-9]\d{0,9}$/.test(userId) && /^[a-f0-9]{64}$/.test(token);
   const [status, setStatus] = useState(valid ? 'idle' : 'missing');
   const [error, setError] = useState('');
   const submitted = useRef(false);
