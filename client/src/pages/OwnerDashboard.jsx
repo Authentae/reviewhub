@@ -63,7 +63,14 @@ export default function OwnerDashboard() {
         }
       });
     return () => { cancelled = true; };
-  }, [userLoading, isPaid, t, toast]);
+    // t and toast are stable refs from context (useCallback'd), but
+    // including them in deps would re-run this effect on every parent
+    // re-render and refetch /owner/businesses repeatedly — flooding the
+    // API and risking a render loop that freezes the UI (which manifests
+    // as "the nav stops responding after I open Owner"). Pin the deps to
+    // just the values that should actually trigger a refetch.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userLoading, isPaid]);
 
   return (
     <div className="rh-design rh-app min-h-screen">

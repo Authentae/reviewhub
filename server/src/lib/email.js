@@ -186,26 +186,34 @@ async function sendVerificationEmail(userEmail, verifyUrl) {
       <tr><td style="padding-bottom:24px;">
         <table cellpadding="0" cellspacing="0" border="0">
           <tr>
-            <td style="width:36px;vertical-align:middle;">
-              <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#2563eb,#6366f1);text-align:center;line-height:36px;">
-                <span style="color:#fff;font-size:18px;font-weight:700;">★</span>
+            <td style="width:36px;vertical-align:middle;" bgcolor="#1e4d5e">
+              <div style="width:36px;height:36px;border-radius:8px;background-color:#1e4d5e;text-align:center;line-height:36px;">
+                <span style="color:#fbf8f1;font-size:18px;font-weight:700;">★</span>
               </div>
             </td>
-            <td style="padding-left:10px;vertical-align:middle;font-size:17px;font-weight:700;color:#0f172a;letter-spacing:-0.01em;">ReviewHub</td>
+            <td style="padding-left:10px;vertical-align:middle;font-size:17px;font-weight:700;color:#1d242c;letter-spacing:-0.01em;">ReviewHub</td>
           </tr>
         </table>
       </td></tr>
-      <tr><td style="padding-bottom:16px;font-size:26px;font-weight:700;color:#0f172a;letter-spacing:-0.02em;line-height:1.2;">
+      <tr><td style="padding-bottom:16px;font-size:26px;font-weight:700;color:#1d242c;letter-spacing:-0.02em;line-height:1.2;">
         One click and you're in.
       </td></tr>
-      <tr><td style="padding-bottom:28px;font-size:15px;color:#475569;line-height:1.55;">
+      <tr><td style="padding-bottom:28px;font-size:15px;color:#3a4248;line-height:1.55;">
         Confirm your email and you'll be drafting AI replies in under a minute. This link expires in 24 hours.
       </td></tr>
       <tr><td style="padding-bottom:28px;">
-        <a href="${safeUrl}" style="display:inline-block;background:linear-gradient(135deg,#2563eb,#6366f1);color:#fff;font-size:15px;font-weight:700;text-decoration:none;padding:14px 28px;border-radius:10px;box-shadow:0 4px 14px rgba(99,102,241,0.4);">Confirm my email →</a>
+        <!--[if mso]>
+        <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${safeUrl}" style="height:48px;v-text-anchor:middle;width:220px;" arcsize="22%" stroke="f" fillcolor="#1e4d5e">
+          <w:anchorlock/>
+          <center style="color:#fbf8f1;font-family:sans-serif;font-size:15px;font-weight:700;">Confirm my email</center>
+        </v:roundrect>
+        <![endif]-->
+        <!--[if !mso]><!-->
+        <a href="${safeUrl}" bgcolor="#1e4d5e" style="display:inline-block;background-color:#1e4d5e;color:#fbf8f1;font-size:15px;font-weight:700;text-decoration:none;padding:14px 28px;border-radius:10px;mso-padding-alt:0;" target="_blank">Confirm my email &rarr;</a>
+        <!--<![endif]-->
       </td></tr>
-      <tr><td style="padding-bottom:24px;font-size:13px;color:#94a3b8;line-height:1.55;">
-        Or paste this into your browser:<br><span style="color:#2563eb;word-break:break-all;">${safeUrl}</span>
+      <tr><td style="padding-bottom:24px;font-size:13px;color:#7a8189;line-height:1.55;">
+        Or paste this into your browser:<br><span style="color:#1e4d5e;word-break:break-all;">${safeUrl}</span>
       </td></tr>
       <tr><td style="border-top:1px solid #e2e8f0;padding-top:20px;padding-bottom:32px;font-size:12px;color:#94a3b8;line-height:1.55;">
         Didn't sign up? You can safely ignore this email — no account will be created.
