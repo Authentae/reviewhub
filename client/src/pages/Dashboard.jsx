@@ -968,8 +968,12 @@ export default function Dashboard() {
         />
       )}
 
-      {/* Back to top */}
-      {showBackTop && (
+      {/* Back to top — hidden while the bulk action bar is showing,
+          since the FAB would otherwise overlap the bottom-fixed bar
+          (both pinned to the bottom-right corner). The bulk bar takes
+          priority because its actions are user-driven; the user can
+          always exit bulk mode and the FAB returns. */}
+      {showBackTop && !(selectMode && selectedIds.size > 0) && (
         <button
           type="button"
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
