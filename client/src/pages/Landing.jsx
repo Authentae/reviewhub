@@ -5,6 +5,7 @@ import usePageTitle from '../hooks/usePageTitle';
 import { useI18n } from '../context/I18nContext';
 import MarketingNav from '../components/MarketingNav';
 import Navbar from '../components/Navbar';
+import Logo from '../components/Logo';
 import { isLoggedIn } from '../lib/auth';
 
 // Editorial-magazine landing page (v2 redesign per Claude Design bundle).
@@ -117,8 +118,8 @@ function Hero() {
             rather than "what's at this location?". */}
       <div className="rh-hero-amp" aria-hidden="true">★</div>
       <div className="rh-hero-coords" aria-hidden="true">
-        <span className="cx">N 18°47′</span>
-        <span className="cy">E 98°59′</span>
+        <span className="cx">N 13°44′</span>
+        <span className="cy">E 100°31′</span>
         <span className="cn">{t('landing.heroOriginCredit', 'AI drafts · in your voice')}</span>
       </div>
       <div className="rh-shell rh-hero-inner">
@@ -731,7 +732,7 @@ function Footer() {
         <div className="foot-top">
           <div>
             <Link to="/" className="rh-brand">
-              <div className="mark">r</div>
+              <Logo size={30} />
               <div className="wm">Review<em>Hub</em></div>
             </Link>
             <div className="tagline">{t('landing.footerTagline')}</div>
@@ -759,7 +760,7 @@ function Footer() {
           </div>
         </div>
         <div className="copy">
-          <div>© 2026 ReviewHub · {t('landing.footerMadeSolo', 'Made solo in Chiang Mai')}</div>
+          <div>© 2026 ReviewHub · {t('landing.footerMadeSolo', 'Made solo in Bangkok')}</div>
           <div className="status rh-mono">{t('landing.footerStatus', 'all systems nominal')}</div>
         </div>
       </div>
