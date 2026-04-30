@@ -465,9 +465,9 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
     try {
       const { data } = await api.put(`/reviews/${review.id}/pin`);
       setPinned(data.pinned);
-    } catch {
+    } catch (err) {
       setPinned(prev); // rollback
-      toast(t('review.pinFailed'), 'error');
+      toast(err?.response?.data?.error || t('review.pinFailed'), 'error');
     } finally {
       setPinning(false);
     }
@@ -481,9 +481,9 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
     try {
       const { data } = await api.put(`/reviews/${review.id}/flag`);
       setFlagged(data.flagged);
-    } catch {
+    } catch (err) {
       setFlagged(prev); // rollback
-      toast(t('review.flagFailed'), 'error');
+      toast(err?.response?.data?.error || t('review.flagFailed'), 'error');
     } finally {
       setFlagging(false);
     }
@@ -498,9 +498,9 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
     try {
       const { data } = await api.put(`/reviews/${review.id}/status`, { status: newStatus });
       setReviewStatus(data.status);
-    } catch {
+    } catch (err) {
       setReviewStatus(prev); // rollback
-      toast(t('review.statusFailed'), 'error');
+      toast(err?.response?.data?.error || t('review.statusFailed'), 'error');
     } finally {
       setSavingStatus(false);
     }
