@@ -79,7 +79,7 @@ const en = {
   'landing.faqEyebrow': 'Questions?',
   'landing.faqTitle': 'Frequently asked',
   'landing.faq1Q': 'Is there a free plan?',
-  'landing.faq1A': 'Yes — our Free plan is permanent, with no credit card required. It supports one business, connects to Google via OAuth (or any other platform via CSV import), and includes 3 AI-drafted responses per month. You can respond manually without limits. Paid plans start at $14/month (฿490 in Thailand, payable via PromptPay) for unlimited AI drafts, multiple platforms, and advanced features.',
+  'landing.faq1A': 'Yes — our Free plan is permanent, with no credit card required. It supports one business, connects to Google via OAuth (or any other platform via CSV import), and includes 3 AI-drafted responses per month. You can respond manually without limits. Paid plans start at $14/month (or ฿490 if you choose the Thai-baht price) for unlimited AI drafts, multiple platforms, and advanced features.',
   'landing.faq2Q': 'Which review platforms do you support?',
   'landing.faq2A': 'Google is fully supported via OAuth — reviews sync automatically. We also support manual entry and CSV import for 60+ other platforms including Yelp, Facebook, TripAdvisor, Trustpilot, Wongnai (Thailand), Tabelog (Japan), Naver Place (Korea), Dianping (China), TheFork (France/Spain/Italy), HolidayCheck (Germany), Reclame Aqui (Brazil). The Business plan unlocks outbound webhooks (Zapier-compatible) and our REST API.',
   'landing.faq3Q': 'How does AI drafting work?',

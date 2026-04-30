@@ -211,9 +211,11 @@ export default function Pricing() {
                 ))}
               </div>
             </div>
-            {/* Thailand-friendly payment affordance — when the THB pricing is
-                shown, surface PromptPay so Thai SMBs (who often don't have
-                international credit cards) see they can pay locally. */}
+            {/* THB pricing affordance — checkout is via LemonSqueezy (the
+                Merchant of Record), which collects + remits Thai VAT 7% on
+                our behalf. PromptPay deliberately not listed: it's a Thai
+                bank rail with no MoR coverage, which would put VAT
+                compliance back on us — defeats the point of LS. */}
             {currency === 'THB' && (
               <p style={{
                 marginTop: 18,
@@ -224,7 +226,7 @@ export default function Pricing() {
                 color: 'var(--rh-ink-3)',
               }}>
                 <span style={{ color: 'var(--rh-ochre-deep)' }}>฿ Thai pricing.</span>{' '}
-                Pay with PromptPay, Thai bank transfer, or international card.
+                Card checkout via secure global processor. Thai VAT 7% included.
               </p>
             )}
           </div>
