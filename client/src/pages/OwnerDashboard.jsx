@@ -142,8 +142,10 @@ function UpsellCard({ plan }) {
 }
 
 function LoadingSkeleton() {
+  const { t: rawT } = useI18n();
+  const t = makeT(rawT);
   return (
-    <div className="grid gap-3 sm:grid-cols-2" aria-busy="true" aria-label="Loading">
+    <div className="grid gap-3 sm:grid-cols-2" aria-busy="true" aria-label={t('common.loading', 'Loading…')}>
       {[0, 1, 2, 3].map((i) => (
         <div key={i} className="card p-4">
           <div className="h-4 w-1/2 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-2" />

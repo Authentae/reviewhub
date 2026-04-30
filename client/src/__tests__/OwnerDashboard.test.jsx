@@ -81,7 +81,7 @@ describe('OwnerDashboard', () => {
     userState.subscription = { plan: 'starter' };
     api.get.mockReturnValue(new Promise(() => {})); // never resolves
     renderPage();
-    expect(screen.getByLabelText('Loading')).toBeInTheDocument();
+    expect(screen.getByLabelText('Loading…')).toBeInTheDocument();
   });
 
   it('shows the empty state when paid user has no claimed businesses', async () => {
