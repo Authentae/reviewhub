@@ -190,8 +190,12 @@ router.post('/register', authAttemptLimiter, require('../middleware/honeypot').h
     if (!userId) return res.status(500).json({ error: 'Failed to create account' });
 
     // Send verification email asynchronously — don't delay the registration response.
+    // Pick the user's preferred locale from Accept-Language so Thai users get
+    // the Thai email instead of always-English. acceptsLanguages returns the
+    // best match from the supplied list (or false if none match).
+    const lang = req.acceptsLanguages(['th', 'en']) || 'en';
     sendEmailInBackground(
-      sendVerificationEmail(email, clientUrl(`/verify-email?token=${verify.plaintext}`)),
+      sendVerificationEmail(email, clientUrl(`/verify-email?token=${verify.plaintext}`), lang),
       'verification'
     );
 
@@ -1118,8 +1122,9 @@ router.post('/resend-verification', emailSendLimiter, authMiddleware, (req, res)
       [verify.hash, user.id]
     );
 
+    const lang = req.acceptsLanguages(['th', 'en']) || 'en';
     sendEmailInBackground(
-      sendVerificationEmail(user.email, clientUrl(`/verify-email?token=${verify.plaintext}`)),
+      sendVerificationEmail(user.email, clientUrl(`/verify-email?token=${verify.plaintext}`), lang),
       'verification-resend'
     );
 

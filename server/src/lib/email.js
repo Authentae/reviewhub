@@ -170,12 +170,44 @@ async function sendNewReviewNotification(userEmail, review, businessName) {
   });
 }
 
+// Localised strings for the verification email. English is the source of
+// truth; other locales fall back to English for any missing key. To add a
+// language: copy the `en` block, translate, drop in. The `lang` param to
+// sendVerificationEmail picks the matching block.
+const VERIFY_STRINGS = {
+  en: {
+    subject: 'Confirm your email — one click and you\'re in',
+    headline: "One click and you're in.",
+    body: "Confirm your email and you'll be drafting AI replies in under a minute. This link expires in 24 hours.",
+    cta: 'Confirm my email',
+    pasteHint: 'Or paste this into your browser:',
+    ignoreFooter: "Didn't sign up? You can safely ignore this email — no account will be created.",
+    textHeader: 'Welcome to ReviewHub',
+    textBody: 'Confirm your email address to finish setting up your account.',
+    textValid: 'This link is valid for 24 hours:',
+    textIgnore: "If you didn't create a ReviewHub account, you can ignore this email.",
+  },
+  th: {
+    subject: 'ยืนยันอีเมลของคุณ — คลิกเดียวเสร็จ',
+    headline: 'คลิกเดียว ก็เริ่มใช้งานได้เลย',
+    body: 'ยืนยันอีเมลของคุณ แล้วคุณจะร่างคำตอบรีวิวด้วย AI ได้ในไม่ถึงนาที ลิงก์นี้หมดอายุภายใน 24 ชั่วโมง',
+    cta: 'ยืนยันอีเมล',
+    pasteHint: 'หรือคัดลอกลิงก์นี้ไปวางในเบราว์เซอร์:',
+    ignoreFooter: 'ไม่ได้สมัครใช่ไหม? คุณสามารถละเลยอีเมลนี้ได้อย่างปลอดภัย — จะไม่มีการสร้างบัญชี',
+    textHeader: 'ยินดีต้อนรับสู่ ReviewHub',
+    textBody: 'ยืนยันอีเมลของคุณเพื่อเริ่มใช้งานบัญชี',
+    textValid: 'ลิงก์นี้ใช้ได้ภายใน 24 ชั่วโมง:',
+    textIgnore: 'หากคุณไม่ได้สมัครบัญชี ReviewHub สามารถละเลยอีเมลนี้ได้',
+  },
+};
+
 // Send the email-verification link. `verifyUrl` is the full URL the user clicks
-// (already includes the token query param). Plaintext + HTML versions are sent
-// so clients without HTML support still work.
-async function sendVerificationEmail(userEmail, verifyUrl) {
-  // Subject updated to match the design spec — action-oriented, invites one tap.
-  const subject = 'Confirm your email — one click and you\'re in';
+// (already includes the token query param). `lang` is the user's preferred
+// locale (currently 'en' or 'th' — others fall back to en). Plaintext + HTML
+// versions are sent so clients without HTML support still work.
+async function sendVerificationEmail(userEmail, verifyUrl, lang = 'en') {
+  const s = VERIFY_STRINGS[lang] || VERIFY_STRINGS.en;
+  const subject = s.subject;
   const safeUrl = escapeHtml(verifyUrl);
   // Table-based HTML per email-client best practice. Inline styles only; no
   // <style> block (most webmail strips it). Design reference:
@@ -187,19 +219,17 @@ async function sendVerificationEmail(userEmail, verifyUrl) {
         <table cellpadding="0" cellspacing="0" border="0">
           <tr>
             <td style="width:36px;vertical-align:middle;">
-              <!-- Editorial brand mark — sparkle on teal-deep, matches the
-                   website logo (client/src/components/Logo.jsx + favicon.svg).
-                   Inline SVG renders in Gmail/Apple Mail/Outlook web/iOS Mail.
-                   Outlook desktop strips SVG but the bgcolor tile underneath
-                   stays — still recognisably on-brand even when the sparkle
-                   doesn't render. The earlier ★ glyph was the retired Star+Spark
-                   logo and clashed with the website's editorial sparkle mark. -->
+              <!-- Editorial brand mark — Unicode sparkle (✦, U+2726) on
+                   a teal-deep tile. Renders identically in Gmail, Apple Mail,
+                   Outlook web, Outlook desktop, iOS Mail, Hotmail/Outlook.com.
+                   Inline SVG would render slightly sharper but Hotmail's CSP
+                   strips it (leaving an empty tile), so we use a Unicode
+                   character that every email client renders natively. The
+                   shape is close to the website's 4-point editorial sparkle
+                   mark (client/src/components/Logo.jsx + favicon.svg). -->
               <table cellpadding="0" cellspacing="0" border="0" style="border-radius:8px;background-color:#1e4d5e;" bgcolor="#1e4d5e">
                 <tr><td align="center" valign="middle" width="36" height="36" style="width:36px;height:36px;line-height:36px;">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 64 64" style="vertical-align:middle;display:inline-block;" aria-label="ReviewHub">
-                    <path d="M32 10c1.5 10 4 12.5 14 14-10 1.5-12.5 4-14 14-1.5-10-4-12.5-14-14 10-1.5 12.5-4 14-14z" fill="#fbf8f1"/>
-                    <path d="M48 40c.7 4 1.6 4.9 5.5 5.5-3.9.6-4.8 1.5-5.5 5.5-.6-4-1.5-4.9-5.5-5.5 4-.6 4.9-1.5 5.5-5.5z" fill="#fbf8f1" opacity="0.95"/>
-                  </svg>
+                  <span style="color:#fbf8f1;font-size:20px;line-height:36px;font-weight:400;">&#10022;</span>
                 </td></tr>
               </table>
             </td>
@@ -208,39 +238,39 @@ async function sendVerificationEmail(userEmail, verifyUrl) {
         </table>
       </td></tr>
       <tr><td style="padding-bottom:16px;font-size:26px;font-weight:700;color:#1d242c;letter-spacing:-0.02em;line-height:1.2;">
-        One click and you're in.
+        ${s.headline}
       </td></tr>
       <tr><td style="padding-bottom:28px;font-size:15px;color:#3a4248;line-height:1.55;">
-        Confirm your email and you'll be drafting AI replies in under a minute. This link expires in 24 hours.
+        ${s.body}
       </td></tr>
       <tr><td style="padding-bottom:28px;">
         <!--[if mso]>
-        <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${safeUrl}" style="height:48px;v-text-anchor:middle;width:220px;" arcsize="22%" stroke="f" fillcolor="#1e4d5e">
+        <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${safeUrl}" style="height:48px;v-text-anchor:middle;width:240px;" arcsize="22%" stroke="f" fillcolor="#1e4d5e">
           <w:anchorlock/>
-          <center style="color:#fbf8f1;font-family:sans-serif;font-size:15px;font-weight:700;">Confirm my email</center>
+          <center style="color:#fbf8f1;font-family:sans-serif;font-size:15px;font-weight:700;">${escapeHtml(s.cta)}</center>
         </v:roundrect>
         <![endif]-->
         <!--[if !mso]><!-->
-        <a href="${safeUrl}" bgcolor="#1e4d5e" style="display:inline-block;background-color:#1e4d5e;color:#fbf8f1;font-size:15px;font-weight:700;text-decoration:none;padding:14px 28px;border-radius:10px;mso-padding-alt:0;" target="_blank">Confirm my email &rarr;</a>
+        <a href="${safeUrl}" bgcolor="#1e4d5e" style="display:inline-block;background-color:#1e4d5e;color:#fbf8f1;font-size:15px;font-weight:700;text-decoration:none;padding:14px 28px;border-radius:10px;mso-padding-alt:0;" target="_blank">${escapeHtml(s.cta)} &rarr;</a>
         <!--<![endif]-->
       </td></tr>
       <tr><td style="padding-bottom:24px;font-size:13px;color:#7a8189;line-height:1.55;">
-        Or paste this into your browser:<br><span style="color:#1e4d5e;word-break:break-all;">${safeUrl}</span>
+        ${s.pasteHint}<br><span style="color:#1e4d5e;word-break:break-all;">${safeUrl}</span>
       </td></tr>
       <tr><td style="border-top:1px solid #e6dfce;padding-top:20px;padding-bottom:32px;font-size:12px;color:#7a8189;line-height:1.55;">
-        Didn't sign up? You can safely ignore this email — no account will be created.
+        ${s.ignoreFooter}
       </td></tr>
     </table>
   </td></tr>
 </table>`;
   const text = [
-    'Welcome to ReviewHub',
+    s.textHeader,
     '',
-    'Confirm your email address to finish setting up your account.',
-    'This link is valid for 24 hours:',
+    s.textBody,
+    s.textValid,
     verifyUrl,
     '',
-    "If you didn't create a ReviewHub account, you can ignore this email.",
+    s.textIgnore,
   ].join('\n');
 
   const transporter = getTransporter();

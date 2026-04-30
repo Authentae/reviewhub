@@ -30,6 +30,16 @@ api.interceptors.request.use((config) => {
   // requests. Safe to send on every request — server ignores it on GETs.
   config.headers['X-Requested-With'] = 'XMLHttpRequest';
   config.headers['X-Request-Id'] = Math.random().toString(36).slice(2, 10);
+  // Forward the user's chosen UI language so server-side surfaces (verification
+  // emails, password-reset emails, future transactional mail) can render in
+  // the right locale. Browsers normally include this automatically based on
+  // OS settings, but our I18nContext lets the user switch independently of
+  // the OS — that selection lives in localStorage and we want emails to
+  // honour it. Falls back to the browser default if nothing's stored.
+  try {
+    const stored = localStorage.getItem('reviewhub_lang');
+    if (stored) config.headers['Accept-Language'] = stored;
+  } catch { /* localStorage may be unavailable in some contexts */ }
   return config;
 });
 
