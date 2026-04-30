@@ -58,7 +58,7 @@ function validateRule(body) {
     const n = parseInt(max_rating, 10);
     if (!Number.isInteger(n) || n < 1 || n > 5) return 'max_rating must be 1–5';
   }
-  if (min_rating != null && max_rating != null && parseInt(min_rating) > parseInt(max_rating)) {
+  if (min_rating != null && max_rating != null && parseInt(min_rating, 10) > parseInt(max_rating, 10)) {
     return 'min_rating cannot exceed max_rating';
   }
   if (!response_text || typeof response_text !== 'string' || !response_text.trim()) return 'response_text is required';
