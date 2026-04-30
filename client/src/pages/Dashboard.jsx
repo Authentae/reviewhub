@@ -71,8 +71,16 @@ export default function Dashboard() {
   const [selectMode, setSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState(new Set());
 
-  // Tag filter state
-  const [tagFilter, setTagFilter] = useState(searchParams.get('tag_id') ? Number(searchParams.get('tag_id')) : null);
+  // Tag filter state — guard against `?tag_id=abc` or `?tag_id=0`. Number()
+  // returns NaN for non-numerics and 0 for "0"; either gets coerced to null
+  // (no filter) instead of being passed to the server which would silently
+  // match no rows.
+  const [tagFilter, setTagFilter] = useState(() => {
+    const raw = searchParams.get('tag_id');
+    if (!raw) return null;
+    const n = Number(raw);
+    return Number.isFinite(n) && n > 0 ? n : null;
+  });
   const [userTags, setUserTags] = useState([]);
   // Pinned filter
   const [pinnedOnly, setPinnedOnly] = useState(searchParams.get('pinned') === 'true');
