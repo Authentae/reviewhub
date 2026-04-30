@@ -50,13 +50,17 @@ export default function SessionExpiryBanner() {
   }, []);
 
   // Auto-logout once the session has actually expired. We call /auth/logout
-  // to clear the cookie, then clear local state and bounce to /login.
+  // to clear the cookie, then clear local state and bounce to /login —
+  // preserving the current path as ?next= so re-auth lands the user back
+  // exactly where their session timed out (matches the api.js 401 path).
   useEffect(() => {
     if (expiresAtMs === null) return;
     if (expiresAtMs - now <= 0) {
       api.post('/auth/logout').catch(() => {});
       clearToken();
-      navigate('/login');
+      const here = window.location.pathname + window.location.search;
+      const next = here && !here.startsWith('/login') ? `?next=${encodeURIComponent(here)}` : '';
+      navigate(`/login${next}`);
     }
   }, [expiresAtMs, now, navigate]);
 
