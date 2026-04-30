@@ -170,6 +170,7 @@ const en = {
   'tags.colorPickerAria': 'Tag colour',
   'settings.apiKeyRevokeShort': 'Revoke?',
   'inbound.regenerateShort': 'Regenerate?',
+  'inbound.regenerateConfirm': 'Regenerate inbound address (old address stops working)',
   'requests.resendShort': 'Re-send?',
   'requests.deleteShort': 'Delete?',
   'tags.removeAria': 'Remove tag {name}',

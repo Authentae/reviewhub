@@ -48,6 +48,8 @@
 .rh-shell { max-width: 1320px; margin: 0 auto; padding: 0 48px; position: relative; }
 @media (max-width: 720px) { .rh-shell { padding: 0 20px; } }
 .rh-mono { font-family: var(--rh-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rh-ink-3); font-weight: 500; }
+.rh-serif { font-family: var(--rh-serif); }
+.rh-sans { font-family: var(--rh-sans); }
 .rh-stars { display: inline-flex; gap: 2px; color: var(--rh-ochre); }
 
 /* NAV */
