@@ -263,8 +263,15 @@ router.get('/analytics', summaryLimiter, (req, res) => {
     // Aggregate daily rows into Monday-anchored weeks
     const weekMap = {};
     for (const row of dailyRows) {
-      const parts = row.day.split('-');
+      // Defensive: SQLite GROUP BY date(...) should always return ISO
+      // YYYY-MM-DD, but a corrupted row or a future schema change could
+      // produce something else. Skip rows where the parts can't form a
+      // real date — better than silently aggregating Invalid Dates into
+      // a "1969-12" week bucket.
+      const parts = (row.day || '').split('-');
+      if (parts.length < 3) continue;
       const d = new Date(+parts[0], +parts[1] - 1, +parts[2], 12, 0, 0);
+      if (isNaN(d.getTime())) continue;
       const key = getMondayKey(d);
       if (!weekMap[key]) weekMap[key] = { count: 0, rating_sum: 0, positive: 0, negative: 0, neutral: 0, responded: 0 };
       const w = weekMap[key];
