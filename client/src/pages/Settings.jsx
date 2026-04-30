@@ -2998,8 +2998,14 @@ export default function Settings() {
           }}
         />
 
-        {/* Browser Extension (all plans) */}
-        <ExtensionTokenSection />
+        {/* Browser Extension (archived 2026-05) — the Chrome extension was
+            cut from the active product to focus on the web dashboard +
+            Thailand-first positioning. The token-generation UI is hidden
+            here but the server-side endpoints + DB table remain dormant
+            so existing tokens keep working if anyone has the extension
+            installed. To revive: uncomment, restore extension/ from
+            archive/extension-mvp/. */}
+        {/* <ExtensionTokenSection /> */}
 
         {/* API Keys */}
         <ApiKeysSection plan={subscription?.plan} />

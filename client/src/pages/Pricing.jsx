@@ -211,6 +211,22 @@ export default function Pricing() {
                 ))}
               </div>
             </div>
+            {/* Thailand-friendly payment affordance — when the THB pricing is
+                shown, surface PromptPay so Thai SMBs (who often don't have
+                international credit cards) see they can pay locally. */}
+            {currency === 'THB' && (
+              <p style={{
+                marginTop: 18,
+                fontFamily: 'var(--rh-mono)',
+                fontSize: 12,
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase',
+                color: 'var(--rh-ink-3)',
+              }}>
+                <span style={{ color: 'var(--rh-ochre-deep)' }}>฿ Thai pricing.</span>{' '}
+                Pay with PromptPay, Thai bank transfer, or international card.
+              </p>
+            )}
           </div>
         </section>
 
