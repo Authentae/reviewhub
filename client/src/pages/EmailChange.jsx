@@ -16,13 +16,18 @@ export default function EmailChange() {
   useNoIndex();
   const [params] = useSearchParams();
   const token = params.get('token') || '';
-  const [status, setStatus] = useState(() => (token ? 'pending' : 'missing'));
+  // Same client-side shape gate used on /verify-email and /confirm-erasure.
+  // Server expects exactly 64 hex chars (auth.js:883). Without this, a
+  // malformed link briefly flashes "Verifying…" before the server's
+  // "Invalid token" rejection arrives — confusing UX.
+  const tokenLooksValid = /^[a-f0-9]{64}$/.test(token);
+  const [status, setStatus] = useState(() => (tokenLooksValid ? 'pending' : 'missing'));
   const [email, setEmail] = useState(null);
   const [error, setError] = useState('');
   const submitted = useRef(false);
 
   useEffect(() => {
-    if (!token || submitted.current) return;
+    if (!tokenLooksValid || submitted.current) return;
     submitted.current = true;
     api.post('/auth/email/confirm', { token })
       .then(({ data }) => { setStatus('success'); setEmail(data.email || null); })
