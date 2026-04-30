@@ -16,15 +16,7 @@ export default function AuthSideArt({ eyebrow, title }) {
       <div className="rh-hero-bg" />
       <div className="rh-hero-grid" />
       <div className="rh-hero-vignette" />
-      {/* Same redesign as the Landing hero flourish — ★ instead of &,
-          Chiang Mai coordinates, "Built solo" credit. Keeps auth pages
-          visually consistent with the marketing surface. */}
       <div className="rh-hero-amp">★</div>
-      <div className="rh-hero-coords">
-        <span className="cx">N 18°47′</span>
-        <span className="cy">E 98°59′</span>
-        <span className="cn">{t('landing.heroOriginCredit', 'AI drafts · in your voice')}</span>
-      </div>
 
       <div className="rh-auth-aside-inner">
         {/* Brand + controls row */}

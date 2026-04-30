@@ -117,11 +117,6 @@ function Hero() {
             visitor reads it as "indie maker behind this product"
             rather than "what's at this location?". */}
       <div className="rh-hero-amp" aria-hidden="true">★</div>
-      <div className="rh-hero-coords" aria-hidden="true">
-        <span className="cx">N 13°44′</span>
-        <span className="cy">E 100°31′</span>
-        <span className="cn">{t('landing.heroOriginCredit', 'AI drafts · in your voice')}</span>
-      </div>
       <div className="rh-shell rh-hero-inner">
         <div className="rh-hero-meta">
           <div className="rh-eyebrow">
@@ -760,7 +755,7 @@ function Footer() {
           </div>
         </div>
         <div className="copy">
-          <div>© 2026 ReviewHub · {t('landing.footerMadeSolo', 'Made solo in Bangkok')}</div>
+          <div>© 2026 ReviewHub</div>
           <div className="status rh-mono">{t('landing.footerStatus', 'all systems nominal')}</div>
         </div>
       </div>
