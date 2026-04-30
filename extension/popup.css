@@ -38,8 +38,8 @@ html, body {
   width: 28px;
   height: 28px;
   border-radius: 8px;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.35);
+  background: linear-gradient(135deg, #2c7889 0%, #1e4d5e 100%);
+  box-shadow: 0 2px 8px rgba(44, 120, 137, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -79,7 +79,7 @@ html, body {
   display: flex; align-items: center; justify-content: center;
 }
 .btn-icon:hover { background: #f1f5f9; }
-.btn-icon:focus-visible { outline: 2px solid #6366f1; outline-offset: 2px; }
+.btn-icon:focus-visible { outline: 2px solid #2c7889; outline-offset: 2px; }
 
 /* ─── Setup screen ──────────────────────────────────────────── */
 .setup-body { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
@@ -104,7 +104,7 @@ html, body {
   color: #0f172a;
 }
 .form-input:focus {
-  outline: 2px solid #6366f1;
+  outline: 2px solid #2c7889;
   outline-offset: 0;
   border-color: transparent;
 }
@@ -117,7 +117,7 @@ html, body {
   border-radius: 6px;
 }
 .setup-hint { font-size: 11px; color: #64748b; margin-top: 2px; }
-.setup-hint a { color: #2563eb; text-decoration: none; font-weight: 500; }
+.setup-hint a { color: #2c7889; text-decoration: none; font-weight: 500; }
 .setup-hint a:hover { text-decoration: underline; }
 
 .btn-primary-gradient {
@@ -125,16 +125,16 @@ html, body {
   height: 40px;
   border: 0;
   border-radius: 10px;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #2c7889 0%, #1e4d5e 100%);
   color: #fff;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.35);
+  box-shadow: 0 4px 14px rgba(30, 77, 94, 0.35);
   margin-top: 4px;
 }
 .btn-primary-gradient:hover:not(:disabled) {
-  box-shadow: 0 6px 18px rgba(139, 92, 246, 0.45);
+  box-shadow: 0 6px 18px rgba(30, 77, 94, 0.45);
 }
 .btn-primary-gradient:disabled { opacity: 0.6; cursor: not-allowed; }
 
@@ -334,7 +334,7 @@ html, body {
   height: 42px;
   border: 0;
   border-radius: 10px;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #2c7889 0%, #1e4d5e 100%);
   color: #fff;
   font-size: 13px;
   font-weight: 600;
@@ -343,12 +343,12 @@ html, body {
   justify-content: center;
   gap: 7px;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  box-shadow: 0 4px 14px rgba(30, 77, 94, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
   letter-spacing: -0.005em;
   font-family: inherit;
 }
 .btn-generate:hover:not(:disabled) {
-  box-shadow: 0 6px 18px rgba(139, 92, 246, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  box-shadow: 0 6px 18px rgba(30, 77, 94, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
 }
 .btn-generate:disabled { opacity: 0.6; cursor: not-allowed; }
 .btn-generate > span:first-child { font-size: 15px; line-height: 1; }
@@ -366,8 +366,8 @@ html, body {
 .state-generating {
   padding: 14px;
   border-radius: 10px;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.07) 0%, rgba(139, 92, 246, 0.09) 100%);
-  border: 1px solid rgba(139, 92, 246, 0.2);
+  background: linear-gradient(135deg, rgba(44, 120, 137, 0.07) 0%, rgba(30, 77, 94, 0.09) 100%);
+  border: 1px solid rgba(30, 77, 94, 0.2);
   display: flex;
   align-items: center;
   gap: 12px;
@@ -376,8 +376,8 @@ html, body {
 .spinner {
   position: absolute; inset: 0;
   border-radius: 50%;
-  border: 2.5px solid rgba(139, 92, 246, 0.2);
-  border-top-color: #8b5cf6;
+  border: 2.5px solid rgba(30, 77, 94, 0.2);
+  border-top-color: #1e4d5e;
   animation: rh-spin 0.7s linear infinite;
 }
 .spinner-icon {
@@ -393,7 +393,7 @@ html, body {
 .elapsed {
   font-size: 15px;
   font-weight: 700;
-  color: #8b5cf6;
+  color: #1e4d5e;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.02em;
 }
@@ -402,8 +402,8 @@ html, body {
 .draft-box {
   padding: 12px;
   border-radius: 10px;
-  background: linear-gradient(180deg, rgba(99, 102, 241, 0.03) 0%, #fff 40%);
-  border: 1px solid rgba(139, 92, 246, 0.2);
+  background: linear-gradient(180deg, rgba(44, 120, 137, 0.03) 0%, #fff 40%);
+  border: 1px solid rgba(30, 77, 94, 0.2);
 }
 .draft-head {
   display: flex;
@@ -417,7 +417,7 @@ html, body {
   gap: 5px;
   font-size: 10.5px;
   font-weight: 600;
-  color: #8b5cf6;
+  color: #1e4d5e;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -437,7 +437,7 @@ html, body {
 .draft-text .cursor {
   display: inline-block;
   width: 6px; height: 13px;
-  background: #8b5cf6;
+  background: #1e4d5e;
   vertical-align: text-bottom;
   margin-left: 1px;
   animation: rh-blink 1s steps(2) infinite;
@@ -454,7 +454,7 @@ html, body {
   height: 36px;
   border: 0;
   border-radius: 8px;
-  background: #2563eb;
+  background: #2c7889;
   color: #fff;
   font-size: 12.5px;
   font-weight: 600;
@@ -513,7 +513,7 @@ html, body {
   background: transparent;
   border: 0;
   padding: 0;
-  color: #2563eb;
+  color: #2c7889;
   font-size: 10.5px;
   font-weight: 600;
   text-decoration: none;

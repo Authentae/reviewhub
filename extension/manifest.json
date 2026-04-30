@@ -2,8 +2,8 @@
   "manifest_version": 3,
   "name": "ReviewHub — AI Review Replies",
   "short_name": "ReviewHub",
-  "version": "0.1.1",
-  "description": "Reply to Google, Yelp, Facebook, TripAdvisor, and Trustpilot reviews in 10 seconds with AI — right inside the review platform.",
+  "version": "0.1.2",
+  "description": "Reply to Yelp, Facebook, TripAdvisor, Trustpilot, Amazon, and Etsy reviews in 10 seconds with AI — right inside the review page. Google reviews sync via the ReviewHub web dashboard.",
   "author": "ReviewHub",
   "permissions": [
     "storage",
@@ -18,7 +18,6 @@
     "https://*.tripadvisor.co.uk/*",
     "https://*.tripadvisor.in/*",
     "https://*.trustpilot.com/*",
-    "https://business.google.com/*",
     "https://*.amazon.com/*",
     "https://*.amazon.co.uk/*",
     "https://*.amazon.ca/*",

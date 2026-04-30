@@ -56,8 +56,9 @@ extension/
 
 ## Packaging for Chrome Web Store
 
-1. Create icons: `icons/icon-16.png`, `icons/icon-48.png`, `icons/icon-128.png`.
-   Any square PNG works; use ReviewHub's brand color `#6366f1`.
+1. Icons live at `icons/icon-16.png`, `icons/icon-48.png`, `icons/icon-128.png`
+   (already generated). Source SVG and regeneration steps in `icons/ICONS.md`.
+   Brand: editorial teal gradient `#1e4d5e → #2c7889` with cream sparkle.
 2. Zip the `extension/` folder contents (not the folder itself):
 
 ```bash

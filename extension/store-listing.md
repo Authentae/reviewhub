@@ -17,12 +17,14 @@ Copy-paste-ready text for the Chrome Web Store developer console.
 ## Description (long)
 
 ```
-Reply to every Google, Yelp, Facebook, TripAdvisor, and Trustpilot review
-in under 10 seconds — without leaving the platform you're already on.
+Reply to every Yelp, Facebook, TripAdvisor, Trustpilot, Amazon, and Etsy
+review in under 10 seconds — right inside the page you're already on.
+Google reviews sync automatically through the ReviewHub web dashboard.
 
 WHAT IT DOES
 
-• Detects reviews on your Yelp, Facebook, TripAdvisor, or Trustpilot page
+• Detects reviews on Yelp, Facebook, TripAdvisor, Trustpilot, Amazon, and
+  Etsy review pages
 • One click drafts a professional reply using AI (powered by Claude)
 • Copy and paste into the platform's native reply field — done in seconds
 • Works in 10 languages — Thai, English, Spanish, French, German, Portuguese,
@@ -37,10 +39,10 @@ WHO IT'S FOR
 
 WHY IT'S DIFFERENT
 
-• Works on every major review platform — not just Google
+• Works across six review platforms in-page, with Google sync via the web app
 • Permanent free plan (3 AI drafts per month)
 • Unlimited AI drafts on the paid plan (just $14/month — or ฿490 in Thailand)
-• No 14-day trial pressure, no sales calls
+• No trial pressure, no sales calls
 • Your drafts adapt to review sentiment automatically — thank positive
   reviewers warmly, address negative ones constructively
 • Replies in the language the review was written in (English reviews get
@@ -64,8 +66,11 @@ PRIVACY
 
 SUPPORTED PLATFORMS
 
-Currently: Yelp, Facebook, TripAdvisor, Trustpilot
-Coming soon: Amazon Seller, Etsy, Booking.com, Airbnb, Google Play, App Store
+In-page injection: Yelp, Facebook, TripAdvisor, Trustpilot, Amazon, Etsy
+Via web dashboard: Google Business Profile (OAuth sync), plus 60+ more
+platforms including Wongnai, Tabelog, Naver Place, Dianping, TheFork,
+HolidayCheck, Reclame Aqui via CSV import.
+Coming soon (in-page): Booking.com, Airbnb, Google Play, App Store
 
 Full multi-platform review dashboard + analytics + weekly digest + bulk
 review request campaigns available at reviewhub.review.
@@ -93,7 +98,7 @@ Full product: https://reviewhub.review
 
 ## Promo tile (440×280 PNG)
 
-Brand gradient background (#6366f1 → #8b5cf6), center text: "Reply to every review in 10 seconds", ReviewHub logo bottom-right.
+Brand gradient background (#1e4d5e → #2c7889), center text: "Reply to every review in 10 seconds", ReviewHub logo bottom-right.
 
 ## Small promo tile (920×680 PNG)
 
@@ -112,7 +117,7 @@ Permissions Justification:
 - `storage` — to save the user's extension token between sessions
 - `activeTab` — to read review content from the page the user is viewing when they click the button
 - `scripting` — to inject the draft-button UI into review pages
-- `host_permissions` (Yelp/FB/TripAdvisor/Trustpilot) — to inject content scripts on supported review platforms
+- `host_permissions` (Yelp/Facebook/TripAdvisor/Trustpilot/Amazon/Etsy) — to inject content scripts on supported review platforms
 
 Data usage declaration (Chrome Web Store form):
 - ✅ Personally identifiable information: no (reviewer names are handled but not stored long-term)
