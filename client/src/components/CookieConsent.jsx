@@ -69,6 +69,26 @@ export default function CookieConsent() {
     else setChoices((prev) => ({ ...prev, ...stored.consents }));
   }, []);
 
+  // Esc on a cookie banner = "decline non-essential" (the conservative
+  // default — same outcome as the explicit Decline button). Without this
+  // keyboard users had no way to dismiss the banner without mousing.
+  //
+  // IMPORTANT: this hook MUST run unconditionally on every render — it sat
+  // after `if (!visible) return null;` previously, which broke the rules of
+  // hooks for fresh visitors (no stored consent → first render returns null,
+  // then setVisible(true) triggers a second render that suddenly calls a new
+  // useEffect → "Rendered more hooks than during the previous render"
+  // crash that bubbled to the ErrorBoundary as a white-screen).
+  useEffect(() => {
+    if (!visible) return;
+    function onKey(e) {
+      if (e.key === 'Escape') decide(false);
+    }
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visible]); // decide is stable wrt closure for this purpose
+
   if (!visible) return null;
 
   function decide(allOn) {
@@ -90,18 +110,6 @@ export default function CookieConsent() {
     syncToServer(next);
     setVisible(false);
   }
-
-  // Esc on a cookie banner = "decline non-essential" (the conservative
-  // default — same outcome as the explicit Decline button). Without this
-  // keyboard users had no way to dismiss the banner without mousing.
-  useEffect(() => {
-    if (!visible) return;
-    function onKey(e) {
-      if (e.key === 'Escape') decide(false);
-    }
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-  }, [visible]); // decide is stable wrt closure for this purpose
   return (
     // Non-blocking banner, not a true modal — role="region" with a label
     // is the accurate ARIA semantic. The previous role="dialog" + aria-
