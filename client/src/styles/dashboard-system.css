@@ -18,6 +18,18 @@
   background: var(--rh-paper);
   color: var(--rh-ink);
   font-family: var(--rh-sans);
+}
+/* min-height: 100vh ONLY when the wrapper also opts in via Tailwind's
+   .min-h-screen utility. Without this scoping, ANY element wrapped in
+   `rh-design rh-app` (toasts, cookie banners, keyboard-shortcut modals,
+   email-verify banners) inherited 100vh and blew up the layout — leaving
+   a giant empty void between the visible chrome and the page content
+   (the "two bars + empty middle" symptom). Page wrappers all use
+   `<div className="rh-design rh-app min-h-screen">` so they still get
+   the full-viewport height; nested fixed/inline-block elements no
+   longer do. */
+.rh-design.rh-app.min-h-screen,
+.rh-design .rh-app.min-h-screen {
   min-height: 100vh;
 }
 
