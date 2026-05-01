@@ -139,6 +139,84 @@ describe('aiDrafts', () => {
     assert.ok(userMsg.includes('Test Co'));
   });
 
+  // Language hint contract: when preferredLang is passed to generateDraft,
+  // the user message should include a "Reply in: <natural language name>"
+  // line that the system prompt knows to honor over auto-detection. The
+  // natural-language form ("Thai (ภาษาไทย)…") is what the model handles
+  // most reliably — passing the bare ISO code 'th' produces flakier results.
+  test('threads preferredLang into the user message as a natural-language hint', async () => {
+    let capturedRequest = null;
+    const client = stubClient({
+      create: async (req) => {
+        capturedRequest = req;
+        return { content: [{ type: 'text', text: 'ok' }] };
+      },
+    });
+    await generateDraft(
+      { review: REVIEW, businessName: 'Test Co', preferredLang: 'th' },
+      { client }
+    );
+    const userMsg = capturedRequest.messages[0].content;
+    assert.ok(userMsg.includes('Reply in:'), `expected Reply-in hint: ${userMsg}`);
+    assert.ok(userMsg.includes('Thai'), `expected Thai language name: ${userMsg}`);
+  });
+
+  test('omits the Reply-in line entirely when preferredLang is not passed', async () => {
+    let capturedRequest = null;
+    const client = stubClient({
+      create: async (req) => {
+        capturedRequest = req;
+        return { content: [{ type: 'text', text: 'ok' }] };
+      },
+    });
+    await generateDraft({ review: REVIEW, businessName: 'Test Co' }, { client });
+    const userMsg = capturedRequest.messages[0].content;
+    assert.ok(!userMsg.includes('Reply in:'), 'no Reply-in hint should appear when lang is unspecified');
+  });
+
+  test('unknown preferredLang code is silently dropped (model auto-detects)', async () => {
+    let capturedRequest = null;
+    const client = stubClient({
+      create: async (req) => {
+        capturedRequest = req;
+        return { content: [{ type: 'text', text: 'ok' }] };
+      },
+    });
+    await generateDraft(
+      { review: REVIEW, businessName: 'Test Co', preferredLang: 'xx' },
+      { client }
+    );
+    const userMsg = capturedRequest.messages[0].content;
+    // Unknown code → fall through to auto-detect rather than send a confusing
+    // "Reply in: xx" line that the model can't resolve.
+    assert.ok(!userMsg.includes('Reply in:'), `expected no Reply-in line for unknown lang: ${userMsg}`);
+  });
+
+  // Template fallback honors preferredLang too — the AI path is the primary
+  // language switch, but when AI isn't available, Thai users shouldn't get
+  // English templates. heuristic: explicit lang wins; absent that, scan for
+  // Thai script in the review text.
+  test('template fallback returns Thai when preferredLang=th', () => {
+    const draft = getTemplateDraft(REVIEW, 'th');
+    // Quick sanity: contains a Thai character (อันใดอันหนึ่ง within Thai unicode block)
+    assert.ok(/[฀-๿]/.test(draft), `expected Thai characters in template: ${draft}`);
+  });
+
+  test('template fallback returns Thai when review text contains Thai script (no explicit lang)', () => {
+    const thaiReview = { ...REVIEW, review_text: 'พาสต้าอร่อยมากครับ' };
+    const draft = getTemplateDraft(thaiReview);
+    assert.ok(/[฀-๿]/.test(draft), `auto-detect: expected Thai template for Thai review: ${draft}`);
+  });
+
+  test('template fallback stays in English when preferredLang=en even if review has Thai', () => {
+    const thaiReview = { ...REVIEW, review_text: 'พาสต้าอร่อยมากครับ' };
+    // Explicit 'en' should override the heuristic. Use case: a Thai customer
+    // wrote a Thai review but the SHOP owner replies in English (e.g. an
+    // English-language hotel staff replying to a Thai guest).
+    const draft = getTemplateDraft(thaiReview, 'en');
+    assert.ok(!/[฀-๿]/.test(draft), `explicit en should override auto-detect: ${draft}`);
+  });
+
   test('system prompt is sent with cache_control for future cache activation', async () => {
     let capturedRequest = null;
     const client = stubClient({
