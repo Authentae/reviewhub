@@ -269,10 +269,17 @@ router.post('/review-reply-generator', freeToolLimiter, require('../middleware/h
       if (accepted) preferredLang = accepted;
     }
 
+    // Platform is a free-text field on the public form; cap length so an
+    // attacker can't pad the AI prompt with a 50KB "platform name" to drain
+    // Anthropic credits. Real platform names are <30 chars; 64 is generous.
+    const safePlatform = typeof platform === 'string'
+      ? platform.toLowerCase().slice(0, 64)
+      : 'other';
+
     const { generateDraft } = require('../lib/aiDrafts');
     const { draft, source } = await generateDraft({
       review: {
-        platform: typeof platform === 'string' ? platform.toLowerCase() : 'other',
+        platform: safePlatform,
         reviewer_name: (reviewer_name || '').slice(0, 200) || 'Customer',
         rating: Math.round(ratingNum),
         review_text: review_text.slice(0, 2000),
