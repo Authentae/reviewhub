@@ -733,23 +733,62 @@ const LANG_NAMES = {
   pt: 'Portuguese (Português)',
 };
 
+// Reviewer-name sniff: detect cases where the platform-supplied name is
+// junk and the model should omit the greeting rather than try to use it.
+// Caught here so the AI doesn't produce "Hi N/A," / "Hi user12345," /
+// "Hi 0," replies when it gets garbage from upstream platforms.
+function isJunkReviewerName(raw) {
+  if (typeof raw !== 'string') return true;
+  const s = raw.trim();
+  if (!s) return true;
+  if (s.length > 80) return true; // someone pasted a paragraph into the name field
+  // Common junk strings observed in the wild from scraped review feeds:
+  if (/^(n\/?a|none|null|undefined|anonymous|guest|user|customer|reviewer)$/i.test(s)) return true;
+  // Pure-digits "names" (e.g. "12345"):
+  if (/^[\d_\-.]+$/.test(s)) return true;
+  // Username-shaped: starts with user/anon/guest + digits/underscores ("user_8472")
+  if (/^(user|usr|anon|guest|reviewer|customer)[\d_\-]+$/i.test(s)) return true;
+  // Looks like an email address:
+  if (/@/.test(s) && /\./.test(s)) return true;
+  return false;
+}
+
 function buildUserMessage({ review, businessName, preferredLang }) {
   // Use the registry's display label so the AI sees "Wongnai" / "Tabelog
   // (食べログ)" / "Dianping (大众点评)" instead of bare lowercase IDs —
   // helps the model adapt tone to the platform's audience and convention.
   const { PLATFORM_META } = require('./platforms');
-  const platformLabel = PLATFORM_META[review.platform]?.label || review.platform || '';
+  const platformLabel = PLATFORM_META[review.platform]?.label || review.platform || '(unknown)';
+
   // When the caller passes a preferred language, surface it as an explicit
   // hint that overrides auto-detection (per SYSTEM_PROMPT). When omitted,
   // the prompt's "match the review's language" rule still applies.
   const langLine = preferredLang && LANG_NAMES[preferredLang]
     ? `Reply in: ${LANG_NAMES[preferredLang]}`
     : null;
+
+  // Reviewer name handling: if the upstream value looks like junk, send
+  // "(no name available)" so the prompt's "if the name looks fake, omit
+  // it" rule can fire. Without this, the model would try to greet
+  // "Hi user_12345," / "Hi N/A," etc.
+  const reviewerLine = isJunkReviewerName(review.reviewer_name)
+    ? 'Reviewer: (no name available — omit greeting by name)'
+    : `Reviewer: ${review.reviewer_name}`;
+
+  // Rating sanity. Ratings should be 1–5; defensively coerce out-of-range
+  // or non-numeric inputs so the prompt doesn't say "Rating: NaN out of 5"
+  // or "Rating: 7 out of 5" — both confuse the model and produce weird
+  // drafts. Default to 5 (most common case) when junk arrives.
+  const ratingNum = Number(review.rating);
+  const safeRating = Number.isFinite(ratingNum) && ratingNum >= 1 && ratingNum <= 5
+    ? Math.round(ratingNum)
+    : 5;
+
   return [
     `Business: ${businessName || 'this business'}`,
     `Platform: ${platformLabel}`,
-    `Reviewer: ${review.reviewer_name}`,
-    `Rating: ${review.rating} out of 5 stars`,
+    reviewerLine,
+    `Rating: ${safeRating} out of 5 stars`,
     `Review text: ${review.review_text ? `"${review.review_text}"` : '(none provided)'}`,
     langLine,
     '',

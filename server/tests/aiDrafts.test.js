@@ -297,6 +297,82 @@ describe('aiDrafts', () => {
     assert.ok(/Obrigado|obrigado|Valeu|valeu|desculpa|estrelas|gosto|ânimo|Avaliação|Volta/.test(draft), `expected Portuguese content: ${draft}`);
   });
 
+  // Junk-name sanitization: upstream platforms occasionally hand us
+  // garbage names (anonymous reviewers, user IDs, accidental email
+  // pastes, "N/A"). The user message should ask the model to omit the
+  // greeting-by-name rather than ship "Hi N/A," / "Hi user_12345," to a
+  // real customer.
+  for (const junk of ['', '   ', 'N/A', 'n/a', 'Anonymous', 'user', 'guest', 'null',
+                       'undefined', '12345', 'user_8472', 'foo@example.com']) {
+    test(`junk reviewer_name=${JSON.stringify(junk)} → "no name available" hint in user message`, async () => {
+      let captured = null;
+      const client = stubClient({
+        create: async (req) => {
+          captured = req;
+          return { content: [{ type: 'text', text: 'ok' }] };
+        },
+      });
+      await generateDraft(
+        { review: { ...REVIEW, reviewer_name: junk }, businessName: 'Test Co' },
+        { client }
+      );
+      const userMsg = captured.messages[0].content;
+      assert.ok(/no name available/.test(userMsg), `expected name-omitted hint, got: ${userMsg}`);
+      // Negative: real names should NOT trigger this branch
+      assert.ok(!/Reviewer: ${junk}/.test(userMsg));
+    });
+  }
+
+  test('real reviewer name passes through to user message normally', async () => {
+    let captured = null;
+    const client = stubClient({
+      create: async (req) => {
+        captured = req;
+        return { content: [{ type: 'text', text: 'ok' }] };
+      },
+    });
+    await generateDraft({ review: REVIEW, businessName: 'Test Co' }, { client });
+    const userMsg = captured.messages[0].content;
+    assert.ok(userMsg.includes('Reviewer: Alice Example'));
+    assert.ok(!/no name available/.test(userMsg));
+  });
+
+  // Rating sanity. Out-of-range or non-numeric ratings should be coerced
+  // to a safe value so the prompt never says "Rating: NaN" or "Rating: 7".
+  test('out-of-range rating is coerced to a sensible value', async () => {
+    let captured = null;
+    const client = stubClient({
+      create: async (req) => {
+        captured = req;
+        return { content: [{ type: 'text', text: 'ok' }] };
+      },
+    });
+    await generateDraft(
+      { review: { ...REVIEW, rating: 7 }, businessName: 'Test Co' },
+      { client }
+    );
+    const userMsg = captured.messages[0].content;
+    assert.ok(/Rating: [1-5] out of 5 stars/.test(userMsg), `expected 1-5 rating in: ${userMsg}`);
+    assert.ok(!/Rating: 7/.test(userMsg));
+  });
+
+  test('non-numeric rating falls back without exploding', async () => {
+    let captured = null;
+    const client = stubClient({
+      create: async (req) => {
+        captured = req;
+        return { content: [{ type: 'text', text: 'ok' }] };
+      },
+    });
+    await generateDraft(
+      { review: { ...REVIEW, rating: 'five stars' }, businessName: 'Test Co' },
+      { client }
+    );
+    const userMsg = captured.messages[0].content;
+    assert.ok(!/NaN/.test(userMsg));
+    assert.ok(/Rating: [1-5] out of 5 stars/.test(userMsg));
+  });
+
   test('system prompt is sent with cache_control for future cache activation', async () => {
     let capturedRequest = null;
     const client = stubClient({
