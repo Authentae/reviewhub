@@ -1423,11 +1423,36 @@ router.get('/:id/draft', draftLimiter, async (req, res) => {
     }
 
     const { generateDraft } = require('../lib/aiDrafts');
+    // Resolve the user's preferred reply language. Order of preference:
+    //   1. Explicit ?lang= or body.lang on the request (lets the dashboard
+    //      override on a per-draft basis if we add that UI later).
+    //   2. The user's stored preferred_lang (captured at registration from
+    //      Accept-Language) — drives the default for everyone.
+    //   3. Live Accept-Language header — survives if the user signed up
+    //      before preferred_lang was added.
+    //   4. Auto-detect from the review text in the prompt itself (the
+    //      SYSTEM_PROMPT in aiDrafts.js handles this when preferredLang
+    //      is omitted).
+    let preferredLang = null;
+    try {
+      const explicit = (req.query?.lang || req.body?.lang || '').toString().trim().toLowerCase();
+      if (explicit && /^[a-z]{2}$/.test(explicit)) preferredLang = explicit;
+      else {
+        const u = get('SELECT preferred_lang FROM users WHERE id = ?', [req.user.id]);
+        if (u?.preferred_lang) preferredLang = u.preferred_lang;
+        else {
+          const accepted = req.acceptsLanguages(['th', 'ja', 'ko', 'zh', 'es', 'fr', 'de', 'it', 'pt', 'en']);
+          if (accepted) preferredLang = accepted;
+        }
+      }
+    } catch { /* best-effort — fall through to auto-detect in prompt */ }
+
     let draft, source;
     try {
       ({ draft, source } = await generateDraft({
         review,
         businessName: business.business_name,
+        preferredLang,
       }));
     } catch (err) {
       // Unexpected throw — refund the slot so the error doesn't cost the user a draft

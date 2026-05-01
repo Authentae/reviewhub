@@ -36,7 +36,23 @@ const REQUEST_TIMEOUT_MS = 10_000;
 // System prompt — deliberately stable so it's cache-friendly. Any runtime
 // data (business name, reviewer name, rating, review text) goes in the user
 // message, never here.
+//
+// LANGUAGE: the LANGUAGE rules at the top are load-bearing. Without them
+// the model defaulted to English even when the review was in Thai/Japanese/
+// Korean — every prior instruction in the prompt is in English, so the model
+// pattern-matched to English output. Naming the rule explicitly + putting
+// it FIRST flips that default. The user message also carries an explicit
+// `Reply in: <lang>` line when the caller passes preferredLang, which beats
+// auto-detection on edge cases (e.g. a reply-in-English Thai-restaurant
+// owner whose customer wrote in English).
 const SYSTEM_PROMPT = `You are drafting a response to an online review for a local business owner.
+
+LANGUAGE (most important rule — apply before anything else):
+- Reply in the SAME language the review is written in. If the review is in Thai, reply in Thai. Japanese review → Japanese reply. Korean → Korean. Spanish → Spanish. Etc.
+- If the user message contains a "Reply in: <language>" hint, that hint OVERRIDES auto-detection — use the requested language regardless of the review's language.
+- For Thai replies, use natural conversational Thai with appropriate ครับ/ค่ะ particles. Avoid stiff translated phrasing like "ขอบคุณสำหรับ feedback".
+- For Japanese, use polite-form (です/ます) by default unless the review is clearly casual.
+- Never mix languages in one reply (no "Thank you ครับ"). Never write a Thai reply in romanized Thai.
 
 Output format:
 - Return ONLY the response text. No preamble, no explanation, no quotes, no markdown.
@@ -44,7 +60,7 @@ Output format:
 - Keep it under 280 characters so it fits on every platform.
 
 Tone:
-- Warm and genuine. Avoid corporate-speak ("We value your feedback") and filler.
+- Warm and genuine. Avoid corporate-speak ("We value your feedback" / "ขอบคุณสำหรับความคิดเห็นอันมีค่า") and filler.
 - Address the reviewer by their first name if the reviewer name looks like a real person's name.
 - Match the register of a small-business owner replying personally, not a PR response.
 
@@ -100,18 +116,73 @@ function getDefaultClient() {
   }
 }
 
+// Heuristic: does this string contain Thai characters? Used to pick a Thai
+// template when the AI path is unavailable AND the caller didn't pass an
+// explicit preferredLang. Cheap (no library), reliable enough for the
+// fallback path. Real language detection happens in the AI path.
+function looksThai(s) {
+  return typeof s === 'string' && /[฀-๿]/.test(s);
+}
+
 // Template pool — used when AI path isn't available or fails. Same
 // style/sentiment mapping as the previous hard-coded drafts route.
-function getTemplateDraft(review) {
-  // Fallback when reviewer_name is null/undefined/empty — drops it cleanly
-  // out of the greeting instead of letting "Hi, null" or "Hi, " ship into
-  // a customer-facing reply. The two pools are written so the with-name
-  // and without-name forms each read naturally; the ai-draft path uses
-  // its own SYSTEM_PROMPT with a similar fallback baked into prompt-time.
+//
+// `preferredLang` is optional; when 'th' (or omitted but the review text
+// contains Thai characters), Thai templates are used. Without this, a Thai
+// reviewer who hits the fallback path got an English-only reply — which is
+// what the user reported.
+function getTemplateDraft(review, preferredLang) {
   const hasName = typeof review.reviewer_name === 'string' && review.reviewer_name.trim().length > 0;
   const name = hasName ? review.reviewer_name : null;
 
-  const drafts = hasName ? {
+  // Pick locale: explicit preferredLang wins, else heuristic-detect from the
+  // review text. Default English. Add more locales here when needed; mirror
+  // the EN/TH structure below.
+  const useThai =
+    preferredLang === 'th' ||
+    (!preferredLang && looksThai(review.review_text));
+
+  const draftsTH = hasName ? {
+    positive: [
+      `ขอบคุณ${name}มากนะคะ ดีใจที่ประทับใจ รอต้อนรับครั้งหน้าเลยค่ะ`,
+      `ขอบคุณสำหรับคำชมจากคุณ${name}ค่ะ ทีมงานอ่านแล้วยิ้มกันเลย แวะมาใหม่นะคะ`,
+      `ขอบคุณ${name}ค่ะ รีวิวแบบนี้เป็นกำลังใจให้ทีมเราจริงๆ เจอกันใหม่นะคะ`,
+      `ดีใจมากนะคะคุณ${name} ขอบคุณที่สละเวลามาเขียนรีวิว แล้วเจอกันค่ะ`,
+    ],
+    negative: [
+      `ต้องขอโทษ${name}จริงๆ นะคะ ไม่ใช่มาตรฐานของเรา รบกวนติดต่อเราโดยตรงเพื่อให้แก้ไขให้ค่ะ`,
+      `ขอบคุณ${name}ที่บอกตรงๆ นะคะ เรารับฟังและจะปรับปรุงให้ดีขึ้น`,
+      `ขออภัยอย่างจริงใจค่ะคุณ${name} อยากให้ติดต่อเราโดยตรงเพื่อแก้ไขเรื่องนี้`,
+      `เราเข้าใจ${name}และขอโทษที่ทำให้ผิดหวัง ขอโอกาสแก้ไข — ทักมาหาเราโดยตรงได้นะคะ`,
+    ],
+    neutral: [
+      `ขอบคุณ${name}สำหรับคำติชมนะคะ ครั้งหน้าเราจะทำให้ดีกว่านี้`,
+      `ขอบคุณ${name}ที่แวะมาและสละเวลาเขียนรีวิวค่ะ ความเห็นแบบนี้ช่วยเราพัฒนา`,
+      `ขอบคุณ${name}มากค่ะ ครั้งหน้าจะพยายามให้ได้ 5 ดาวเต็มจากคุณ`,
+      `ขอบคุณ${name}สำหรับความเห็นจริงใจ เราพยายามทำให้ดีขึ้นเสมอ แวะมาใหม่นะคะ`,
+    ],
+  } : {
+    positive: [
+      `ขอบคุณมากนะคะ ดีใจที่ประทับใจ รอต้อนรับครั้งหน้าเลยค่ะ`,
+      `ขอบคุณสำหรับคำชมค่ะ ทีมงานอ่านแล้วยิ้มกันเลย แวะมาใหม่นะคะ`,
+      `ขอบคุณค่ะ รีวิวแบบนี้เป็นกำลังใจให้ทีมเราจริงๆ เจอกันใหม่นะคะ`,
+      `ดีใจมากค่ะ ขอบคุณที่สละเวลามาเขียนรีวิว แล้วเจอกันนะคะ`,
+    ],
+    negative: [
+      `ต้องขอโทษจริงๆ ค่ะ ไม่ใช่มาตรฐานของเรา รบกวนติดต่อเราโดยตรงเพื่อให้แก้ไขให้`,
+      `ขอบคุณที่บอกตรงๆ นะคะ เรารับฟังและจะปรับปรุงให้ดีขึ้น`,
+      `ขออภัยอย่างจริงใจค่ะ อยากให้ติดต่อเราโดยตรงเพื่อแก้ไขเรื่องนี้`,
+      `เราเข้าใจและขอโทษที่ทำให้ผิดหวัง ขอโอกาสแก้ไข — ทักมาหาเราโดยตรงได้นะคะ`,
+    ],
+    neutral: [
+      `ขอบคุณสำหรับคำติชมนะคะ ครั้งหน้าเราจะทำให้ดีกว่านี้`,
+      `ขอบคุณที่แวะมาและสละเวลาเขียนรีวิวค่ะ ความเห็นแบบนี้ช่วยเราพัฒนา`,
+      `ขอบคุณมากค่ะ ครั้งหน้าจะพยายามให้ได้ 5 ดาวเต็มจากคุณ`,
+      `ขอบคุณสำหรับความเห็นจริงใจ เราพยายามทำให้ดีขึ้นเสมอ แวะมาใหม่นะคะ`,
+    ],
+  };
+
+  const draftsEN = hasName ? {
     positive: [
       `Thank you so much, ${name}! We're thrilled you had a great experience and look forward to welcoming you back soon.`,
       `We really appreciate your kind words, ${name}! It means the world to our team. See you next time!`,
@@ -150,34 +221,61 @@ function getTemplateDraft(review) {
       `Thank you! We value your honest feedback and are always looking for ways to do better. We hope to see you again soon.`,
     ],
   };
+
+  const drafts = useThai ? draftsTH : draftsEN;
   const options = drafts[review.sentiment] || drafts.neutral;
   return options[Math.floor(Math.random() * options.length)];
 }
 
-function buildUserMessage({ review, businessName }) {
+// Map ISO-639 codes the rest of the app uses to natural-language names the
+// model understands well. We pass the name (not the code) because models are
+// far more reliable when prompted with "Reply in: Thai" than "Reply in: th".
+const LANG_NAMES = {
+  en: 'English',
+  th: 'Thai (ภาษาไทย) — natural conversational Thai with appropriate ครับ/ค่ะ particles, NOT romanized',
+  ja: 'Japanese (日本語)',
+  ko: 'Korean (한국어)',
+  zh: 'Chinese (中文)',
+  es: 'Spanish (Español)',
+  fr: 'French (Français)',
+  de: 'German (Deutsch)',
+  it: 'Italian (Italiano)',
+  pt: 'Portuguese (Português)',
+};
+
+function buildUserMessage({ review, businessName, preferredLang }) {
   // Use the registry's display label so the AI sees "Wongnai" / "Tabelog
   // (食べログ)" / "Dianping (大众点评)" instead of bare lowercase IDs —
   // helps the model adapt tone to the platform's audience and convention.
   const { PLATFORM_META } = require('./platforms');
   const platformLabel = PLATFORM_META[review.platform]?.label || review.platform || '';
+  // When the caller passes a preferred language, surface it as an explicit
+  // hint that overrides auto-detection (per SYSTEM_PROMPT). When omitted,
+  // the prompt's "match the review's language" rule still applies.
+  const langLine = preferredLang && LANG_NAMES[preferredLang]
+    ? `Reply in: ${LANG_NAMES[preferredLang]}`
+    : null;
   return [
     `Business: ${businessName || 'this business'}`,
     `Platform: ${platformLabel}`,
     `Reviewer: ${review.reviewer_name}`,
     `Rating: ${review.rating} out of 5 stars`,
     `Review text: ${review.review_text ? `"${review.review_text}"` : '(none provided)'}`,
+    langLine,
     '',
     'Draft a response.',
-  ].join('\n');
+  ].filter(Boolean).join('\n');
 }
 
 // Main entry point. `client` is injectable for tests; production passes nothing
-// and gets the module-level lazily-initialised client.
-async function generateDraft({ review, businessName }, { client } = {}) {
+// and gets the module-level lazily-initialised client. `preferredLang` (e.g.
+// 'th', 'ja') overrides the model's auto-language-detection AND picks the
+// matching template for the fallback path.
+async function generateDraft({ review, businessName, preferredLang }, { client } = {}) {
   const anthropic = client ?? getDefaultClient();
 
   if (!anthropic) {
-    return { draft: getTemplateDraft(review), source: 'template' };
+    return { draft: getTemplateDraft(review, preferredLang), source: 'template' };
   }
 
   // Auth circuit breaker — short-circuit during the cooldown window so a
@@ -185,7 +283,7 @@ async function generateDraft({ review, businessName }, { client } = {}) {
   // doesn't keep tripping Sentry alerts. Tests inject a client directly,
   // so the breaker only applies when we're using the module-level client.
   if (!client && Date.now() < _authBreakerUntil) {
-    return { draft: getTemplateDraft(review), source: 'template' };
+    return { draft: getTemplateDraft(review, preferredLang), source: 'template' };
   }
 
   try {
@@ -203,7 +301,7 @@ async function generateDraft({ review, businessName }, { client } = {}) {
         },
       ],
       messages: [
-        { role: 'user', content: buildUserMessage({ review, businessName }) },
+        { role: 'user', content: buildUserMessage({ review, businessName, preferredLang }) },
       ],
     });
 
@@ -216,7 +314,7 @@ async function generateDraft({ review, businessName }, { client } = {}) {
         kind: 'anthropic.empty_response',
         reviewId: review.id,
       });
-      return { draft: getTemplateDraft(review), source: 'template' };
+      return { draft: getTemplateDraft(review, preferredLang), source: 'template' };
     }
     return { draft, source: 'ai' };
   } catch (err) {
@@ -246,7 +344,7 @@ async function generateDraft({ review, businessName }, { client } = {}) {
           breaker: 'tripped',
         });
       }
-      return { draft: getTemplateDraft(review), source: 'template' };
+      return { draft: getTemplateDraft(review, preferredLang), source: 'template' };
     }
 
     captureException(err, {
@@ -255,7 +353,7 @@ async function generateDraft({ review, businessName }, { client } = {}) {
       reviewId: review.id,
       model: MODEL,
     });
-    return { draft: getTemplateDraft(review), source: 'template' };
+    return { draft: getTemplateDraft(review, preferredLang), source: 'template' };
   }
 }
 

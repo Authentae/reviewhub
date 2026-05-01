@@ -141,7 +141,11 @@ export default function ReplyGeneratorTool() {
     }
     setLoading(true);
     try {
-      const { data } = await api.post('/public/review-reply-generator', { ...form, website: honeypot });
+      // Pass the UI language explicitly so the AI replies in the right
+      // language even when the review text is mostly English/numbers/symbols
+      // and auto-detection would default to English. Falls through to
+      // Accept-Language on the server when omitted.
+      const { data } = await api.post('/public/review-reply-generator', { ...form, lang, website: honeypot });
       setDraft(data.draft);
     } catch (err) {
       const status = err?.response?.status;

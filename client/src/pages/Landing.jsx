@@ -421,6 +421,10 @@ function AiDemo() {
         business_name: lang === 'th' ? 'ร้านกาแฟริมทาง' : 'Corner Bistro',
         review_text: review.body,
         tone,
+        // Send the UI language so the AI replies in Thai when the user is
+        // browsing the Thai landing page, even if the demo's English sample
+        // review would otherwise win the auto-detect.
+        lang,
       });
       const text = (data && data.draft) || DEMO_FALLBACKS[which]?.[tone] || '';
       typeOut(text);
@@ -809,6 +813,7 @@ function GimmickLayer() {
         business_name: lang === 'th' ? 'ร้านกาแฟริมทาง' : 'Corner Bistro',
         review_text: pick.body,
         tone: 'warm',
+        lang,
       });
       text = (data && data.draft) || '';
     } catch (err) {

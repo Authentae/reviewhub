@@ -14,6 +14,7 @@ const rateLimit = require('express-rate-limit');
 const { authMiddleware } = require('../middleware/auth');
 
 const { captureException } = require('../lib/errorReporter');
+const { get } = require('../db/schema');
 const router = express.Router();
 router.use(authMiddleware);
 
@@ -56,6 +57,22 @@ router.post('/draft', draftLimiter, async (req, res) => {
       });
     }
 
+    // Resolve preferred reply language. Same waterfall as the dashboard
+    // /draft route: explicit body.lang → user.preferred_lang → Accept-Language.
+    let preferredLang = null;
+    try {
+      const explicit = (req.body?.lang || '').toString().trim().toLowerCase();
+      if (/^[a-z]{2}$/.test(explicit)) preferredLang = explicit;
+      else {
+        const u = get('SELECT preferred_lang FROM users WHERE id = ?', [req.user.id]);
+        if (u?.preferred_lang) preferredLang = u.preferred_lang;
+        else {
+          const accepted = req.acceptsLanguages(['th', 'ja', 'ko', 'zh', 'es', 'fr', 'de', 'it', 'pt', 'en']);
+          if (accepted) preferredLang = accepted;
+        }
+      }
+    } catch { /* fall through to auto-detect */ }
+
     // Build a synthetic review object for the existing generateDraft helper
     // — the extension doesn't know a review_id (the review lives on the
     // third-party platform), so we pass the fields directly.
@@ -71,6 +88,7 @@ router.post('/draft', draftLimiter, async (req, res) => {
           sentiment: ratingNum >= 4 ? 'positive' : ratingNum <= 2 ? 'negative' : 'neutral',
         },
         businessName: (business_name || '').slice(0, 200) || 'our business',
+        preferredLang,
       }));
     } catch (err) {
       refundAiDraft(req.user.id);

@@ -42,6 +42,29 @@ const POOLS = {
   ],
 };
 
+// Thai pool — used when the parsed user message carries "Reply in: Thai..."
+// or the review text contains Thai characters. Same {name}/{biz} interpolation
+// but with native Thai phrasing (no "ขอบคุณสำหรับ feedback" awkwardness).
+const POOLS_TH = {
+  positive: [
+    "ขอบคุณ{name}มากนะคะ ดีใจที่ประทับใจ ครั้งหน้ารอต้อนรับที่{biz}เลยค่ะ",
+    "ขอบคุณ{name}ค่ะ รีวิวแบบนี้เป็นกำลังใจให้ทีมเราจริงๆ แวะมาใหม่นะคะ",
+    "ขอบคุณ{name}มากที่สละเวลาเขียนรีวิว ทีมงาน{biz}ดีใจกันใหญ่เลย",
+    "ขอบคุณ{name}ค่ะ คำชมแบบนี้ทำให้คนทำร้านอย่างเรามีแรงต่อ เจอกันรอบหน้าค่ะ",
+  ],
+  neutral: [
+    "ขอบคุณ{name}สำหรับคำติชมตรงๆ นะคะ ถ้ามีอะไรที่ช่วยให้คุณให้ 5 ดาวได้ บอกเราตรงๆ ที่{biz}ก็ได้ค่ะ",
+    "ขอบคุณ{name}ที่สละเวลาเขียน เราจะพยายามทำให้ดีขึ้น ครั้งหน้าหวังว่าจะได้ 5 ดาวจากคุณ",
+    "ขอบคุณ{name}ค่ะ ความเห็นแบบนี้ช่วยเราเห็นว่าควรปรับตรงไหน ลองให้โอกาส{biz}อีกครั้งนะคะ",
+  ],
+  negative: [
+    "ต้องขอโทษ{name}จริงๆ นะคะ ไม่ใช่มาตรฐานของ{biz}เลย รบกวนทักมาหาเราโดยตรง อยากแก้ไขเรื่องนี้ให้",
+    "ขออภัย{name}ค่ะ อยากรู้เรื่องที่เกิดขึ้นจากปากคุณเอง ทักมาทาง DM ได้เลย เราจะดูแลให้ดีที่สุด",
+    "ขอบคุณ{name}ที่บอกเรา แม้จะไม่ใช่เรื่องที่เราอยากได้ยิน {biz}ขอโอกาสแก้ตัว ติดต่อเราโดยตรงได้นะคะ",
+    "ไม่ใช่ตัวตนของเราเลยค่ะ ขออภัย{name}จริงๆ ทักมาหาเราได้ตลอด เราอ่านทุกข้อความและจะตอบเอง",
+  ],
+};
+
 // Hook generators look at the review text for concrete things to reference,
 // so the draft feels read-not-templated. Falls back to a generic phrase if
 // nothing notable surfaces.
@@ -121,16 +144,39 @@ function parseUserMessage(content) {
   }
   const rating = parseInt(fields.rating, 10) || 0;
   const sentiment = rating >= 4 ? 'positive' : rating <= 2 ? 'negative' : 'neutral';
+  const reviewText = (fields['review text'] || '').replace(/^"|"$/g, '');
+  // Pull the "Reply in: <language>" hint that aiDrafts.js writes when the
+  // caller passes preferredLang. Falls back to detecting Thai characters in
+  // the review text. Same precedence as the real-API path so the mock and
+  // production paths feel consistent in dev.
+  const replyInLine = fields['reply in'] || '';
+  const lang =
+    /thai|ภาษาไทย|^th\b/i.test(replyInLine) ? 'th' :
+    /[฀-๿]/.test(reviewText) ? 'th' :
+    'en';
   return {
     sentiment,
     rating,
     reviewer: fields.reviewer || '',
     business: fields.business || 'this business',
-    reviewText: (fields['review text'] || '').replace(/^"|"$/g, ''),
+    reviewText,
+    lang,
   };
 }
 
-function generateDraftText({ sentiment, reviewer, business, reviewText }) {
+function generateDraftText({ sentiment, reviewer, business, reviewText, lang }) {
+  // Thai mock pool when we can tell the reply should be Thai. English drafts
+  // ship with a language-aware {hook}; Thai mocks skip the hook because the
+  // pool already carries enough variety on its own.
+  if (lang === 'th') {
+    const poolTh = POOLS_TH[sentiment] || POOLS_TH.neutral;
+    const tplTh = poolTh[Math.floor(Math.random() * poolTh.length)];
+    return tplTh
+      .replace('{name}', firstName(reviewer))
+      .replace('{biz}', business || 'ร้านเรา')
+      .replace(/\s{2,}/g, ' ')
+      .trim();
+  }
   const pool = POOLS[sentiment] || POOLS.neutral;
   const template = pool[Math.floor(Math.random() * pool.length)];
   const hook = pickHook(reviewText, sentiment);

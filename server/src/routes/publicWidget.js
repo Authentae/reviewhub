@@ -256,6 +256,19 @@ router.post('/review-reply-generator', freeToolLimiter, require('../middleware/h
       return res.status(400).json({ error: 'rating must be 1-5' });
     }
 
+    // Resolve preferred reply language: explicit body.lang from the public
+    // tool's UI (the I18nContext on the client) wins; otherwise fall back to
+    // the Accept-Language header. This is the no-auth surface, so there's no
+    // stored preferred_lang to read.
+    let preferredLang = null;
+    const bodyLang = typeof req.body?.lang === 'string' ? req.body.lang.trim().toLowerCase() : '';
+    if (/^[a-z]{2}$/.test(bodyLang)) {
+      preferredLang = bodyLang;
+    } else {
+      const accepted = req.acceptsLanguages(['th', 'ja', 'ko', 'zh', 'es', 'fr', 'de', 'it', 'pt', 'en']);
+      if (accepted) preferredLang = accepted;
+    }
+
     const { generateDraft } = require('../lib/aiDrafts');
     const { draft, source } = await generateDraft({
       review: {
@@ -266,6 +279,7 @@ router.post('/review-reply-generator', freeToolLimiter, require('../middleware/h
         sentiment: ratingNum >= 4 ? 'positive' : ratingNum <= 2 ? 'negative' : 'neutral',
       },
       businessName: (business_name || '').slice(0, 200) || 'our business',
+      preferredLang,
     });
 
     res.setHeader('Cache-Control', 'no-store, private');
