@@ -38,6 +38,9 @@ const AuditLanding = lazy(() => import('./pages/AuditLanding'));
 // Changelog — public, tech-savvy buyers ("where's the changelog?") asked
 // for this in persona testing. Curated highlights, no firehose.
 const Changelog = lazy(() => import('./pages/Changelog'));
+// Support — public-or-authed real-issue intake. Frill (already wired) is
+// for feature feedback; /support is for "this broke" / billing / account.
+const Support = lazy(() => import('./pages/Support'));
 const OwnerDashboard = lazy(() => import('./pages/OwnerDashboard'));
 // Landing page after one-click unsubscribe (RFC 8058). Public — the server
 // applies the unsub, then redirects browser-clicks here as a confirmation.
@@ -120,6 +123,7 @@ export default function App() {
         {/* Cold-outreach lead-capture landing — see AuditLanding.jsx */}
         <Route path="/audit" element={<AuditLanding />} />
         <Route path="/changelog" element={<Changelog />} />
+        <Route path="/support" element={<Support />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>

@@ -207,6 +207,33 @@ function initSchema() {
     );
     CREATE INDEX IF NOT EXISTS idx_onboarding_user ON onboarding_emails(user_id);
 
+    -- Support tickets (the thing the founder receives when something breaks
+    -- for a user). Frill handles feedback/feature-request style input;
+    -- support_tickets handles "my checkout broke" / "I can't connect Google"
+    -- / "delete my account" / "your AI gave me a bad reply." Email-to-
+    -- founder is fired immediately on insert (see routes/support.js); the
+    -- DB row exists so the founder has a CRM-lite inbox view on the /owner
+    -- dashboard later. ON DELETE SET NULL on user_id so a ticket survives
+    -- account deletion (we still want the conversation history) but loses
+    -- the personal-data link. Email field is captured separately so the
+    -- founder can reply even after the account is gone.
+    CREATE TABLE IF NOT EXISTS support_tickets (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+      email TEXT NOT NULL,
+      category TEXT NOT NULL,
+      subject TEXT NOT NULL,
+      message TEXT NOT NULL,
+      url TEXT,
+      user_agent TEXT,
+      ip TEXT,
+      status TEXT NOT NULL DEFAULT 'new',
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      resolved_at TEXT
+    );
+    CREATE INDEX IF NOT EXISTS idx_support_status ON support_tickets(status, created_at DESC);
+    CREATE INDEX IF NOT EXISTS idx_support_user ON support_tickets(user_id);
+
     CREATE TABLE IF NOT EXISTS review_requests (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       business_id INTEGER NOT NULL REFERENCES businesses(id) ON DELETE CASCADE,
