@@ -303,4 +303,105 @@ router.get('/platforms', widgetLimiter, (_req, res) => {
   }
 });
 
+// POST /api/public/audit-request — lead capture for the "Free 10 review-reply
+// audit" cold-outreach landing page. The prospect submits their Google Business
+// (or any review platform) URL + email, we email the founder with the lead, and
+// respond with a generic ack. No DB persistence yet — the volume is currently
+// low enough that the founder's inbox IS the CRM. Promote to a leads table when
+// volume justifies it.
+//
+// Spam defences:
+//   - 5 requests/IP/hour (cold-DM funnels are bursty but not THAT bursty)
+//   - Honeypot field 'website' — bots fill every input; humans never see it
+//   - Length caps prevent payload-stuffing
+//   - Email format validation (loose; we'd rather accept oddities than block legit)
+const auditLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 5,
+  message: 'Too many audit requests from this IP. Try again in an hour.',
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: () => process.env.NODE_ENV === 'test',
+});
+
+router.post('/audit-request', auditLimiter, async (req, res) => {
+  try {
+    const { businessName, businessUrl, email, notes, website } = req.body || {};
+
+    // Honeypot: bots that fill every form field land here. Return a fake-200
+    // so they don't retry — we never email anyone, never log it as a real lead.
+    if (website && String(website).trim() !== '') {
+      return res.json({ success: true });
+    }
+
+    // Validation — fail-fast on missing essentials. Loose email regex
+    // (anything@anything.anything) because we'd rather a typo'd lead reach
+    // the founder than reject a real prospect.
+    const cleanEmail = String(email || '').trim().toLowerCase().slice(0, 254);
+    const cleanBizName = String(businessName || '').trim().slice(0, 200);
+    const cleanBizUrl = String(businessUrl || '').trim().slice(0, 1000);
+    const cleanNotes = String(notes || '').trim().slice(0, 2000);
+
+    if (!cleanEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+      return res.status(400).json({ error: 'Please enter a valid email.' });
+    }
+    if (!cleanBizName) {
+      return res.status(400).json({ error: 'Please tell us your business name.' });
+    }
+    if (!cleanBizUrl) {
+      return res.status(400).json({ error: 'Please share your Google Business or review-platform URL.' });
+    }
+
+    // Build the lead-notification email. Plain-text only — this goes to the
+    // founder's inbox, not a customer, so design polish doesn't matter.
+    const adminEmail = process.env.ADMIN_EMAIL || process.env.SMTP_FROM || '';
+    if (adminEmail) {
+      const nodemailer = require('nodemailer');
+      const transporter = (() => {
+        if (!process.env.SMTP_HOST) return null;
+        return nodemailer.createTransport({
+          host: process.env.SMTP_HOST,
+          port: parseInt(process.env.SMTP_PORT || '587', 10),
+          secure: process.env.SMTP_SECURE === 'true',
+          auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+        });
+      })();
+      if (transporter) {
+        const text = [
+          `New audit request from ${cleanBizName}`,
+          ``,
+          `Email:    ${cleanEmail}`,
+          `Business: ${cleanBizName}`,
+          `URL:      ${cleanBizUrl}`,
+          `IP:       ${req.ip || 'unknown'}`,
+          `UA:       ${(req.headers['user-agent'] || '').slice(0, 200)}`,
+          ``,
+          cleanNotes ? `Notes:\n${cleanNotes}` : '(no notes)',
+          ``,
+          `Reply directly to ${cleanEmail} with the audit.`,
+        ].join('\n');
+        // Fire-and-forget; the prospect's UX shouldn't block on SMTP.
+        transporter.sendMail({
+          from: process.env.SMTP_FROM || 'ReviewHub <noreply@reviewhub.review>',
+          to: adminEmail,
+          replyTo: cleanEmail,
+          subject: `[Audit lead] ${cleanBizName} — ${cleanEmail}`,
+          text,
+        }).catch((err) => {
+          captureException(err, { route: 'public.audit-request', op: 'notify-founder' });
+        });
+      } else {
+        console.log(`[AUDIT-LEAD] ${cleanBizName} <${cleanEmail}> ${cleanBizUrl}`);
+      }
+    } else {
+      console.log(`[AUDIT-LEAD] ${cleanBizName} <${cleanEmail}> ${cleanBizUrl}`);
+    }
+
+    return res.json({ success: true });
+  } catch (err) {
+    captureException(err, { route: 'public.audit-request' });
+    return res.status(500).json({ error: 'Server error. Try again or email us.' });
+  }
+});
+
 module.exports = router;

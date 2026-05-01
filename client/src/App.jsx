@@ -31,6 +31,10 @@ const ReviewRequests = lazy(() => import('./pages/ReviewRequests'));
 const LoginMfa = lazy(() => import('./pages/LoginMfa'));
 const EmailChange = lazy(() => import('./pages/EmailChange'));
 const ReplyGeneratorTool = lazy(() => import('./pages/ReplyGeneratorTool'));
+// Cold-outreach lead-capture page. Funnel target for DM/email campaigns —
+// prospect submits Google Business URL, founder hand-crafts a 10-reply audit
+// and emails it back. Public, no signup.
+const AuditLanding = lazy(() => import('./pages/AuditLanding'));
 const OwnerDashboard = lazy(() => import('./pages/OwnerDashboard'));
 // Landing page after one-click unsubscribe (RFC 8058). Public — the server
 // applies the unsub, then redirects browser-clicks here as a confirmation.
@@ -110,6 +114,8 @@ export default function App() {
         <Route path="/confirm-erasure" element={<ConfirmErasure />} />
         {/* Public no-signup SEO/PLG tool */}
         <Route path="/tools/review-reply-generator" element={<ReplyGeneratorTool />} />
+        {/* Cold-outreach lead-capture landing — see AuditLanding.jsx */}
+        <Route path="/audit" element={<AuditLanding />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
