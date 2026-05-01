@@ -941,7 +941,7 @@ router.post('/', reviewCreateLimiter, async (req, res) => {
 
     const review = get('SELECT * FROM reviews WHERE id = ?', [id]);
     const user = get(
-      `SELECT u.email, u.notif_new_review, u.notif_negative_alert, s.plan
+      `SELECT u.email, u.notif_new_review, u.notif_negative_alert, u.preferred_lang, s.plan
        FROM users u LEFT JOIN subscriptions s ON s.user_id = u.id
        WHERE u.id = ?`,
       [req.user.id]
@@ -951,7 +951,8 @@ router.post('/', reviewCreateLimiter, async (req, res) => {
       const wantsNew = user.notif_new_review !== 0 && planFeatures.email_alerts_new;
       const wantsNeg = user.notif_negative_alert !== 0 && planFeatures.email_alerts_negative && sentiment === 'negative';
       if (wantsNew || wantsNeg) {
-        sendNewReviewNotification(user.email, review, business.business_name).catch((err) => {
+        const userLang = (user.preferred_lang === 'th') ? 'th' : 'en';
+        sendNewReviewNotification(user.email, review, business.business_name, userLang).catch((err) => {
           console.error('[EMAIL] Failed to send new review notification:', err.message);
           captureException(err, { kind: 'email.send_failed', label: 'new-review-notification', userId: user.id });
         });

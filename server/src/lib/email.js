@@ -114,11 +114,41 @@ async function verifySmtp() {
 // boot also runs on runtime sendMail failures.
 const portBlockHint = _portBlockHint;
 
-async function sendNewReviewNotification(userEmail, review, businessName) {
+const NEW_REVIEW_STRINGS = {
+  en: {
+    subjectPrefix: 'New',
+    subjectFor: 'review for',
+    headlinePrefix: 'New Review on',
+    leftA: 'left a',
+    starReview: 'star review for',
+    sentiment: 'Sentiment',
+    cta: 'View & Respond',
+    footer: 'ReviewHub · Manage notifications in Settings',
+    textHeadline: (platform) => `New Review on ${platform}`,
+    textIntro: (name, rating, biz) => `${name} left a ${rating}-star review for ${biz}`,
+    textViewAt: 'View and respond:',
+  },
+  th: {
+    subjectPrefix: 'รีวิวใหม่',
+    subjectFor: 'สำหรับ',
+    headlinePrefix: 'รีวิวใหม่บน',
+    leftA: 'ให้รีวิว',
+    starReview: 'ดาวสำหรับ',
+    sentiment: 'ความรู้สึก',
+    cta: 'ดูและตอบกลับ',
+    footer: 'ReviewHub · จัดการการแจ้งเตือนในหน้า Settings',
+    textHeadline: (platform) => `รีวิวใหม่บน ${platform}`,
+    textIntro: (name, rating, biz) => `${name} ให้รีวิว ${rating} ดาวสำหรับ ${biz}`,
+    textViewAt: 'ดูและตอบกลับ:',
+  },
+};
+
+async function sendNewReviewNotification(userEmail, review, businessName, lang = 'en') {
+  const s = NEW_REVIEW_STRINGS[lang] || NEW_REVIEW_STRINGS.en;
   const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
 
   // Strip newlines/carriage returns from values used in email headers to prevent header injection
-  const stripHeaderChars = (s) => String(s ?? '').replace(/[\r\n]/g, ' ');
+  const stripHeaderChars = (str) => String(str ?? '').replace(/[\r\n]/g, ' ');
 
   const safePlatform = escapeHtml(platformLabel(review.platform));
   const safeName = escapeHtml(review.reviewer_name);
@@ -128,20 +158,20 @@ async function sendNewReviewNotification(userEmail, review, businessName) {
   const safeClientUrl = escapeHtml(process.env.CLIENT_URL || 'http://localhost:5173');
 
   // Subject uses stripHeaderChars to prevent email header injection
-  const subject = `New ${stripHeaderChars(platformLabel(review.platform))} review for ${stripHeaderChars(businessName)} — ${stars}`;
+  const subject = `${s.subjectPrefix} ${stripHeaderChars(platformLabel(review.platform))} ${s.subjectFor} ${stripHeaderChars(businessName)} — ${stars}`;
   const html = `
     <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-      <h2 style="color:#1e4d5e">New Review on ${safePlatform}</h2>
+      <h2 style="color:#1e4d5e">${s.headlinePrefix} ${safePlatform}</h2>
       <div style="background:#f9fafb;border-radius:8px;padding:16px;margin:16px 0">
-        <p><strong>${safeName}</strong> left a <strong>${review.rating}-star</strong> review for <strong>${safeBizName}</strong></p>
+        <p><strong>${safeName}</strong> ${s.leftA} <strong>${review.rating} ${s.starReview}</strong> <strong>${safeBizName}</strong></p>
         <p style="color:#374151">&ldquo;${safeText}&rdquo;</p>
-        <p style="font-size:12px;color:#6b7280">Sentiment: ${safeSentiment} · ${new Date().toLocaleDateString()}</p>
+        <p style="font-size:12px;color:#6b7280">${s.sentiment}: ${safeSentiment} · ${new Date().toLocaleDateString()}</p>
       </div>
       <a href="${safeClientUrl}/dashboard"
          style="background:#1e4d5e;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block">
-        View &amp; Respond
+        ${escapeHtml(s.cta)}
       </a>
-      <p style="font-size:11px;color:#9ca3af;margin-top:24px">ReviewHub · Manage notifications in Settings</p>
+      <p style="font-size:11px;color:#9ca3af;margin-top:24px">${s.footer}</p>
     </div>`;
 
   const transporter = getTransporter();
@@ -151,14 +181,14 @@ async function sendNewReviewNotification(userEmail, review, businessName) {
   }
 
   const text = [
-    `New Review on ${platformLabel(review.platform)}`,
-    `${review.reviewer_name} left a ${review.rating}-star review for ${businessName}`,
+    s.textHeadline(platformLabel(review.platform)),
+    s.textIntro(review.reviewer_name, review.rating, businessName),
     `"${review.review_text || '(no text)'}"`,
-    `Sentiment: ${review.sentiment}`,
+    `${s.sentiment}: ${review.sentiment}`,
     ``,
-    `View and respond: ${process.env.CLIENT_URL || 'http://localhost:5173'}/dashboard`,
+    `${s.textViewAt} ${process.env.CLIENT_URL || 'http://localhost:5173'}/dashboard`,
     ``,
-    `ReviewHub · Manage notifications in Settings`,
+    s.footer,
   ].join('\n');
 
   await transporter.sendMail({
