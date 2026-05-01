@@ -66,7 +66,9 @@ describe('ReviewResponseForm', () => {
     await user.type(screen.getByRole('textbox'), 'Thank you so much!');
     await user.click(screen.getByRole('button', { name: /publish response/i }));
     await waitFor(() => {
-      expect(api.post).toHaveBeenCalledWith('/reviews/7/response', { text: 'Thank you so much!' });
+      // Field name mirrors the DB column (`response_text`) — see
+      // server/src/routes/reviews.js. Test was previously stale.
+      expect(api.post).toHaveBeenCalledWith('/reviews/7/response', { response_text: 'Thank you so much!' });
     });
     await waitFor(() => expect(onSaved).toHaveBeenCalledWith(echoed));
   });
@@ -91,7 +93,7 @@ describe('ReviewResponseForm', () => {
     expect(screen.getByRole('button', { name: /save changes/i })).toBeInTheDocument();
     const user = userEvent.setup();
     await user.click(screen.getByRole('button', { name: /save changes/i }));
-    await waitFor(() => expect(api.put).toHaveBeenCalledWith('/reviews/7/response', { text: 'old text here' }));
+    await waitFor(() => expect(api.put).toHaveBeenCalledWith('/reviews/7/response', { response_text: 'old text here' }));
     expect(api.post).not.toHaveBeenCalled();
   });
 

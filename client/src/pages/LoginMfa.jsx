@@ -58,14 +58,20 @@ export default function LoginMfa() {
     codeRef.current?.focus();
   }, [mode]);
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e, overrideCode) {
     e.preventDefault();
     if (!pendingToken) return;
     setError('');
     setLoading(true);
+    // overrideCode lets the auto-submit path pass the freshly-typed value
+    // directly instead of relying on `code` state, which hasn't re-rendered
+    // yet at the moment requestSubmit fires from onChange. Without this,
+    // submitting the 6th digit of an OTP races against setCode and posts
+    // a 5-digit code (silent — server returns 401, user retypes, frustrating).
+    const submitted = (typeof overrideCode === 'string') ? overrideCode : code;
     try {
       const endpoint = mode === 'otp' ? '/auth/login/mfa' : '/auth/login/recovery';
-      const body = mode === 'otp' ? { code } : { recovery_code: code };
+      const body = mode === 'otp' ? { code: submitted } : { recovery_code: submitted };
       // This endpoint wants the pending token in the Authorization header —
       // a one-off pattern since the usual api interceptor pulls from localStorage.
       const { data } = await api.post(endpoint, body, {
@@ -171,7 +177,10 @@ export default function LoginMfa() {
                   // We only auto-submit in OTP mode (not recovery, which is
                   // 2x4 alphanumeric and people often paste with the dash).
                   if (mode === 'otp' && /^[0-9]{6}$/.test(v) && !loading && pendingToken) {
-                    e.target.form?.requestSubmit?.();
+                    // Pass `v` directly — see handleSubmit for the race
+                    // explanation. Fake a submit event since requestSubmit's
+                    // onSubmit handler doesn't take an extra arg.
+                    handleSubmit({ preventDefault: () => {} }, v);
                   }
                 }}
                 placeholder={mode === 'otp' ? '000000' : 'XXXX-XXXX'}

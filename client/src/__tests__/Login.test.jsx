@@ -77,8 +77,11 @@ describe('Login page', () => {
     expect(alert).toHaveTextContent(/Invalid credentials/);
     // Did NOT navigate — still on the login page.
     expect(screen.queryByText('DASHBOARD')).not.toBeInTheDocument();
-    // Focus moved to the email field so the error is actionable for keyboard users.
-    expect(document.activeElement).toBe(screen.getByLabelText(/email/i));
+    // Focus moved to the error banner itself so screen readers announce it
+    // immediately and keyboard users can read the error in place. (Previously
+    // focus went to the email input, but jumping past the error message
+    // skipped the announcement — see Login.jsx ref={errorRef}.)
+    expect(document.activeElement).toBe(alert);
   });
 
   it('toggles password visibility', async () => {

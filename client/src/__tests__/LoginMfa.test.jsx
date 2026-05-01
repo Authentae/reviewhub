@@ -64,8 +64,11 @@ describe('LoginMfa', () => {
     });
     renderAt('/login/mfa', { pendingToken: 'pending-xyz' });
     const user = userEvent.setup();
+    // Typing 6 digits auto-submits (parity with Google/Apple/bank OTP UX —
+    // see LoginMfa.jsx requestSubmit on /^[0-9]{6}$/). On success the page
+    // navigates to /dashboard before any explicit click could land, so we
+    // await the navigation rather than clicking the now-unmounted button.
     await user.type(screen.getByLabelText(/verification code/i), '123456');
-    await user.click(screen.getByRole('button', { name: /^verify$/i }));
 
     await waitFor(() => expect(screen.getByText('DASHBOARD')).toBeInTheDocument());
     expect(api.post).toHaveBeenCalledWith(

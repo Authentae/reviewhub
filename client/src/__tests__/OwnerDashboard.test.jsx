@@ -65,15 +65,15 @@ describe('OwnerDashboard', () => {
   it('shows the upsell card on Free plan and skips the businesses fetch', async () => {
     userState.subscription = { plan: 'free' };
     renderPage();
-    expect(await screen.findByText(/respond to reviews as the verified owner/i)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /see plans/i })).toHaveAttribute('href', '/pricing');
+    expect(await screen.findByText(/owner responses across all your reviews/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /upgrade to pro/i })).toHaveAttribute('href', '/pricing');
     expect(api.get).not.toHaveBeenCalled();
   });
 
   it('shows the upsell when subscription is missing entirely (defaults to free)', async () => {
     userState.subscription = null;
     renderPage();
-    expect(await screen.findByText(/respond to reviews as the verified owner/i)).toBeInTheDocument();
+    expect(await screen.findByText(/owner responses across all your reviews/i)).toBeInTheDocument();
     expect(api.get).not.toHaveBeenCalled();
   });
 
@@ -88,7 +88,7 @@ describe('OwnerDashboard', () => {
     userState.subscription = { plan: 'pro' };
     api.get.mockResolvedValue({ data: { businesses: [] } });
     renderPage();
-    expect(await screen.findByText(/no claimed businesses yet/i)).toBeInTheDocument();
+    expect(await screen.findByText(/no verified businesses yet/i)).toBeInTheDocument();
   });
 
   it('renders the grid with names, totals, and pending badge for paid users', async () => {
@@ -106,8 +106,8 @@ describe('OwnerDashboard', () => {
     expect(screen.getByText('Cafe Two')).toBeInTheDocument();
     expect(screen.getByText('12 reviews')).toBeInTheDocument();
     // Pending badge appears for biz #1, not #2
-    expect(screen.getByLabelText(/3 reviews awaiting your response/i)).toBeInTheDocument();
-    expect(screen.queryByLabelText(/0 reviews awaiting/i)).not.toBeInTheDocument();
+    expect(screen.getByLabelText(/pending owner response on 3 reviews/i)).toBeInTheDocument();
+    expect(screen.queryByLabelText(/pending owner response on 0 reviews/i)).not.toBeInTheDocument();
     // Cards link to /businesses/:id
     expect(screen.getByRole('link', { name: /Cafe One/i })).toHaveAttribute('href', '/businesses/1');
   });
@@ -116,7 +116,7 @@ describe('OwnerDashboard', () => {
     userState.subscription = { plan: 'starter' };
     api.get.mockRejectedValue({ response: { status: 404 } });
     renderPage();
-    expect(await screen.findByText(/no claimed businesses yet/i)).toBeInTheDocument();
+    expect(await screen.findByText(/no verified businesses yet/i)).toBeInTheDocument();
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
@@ -124,15 +124,18 @@ describe('OwnerDashboard', () => {
     userState.subscription = { plan: 'starter' };
     api.get.mockRejectedValue({ response: { status: 501 } });
     renderPage();
-    expect(await screen.findByText(/no claimed businesses yet/i)).toBeInTheDocument();
+    expect(await screen.findByText(/no verified businesses yet/i)).toBeInTheDocument();
   });
 
   it('surfaces an alert when the fetch fails with a 500', async () => {
     userState.subscription = { plan: 'starter' };
     api.get.mockRejectedValue({ response: { status: 500 } });
     renderPage();
+    // Both the inline <p role="alert"> and the toast announce the error,
+    // so getAllByRole returns >1 — assert SOME alert mentions "could not load".
     await waitFor(() => {
-      expect(screen.getByRole('alert')).toHaveTextContent(/could not load/i);
+      const alerts = screen.getAllByRole('alert');
+      expect(alerts.some((a) => /could not load/i.test(a.textContent))).toBe(true);
     });
   });
 
@@ -140,7 +143,7 @@ describe('OwnerDashboard', () => {
     userState.subscription = { plan: 'starter' };
     api.get.mockResolvedValue({ data: { not_businesses: 'oops' } });
     renderPage();
-    expect(await screen.findByText(/no claimed businesses yet/i)).toBeInTheDocument();
+    expect(await screen.findByText(/no verified businesses yet/i)).toBeInTheDocument();
   });
 
   it('waits for user-loading before deciding which UI to show', () => {

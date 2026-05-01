@@ -47,7 +47,9 @@ describe('ForgotPassword page', () => {
     // The form is replaced with the success panel — same whether or not the
     // account exists (server-side generic 200 prevents enumeration).
     expect(await screen.findByText(/check your inbox/i)).toBeInTheDocument();
-    expect(api.post).toHaveBeenCalledWith('/auth/forgot-password', { email: 'u@example.com' });
+    // 'website' is the honeypot field — empty for real users, server-side
+    // anti-bot trap. Stays in the payload regardless.
+    expect(api.post).toHaveBeenCalledWith('/auth/forgot-password', { email: 'u@example.com', website: '' });
   });
 
   it('surfaces rate-limit / network errors in a visible alert', async () => {
