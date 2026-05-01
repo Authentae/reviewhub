@@ -489,10 +489,17 @@ router.get('/me/export', accountLimiter, authMiddleware, (req, res) => {
           [business.id]
         )
       : [];
+    // Lifecycle email send-log. Each row is "we sent you the day-N
+    // onboarding email at this timestamp." Users have a right to see
+    // what we sent them under GDPR Article 15.
+    const onboardingEmails = all(
+      `SELECT day_number, sent_at FROM onboarding_emails WHERE user_id = ? ORDER BY day_number ASC`,
+      [userId]
+    );
 
     const payload = {
       exported_at: new Date().toISOString(),
-      schema_version: 3, // v3 adds review_requests, tags, auto_rules
+      schema_version: 4, // v4 adds onboarding_emails + preferred_lang/notif_onboarding on user
       user,
       subscription,
       business,
@@ -503,6 +510,7 @@ router.get('/me/export', accountLimiter, authMiddleware, (req, res) => {
       templates,
       platform_connections: platformConnections,
       audit_log: auditLog,
+      onboarding_emails: onboardingEmails,
     };
 
     const filename = `reviewhub-export-${user.id}-${new Date().toISOString().slice(0, 10)}.json`;

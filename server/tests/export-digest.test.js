@@ -24,8 +24,14 @@ describe('data export', () => {
     assert.ok(Array.isArray(body.review_requests), 'v3: review_requests included');
     assert.ok(Array.isArray(body.tags), 'v3: tags included');
     assert.ok(Array.isArray(body.auto_rules), 'v3: auto_rules included');
-    assert.strictEqual(body.schema_version, 3);
+    assert.ok(Array.isArray(body.onboarding_emails), 'v4: onboarding_emails included');
+    assert.strictEqual(body.schema_version, 4);
     assert.ok(Array.isArray(body.audit_log));
+    // v4 also adds preferred_lang + notif_onboarding to user.* — these
+    // can be null/0 for a freshly-created test user but the keys must
+    // be present so users can see their stored locale preference.
+    assert.ok('preferred_lang' in body.user, 'v4: user.preferred_lang included');
+    assert.ok('notif_onboarding' in body.user, 'v4: user.notif_onboarding included');
     // The user.register event must be present from the signup in makeUser()
     assert.ok(body.audit_log.some((e) => e.event === 'user.register'),
       'expected user.register audit entry');
