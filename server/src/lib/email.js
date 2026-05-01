@@ -229,6 +229,30 @@ const VERIFY_STRINGS = {
     textValid: 'ลิงก์นี้ใช้ได้ภายใน 24 ชั่วโมง:',
     textIgnore: 'หากคุณไม่ได้สมัครบัญชี ReviewHub สามารถละเลยอีเมลนี้ได้',
   },
+  es: {
+    subject: 'Confirma tu email — un clic y estás dentro',
+    headline: 'Un clic y estás dentro.',
+    body: 'Confirma tu email y en menos de un minuto estarás generando respuestas con IA. Este enlace expira en 24 horas.',
+    cta: 'Confirmar mi email',
+    pasteHint: 'O pega esto en tu navegador:',
+    ignoreFooter: '¿No te registraste? Puedes ignorar este email tranquilamente — no se creará ninguna cuenta.',
+    textHeader: 'Bienvenido a ReviewHub',
+    textBody: 'Confirma tu email para terminar de configurar tu cuenta.',
+    textValid: 'El enlace es válido durante 24 horas:',
+    textIgnore: 'Si no creaste una cuenta de ReviewHub, ignora este email.',
+  },
+  ja: {
+    subject: 'メールアドレスを確認 — クリック1回で完了',
+    headline: 'クリック1回で完了です。',
+    body: 'メールを確認したら、1分以内にAIで返信を作成できるようになります。このリンクは24時間で期限切れになります。',
+    cta: 'メールを確認',
+    pasteHint: 'またはこのURLをブラウザに貼り付けてください：',
+    ignoreFooter: '登録していませんか？このメールは無視して大丈夫です — アカウントは作成されません。',
+    textHeader: 'ReviewHubへようこそ',
+    textBody: 'アカウントの設定を完了するため、メールアドレスを確認してください。',
+    textValid: 'このリンクは24時間有効です：',
+    textIgnore: 'ReviewHubのアカウントを作成していない場合は、このメールを無視してください。',
+  },
 };
 
 // Send the email-verification link. `verifyUrl` is the full URL the user clicks
@@ -338,6 +362,26 @@ const RESET_STRINGS = {
     ignoreFooter: 'หากคุณไม่ได้ส่งคำขอนี้ สามารถละเลยอีเมลนี้ได้อย่างปลอดภัย — รหัสผ่านของคุณจะไม่เปลี่ยนแปลง',
     textValid: 'ลิงก์นี้ใช้ได้ภายใน 1 ชั่วโมง:',
     textIgnore: 'หากคุณไม่ได้ส่งคำขอนี้ สามารถละเลยอีเมลนี้ได้อย่างปลอดภัย',
+  },
+  es: {
+    subject: 'Restablecer tu contraseña de ReviewHub',
+    headline: 'Restablecer contraseña',
+    body: 'Recibimos una petición para restablecer la contraseña de tu cuenta de ReviewHub. Este enlace es válido durante 1 hora.',
+    cta: 'Restablecer contraseña',
+    pasteHint: 'Si el botón no funciona, pega esta URL en tu navegador:',
+    ignoreFooter: 'Si no fuiste tú, puedes ignorar este email — tu contraseña no cambiará.',
+    textValid: 'El enlace es válido durante 1 hora:',
+    textIgnore: 'Si no fuiste tú, puedes ignorar este email.',
+  },
+  ja: {
+    subject: 'ReviewHubのパスワードを再設定',
+    headline: 'パスワード再設定',
+    body: 'ReviewHubアカウントのパスワード再設定リクエストを受け付けました。このリンクは1時間有効です。',
+    cta: 'パスワードを再設定',
+    pasteHint: 'ボタンが動作しない場合は、このURLをブラウザに貼り付けてください：',
+    ignoreFooter: 'リクエストした覚えがない場合は、このメールを無視してください — パスワードは変わりません。',
+    textValid: 'このリンクは1時間有効です：',
+    textIgnore: 'リクエストした覚えがない場合は、このメールを無視してください。',
   },
 };
 
