@@ -342,9 +342,9 @@ const SAMPLE_REVIEWS_EN = {
   harsh:   { name: 'Anon.',    plat: 'google', platLabel: 'Google', stars: 1, body: 'Rude manager. Overpriced. Never coming back. Zero stars if I could.' },
 };
 const SAMPLE_REVIEWS_TH = {
-  glowing: { name: 'พลอย ส.', plat: 'google', platLabel: 'Google', stars: 5, body: 'มาฉลองครบรอบที่นี่ พนักงานสังเกตและเอาเทียนเล็กๆ มาให้บนทีรามิสุ เรื่องเล็กๆ — ทำให้คืนนั้นพิเศษ ขอบคุณค่ะ' },
-  mixed:   { name: 'สมชาย ก.', plat: 'google', platLabel: 'Google', stars: 3, body: 'พาสต้าอร่อยมาก แต่บริการช้าไปหน่อย — รออาหารหลัก 40 นาทีในวันอังคาร อยากชอบมากกว่านี้แต่...' },
-  harsh:   { name: 'ผู้รีวิว', plat: 'google', platLabel: 'Google', stars: 1, body: 'ผู้จัดการพูดจาไม่ดี ราคาแพงเกินไป จะไม่กลับมาอีก ถ้าให้ 0 ดาวได้ก็ให้' },
+  glowing: { name: 'พลอย ส.', plat: 'google', platLabel: 'Google', stars: 5, body: 'มาฉลองครบรอบแต่งงานที่นี่ค่ะ พนักงานสังเกตเห็นแล้วยกทีรามิสุพร้อมเทียนเล็กๆ มาเซอร์ไพรส์ให้ ดูเป็นเรื่องเล็กแต่ทำให้คืนนั้นพิเศษมาก ขอบคุณนะคะ' },
+  mixed:   { name: 'สมชาย ก.', plat: 'google', platLabel: 'Google', stars: 3, body: 'พาสต้าอร่อยมากครับ แต่บริการช้าไปหน่อย รออาหารหลัก 40 นาทีตอนเที่ยงวันอังคาร ถ้าเร็วกว่านี้คงให้ 5 ดาวเลย' },
+  harsh:   { name: 'ลูกค้า', plat: 'google', platLabel: 'Google', stars: 1, body: 'ผู้จัดการพูดจาไม่ดี ราคาแพงเกินคุณภาพ ไม่กลับมาอีกแน่นอน ให้ 0 ดาวได้ก็จะให้' },
 };
 const TONE_PRESETS = [
   { id: 'warm', label: 'Warm' },
@@ -375,19 +375,19 @@ const DEMO_FALLBACKS_EN = {
 };
 const DEMO_FALLBACKS_TH = {
   glowing: {
-    warm:   "ขอบคุณคุณพลอยมากค่ะ ทีมเราดีใจที่ได้เป็นส่วนหนึ่งของวันพิเศษ เทียนเล็กๆ นั้นเป็นไอเดียของทีมเอง รอพบคุณอีกในครบรอบปีหน้าค่ะ — ครั้งหน้าเทียนแถมให้",
-    brisk:  "ขอบคุณคุณพลอยค่ะ ดีใจที่ทีมสังเกตเห็น แล้วเจอกันใหม่ค่ะ",
-    formal: "ขอบคุณคุณพลอย ทางร้านยินดีที่พนักงานได้ร่วมในโอกาสพิเศษ หวังเป็นอย่างยิ่งว่าจะได้ต้อนรับคุณอีกครั้ง",
+    warm:   "ขอบคุณคุณพลอยมากนะคะ ทีมเราดีใจที่ได้เป็นส่วนหนึ่งของวันสำคัญ เทียนเป็นไอเดียของน้องในร้านเอง ครบรอบปีหน้ามาฉลองอีกได้นะคะ ครั้งหน้าทีรามิสุพิเศษเลี้ยงเองค่ะ",
+    brisk:  "ขอบคุณคุณพลอยค่ะ ดีใจที่ทีมสังเกตเห็น แล้วเจอกันใหม่นะคะ",
+    formal: "ขอบคุณคุณพลอยที่เลือกฉลองโอกาสสำคัญที่ร้านของเรา ทางร้านยินดีอย่างยิ่งที่ทีมงานได้ร่วมเป็นส่วนหนึ่งของค่ำคืนนั้น และหวังว่าจะได้ต้อนรับคุณอีกครั้งในเร็วๆ นี้",
   },
   mixed: {
-    warm:   "ขอบคุณคุณสมชายค่ะ — 40 นาทีไม่ใช่มาตรฐานของเรา เรากำลังปรับครัววันอังคารแล้ว ดีใจที่พาสต้าผ่านเกณฑ์ กลับมาเร็วๆ นี้ครั้งหน้าเวลาจะเร็วเหมือนรสชาติ",
-    brisk:  "ขอบคุณคุณสมชาย เรื่องเวลารับมาแก้ไขแล้ว แวะมาใหม่ พาสต้าจะออกเร็วขึ้นค่ะ",
-    formal: "ขอบคุณคุณสมชาย เวลารอที่ท่านระบุต่ำกว่ามาตรฐานของเรา และเราอยู่ระหว่างแก้ไข หวังว่าพาสต้าจะดึงดูดให้ท่านกลับมา",
+    warm:   "ขอบคุณคุณสมชายที่บอกตรงๆ นะคะ 40 นาทีไม่ใช่มาตรฐานของเรา ตอนนี้กำลังปรับวิธีจัดคิวครัวช่วงเที่ยงวันอังคารใหม่ ดีใจที่พาสต้ายังถูกใจ ถ้าแวะมาใหม่ครั้งนี้รับรองว่าออกเร็วขึ้นแน่นอนค่ะ",
+    brisk:  "ขอบคุณคุณสมชายค่ะ เรื่องเวลารอเรารับมาแก้ไขแล้ว ครั้งหน้าแวะมาใหม่ พาสต้าจะออกเร็วกว่าเดิมแน่นอน",
+    formal: "ขอบคุณคุณสมชายสำหรับความเห็นที่เป็นประโยชน์ เวลารอ 40 นาทีไม่ใช่มาตรฐานของทางร้าน เรากำลังดำเนินการปรับปรุงระบบครัวในช่วงเวลาดังกล่าว และหวังว่าจะได้ต้อนรับคุณอีกครั้ง",
   },
   harsh: {
-    warm:   "ขออภัยอย่างจริงใจ — นั่นไม่ใช่ประสบการณ์ที่เราอยากให้ใครจำ อยากเข้าใจสิ่งที่เกิดขึ้นโดยตรง รบกวนอีเมลถึง owner@cornerbistro.example นะคะ — เจ้าของร้าน",
-    brisk:  "ไม่ใช่มาตรฐานของเรา รบกวนอีเมล owner@cornerbistro.example เพื่อให้เราแก้ไข — เจ้าของร้าน",
-    formal: "เราขออภัยอย่างจริงใจสำหรับประสบการณ์ที่คุณได้รับ อยากแก้ไขเรื่องนี้เป็นการส่วนตัว — กรุณาติดต่อ owner@cornerbistro.example ได้ตามสะดวก",
+    warm:   "ขออภัยจริงๆ นะคะ ไม่ใช่ประสบการณ์ที่เราอยากให้ลูกค้าได้รับ อยากฟังเรื่องที่เกิดขึ้นจากปากคุณโดยตรง รบกวนอีเมลถึง owner@cornerbistro.example หน่อยได้ไหมคะ จะแก้ไขให้ดีที่สุด — เจ้าของร้าน",
+    brisk:  "ขออภัยค่ะ ไม่ใช่มาตรฐานของเรา รบกวนอีเมลที่ owner@cornerbistro.example เราจะรีบจัดการให้ — เจ้าของร้าน",
+    formal: "ทางร้านขออภัยอย่างจริงใจสำหรับประสบการณ์ที่คุณได้รับ เราอยากแก้ไขเรื่องนี้เป็นการส่วนตัว รบกวนติดต่อ owner@cornerbistro.example ตามสะดวกของท่าน",
   },
 };
 
@@ -586,6 +586,15 @@ function FeatureGrid() {
 }
 
 // ── Pricing — cream panel, dark featured plan ─────────────────────────────
+//
+// Source of truth for prices + features lives in
+// server/src/lib/billing/plans.js. The landing surface intentionally collapses
+// the 4-tier catalogue down to 3 cards (Free / Pro popular / Business) so the
+// editorial 3-column grid stays balanced. The Starter tier ($14) is surfaced
+// as a one-liner callout beneath the grid + linked through to /pricing where
+// all four are shown side-by-side. Keeping prices and feature deltas in sync
+// with plans.js manually is fragile — when these diverge again, prefer to
+// import the plan data and render from it instead of hard-coding here.
 function Pricing() {
   const { t } = useI18n();
   return (
@@ -593,52 +602,60 @@ function Pricing() {
       <div className="rh-shell">
         <div className="rh-section-head">
           <div className="kicker"><div className="num">04</div><div className="cat">§ {t('landing.pricingEyebrow', 'Pricing')}</div></div>
-          <h2 className="rh-reveal">{t('landing.pricingTitle', 'Simple, honest pricing.')}</h2>
+          <h2 className="rh-reveal">{t('landing.pricingTitle', 'Clear pricing. No surprises.')}</h2>
         </div>
         <div className="rh-price-grid rh-reveal">
           <div className="plan">
-            <div className="plan-name">Solo</div>
-            <h3>{t('landing.plan.soloHeadline', 'The first shop.')}</h3>
-            <div className="plan-price">$0<small>{t('landing.plan.foreverSuffix', '/mo, forever')}</small></div>
-            <div className="plan-sub">{t('landing.plan.soloSub', 'One location, two platforms, all the basics.')}</div>
+            <div className="plan-name">Free</div>
+            <h3>{t('landing.plan.freeHeadline', 'Try it out.')}</h3>
+            <div className="plan-price">$0<small>{t('landing.plan.foreverSuffix', '/mo · free forever')}</small></div>
+            <div className="plan-sub">{t('landing.plan.freeSub', 'No credit card. See if AI replies fit your voice.')}</div>
             <ul>
-              <li><Check />{t('landing.plan.solo1', 'Up to 50 reviews / month')}</li>
-              <li><Check />{t('landing.plan.solo2', 'Google auto-sync · 60+ platforms via CSV')}</li>
-              <li><Check />{t('landing.plan.solo3', 'AI drafts (template fallback)')}</li>
-              <li><Check />{t('landing.plan.solo4', 'CSV import')}</li>
+              <li><Check />{t('landing.plan.free1', '3 AI drafts / month')}</li>
+              <li><Check />{t('landing.plan.free2', '1 review platform')}</li>
+              <li><Check />{t('landing.plan.free3', '1 business')}</li>
+              <li><Check />{t('landing.plan.free4', 'CSV import')}</li>
             </ul>
             <Link to="/register" className="rh-btn rh-btn-ghost">{t('nav.startFree', 'Start free')}</Link>
           </div>
           <div className="plan featured">
             <div className="badge">{t('landing.plan.popular', 'Most popular')}</div>
-            <div className="plan-name">Shop</div>
-            <h3>{t('landing.plan.shopHeadline', 'A real front door.')}</h3>
+            <div className="plan-name">Pro</div>
+            <h3>{t('landing.plan.proHeadline', 'For shops with real review volume.')}</h3>
             <div className="plan-price">$29<small>/mo</small></div>
-            <div className="plan-sub">{t('landing.plan.shopSub', 'For the place you actually show up to every morning.')}</div>
+            <div className="plan-sub">{t('landing.plan.proSub', 'Unlimited AI drafts and the analytics that actually matter.')}</div>
             <ul>
-              <li><Check />{t('landing.plan.shop1', 'Unlimited reviews')}</li>
-              <li><Check />{t('landing.plan.shop2', 'Google auto-sync · 60+ platforms via CSV')}</li>
-              <li><Check />{t('landing.plan.shop3', 'Claude-powered drafts, 10 languages')}</li>
-              <li><Check />{t('landing.plan.shop4', 'Sentiment, trends, weekly digest')}</li>
-              <li><Check />{t('landing.plan.shop5', '3 teammates')}</li>
+              <li><Check />{t('landing.plan.pro1', 'Unlimited AI drafts')}</li>
+              <li><Check />{t('landing.plan.pro2', '6 platforms (Google, Wongnai, Yelp…)')}</li>
+              <li><Check />{t('landing.plan.pro3', 'AI drafts in 10 languages')}</li>
+              <li><Check />{t('landing.plan.pro4', 'Sentiment + trends + weekly digest')}</li>
+              <li><Check />{t('landing.plan.pro5', 'Templates + CSV export')}</li>
+              <li><Check />{t('landing.plan.pro6', 'Email alerts on new + negative reviews')}</li>
             </ul>
-            <Link to="/register" className="rh-btn rh-btn-amber">{t('landing.plan.chooseShop', 'Choose Shop · $29/mo')}</Link>
+            <Link to="/register" className="rh-btn rh-btn-amber">{t('landing.plan.choosePro', 'Choose Pro · $29/mo')}</Link>
           </div>
           <div className="plan">
-            <div className="plan-name">Chain</div>
-            <h3>{t('landing.plan.chainHeadline', 'More than one.')}</h3>
+            <div className="plan-name">Business</div>
+            <h3>{t('landing.plan.businessHeadline', 'Multi-location.')}</h3>
             <div className="plan-price">$59<small>/mo</small></div>
-            <div className="plan-sub">{t('landing.plan.chainSub', 'For multi-location operators juggling dashboards.')}</div>
+            <div className="plan-sub">{t('landing.plan.businessSub', 'For owners and agencies running several shops at once.')}</div>
             <ul>
-              <li><Check />{t('landing.plan.chain1', 'Everything in Shop')}</li>
-              <li><Check />{t('landing.plan.chain2', 'Up to 10 locations')}</li>
-              <li><Check />{t('landing.plan.chain3', 'Unlimited teammates + audit log')}</li>
-              <li><Check />{t('landing.plan.chain4', 'API + webhooks')}</li>
-              <li><Check />{t('landing.plan.chain5', 'Priority support')}</li>
+              <li><Check />{t('landing.plan.business1', 'Everything in Pro')}</li>
+              <li><Check />{t('landing.plan.business2', 'Up to 5 businesses')}</li>
+              <li><Check />{t('landing.plan.business3', 'API access + webhooks')}</li>
+              <li><Check />{t('landing.plan.business4', 'Priority support')}</li>
             </ul>
-            <Link to="/register" className="rh-btn rh-btn-ghost">{t('landing.plan.chooseChain', 'Choose Chain · $59/mo')}</Link>
+            <Link to="/register" className="rh-btn rh-btn-ghost">{t('landing.plan.chooseBusiness', 'Choose Business · $59/mo')}</Link>
           </div>
         </div>
+        {/* Starter callout — the missing $14 tier. Surfaced as a thin row so
+            the 3-card grid stays clean while the price catalog stays honest. */}
+        <p className="rh-pricing-callout rh-reveal" style={{ textAlign: 'center', marginTop: 24, fontSize: 14, color: 'var(--rh-ink-3)' }}>
+          {t('landing.plan.starterCallout', 'Just need the basics with email alerts? ')}
+          <Link to="/pricing" style={{ fontWeight: 600, color: 'var(--rh-ink)' }}>
+            {t('landing.plan.starterCalloutLink', 'Starter is $14/mo — see all plans →')}
+          </Link>
+        </p>
       </div>
     </section>
   );
