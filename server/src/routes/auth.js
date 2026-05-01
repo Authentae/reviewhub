@@ -429,8 +429,9 @@ router.get('/me/export', accountLimiter, authMiddleware, (req, res) => {
 
     const user = get(
       `SELECT id, email, created_at, email_verified_at,
-              notif_new_review, notif_negative_alert, notif_weekly_summary,
-              follow_up_after_days, onboarding_dismissed_at
+              notif_new_review, notif_negative_alert, notif_weekly_summary, notif_onboarding,
+              follow_up_after_days, onboarding_dismissed_at,
+              preferred_lang
        FROM users WHERE id = ?`,
       [userId]
     );
