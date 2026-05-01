@@ -736,7 +736,7 @@ router.post('/onboarding/dismiss', notifLimiter, authMiddleware, (req, res) => {
 router.get('/notifications', notifLimiter, authMiddleware, (req, res) => {
   try {
     const user = get(
-      'SELECT notif_new_review, notif_negative_alert, notif_weekly_summary, follow_up_after_days FROM users WHERE id = ?',
+      'SELECT notif_new_review, notif_negative_alert, notif_weekly_summary, notif_onboarding, follow_up_after_days FROM users WHERE id = ?',
       [req.user.id]
     );
     if (!user) return res.status(404).json({ error: 'User not found' });
@@ -745,6 +745,10 @@ router.get('/notifications', notifLimiter, authMiddleware, (req, res) => {
       notif_new_review: user.notif_new_review !== 0,
       notif_negative_alert: user.notif_negative_alert !== 0,
       notif_weekly_summary: user.notif_weekly_summary !== 0,
+      // Onboarding-emails opt-in (day 0/1/3/7/14 lifecycle). Default 1 in
+      // schema; expose to /api/auth/notifications so the Settings UI can
+      // show a toggle alongside the other notif preferences.
+      notif_onboarding: user.notif_onboarding !== 0,
       follow_up_after_days: user.follow_up_after_days ?? 0,
     });
   } catch (err) {
@@ -758,7 +762,7 @@ router.put('/notifications', notifLimiter, authMiddleware, (req, res) => {
     const user = get('SELECT id FROM users WHERE id = ?', [req.user.id]);
     if (!user) return res.status(404).json({ error: 'User not found' });
 
-    const BOOL_ALLOWED = ['notif_new_review', 'notif_negative_alert', 'notif_weekly_summary'];
+    const BOOL_ALLOWED = ['notif_new_review', 'notif_negative_alert', 'notif_weekly_summary', 'notif_onboarding'];
     const fields = [];
     const params = [];
     for (const key of BOOL_ALLOWED) {
