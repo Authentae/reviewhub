@@ -168,6 +168,12 @@ router.post('/register', authAttemptLimiter, require('../middleware/honeypot').h
       } catch { /* silent */ }
     }
 
+    // Preferred-language capture: pick best match from Accept-Language so
+    // background-job emails (weekly digest, follow-up review request, new
+    // review notification) can later reach the user in the right locale
+    // without needing a live req. Falls through to 'en' for unknown.
+    const preferredLang = req.acceptsLanguages(['th', 'en']) || 'en';
+
     let userId;
     transaction((tx) => {
       userId = tx.insert(
@@ -176,9 +182,10 @@ router.post('/register', authAttemptLimiter, require('../middleware/honeypot').h
            email_verify_token_hash, email_verify_sent_at,
            terms_accepted_at, terms_version_accepted, terms_accept_ip, terms_accept_ua,
            age_confirmed,
-           referred_by_user_id
-         ) VALUES (?, ?, ?, datetime('now'), datetime('now'), ?, ?, ?, 1, ?)`,
-        [email, hash, verify.hash, CURRENT_TERMS_VERSION, acceptIp, acceptUa, referredByUserId]
+           referred_by_user_id,
+           preferred_lang
+         ) VALUES (?, ?, ?, datetime('now'), datetime('now'), ?, ?, ?, 1, ?, ?)`,
+        [email, hash, verify.hash, CURRENT_TERMS_VERSION, acceptIp, acceptUa, referredByUserId, preferredLang]
       );
       if (!userId) throw new Error('Failed to create user');
       tx.run(
@@ -193,9 +200,8 @@ router.post('/register', authAttemptLimiter, require('../middleware/honeypot').h
     // Pick the user's preferred locale from Accept-Language so Thai users get
     // the Thai email instead of always-English. acceptsLanguages returns the
     // best match from the supplied list (or false if none match).
-    const lang = req.acceptsLanguages(['th', 'en']) || 'en';
     sendEmailInBackground(
-      sendVerificationEmail(email, clientUrl(`/verify-email?token=${verify.plaintext}`), lang),
+      sendVerificationEmail(email, clientUrl(`/verify-email?token=${verify.plaintext}`), preferredLang),
       'verification'
     );
 

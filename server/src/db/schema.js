@@ -314,6 +314,13 @@ function initSchema() {
   // generated on first request via /api/inbound/address (see routes/inbound.js).
   migrateAddColumn('users', 'inbound_email_secret', 'TEXT DEFAULT NULL', true);
 
+  // Preferred locale for transactional + scheduled emails. Captured from
+  // Accept-Language at registration; foreground emails (verify, reset, MFA,
+  // email-change, erasure) prefer the live request locale, but background
+  // jobs (weekly digest, follow-up requests, new-review notifications) have
+  // no req object, so they read this column. NULL means default to English.
+  migrateAddColumn('users', 'preferred_lang', "TEXT DEFAULT NULL");
+
   // Password-change timestamp — used by the auth middleware to invalidate
   // JWTs issued BEFORE the user changed their password. Without this, an
   // attacker with a stolen-but-still-within-TTL JWT keeps access indefinitely
