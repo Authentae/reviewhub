@@ -35,6 +35,27 @@ export function I18nProvider({ children }) {
     if (!translations[code]) return;
     localStorage.setItem(LANG_KEY, code);
     setLangState(code);
+    // Persist to server so transactional + lifecycle emails reach the user
+    // in the language they actually use the app in. Fire-and-forget — if
+    // the user is logged out (no auth token), the request will 401 and we
+    // ignore it silently. The next request after login will re-send
+    // Accept-Language anyway, so this is best-effort sync, not load-bearing.
+    try {
+      // Avoid pulling the api singleton into this module (would create a
+      // circular dep — api.js reads localStorage which I18nContext also
+      // touches). Native fetch with credentials covers the cookie-auth
+      // path; legacy bearer-from-localStorage callers re-sync on next API
+      // request anyway.
+      const t = localStorage.getItem('token');
+      const headers = { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' };
+      if (t) headers['Authorization'] = `Bearer ${t}`;
+      fetch('/api/auth/me/preferred-lang', {
+        method: 'PUT',
+        credentials: 'include',
+        headers,
+        body: JSON.stringify({ lang: code }),
+      }).catch(() => { /* logged-out path or transient network — ignore */ });
+    } catch { /* localStorage / fetch unavailable — ignore */ }
   }, []);
 
   // Keep <html lang="..."> in sync with selected language for accessibility

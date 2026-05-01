@@ -733,6 +733,29 @@ router.post('/onboarding/dismiss', notifLimiter, authMiddleware, (req, res) => {
   }
 });
 
+// PUT /api/auth/me/preferred-lang — let the user persist their UI locale
+// to the server so transactional + lifecycle emails reach them in the
+// language they're actually reading the app in. Without this, preferred_lang
+// stayed locked to whatever Accept-Language was on the registration request
+// — a user signing up with browser-default English then switching the UI to
+// Thai would still get Thai-language drafts in the dashboard but English
+// emails in their inbox. Called from client/src/context/I18nContext.jsx
+// setLang.
+router.put('/me/preferred-lang', notifLimiter, authMiddleware, (req, res) => {
+  try {
+    const SUPPORTED = ['en', 'th', 'es', 'ja', 'ko', 'zh', 'fr', 'de', 'it', 'pt'];
+    const lang = String(req.body?.lang || '').trim().toLowerCase();
+    if (!SUPPORTED.includes(lang)) {
+      return res.status(400).json({ error: `lang must be one of: ${SUPPORTED.join(', ')}` });
+    }
+    run('UPDATE users SET preferred_lang = ? WHERE id = ?', [lang, req.user.id]);
+    res.json({ preferred_lang: lang });
+  } catch (err) {
+    captureException(err, { route: 'auth', op: 'preferred-lang' });
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 router.get('/notifications', notifLimiter, authMiddleware, (req, res) => {
   try {
     const user = get(
