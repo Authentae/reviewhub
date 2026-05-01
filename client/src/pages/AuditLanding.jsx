@@ -77,11 +77,11 @@ export default function AuditLanding() {
             <span style={{ color: 'var(--rh-paper)', fontSize: 28 }}>✦</span>
           </div>
           <h1 className="text-4xl font-bold mb-4" style={{ color: 'var(--rh-ink)', letterSpacing: '-0.02em' }}>
-            {isThai ? 'ได้รับคำขอแล้ว' : 'Got it. Audit on the way.'}
+            {isThai ? 'รับเรื่องแล้ว เดี๋ยวส่งให้' : 'Got it. Audit on the way.'}
           </h1>
           <p className="text-lg leading-relaxed mb-8" style={{ color: 'var(--rh-ink-soft, #4a525a)' }}>
             {isThai
-              ? 'เราจะส่งรายงานพร้อมร่างคำตอบ AI 10 ฉบับให้คุณภายใน 24 ชั่วโมง ตรวจกล่องจดหมาย (และโฟลเดอร์ Spam)'
+              ? 'เราจะส่งรายงานพร้อมคำตอบ AI 10 อันให้ภายใน 24 ชั่วโมง ลองเช็คอินบ็อกซ์ (กับโฟลเดอร์สแปมเผื่อไว้)'
               : "We'll send your personalized audit + 10 AI-drafted replies within 24 hours. Check your inbox (and spam folder, just in case)."}
           </p>
           <Link
@@ -105,14 +105,14 @@ export default function AuditLanding() {
             className="inline-block px-3 py-1 mb-6 text-xs font-bold uppercase tracking-widest rounded-full"
             style={{ background: 'rgba(196,138,44,0.12)', color: 'var(--rh-ochre, #c48a2c)' }}
           >
-            {isThai ? 'ฟรี · จำกัด 20 ร้านต่อสัปดาห์' : 'Free · 20 audits per week'}
+            {isThai ? 'ฟรี · รับ 20 ร้านต่อสัปดาห์เท่านั้น' : 'Free · 20 audits per week'}
           </div>
           <h1
             className="text-4xl md:text-5xl font-bold mb-6 leading-tight"
             style={{ color: 'var(--rh-ink)', letterSpacing: '-0.02em' }}
           >
             {isThai
-              ? 'รับร่างคำตอบรีวิวฟรี 10 ฉบับ คัดสำหรับร้านคุณโดยเฉพาะ'
+              ? 'รับคำตอบรีวิว 10 อัน เขียนเฉพาะให้ร้านคุณ ฟรี'
               : 'Get 10 expert review replies, hand-crafted for your business. Free.'}
           </h1>
           <p
@@ -120,7 +120,7 @@ export default function AuditLanding() {
             style={{ color: 'var(--rh-ink-soft, #4a525a)' }}
           >
             {isThai
-              ? 'ส่ง URL ร้านคุณบน Google เราจะอ่านรีวิว 10 รายการล่าสุด แล้วส่งคำตอบที่เหมาะกับโทนของแต่ละลูกค้า — กลับไปคัดลอก-วางได้เลย'
+              ? 'ส่ง URL ร้านคุณบน Google มา เราจะอ่านรีวิว 10 อันล่าสุด แล้วเขียนคำตอบที่เข้ากับลูกค้าแต่ละคน คัดลอกไปวางได้เลย ไม่ต้องสมัคร ไม่ต้องใช้บัตร'
               : "Drop your Google Business URL. We'll read your 10 most recent reviews and send back tone-matched replies you can copy and paste — no signup, no credit card."}
           </p>
         </div>
@@ -164,7 +164,7 @@ export default function AuditLanding() {
               />
               <p className="text-xs mt-1.5" style={{ color: 'var(--rh-ink-soft, #7a8189)' }}>
                 {isThai
-                  ? 'ค้นชื่อร้านบน Google → คลิกแชร์ → คัดลอกลิงก์'
+                  ? 'ค้นชื่อร้านใน Google Maps → กดแชร์ → คัดลอกลิงก์มาวาง'
                   : 'Search your business on Google Maps → tap Share → copy the link.'}
               </p>
             </div>
@@ -178,7 +178,7 @@ export default function AuditLanding() {
                 type="email"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
-                placeholder={isThai ? 'เราจะส่งรายงานไปที่นี่' : "We'll send the audit here"}
+                placeholder={isThai ? 'เราจะส่งรายงานมาที่นี่' : "We'll send the audit here"}
                 className="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2"
                 style={{ borderColor: 'var(--rh-line)', background: 'var(--rh-paper)' }}
                 required
@@ -188,13 +188,13 @@ export default function AuditLanding() {
 
             <div>
               <label htmlFor="notes" className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--rh-ink)' }}>
-                {isThai ? 'อยากเล่าอะไรเกี่ยวกับร้าน? (ไม่บังคับ)' : 'Anything we should know about your business? (optional)'}
+                {isThai ? 'มีอะไรอยากบอกเราเกี่ยวกับร้าน? (ไม่บังคับ)' : 'Anything we should know about your business? (optional)'}
               </label>
               <textarea
                 id="notes"
                 value={form.notes}
                 onChange={(e) => setForm({ ...form, notes: e.target.value })}
-                placeholder={isThai ? 'เช่น โทนการสื่อสารที่ต้องการ ร้านไหนคู่แข่ง ฯลฯ' : 'Tone preferences, common pain points, what makes you different...'}
+                placeholder={isThai ? 'เช่น โทนเสียงที่อยากใช้, จุดที่ลูกค้าชอบ/ไม่ชอบ, ร้านคู่แข่ง...' : 'Tone preferences, common pain points, what makes you different...'}
                 rows={3}
                 className="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2"
                 style={{ borderColor: 'var(--rh-line)', background: 'var(--rh-paper)' }}
@@ -227,12 +227,12 @@ export default function AuditLanding() {
             >
               {status === 'submitting'
                 ? (isThai ? 'กำลังส่ง…' : 'Sending…')
-                : (isThai ? 'ขอรับรายงานฟรี →' : 'Send my free audit →')}
+                : (isThai ? 'ขอรับ audit ฟรี →' : 'Send my free audit →')}
             </button>
 
             <p className="text-xs text-center" style={{ color: 'var(--rh-ink-soft, #7a8189)' }}>
               {isThai
-                ? 'ไม่มีบัตรเครดิต ไม่มีสมัครสมาชิก ส่งภายใน 24 ชั่วโมง'
+                ? 'ไม่ต้องใช้บัตร ไม่ต้องสมัคร ส่งให้ภายใน 24 ชม.'
                 : 'No credit card. No signup. Delivered within 24 hours.'}
             </p>
           </form>
@@ -242,27 +242,27 @@ export default function AuditLanding() {
           <div>
             <div className="text-3xl font-bold mb-2" style={{ color: 'var(--rh-teal-deep)' }}>10</div>
             <div className="text-sm" style={{ color: 'var(--rh-ink-soft, #4a525a)' }}>
-              {isThai ? 'ร่างคำตอบที่เขียนเฉพาะร้านคุณ' : 'replies hand-crafted for your business'}
+              {isThai ? 'คำตอบที่เขียนเฉพาะร้านคุณ' : 'replies hand-crafted for your business'}
             </div>
           </div>
           <div>
             <div className="text-3xl font-bold mb-2" style={{ color: 'var(--rh-ochre, #c48a2c)' }}>24h</div>
             <div className="text-sm" style={{ color: 'var(--rh-ink-soft, #4a525a)' }}>
-              {isThai ? 'จัดส่งภายใน 24 ชั่วโมง' : 'delivered to your inbox'}
+              {isThai ? 'ส่งถึงอินบ็อกซ์คุณ' : 'delivered to your inbox'}
             </div>
           </div>
           <div>
             <div className="text-3xl font-bold mb-2" style={{ color: 'var(--rh-sage, #7a9b78)' }}>0฿</div>
             <div className="text-sm" style={{ color: 'var(--rh-ink-soft, #4a525a)' }}>
-              {isThai ? 'ฟรี ไม่มีเงื่อนไข' : 'no strings attached'}
+              {isThai ? 'ฟรีจริง ไม่มีเงื่อนไข' : 'no strings attached'}
             </div>
           </div>
         </div>
 
         <div className="mt-12 text-center text-sm" style={{ color: 'var(--rh-ink-soft, #7a8189)' }}>
-          {isThai ? 'อยากตอบรีวิวอัตโนมัติทุกวันเลยมั้ย? ' : 'Want this automated forever? '}
+          {isThai ? 'อยากให้ AI ตอบให้ทุกวันเลยมั้ย? ' : 'Want this automated forever? '}
           <Link to="/pricing" style={{ color: 'var(--rh-teal-deep)', fontWeight: 600 }}>
-            {isThai ? 'ดูแพ็กเกจ' : 'See pricing'}
+            {isThai ? 'ดูแพ็กเกจ →' : 'See pricing →'}
           </Link>
         </div>
       </main>
