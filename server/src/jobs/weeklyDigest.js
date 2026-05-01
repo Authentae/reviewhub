@@ -38,7 +38,7 @@ async function runWeeklyDigest() {
   // subscription plan in the JOIN scopes the set correctly.
   const { planAllows } = require('../lib/billing/plans');
   const rows = all(
-    `SELECT u.id, u.email, s.plan
+    `SELECT u.id, u.email, u.preferred_lang, s.plan
      FROM users u
      LEFT JOIN subscriptions s ON s.user_id = u.id
      WHERE u.notif_weekly_summary = 1
@@ -86,6 +86,8 @@ async function runWeeklyDigest() {
     );
 
     try {
+      const supportedLangs = ['en', 'th', 'es', 'ja'];
+      const userLang = supportedLangs.includes(user.preferred_lang) ? user.preferred_lang : 'en';
       await sendWeeklyDigest(user.email, {
         userId: user.id,
         business_name: business.business_name,
@@ -95,6 +97,7 @@ async function runWeeklyDigest() {
         negative: stats.negative || 0,
         unresponded: stats.unresponded || 0,
         recentReviews,
+        lang: userLang,
       });
       // Mark the send so the next tick (and the next restart) skips this user
       // until the window reopens. Done after the await so a transient SMTP

@@ -453,6 +453,124 @@ async function sendPasswordResetEmail(userEmail, resetUrl, lang = 'en') {
   });
 }
 
+// Localised strings for the weekly digest. Most strings here are short
+// labels or chart legends; full sentences are kept short because the
+// digest is a scan-not-read experience by design.
+const DIGEST_STRINGS = {
+  en: {
+    subjectActive: (total, unresponded) => `${total} new review${total === 1 ? '' : 's'} this week · ${unresponded} need${unresponded === 1 ? 's' : ''} a reply`,
+    subjectFallback: (biz) => `Your review week — ${biz}`,
+    headline: 'Your review week',
+    sentimentLegend: (pos, neu, neg) => `${pos} positive · ${neu} neutral · ${neg} critical`,
+    statNewReviews: 'new reviews',
+    statAvgRating: 'avg rating',
+    statNeedReply: 'need a reply',
+    needsReplyEyebrow: '⚠ Needs a reply',
+    draftReplyBtn: '✨ Draft reply',
+    highlightEyebrow: '✨ Highlight of the week',
+    openDashboard: 'Open dashboard →',
+    footer: 'You get this every Monday.',
+    changeFrequency: 'Change frequency',
+    unsubscribe: 'Unsubscribe',
+    weekLabel: (start, end, monthName) => `Week of ${monthName} ${start} – ${end}`,
+    monthNames: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+    textHeadline: (biz) => `Weekly digest for ${biz}`,
+    textNewReviews: 'New reviews',
+    textAvgRating: 'Average rating',
+    textPositive: 'Positive',
+    textNegative: 'Negative',
+    textAwaiting: 'Awaiting response',
+    textRecentReviews: 'Recent reviews:',
+    textNoResponseYet: '[no response yet]',
+    textNoText: '(no text)',
+    textOpenDashboard: 'Open dashboard:',
+  },
+  th: {
+    subjectActive: (total, unresponded) => `${total} รีวิวใหม่สัปดาห์นี้ · ${unresponded} อันรอตอบ`,
+    subjectFallback: (biz) => `สรุปรีวิวสัปดาห์ของคุณ — ${biz}`,
+    headline: 'สรุปรีวิวสัปดาห์ของคุณ',
+    sentimentLegend: (pos, neu, neg) => `ชม ${pos} · กลางๆ ${neu} · แย่ ${neg}`,
+    statNewReviews: 'รีวิวใหม่',
+    statAvgRating: 'คะแนนเฉลี่ย',
+    statNeedReply: 'รอตอบ',
+    needsReplyEyebrow: '⚠ รอคุณตอบ',
+    draftReplyBtn: '✨ ร่างคำตอบ',
+    highlightEyebrow: '✨ รีวิวเด่นประจำสัปดาห์',
+    openDashboard: 'เปิดแดชบอร์ด →',
+    footer: 'อีเมลนี้ส่งให้ทุกวันจันทร์',
+    changeFrequency: 'เปลี่ยนความถี่',
+    unsubscribe: 'ยกเลิกการรับ',
+    weekLabel: (start, end, monthName) => `สัปดาห์ ${start} – ${end} ${monthName}`,
+    monthNames: ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'],
+    textHeadline: (biz) => `สรุปรีวิวรายสัปดาห์ของ ${biz}`,
+    textNewReviews: 'รีวิวใหม่',
+    textAvgRating: 'คะแนนเฉลี่ย',
+    textPositive: 'ชม',
+    textNegative: 'แย่',
+    textAwaiting: 'รอตอบ',
+    textRecentReviews: 'รีวิวล่าสุด:',
+    textNoResponseYet: '[ยังไม่ได้ตอบ]',
+    textNoText: '(ไม่มีข้อความ)',
+    textOpenDashboard: 'เปิดแดชบอร์ด:',
+  },
+  es: {
+    subjectActive: (total, unresponded) => `${total} reseña${total === 1 ? '' : 's'} nueva${total === 1 ? '' : 's'} esta semana · ${unresponded} esperando respuesta`,
+    subjectFallback: (biz) => `Tu semana de reseñas — ${biz}`,
+    headline: 'Tu semana de reseñas',
+    sentimentLegend: (pos, neu, neg) => `${pos} positivas · ${neu} neutras · ${neg} críticas`,
+    statNewReviews: 'reseñas nuevas',
+    statAvgRating: 'media',
+    statNeedReply: 'esperan respuesta',
+    needsReplyEyebrow: '⚠ Esperando respuesta',
+    draftReplyBtn: '✨ Redactar respuesta',
+    highlightEyebrow: '✨ Reseña destacada de la semana',
+    openDashboard: 'Abrir panel →',
+    footer: 'Recibes esto cada lunes.',
+    changeFrequency: 'Cambiar frecuencia',
+    unsubscribe: 'Darme de baja',
+    weekLabel: (start, end, monthName) => `Semana del ${start} al ${end} de ${monthName}`,
+    monthNames: ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'],
+    textHeadline: (biz) => `Resumen semanal de ${biz}`,
+    textNewReviews: 'Reseñas nuevas',
+    textAvgRating: 'Media',
+    textPositive: 'Positivas',
+    textNegative: 'Críticas',
+    textAwaiting: 'Esperando respuesta',
+    textRecentReviews: 'Reseñas recientes:',
+    textNoResponseYet: '[sin respuesta aún]',
+    textNoText: '(sin texto)',
+    textOpenDashboard: 'Abrir panel:',
+  },
+  ja: {
+    subjectActive: (total, unresponded) => `今週の新着口コミ ${total}件 · 返信待ち ${unresponded}件`,
+    subjectFallback: (biz) => `今週の口コミまとめ — ${biz}`,
+    headline: '今週の口コミ',
+    sentimentLegend: (pos, neu, neg) => `好評 ${pos} · 中立 ${neu} · 不満 ${neg}`,
+    statNewReviews: '新着口コミ',
+    statAvgRating: '平均評価',
+    statNeedReply: '返信待ち',
+    needsReplyEyebrow: '⚠ 返信が必要',
+    draftReplyBtn: '✨ 返信を作成',
+    highlightEyebrow: '✨ 今週のハイライト',
+    openDashboard: 'ダッシュボードを開く →',
+    footer: '毎週月曜日にお届けしています。',
+    changeFrequency: '頻度を変更',
+    unsubscribe: '配信停止',
+    weekLabel: (start, end, monthName) => `${monthName}${start}日 – ${end}日の週`,
+    monthNames: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+    textHeadline: (biz) => `${biz}の週次サマリー`,
+    textNewReviews: '新着口コミ',
+    textAvgRating: '平均評価',
+    textPositive: '好評',
+    textNegative: '不満',
+    textAwaiting: '返信待ち',
+    textRecentReviews: '最近の口コミ：',
+    textNoResponseYet: '[未返信]',
+    textNoText: '(テキストなし)',
+    textOpenDashboard: 'ダッシュボードを開く：',
+  },
+};
+
 // Weekly digest: summary stats for the past 7 days. `stats` is whatever
 // runWeeklyDigest prepares — minimal, just enough to render a readable email.
 async function sendWeeklyDigest(userEmail, stats) {
@@ -461,7 +579,9 @@ async function sendWeeklyDigest(userEmail, stats) {
     business_name, total, avg_rating = null,
     positive = 0, negative = 0, unresponded = 0,
     recentReviews = [],
+    lang = 'en',
   } = stats;
+  const s = DIGEST_STRINGS[lang] || DIGEST_STRINGS.en;
   // Signed one-click unsub token. The same token goes into both the email
   // footer link (for users who click) AND the List-Unsubscribe header (for
   // mail clients' automated probes — RFC 8058). Without a userId we can
@@ -477,8 +597,8 @@ async function sendWeeklyDigest(userEmail, stats) {
   // Subject is drawn from the numbers so the preview-pane line tells you
   // exactly what's inside. Design spec: "7 new reviews this week · 3 need a reply".
   const subject = total > 0 && unresponded > 0
-    ? `${total} new review${total === 1 ? '' : 's'} this week · ${unresponded} need${unresponded === 1 ? 's' : ''} a reply`
-    : `Your review week — ${safeBiz}`;
+    ? s.subjectActive(total, unresponded)
+    : s.subjectFallback(business_name);
 
   // Sentiment-split sparkline bar — fills only as wide as each segment's share
   // of total reviews. Degrades to a single-color bar if total is zero.
@@ -493,7 +613,7 @@ async function sendWeeklyDigest(userEmail, stats) {
         ${negPct > 0 ? `<td width="${negPct}%" height="6" style="background:#b85450;font-size:0;line-height:0;">&nbsp;</td>` : ''}
       </tr>
     </table>
-    <div style="font-size:11px;color:#7a8189;margin-top:6px;">${positive} positive · ${total - positive - negative} neutral · ${negative} critical</div>`;
+    <div style="font-size:11px;color:#7a8189;margin-top:6px;">${s.sentimentLegend(positive, total - positive - negative, negative)}</div>`;
   })() : '';
 
   // Critical callout — most negative unresponded review, if one exists. Uses
@@ -501,7 +621,7 @@ async function sendWeeklyDigest(userEmail, stats) {
   const criticalReview = recentReviews.find(r => r.rating <= 2 && !r.response_text);
   const criticalBlock = criticalReview ? `
     <tr><td style="padding:0 28px 16px;">
-      <div style="font-size:11px;font-weight:700;color:#7a8189;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">⚠ Needs a reply</div>
+      <div style="font-size:11px;font-weight:700;color:#7a8189;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">${s.needsReplyEyebrow}</div>
       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;">
         <tr><td style="padding:14px 16px;">
           <table cellpadding="0" cellspacing="0" border="0" width="100%">
@@ -511,7 +631,7 @@ async function sendWeeklyDigest(userEmail, stats) {
             </tr>
           </table>
           <div style="font-size:13px;color:#7f1d1d;line-height:1.5;margin-top:6px;">"${escapeHtml((criticalReview.review_text || '').slice(0, 160))}${(criticalReview.review_text || '').length > 160 ? '…' : ''}"</div>
-          <a href="${safeUrl}/dashboard?responded=no" style="display:inline-block;margin-top:12px;background:#b85450;color:#fff;font-size:12px;font-weight:700;text-decoration:none;padding:8px 14px;border-radius:7px;">✨ Draft reply</a>
+          <a href="${safeUrl}/dashboard?responded=no" style="display:inline-block;margin-top:12px;background:#b85450;color:#fff;font-size:12px;font-weight:700;text-decoration:none;padding:8px 14px;border-radius:7px;">${s.draftReplyBtn}</a>
         </td></tr>
       </table>
     </td></tr>` : '';
@@ -520,7 +640,7 @@ async function sendWeeklyDigest(userEmail, stats) {
   const highlightReview = recentReviews.find(r => r.rating >= 5);
   const highlightBlock = highlightReview ? `
     <tr><td style="padding:0 28px 24px;">
-      <div style="font-size:11px;font-weight:700;color:#7a8189;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">✨ Highlight of the week</div>
+      <div style="font-size:11px;font-weight:700;color:#7a8189;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">${s.highlightEyebrow}</div>
       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;">
         <tr><td style="padding:14px 16px;font-size:13px;color:#166534;line-height:1.5;">
           <b>${escapeHtml(highlightReview.reviewer_name || 'Anonymous')} · ★★★★★</b> — <i>"${escapeHtml((highlightReview.review_text || '').slice(0, 140))}${(highlightReview.review_text || '').length > 140 ? '…' : ''}"</i>
@@ -528,12 +648,12 @@ async function sendWeeklyDigest(userEmail, stats) {
       </table>
     </td></tr>` : '';
 
-  // Week label — "Week of Apr 19 – 25" format.
+  // Week label — locale-specific format. Each locale's monthNames list +
+  // weekLabel formatter handles the regional convention.
   const now = new Date();
   const weekStart = new Date(now);
   weekStart.setDate(now.getDate() - 6);
-  const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const weekLabel = `Week of ${monthNames[weekStart.getMonth()]} ${weekStart.getDate()} – ${now.getDate()}`;
+  const weekLabel = s.weekLabel(weekStart.getDate(), now.getDate(), s.monthNames[weekStart.getMonth()]);
 
   const html = `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f4eee0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
   <tr><td align="center" style="padding:24px 16px;">
@@ -544,15 +664,15 @@ async function sendWeeklyDigest(userEmail, stats) {
             <td style="font-size:12px;color:rgba(255,255,255,0.7);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;">${weekLabel}</td>
             <td align="right" style="font-size:12px;color:rgba(255,255,255,0.7);font-weight:600;">${safeBiz}</td>
           </tr>
-          <tr><td colspan="2" style="padding-top:8px;font-size:26px;color:#fff;font-weight:700;letter-spacing:-0.02em;">Your review week</td></tr>
+          <tr><td colspan="2" style="padding-top:8px;font-size:26px;color:#fff;font-weight:700;letter-spacing:-0.02em;">${s.headline}</td></tr>
         </table>
       </td></tr>
       <tr><td style="padding:24px 28px 8px;">
         <table width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr>
-            <td width="33%"><div style="font-size:28px;font-weight:800;color:#1d242c;letter-spacing:-0.02em;">${total}</div><div style="font-size:12px;color:#7a8189;margin-top:2px;">new reviews</div></td>
-            <td width="33%"><div style="font-size:28px;font-weight:800;color:#c48a2c;letter-spacing:-0.02em;">${avg_rating != null ? avg_rating : '—'} ★</div><div style="font-size:12px;color:#7a8189;margin-top:2px;">avg rating</div></td>
-            <td width="33%"><div style="font-size:28px;font-weight:800;color:#b85450;letter-spacing:-0.02em;">${unresponded}</div><div style="font-size:12px;color:#7a8189;margin-top:2px;">need a reply</div></td>
+            <td width="33%"><div style="font-size:28px;font-weight:800;color:#1d242c;letter-spacing:-0.02em;">${total}</div><div style="font-size:12px;color:#7a8189;margin-top:2px;">${s.statNewReviews}</div></td>
+            <td width="33%"><div style="font-size:28px;font-weight:800;color:#c48a2c;letter-spacing:-0.02em;">${avg_rating != null ? avg_rating : '—'} ★</div><div style="font-size:12px;color:#7a8189;margin-top:2px;">${s.statAvgRating}</div></td>
+            <td width="33%"><div style="font-size:28px;font-weight:800;color:#b85450;letter-spacing:-0.02em;">${unresponded}</div><div style="font-size:12px;color:#7a8189;margin-top:2px;">${s.statNeedReply}</div></td>
           </tr>
         </table>
       </td></tr>
@@ -560,10 +680,10 @@ async function sendWeeklyDigest(userEmail, stats) {
       ${criticalBlock}
       ${highlightBlock}
       <tr><td align="center" style="padding:0 28px 32px;">
-        <a href="${safeUrl}/dashboard" style="display:inline-block;background:#1d242c;color:#fff;font-size:14px;font-weight:700;text-decoration:none;padding:13px 24px;border-radius:10px;">Open dashboard →</a>
+        <a href="${safeUrl}/dashboard" style="display:inline-block;background:#1d242c;color:#fff;font-size:14px;font-weight:700;text-decoration:none;padding:13px 24px;border-radius:10px;">${s.openDashboard}</a>
       </td></tr>
       <tr><td style="border-top:1px solid #e6dfce;padding:18px 28px;font-size:11px;color:#7a8189;line-height:1.55;" align="center">
-        You get this every Monday. <a href="${safeUrl}/settings" style="color:#7a8189;">Change frequency</a> · <a href="${escapeHtml(oneClickUnsubUrl)}" style="color:#7a8189;">Unsubscribe</a>
+        ${s.footer} <a href="${safeUrl}/settings" style="color:#7a8189;">${s.changeFrequency}</a> · <a href="${escapeHtml(oneClickUnsubUrl)}" style="color:#7a8189;">${s.unsubscribe}</a>
       </td></tr>
     </table>
   </td></tr>
@@ -571,27 +691,27 @@ async function sendWeeklyDigest(userEmail, stats) {
 
   const reviewsText = recentReviews.length > 0 ? [
     '',
-    'Recent reviews:',
+    s.textRecentReviews,
     ...recentReviews.map(r => {
       const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
-      const excerpt = r.review_text ? r.review_text.slice(0, 160) + (r.review_text.length > 160 ? '…' : '') : '(no text)';
-      const responded = r.response_text ? '' : ' [no response yet]';
+      const excerpt = r.review_text ? r.review_text.slice(0, 160) + (r.review_text.length > 160 ? '…' : '') : s.textNoText;
+      const responded = r.response_text ? '' : ` ${s.textNoResponseYet}`;
       return `  ${r.reviewer_name || 'Anonymous'} ${stars} (${r.platform})${responded}\n  "${excerpt}"`;
     }),
   ] : [];
 
   const text = [
-    `Weekly digest for ${business_name}`,
+    s.textHeadline(business_name),
     '',
-    `New reviews: ${total}`,
-    avg_rating != null ? `Average rating: ${avg_rating}` : null,
-    `Positive: ${positive}`,
-    `Negative: ${negative}`,
-    `Awaiting response: ${unresponded}`,
+    `${s.textNewReviews}: ${total}`,
+    avg_rating != null ? `${s.textAvgRating}: ${avg_rating}` : null,
+    `${s.textPositive}: ${positive}`,
+    `${s.textNegative}: ${negative}`,
+    `${s.textAwaiting}: ${unresponded}`,
     ...reviewsText,
     '',
-    `Open dashboard: ${process.env.CLIENT_URL || 'http://localhost:5173'}/dashboard`,
-  ].filter(s => s !== null).join('\n');
+    `${s.textOpenDashboard} ${process.env.CLIENT_URL || 'http://localhost:5173'}/dashboard`,
+  ].filter((line) => line !== null).join('\n');
 
   const transporter = getTransporter();
   if (!transporter) {
