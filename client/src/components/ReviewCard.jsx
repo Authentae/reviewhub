@@ -359,6 +359,16 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
           ? t('toast.aiDraftLimitUpgrade', { plan: upgradeTo })
           : t('toast.aiDraftLimit');
         toast(`${upgrade}${quotaMsg}`, 'error');
+      } else if (err?.isRateLimited || err?.response?.status === 429) {
+        // Per-IP rate limit hit (api.js interceptor sets isRateLimited +
+        // retryAfterSeconds). Showing the wait time is much more useful than
+        // a generic "failed to draft" — without it the user just retries
+        // immediately and hits the same wall.
+        const wait = err?.retryAfterSeconds;
+        const msg = wait && Number.isFinite(wait) && wait > 0
+          ? t('common.rateLimitedWait', { seconds: wait })
+          : t('common.rateLimited');
+        toast(msg, 'error');
       } else {
         toast(t('toast.failedDraft'), 'error');
       }
