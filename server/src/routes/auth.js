@@ -279,7 +279,8 @@ router.post('/login', authAttemptLimiter, async (req, res) => {
           user.id,
         ]
       );
-      sendEmailInBackground(sendMfaCode(user.email, otp, 'login'), 'mfa-login');
+      const mfaLang = req.acceptsLanguages(['th', 'en']) || 'en';
+      sendEmailInBackground(sendMfaCode(user.email, otp, 'login', mfaLang), 'mfa-login');
       logAudit(req, 'user.login.mfa_challenged', { userId: user.id });
 
       const pendingToken = signToken({ id: user.id, email: user.email, mfa: 'pending' }, { expiresIn: '10m' });
@@ -858,17 +859,18 @@ router.put('/email', emailChangeLimiter, authMiddleware, async (req, res) => {
     logAudit(req, 'user.email_change_requested', { userId: user.id });
 
     if (!taken) {
+      const lang = req.acceptsLanguages(['th', 'en']) || 'en';
       // Email the new address with a confirm link (purpose-specific template
       // — "Confirm your new email", not the generic first-time verify text).
       sendEmailInBackground(
-        sendEmailChangeConfirmation(newEmail, clientUrl(`/email-change?token=${change.plaintext}`)),
+        sendEmailChangeConfirmation(newEmail, clientUrl(`/email-change?token=${change.plaintext}`), lang),
         'email-change-confirm'
       );
       // Best-effort alert to the old address — account takeover defence.
       // The old address still owns the account at this point; if someone
       // else initiated the change, the owner needs to know NOW.
       sendEmailInBackground(
-        sendEmailChangeAlert(user.email, newEmail),
+        sendEmailChangeAlert(user.email, newEmail, lang),
         'email-change-alert'
       );
     }
@@ -962,8 +964,9 @@ router.post('/email/resend-confirm', emailChangeLimiter, authMiddleware, async (
       `UPDATE users SET pending_email_token_hash = ?, pending_email_expires_at = ? WHERE id = ?`,
       [change.hash, expiresAt, user.id]
     );
+    const resendLang = req.acceptsLanguages(['th', 'en']) || 'en';
     sendEmailInBackground(
-      sendEmailChangeConfirmation(user.pending_email, clientUrl(`/confirm-email-change?token=${change.plaintext}`)),
+      sendEmailChangeConfirmation(user.pending_email, clientUrl(`/confirm-email-change?token=${change.plaintext}`), resendLang),
       'email-change-resend'
     );
     logAudit(req, 'user.email_change_resent', { userId: user.id });
@@ -1181,8 +1184,9 @@ router.post('/forgot-password', emailSendLimiter, require('../middleware/honeypo
           `UPDATE users SET password_reset_token_hash = ?, password_reset_expires_at = ? WHERE id = ?`,
           [reset.hash, expiresAt, user.id]
         );
+        const resetLang = req.acceptsLanguages(['th', 'en']) || 'en';
         sendEmailInBackground(
-          sendPasswordResetEmail(user.email, clientUrl(`/reset-password?token=${reset.plaintext}`)),
+          sendPasswordResetEmail(user.email, clientUrl(`/reset-password?token=${reset.plaintext}`), resetLang),
           'password-reset'
         );
       }
@@ -1304,7 +1308,8 @@ router.post('/mfa/enable', mfaChallengeLimiter, authMiddleware, async (req, res)
         user.id,
       ]
     );
-    sendEmailInBackground(sendMfaCode(user.email, otp, 'enable'), 'mfa-enable');
+    const enableLang = req.acceptsLanguages(['th', 'en']) || 'en';
+    sendEmailInBackground(sendMfaCode(user.email, otp, 'enable', enableLang), 'mfa-enable');
     res.setHeader('Cache-Control', 'no-store');
     res.json({ success: true });
   } catch (err) {
@@ -1512,7 +1517,8 @@ router.post('/login/mfa/resend', mfaChallengeLimiter, mfaPendingMiddleware, (req
         user.id,
       ]
     );
-    sendEmailInBackground(sendMfaCode(user.email, otp, 'login'), 'mfa-login-resend');
+    const resendMfaLang = req.acceptsLanguages(['th', 'en']) || 'en';
+    sendEmailInBackground(sendMfaCode(user.email, otp, 'login', resendMfaLang), 'mfa-login-resend');
     res.setHeader('Cache-Control', 'no-store');
     res.json({ success: true });
   } catch (err) {

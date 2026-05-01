@@ -161,7 +161,8 @@ router.post('/erasure-request', requireAuth, gdprRateLimit, async (req, res) => 
     // Fire-and-forget: don't block the response on SMTP. If the send fails,
     // the failure-mode is privacy-safe (data simply isn't deleted) but we
     // still want operator visibility, so route the error through Sentry.
-    sendErasureConfirmation(req.user.email, confirmUrl).catch((err) => {
+    const erasureLang = req.acceptsLanguages(['th', 'en']) || 'en';
+    sendErasureConfirmation(req.user.email, confirmUrl, erasureLang).catch((err) => {
       captureException(err, {
         route: 'gdpr', op: 'erasure-confirmation-send', userId: req.user.id,
         kind: 'email.send_failed',

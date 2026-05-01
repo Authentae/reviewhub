@@ -287,31 +287,56 @@ async function sendVerificationEmail(userEmail, verifyUrl, lang = 'en') {
   });
 }
 
+// Localised strings for password-reset email. See VERIFY_STRINGS comment.
+const RESET_STRINGS = {
+  en: {
+    subject: 'Reset your ReviewHub password',
+    headline: 'Password reset',
+    body: 'We received a request to reset the password for your ReviewHub account. This link is valid for 1 hour.',
+    cta: 'Reset password',
+    pasteHint: "If the button doesn't work, paste this URL into your browser:",
+    ignoreFooter: "If you didn't request this, you can safely ignore this email — your password won't change.",
+    textValid: 'This link is valid for 1 hour:',
+    textIgnore: "If you didn't request this, you can safely ignore this email.",
+  },
+  th: {
+    subject: 'รีเซ็ตรหัสผ่าน ReviewHub ของคุณ',
+    headline: 'รีเซ็ตรหัสผ่าน',
+    body: 'เราได้รับคำขอรีเซ็ตรหัสผ่านสำหรับบัญชี ReviewHub ของคุณ ลิงก์นี้ใช้ได้ภายใน 1 ชั่วโมง',
+    cta: 'รีเซ็ตรหัสผ่าน',
+    pasteHint: 'หากปุ่มใช้งานไม่ได้ ให้คัดลอก URL นี้ไปวางในเบราว์เซอร์:',
+    ignoreFooter: 'หากคุณไม่ได้ส่งคำขอนี้ สามารถละเลยอีเมลนี้ได้อย่างปลอดภัย — รหัสผ่านของคุณจะไม่เปลี่ยนแปลง',
+    textValid: 'ลิงก์นี้ใช้ได้ภายใน 1 ชั่วโมง:',
+    textIgnore: 'หากคุณไม่ได้ส่งคำขอนี้ สามารถละเลยอีเมลนี้ได้อย่างปลอดภัย',
+  },
+};
+
 // Send the password-reset link. Valid for 1 hour.
-async function sendPasswordResetEmail(userEmail, resetUrl) {
-  const subject = 'Reset your ReviewHub password';
+async function sendPasswordResetEmail(userEmail, resetUrl, lang = 'en') {
+  const s = RESET_STRINGS[lang] || RESET_STRINGS.en;
+  const subject = s.subject;
   const safeUrl = escapeHtml(resetUrl);
   const html = `
     <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-      <h2 style="color:#1e4d5e">Password reset</h2>
-      <p>We received a request to reset the password for your ReviewHub account. This link is valid for 1 hour.</p>
+      <h2 style="color:#1e4d5e">${s.headline}</h2>
+      <p>${s.body}</p>
       <p style="margin:24px 0">
         <a href="${safeUrl}"
            style="background:#1e4d5e;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block">
-          Reset password
+          ${escapeHtml(s.cta)}
         </a>
       </p>
-      <p style="font-size:12px;color:#6b7280">If the button doesn't work, paste this URL into your browser:<br>${safeUrl}</p>
-      <p style="font-size:11px;color:#9ca3af;margin-top:24px">If you didn't request this, you can safely ignore this email — your password won't change.</p>
+      <p style="font-size:12px;color:#6b7280">${s.pasteHint}<br>${safeUrl}</p>
+      <p style="font-size:11px;color:#9ca3af;margin-top:24px">${s.ignoreFooter}</p>
     </div>`;
   const text = [
-    'Password reset',
+    s.headline,
     '',
-    'We received a request to reset the password for your ReviewHub account.',
-    'This link is valid for 1 hour:',
+    s.body,
+    s.textValid,
     resetUrl,
     '',
-    "If you didn't request this, you can safely ignore this email.",
+    s.textIgnore,
   ].join('\n');
 
   const transporter = getTransporter();
@@ -597,34 +622,48 @@ async function sendReviewRequest({ customerEmail, customerName, businessName, pl
   });
 }
 
+// Localised strings for the 2FA email. Two-key shape: { login, enable }
+// for each language so the subject + headline match the purpose.
+const MFA_STRINGS = {
+  en: {
+    login: { subject: 'Your ReviewHub sign-in code', headline: 'Sign-in code', intro: 'Enter this code to finish signing in:' },
+    enable: { subject: 'Your ReviewHub verification code', headline: 'Enable 2FA', intro: 'Enter this code to turn on two-factor authentication:' },
+    validFooter: "This code is valid for 10 minutes. If you didn't request it, you can ignore this email — your account is safe.",
+    textValidFooter: "This code is valid for 10 minutes. If you didn't request it, you can ignore this email.",
+  },
+  th: {
+    login: { subject: 'รหัสเข้าสู่ระบบ ReviewHub ของคุณ', headline: 'รหัสเข้าสู่ระบบ', intro: 'กรอกรหัสนี้เพื่อเข้าสู่ระบบ:' },
+    enable: { subject: 'รหัสยืนยัน ReviewHub ของคุณ', headline: 'เปิดใช้งาน 2FA', intro: 'กรอกรหัสนี้เพื่อเปิดใช้การยืนยันตัวตนสองขั้นตอน:' },
+    validFooter: 'รหัสนี้ใช้ได้ 10 นาที หากคุณไม่ได้ส่งคำขอ สามารถละเลยอีเมลนี้ได้ — บัญชีของคุณปลอดภัย',
+    textValidFooter: 'รหัสนี้ใช้ได้ 10 นาที หากคุณไม่ได้ส่งคำขอ สามารถละเลยอีเมลนี้ได้',
+  },
+};
+
 // 2FA challenge code. The code is prominent in both the subject preheader
 // and the body so users on mobile lockscreens see it without opening the
 // mail. Intentionally terse — these arrive on every login attempt.
-async function sendMfaCode(userEmail, code, purpose = 'login') {
+async function sendMfaCode(userEmail, code, purpose = 'login', lang = 'en') {
   const safeCode = escapeHtml(code);
-  const subject = purpose === 'enable'
-    ? `Your ReviewHub verification code: ${code}`
-    : `Your ReviewHub sign-in code: ${code}`;
-  const intro = purpose === 'enable'
-    ? 'Enter this code to turn on two-factor authentication:'
-    : 'Enter this code to finish signing in:';
+  const ls = MFA_STRINGS[lang] || MFA_STRINGS.en;
+  const p = ls[purpose] || ls.login;
+  const subject = `${p.subject}: ${code}`;
   const html = `
     <div style="font-family:sans-serif;max-width:480px;margin:0 auto">
-      <h2 style="color:#1e4d5e">${purpose === 'enable' ? 'Enable 2FA' : 'Sign-in code'}</h2>
-      <p>${intro}</p>
+      <h2 style="color:#1e4d5e">${p.headline}</h2>
+      <p>${p.intro}</p>
       <p style="font-size:32px;letter-spacing:6px;font-weight:700;background:#f3f4f6;padding:16px;text-align:center;border-radius:8px;font-family:monospace">
         ${safeCode}
       </p>
-      <p style="font-size:12px;color:#6b7280">This code is valid for 10 minutes. If you didn't request it, you can ignore this email — your account is safe.</p>
+      <p style="font-size:12px;color:#6b7280">${ls.validFooter}</p>
     </div>`;
   const text = [
-    purpose === 'enable' ? 'Enable 2FA' : 'Sign-in code',
+    p.headline,
     '',
-    intro,
+    p.intro,
     '',
     `    ${code}`,
     '',
-    "This code is valid for 10 minutes. If you didn't request it, you can ignore this email.",
+    ls.textValidFooter,
   ].join('\n');
 
   const transporter = getTransporter();
@@ -644,30 +683,56 @@ async function sendMfaCode(userEmail, code, purpose = 'login') {
 // Confirm a pending email change by emailing the NEW address. Separate from
 // sendVerificationEmail so the subject + body make sense for "change"
 // rather than "verify for the first time".
-async function sendEmailChangeConfirmation(newEmail, confirmUrl) {
-  const subject = 'Confirm your new ReviewHub email';
+const CHANGE_STRINGS = {
+  en: {
+    subject: 'Confirm your new ReviewHub email',
+    headline: 'Confirm your new email',
+    body1: 'We received a request to change the email on your ReviewHub account to this address. Click the button below to confirm the change.',
+    body2: "The link is valid for 1 hour. If you didn't request this, you can safely ignore this email — your existing email will stay as it is.",
+    cta: 'Confirm email change',
+    pasteHint: "If the button doesn't work, paste this URL into your browser:",
+    footer: "ReviewHub · you're receiving this because someone entered this address as a new email on their account.",
+    textIntro: 'Click the link to confirm changing your account email to this address:',
+    textValid: 'Valid for 1 hour. If you did not request this, ignore this email.',
+  },
+  th: {
+    subject: 'ยืนยันอีเมลใหม่ของ ReviewHub',
+    headline: 'ยืนยันอีเมลใหม่ของคุณ',
+    body1: 'เราได้รับคำขอเปลี่ยนอีเมลของบัญชี ReviewHub เป็นอีเมลนี้ คลิกปุ่มด้านล่างเพื่อยืนยันการเปลี่ยนแปลง',
+    body2: 'ลิงก์ใช้ได้ภายใน 1 ชั่วโมง หากคุณไม่ได้ส่งคำขอ สามารถละเลยอีเมลนี้ได้ — อีเมลเดิมจะยังคงอยู่',
+    cta: 'ยืนยันการเปลี่ยนอีเมล',
+    pasteHint: 'หากปุ่มใช้ไม่ได้ ให้คัดลอก URL นี้ไปวางในเบราว์เซอร์:',
+    footer: 'ReviewHub · คุณได้รับอีเมลนี้เพราะมีผู้ระบุอีเมลนี้เป็นอีเมลใหม่บนบัญชีของพวกเขา',
+    textIntro: 'คลิกลิงก์เพื่อยืนยันการเปลี่ยนอีเมลบัญชีเป็นอีเมลนี้:',
+    textValid: 'ใช้ได้ภายใน 1 ชั่วโมง หากคุณไม่ได้ส่งคำขอ ให้ละเลยอีเมลนี้',
+  },
+};
+
+async function sendEmailChangeConfirmation(newEmail, confirmUrl, lang = 'en') {
+  const s = CHANGE_STRINGS[lang] || CHANGE_STRINGS.en;
+  const subject = s.subject;
   const safeUrl = escapeHtml(confirmUrl);
   const html = `
     <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-      <h2 style="color:#1e4d5e">Confirm your new email</h2>
-      <p>We received a request to change the email on your ReviewHub account to this address. Click the button below to confirm the change.</p>
-      <p>The link is valid for 1 hour. If you didn't request this, you can safely ignore this email — your existing email will stay as it is.</p>
+      <h2 style="color:#1e4d5e">${s.headline}</h2>
+      <p>${s.body1}</p>
+      <p>${s.body2}</p>
       <p style="margin:24px 0">
         <a href="${safeUrl}"
            style="background:#1e4d5e;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block">
-          Confirm email change
+          ${escapeHtml(s.cta)}
         </a>
       </p>
-      <p style="font-size:12px;color:#6b7280">If the button doesn't work, paste this URL into your browser:<br>${safeUrl}</p>
-      <p style="font-size:11px;color:#9ca3af;margin-top:24px">ReviewHub · you're receiving this because someone entered this address as a new email on their account.</p>
+      <p style="font-size:12px;color:#6b7280">${s.pasteHint}<br>${safeUrl}</p>
+      <p style="font-size:11px;color:#9ca3af;margin-top:24px">${s.footer}</p>
     </div>`;
   const text = [
-    'Confirm your new ReviewHub email',
+    s.subject,
     '',
-    'Click the link to confirm changing your account email to this address:',
+    s.textIntro,
     confirmUrl,
     '',
-    'Valid for 1 hour. If you did not request this, ignore this email.',
+    s.textValid,
   ].join('\n');
 
   const transporter = getTransporter();
@@ -690,35 +755,63 @@ async function sendEmailChangeConfirmation(newEmail, confirmUrl) {
 // account owner learns about it before the attacker completes verification.
 // Includes no action link (user who didn't initiate should reset password
 // via the standard forgot-password flow).
-async function sendEmailChangeAlert(oldEmail, newEmail) {
+const ALERT_STRINGS = {
+  en: {
+    subject: 'Email change requested on your ReviewHub account',
+    headline: 'Email change requested',
+    introBlock: 'Someone just requested to change the email on your ReviewHub account to:',
+    ifYou: 'If that was you, you can ignore this message — the change only takes effect after you click the confirm link we sent to the new address.',
+    ifNot: "If it wasn't you",
+    ifNotBody: ', your account may be compromised. Sign in and change your password immediately:',
+    cta: 'Secure your account',
+    footer: "You received this because someone requested an email change on ReviewHub. No action is required unless you didn't initiate this.",
+    textBody: (newEmail) => `Someone just requested to change the email on your account to: ${newEmail}`,
+    textCta: (url) => `If it wasn't you, sign in and change your password now: ${url}/forgot-password`,
+  },
+  th: {
+    subject: 'มีคำขอเปลี่ยนอีเมลในบัญชี ReviewHub ของคุณ',
+    headline: 'มีคำขอเปลี่ยนอีเมล',
+    introBlock: 'มีผู้ส่งคำขอเปลี่ยนอีเมลของบัญชี ReviewHub ของคุณเป็น:',
+    ifYou: 'หากเป็นคุณเอง สามารถละเลยข้อความนี้ได้ — การเปลี่ยนแปลงจะมีผลก็ต่อเมื่อคลิกลิงก์ยืนยันที่ส่งไปยังอีเมลใหม่',
+    ifNot: 'หากไม่ใช่คุณ',
+    ifNotBody: ' บัญชีของคุณอาจถูกบุกรุก เข้าสู่ระบบและเปลี่ยนรหัสผ่านทันที:',
+    cta: 'รักษาความปลอดภัยบัญชี',
+    footer: 'คุณได้รับอีเมลนี้เพราะมีผู้ขอเปลี่ยนอีเมลบน ReviewHub ไม่ต้องทำอะไรหากเป็นคุณเอง',
+    textBody: (newEmail) => `มีผู้ส่งคำขอเปลี่ยนอีเมลของบัญชีคุณเป็น: ${newEmail}`,
+    textCta: (url) => `หากไม่ใช่คุณ ให้เข้าสู่ระบบและเปลี่ยนรหัสผ่านทันที: ${url}/forgot-password`,
+  },
+};
+
+async function sendEmailChangeAlert(oldEmail, newEmail, lang = 'en') {
+  const s = ALERT_STRINGS[lang] || ALERT_STRINGS.en;
   const safeNew = escapeHtml(newEmail);
   const safeUrl = escapeHtml(process.env.CLIENT_URL || 'http://localhost:5173');
-  const subject = 'Email change requested on your ReviewHub account';
+  const subject = s.subject;
   const html = `
     <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-      <h2 style="color:#b45309">Email change requested</h2>
-      <p>Someone just requested to change the email on your ReviewHub account to:</p>
+      <h2 style="color:#b45309">${s.headline}</h2>
+      <p>${s.introBlock}</p>
       <p style="background:#fef3c7;border-left:4px solid #c48a2c;padding:12px 16px;margin:16px 0;font-family:monospace">
         ${safeNew}
       </p>
-      <p>If that was you, you can ignore this message — the change only takes effect after you click the confirm link we sent to the new address.</p>
-      <p><strong>If it wasn't you</strong>, your account may be compromised. Sign in and change your password immediately:</p>
+      <p>${s.ifYou}</p>
+      <p><strong>${s.ifNot}</strong>${s.ifNotBody}</p>
       <p style="margin:16px 0">
         <a href="${safeUrl}/forgot-password"
            style="background:#b85450;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block">
-          Secure your account
+          ${escapeHtml(s.cta)}
         </a>
       </p>
       <p style="font-size:11px;color:#9ca3af;margin-top:24px">
-        You received this because someone requested an email change on ReviewHub. No action is required unless you didn't initiate this.
+        ${s.footer}
       </p>
     </div>`;
   const text = [
-    'Email change requested on your ReviewHub account',
+    s.subject,
     '',
-    `Someone just requested to change the email on your account to: ${newEmail}`,
+    s.textBody(newEmail),
     '',
-    `If it wasn't you, sign in and change your password now: ${process.env.CLIENT_URL || 'http://localhost:5173'}/forgot-password`,
+    s.textCta(process.env.CLIENT_URL || 'http://localhost:5173'),
   ].join('\n');
 
   const transporter = getTransporter();
@@ -744,31 +837,59 @@ async function sendEmailChangeAlert(oldEmail, newEmail) {
 // guard it — (a) the requester must be authenticated to start the flow,
 // (b) they must hold the inbox to complete it. Cuts off "I left my laptop
 // open at the cafe and someone clicked Delete Account" scenarios.
-async function sendErasureConfirmation(userEmail, confirmUrl) {
-  const subject = 'Confirm your ReviewHub account deletion';
+const ERASURE_STRINGS = {
+  en: {
+    subject: 'Confirm your ReviewHub account deletion',
+    headline: 'Confirm account deletion',
+    body: 'You requested permanent deletion of your ReviewHub account and all associated data. This action is irreversible — once confirmed, your reviews, settings, audit trail, and connected platforms are removed and cannot be recovered.',
+    cta: 'Confirm deletion',
+    pasteHint: "If the button doesn't work, paste this URL into your browser:",
+    footer: 'This link is valid for 24 hours. If you did not request deletion, you can safely ignore this email — nothing will be removed.',
+    textBody: 'You requested permanent deletion of your ReviewHub account.',
+    textIrreversible: 'This action is irreversible. To proceed, click:',
+    textValid: 'This link is valid for 24 hours.',
+    textIgnore: "If you didn't request this, you can safely ignore this email.",
+  },
+  th: {
+    subject: 'ยืนยันการลบบัญชี ReviewHub ของคุณ',
+    headline: 'ยืนยันการลบบัญชี',
+    body: 'คุณได้ส่งคำขอลบบัญชี ReviewHub และข้อมูลที่เกี่ยวข้องอย่างถาวร การกระทำนี้ไม่สามารถย้อนกลับได้ — เมื่อยืนยันแล้ว รีวิว การตั้งค่า ประวัติ และแพลตฟอร์มที่เชื่อมต่อทั้งหมดจะถูกลบและไม่สามารถกู้คืนได้',
+    cta: 'ยืนยันการลบ',
+    pasteHint: 'หากปุ่มใช้ไม่ได้ ให้คัดลอก URL นี้ไปวางในเบราว์เซอร์:',
+    footer: 'ลิงก์นี้ใช้ได้ภายใน 24 ชั่วโมง หากคุณไม่ได้ส่งคำขอลบ สามารถละเลยอีเมลนี้ได้อย่างปลอดภัย — ไม่มีอะไรจะถูกลบ',
+    textBody: 'คุณได้ส่งคำขอลบบัญชี ReviewHub อย่างถาวร',
+    textIrreversible: 'การกระทำนี้ไม่สามารถย้อนกลับได้ หากต้องการดำเนินการต่อ ให้คลิก:',
+    textValid: 'ลิงก์นี้ใช้ได้ภายใน 24 ชั่วโมง',
+    textIgnore: 'หากคุณไม่ได้ส่งคำขอนี้ สามารถละเลยอีเมลนี้ได้อย่างปลอดภัย',
+  },
+};
+
+async function sendErasureConfirmation(userEmail, confirmUrl, lang = 'en') {
+  const s = ERASURE_STRINGS[lang] || ERASURE_STRINGS.en;
+  const subject = s.subject;
   const safeUrl = escapeHtml(confirmUrl);
   const html = `
     <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-      <h2 style="color:#b85450">Confirm account deletion</h2>
-      <p>You requested permanent deletion of your ReviewHub account and all associated data. This action is irreversible — once confirmed, your reviews, settings, audit trail, and connected platforms are removed and cannot be recovered.</p>
+      <h2 style="color:#b85450">${s.headline}</h2>
+      <p>${s.body}</p>
       <p style="margin:24px 0">
         <a href="${safeUrl}"
            style="background:#b85450;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block">
-          Confirm deletion
+          ${escapeHtml(s.cta)}
         </a>
       </p>
-      <p style="font-size:12px;color:#6b7280">If the button doesn't work, paste this URL into your browser:<br>${safeUrl}</p>
-      <p style="font-size:11px;color:#9ca3af;margin-top:24px">This link is valid for 24 hours. If you did not request deletion, you can safely ignore this email — nothing will be removed.</p>
+      <p style="font-size:12px;color:#6b7280">${s.pasteHint}<br>${safeUrl}</p>
+      <p style="font-size:11px;color:#9ca3af;margin-top:24px">${s.footer}</p>
     </div>`;
   const text = [
-    'Confirm ReviewHub account deletion',
+    s.subject,
     '',
-    'You requested permanent deletion of your ReviewHub account.',
-    'This action is irreversible. To proceed, click:',
+    s.textBody,
+    s.textIrreversible,
     confirmUrl,
     '',
-    'This link is valid for 24 hours.',
-    "If you didn't request this, you can safely ignore this email.",
+    s.textValid,
+    s.textIgnore,
   ].join('\n');
 
   const transporter = getTransporter();
