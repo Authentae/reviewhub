@@ -174,6 +174,21 @@ export default function Register() {
               )}
             </div>
 
+            {/* Healthcare/regulated-industries gate. We are NOT HIPAA-
+                compliant and don't offer a BAA. Healthcare buyers who sign
+                up not knowing this end up demanding refunds and bad-mouthing
+                us. Surfacing the limitation BEFORE the signup form
+                completes is honest + protects everyone. Direct buyers in
+                non-regulated industries breeze past it. */}
+            <div className="rounded-lg border border-amber-200 bg-amber-50 dark:bg-amber-900/20 dark:border-amber-700/50 px-3 py-2.5 text-xs text-amber-900 dark:text-amber-100 leading-relaxed">
+              <strong className="font-semibold">{t('auth.regulatedIndustryTitle', 'Healthcare, legal, or financial advisory?')}</strong>{' '}
+              {t('auth.regulatedIndustryBody', "We're not HIPAA-compliant and don't offer a BAA today. If you handle patient/client privileged data, ")}
+              <Link to="/support?type=account" className="underline font-medium">
+                {t('auth.regulatedIndustryCta', 'contact us first')}
+              </Link>
+              {t('auth.regulatedIndustryAfter', ' before signing up.')}
+            </div>
+
             {/* Required attestations. Order matters for accessibility — the
                 checkboxes precede the submit button so screen readers encounter
                 them first. */}

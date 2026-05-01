@@ -636,6 +636,9 @@ function Pricing() {
             <h3>{t('landing.plan.proHeadline', 'For shops with real review volume.')}</h3>
             <div className="plan-price">$29<small>/mo</small></div>
             <div className="plan-sub">{t('landing.plan.proSub', 'Unlimited AI drafts and the analytics that actually matter.')}</div>
+            <div className="plan-sub" style={{ fontSize: 11, opacity: 0.7, marginTop: -8 }}>
+              {t('landing.plan.proPopularHint', 'Most popular if you get 5+ new reviews a month. If you have a smaller cafe or just opened, Free or Starter is fine.')}
+            </div>
             <ul>
               <li><Check />{t('landing.plan.pro1', 'Unlimited AI drafts')}</li>
               <li><Check />{t('landing.plan.pro2', '6 platforms (Google, Wongnai, Yelp…)')}</li>
@@ -756,10 +759,19 @@ function Footer() {
               <h4>{t('landing.footerProduct', 'Product')}</h4>
               <ul>
                 <li><Link to="/tools/review-reply-generator">{t('landing.footerFreeTool', 'Free tool')}</Link></li>
+                <li><Link to="/audit">{t('landing.footerAudit', 'Free audit')}</Link></li>
                 <li><Link to="/login">{t('landing.footerDashboard', 'Dashboard')}</Link></li>
                 <li><Link to="/pricing">{t('landing.footerPricing', 'Pricing')}</Link></li>
+                <li><Link to="/changelog">{t('landing.footerChangelog', 'Changelog')}</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4>{t('landing.footerSupport', 'Support')}</h4>
+              <ul>
+                <li><Link to="/support">{t('landing.footerHelp', 'Help & support')}</Link></li>
                 <li><a href="#demo">{t('landing.footerAiDrafts', 'AI drafts')}</a></li>
                 <li><a href="#features">{t('landing.footerFeatures', 'Features')}</a></li>
+                <li><a href="mailto:hello@reviewhub.review">hello@reviewhub.review</a></li>
               </ul>
             </div>
             <div>
