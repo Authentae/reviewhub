@@ -18,6 +18,15 @@ function escapeHtml(str) {
     .replace(/'/g, '&#x27;');
 }
 
+// Strip CR / LF — anything that lands in an email HEADER (Subject, To,
+// From, Reply-To) needs this. Without it, a user-controlled string with
+// "\r\nBcc: …" in it could inject extra headers. Defense-in-depth: even
+// when the upstream value is stored in our DB by an authenticated user,
+// we don't want the address book or admin tooling to accidentally leak.
+function stripHdr(str) {
+  return String(str ?? '').replace(/[\r\n]/g, ' ');
+}
+
 let _transporter = null;
 
 function getTransporter() {
@@ -173,8 +182,10 @@ async function sendNewReviewNotification(userEmail, review, businessName, lang =
   const s = NEW_REVIEW_STRINGS[lang] || NEW_REVIEW_STRINGS.en;
   const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
 
-  // Strip newlines/carriage returns from values used in email headers to prevent header injection
-  const stripHeaderChars = (str) => String(str ?? '').replace(/[\r\n]/g, ' ');
+  // stripHdr (top-of-file helper) strips newlines from values used in
+  // email headers — prevents header injection when business_name or
+  // platform-label contain user-controlled CR/LF.
+  const stripHeaderChars = stripHdr;
 
   const safePlatform = escapeHtml(platformLabel(review.platform));
   const safeName = escapeHtml(review.reviewer_name);
@@ -596,9 +607,10 @@ async function sendWeeklyDigest(userEmail, stats) {
   const safeUrl = escapeHtml(process.env.CLIENT_URL || 'http://localhost:5173');
   // Subject is drawn from the numbers so the preview-pane line tells you
   // exactly what's inside. Design spec: "7 new reviews this week · 3 need a reply".
+  // business_name goes in the fallback subject — strip CR/LF for header safety.
   const subject = total > 0 && unresponded > 0
     ? s.subjectActive(total, unresponded)
-    : s.subjectFallback(business_name);
+    : s.subjectFallback(stripHdr(business_name));
 
   // Sentiment-split sparkline bar — fills only as wide as each segment's share
   // of total reviews. Degrades to a single-color bar if total is zero.
@@ -830,8 +842,9 @@ async function sendReviewRequest({ customerEmail, customerName, businessName, pl
 
   // Subjects follow the design spec — personal + low-pressure. The
   // follow-up uses "Last one, promise 🙏" phrasing so recipients don't
-  // feel harassed.
-  const subject = isFollowUp ? s.subjectFollowUp : s.subject(businessName);
+  // feel harassed. businessName goes into the subject HEADER, so strip
+  // CR/LF to prevent header injection (defense-in-depth).
+  const subject = isFollowUp ? s.subjectFollowUp : s.subject(stripHdr(businessName));
   const introText = isFollowUp ? s.introFollowUp : s.intro(safeBiz);
   const asksText = isFollowUp ? s.asksFollowUp(safePlatform) : s.asks(safePlatform);
 
