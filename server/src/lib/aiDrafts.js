@@ -236,31 +236,51 @@ function getDefaultClient() {
   }
 }
 
-// Heuristic: does this string contain Thai characters? Used to pick a Thai
-// template when the AI path is unavailable AND the caller didn't pass an
-// explicit preferredLang. Cheap (no library), reliable enough for the
-// fallback path. Real language detection happens in the AI path.
+// Cheap script-based heuristics for picking a template language when the AI
+// path is unavailable AND the caller didn't pass an explicit preferredLang.
+// Real language detection happens in the AI path. We only check for the
+// scripts where falling back to English would be obviously wrong (CJK + Thai);
+// Latin-script languages share the alphabet so heuristic-detection between
+// English / Spanish / French is unreliable — those need explicit preferredLang.
 function looksThai(s) {
   return typeof s === 'string' && /[฀-๿]/.test(s);
+}
+function looksJapanese(s) {
+  // Hiragana or Katakana — kanji alone could be Chinese, so we require kana
+  // to disambiguate. Practical for our use case: Japanese reviews always
+  // include kana; standalone-kanji review text is a Chinese review.
+  return typeof s === 'string' && /[぀-ゟ゠-ヿ]/.test(s);
+}
+function looksChinese(s) {
+  // CJK Unified Ideographs without any Japanese kana → almost certainly Chinese.
+  return typeof s === 'string' && /[一-鿿]/.test(s) && !looksJapanese(s);
+}
+function looksKorean(s) {
+  return typeof s === 'string' && /[가-힣]/.test(s);
 }
 
 // Template pool — used when AI path isn't available or fails. Same
 // style/sentiment mapping as the previous hard-coded drafts route.
 //
-// `preferredLang` is optional; when 'th' (or omitted but the review text
-// contains Thai characters), Thai templates are used. Without this, a Thai
-// reviewer who hits the fallback path got an English-only reply — which is
-// what the user reported.
+// `preferredLang` is optional; when set, that language wins. When omitted,
+// we heuristic-detect the script of the review text. Defaults to English
+// when nothing matches.
 function getTemplateDraft(review, preferredLang) {
   const hasName = typeof review.reviewer_name === 'string' && review.reviewer_name.trim().length > 0;
   const name = hasName ? review.reviewer_name : null;
 
-  // Pick locale: explicit preferredLang wins, else heuristic-detect from the
-  // review text. Default English. Add more locales here when needed; mirror
-  // the EN/TH structure below.
-  const useThai =
-    preferredLang === 'th' ||
-    (!preferredLang && looksThai(review.review_text));
+  // Resolve locale. Explicit lang from caller wins. Otherwise scan the
+  // review text for non-Latin scripts to pick the right pool. Latin-script
+  // pairs (en/es/fr/de/it/pt) can't be heuristic-detected reliably so we
+  // default to English when no explicit lang is given and the text is Latin.
+  let lang = preferredLang;
+  if (!lang) {
+    if (looksThai(review.review_text)) lang = 'th';
+    else if (looksJapanese(review.review_text)) lang = 'ja';
+    else if (looksKorean(review.review_text)) lang = 'ko';
+    else if (looksChinese(review.review_text)) lang = 'zh';
+    else lang = 'en';
+  }
 
   const draftsTH = hasName ? {
     positive: [
@@ -342,7 +362,183 @@ function getTemplateDraft(review, preferredLang) {
     ],
   };
 
-  const drafts = useThai ? draftsTH : draftsEN;
+  // Japanese pool. です/ます polite by default, owner voice 私 / 私たち,
+  // avoid 拝啓/敬具 and 「貴重なご意見」-style canned phrases.
+  const draftsJA = hasName ? {
+    positive: [
+      `${name}さん、嬉しい口コミをありがとうございます。スタッフ一同元気が出ました。またのお越しをお待ちしてます。`,
+      `${name}さん、ありがとうございます。お気に召していただけて本当に嬉しいです。次回もお待ちしてます。`,
+      `${name}さん、温かいお言葉ありがとうございます。私たちの励みになります。またお会いできるのを楽しみに。`,
+      `${name}さん、わざわざ口コミをありがとうございます。次にいらっしゃる時もよろしくお願いします。`,
+    ],
+    negative: [
+      `${name}さん、申し訳ありませんでした。私たちの基準に達しておらず、直接お話しできれば幸いです。お手数ですがご連絡ください。`,
+      `${name}さん、教えていただきありがとうございます。改善すべき点としてしっかり受け止めます。`,
+      `心からお詫びします、${name}さん。直接やり取りさせていただき、状況を改善したいです。ご連絡をお待ちしています。`,
+      `${name}さん、ご期待に応えられず申し訳ありません。チャンスをいただければ — 私から直接ご連絡させてください。`,
+    ],
+    neutral: [
+      `${name}さん、率直なご意見ありがとうございます。次回はもっと満足いただけるよう頑張ります。`,
+      `${name}さん、貴重なお時間を割いていただき感謝します。改善のヒントになります。`,
+      `${name}さん、ありがとうございます。次回は5つ星をいただけるよう努めます。`,
+      `${name}さん、正直なご感想をありがとうございます。常に良くしていくつもりです。またのお越しをお待ちしてます。`,
+    ],
+  } : {
+    positive: [
+      '嬉しい口コミをありがとうございます。スタッフ一同元気が出ました。またのお越しをお待ちしてます。',
+      'ありがとうございます。お気に召していただけて本当に嬉しいです。次回もお待ちしてます。',
+      '温かいお言葉ありがとうございます。私たちの励みになります。またお会いできるのを楽しみに。',
+      'わざわざ口コミをありがとうございます。次にいらっしゃる時もよろしくお願いします。',
+    ],
+    negative: [
+      '申し訳ありませんでした。私たちの基準に達しておらず、直接お話しできれば幸いです。お手数ですがご連絡ください。',
+      '教えていただきありがとうございます。改善すべき点としてしっかり受け止めます。',
+      '心からお詫びします。直接やり取りさせていただき、状況を改善したいです。ご連絡をお待ちしています。',
+      'ご期待に応えられず申し訳ありません。チャンスをいただければ — 私から直接ご連絡させてください。',
+    ],
+    neutral: [
+      '率直なご意見ありがとうございます。次回はもっと満足いただけるよう頑張ります。',
+      '貴重なお時間を割いていただき感謝します。改善のヒントになります。',
+      'ありがとうございます。次回は5つ星をいただけるよう努めます。',
+      '正直なご感想をありがとうございます。常に良くしていくつもりです。またのお越しをお待ちしてます。',
+    ],
+  };
+
+  // Spanish pool. Match the reviewer's register; we default to tú which
+  // reads as small-business friendly. Owner voice: yo / nosotros.
+  const draftsES = hasName ? {
+    positive: [
+      `¡Mil gracias, ${name}! Nos alegra muchísimo que te haya gustado. Te esperamos pronto.`,
+      `Gracias, ${name} — el equipo se ha alegrado un montón al leerlo. Vuelve cuando quieras.`,
+      `Qué alegría leer esto, ${name}. Reseñas así nos dan energía para seguir. Hasta pronto.`,
+      `Gracias por tomarte el tiempo, ${name}. Comentarios así son lo que nos motiva.`,
+    ],
+    negative: [
+      `Lo siento mucho, ${name}. Eso no es lo que queremos para nadie. Escríbeme directamente y lo resolvemos.`,
+      `Gracias por contárnoslo, ${name}. Tomamos nota y vamos a mejorar.`,
+      `${name}, mil disculpas. Me gustaría hablarlo en persona — ponte en contacto y lo arreglamos.`,
+      `${name}, lamento que no fuera la experiencia que esperabas. Dame la oportunidad de arreglarlo — escríbeme directamente.`,
+    ],
+    neutral: [
+      `Gracias por la opinión sincera, ${name}. La próxima visita vamos a por las 5 estrellas.`,
+      `Te agradezco que te tomes el tiempo, ${name}. Comentarios como el tuyo nos ayudan a afinar.`,
+      `Gracias, ${name}. Volvemos a verte y nos esmeramos para que sea de 5 estrellas.`,
+      `Gracias por la sinceridad, ${name}. Siempre buscando mejorar — ojalá volvamos a verte pronto.`,
+    ],
+  } : {
+    positive: [
+      '¡Mil gracias! Nos alegra muchísimo que te haya gustado. Te esperamos pronto.',
+      'Gracias — el equipo se ha alegrado un montón al leerlo. Vuelve cuando quieras.',
+      'Qué alegría leer esto. Reseñas así nos dan energía para seguir. Hasta pronto.',
+      'Gracias por tomarte el tiempo. Comentarios así son lo que nos motiva.',
+    ],
+    negative: [
+      'Lo siento mucho. Eso no es lo que queremos para nadie. Escríbeme directamente y lo resolvemos.',
+      'Gracias por contárnoslo. Tomamos nota y vamos a mejorar.',
+      'Mil disculpas. Me gustaría hablarlo en persona — ponte en contacto y lo arreglamos.',
+      'Lamento que no fuera la experiencia que esperabas. Dame la oportunidad de arreglarlo — escríbeme directamente.',
+    ],
+    neutral: [
+      'Gracias por la opinión sincera. La próxima visita vamos a por las 5 estrellas.',
+      'Te agradezco que te tomes el tiempo. Comentarios así nos ayudan a afinar.',
+      'Gracias. Volvemos a verte y nos esmeramos para que sea de 5 estrellas.',
+      'Gracias por la sinceridad. Siempre buscando mejorar — ojalá volvamos a verte pronto.',
+    ],
+  };
+
+  // Chinese (Simplified) pool. Match register: default 你 for casual,
+  // owner voice 我 / 我们. Avoid 您 stacking and 感谢您宝贵的意见 corp-speak.
+  const draftsZH = hasName ? {
+    positive: [
+      `${name}，谢谢你！看到你喜欢，我们都开心。下次再来啊。`,
+      `谢谢${name}的好评，团队读到都笑了。期待再见到你。`,
+      `${name}，太感谢了。这种评价是我们继续做下去的动力，下次见。`,
+      `${name}，谢谢你抽时间写评价，这种反馈对我们意义很大。`,
+    ],
+    negative: [
+      `${name}，真的很抱歉，这不是我们应有的水平。能私信联系我们一下吗？想直接处理这个问题。`,
+      `谢谢${name}直接告诉我们。我们会认真改进。`,
+      `${name}，向你诚恳道歉。希望能直接联系你，把这件事处理好。`,
+      `${name}，让你失望了，对不起。给我们一次机会改正 — 私信联系我们就行。`,
+    ],
+    neutral: [
+      `谢谢${name}的坦诚反馈，下次我们会做得更好。`,
+      `${name}，感谢你抽时间写评价，这种意见对我们有帮助。`,
+      `${name}，谢谢。下次争取拿到你的5星。`,
+      `${name}，谢谢你直说。我们一直在调整，希望你能再来一次。`,
+    ],
+  } : {
+    positive: [
+      '谢谢你！看到你喜欢，我们都开心。下次再来啊。',
+      '谢谢好评，团队读到都笑了。期待再见到你。',
+      '太感谢了。这种评价是我们继续做下去的动力，下次见。',
+      '谢谢你抽时间写评价，这种反馈对我们意义很大。',
+    ],
+    negative: [
+      '真的很抱歉，这不是我们应有的水平。能私信联系我们一下吗？想直接处理这个问题。',
+      '谢谢直接告诉我们。我们会认真改进。',
+      '向你诚恳道歉。希望能直接联系你，把这件事处理好。',
+      '让你失望了，对不起。给我们一次机会改正 — 私信联系我们就行。',
+    ],
+    neutral: [
+      '谢谢坦诚反馈，下次我们会做得更好。',
+      '感谢你抽时间写评价，这种意见对我们有帮助。',
+      '谢谢。下次争取拿到你的5星。',
+      '谢谢你直说。我们一直在调整，希望你能再来一次。',
+    ],
+  };
+
+  // Korean pool. -습니다 polite form, owner voice 저 / 저희. Avoid stacked
+  // honorifics and "고객님의 소중한 의견" canned phrases.
+  const draftsKO = hasName ? {
+    positive: [
+      `${name}님, 정말 감사합니다. 좋게 봐주셔서 저희 팀 모두 힘이 나요. 다음에 또 뵙겠습니다.`,
+      `${name}님 칭찬 덕분에 팀 분위기가 환해졌습니다. 또 들러주세요.`,
+      `${name}님, 시간 내서 글 남겨주셔서 감사해요. 이런 리뷰가 저희를 계속 일하게 만듭니다.`,
+      `${name}님, 마음 따뜻해지는 한마디 감사합니다. 곧 또 뵙겠습니다.`,
+    ],
+    negative: [
+      `${name}님, 정말 죄송합니다. 저희 기준에 못 미친 부분이 있었네요. 직접 해결해 드리고 싶으니 DM이나 연락 부탁드립니다.`,
+      `${name}님, 솔직하게 말씀해주셔서 감사합니다. 진지하게 받아들이고 고치겠습니다.`,
+      `진심으로 사과드립니다, ${name}님. 직접 풀어드리고 싶으니 편한 방법으로 연락 주세요.`,
+      `${name}님, 실망시켜드려 죄송합니다. 한번 더 기회 주시면 직접 챙기겠습니다 — 연락 주세요.`,
+    ],
+    neutral: [
+      `${name}님, 솔직한 의견 감사합니다. 다음엔 더 잘하겠습니다.`,
+      `${name}님, 시간 내서 글 써주셔서 감사해요. 이런 의견 덕에 부족한 데가 보입니다.`,
+      `${name}님, 감사합니다. 다음엔 5점 받을 수 있도록 노력하겠습니다.`,
+      `${name}님, 솔직하게 말씀해 주셔서 감사합니다. 항상 더 나아지려고 합니다 — 또 뵙길 바랍니다.`,
+    ],
+  } : {
+    positive: [
+      '정말 감사합니다. 좋게 봐주셔서 저희 팀 모두 힘이 나요. 다음에 또 뵙겠습니다.',
+      '칭찬 덕분에 팀 분위기가 환해졌습니다. 또 들러주세요.',
+      '시간 내서 글 남겨주셔서 감사해요. 이런 리뷰가 저희를 계속 일하게 만듭니다.',
+      '마음 따뜻해지는 한마디 감사합니다. 곧 또 뵙겠습니다.',
+    ],
+    negative: [
+      '정말 죄송합니다. 저희 기준에 못 미친 부분이 있었네요. 직접 해결해 드리고 싶으니 DM이나 연락 부탁드립니다.',
+      '솔직하게 말씀해주셔서 감사합니다. 진지하게 받아들이고 고치겠습니다.',
+      '진심으로 사과드립니다. 직접 풀어드리고 싶으니 편한 방법으로 연락 주세요.',
+      '실망시켜드려 죄송합니다. 한번 더 기회 주시면 직접 챙기겠습니다 — 연락 주세요.',
+    ],
+    neutral: [
+      '솔직한 의견 감사합니다. 다음엔 더 잘하겠습니다.',
+      '시간 내서 글 써주셔서 감사해요. 이런 의견 덕에 부족한 데가 보입니다.',
+      '감사합니다. 다음엔 5점 받을 수 있도록 노력하겠습니다.',
+      '솔직하게 말씀해 주셔서 감사합니다. 항상 더 나아지려고 합니다 — 또 뵙길 바랍니다.',
+    ],
+  };
+
+  const POOLS = {
+    en: draftsEN,
+    th: draftsTH,
+    ja: draftsJA,
+    es: draftsES,
+    zh: draftsZH,
+    ko: draftsKO,
+  };
+  const drafts = POOLS[lang] || draftsEN;
   const options = drafts[review.sentiment] || drafts.neutral;
   return options[Math.floor(Math.random() * options.length)];
 }

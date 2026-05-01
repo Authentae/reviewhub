@@ -217,6 +217,56 @@ describe('aiDrafts', () => {
     assert.ok(!/[฀-๿]/.test(draft), `explicit en should override auto-detect: ${draft}`);
   });
 
+  // Coverage for the additional fallback pools (ja/es/zh/ko). Each pool
+  // exercises the explicit-lang path; auto-detect is also tested so a
+  // future caller forgetting to pass preferredLang still gets the right
+  // language when the script of the review text obviously dictates it.
+
+  test('Japanese template via explicit preferredLang=ja', () => {
+    const draft = getTemplateDraft(REVIEW, 'ja');
+    assert.ok(/[぀-ゟ゠-ヿ]/.test(draft), `expected kana in JA template: ${draft}`);
+  });
+
+  test('Japanese template via auto-detect (kana in review text)', () => {
+    const jaReview = { ...REVIEW, review_text: 'パスタが本当に美味しかったです。' };
+    const draft = getTemplateDraft(jaReview);
+    assert.ok(/[぀-ゟ゠-ヿ]/.test(draft), `auto-detect kana → JA: ${draft}`);
+  });
+
+  test('Chinese template via explicit preferredLang=zh', () => {
+    const draft = getTemplateDraft(REVIEW, 'zh');
+    // Chinese characters present, but no Japanese kana (kana would mean we
+    // accidentally selected the JA pool). The disambiguation matters: a
+    // Chinese review text has CJK ideographs without kana.
+    assert.ok(/[一-鿿]/.test(draft) && !/[぀-ゟ゠-ヿ]/.test(draft), `expected CN-only chars: ${draft}`);
+  });
+
+  test('Korean template via explicit preferredLang=ko', () => {
+    const draft = getTemplateDraft(REVIEW, 'ko');
+    assert.ok(/[가-힣]/.test(draft), `expected hangul in KO template: ${draft}`);
+  });
+
+  test('Spanish template via explicit preferredLang=es (Latin-script — no auto-detect)', () => {
+    const draft = getTemplateDraft(REVIEW, 'es');
+    // Spanish-only marker that appears in our pool: ñ/¡/¿/é/ó or specific
+    // Spanish phrasing. Pool has "¡Mil gracias" and "Lo siento mucho" etc.
+    // Cheapest reliable check: a Spanish-specific punctuation/letter.
+    assert.ok(/[¡¿áéíóúñ]/.test(draft) || /Gracias|gracias/.test(draft), `expected Spanish content: ${draft}`);
+  });
+
+  // Latin-script reviews can't be heuristic-detected reliably (es/fr/de/it
+  // share the alphabet), so without explicit preferredLang they default to
+  // English. Pin that contract.
+  test('Latin-script review without explicit lang defaults to English', () => {
+    const esReview = { ...REVIEW, review_text: 'La pasta estaba deliciosa.' };
+    const draft = getTemplateDraft(esReview);
+    // No CJK, no Thai, no Hangul → English pool. Should NOT contain Spanish-specific markers.
+    assert.ok(!/[฀-๿]/.test(draft));
+    assert.ok(!/[가-힣]/.test(draft));
+    assert.ok(!/[一-鿿]/.test(draft));
+    assert.ok(!/[぀-ゟ゠-ヿ]/.test(draft));
+  });
+
   test('system prompt is sent with cache_control for future cache activation', async () => {
     let capturedRequest = null;
     const client = stubClient({
