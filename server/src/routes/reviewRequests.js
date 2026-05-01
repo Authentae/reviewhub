@@ -193,6 +193,13 @@ router.post('/', sendLimiter, async (req, res) => {
       [business.id, name, email, platform, msg, hash]
     );
 
+    // Locale comes from the business owner's preferred_lang — the customer's
+    // locale is unknown, so the safest default is "the language the business
+    // operates in." Falls back to en for unsupported locales.
+    const ownerRow = get('SELECT preferred_lang FROM users WHERE id = ?', [req.user.id]);
+    const supportedLangs = ['en', 'th', 'es', 'ja'];
+    const ownerLang = supportedLangs.includes(ownerRow?.preferred_lang) ? ownerRow.preferred_lang : 'en';
+
     await sendReviewRequest({
       customerEmail: email,
       customerName: name,
@@ -200,6 +207,7 @@ router.post('/', sendLimiter, async (req, res) => {
       platform,
       message: msg,
       trackUrl,
+      lang: ownerLang,
     });
 
     res.status(201).json({
@@ -235,6 +243,11 @@ router.post('/bulk', sendLimiter, expressText({ type: ['text/csv', 'text/plain',
 
     const business = getUserBusiness(req.user.id);
     if (!business) return res.status(404).json({ error: 'No business found' });
+
+    // Owner's locale — drives the language of all the CSV-batched requests.
+    const ownerRow = get('SELECT preferred_lang FROM users WHERE id = ?', [req.user.id]);
+    const supportedLangs = ['en', 'th', 'es', 'ja'];
+    const ownerLang = supportedLangs.includes(ownerRow?.preferred_lang) ? ownerRow.preferred_lang : 'en';
 
     // express.text() sets req.body to the raw string for text/* types.
     // Fall back to req.body.csv for JSON bodies.
@@ -319,6 +332,7 @@ router.post('/bulk', sendLimiter, expressText({ type: ['text/csv', 'text/plain',
           platform,
           message: msg,
           trackUrl,
+          lang: ownerLang,
         });
         results.sent++;
       } catch {
@@ -363,6 +377,10 @@ router.post('/:id/resend', sendLimiter, async (req, res) => {
       [hash, rr.id]
     );
 
+    const ownerRow = get('SELECT preferred_lang FROM users WHERE id = ?', [req.user.id]);
+    const supportedLangs = ['en', 'th', 'es', 'ja'];
+    const ownerLang = supportedLangs.includes(ownerRow?.preferred_lang) ? ownerRow.preferred_lang : 'en';
+
     await sendReviewRequest({
       customerEmail: rr.customer_email,
       customerName: rr.customer_name,
@@ -370,6 +388,7 @@ router.post('/:id/resend', sendLimiter, async (req, res) => {
       platform: rr.platform,
       message: rr.message,
       trackUrl,
+      lang: ownerLang,
     });
 
     res.json({ resent: true, sent_at: new Date().toISOString() });

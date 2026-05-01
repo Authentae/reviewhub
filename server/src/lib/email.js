@@ -615,10 +615,93 @@ async function sendWeeklyDigest(userEmail, stats) {
   });
 }
 
+// Localised strings for the review-request email. Sent to the
+// restaurant/business CUSTOMER asking them to leave a review — so this
+// is the most public-facing email we send (the END-USER of our user
+// sees it). Lang choice: `lang` from the businessOwner — the request
+// is in the language the business operates in, not the customer's
+// preferred locale (which we don't know).
+const REVIEW_REQUEST_STRINGS = {
+  en: {
+    subject: (biz) => `Thanks for stopping by — ${biz}`,
+    subjectFollowUp: 'Last one, promise 🙏',
+    intro: (biz) => `Thanks for swinging by ${biz} — hope it hit the spot.`,
+    introFollowUp: `One gentle nudge and then I'll stop. 🙏`,
+    asks: (platform) => `If you have 20 seconds, a quick review on ${platform} would mean the world to us. We're a tiny team and every word genuinely helps other neighbors find us.`,
+    asksFollowUp: (platform) => `If the visit was good, would you drop a line on ${platform}? If it wasn't — I genuinely want to hear why. Reply to this email directly and it goes straight to me.`,
+    hi: 'Hi',
+    leaveReviewBtn: (platform) => `Leave a ${platform} review`,
+    tellPrivately: 'Tell me privately',
+    tapToRate: (platform) => `Tap a star to leave a review on ${platform}`,
+    eitherWay: 'Either way, thanks for being here.',
+    eitherWayFollowUp: 'Either way — thanks for being here.',
+    receivedFooter: (biz) => `You received this because ${biz} invited you to share your experience.`,
+    sentVia: 'Sent via ReviewHub',
+    textLeaveReview: 'Leave a review',
+    textReceived: (biz) => `You received this because ${biz} invited you.`,
+  },
+  th: {
+    subject: (biz) => `ขอบคุณที่แวะมา — ${biz}`,
+    subjectFollowUp: 'ครั้งสุดท้ายแล้วนะ 🙏',
+    intro: (biz) => `ขอบคุณที่แวะมาที่ ${biz} หวังว่าถูกใจนะคะ`,
+    introFollowUp: 'รบกวนทักครั้งเดียว แล้วจะไม่กวนแล้วค่ะ 🙏',
+    asks: (platform) => `ถ้ามีเวลาแค่ 20 วินาที ช่วยเขียนรีวิวสั้น ๆ ให้บน ${platform} ได้ไหมคะ เราเป็นทีมเล็ก ๆ ทุกคำของคุณช่วยให้ลูกค้าใหม่เจอเราได้`,
+    asksFollowUp: (platform) => `ถ้าครั้งนั้นพอใจ ช่วยเขียนรีวิวบน ${platform} ได้ไหมคะ ถ้าไม่พอใจ ตอบกลับอีเมลนี้ได้เลย เข้าตรงถึงเจ้าของร้าน`,
+    hi: 'สวัสดีค่ะ',
+    leaveReviewBtn: (platform) => `เขียนรีวิวบน ${platform}`,
+    tellPrivately: 'บอกเป็นการส่วนตัว',
+    tapToRate: (platform) => `แตะดาวเพื่อเขียนรีวิวบน ${platform}`,
+    eitherWay: 'ยังไงก็ตาม ขอบคุณที่มาค่ะ',
+    eitherWayFollowUp: 'ยังไงก็ตาม — ขอบคุณที่อยู่กับเรานะคะ',
+    receivedFooter: (biz) => `คุณได้รับอีเมลนี้เพราะ ${biz} เชิญให้แบ่งปันประสบการณ์`,
+    sentVia: 'ส่งผ่าน ReviewHub',
+    textLeaveReview: 'เขียนรีวิว',
+    textReceived: (biz) => `คุณได้รับอีเมลนี้เพราะ ${biz} เชิญให้แบ่งปันประสบการณ์`,
+  },
+  es: {
+    subject: (biz) => `Gracias por pasarte por — ${biz}`,
+    subjectFollowUp: 'Última vez, lo prometo 🙏',
+    intro: (biz) => `Gracias por pasarte por ${biz} — espero que disfrutaras.`,
+    introFollowUp: 'Un recordatorio amable y ya te dejo en paz. 🙏',
+    asks: (platform) => `Si tienes 20 segundos, una reseña rápida en ${platform} significaría muchísimo. Somos un equipo pequeño y cada palabra ayuda a que otros vecinos nos encuentren.`,
+    asksFollowUp: (platform) => `Si la visita fue bien, ¿te animas a dejarnos una reseña en ${platform}? Si no fue bien — quiero saberlo de verdad. Responde a este email directamente y me llega a mí.`,
+    hi: 'Hola',
+    leaveReviewBtn: (platform) => `Dejar reseña en ${platform}`,
+    tellPrivately: 'Cuéntamelo en privado',
+    tapToRate: (platform) => `Toca una estrella para dejar reseña en ${platform}`,
+    eitherWay: 'Sea como sea, gracias por venir.',
+    eitherWayFollowUp: 'Sea como sea — gracias por estar aquí.',
+    receivedFooter: (biz) => `Recibiste este email porque ${biz} te invitó a compartir tu experiencia.`,
+    sentVia: 'Enviado vía ReviewHub',
+    textLeaveReview: 'Dejar reseña',
+    textReceived: (biz) => `Recibiste este email porque ${biz} te invitó.`,
+  },
+  ja: {
+    subject: (biz) => `ご来店ありがとうございました — ${biz}`,
+    subjectFollowUp: '最後のお願いです 🙏',
+    intro: (biz) => `${biz}にお越しいただきありがとうございました。気に入っていただけたら嬉しいです。`,
+    introFollowUp: 'もう一度だけお願いさせてください、これで最後です。 🙏',
+    asks: (platform) => `20秒だけお時間をいただけたら、${platform}に短い口コミを書いていただけると本当に嬉しいです。私たちは小さなチームで、お客様の一言一言が新しいお客様との出会いにつながります。`,
+    asksFollowUp: (platform) => `ご満足いただけたなら、${platform}に一言いただけませんか？ご満足いただけなかったなら、その理由を本気で知りたいです。このメールに直接返信していただければ、私のところに届きます。`,
+    hi: 'こんにちは、',
+    leaveReviewBtn: (platform) => `${platform}に口コミを書く`,
+    tellPrivately: '個別にお伝えする',
+    tapToRate: (platform) => `星をタップして${platform}に口コミを書く`,
+    eitherWay: 'どちらにせよ、お越しいただきありがとうございました。',
+    eitherWayFollowUp: 'どちらにせよ — ご利用いただきありがとうございます。',
+    receivedFooter: (biz) => `このメールは、${biz}があなたの体験を共有するよう招待したため送信されました。`,
+    sentVia: 'ReviewHubから送信',
+    textLeaveReview: '口コミを書く',
+    textReceived: (biz) => `このメールは、${biz}があなたを招待したため送信されました。`,
+  },
+};
+
 // Review request: ask a customer to leave a review on a specific platform.
 // trackUrl is the click-tracking redirect URL (our server logs the click then
-// redirects to the real platform review URL).
-async function sendReviewRequest({ customerEmail, customerName, businessName, platform, message, trackUrl, isFollowUp = false }) {
+// redirects to the real platform review URL). `lang` is the business owner's
+// preferred locale (not the customer's — we don't know that).
+async function sendReviewRequest({ customerEmail, customerName, businessName, platform, message, trackUrl, isFollowUp = false, lang = 'en' }) {
+  const s = REVIEW_REQUEST_STRINGS[lang] || REVIEW_REQUEST_STRINGS.en;
   const safeName = escapeHtml(customerName);
   const safeBiz = escapeHtml(businessName);
   const safePlatform = escapeHtml(platform.charAt(0).toUpperCase() + platform.slice(1));
@@ -628,15 +711,9 @@ async function sendReviewRequest({ customerEmail, customerName, businessName, pl
   // Subjects follow the design spec — personal + low-pressure. The
   // follow-up uses "Last one, promise 🙏" phrasing so recipients don't
   // feel harassed.
-  const subject = isFollowUp
-    ? `Last one, promise 🙏`
-    : `Thanks for stopping by — ${businessName}`;
-  const introText = isFollowUp
-    ? `One gentle nudge and then I'll stop. 🙏`
-    : `Thanks for swinging by ${safeBiz} — hope it hit the spot.`;
-  const asksText = isFollowUp
-    ? `If the visit was good, would you drop a line on ${safePlatform}? If it wasn't — I genuinely want to hear why. Reply to this email directly and it goes straight to me.`
-    : `If you have 20 seconds, a quick review on ${safePlatform} would mean the world to us. We're a tiny team and every word genuinely helps other neighbors find us.`;
+  const subject = isFollowUp ? s.subjectFollowUp : s.subject(businessName);
+  const introText = isFollowUp ? s.introFollowUp : s.intro(safeBiz);
+  const asksText = isFollowUp ? s.asksFollowUp(safePlatform) : s.asks(safePlatform);
 
   // Personal-letter aesthetic: Georgia serif for the greeting + sign-off,
   // sans for body. 5-star inline row on the primary request email so users
@@ -646,7 +723,7 @@ async function sendReviewRequest({ customerEmail, customerName, businessName, pl
   <tr><td align="center" style="padding:${isFollowUp ? '40' : '36'}px 24px 16px;">
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:520px;">
       <tr><td style="font-family:Georgia,serif;font-size:${isFollowUp ? '26' : '28'}px;color:#1d242c;line-height:1.3;letter-spacing:-0.01em;padding-bottom:18px;">
-        Hi ${safeName},
+        ${s.hi} ${safeName},
       </td></tr>
       <tr><td style="font-size:16px;color:#334155;line-height:1.6;padding-bottom:16px;">
         ${escapeHtml(introText)}
@@ -662,10 +739,10 @@ async function sendReviewRequest({ customerEmail, customerName, businessName, pl
         <table cellpadding="0" cellspacing="0" border="0">
           <tr>
             <td style="padding:0 6px;">
-              <a href="${safeUrl}" style="display:inline-block;background-color:#1e4d5e;color:#fff;font-size:14px;font-weight:700;text-decoration:none;padding:12px 22px;border-radius:10px;">Leave a ${safePlatform} review</a>
+              <a href="${safeUrl}" style="display:inline-block;background-color:#1e4d5e;color:#fff;font-size:14px;font-weight:700;text-decoration:none;padding:12px 22px;border-radius:10px;">${s.leaveReviewBtn(safePlatform)}</a>
             </td>
             <td style="padding:0 6px;">
-              <a href="mailto:support@reviewhub.review?subject=Feedback%20about%20${encodeURIComponent(businessName)}" style="display:inline-block;background:#f4eee0;color:#1d242c;font-size:14px;font-weight:600;text-decoration:none;padding:12px 22px;border-radius:10px;">Tell me privately</a>
+              <a href="mailto:support@reviewhub.review?subject=Feedback%20about%20${encodeURIComponent(businessName)}" style="display:inline-block;background:#f4eee0;color:#1d242c;font-size:14px;font-weight:600;text-decoration:none;padding:12px 22px;border-radius:10px;">${s.tellPrivately}</a>
             </td>
           </tr>
         </table>
@@ -680,33 +757,34 @@ async function sendReviewRequest({ customerEmail, customerName, businessName, pl
             <td style="padding:0 4px;"><a href="${safeUrl}" style="text-decoration:none;font-size:32px;color:#c48a2c;">★</a></td>
           </tr>
         </table>
-        <div style="font-size:12px;color:#7a8189;margin-top:8px;">Tap a star to leave a review on ${safePlatform}</div>
+        <div style="font-size:12px;color:#7a8189;margin-top:8px;">${s.tapToRate(safePlatform)}</div>
       </td></tr>`}
       <tr><td style="font-size:${isFollowUp ? '14' : '16'}px;color:#${isFollowUp ? '64748b' : '334155'};line-height:1.6;padding-bottom:8px;">
-        ${isFollowUp ? 'Either way — thanks for being here.' : 'Either way, thanks for being here.'}
+        ${isFollowUp ? s.eitherWayFollowUp : s.eitherWay}
       </td></tr>
       <tr><td style="font-family:Georgia,serif;font-size:17px;color:#1d242c;padding-bottom:32px;font-style:italic;">
         — ${safeBiz}
       </td></tr>
       <tr><td style="border-top:1px solid #e6dfce;padding-top:16px;padding-bottom:24px;font-size:11px;color:#7a8189;line-height:1.55;" align="center">
-        You received this because ${safeBiz} invited you to share your experience.<br>
-        <span style="color:#cbd5e1;">Sent via ReviewHub</span>
+        ${s.receivedFooter(safeBiz)}<br>
+        <span style="color:#cbd5e1;">${s.sentVia}</span>
       </td></tr>
     </table>
   </td></tr>
 </table>`;
+  // Plain-text body — same locale waterfall as the HTML.
   const introPlain = isFollowUp
-    ? `Hi ${customerName}, one gentle nudge and then I'll stop. If the visit was good, a quick review on ${platform} would mean a lot. If it wasn't, reply to this email directly.`
-    : `Thanks for swinging by ${businessName} — hope it hit the spot. If you have 20 seconds, a quick review on ${platform} would mean the world to us.`;
+    ? `${s.hi} ${customerName}, ${s.introFollowUp.replace(/^[^a-zA-Zก-๛أ-يあ-ヿ一-鿿가-힣]/, '')}\n${s.asksFollowUp(platform)}`
+    : `${s.intro(businessName)}\n${s.asks(platform)}`;
   const text = [
-    `Hi ${customerName},`,
+    `${s.hi} ${customerName},`,
     '',
     introPlain,
     safeMsg ? `\n"${message}"\n` : '',
-    `Leave a review: ${trackUrl}`,
+    `${s.textLeaveReview}: ${trackUrl}`,
     '',
-    `You received this because ${businessName} invited you.`,
-  ].filter(s => s !== null).join('\n');
+    s.textReceived(businessName),
+  ].filter((line) => line !== null).join('\n');
 
   const transporter = getTransporter();
   if (!transporter) {

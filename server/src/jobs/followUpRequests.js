@@ -37,7 +37,7 @@ async function runFollowUp() {
   const pending = all(
     `SELECT rr.id, rr.customer_email, rr.customer_name, rr.platform, rr.message,
             b.business_name,
-            u.id AS user_id, s.plan
+            u.id AS user_id, u.preferred_lang, s.plan
      FROM review_requests rr
      JOIN businesses b ON b.id = rr.business_id
      JOIN users u ON u.id = b.user_id
@@ -68,6 +68,9 @@ async function runFollowUp() {
         [hash, rr.id]
       );
 
+      const supportedLangs = ['en', 'th', 'es', 'ja'];
+      const ownerLang = supportedLangs.includes(rr.preferred_lang) ? rr.preferred_lang : 'en';
+
       await sendReviewRequest({
         customerEmail: rr.customer_email,
         customerName: rr.customer_name,
@@ -76,6 +79,7 @@ async function runFollowUp() {
         message: rr.message,
         trackUrl,
         isFollowUp: true,
+        lang: ownerLang,
       });
       sent++;
     } catch (err) {
