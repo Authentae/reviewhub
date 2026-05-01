@@ -29,9 +29,9 @@ const en = {
 
   // Landing page
   'landing.pageTitle': 'AI Review Replies in 10 Languages.',
-  'landing.heroBadge': 'Free plan forever · 10 languages · From $14 / ฿490 a month',
+  'landing.heroBadge': 'Free plan forever · 10 languages · From USD $14 / THB ฿490 a month',
   'landing.heroTitle': 'Reply to every review in 10 seconds.',
-  'landing.heroSubtitle': 'AI drafts replies in 10 languages — in your voice, not a machine\'s. Google syncs automatically. TripAdvisor, Yelp, Trustpilot, Wongnai, Tabelog, Naver, and 60+ more via CSV import. From $14 / ฿490 a month — no sales call, no contract.',
+  'landing.heroSubtitle': 'AI drafts replies in 10 languages — in your voice, not a machine\'s. Google syncs automatically. TripAdvisor, Yelp, Trustpilot, Wongnai, Tabelog, Naver, and 60+ more via CSV import. From USD $14 / THB ฿490 a month — no sales call, no contract.',
   'landing.heroCtaPrimary': 'Start Free',
   'landing.heroCtaSecondary': 'Try free — no signup',
   'landing.heroCtaPrimaryNewTab': '(opens in a new tab)',
@@ -84,7 +84,7 @@ const en = {
   'landing.faq2Q': 'Which review platforms do you support?',
   'landing.faq2A': 'Google is fully supported — reviews sync automatically after a one-click secure sign-in with the Google account that owns your business. We also support manual entry and CSV import for 60+ other platforms including Yelp, Facebook, TripAdvisor, Trustpilot, Wongnai (Thailand), Tabelog (Japan), Naver Place (Korea), Dianping (China), TheFork (France/Spain/Italy), HolidayCheck (Germany), Reclame Aqui (Brazil). The Business plan unlocks outbound webhooks (Zapier-compatible) and our REST API.',
   'landing.faq3Q': 'How does AI drafting work?',
-  'landing.faq3A': 'We use Claude (by Anthropic) to generate context-aware draft replies based on the review content, sentiment, and your business name. Every draft is editable — you always have the final say before anything is sent. Free plan includes 3 drafts per month; Starter+ plans are unlimited.',
+  'landing.faq3A': 'We use Claude (by Anthropic) to generate context-aware draft replies based on the review content, sentiment, and your business name. Every draft is editable — you always have the final say before anything is sent. Free plan includes 3 drafts per month; Starter+ plans are unlimited. Today the AI is fluent in 10 languages (Thai, English, Japanese, Korean, Chinese, Spanish, French, German, Italian, Portuguese). If you need a language we don\'t cover yet (Hindi, Arabic, Hebrew, Polish, Vietnamese, Indonesian, etc.), email us — we add new languages when paying customers ask for them, and we\'ll be honest about timing.',
   'landing.faq4Q': 'Can I cancel anytime?',
   'landing.faq4A': 'Yes. Cancel from your billing portal in one click. You keep access until the end of your current billing period. Monthly plans have a 30-day refund window on your first payment — no questions asked.',
   'landing.faq5Q': 'Is my data safe?',
@@ -474,19 +474,22 @@ const en = {
   'legal.aup.responseConduct': '5. Response content rules',
   'legal.aup.responseConductBody': 'When posting responses through or drafted by the Service, you must not: (a) threaten, harass, defame, or dox a reviewer; (b) disclose a reviewer\'s private information or transaction details beyond what they revealed; (c) make false statements of fact about the reviewer; (d) promise refunds, discounts, comps, or other remedies you don\'t intend to honour; (e) include spam, unrelated promotions, or links unrelated to resolving the review; (f) make statements that violate consumer-protection, medical, financial, or advertising laws applicable to your industry.',
 
-  'legal.aup.security': '6. No security attacks, abuse, or interference',
+  'legal.aup.regulatedIndustries': '6. Regulated industries (healthcare, legal, finance)',
+  'legal.aup.regulatedIndustriesBody': 'ReviewHub is NOT designed for, certified for, or compliant with healthcare-specific privacy regulations (US HIPAA, EU patient-data rules, Thailand PDPA medical data, etc.). If you operate a clinic, hospital, dental practice, mental-health practice, or any healthcare business, you must NOT include Protected Health Information (PHI) — patient names, conditions, treatment details, prescription information, or any clinical data — in reviews you process through this Service or in responses you publish. The same applies to legal practice details (privileged communications, case specifics) and certain financial-advisory content (client portfolio details, regulated investment advice). The reviewer themselves may post such content; if they do, you are responsible for ensuring your response does not echo, confirm, or amplify it. We do not currently offer a Business Associate Agreement (BAA) and our AI provider (Anthropic) is not a HIPAA-covered processor for these purposes. If you require HIPAA / regulated-data compliance, this Service is not suitable for your use case today — contact us before subscribing so we can confirm whether your specific workflow can be supported.',
+
+  'legal.aup.security': '7. No security attacks, abuse, or interference',
   'legal.aup.securityBody': "You must not: (a) attempt to access accounts, data, or systems you're not authorised to access; (b) probe, scan, or test the vulnerability of the Service without prior written permission (responsible disclosure is welcomed — email security@reviewhub.review first); (c) interfere with or disrupt the Service, servers, or networks (including denial-of-service, traffic flooding, or resource-exhaustion attacks); (d) bypass rate limits, authentication, or access controls; (e) reverse-engineer, decompile, or extract source code except to the extent permitted by applicable law; (f) scrape, data-mine, or systematically copy the Service's content or user data; (g) introduce malware, viruses, worms, or any malicious code.",
 
-  'legal.aup.apiLimits': '7. API and rate-limit compliance',
+  'legal.aup.apiLimits': '8. API and rate-limit compliance',
   'legal.aup.apiLimitsBody': "You must not use automated scripts, bots, or any method to circumvent rate limits, quotas, or usage caps of your plan. The Service is intended for normal human-paced operation by the account owner and authorised users; if you need higher limits, contact us. Creating multiple accounts to stack free tiers, or splitting a single business's data across accounts to avoid plan limits, is prohibited.",
 
-  'legal.aup.resale': '8. No resale or repackaging without agreement',
+  'legal.aup.resale': '9. No resale or repackaging without agreement',
   'legal.aup.resaleBody': "You must not resell, sublicence, white-label, or repackage the Service for third parties without a written agreement with us. If you're an agency managing reviews for multiple client businesses, you may do so under a single ReviewHub account on an appropriate plan, provided each business authorises you per §2 above. Contact sales@reviewhub.review if you need an agency or multi-tenant arrangement.",
 
-  'legal.aup.illegal': '9. No illegal or harmful use',
+  'legal.aup.illegal': '10. No illegal or harmful use',
   'legal.aup.illegalBody': 'You must not use the Service for any illegal purpose or to violate any law in your or any applicable jurisdiction, including (without limitation) fraud, tax evasion, money laundering, human trafficking, child exploitation, or the promotion of violence, hatred, or terrorism. You must not use the Service to process or store data unlawfully obtained, or data of a category we do not explicitly support (sensitive personal data, health information, children\'s data, etc.).',
 
-  'legal.aup.enforcement': '10. Enforcement',
+  'legal.aup.enforcement': '11. Enforcement',
   'legal.aup.enforcementBody': 'If we suspect or detect a violation, we may (without prior notice): investigate — including by inspecting account data, logs, and connected platforms; suspend affected account features or the entire account; require you to provide evidence of authorisation, identity, or compliance; terminate your account and delete your data in accordance with our retention policy; cooperate with law enforcement or the affected platform; and retain any fees paid. We are not obligated to give prior notice of suspension or termination for AUP violations. We reserve the right to update this AUP from time to time; material changes are communicated per the notice provision in the Terms.',
 
   'legal.aup.reporting': '11. Reporting violations',
@@ -7691,7 +7694,7 @@ const th = {
   'landing.plan.businessSub': 'สำหรับเชน, เอเจนซี และโรงแรมที่มีหลายสาขา/หลายอาคาร',
   'landing.plan.business1': 'ทุกอย่างใน Pro',
   'landing.plan.business2': 'สูงสุด 5 ร้าน',
-  'landing.plan.business3': 'ใช้ API + webhook ได้',
+  'landing.plan.business3': 'API + webhook (Zapier / Slack / n8n)',
   'landing.plan.business4': 'ซัพพอร์ตด่วน',
   'landing.plan.chooseBusiness': 'เลือก Business · $59/เดือน',
   'landing.plan.starterCallout': 'อยากได้แค่ฟีเจอร์พื้นฐาน + แจ้งเตือนอีเมล? ',

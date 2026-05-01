@@ -654,7 +654,7 @@ function Pricing() {
             <ul>
               <li><Check />{t('landing.plan.business1', 'Everything in Pro')}</li>
               <li><Check />{t('landing.plan.business2', 'Up to 5 businesses')}</li>
-              <li><Check />{t('landing.plan.business3', 'API access + webhooks')}</li>
+              <li><Check />{t('landing.plan.business3', 'API + webhooks (Zapier / Slack / n8n)')}</li>
               <li><Check />{t('landing.plan.business4', 'Priority support')}</li>
             </ul>
             <Link to="/register" className="rh-btn rh-btn-ghost">{t('landing.plan.chooseBusiness', 'Choose Business · $59/mo')}</Link>

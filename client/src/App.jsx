@@ -35,6 +35,9 @@ const ReplyGeneratorTool = lazy(() => import('./pages/ReplyGeneratorTool'));
 // prospect submits Google Business URL, founder hand-crafts a 10-reply audit
 // and emails it back. Public, no signup.
 const AuditLanding = lazy(() => import('./pages/AuditLanding'));
+// Changelog — public, tech-savvy buyers ("where's the changelog?") asked
+// for this in persona testing. Curated highlights, no firehose.
+const Changelog = lazy(() => import('./pages/Changelog'));
 const OwnerDashboard = lazy(() => import('./pages/OwnerDashboard'));
 // Landing page after one-click unsubscribe (RFC 8058). Public — the server
 // applies the unsub, then redirects browser-clicks here as a confirmation.
@@ -116,6 +119,7 @@ export default function App() {
         <Route path="/tools/review-reply-generator" element={<ReplyGeneratorTool />} />
         {/* Cold-outreach lead-capture landing — see AuditLanding.jsx */}
         <Route path="/audit" element={<AuditLanding />} />
+        <Route path="/changelog" element={<Changelog />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>

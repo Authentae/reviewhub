@@ -16,6 +16,7 @@ const SECTIONS = [
   ['platformCompliance', 'platformComplianceBody'],
   ['aiContent', 'aiContentBody'],
   ['responseConduct', 'responseConductBody'],
+  ['regulatedIndustries', 'regulatedIndustriesBody'],
   ['security', 'securityBody'],
   ['apiLimits', 'apiLimitsBody'],
   ['resale', 'resaleBody'],
