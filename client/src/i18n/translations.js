@@ -1351,7 +1351,7 @@ const es = {
   'landing.pageTitle': 'Todas tus reseñas. Un panel inteligente.',
   'landing.heroBadge': 'Plan gratuito para siempre · Sin tarjeta · 10 idiomas',
   'landing.heroTitle': 'Responde a cada reseña de Google en 10 segundos.',
-  'landing.heroSubtitle': 'Reúne todas tus reseñas de Google en un único panel. La IA redacta una respuesta profesional con tu voz — en 10 idiomas. Importa desde 60+ plataformas vía CSV (TheFork, Mercado Libre, TripAdvisor, Trustpilot…).',
+  'landing.heroSubtitle': 'Todas tus reseñas de Google en un solo panel. La IA escribe respuestas en tu tono — en 10 idiomas. Importa desde 60+ plataformas vía CSV (TheFork, Mercado Libre, TripAdvisor, Trustpilot…).',
   'landing.heroCta': 'Empezar gratis — planes desde $14/mes',
   'landing.heroNote': 'Gratis para siempre · Sin tarjeta de crédito',
   'landing.featuresTitle': 'Todo lo que necesitas para gestionar reseñas',
@@ -1374,7 +1374,7 @@ const es = {
   'landing.testimonial3': 'Las alertas de sentimiento nos ayudaron a detectar un problema con el nuevo personal de inmediato.',
   'landing.ctaTitle': '¿Listo para tomar el control de tus reseñas?',
   'landing.ctaSubtitle': 'Únete a cientos de negocios locales que ahorran tiempo cada semana.',
-  'landing.ctaButton': 'Comenzar — gratis para siempre',
+  'landing.ctaButton': 'Empezar gratis',
   'landing.footer': '© {year} ReviewHub. Todos los derechos reservados.',
 
   // Navigation
@@ -2002,7 +2002,7 @@ const fr = {
   'landing.pageTitle': 'Tous vos avis. Un tableau de bord intelligent.',
   'landing.heroBadge': 'Plan gratuit à vie · Sans carte · 10 langues',
   'landing.heroTitle': 'Répondez à chaque avis Google en 10 secondes.',
-  'landing.heroSubtitle': 'Réunissez tous vos avis Google dans un seul tableau de bord. L\'IA rédige une réponse professionnelle dans votre voix — en 10 langues. Importez depuis 60+ plateformes via CSV (TheFork, Pages Jaunes, Avis Vérifiés, TripAdvisor…).',
+  'landing.heroSubtitle': 'Tous vos avis Google dans un seul tableau de bord. L\'IA rédige des réponses dans votre ton — en 10 langues. Importez depuis 60+ plateformes via CSV (TheFork, Pages Jaunes, Avis Vérifiés, TripAdvisor…).',
   'landing.heroCta': 'Commencer gratuitement — à partir de 14 $/mois',
   'landing.heroNote': 'Gratuit pour toujours · Sans carte bancaire',
   'landing.featuresTitle': 'Tout ce qu\'il faut pour gérer vos avis',
@@ -2025,7 +2025,7 @@ const fr = {
   'landing.testimonial3': 'Les alertes de sentiment nous ont aidé à détecter un problème avec notre nouveau personnel immédiatement.',
   'landing.ctaTitle': 'Prêt à prendre le contrôle de vos avis ?',
   'landing.ctaSubtitle': 'Rejoignez des centaines d\'entreprises locales qui gagnent du temps chaque semaine.',
-  'landing.ctaButton': 'Commencer — gratuit pour toujours',
+  'landing.ctaButton': 'Commencer gratuitement',
   'landing.footer': '© {year} ReviewHub. Tous droits réservés.',
 
   // Navigation
@@ -2628,7 +2628,7 @@ const de = {
   'landing.pageTitle': 'Alle Bewertungen. Ein smartes Dashboard.',
   'landing.heroBadge': 'Für immer kostenlos · Keine Kreditkarte · 10 Sprachen',
   'landing.heroTitle': 'Antworte auf jede Google-Bewertung in 10 Sekunden.',
-  'landing.heroSubtitle': 'Bündle alle deine Google-Bewertungen in einem Dashboard. KI entwirft eine professionelle Antwort in deiner Stimme — in 10 Sprachen. Importiere von 60+ Plattformen per CSV (HolidayCheck, kununu, eKomi, TripAdvisor…).',
+  'landing.heroSubtitle': 'Alle deine Google-Bewertungen in einem Dashboard. KI schreibt Antworten in deinem Ton — in 10 Sprachen. Importiere von 60+ Plattformen per CSV (HolidayCheck, kununu, eKomi, TripAdvisor…).',
   'landing.heroCta': 'Kostenlos starten — ab $14/Monat',
   'landing.heroNote': 'Für immer kostenlos · Keine Kreditkarte erforderlich',
   'landing.featuresTitle': 'Alles, was Sie für die Bewertungsverwaltung brauchen',
@@ -2651,7 +2651,7 @@ const de = {
   'landing.testimonial3': 'Die Stimmungsalarme halfen uns, ein Problem mit unserem neuen Personal sofort zu erkennen.',
   'landing.ctaTitle': 'Bereit, Ihre Bewertungen in die Hand zu nehmen?',
   'landing.ctaSubtitle': 'Hunderte lokaler Betriebe sparen bereits jede Woche Zeit.',
-  'landing.ctaButton': 'Jetzt starten — für immer kostenlos',
+  'landing.ctaButton': 'Kostenlos starten',
   'landing.footer': '© {year} ReviewHub. Alle Rechte vorbehalten.',
 
   // Navigation
@@ -3254,7 +3254,7 @@ const pt = {
   'landing.pageTitle': 'Todas as suas avaliações. Um painel inteligente.',
   'landing.heroBadge': 'Plano grátis para sempre · Sem cartão · 10 idiomas',
   'landing.heroTitle': 'Responda a cada avaliação do Google em 10 segundos.',
-  'landing.heroSubtitle': 'Reúna todas as suas avaliações do Google em um único painel. A IA redige uma resposta profissional com a sua voz — em 10 idiomas. Importe de 60+ plataformas via CSV (Reclame Aqui, TripAdvisor, Trustpilot, Mercado Livre…).',
+  'landing.heroSubtitle': 'Todas as suas avaliações do Google num só painel. A IA escreve respostas no seu tom — em 10 idiomas. Importe de 60+ plataformas via CSV (Reclame Aqui, TripAdvisor, Trustpilot, Mercado Livre…).',
   'landing.heroCta': 'Comece grátis — planos a partir de $14/mês',
   'landing.heroNote': 'Grátis para sempre · Sem cartão de crédito',
   'landing.featuresTitle': 'Tudo que você precisa para gerenciar avaliações',
@@ -3277,7 +3277,7 @@ const pt = {
   'landing.testimonial3': 'Os alertas de sentimento nos ajudaram a identificar um problema com nosso novo funcionário imediatamente.',
   'landing.ctaTitle': 'Pronto para assumir o controle das suas avaliações?',
   'landing.ctaSubtitle': 'Junte-se a centenas de negócios locais que economizam tempo toda semana.',
-  'landing.ctaButton': 'Começar — grátis para sempre',
+  'landing.ctaButton': 'Começar grátis',
   'landing.footer': '© {year} ReviewHub. Todos os direitos reservados.',
 
   // Navigation
@@ -3880,7 +3880,7 @@ const it = {
   'landing.pageTitle': 'Tutte le tue recensioni. Un cruscotto intelligente.',
   'landing.heroBadge': 'Piano gratuito per sempre · Nessuna carta · 10 lingue',
   'landing.heroTitle': 'Rispondi a ogni recensione Google in 10 secondi.',
-  'landing.heroSubtitle': 'Riunisci tutte le tue recensioni Google in un unico cruscotto. L\'IA redige una risposta professionale nel tuo stile — in 10 lingue. Importa da 60+ piattaforme via CSV (TheFork, Pagine Gialle, TripAdvisor, Trustpilot…).',
+  'landing.heroSubtitle': 'Tutte le tue recensioni Google in un\'unica dashboard. L\'IA scrive risposte nel tuo stile — in 10 lingue. Importa da 60+ piattaforme via CSV (TheFork, Pagine Gialle, TripAdvisor, Trustpilot…).',
   'landing.heroCta': 'Inizia gratis — piani da $14/mese',
   'landing.heroNote': 'Gratis per sempre · Nessuna carta di credito richiesta',
   'landing.featuresTitle': 'Tutto il necessario per gestire le recensioni',
@@ -3903,7 +3903,7 @@ const it = {
   'landing.testimonial3': 'Gli avvisi sul sentimento ci hanno aiutato a scoprire subito un problema con il nuovo personale.',
   'landing.ctaTitle': 'Pronto a prendere il controllo delle tue recensioni?',
   'landing.ctaSubtitle': 'Unisciti a centinaia di attività locali che risparmiano tempo ogni settimana.',
-  'landing.ctaButton': 'Inizia — gratis per sempre',
+  'landing.ctaButton': 'Inizia gratis',
   'landing.footer': '© {year} ReviewHub. Tutti i diritti riservati.',
 
   // Navigation
@@ -4506,7 +4506,7 @@ const ja = {
   'landing.pageTitle': 'すべての口コミを一か所に。スマートなダッシュボード。',
   'landing.heroBadge': '永久無料 · クレジットカード不要 · 10言語対応',
   'landing.heroTitle': 'すべてのGoogle口コミに10秒で返信。',
-  'landing.heroSubtitle': 'すべてのGoogle口コミを1つのダッシュボードに集約。AIがあなたの声でプロフェッショナルな返信を下書きします — 10言語対応（日本語、韓国語、中国語含む）。食べログ、Retty、ホットペッパー、ぐるなびなど60以上のプラットフォームからCSVで取り込み可能。',
+  'landing.heroSubtitle': 'Google口コミを全部まとめて1つのダッシュボードへ。AIがお店のトーンで自然な返信を書きます — 10言語対応（日本語・韓国語・中国語含む）。食べログ、Retty、ホットペッパー、ぐるなびなど60以上のプラットフォームからCSVで取り込めます。',
   'landing.heroCta': '無料で開始 — プランは月$14から',
   'landing.heroNote': '永久無料 · クレジットカード不要',
   'landing.featuresTitle': '口コミ管理に必要なすべてが揃っています',
@@ -5132,7 +5132,7 @@ const zh = {
   'landing.pageTitle': '所有评价，一个智能仪表盘。',
   'landing.heroBadge': '永久免费 · 无需信用卡 · 支持10种语言',
   'landing.heroTitle': '10秒内回复每条Google评价。',
-  'landing.heroSubtitle': '将所有Google评价汇集到一个仪表盘。AI以您的语气起草专业回复 — 支持10种语言（含中文、日文、韩文、泰文）。可通过CSV从60+平台导入（大众点评、美团、小红书、TripAdvisor…）。',
+  'landing.heroSubtitle': '把所有Google评价集中到一个面板。AI用您店里的语气写回复 — 支持10种语言（含中文、日文、韩文、泰文）。可通过CSV从60+平台导入（大众点评、美团、小红书、TripAdvisor…）。',
   'landing.heroCta': '免费开始 — 套餐从 $14/月起',
   'landing.heroNote': '永久免费 · 无需信用卡',
   'landing.featuresTitle': '管理评价所需的一切',
@@ -5769,7 +5769,7 @@ const ko = {
   'landing.pageTitle': '모든 리뷰를 하나의 스마트 대시보드로.',
   'landing.heroBadge': '평생 무료 · 신용카드 불필요 · 10개 언어 지원',
   'landing.heroTitle': '모든 Google 리뷰에 10초 안에 답변하세요.',
-  'landing.heroSubtitle': '모든 Google 리뷰를 하나의 대시보드로 모으세요. AI가 당신의 어조로 전문적인 답변을 초안합니다 — 한국어, 일본어, 중국어 포함 10개 언어 지원. 네이버 플레이스, 카카오맵, 망고플레이트 등 60개 이상 플랫폼에서 CSV로 가져오기.',
+  'landing.heroSubtitle': '모든 Google 리뷰를 하나의 대시보드로. AI가 가게 톤에 맞는 답변을 써드립니다 — 한국어·일본어·중국어 포함 10개 언어 지원. 네이버 플레이스, 카카오맵, 망고플레이트 등 60개 이상 플랫폼에서 CSV로 가져올 수 있습니다.',
   'landing.heroCta': '무료로 시작 — $14/월부터 시작하는 요금제',
   'landing.heroNote': '평생 무료 · 신용카드 필요 없음',
   'landing.featuresTitle': '리뷰 관리에 필요한 모든 것',
@@ -6429,7 +6429,7 @@ const th = {
   'landing.testimonial3': 'การแจ้งเตือนความรู้สึกช่วยให้เราจับปัญหากับพนักงานใหม่ได้ทันที',
   'landing.ctaTitle': 'พร้อมควบคุมรีวิวของคุณหรือยัง?',
   'landing.ctaSubtitle': 'เข้าร่วมกับธุรกิจท้องถิ่นหลายร้อยแห่งที่ประหยัดเวลาทุกสัปดาห์',
-  'landing.ctaButton': 'เริ่มต้นใช้งาน — ฟรีตลอดไป',
+  'landing.ctaButton': 'เริ่มฟรีเลย',
   'landing.footer': '© {year} ReviewHub สงวนลิขสิทธิ์',
 
   // Navigation
