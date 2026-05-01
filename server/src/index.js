@@ -7,6 +7,7 @@ const { startSyncScheduler, stopSyncScheduler } = require('./jobs/syncReviews');
 const { startDigestScheduler, stopDigestScheduler } = require('./jobs/weeklyDigest');
 const { startFollowUpScheduler, stopFollowUpScheduler } = require('./jobs/followUpRequests');
 const { startBackupScheduler, stopBackupScheduler } = require('./jobs/dailyBackup');
+const { startOnboardingScheduler, stopOnboardingScheduler } = require('./jobs/onboardingEmails');
 const { installGlobalHandlers } = require('./lib/errorReporter');
 
 // Install process-wide error handlers before anything else runs so failures
@@ -27,6 +28,7 @@ async function start() {
     startDigestScheduler();
     startFollowUpScheduler();
     startBackupScheduler();
+    startOnboardingScheduler();
   }
 
   const app = createApp();
@@ -40,6 +42,7 @@ async function start() {
     stopDigestScheduler();
     stopFollowUpScheduler();
     stopBackupScheduler();
+    stopOnboardingScheduler();
     server.close(async () => {
       try {
         const db = await getDb();

@@ -195,6 +195,18 @@ function initSchema() {
     CREATE INDEX IF NOT EXISTS idx_review_tags_review ON review_tags(review_id);
     CREATE INDEX IF NOT EXISTS idx_review_tags_tag ON review_tags(tag_id);
 
+    -- Lifecycle/onboarding email idempotency. day_number is 0/1/3/7/14
+    -- matching docs/gtm/onboarding-email-sequence.md. UNIQUE(user_id,day)
+    -- prevents the cron from double-sending if it ticks during a slow send.
+    CREATE TABLE IF NOT EXISTS onboarding_emails (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      day_number INTEGER NOT NULL,
+      sent_at TEXT NOT NULL DEFAULT (datetime('now')),
+      UNIQUE(user_id, day_number)
+    );
+    CREATE INDEX IF NOT EXISTS idx_onboarding_user ON onboarding_emails(user_id);
+
     CREATE TABLE IF NOT EXISTS review_requests (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       business_id INTEGER NOT NULL REFERENCES businesses(id) ON DELETE CASCADE,
@@ -320,6 +332,12 @@ function initSchema() {
   // jobs (weekly digest, follow-up requests, new-review notifications) have
   // no req object, so they read this column. NULL means default to English.
   migrateAddColumn('users', 'preferred_lang', "TEXT DEFAULT NULL");
+
+  // Onboarding-email opt-in. Set to 1 by default; users get the lifecycle
+  // sequence (day 0/1/3/7/14) until they upgrade or unsubscribe. Honored by
+  // server/src/jobs/onboardingEmails.js + the /api/auth/unsubscribe endpoint
+  // (LIST_TYPE_TO_COLUMN['onboarding']).
+  migrateAddColumn('users', 'notif_onboarding', 'INTEGER NOT NULL DEFAULT 1');
 
   // Password-change timestamp — used by the auth middleware to invalidate
   // JWTs issued BEFORE the user changed their password. Without this, an

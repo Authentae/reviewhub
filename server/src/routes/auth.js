@@ -1558,6 +1558,9 @@ const LIST_TYPE_TO_COLUMN = {
   digest: 'notif_weekly_summary',
   new_review: 'notif_new_review',
   negative_alert: 'notif_negative_alert',
+  // Onboarding lifecycle (day 0/1/3/7/14). Honored by the scheduler in
+  // jobs/onboardingEmails.js — once flipped to 0, no further sends fire.
+  onboarding: 'notif_onboarding',
 };
 
 function unsubHandler(req, res) {

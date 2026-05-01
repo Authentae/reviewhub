@@ -906,6 +906,286 @@ async function sendErasureConfirmation(userEmail, confirmUrl, lang = 'en') {
   });
 }
 
+// Lifecycle / onboarding emails (day 0/1/3/7/14). Templates live in
+// docs/gtm/onboarding-email-sequence.md as the source of truth; the
+// strings below mirror that doc. Plain prose, no fancy HTML — these are
+// founder-style conversion emails, not transactional templates. Markdown-
+// style line breaks are preserved with a single <br> per newline so the
+// HTML renders close to the plaintext.
+const ONBOARDING_STRINGS = {
+  en: {
+    0: {
+      subject: "Welcome to ReviewHub — let's reply to your first review",
+      body: (clientUrl) => `Hi there,
+
+You're in. Quick orientation:
+
+1. Connect your first review platform (1 min)
+   → ${clientUrl}/dashboard
+
+2. Pick any review and click "Draft reply"
+   AI gives you 3 tone variants. Edit, copy, paste on Google.
+   Done in 10 seconds.
+
+3. Want a personalized 10-reply audit before you commit?
+   → ${clientUrl}/audit (free, no upsell)
+
+Reply to this email if you get stuck. I read every one.
+
+— ReviewHub
+Bangkok`,
+    },
+    1: {
+      subject: 'Stuck on setup? 60-second walkthrough',
+      body: (clientUrl) => `Hi there,
+
+Noticed you haven't connected a review platform yet — most people get stuck on the same step. Here's the fastest path:
+
+→ Google: Sign in with the Google account that owns your business profile. We auto-find listings.
+→ Wongnai: Paste your Wongnai URL. We poll it for new reviews.
+→ Yelp / Trustpilot / TripAdvisor: Paste the URL. Same idea.
+
+If you don't have access to your Google Business Profile, that's fixable — search "transfer Google Business Profile ownership" or reply and I'll walk you through it.
+
+Not for you? Reply with one word and I'll close the loop. No follow-ups.
+
+→ ${clientUrl}/dashboard
+
+— ReviewHub`,
+    },
+    3: {
+      subject: 'The reply that brought a customer back (1-min read)',
+      body: (clientUrl) => `Hi there,
+
+Quick story:
+
+A Bangkok cafe owner I work with had a 1-star review:
+"Coffee was cold, server ignored us for 20 minutes."
+
+Most owners would either ignore it or write a defensive "We strive for excellence" reply. He used ReviewHub. The AI drafted this:
+
+   "Hi [name], this isn't the experience we want anyone to have, and the wait is on me — Tuesday morning we were short-staffed and I pulled the wrong shift schedule. Cold coffee = unacceptable, that's a process I'm fixing today. Would love to make it right next time you're nearby — drop me a DM @cafename and your next round is on the house."
+
+The reviewer DMed back, came in, left a 5-star edit.
+
+That's the entire pitch. Three tone variants on every review. 10 seconds per reply.
+
+→ ${clientUrl}/dashboard
+
+— ReviewHub`,
+    },
+    7: {
+      subject: 'Free plan — what you get vs Starter',
+      body: (clientUrl) => `Hi there,
+
+You've been on the free plan for a week. Quick comparison if Starter is on your radar:
+
+FREE
+- 5 AI replies / month
+- 1 review platform
+- Manual review check-in
+
+STARTER ($14/mo, ~฿490)
+- 50 AI replies / month
+- 3 platforms
+- Auto-import every 6h
+- Email + weekly digest
+
+PRO ($29/mo)
+- Unlimited replies
+- Wongnai included
+- Auto-reply rules
+- Priority support
+- Multi-business (up to 3)
+
+Most owners hit the free-plan ceiling around week 2. If you're not at 5/month, no rush — keep the free tier as long as it works for you.
+
+→ ${clientUrl}/pricing
+
+Reply if you have questions about which fits your business.
+
+— ReviewHub`,
+    },
+    14: {
+      subject: 'One last thing before I stop emailing you',
+      body: (clientUrl) => `Hi there,
+
+I won't keep sending these — last one promised.
+
+If ReviewHub isn't the right fit, I'd genuinely love to know why. Hit reply with one sentence:
+
+- Wrong tool? (you don't have many reviews to deal with)
+- Wrong moment? (busy with other priorities)
+- Wrong UX? (something specific frustrated you)
+- Wrong price? (would $X make it work)
+
+I read every reply and the answers shape what I build next.
+
+If it IS still useful — Starter plan starts at $14/mo and includes 50 AI replies + email digest. The free plan still works for low-volume use.
+
+→ ${clientUrl}/pricing
+
+Either way, thanks for trying it.
+
+— ReviewHub`,
+    },
+  },
+  th: {
+    0: {
+      subject: 'ยินดีต้อนรับ — มาตอบรีวิวแรกกัน',
+      body: (clientUrl) => `สวัสดีครับ/ค่ะ
+
+ยินดีต้อนรับสู่ ReviewHub!
+
+ขั้นตอนเริ่มต้น:
+
+1. เชื่อมแพลตฟอร์มรีวิวอันแรก (1 นาที)
+   → ${clientUrl}/dashboard
+
+2. เลือกรีวิว แล้วกด "Draft reply"
+   AI จะให้คำตอบ 3 แบบให้เลือก แก้ไข copy ไปวางบน Google
+   เสร็จใน 10 วินาที
+
+3. อยากรับ audit ฟรี 10 รีวิวก่อนตัดสินใจ?
+   → ${clientUrl}/audit (ฟรีจริง ไม่บังคับขาย)
+
+ติดอะไร ตอบกลับอีเมลนี้ได้ ผม/ดิฉันอ่านทุกฉบับ
+
+— ReviewHub
+Bangkok`,
+    },
+    1: {
+      subject: 'ติดอยู่ตรงไหน? 60 วินาทีพอ',
+      body: (clientUrl) => `สวัสดีครับ/ค่ะ
+
+เห็นว่ายังไม่ได้เชื่อมแพลตฟอร์มรีวิว — คนส่วนใหญ่ติดที่ขั้นนี้แหละ ลองทางลัดนี้:
+
+→ Google: เข้าสู่ระบบด้วย Google account ที่เป็นเจ้าของ business profile เราจะหาให้อัตโนมัติ
+→ Wongnai: paste URL ร้านบน Wongnai เราตรวจรีวิวใหม่ให้
+→ Yelp / Trustpilot / TripAdvisor: paste URL เช่นกัน
+
+ถ้าไม่มีสิทธิ์เข้า Google Business Profile บอกมาได้ ผม/ดิฉันแนะนำขั้นตอนโอนสิทธิ์ให้
+
+ไม่ใช่สิ่งที่คุณต้องการ? ตอบกลับมาคำเดียว จะหยุดส่งทันที
+
+→ ${clientUrl}/dashboard
+
+— ReviewHub`,
+    },
+    3: {
+      subject: 'คำตอบที่ดึงลูกค้ากลับมา (อ่าน 1 นาที)',
+      body: (clientUrl) => `สวัสดีครับ/ค่ะ
+
+เรื่องสั้น ๆ:
+
+ร้านกาแฟในกรุงเทพที่ใช้ ReviewHub ได้รีวิว 1 ดาว:
+"กาแฟเย็น พนักงานไม่สนใจตั้ง 20 นาที"
+
+เจ้าของร้านส่วนใหญ่จะเงียบ หรือตอบแบบป้องกัน เจ้าของร้านนี้ใช้ AI เราตอบว่า:
+
+   "ขอบคุณที่บอกครับ ผมรับผิดชอบเอง — เช้าวันนั้นพนักงานน้อยเพราะผมจัดตารางผิด กาแฟเย็นไม่ใช่มาตรฐานเรา จะแก้ระบบวันนี้ ครั้งหน้าที่แวะ DM @cafename มา รอบนั้นผมเลี้ยงเอง"
+
+ลูกค้าคนนั้น DM กลับ มาร้านอีก แก้รีวิวเป็น 5 ดาว
+
+นี่แหละคือทั้งหมด — คำตอบ 3 โทนทุกรีวิว 10 วินาทีเสร็จ
+
+→ ${clientUrl}/dashboard
+
+— ReviewHub`,
+    },
+    7: {
+      subject: 'แพ็กเกจฟรี vs Starter — ต่างกันยังไง',
+      body: (clientUrl) => `สวัสดีครับ/ค่ะ
+
+ใช้แพ็กเกจฟรีมาครบสัปดาห์แล้ว — เปรียบเทียบกับ Starter ถ้ากำลังคิดอยู่:
+
+FREE
+- AI ตอบ 5 รีวิว/เดือน
+- 1 แพลตฟอร์ม
+- เช็คเอง
+
+STARTER ($14/เดือน ~฿490)
+- AI ตอบ 50 รีวิว/เดือน
+- 3 แพลตฟอร์ม
+- import อัตโนมัติทุก 6 ชม.
+- email + สรุปรายสัปดาห์
+
+PRO ($29/เดือน)
+- ตอบไม่จำกัด
+- Wongnai รวมอยู่แล้ว
+- กฎ auto-reply
+- support แบบ priority
+- ร้านหลายสาขา (สูงสุด 3)
+
+ส่วนใหญ่จะชนเพดาน 5 รีวิวอาทิตย์ที่ 2 ถ้ายังไม่ถึง ใช้ฟรีไปเรื่อย ๆ ได้
+
+→ ${clientUrl}/pricing
+
+ตอบกลับมาได้ ถ้าอยากปรึกษาว่าควรเลือกอะไร
+
+— ReviewHub`,
+    },
+    14: {
+      subject: 'สิ่งสุดท้ายก่อนจะหยุดส่งอีเมล',
+      body: (clientUrl) => `สวัสดีครับ/ค่ะ
+
+จะไม่ส่งอีเมลแบบนี้แล้ว — อันนี้อันสุดท้าย
+
+ถ้า ReviewHub ไม่เหมาะกับคุณ อยากรู้จริง ๆ ตอบกลับมาประโยคเดียวก็พอ:
+
+- ผิดเครื่องมือ? (รีวิวไม่เยอะพอจะใช้)
+- ผิดเวลา? (ยุ่งกับอย่างอื่น)
+- UX ไม่ดี? (มีอะไรที่ใช้แล้วหงุดหงิด)
+- แพงเกิน? ($X ถึงจะใช้)
+
+ผมอ่านทุกฉบับ และคำตอบของคุณจะกลายเป็นสิ่งที่ผมสร้างต่อไป
+
+ถ้ายังเป็นประโยชน์อยู่ — Starter เริ่ม $14/เดือน 50 รีวิว + สรุปอีเมล แพ็กเกจฟรียังใช้ได้สำหรับคนปริมาณน้อย
+
+→ ${clientUrl}/pricing
+
+ขอบคุณที่ลองใช้ครับ/ค่ะ
+
+— ReviewHub`,
+    },
+  },
+};
+
+// Send a single onboarding email. `dayNumber` ∈ {0,1,3,7,14}; `unsubUrl` is
+// the signed one-click List-Unsubscribe URL (RFC 8058) — required for any
+// bulk-ish lifecycle email so Gmail/Yahoo deliverability stays clean.
+async function sendOnboardingEmail(userEmail, dayNumber, lang = 'en', unsubUrl = '') {
+  const ls = ONBOARDING_STRINGS[lang] || ONBOARDING_STRINGS.en;
+  const tpl = ls[dayNumber];
+  if (!tpl) throw new Error(`unknown onboarding day: ${dayNumber}`);
+  const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+  const text = tpl.body(clientUrl);
+  // Render plaintext as plain HTML — no styling, just <br> for newlines so
+  // the email reads like a personal note rather than a marketing template.
+  const htmlBody = escapeHtml(text).replace(/\n/g, '<br>');
+  const unsubFooter = unsubUrl
+    ? `<br><br><span style="font-size:11px;color:#9ca3af">${lang === 'th' ? 'ไม่อยากรับอีเมลแบบนี้?' : 'No more emails like this?'} <a href="${escapeHtml(unsubUrl)}" style="color:#9ca3af">${lang === 'th' ? 'กดยกเลิก' : 'Unsubscribe'}</a></span>`
+    : '';
+  const html = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:15px;color:#1d242c;line-height:1.6;max-width:560px;margin:0 auto;padding:24px 16px;">${htmlBody}${unsubFooter}</div>`;
+  const transporter = getTransporter();
+  if (!transporter) {
+    console.log(`[EMAIL] Onboarding day-${dayNumber} (${lang}) → ${userEmail}: ${tpl.subject}`);
+    return;
+  }
+  const headers = unsubUrl ? {
+    'List-Unsubscribe': `<${unsubUrl}>, <mailto:unsubscribe@reviewhub.review?subject=unsubscribe%20onboarding>`,
+    'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+  } : undefined;
+  await transporter.sendMail({
+    from: process.env.SMTP_FROM || 'ReviewHub <hello@reviewhub.review>',
+    to: userEmail,
+    subject: tpl.subject,
+    html,
+    text,
+    headers,
+  });
+}
+
 module.exports = {
   sendNewReviewNotification,
   sendVerificationEmail,
@@ -916,6 +1196,7 @@ module.exports = {
   sendEmailChangeConfirmation,
   sendReviewRequest,
   sendErasureConfirmation,
+  sendOnboardingEmail,
   verifySmtp,
   portBlockHint,
 };
