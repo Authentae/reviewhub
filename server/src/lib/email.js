@@ -1179,6 +1179,240 @@ PRO ($29/เดือน)
 — ReviewHub`,
     },
   },
+  es: {
+    0: {
+      subject: 'Bienvenido a ReviewHub — vamos a por tu primera respuesta',
+      body: (clientUrl) => `Hola,
+
+Ya estás dentro. Orientación rápida:
+
+1. Conecta tu primera plataforma de reseñas (1 min)
+   → ${clientUrl}/dashboard
+
+2. Elige cualquier reseña y pulsa "Borrador con IA"
+   La IA te da 3 variantes de tono. Editas, copias, pegas en Google.
+   Listo en 10 segundos.
+
+3. ¿Quieres una auditoría gratis de 10 respuestas antes de comprometerte?
+   → ${clientUrl}/audit (gratis, sin compromiso)
+
+Si te atascas en algo, responde a este correo. Lo leo todos.
+
+— ReviewHub
+Bangkok`,
+    },
+    1: {
+      subject: '¿Atascado configurando? Aquí va el atajo',
+      body: (clientUrl) => `Hola,
+
+Veo que aún no has conectado ninguna plataforma — la mayoría se atasca en el mismo paso. La ruta más rápida:
+
+→ Google: inicia sesión con la cuenta de Google que es propietaria de tu ficha. Encontramos los listings automáticamente.
+→ Yelp / Trustpilot / TripAdvisor: pega la URL pública. Igual de fácil.
+→ Otras: importa por CSV (te pasamos una plantilla).
+
+¿Sin acceso a tu Google Business Profile? Tiene arreglo — busca "transferir propiedad de Google Business Profile" o respóndeme y te guío paso a paso.
+
+¿No es para ti? Respóndeme con una palabra y cierro el bucle. No te molesto más.
+
+→ ${clientUrl}/dashboard
+
+— ReviewHub`,
+    },
+    3: {
+      subject: 'La respuesta que recuperó a un cliente (1 min de lectura)',
+      body: (clientUrl) => `Hola,
+
+Una historia corta:
+
+Un cafetero de Bangkok que usa ReviewHub recibió esta reseña de 1 estrella:
+"El café estaba frío y el camarero nos ignoró 20 minutos."
+
+Los dueños suelen ignorarla o escribir un "Lamentamos profundamente la experiencia" defensivo. Él usó ReviewHub. La IA le redactó esto:
+
+   "Hola [nombre], no es la experiencia que queremos para nadie y la culpa es mía — el martes por la mañana íbamos cortos de personal porque me equivoqué con los turnos. Café frío = inaceptable, eso lo arreglo hoy. Si quieres darnos otra oportunidad, escríbeme directamente @cafename y la próxima ronda corre por mi cuenta."
+
+El cliente le escribió por DM, volvió, y editó la reseña a 5 estrellas.
+
+Esa es la propuesta entera. Tres tonos por cada reseña. 10 segundos por respuesta.
+
+→ ${clientUrl}/dashboard
+
+— ReviewHub`,
+    },
+    7: {
+      subject: 'Plan gratuito vs Starter — diferencias',
+      body: (clientUrl) => `Hola,
+
+Llevas una semana en el plan gratuito. Si Starter te ronda la cabeza, comparativa rápida:
+
+FREE
+- 5 respuestas IA / mes
+- 1 plataforma de reseñas
+- Sincronización manual
+
+STARTER ($14/mes, ~€13)
+- 50 respuestas IA / mes
+- 3 plataformas
+- Importación automática cada 6 h
+- Email + resumen semanal
+
+PRO ($29/mes)
+- Respuestas ilimitadas
+- Wongnai incluido
+- Reglas de auto-respuesta
+- Soporte prioritario
+- Multi-negocio (hasta 3)
+
+La mayoría llega al techo del Free hacia la semana 2. Si no estás en 5/mes, no hay prisa — sigue con Free todo el tiempo que quieras.
+
+→ ${clientUrl}/pricing
+
+Si tienes dudas sobre cuál te encaja, respóndeme.
+
+— ReviewHub`,
+    },
+    14: {
+      subject: 'Una última cosa antes de que deje de mandarte correos',
+      body: (clientUrl) => `Hola,
+
+No voy a seguir mandándote estos — éste es el último, te lo prometo.
+
+Si ReviewHub no es lo tuyo, me encantaría saber por qué. Respóndeme con una frase:
+
+- ¿Herramienta equivocada? (no tienes tantas reseñas que gestionar)
+- ¿Mal momento? (tienes otras prioridades ahora)
+- ¿UX que rechinó? (algo concreto que te frustró)
+- ¿Precio? (¿con qué importe sí lo usarías?)
+
+Leo todas las respuestas y dan forma a lo que construyo a continuación.
+
+Si SÍ te resulta útil — Starter empieza en $14/mes, 50 respuestas con IA + resumen por email. El plan gratuito sigue funcionando para volúmenes bajos.
+
+→ ${clientUrl}/pricing
+
+Sea como sea, gracias por probarlo.
+
+— ReviewHub`,
+    },
+  },
+  ja: {
+    0: {
+      subject: 'ReviewHubへようこそ — 最初の口コミに返信してみましょう',
+      body: (clientUrl) => `こんにちは、
+
+登録ありがとうございます。簡単な案内です：
+
+1. 最初の口コミプラットフォームを接続（1分）
+   → ${clientUrl}/dashboard
+
+2. 口コミを選んで「AIで下書き」をクリック
+   AIが3種類のトーンの下書きを作ります。編集して、コピーして、Googleに貼り付け。
+   10秒で完了です。
+
+3. 登録前に、無料で10件分の返信診断を試してみたいですか？
+   → ${clientUrl}/audit （無料、押し売りなし）
+
+詰まったらこのメールに返信してください。私が全部読みます。
+
+— ReviewHub
+Bangkok`,
+    },
+    1: {
+      subject: 'セットアップで止まっていますか？60秒で説明します',
+      body: (clientUrl) => `こんにちは、
+
+まだ口コミプラットフォームを接続されていないようです — みんな同じところで止まります。最短ルート：
+
+→ Google: お店のオーナー権限を持っているGoogleアカウントでログイン。リスティングを自動で見つけます。
+→ 食べログ / Retty / ホットペッパー: URLを貼り付けてください。新着口コミを定期的にチェックします。
+→ Yelp / TripAdvisor: URLを貼り付けるだけ。
+
+Google Business Profileのオーナー権限がない場合も解決できます — 「Google Business Profile オーナー譲渡」で検索するか、このメールに返信してください。手順を案内します。
+
+合わなさそう？「不要」とだけ返信いただければ、もう連絡しません。
+
+→ ${clientUrl}/dashboard
+
+— ReviewHub`,
+    },
+    3: {
+      subject: 'お客様を取り戻した返信 (1分で読めます)',
+      body: (clientUrl) => `こんにちは、
+
+短い話です：
+
+ReviewHubを使っているバンコクのカフェオーナーが、こんな1つ星の口コミを受け取りました：
+「コーヒーが冷めていて、店員に20分も無視された。」
+
+ふつうはオーナーは無視するか、「お客様の声を真摯に受け止めます」みたいな防御的な返信を書きます。彼はReviewHubを使い、AIが書いたのはこちら：
+
+   「[名前]さん、本当に申し訳ありません。火曜の朝、シフトを組み間違えて人手が足りませんでした — 完全に私のミスです。冷めたコーヒーは絶対にあってはならないこと、今日中に仕組みを直します。次に近くを通る時、@cafename にDMください。次の一杯は私のおごりです。」
+
+このお客様はDMを返してくれて、再来店し、口コミを5つ星に書き直しました。
+
+それが全てです。一つの口コミに3種類のトーン。1件10秒。
+
+→ ${clientUrl}/dashboard
+
+— ReviewHub`,
+    },
+    7: {
+      subject: '無料プラン vs Starter — どこが違うか',
+      body: (clientUrl) => `こんにちは、
+
+無料プランで1週間お使いいただきました。Starterが気になっていたら、比較です：
+
+FREE
+- AI返信: 月5件
+- 口コミプラットフォーム: 1つ
+- 手動チェック
+
+STARTER ($14/月、約2,100円)
+- AI返信: 月50件
+- プラットフォーム: 3つ
+- 6時間ごとに自動取り込み
+- メール + 週次サマリー
+
+PRO ($29/月)
+- AI返信: 無制限
+- 食べログ含む
+- 自動返信ルール
+- 優先サポート
+- 複数店舗（3つまで）
+
+ほとんどの方は2週目あたりで無料プランの上限に達します。月5件に達していないなら、急ぐ必要はありません — 無料プランで気が済むまで使ってください。
+
+→ ${clientUrl}/pricing
+
+どれが合うか相談したければ、返信してください。
+
+— ReviewHub`,
+    },
+    14: {
+      subject: 'メールを止める前に、最後にひとつだけ',
+      body: (clientUrl) => `こんにちは、
+
+これ以上メールはお送りしません — 約束します、これが最後です。
+
+ReviewHubが合わなかったとしたら、なぜか教えていただけませんか。一文でも結構です：
+
+- 道具違い？ (返信が必要な口コミがそんなに多くない)
+- タイミング？ (今は他のことで忙しい)
+- UXが合わなかった？ (具体的に何が引っかかった？)
+- 価格？ ($Xなら使う、という金額があれば)
+
+全部読みますし、いただいた答えが次に作るものを決めます。
+
+それでも役に立ちそうなら — Starterは月$14、AI返信50件 + 週次メール。無料プランも引き続き、少量利用にはお使いいただけます。
+
+→ ${clientUrl}/pricing
+
+どちらにせよ、試していただきありがとうございました。
+
+— ReviewHub`,
+    },
+  },
 };
 
 // Send a single onboarding email. `dayNumber` ∈ {0,1,3,7,14}; `unsubUrl` is
