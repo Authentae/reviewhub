@@ -40,6 +40,13 @@ router.post('/draft', draftLimiter, async (req, res) => {
     if (typeof review_text !== 'string' || !review_text.trim()) {
       return res.status(400).json({ error: 'review_text is required' });
     }
+    // Cap review_text upfront. Without this, a malicious caller could
+    // submit a 50MB body, pass validation, AND consume an AI-draft quota
+    // slot (reserveAiDraft happens below) before being silently truncated
+    // at the slice() call in generateDraft. Reject loud and early instead.
+    if (review_text.length > 2000) {
+      return res.status(400).json({ error: 'review_text must be 2000 characters or fewer' });
+    }
     const ratingNum = Number(rating);
     if (!Number.isFinite(ratingNum) || ratingNum < 1 || ratingNum > 5) {
       return res.status(400).json({ error: 'rating must be 1-5' });
