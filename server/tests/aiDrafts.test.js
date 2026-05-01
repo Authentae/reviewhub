@@ -267,6 +267,36 @@ describe('aiDrafts', () => {
     assert.ok(!/[぀-ゟ゠-ヿ]/.test(draft));
   });
 
+  // FR/DE/IT/PT pools — explicit-lang only, since they're all Latin-script
+  // and can't be auto-detected. Each test pins a language-specific phrase
+  // that exists in the pool (so a future copy-paste accident replacing a
+  // pool with English fails loudly).
+  test('French template via explicit preferredLang=fr', () => {
+    const draft = getTemplateDraft(REVIEW, 'fr');
+    // Markers from the FR pool — any one of: French-only accented forms
+    // (à/è/ç/ô), French phrases (merci/désolé/grâce/votre), or the French
+    // contractions our pool uses (l'/d'/qu'/c').
+    assert.ok(/Merci|merci|Désolé|désolé|écrivez|votre|vôtre|à très vite|grâce|Je m'/.test(draft), `expected French content: ${draft}`);
+  });
+
+  test('German template via explicit preferredLang=de', () => {
+    const draft = getTemplateDraft(REVIEW, 'de');
+    // "Danke" / German articles / du-form pronouns / German-specific markers
+    assert.ok(/Danke|danke|leid|Schreib|hören|Bewertung|uns|geben|Kraft/.test(draft), `expected German content: ${draft}`);
+  });
+
+  test('Italian template via explicit preferredLang=it', () => {
+    const draft = getTemplateDraft(REVIEW, 'it');
+    // "Grazie" / Italian-specific markers — squad of common Italian function words
+    assert.ok(/Grazie|grazie|dispiace|stelle|piacere|leggerlo|Scrivimi|Felici/.test(draft), `expected Italian content: ${draft}`);
+  });
+
+  test('Portuguese template via explicit preferredLang=pt', () => {
+    const draft = getTemplateDraft(REVIEW, 'pt');
+    // "Obrigado" / "Valeu" / Portuguese-specific markers — Brazilian variants
+    assert.ok(/Obrigado|obrigado|Valeu|valeu|desculpa|estrelas|gosto|ânimo|Avaliação|Volta/.test(draft), `expected Portuguese content: ${draft}`);
+  });
+
   test('system prompt is sent with cache_control for future cache activation', async () => {
     let capturedRequest = null;
     const client = stubClient({

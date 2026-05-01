@@ -530,6 +530,176 @@ function getTemplateDraft(review, preferredLang) {
     ],
   };
 
+  // French pool. Vouvoiement default. Owner voice je / nous. Avoid "Cher client",
+  // "Nous vous remercions de votre précieux avis", "Cordialement" sign-off.
+  const draftsFR = hasName ? {
+    positive: [
+      `Merci ${name} ! On est ravis que ça vous ait plu. À très vite.`,
+      `${name}, merci pour ce retour — toute l'équipe a souri en le lisant. Revenez quand vous voulez.`,
+      `${name}, ça fait plaisir à lire. Des avis comme le vôtre nous donnent l'énergie de continuer.`,
+      `${name}, merci d'avoir pris le temps. C'est ce qui fait avancer une petite équipe comme la nôtre.`,
+    ],
+    negative: [
+      `${name}, désolé sincèrement. Ce n'est pas notre standard. Écrivez-moi directement et on va arranger ça.`,
+      `Merci ${name} de nous l'avoir dit clairement. On prend la critique et on corrige.`,
+      `Je m'excuse, ${name}. J'aimerais en discuter directement — contactez-moi et on règle ça.`,
+      `${name}, désolé de vous avoir déçu. Donnez-nous une seconde chance — écrivez-moi en direct.`,
+    ],
+    neutral: [
+      `Merci ${name} pour ce retour franc. La prochaine fois on vise les 5 étoiles.`,
+      `${name}, merci d'avoir pris le temps. C'est exactement le genre de remarque qui nous aide à affiner.`,
+      `Merci ${name}. Repassez nous voir, on va faire en sorte que ça vaille la 5e étoile.`,
+      `Merci pour la franchise, ${name}. On essaie toujours de mieux faire — au plaisir de vous revoir.`,
+    ],
+  } : {
+    positive: [
+      'Merci beaucoup ! On est ravis que ça vous ait plu. À très vite.',
+      'Merci pour ce retour — toute l\'équipe a souri en le lisant. Revenez quand vous voulez.',
+      'Ça fait plaisir à lire. Des avis comme le vôtre nous donnent l\'énergie de continuer.',
+      'Merci d\'avoir pris le temps. C\'est ce qui fait avancer une petite équipe comme la nôtre.',
+    ],
+    negative: [
+      'Désolé sincèrement. Ce n\'est pas notre standard. Écrivez-moi directement et on va arranger ça.',
+      'Merci de nous l\'avoir dit clairement. On prend la critique et on corrige.',
+      'Je m\'excuse. J\'aimerais en discuter directement — contactez-moi et on règle ça.',
+      'Désolé de vous avoir déçu. Donnez-nous une seconde chance — écrivez-moi en direct.',
+    ],
+    neutral: [
+      'Merci pour ce retour franc. La prochaine fois on vise les 5 étoiles.',
+      'Merci d\'avoir pris le temps. C\'est exactement le genre de remarque qui nous aide à affiner.',
+      'Merci. Repassez nous voir, on va faire en sorte que ça vaille la 5e étoile.',
+      'Merci pour la franchise. On essaie toujours de mieux faire — au plaisir de vous revoir.',
+    ],
+  };
+
+  // German pool. du-form (matches the German marketing voice). Owner voice
+  // ich / wir. Avoid "Sehr geehrter Kunde", "Mit freundlichen Grüßen",
+  // "Wir bedauern den Vorfall zutiefst" Beamtendeutsch.
+  const draftsDE = hasName ? {
+    positive: [
+      `${name}, danke dir! Schön, dass es dir gefallen hat. Bis bald.`,
+      `${name}, das freut uns echt — das ganze Team hat sich beim Lesen gefreut. Komm gerne wieder.`,
+      `${name}, das ist klasse zu hören. Solche Bewertungen geben uns Kraft, weiterzumachen.`,
+      `${name}, danke fürs Schreiben. Genau das treibt ein kleines Team wie uns an.`,
+    ],
+    negative: [
+      `${name}, das tut mir wirklich leid. Das ist nicht unser Standard. Schreib mir direkt und wir kriegen das hin.`,
+      `${name}, danke dass du's klar sagst. Wir nehmen die Kritik an und arbeiten dran.`,
+      `Ich entschuldige mich, ${name}. Würde das gerne direkt mit dir besprechen — meld dich, dann regeln wir's.`,
+      `${name}, sorry dass wir dich enttäuscht haben. Gib uns noch eine Chance — schreib mir direkt.`,
+    ],
+    neutral: [
+      `Danke ${name} für die ehrliche Rückmeldung. Beim nächsten Mal wollen wir die 5 Sterne.`,
+      `${name}, danke fürs Schreiben. Genau solche Hinweise helfen uns, besser zu werden.`,
+      `Danke ${name}. Komm gerne nochmal vorbei, wir geben alles für die fünf Sterne.`,
+      `Danke für die Ehrlichkeit, ${name}. Wir versuchen, jeden Tag besser zu werden — bis bald.`,
+    ],
+  } : {
+    positive: [
+      'Danke dir! Schön, dass es dir gefallen hat. Bis bald.',
+      'Das freut uns echt — das ganze Team hat sich beim Lesen gefreut. Komm gerne wieder.',
+      'Das ist klasse zu hören. Solche Bewertungen geben uns Kraft, weiterzumachen.',
+      'Danke fürs Schreiben. Genau das treibt ein kleines Team wie uns an.',
+    ],
+    negative: [
+      'Das tut mir wirklich leid. Das ist nicht unser Standard. Schreib mir direkt und wir kriegen das hin.',
+      'Danke dass du\'s klar sagst. Wir nehmen die Kritik an und arbeiten dran.',
+      'Ich entschuldige mich. Würde das gerne direkt mit dir besprechen — meld dich, dann regeln wir\'s.',
+      'Sorry dass wir dich enttäuscht haben. Gib uns noch eine Chance — schreib mir direkt.',
+    ],
+    neutral: [
+      'Danke für die ehrliche Rückmeldung. Beim nächsten Mal wollen wir die 5 Sterne.',
+      'Danke fürs Schreiben. Genau solche Hinweise helfen uns, besser zu werden.',
+      'Danke. Komm gerne nochmal vorbei, wir geben alles für die fünf Sterne.',
+      'Danke für die Ehrlichkeit. Wir versuchen, jeden Tag besser zu werden — bis bald.',
+    ],
+  };
+
+  // Italian pool. Lei-form default. Owner voice io / noi. Avoid "Gentile cliente",
+  // "Cordiali saluti", "Vi ringraziamo per il vostro prezioso feedback".
+  const draftsIT = hasName ? {
+    positive: [
+      `Grazie ${name}! Felici che ti sia piaciuto. A presto.`,
+      `${name}, grazie — il team ha sorriso leggendo. Torna quando vuoi.`,
+      `${name}, fa davvero piacere leggerlo. Recensioni così ci danno la carica per continuare.`,
+      `${name}, grazie per il tempo. È quello che fa andare avanti una piccola squadra come la nostra.`,
+    ],
+    negative: [
+      `${name}, mi dispiace davvero. Non è il nostro standard. Scrivimi direttamente e sistemiamo la cosa.`,
+      `Grazie ${name} per dircelo apertamente. Prendiamo la critica e correggiamo.`,
+      `Mi scuso, ${name}. Vorrei parlarne direttamente — contattami e risolviamo.`,
+      `${name}, mi spiace averti deluso. Dacci un'altra possibilità — scrivimi direttamente.`,
+    ],
+    neutral: [
+      `Grazie ${name} per la sincerità. La prossima volta puntiamo alle 5 stelle.`,
+      `${name}, grazie per il tempo. Note come la tua ci aiutano a sistemare i dettagli.`,
+      `Grazie ${name}. Ripassa, faremo in modo che la prossima visita meriti le cinque.`,
+      `Grazie per la franchezza, ${name}. Cerchiamo sempre di migliorare — a presto.`,
+    ],
+  } : {
+    positive: [
+      'Grazie! Felici che ti sia piaciuto. A presto.',
+      'Grazie — il team ha sorriso leggendo. Torna quando vuoi.',
+      'Fa davvero piacere leggerlo. Recensioni così ci danno la carica per continuare.',
+      'Grazie per il tempo. È quello che fa andare avanti una piccola squadra come la nostra.',
+    ],
+    negative: [
+      'Mi dispiace davvero. Non è il nostro standard. Scrivimi direttamente e sistemiamo la cosa.',
+      'Grazie per dircelo apertamente. Prendiamo la critica e correggiamo.',
+      'Mi scuso. Vorrei parlarne direttamente — contattami e risolviamo.',
+      'Mi spiace averti deluso. Dacci un\'altra possibilità — scrivimi direttamente.',
+    ],
+    neutral: [
+      'Grazie per la sincerità. La prossima volta puntiamo alle 5 stelle.',
+      'Grazie per il tempo. Note come la tua ci aiutano a sistemare i dettagli.',
+      'Grazie. Ripassa, faremo in modo che la prossima visita meriti le cinque.',
+      'Grazie per la franchezza. Cerchiamo sempre di migliorare — a presto.',
+    ],
+  };
+
+  // Portuguese pool. Brazilian register (você default — covers the largest
+  // Lusophone market). Owner voice eu / nós. Avoid "Prezado cliente",
+  // "Lamentamos qualquer desconforto causado".
+  const draftsPT = hasName ? {
+    positive: [
+      `${name}, muito obrigado! Que bom que curtiu. Volta sempre.`,
+      `${name}, valeu — o time ficou feliz de ler isso aí. Aparece quando quiser.`,
+      `${name}, dá gosto de ler. Avaliação assim dá ânimo pra continuar.`,
+      `${name}, obrigado por tirar um tempo. É o que move uma equipe pequena como a nossa.`,
+    ],
+    negative: [
+      `${name}, peço desculpa de verdade. Não é o nosso padrão. Me chama direto que a gente resolve.`,
+      `Valeu ${name} por dizer direto. A crítica entrou no nosso radar e vamos corrigir.`,
+      `Peço desculpas, ${name}. Queria resolver isso direto com você — me manda mensagem.`,
+      `${name}, desculpa ter te decepcionado. Me dá uma segunda chance — me chama no privado.`,
+    ],
+    neutral: [
+      `Valeu ${name} pelo retorno sincero. Na próxima a gente vai atrás das 5 estrelas.`,
+      `${name}, obrigado pelo tempo. Esse tipo de comentário ajuda a gente a afinar os detalhes.`,
+      `Obrigado ${name}. Volta lá, vamos fazer o possível pra valer 5 estrelas.`,
+      `Valeu pela sinceridade, ${name}. A gente sempre tenta melhorar — até a próxima.`,
+    ],
+  } : {
+    positive: [
+      'Muito obrigado! Que bom que curtiu. Volta sempre.',
+      'Valeu — o time ficou feliz de ler isso aí. Aparece quando quiser.',
+      'Dá gosto de ler. Avaliação assim dá ânimo pra continuar.',
+      'Obrigado por tirar um tempo. É o que move uma equipe pequena como a nossa.',
+    ],
+    negative: [
+      'Peço desculpa de verdade. Não é o nosso padrão. Me chama direto que a gente resolve.',
+      'Valeu por dizer direto. A crítica entrou no nosso radar e vamos corrigir.',
+      'Peço desculpas. Queria resolver isso direto com você — me manda mensagem.',
+      'Desculpa ter te decepcionado. Me dá uma segunda chance — me chama no privado.',
+    ],
+    neutral: [
+      'Valeu pelo retorno sincero. Na próxima a gente vai atrás das 5 estrelas.',
+      'Obrigado pelo tempo. Esse tipo de comentário ajuda a gente a afinar os detalhes.',
+      'Obrigado. Volta lá, vamos fazer o possível pra valer 5 estrelas.',
+      'Valeu pela sinceridade. A gente sempre tenta melhorar — até a próxima.',
+    ],
+  };
+
   const POOLS = {
     en: draftsEN,
     th: draftsTH,
@@ -537,6 +707,10 @@ function getTemplateDraft(review, preferredLang) {
     es: draftsES,
     zh: draftsZH,
     ko: draftsKO,
+    fr: draftsFR,
+    de: draftsDE,
+    it: draftsIT,
+    pt: draftsPT,
   };
   const drafts = POOLS[lang] || draftsEN;
   const options = drafts[review.sentiment] || drafts.neutral;
