@@ -141,6 +141,32 @@ const NEW_REVIEW_STRINGS = {
     textIntro: (name, rating, biz) => `${name} ให้รีวิว ${rating} ดาวสำหรับ ${biz}`,
     textViewAt: 'ดูและตอบกลับ:',
   },
+  es: {
+    subjectPrefix: 'Nueva',
+    subjectFor: 'reseña para',
+    headlinePrefix: 'Nueva reseña en',
+    leftA: 'dejó una',
+    starReview: 'reseña de estrellas para',
+    sentiment: 'Sentimiento',
+    cta: 'Ver y responder',
+    footer: 'ReviewHub · Gestiona las notificaciones en Ajustes',
+    textHeadline: (platform) => `Nueva reseña en ${platform}`,
+    textIntro: (name, rating, biz) => `${name} dejó una reseña de ${rating} estrellas para ${biz}`,
+    textViewAt: 'Ver y responder:',
+  },
+  ja: {
+    subjectPrefix: '新着',
+    subjectFor: '・',
+    headlinePrefix: '新着口コミ：',
+    leftA: 'さんが',
+    starReview: 'つ星の口コミを投稿しました：',
+    sentiment: '感情',
+    cta: '確認して返信',
+    footer: 'ReviewHub · 通知設定は「設定」から変更できます',
+    textHeadline: (platform) => `${platform} に新着口コミ`,
+    textIntro: (name, rating, biz) => `${name}さんが ${biz} に ${rating}つ星の口コミを投稿しました`,
+    textViewAt: '確認して返信：',
+  },
 };
 
 async function sendNewReviewNotification(userEmail, review, businessName, lang = 'en') {

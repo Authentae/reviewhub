@@ -951,7 +951,12 @@ router.post('/', reviewCreateLimiter, async (req, res) => {
       const wantsNew = user.notif_new_review !== 0 && planFeatures.email_alerts_new;
       const wantsNeg = user.notif_negative_alert !== 0 && planFeatures.email_alerts_negative && sentiment === 'negative';
       if (wantsNew || wantsNeg) {
-        const userLang = (user.preferred_lang === 'th') ? 'th' : 'en';
+        // Locale supported by NEW_REVIEW_STRINGS (en/th/es/ja). Anything
+        // else falls through to en — the email lib handles unknown lang
+        // safely via its `|| .en` fallback, but checking here keeps the
+        // log line accurate.
+        const supportedLangs = ['en', 'th', 'es', 'ja'];
+        const userLang = supportedLangs.includes(user.preferred_lang) ? user.preferred_lang : 'en';
         sendNewReviewNotification(user.email, review, business.business_name, userLang).catch((err) => {
           console.error('[EMAIL] Failed to send new review notification:', err.message);
           captureException(err, { kind: 'email.send_failed', label: 'new-review-notification', userId: user.id });
