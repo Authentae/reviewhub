@@ -135,7 +135,7 @@ export function RhThemeToggle() {
 }
 
 export function RhLangPicker() {
-  const { lang, setLang, languages } = useI18n();
+  const { lang, setLang, languages, t } = useI18n();
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
   useEffect(() => {
@@ -144,9 +144,13 @@ export function RhLangPicker() {
     return () => document.removeEventListener('mousedown', onDoc);
   }, []);
   const current = languages.find((l) => l.code === lang) || languages[0];
+  // The tooltip shows "Language: English" in English, "Idioma: Español" in
+  // Spanish, etc — using the picker's own translated label so a Thai visitor
+  // hovering over the menu sees Thai, not English.
+  const langLabel = t('nav.langPickerLabel', 'Language');
   return (
     <div className="rh-lang-picker" ref={ref}>
-      <button type="button" onClick={() => setOpen((v) => !v)} className="rh-icon-btn" aria-haspopup="listbox" aria-expanded={open} title={`Language: ${current.label}`}>
+      <button type="button" onClick={() => setOpen((v) => !v)} className="rh-icon-btn" aria-haspopup="listbox" aria-expanded={open} title={`${langLabel}: ${current.label}`} aria-label={`${langLabel}: ${current.label}`}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
         </svg>

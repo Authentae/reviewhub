@@ -129,6 +129,7 @@ const en = {
   'nav.aiDrafts': 'AI drafts',
   'nav.features': 'Features',
   'nav.faq': 'FAQ',
+  'nav.langPickerLabel': 'Language',
 
   // Dashboard
   'dashboard.title': 'Review Dashboard',
@@ -1417,6 +1418,7 @@ const es = {
   'nav.aiDrafts': 'Borradores con IA',
   'nav.features': 'Funciones',
   'nav.faq': 'FAQ',
+  'nav.langPickerLabel': 'Idioma',
 
   // Dashboard
   'dashboard.title': 'Panel de reseñas',
@@ -2080,6 +2082,7 @@ const fr = {
   'nav.aiDrafts': 'Brouillons IA',
   'nav.features': 'Fonctionnalités',
   'nav.faq': 'FAQ',
+  'nav.langPickerLabel': 'Langue',
 
   // Dashboard
   'dashboard.title': 'Tableau de bord des avis',
@@ -2718,6 +2721,7 @@ const de = {
   'nav.aiDrafts': 'KI-Entwürfe',
   'nav.features': 'Funktionen',
   'nav.faq': 'FAQ',
+  'nav.langPickerLabel': 'Sprache',
 
   // Dashboard
   'dashboard.title': 'Bewertungs-Dashboard',
@@ -3356,6 +3360,7 @@ const pt = {
   'nav.aiDrafts': 'Rascunhos com IA',
   'nav.features': 'Funcionalidades',
   'nav.faq': 'FAQ',
+  'nav.langPickerLabel': 'Idioma',
 
   // Dashboard
   'dashboard.title': 'Painel de avaliações',
@@ -3994,6 +3999,7 @@ const it = {
   'nav.aiDrafts': 'Bozze con IA',
   'nav.features': 'Funzionalità',
   'nav.faq': 'FAQ',
+  'nav.langPickerLabel': 'Lingua',
 
   // Dashboard
   'dashboard.title': 'Dashboard delle recensioni',
@@ -4632,6 +4638,7 @@ const ja = {
   'nav.aiDrafts': 'AI下書き',
   'nav.features': '機能',
   'nav.faq': 'よくある質問',
+  'nav.langPickerLabel': '言語',
 
   // Dashboard
   'dashboard.title': '口コミダッシュボード',
@@ -5273,6 +5280,7 @@ const zh = {
   'nav.aiDrafts': 'AI草稿',
   'nav.features': '功能',
   'nav.faq': '常见问题',
+  'nav.langPickerLabel': '语言',
   'nav.themeLight': '切换到浅色模式',
   'nav.themeDark': '切换到深色模式',
 
@@ -5922,6 +5930,7 @@ const ko = {
   'nav.aiDrafts': 'AI 초안',
   'nav.features': '기능',
   'nav.faq': '자주 묻는 질문',
+  'nav.langPickerLabel': '언어',
   'nav.themeLight': '라이트 모드로 전환',
   'nav.themeDark': '다크 모드로 전환',
 
@@ -6560,6 +6569,7 @@ const th = {
   'nav.mobileMenu': 'เมนูนำทาง',
   'nav.audit': 'รับ audit ฟรี',
   'nav.auditTitle': 'รับ audit รีวิว 10 อันฟรี เขียนเฉพาะร้านคุณ',
+  'nav.langPickerLabel': 'ภาษา',
 
   // Dashboard
   'dashboard.title': 'แดชบอร์ดรีวิว',
