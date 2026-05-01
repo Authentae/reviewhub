@@ -114,8 +114,16 @@ function Hero() {
             <span className="rh-mono">{t('landing.heroBadge')}</span>
           </div>
           <div className="rh-meta-right">
-            <div className="avatars"><span>MP</span><span>PS</span><span>JR</span><span>+</span></div>
+            {/* Removed the fake "MP PS JR +" customer-avatar row. Until we
+                have real customers willing to be named, that placeholder
+                read as fake-social-proof to several testers. The
+                heroMadeBy line below is more honest: a solo founder
+                signal, which is itself a trust factor in the SMB
+                market we're targeting. */}
             <div className="ct">{t('landing.heroBuiltFor', 'Built for independent shops')}</div>
+            <div className="ct rh-mono" style={{ fontSize: 11, opacity: 0.7, marginTop: 2 }}>
+              {t('landing.heroMadeBy', 'Made in Bangkok by a solo founder')}
+            </div>
           </div>
         </div>
         <h1 className="rh-display">
@@ -613,7 +621,7 @@ function Pricing() {
             <div className="plan-name">Free</div>
             <h3>{t('landing.plan.freeHeadline', 'Try it out.')}</h3>
             <div className="plan-price">$0<small>{t('landing.plan.foreverSuffix', '/mo · free forever')}</small></div>
-            <div className="plan-sub">{t('landing.plan.freeSub', 'No credit card. See if AI replies fit your voice.')}</div>
+            <div className="plan-sub">{t('landing.plan.freeSub', 'Test drive, not daily use. 3 drafts to see if it fits.')}</div>
             <ul>
               <li><Check />{t('landing.plan.free1', '3 AI drafts / month')}</li>
               <li><Check />{t('landing.plan.free2', '1 review platform')}</li>
@@ -642,7 +650,7 @@ function Pricing() {
             <div className="plan-name">Business</div>
             <h3>{t('landing.plan.businessHeadline', 'Multi-location.')}</h3>
             <div className="plan-price">$59<small>/mo</small></div>
-            <div className="plan-sub">{t('landing.plan.businessSub', 'For owners and agencies running several shops at once.')}</div>
+            <div className="plan-sub">{t('landing.plan.businessSub', 'For chains, agencies, and hotels with multiple properties.')}</div>
             <ul>
               <li><Check />{t('landing.plan.business1', 'Everything in Pro')}</li>
               <li><Check />{t('landing.plan.business2', 'Up to 5 businesses')}</li>
