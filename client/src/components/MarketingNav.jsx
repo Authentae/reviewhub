@@ -96,6 +96,10 @@ export default function MarketingNav({ sections = [] }) {
               standalone demo or the sign-up flow. "AI generator" reads as
               the standalone tool unambiguously. */}
           <Link to="/tools/review-reply-generator" className="rh-nav-tool" title={t('nav.freeToolTitle', 'Free AI reply generator')}>{t('nav.freeTool', 'AI generator')}</Link>
+          {/* Audit funnel — cold-DM landing. Kept lightweight (text link, no
+              accent) so it doesn't compete with the primary "Start free" CTA
+              but is discoverable for prospects landing on /pricing first. */}
+          <Link to="/audit" className="rh-nav-tool" title={t('nav.auditTitle', 'Free 10-reply audit')}>{t('nav.audit', 'Free audit')}</Link>
           <RhLangPicker />
           <RhThemeToggle />
           <Link to="/login" className="rh-btn rh-btn-ghost">{t('nav.signIn', 'Sign in')}</Link>
