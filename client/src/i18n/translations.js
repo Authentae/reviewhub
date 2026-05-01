@@ -323,6 +323,8 @@ const en = {
   'settings.notif.negativeAlertSub': 'Immediate alert for 1–2 star reviews',
   'settings.notif.weeklySummary': 'Weekly summary',
   'settings.notif.weeklySummarySub': 'Weekly digest of your review activity',
+  'settings.notif.onboarding': 'Getting-started emails',
+  'settings.notif.onboardingSub': '5 emails over your first 2 weeks with tips, examples, and a final check-in',
   'settings.notif.upgradeRequired': 'Upgrade to enable',
   'settings.notif.followUp': 'Auto follow-up',
   'settings.notif.followUpSub': 'Automatically resend once to customers who haven\'t clicked their link',
@@ -1566,6 +1568,8 @@ const es = {
   'settings.notif.negativeAlertSub': 'Alerta inmediata para reseñas de 1-2 estrellas',
   'settings.notif.weeklySummary': 'Resumen semanal',
   'settings.notif.weeklySummarySub': 'Resumen semanal de tu actividad de reseñas',
+  'settings.notif.onboarding': 'Emails de bienvenida',
+  'settings.notif.onboardingSub': '5 emails durante tus primeras 2 semanas con consejos, ejemplos y un último mensaje',
 
   // Auth
   'auth.createAccount': 'Crea tu cuenta',
@@ -2230,6 +2234,8 @@ const fr = {
   'settings.notif.negativeAlertSub': 'Alerte immédiate pour les avis 1-2 étoiles',
   'settings.notif.weeklySummary': 'Résumé hebdomadaire',
   'settings.notif.weeklySummarySub': 'Récapitulatif hebdomadaire de votre activité d\'avis',
+  'settings.notif.onboarding': 'E-mails de prise en main',
+  'settings.notif.onboardingSub': '5 e-mails sur vos 2 premières semaines avec des conseils, des exemples et un dernier message',
 
   // Auth
   'auth.createAccount': 'Créer votre compte',
@@ -2869,6 +2875,8 @@ const de = {
   'settings.notif.negativeAlertSub': 'Sofortalarm für 1–2-Sterne-Bewertungen',
   'settings.notif.weeklySummary': 'Wöchentliche Zusammenfassung',
   'settings.notif.weeklySummarySub': 'Wöchentlicher Überblick über Ihre Bewertungsaktivität',
+  'settings.notif.onboarding': 'Einstiegs-E-Mails',
+  'settings.notif.onboardingSub': '5 E-Mails in deinen ersten 2 Wochen mit Tipps, Beispielen und einer letzten Rückmeldung',
 
   // Auth
   'auth.createAccount': 'Konto erstellen',
@@ -3508,6 +3516,8 @@ const pt = {
   'settings.notif.negativeAlertSub': 'Alerta imediato para avaliações de 1-2 estrelas',
   'settings.notif.weeklySummary': 'Resumo semanal',
   'settings.notif.weeklySummarySub': 'Resumo semanal da sua atividade de avaliações',
+  'settings.notif.onboarding': 'E-mails de boas-vindas',
+  'settings.notif.onboardingSub': '5 e-mails ao longo das suas primeiras 2 semanas com dicas, exemplos e um último contato',
 
   // Auth
   'auth.createAccount': 'Crie sua conta',
@@ -4147,6 +4157,8 @@ const it = {
   'settings.notif.negativeAlertSub': 'Avviso immediato per recensioni con 1-2 stelle',
   'settings.notif.weeklySummary': 'Riepilogo settimanale',
   'settings.notif.weeklySummarySub': 'Digest settimanale dell\'attività di recensioni',
+  'settings.notif.onboarding': 'Email di benvenuto',
+  'settings.notif.onboardingSub': '5 email nelle tue prime 2 settimane con consigli, esempi e un ultimo messaggio',
 
   // Auth
   'auth.createAccount': 'Crea il tuo account',
@@ -4786,6 +4798,8 @@ const ja = {
   'settings.notif.negativeAlertSub': '1〜2星の口コミへの即時アラート',
   'settings.notif.weeklySummary': '週次サマリー',
   'settings.notif.weeklySummarySub': '口コミアクティビティの週次ダイジェスト',
+  'settings.notif.onboarding': 'スタートアップメール',
+  'settings.notif.onboardingSub': '最初の2週間にコツや事例、最終フォローを5通お送りします',
 
   // Auth
   'auth.createAccount': 'アカウントを作成',
@@ -5465,6 +5479,8 @@ const zh = {
   'settings.notif.negativeAlertSub': '新的1-2星评价时立即提醒',
   'settings.notif.weeklySummary': '每周摘要',
   'settings.notif.weeklySummarySub': '每周评价活动摘要',
+  'settings.notif.onboarding': '入门邮件',
+  'settings.notif.onboardingSub': '前2周内发送5封邮件，包含使用技巧、案例和最后回访',
   'settings.subActive': '有效',
   'settings.subTrial': '试用中',
   'settings.subUnknown': '未知',
@@ -6115,6 +6131,8 @@ const ko = {
   'settings.notif.negativeAlertSub': '별점 1-2 리뷰에 대한 즉각적인 알림',
   'settings.notif.weeklySummary': '주간 요약',
   'settings.notif.weeklySummarySub': '리뷰 활동 주간 요약 이메일',
+  'settings.notif.onboarding': '안내 이메일',
+  'settings.notif.onboardingSub': '가입 후 2주간 사용 팁·사례·마지막 안내 이메일 5통',
   'settings.subActive': '활성',
   'settings.subTrial': '체험 중',
   'settings.subUnknown': '알 수 없음',
@@ -6717,6 +6735,8 @@ const th = {
   'settings.notif.negativeAlertSub': 'แจ้งเตือนทันทีสำหรับรีวิว 1–2 ดาว',
   'settings.notif.weeklySummary': 'สรุปรายสัปดาห์',
   'settings.notif.weeklySummarySub': 'สรุปกิจกรรมรีวิวรายสัปดาห์',
+  'settings.notif.onboarding': 'อีเมลแนะนำการใช้งาน',
+  'settings.notif.onboardingSub': '5 อีเมลใน 2 สัปดาห์แรก รวมเคล็ดลับ ตัวอย่าง และข้อความสุดท้าย',
 
   // Auth
   'auth.createAccount': 'สร้างบัญชีของคุณ',

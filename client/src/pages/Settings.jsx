@@ -1790,6 +1790,10 @@ const NOTIF_KEYS_META = [
   { key: 'new_review',     labelKey: 'settings.notif.newReview',     subKey: 'settings.notif.newReviewSub',     defaultOn: true,  planFeature: 'email_alerts_new' },
   { key: 'negative_alert', labelKey: 'settings.notif.negativeAlert', subKey: 'settings.notif.negativeAlertSub', defaultOn: true,  planFeature: 'email_alerts_negative' },
   { key: 'weekly_summary', labelKey: 'settings.notif.weeklySummary', subKey: 'settings.notif.weeklySummarySub', defaultOn: false, planFeature: 'weekly_digest' },
+  // Lifecycle / onboarding emails (day 0/1/3/7/14). Always available — no
+  // plan gate. Default ON for new signups; the email footer one-click
+  // unsub also flips this off (see auth.js LIST_TYPE_TO_COLUMN.onboarding).
+  { key: 'onboarding',     labelKey: 'settings.notif.onboarding',    subKey: 'settings.notif.onboardingSub',    defaultOn: true },
 ];
 
 // Email-change trigger — expands inline to a form asking for the new email +
@@ -2551,6 +2555,9 @@ export default function Settings() {
             new_review: uData.notifications.notif_new_review,
             negative_alert: uData.notifications.notif_negative_alert,
             weekly_summary: uData.notifications.notif_weekly_summary,
+            // Default to true if missing (older /auth/notifications responses
+            // pre-v4 didn't return this field; the column itself defaults to 1).
+            onboarding: uData.notifications.notif_onboarding ?? true,
             follow_up_after_days: uData.notifications.follow_up_after_days ?? 0,
           };
           const merged = { ...serverPrefs }; // server is source of truth on load
