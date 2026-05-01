@@ -207,6 +207,19 @@ function ConnectCard({ platform, icon, color, connected, onConnect, syncStatus }
               {t('settings.platform.connectWithGoogle')}
             </button>
           )}
+          {/* Pre-OAuth permission explainer — without this, users see
+              Google's "this app wants access to..." screen with no upfront
+              context and bounce. Several persona testers flagged this as
+              the #1 fear factor in the signup flow. Surfaces only when
+              OAuth is the active connection method (i.e., for Google). */}
+          {platform === 'google' && (
+            <details className="text-xs text-gray-500 dark:text-gray-400 -mt-1 mb-2">
+              <summary className="cursor-pointer font-medium hover:text-gray-700 dark:hover:text-gray-300">
+                {t('settings.platform.oauthExplainerTitle', 'Before you click — what we ask Google for')}
+              </summary>
+              <p className="mt-2 leading-relaxed">{t('settings.platform.oauthExplainer')}</p>
+            </details>
+          )}
 
           {/* Manual fallback — always available. Useful when OAuth isn't
               configured on this deployment, or for Yelp/Facebook which

@@ -143,6 +143,9 @@ export default function AuditLanding() {
                 className="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2"
                 style={{ borderColor: 'var(--rh-line)', background: 'var(--rh-paper)' }}
                 required
+                aria-required="true"
+                aria-invalid={status === 'error' && !form.businessName.trim() ? 'true' : 'false'}
+                autoComplete="organization"
                 maxLength={200}
               />
             </div>
@@ -160,9 +163,13 @@ export default function AuditLanding() {
                 className="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2"
                 style={{ borderColor: 'var(--rh-line)', background: 'var(--rh-paper)' }}
                 required
+                aria-required="true"
+                aria-invalid={status === 'error' && !form.businessUrl.trim() ? 'true' : 'false'}
+                aria-describedby="businessUrl-hint"
+                autoComplete="url"
                 maxLength={1000}
               />
-              <p className="text-xs mt-1.5" style={{ color: 'var(--rh-ink-soft, #7a8189)' }}>
+              <p id="businessUrl-hint" className="text-xs mt-1.5" style={{ color: 'var(--rh-ink-soft, #7a8189)' }}>
                 {isThai
                   ? 'ค้นชื่อร้านใน Google Maps → กดแชร์ → คัดลอกลิงก์มาวาง'
                   : 'Search your business on Google Maps → tap Share → copy the link.'}
@@ -182,6 +189,10 @@ export default function AuditLanding() {
                 className="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2"
                 style={{ borderColor: 'var(--rh-line)', background: 'var(--rh-paper)' }}
                 required
+                aria-required="true"
+                aria-invalid={status === 'error' && !form.email.trim() ? 'true' : 'false'}
+                autoComplete="email"
+                inputMode="email"
                 maxLength={254}
               />
             </div>
