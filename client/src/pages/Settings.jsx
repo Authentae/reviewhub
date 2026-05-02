@@ -830,6 +830,16 @@ function WebhooksSection() {
                   <label className="text-xs font-medium text-gray-600 dark:text-gray-300 block mb-0.5">{t('webhooks.urlLabel')}</label>
                   <input type="url" value={newUrl} onChange={e => setNewUrl(e.target.value)} required
                     placeholder="https://your-server.com/webhook" className="input text-sm w-full" />
+                  {/* HTTP-without-TLS warning. We accept http:// for internal/dev
+                      receivers, but the signed payload + signing secret are
+                      essentially leaked to anyone on the wire. Inline-warn so
+                      the user sees the risk before they save. */}
+                  {newUrl.trim().toLowerCase().startsWith('http://') && (
+                    <p className="mt-1 text-xs text-amber-700 dark:text-amber-400 flex items-start gap-1">
+                      <span aria-hidden="true">⚠️</span>
+                      <span>{t('webhooks.httpWarning', 'http:// URLs send the signing secret in cleartext. Use https:// in production.')}</span>
+                    </p>
+                  )}
                 </div>
                 <div>
                   <p className="text-xs font-medium text-gray-600 dark:text-gray-300 mb-1">{t('webhooks.eventsLabel')}</p>
