@@ -2,7 +2,7 @@
 
 TripAdvisor doesn't expose an API or a "Download all reviews as CSV" button to property owners — their export tooling is buried and changes a few times a year. This is a manual workflow that takes about 5 minutes per property per week.
 
-Until we ship the email-forward parser (planned), this is the path.
+If you'd rather not do this every week, the email-forward parser is now shipped — TripAdvisor sends a notification email to the property owner for every new review, and you can forward those to your personal `reviews+yoursecret@reviewhub.review` address (Settings → Inbound) for automatic ingest. CSV is the path described below if you prefer batch.
 
 ## Step 1 — Get to your reviews list
 
@@ -45,6 +45,6 @@ It is annoying. Three reasons:
 2. **Their CSV export is hidden.** Some accounts have it under "Data Export"; some don't.
 3. **Their reply tooling is also closed** so even if we read the reviews, we can't post your reply for you.
 
-The plan: ship an **email-forward parser**. TripAdvisor sends an email to the owner when a new review is posted; if you set up a mail filter to forward those emails to `tripadvisor@reviewhub.review` (a magic address per business), we'd parse and ingest automatically. No API, no manual CSV. Estimated next quarter — vote at /support if you want it sooner.
+**Update — email-forward parser is now live.** TripAdvisor sends an email to the owner when a new review is posted. Set up a mail filter forwarding those emails to your personal `reviews+yoursecret@reviewhub.review` address (find yours in Settings → Inbound) and we parse and ingest automatically. No API, no manual CSV. The format we don't yet recognise? Email a sample to support and we'll add it.
 
 In the meantime, this 5-minutes-a-week workflow is what we have. Sorry it's manual; not pretending otherwise.

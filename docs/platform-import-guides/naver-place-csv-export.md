@@ -2,7 +2,7 @@
 
 Naver Place doesn't expose an API to third-party tools. Korean SMB owners get review notifications by email and have a partial export inside the **Naver Smart Place** owner dashboard, but it's buried and date-bound.
 
-This is the manual workflow for Naver Place. ~5 minutes per property per week. Email-forward parser is on our roadmap.
+This is the manual workflow for Naver Place. ~5 minutes per property per week. (For TripAdvisor / Booking / Airbnb, the email-forward parser route is faster — see Settings → Inbound for your personal forwarding address. Naver doesn't email new-review notifications, so CSV is the path here.)
 
 ## Step 1 — Open Naver Smart Place
 
@@ -39,6 +39,6 @@ Naver Place doesn't accept third-party reply posting either. Once you've drafted
 
 ## Why this is manual
 
-Naver's API is closed to small tools (you need a Korean business registration + an enterprise partnership process to get keys). Until that changes — or until we ship our email-forward parser — this is the workflow.
+Naver's API is closed to small tools (you need a Korean business registration + an enterprise partnership process to get keys). Naver Place also doesn't email new-review notifications to owners by default — so the email-forward route that works for TripAdvisor / Booking / Airbnb doesn't apply here. CSV is the workflow until Naver opens the API.
 
-If you want the email-forward parser sooner, vote at /support — we move fastest on what paying customers ask for.
+If you find a way to get Naver to email you on new reviews (some Smart Place owners report this works for accounts in specific verticals), forward those emails to your personal `reviews+yoursecret@reviewhub.review` address — we'll try to parse them.
