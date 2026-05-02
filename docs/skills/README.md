@@ -25,6 +25,7 @@ SaaS copy.
 | [`onboarding-email.md`](onboarding-email.md) | Drafting any of the post-signup nudge emails |
 | [`support-response.md`](support-response.md) | Replying to a customer email, chat, or LINE message |
 | [`thai-smb-outreach.md`](thai-smb-outreach.md) | Writing cold LINE / Facebook DM / email to a Thai SMB |
+| [`ship-readiness-audit.md`](ship-readiness-audit.md) | Engineering checklist after shipping any feature touching pricing / schema / i18n / public pages / plan gates |
 
 ## When to update these
 

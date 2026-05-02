@@ -778,6 +778,7 @@ function Footer() {
                 <li><Link to="/login">{t('landing.footerDashboard', 'Dashboard')}</Link></li>
                 <li><Link to="/pricing">{t('landing.footerPricing', 'Pricing')}</Link></li>
                 <li><Link to="/changelog">{t('landing.footerChangelog', 'Changelog')}</Link></li>
+                <li><Link to="/roadmap">{t('landing.footerRoadmap', 'Roadmap')}</Link></li>
               </ul>
             </div>
             <div>

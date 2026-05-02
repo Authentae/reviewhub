@@ -38,6 +38,10 @@ const AuditLanding = lazy(() => import('./pages/AuditLanding'));
 // Changelog — public, tech-savvy buyers ("where's the changelog?") asked
 // for this in persona testing. Curated highlights, no firehose.
 const Changelog = lazy(() => import('./pages/Changelog'));
+// Roadmap — public, names what's shipped / building / considering / NOT
+// building. The "decided not to build" column lets prospects self-qualify
+// out before signing up. No Q-dated promises (they always slip).
+const Roadmap = lazy(() => import('./pages/Roadmap'));
 // Support — public-or-authed real-issue intake. Frill (already wired) is
 // for feature feedback; /support is for "this broke" / billing / account.
 const Support = lazy(() => import('./pages/Support'));
@@ -126,6 +130,7 @@ export default function App() {
         {/* Cold-outreach lead-capture landing — see AuditLanding.jsx */}
         <Route path="/audit" element={<AuditLanding />} />
         <Route path="/changelog" element={<Changelog />} />
+        <Route path="/roadmap" element={<Roadmap />} />
         <Route path="/support" element={<Support />} />
         <Route path="/api-docs" element={<ApiDocs />} />
         <Route path="*" element={<NotFound />} />
