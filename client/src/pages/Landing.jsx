@@ -451,6 +451,9 @@ function AiDemo() {
         <div className="rh-section-head">
           <div className="kicker"><div className="num">02</div><div className="cat">§ {t('landing.demoEyebrow', 'Live demo')}</div></div>
           <h2 className="rh-reveal">{t('landing.demoTitle', "Draft one right now. It's really running.")}</h2>
+          <p className="rh-section-sub rh-reveal" style={{ fontSize: 14, opacity: 0.7, marginTop: 6 }}>
+            {t('landing.demoIndustryNote', 'Samples below are restaurant reviews. The AI works the same way for auto shops, hotels, salons, clinics (non-PHI), retail, services — paste your own at /tools/review-reply-generator to see.')}
+          </p>
         </div>
         <div className="rh-demo rh-reveal">
           <div className="demo-side">
@@ -691,6 +694,7 @@ function Faq({ t }) {
     { q: t('landing.faq4Q'), a: t('landing.faq4A') },
     { q: t('landing.faq5Q'), a: t('landing.faq5A') },
     { q: t('landing.faq6Q'), a: t('landing.faq6A') },
+    { q: t('landing.faq7Q'), a: t('landing.faq7A') },
   ];
   const [openIdx, setOpenIdx] = useState(0);
   return (
