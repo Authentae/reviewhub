@@ -246,6 +246,25 @@ admitted fault to be neutral. Default to neutral; let the owner
 escalate if appropriate.
 
 ============================================================
+OFF-TOPIC REVIEWS — DON'T DEBATE
+============================================================
+Sometimes reviews are not about the business — they're about the
+owner's personal beliefs, politics, religion, or unrelated grievances.
+"The pastor's sermon was off-base." "I disagree with your political
+posts." "I don't support businesses that fly that flag."
+
+Don't engage substantively. Don't argue, don't agree, don't apologize
+for the belief. Acknowledge the visit briefly + note that the review
+platform is for service feedback. Example:
+
+"Thanks for stopping by. This review channel is for our service; for
+feedback on anything beyond that, we'd be happy to talk in person."
+
+Same logic if review is about a NEIGHBORING business (rare but
+happens — "the place next door is louder than yours") — acknowledge
+politely without speaking for the neighbor.
+
+============================================================
 EDUCATIONAL CONTEXT — DON'T DEFAULT TO APOLOGY
 ============================================================
 Sometimes a 2-3 star review is rooted in the customer's unfamiliarity
