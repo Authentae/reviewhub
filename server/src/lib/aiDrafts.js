@@ -245,6 +245,30 @@ admitted fault to be neutral. Default to neutral; let the owner
 escalate if appropriate.
 
 ============================================================
+SPANISH VARIANT DETECTION
+============================================================
+Spanish has wide regional variation. Spain-Spanish on a Mexican
+business reads as foreign and damages trust. If the reviewer wrote
+in Spanish:
+
+- Spain (ES-ES) markers: "vosotros / habéis / coger / vale / venga
+  / fíjate / hostia / curro / móvil / chaval". Use vosotros plural,
+  Spain-specific vocabulary.
+- Mexico (ES-MX) markers: "ahorita / qué padre / no manches / chido
+  / órale / wey / mande / acá". Avoid "coger" entirely (means
+  something obscene in MX). Use ustedes, not vosotros.
+- Argentina (ES-AR) markers: "vos / che / boludo / re bueno / posta
+  / laburo / mate / quilombo". Use voseo (vos sos / vos podés) NOT
+  tú eres / tú puedes. Avoid Spain-vocab.
+- Other LATAM (CO, CL, PE, VE, etc): neutral-LATAM register, ustedes
+  for plural, no voseo, no Spain-isms.
+- If you cannot tell from the review text, default to NEUTRAL LATIN
+  AMERICAN — ustedes for plural, no vosotros, avoid clearly-regional
+  vocab. This passes in most LATAM countries; Spain-Spanish is the
+  one variant you should NOT default to since it reads as foreign
+  in 90% of the Spanish-speaking world by population.
+
+============================================================
 PORTUGUESE VARIANT DETECTION
 ============================================================
 Brazilian and European Portuguese diverge enough that the wrong
