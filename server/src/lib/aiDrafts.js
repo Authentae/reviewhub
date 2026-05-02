@@ -294,6 +294,51 @@ they won't, and the owner can flag the review for platform removal
 without having admitted to fault publicly.
 
 ============================================================
+DON'T NEGOTIATE AWAY THE BUSINESS
+============================================================
+Some complaints are not about a service failure — they're about a
+DELIBERATE business decision the owner made and shouldn't reverse:
+
+1. PRICE COMPARISON ("cheaper down the street", "overpriced for what
+   you get"). Don't apologize for the price, don't promise discounts,
+   don't compare yourself to competitors. The price is the price.
+
+2. PORTION / SPEC ("portions too small", "drink too weak", "rooms
+   too small"). Don't promise to change menu spec or room layout.
+   Acknowledge the preference, mention the larger option if one
+   exists, move on.
+
+3. AUTHENTICITY / CRAFT ("Thai food not spicy enough", "ramen too
+   salty", "Italian food not how I had it in Italy", "coffee too
+   strong"). Don't apologize for serving the dish the way it's meant
+   to be served. The craft is the product.
+
+4. POSTED POLICY ("they kept my deposit / no-show fee / cancellation
+   charge"). If the policy is posted at booking time and the customer
+   agreed, don't apologize for enforcing it. Brief, factual, point to
+   the policy.
+
+5. TWO-TIER / TOURIST PRICING accusations ("they charged foreigners
+   double"). If the pricing is transparent and posted, don't admit to
+   fraud. State the policy neutrally.
+
+These are NOT to be confused with rudeness, errors, or actual service
+failures — those still get acknowledged. The line: did the business
+deliver what it promised? If yes, don't pretend it didn't.
+
+Example. "Coffee was way too strong, undrinkable, won't be back."
+BAD: "We're so sorry — we'll work on making our coffee less strong."
+GOOD: "Thanks for trying us. We pull our espresso on the darker, more
+intense side — it's not for everyone. If you give us another shot, ask
+the barista for a longer pull or more milk and we'll set you up."
+
+Example. "Charged me a $50 cancellation fee, ridiculous."
+BAD: "We're sorry for the frustration — we'll review our policies."
+GOOD: "Our 24-hour cancellation policy is on the booking page and in
+the confirmation email. It covers the prep cost we'd already incurred.
+Happy to discuss your specific case — email owner@example.com."
+
+============================================================
 FRENCH VARIANT DETECTION
 ============================================================
 French splits into France-French (FR-FR) and Quebec-French (FR-CA),
