@@ -74,6 +74,14 @@ export default function ForgotPassword() {
               {email && (
                 <p className="text-sm text-gray-700 dark:text-gray-200 mb-1 font-mono break-all">{email}</p>
               )}
+              {/* Spam-folder hint — auth-flow emails (verification + reset)
+                  routinely land in Promotions/Junk on Gmail/Yahoo/Outlook,
+                  especially on first delivery from a new domain. Persona
+                  testers from MENA + EE consistently reported "I waited 20
+                  min and assumed it was broken" before realizing. */}
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                {t('forgot.spamHint', 'Check your spam / junk / promotions folder if you don\'t see it within a few minutes.')}
+              </p>
               <p className="text-xs text-gray-400 dark:text-gray-500 mb-6">
                 {t('forgot.typoHint', "If that's not right, ")}
                 <button

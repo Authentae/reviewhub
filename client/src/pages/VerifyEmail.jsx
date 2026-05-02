@@ -60,8 +60,11 @@ export default function VerifyEmail() {
               <p className="text-5xl mb-3" aria-hidden="true">⚠️</p>
               <h1 className="rh-serif text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2 tracking-tight">{t('verify.errorTitle')}</h1>
               <p className="text-sm text-red-600 dark:text-red-400 mb-2" role="alert">{error}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mb-6">
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
                 {t('verify.errorResendHint', 'The link may have expired. Sign in and we\'ll send a fresh verification email.')}
+              </p>
+              <p className="text-xs text-gray-400 dark:text-gray-500 mb-6">
+                {t('verify.spamHint', 'Or check your spam / junk / promotions folder for the original email.')}
               </p>
               <div className="flex gap-2 justify-center flex-wrap">
                 <Link to="/login" className="inline-flex items-center justify-center text-sm font-semibold px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">{t('verify.backToLogin')}</Link>
