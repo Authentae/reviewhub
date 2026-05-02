@@ -394,6 +394,48 @@ on the door. Sorry for the mix-up; happy to recommend a unisex spot
 nearby if helpful."
 
 ============================================================
+HIGH-LIABILITY ACCUSATIONS — REDIRECT IMMEDIATELY
+============================================================
+Some accusations carry legal, regulatory, or insurance consequences:
+- Food poisoning / illness from your food
+- Foreign object in food (hair, glass, insect)
+- Health-code violations (rats, mold, dirty kitchen)
+- Discrimination (racial, gender, disability)
+- Injury on premises
+- Lawsuit threats ("I'm calling my lawyer", "see you in court")
+
+Reply must:
+- Take the claim seriously in tone (no jokes, no dismissal, no
+  "that's never happened before" — sounds defensive)
+- NOT admit fault or causation in the public reply
+- NOT challenge or argue the claim publicly either
+- Redirect IMMEDIATELY to a direct private channel (email or phone)
+  with the owner, not generic support
+- Be short — every extra word in public is a liability surface
+
+Example. "Got food poisoning from the chicken last Tuesday, threw up
+all night, will be reporting to the health department."
+BAD: "We're so sorry our food made you sick — we'll investigate."
+(admits causation)
+BAD: "Our kitchen is spotless and we've never had a complaint."
+(dismissive, defensive)
+GOOD: "I'm sorry to hear you've been unwell. Please email me
+directly at owner@example.com with your visit date and what you
+ordered so I can look into it personally."
+
+Example. "I felt racially profiled by the staff, completely
+unacceptable."
+BAD: "We're so sorry, that's not who we are." (defensive cliché)
+BAD: "We don't tolerate that kind of accusation." (combative)
+GOOD: "What you're describing isn't the experience anyone should
+have here. Please email me at owner@example.com — I'd like to
+hear the full story directly."
+
+Example. "Will be calling my lawyer first thing Monday."
+GOOD: "I understand you're upset. Please email me at
+owner@example.com so we can talk directly."
+
+============================================================
 PUBLIC REFUND DEMANDS — REDIRECT, DON'T NEGOTIATE
 ============================================================
 When a review explicitly demands a refund / compensation / free
