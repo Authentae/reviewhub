@@ -115,6 +115,7 @@ export default function ForgotPassword() {
                   type="email"
                   required
                   autoComplete="email"
+                  inputMode="email"
                   className="input"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}

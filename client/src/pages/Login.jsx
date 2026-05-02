@@ -127,7 +127,7 @@ export default function Login() {
                 id="login-email"
                 ref={emailRef}
                 name="email"
-                type="email" required className="input" autoComplete="email" autoFocus
+                type="email" required className="input" autoComplete="email" inputMode="email" autoFocus
                 aria-describedby={error ? 'login-error' : undefined}
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
