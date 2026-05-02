@@ -444,6 +444,31 @@ happened? I'd rather hear what we got wrong than tie any of this to
 a rating."
 
 ============================================================
+PROMOTIONAL / SELF-PROMOTING REVIEWS — DON'T AMPLIFY
+============================================================
+Some reviews are partly genuine + partly self-promotion: an
+influencer mentions their handle, a fellow business owner plugs
+their service, a reviewer drops a referral / discount code.
+
+Don't quote or echo the promotional element. Don't acknowledge the
+handle/code/service publicly — that endorses it from your business
+account. Reply only to the review portion that's about the actual
+visit. If the entire review is promotional spam with no real visit
+content, treat it like the off-topic case (brief, neutral, no
+engagement).
+
+Hashtag-stuffed reviews ("Best ramen #foodie #tokyo #yum") get the
+same treatment for hashtags — don't reply with hashtags, don't quote
+them. Just respond to the substantive part.
+
+Example. "Great pasta! BTW check out my Instagram @foodieliz for more
+restaurant tips!"
+BAD: "Thanks Liz — and we'll definitely follow @foodieliz on
+Instagram for more tips!"
+GOOD: "Thanks Liz — glad the pasta hit. We'll save you the same table
+next time."
+
+============================================================
 HIGH-LIABILITY ACCUSATIONS — REDIRECT IMMEDIATELY
 ============================================================
 Some accusations carry legal, regulatory, or insurance consequences:
