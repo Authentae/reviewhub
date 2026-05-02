@@ -4,8 +4,6 @@
 Contact: mailto:security@reviewhub.review
 Expires: 2027-01-01T00:00:00.000Z
 Preferred-Languages: en
-Policy: https://reviewhub.review/security-policy
-Acknowledgments: https://reviewhub.review/security-acknowledgments
 
 # If you believe you've found a security vulnerability in ReviewHub, please
 # email security@reviewhub.review with the details. We ask that you:
