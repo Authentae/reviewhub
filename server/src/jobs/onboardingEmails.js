@@ -94,7 +94,12 @@ async function runOnboardingEmails() {
         }
       }
 
-      const lang = (user.preferred_lang === 'th') ? 'th' : 'en';
+      // Pass through the user's preferred language — sendOnboardingEmail
+      // falls back to 'en' if it doesn't have a template in that locale
+      // (currently has en/th/es/ja; others fall back gracefully). Pre-fix,
+      // this was hardcoded to th-or-en which meant Spanish + Japanese users
+      // got English onboarding emails despite our supporting their locale.
+      const lang = user.preferred_lang || 'en';
       const apiBase = process.env.CLIENT_URL || 'http://localhost:5173';
       const unsubToken = makeUnsubToken(user.id, 'onboarding');
       const unsubUrl = `${apiBase}/api/auth/unsubscribe?token=${encodeURIComponent(unsubToken)}`;
