@@ -1725,7 +1725,14 @@ router.get('/import/template', (req, res) => {
   ];
   res.setHeader('Content-Type', 'text/csv; charset=utf-8');
   res.setHeader('Content-Disposition', 'attachment; filename="reviewhub-import-template.csv"');
-  res.send(lines.join('\r\n') + '\r\n');
+  // Prepend UTF-8 BOM (﻿). Excel for Windows ignores the charset=utf-8
+  // header and falls back to the system code page when opening CSV — which
+  // means the Thai / Japanese / Korean / Chinese sample rows render as
+  // mojibake unless a BOM is present. The BOM tells Excel "this file is
+  // UTF-8" reliably across versions. Other tools (Numbers, Sheets, our own
+  // import endpoint) strip the BOM before parsing, so this is purely
+  // additive.
+  res.send('﻿' + lines.join('\r\n') + '\r\n');
 });
 
 router.post('/import', importLimiter, express.text({ type: ['text/plain', 'text/csv'], limit: '500kb' }), (req, res) => {

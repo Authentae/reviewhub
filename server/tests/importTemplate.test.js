@@ -16,8 +16,13 @@ describe('CSV import template', () => {
     assert.strictEqual(res.status, 200);
     assert.match(res.headers['content-type'], /text\/csv/);
     assert.match(res.headers['content-disposition'], /reviewhub-import-template\.csv/);
-    // Header row + 7 example rows covering multiple platforms and locales
-    const rows = res.text.split('\r\n').filter(Boolean);
+    // Header row + 7 example rows covering multiple platforms and locales.
+    // The response begins with a UTF-8 BOM so Excel for Windows opens the
+    // CSV in UTF-8 instead of falling back to the system code page (which
+    // would render the Thai/Japanese/Korean rows as mojibake). Strip it
+    // before asserting on the header.
+    const text = res.text.charCodeAt(0) === 0xfeff ? res.text.slice(1) : res.text;
+    const rows = text.split('\r\n').filter(Boolean);
     assert.strictEqual(rows.length, 8);
     assert.match(rows[0], /^platform,reviewer_name,rating,review_text,response_text,created_at$/);
   });
