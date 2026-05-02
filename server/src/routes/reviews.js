@@ -663,7 +663,7 @@ router.post('/bulk-respond', bulkRespondLimiter, (req, res) => {
     }
     const text = response_text.trim();
     if (!text) return res.status(400).json({ error: 'response_text is required' });
-    if (text.length > 1000) return res.status(400).json({ error: 'Response too long (max 1000 chars)' });
+    if (text.length > 4000) return res.status(400).json({ error: 'Response too long (max 4000 chars)' });
 
     // Target only reviews that belong to this user's business AND have no response yet.
     // Skipping already-responded reviews prevents overwriting deliberate custom replies.
@@ -1154,7 +1154,7 @@ router.post('/:id/respond', respondLimiter, async (req, res) => {
     }
     const rawTrimmed = (rawResponseText || '').trim();
     if (!rawTrimmed) return res.status(400).json({ error: 'Response text required' });
-    if (rawTrimmed.length > 1000) return res.status(400).json({ error: 'Response too long (max 1000 chars)' });
+    if (rawTrimmed.length > 4000) return res.status(400).json({ error: 'Response too long (max 4000 chars)' });
     const response_text = substituteVars(rawTrimmed, review, business);
 
     // Save locally first (source of truth) — even if the optional external
@@ -1771,7 +1771,7 @@ router.post('/import', importLimiter, express.text({ type: ['text/plain', 'text/
         continue;
       }
       const textRaw = piText !== -1 ? (r[piText] || '').trim().slice(0, 5000) : '';
-      const responseRaw = piResponse !== -1 ? (r[piResponse] || '').trim().slice(0, 1000) : null;
+      const responseRaw = piResponse !== -1 ? (r[piResponse] || '').trim().slice(0, 4000) : null;
 
       let createdAt = null;
       if (piCreatedAt !== -1 && r[piCreatedAt]) {

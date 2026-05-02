@@ -1134,7 +1134,7 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
                 onChange={(e) => setDraftText(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) handleSend(); }}
                 rows={3}
-                maxLength={1000}
+                maxLength={4000}
                 aria-label={t('review.responseToAria', { name: review.reviewer_name })}
                 aria-describedby={`draft-counter-${review.id}`}
                 className="input text-sm resize-none overflow-hidden"
@@ -1233,7 +1233,7 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
               <div className="flex items-center justify-between gap-2 flex-wrap">
                 <div className="flex items-center gap-2">
                   <span id={`draft-counter-${review.id}`} className={`text-xs ${draftText.length > 800 ? 'text-red-500' : 'text-gray-400'}`} aria-live="polite">
-                    {draftText.length}/1000
+                    {draftText.length}/4000
                   </span>
                   {/* Proactive AI quota badge — only shown on plans with a finite cap */}
                   {aiLimited && aiRemaining != null && (

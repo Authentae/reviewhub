@@ -62,7 +62,7 @@ function validateRule(body) {
     return 'min_rating cannot exceed max_rating';
   }
   if (!response_text || typeof response_text !== 'string' || !response_text.trim()) return 'response_text is required';
-  if (response_text.trim().length > 1000) return 'response_text too long (max 1000 chars)';
+  if (response_text.trim().length > 4000) return 'response_text too long (max 4000 chars)';
   return null;
 }
 
