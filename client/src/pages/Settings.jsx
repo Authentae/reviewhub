@@ -79,7 +79,19 @@ function ConnectCard({ platform, icon, color, connected, onConnect, syncStatus }
       // commonly captures leading/trailing whitespace, and the server
       // either rejects or stores the whitespace, breaking later lookups.
       // Trim once at the boundary so the user doesn't have to notice.
-      const cleanId = (id || '').trim();
+      let cleanId = (id || '').trim();
+      // Common UX trap on Google: users paste a Maps URL instead of the
+      // place_id. URLs of the form
+      //   https://...?place_id=ChIJxxxxxxxxxxxxxxxxxxx
+      //   https://www.google.com/maps/place/.../@.../data=...!1s0x...:0x...
+      // contain a ChIJ-prefixed place ID embedded somewhere. Extract it
+      // best-effort so the connect "just works"; if no ChIJ pattern is
+      // present (short maps.app.goo.gl URL etc.), let the original string
+      // through and let the server-side validator surface the right error.
+      if (platform === 'google' && /^https?:\/\//i.test(cleanId)) {
+        const match = cleanId.match(/ChIJ[A-Za-z0-9_-]{10,}/);
+        if (match) cleanId = match[0];
+      }
       await onConnect(platform, cleanId, { attested: !connected ? true : undefined });
       setOpen(false);
       setShowAttest(false);
