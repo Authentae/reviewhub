@@ -413,6 +413,15 @@ function initSchema() {
   // one value per user.
   migrateAddColumn('subscriptions', 'ai_drafts_used', 'INTEGER NOT NULL DEFAULT 0');
   migrateAddColumn('subscriptions', 'ai_drafts_period_start', 'TEXT DEFAULT NULL');
+  // One-shot status backfill: the schema has DEFAULT 'trial' for legacy
+  // reasons but the trial concept was killed (free is permanent). Old free-
+  // tier rows still carry status='trial' and render an "On trial" badge in
+  // Settings, which confuses users into thinking their access will end. New
+  // signups get 'active' via getSubscription, but the long-tail remains.
+  // Safe to run repeatedly; no-op once converted.
+  try {
+    db.exec(`UPDATE subscriptions SET status = 'active' WHERE status = 'trial' AND plan = 'free'`);
+  } catch (err) { console.error('[DB] trial-to-active backfill failed:', err.message); }
   migrateAddColumn('businesses', 'widget_enabled', 'INTEGER NOT NULL DEFAULT 0');
   // Per-business AI reply tone preference. NULL = use default (warm). Other
   // valid values steered by the AI prompt: 'casual', 'warm', 'formal'.

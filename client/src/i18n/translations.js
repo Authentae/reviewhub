@@ -1065,7 +1065,7 @@ const en = {
   // Browser extension token section
   'settings.extension.title': 'Browser Extension',
   'settings.extension.description': 'Reply to Google, Yelp, Facebook, TripAdvisor, Trustpilot, and more reviews directly from the platform you\'re viewing — using AI drafts powered by your ReviewHub account.',
-  'settings.extension.availableAllPlans': 'Available on every plan — Free users get 3 AI drafts/month, Solo gets unlimited.',
+  'settings.extension.availableAllPlans': 'Available on every plan — Free users get 3 AI drafts/month, paid plans get unlimited.',
   'settings.extension.tokenActive': 'Token active',
   'settings.extension.tokenShownOnce': 'Copy this token now — it won\'t be shown again.',
   'settings.extension.pasteIntoExtension': 'Paste it into the ReviewHub browser extension\'s popup to connect your account.',
