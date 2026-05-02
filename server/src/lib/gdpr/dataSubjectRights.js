@@ -53,7 +53,7 @@ class DataSubjectRights {
 
       businesses: all(`
         SELECT id, business_name, google_place_id, yelp_business_id,
-               facebook_page_id, widget_enabled, created_at
+               facebook_page_id, widget_enabled, reply_tone, created_at
         FROM businesses WHERE user_id = ?
       `, [userId]),
 
