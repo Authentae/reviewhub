@@ -1766,7 +1766,14 @@ router.post('/import', importLimiter, express.text({ type: ['text/plain', 'text/
 
       const platformRaw = (r[piPlatform] || '').trim().toLowerCase();
       if (!VALID_PLATFORMS.includes(platformRaw)) {
-        errors.push({ row: rowNum, error: `Unknown platform: "${r[piPlatform]}"` });
+        // Show a few of the most-common valid IDs so the user can self-fix
+        // typos without having to read the docs. Full list is in
+        // /docs/platform-import-guides/. Pre-fix this error said only
+        // "Unknown platform: X" with no path forward.
+        errors.push({
+          row: rowNum,
+          error: `Unknown platform: "${r[piPlatform]}". Use one of: google, yelp, facebook, tripadvisor, trustpilot, wongnai, tabelog, naver, dianping, booking, agoda (or other supported IDs — see import docs).`,
+        });
         skipped++;
         continue;
       }

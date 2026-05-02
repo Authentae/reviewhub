@@ -1,4 +1,9 @@
 User-agent: *
+# API endpoints — JSON responses, no human-readable content for search
+# engines, but they cost real DB cycles + rate-limit budget if crawled.
+# Block before SEO bots probe /api/auth/login etc.
+Disallow: /api/
+
 # App pages — require auth, no SEO value, would otherwise eat crawl budget.
 Disallow: /dashboard
 Disallow: /settings
