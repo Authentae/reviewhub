@@ -1655,33 +1655,43 @@ const importLimiter = rateLimit({
   skip: () => process.env.NODE_ENV === 'test',
 });
 
-// Minimal RFC-4180 CSV parser: handles quoted fields and escaped quotes ("").
+// Minimal RFC-4180 CSV parser: handles quoted fields, escaped quotes (""),
+// and embedded newlines inside quoted fields (real reviews often have
+// line breaks — "Great food.\n\nBut slow service." would otherwise break
+// into two malformed rows).
 function parseCsv(text) {
-  const lines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+  // Normalise line endings but DO NOT split — we walk char-by-char so quoted
+  // fields can contain real \n.
+  const src = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
   const result = [];
-  for (const line of lines) {
-    if (!line.trim()) continue;
-    const fields = [];
-    let i = 0;
-    while (i < line.length) {
-      if (line[i] === '"') {
-        let val = '';
-        i++; // skip opening quote
-        while (i < line.length) {
-          if (line[i] === '"' && line[i + 1] === '"') { val += '"'; i += 2; }
-          else if (line[i] === '"') { i++; break; }
-          else { val += line[i++]; }
-        }
-        fields.push(val);
-        if (line[i] === ',') i++;
-      } else {
-        const end = line.indexOf(',', i);
-        if (end === -1) { fields.push(line.slice(i).trim()); i = line.length; }
-        else { fields.push(line.slice(i, end).trim()); i = end + 1; }
-      }
+  let row = [];
+  let field = '';
+  let inQuotes = false;
+  let wasQuoted = false;
+  let i = 0;
+  const pushField = () => {
+    row.push(wasQuoted ? field : field.trim());
+    field = '';
+    wasQuoted = false;
+  };
+  const pushRow = () => {
+    pushField();
+    if (row.some(f => f !== '')) result.push(row);
+    row = [];
+  };
+  while (i < src.length) {
+    const c = src[i];
+    if (inQuotes) {
+      if (c === '"' && src[i + 1] === '"') { field += '"'; i += 2; continue; }
+      if (c === '"') { inQuotes = false; i++; continue; }
+      field += c; i++; continue;
     }
-    result.push(fields);
+    if (c === '"' && field === '') { inQuotes = true; wasQuoted = true; i++; continue; }
+    if (c === ',') { pushField(); i++; continue; }
+    if (c === '\n') { pushRow(); i++; continue; }
+    field += c; i++;
   }
+  if (field !== '' || row.length > 0) pushRow();
   return result;
 }
 

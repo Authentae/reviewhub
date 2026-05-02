@@ -284,4 +284,24 @@ describe('CSV import', () => {
     assert.strictEqual(res.body.imported, 5);
     assert.strictEqual(res.body.skipped, 0);
   });
+
+  test('imports reviews with embedded newlines inside quoted fields', async () => {
+    // Real reviews often contain literal line breaks inside the body. The
+    // pre-2026-05 parser split on \n first, which broke a single review
+    // into two malformed rows. Lock in the fix.
+    const u = await makeUserWithBusiness();
+    const body = [
+      HEADER,
+      'google,Alice,5,"Great food.\n\nBut slow service today.","Thanks Alice — sorry about the wait!",',
+      'yelp,Bob,4,"Line one\nLine two\nLine three",,',
+    ].join('\r\n');
+    const res = await request(app).post('/api/reviews/import')
+      .set('Authorization', `Bearer ${u.token}`)
+      .set('Content-Type', 'text/plain')
+      .send(body);
+
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.body.imported, 2);
+    assert.strictEqual(res.body.errors.length, 0);
+  });
 });
