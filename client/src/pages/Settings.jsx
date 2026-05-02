@@ -541,6 +541,12 @@ function WebhooksSection() {
   // (and the secret can't be recovered). Match the inline-yes/no pattern used
   // for tags / auto-rules / templates so the UX feels consistent.
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+  // Rotate-secret inline confirm gate. Rotating instantly invalidates the
+  // existing receiver — every in-flight delivery starts failing signature
+  // verification until the user updates their receiver. Confirm before
+  // doing it.
+  const [confirmRotateId, setConfirmRotateId] = useState(null);
+  const [rotating, setRotating] = useState({});
   // Last-created secret. Stored only in component memory and cleared
   // once the user dismisses or navigates away — server returns secrets
   // ONLY on the create response, never on the list, so this is the
@@ -611,6 +617,24 @@ function WebhooksSection() {
       toast(t('webhooks.deleted'), 'info');
     } catch (err) {
       toast(err?.response?.data?.error || t('webhooks.deleteFailed'), 'error');
+    }
+  }
+
+  async function handleRotate(id) {
+    setRotating(prev => ({ ...prev, [id]: true }));
+    try {
+      const { data } = await api.post(`/webhooks/${id}/rotate`);
+      const hook = hooks.find(h => h.id === id);
+      // Surface the new secret in the existing show-once banner so the user
+      // can copy it the same way as on creation. Reuses the styling and the
+      // copy/dismiss buttons.
+      if (data.secret) setRevealedSecret({ id: data.id, secret: data.secret, url: hook?.url || '' });
+      toast(t('webhooks.rotated', 'New signing secret generated. Save it now — you won\'t see it again.'), 'success');
+    } catch (err) {
+      toast(err?.response?.data?.error || t('webhooks.rotateFailed', 'Rotation failed'), 'error');
+    } finally {
+      setRotating(prev => ({ ...prev, [id]: false }));
+      setConfirmRotateId(null);
     }
   }
 
@@ -720,6 +744,19 @@ function WebhooksSection() {
                         </button>
                         <button type="button" onClick={() => handleTest(hook.id)} disabled={testing[hook.id]}
                           className="text-xs text-blue-500 hover:text-blue-700 disabled:opacity-50">{testing[hook.id] ? '…' : t('webhooks.test')}</button>
+                        {confirmRotateId === hook.id ? (
+                          <>
+                            <span className="text-xs text-amber-700 dark:text-amber-400 font-medium" title={t('webhooks.rotateWarning', 'Receiver will fail until you update its secret')}>{t('webhooks.rotateConfirm', 'Rotate?')}</span>
+                            <button type="button" onClick={() => handleRotate(hook.id)} disabled={rotating[hook.id]}
+                              className="text-xs text-amber-700 font-semibold hover:underline px-1 disabled:opacity-50">{rotating[hook.id] ? '…' : t('tags.yes')}</button>
+                            <button type="button" onClick={() => setConfirmRotateId(null)}
+                              className="text-xs text-gray-400 hover:text-gray-600 px-1">{t('tags.no')}</button>
+                          </>
+                        ) : (
+                          <button type="button" onClick={() => setConfirmRotateId(hook.id)}
+                            title={t('webhooks.rotateTooltip', 'Generate a new signing secret')}
+                            className="text-xs text-gray-400 hover:text-amber-600 dark:hover:text-amber-400">{t('webhooks.rotate', 'Rotate')}</button>
+                        )}
                         <button type="button" onClick={() => handleToggle(hook)}
                           className={`text-xs px-1.5 py-0.5 rounded border transition-colors ${hook.enabled ? 'border-green-300 text-green-700 bg-green-50 dark:border-green-700 dark:text-green-400 dark:bg-green-900/20 hover:bg-green-100' : 'border-gray-200 text-gray-400 hover:bg-gray-50 dark:border-gray-600'}`}>
                           {hook.enabled ? t('webhooks.active') : t('webhooks.disabled')}
