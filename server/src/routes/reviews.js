@@ -1661,9 +1661,14 @@ const importLimiter = rateLimit({
 // line breaks — "Great food.\n\nBut slow service." would otherwise break
 // into two malformed rows).
 function parseCsv(text) {
+  // Strip UTF-8 BOM. Excel for Windows saves CSVs with a leading
+  // ("ZERO WIDTH NO-BREAK SPACE"); without stripping it the first header
+  // becomes "﻿platform" and the column lookup fails with "Missing
+  // required column: platform" even though the file looks correct.
+  const stripped = text.charCodeAt(0) === 0xfeff ? text.slice(1) : text;
   // Normalise line endings but DO NOT split — we walk char-by-char so quoted
   // fields can contain real \n.
-  const src = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  const src = stripped.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
   const result = [];
   let row = [];
   let field = '';

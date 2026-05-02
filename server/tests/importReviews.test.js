@@ -304,4 +304,22 @@ describe('CSV import', () => {
     assert.strictEqual(res.body.imported, 2);
     assert.strictEqual(res.body.errors.length, 0);
   });
+
+  test('imports CSV with UTF-8 BOM (Excel-on-Windows export)', async () => {
+    // Excel for Windows saves CSV-as-UTF-8 with a leading 0xFEFF byte.
+    // Pre-fix, the first header "platform" became "﻿platform" and the
+    // import 400'd with "Missing required column: platform".
+    const u = await makeUserWithBusiness();
+    const body = '﻿' + csv(
+      HEADER,
+      'google,Alice,5,"Great place!","Thank you Alice!",'
+    );
+    const res = await request(app).post('/api/reviews/import')
+      .set('Authorization', `Bearer ${u.token}`)
+      .set('Content-Type', 'text/plain')
+      .send(body);
+
+    assert.strictEqual(res.status, 200, JSON.stringify(res.body));
+    assert.strictEqual(res.body.imported, 1);
+  });
 });
