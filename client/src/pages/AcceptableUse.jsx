@@ -28,7 +28,7 @@ const SECTIONS = [
 export default function AcceptableUse() {
   const { t } = useI18n();
   usePageTitle(t('legal.aupTitle'));
-  const updated = '2025-04-22';
+  const updated = '2026-05-02';
 
   return (
     <div className="rh-design rh-app min-h-screen">
