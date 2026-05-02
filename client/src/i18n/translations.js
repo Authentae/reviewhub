@@ -101,6 +101,8 @@ const en = {
   'landing.faq10A': "That works fine. The Free / Starter / Pro tiers all support read-only mode where you reply to incoming reviews without actively soliciting more. If you don't want our review-request feature, just don't enable it — we never auto-send anything to your customers. Notaries, legal services, healthcare, and any business where unsolicited reviews are a liability use this mode.",
   'landing.faq11Q': "I'm in an emerging market — is the price reasonable for me?",
   'landing.faq11A': "Honest answer: maybe not. $14/mo is reasonable in the US / EU / Japan / Korea / Singapore / Australia. In ZAR / NGN / EGP / VND / IDR / PHP / BDT terms it can be 1-3 days of net profit for a small shop. We don't have PPP-adjusted pricing today (one global price), but if that's a real blocker for you, email us — we'd rather have you on a custom price than lose you to no-tool-at-all. Especially open to working with operators in Southeast Asia and Africa.",
+  'landing.faq12Q': "I'm switching from Birdeye / Reputation / Podium / another tool — do I lose my history?",
+  'landing.faq12A': "No. Export your existing reviews from your current tool as CSV, drop the file into ReviewHub's import (Settings → Import), and we keep everything: reviewer, rating, date, your replies. We dedupe on platform + external ID so re-importing the same file twice is safe. The catch: most platforms don't expose a clean CSV download — you may need to copy from the tool's dashboard. Email us if you're stuck and we'll help map your specific export format.",
   'landing.faqFooter': 'Still have questions?',
   'landing.faqFooterCta': 'Try it free — no card needed →',
 

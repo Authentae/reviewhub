@@ -229,6 +229,18 @@ export default function Pricing() {
                 Card checkout via secure global processor. Thai VAT 7% included.
               </p>
             )}
+            {currency === 'USD' && (
+              <p style={{
+                marginTop: 18,
+                fontFamily: 'var(--rh-mono)',
+                fontSize: 12,
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase',
+                color: 'var(--rh-ink-3)',
+              }}>
+                {t('pricing.usdNote', 'Prices in USD. Your card is charged in your local currency at your bank\'s rate; any local VAT/sales tax is calculated at checkout.')}
+              </p>
+            )}
           </div>
         </section>
 
