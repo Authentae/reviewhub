@@ -45,6 +45,20 @@ export default function Support() {
   const [error, setError] = useState('');
   const [ticketId, setTicketId] = useState(null);
 
+  // Ticket history — only fetched when logged in. The /api/support/me
+  // endpoint returns the user's last 50 tickets with status. Persona
+  // testers asked for this repeatedly: "I submitted a ticket last week,
+  // is it open or resolved? Did anyone see it?"
+  const [myTickets, setMyTickets] = useState(null); // null = not loaded
+  useEffect(() => {
+    if (!user) { setMyTickets(null); return; }
+    let cancelled = false;
+    api.get('/support/me')
+      .then(({ data }) => { if (!cancelled) setMyTickets(data.tickets || []); })
+      .catch(() => { if (!cancelled) setMyTickets([]); });
+    return () => { cancelled = true; };
+  }, [user]);
+
   // Auto-fill email if user logs in after the page loads (e.g. they came
   // here logged-out, signed in, came back).
   useEffect(() => {
@@ -270,6 +284,58 @@ export default function Support() {
             </p>
           </form>
         </div>
+
+        {/* Ticket history — logged-in users see their past tickets +
+            status. Closes the "did anyone see this?" loop persona testers
+            kept hitting. Hidden when logged out. */}
+        {user && myTickets && myTickets.length > 0 && (
+          <div className="mt-12">
+            <h2 className="text-2xl font-bold mb-4" style={{ color: 'var(--rh-ink)', letterSpacing: '-0.01em' }}>
+              {isThai ? 'เรื่องที่คุณส่งมา' : 'Your past tickets'}
+            </h2>
+            <div className="rounded-2xl overflow-hidden" style={{ background: '#fff', border: '1px solid var(--rh-line, #e6dfce)' }}>
+              <ul className="divide-y" style={{ borderColor: 'var(--rh-line, #e6dfce)' }}>
+                {myTickets.map(t => {
+                  const status = t.resolved_at
+                    ? (isThai ? 'แก้ไขแล้ว' : 'Resolved')
+                    : (t.status === 'open' || !t.status
+                        ? (isThai ? 'รอตอบกลับ' : 'Open')
+                        : t.status);
+                  const statusCls = t.resolved_at
+                    ? { background: '#e7f3ec', color: '#1d6f3a' }
+                    : { background: '#fff4d6', color: '#7a5300' };
+                  return (
+                    <li key={t.id} className="p-4 flex items-start gap-3">
+                      <span
+                        className="text-xs font-semibold px-2 py-0.5 rounded-full whitespace-nowrap mt-0.5"
+                        style={statusCls}
+                      >
+                        {status}
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold truncate" style={{ color: 'var(--rh-ink)' }}>
+                          #{t.id} · {t.subject}
+                        </p>
+                        <p className="text-xs mt-0.5" style={{ color: 'var(--rh-ink-soft, #7a8189)' }}>
+                          {t.category.toUpperCase()} ·{' '}
+                          {new Date(t.created_at).toLocaleDateString(lang)}
+                          {t.resolved_at && (
+                            <> · {isThai ? 'แก้ไขเมื่อ' : 'Resolved'} {new Date(t.resolved_at).toLocaleDateString(lang)}</>
+                          )}
+                        </p>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+            <p className="text-xs mt-3" style={{ color: 'var(--rh-ink-soft, #9aa3ac)' }}>
+              {isThai
+                ? 'รายละเอียดและการตอบกลับอยู่ในอีเมลของคุณ'
+                : 'Full conversation and replies are in your email.'}
+            </p>
+          </div>
+        )}
       </main>
     </div>
   );
