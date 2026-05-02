@@ -61,6 +61,15 @@ class ErrorBoundaryInner extends React.Component {
             >
               {this.props.reload}
             </button>
+            {/* Crash-recovery escape hatch — users who land here usually
+                CAN'T navigate anywhere else (the SPA shell errored). Give
+                them a hard link to /support so they have a path forward
+                that doesn't depend on whatever broke. */}
+            <p className="text-xs text-gray-400 dark:text-gray-500 mt-4">
+              <a href="/support" className="underline hover:text-gray-600 dark:hover:text-gray-300">
+                {this.props.tellUs}
+              </a>
+            </p>
           </div>
         </div>
       );
@@ -79,6 +88,7 @@ export default function ErrorBoundary({ children }) {
       title={t('error.title')}
       reload={t('error.reload')}
       unknownError={t('error.unknown')}
+      tellUs={t('error.tellUs', 'Tell us what happened')}
     >
       {children}
     </ErrorBoundaryInner>
