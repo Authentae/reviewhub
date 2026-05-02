@@ -41,6 +41,9 @@ const Changelog = lazy(() => import('./pages/Changelog'));
 // Support — public-or-authed real-issue intake. Frill (already wired) is
 // for feature feedback; /support is for "this broke" / billing / account.
 const Support = lazy(() => import('./pages/Support'));
+// API docs — public TL;DR + cURL examples for the Business-plan API.
+// Marketing-page "API access" was reading as fluff; this page makes it real.
+const ApiDocs = lazy(() => import('./pages/ApiDocs'));
 const OwnerDashboard = lazy(() => import('./pages/OwnerDashboard'));
 // Landing page after one-click unsubscribe (RFC 8058). Public — the server
 // applies the unsub, then redirects browser-clicks here as a confirmation.
@@ -124,6 +127,7 @@ export default function App() {
         <Route path="/audit" element={<AuditLanding />} />
         <Route path="/changelog" element={<Changelog />} />
         <Route path="/support" element={<Support />} />
+        <Route path="/api-docs" element={<ApiDocs />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>

@@ -314,6 +314,35 @@ export default function ReplyGeneratorTool() {
             <p className={`text-xs mt-1 ${form.review_text.length > 1900 ? 'text-red-500' : form.review_text.length > 1500 ? 'text-amber-600 dark:text-amber-400' : 'text-gray-400'}`}>
               {form.review_text.length}/2000
             </p>
+            {/* Unsupported-language sniff. We support 10 languages; if the
+                pasted review is written in a script we know we don't have a
+                native-template for (Cyrillic, Arabic, Hebrew, Devanagari, etc.),
+                warn the visitor BEFORE they hit Generate so they aren't
+                surprised by an English/wrong-language draft. The AI will
+                still try; this is just expectation-setting. */}
+            {(() => {
+              const text = form.review_text;
+              if (!text || text.length < 10) return null;
+              const detected =
+                /[Ѐ-ӿ]/.test(text) ? 'Russian / Cyrillic' :
+                /[؀-ۿ]/.test(text) ? 'Arabic' :
+                /[֐-׿]/.test(text) ? 'Hebrew' :
+                /[ऀ-ॿ]/.test(text) ? 'Hindi / Devanagari' :
+                /[຀-໿]/.test(text) ? 'Lao' :
+                /[ក-៿]/.test(text) ? 'Khmer' :
+                null;
+              if (!detected) return null;
+              return (
+                <div className="mt-2 text-xs px-3 py-2 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/50 text-amber-900 dark:text-amber-100">
+                  {t('tool.unsupportedLangWarn', 'Heads up — your review looks like it\'s in')}{' '}
+                  <strong>{detected}</strong>.{' '}
+                  {t('tool.unsupportedLangWarnAfter', "We support 10 languages today; that one isn't one of them yet, so the AI will fall back to English. If you'd like us to add it, ")}
+                  <a href="/support?type=feature" className="underline font-medium">
+                    {t('tool.unsupportedLangWarnCta', 'tell us')}
+                  </a>.
+                </div>
+              );
+            })()}
           </div>
 
           {error && (

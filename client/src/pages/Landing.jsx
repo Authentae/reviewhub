@@ -646,6 +646,7 @@ function Pricing() {
               <li><Check />{t('landing.plan.pro4', 'Sentiment + trends + weekly digest')}</li>
               <li><Check />{t('landing.plan.pro5', 'Templates + CSV export')}</li>
               <li><Check />{t('landing.plan.pro6', 'Email alerts on new + negative reviews')}</li>
+              <li><Check />{t('landing.plan.pro7', 'Bulk-reply to your unresponded backlog (one-by-one or batched)')}</li>
             </ul>
             <Link to="/register" className="rh-btn rh-btn-amber">{t('landing.plan.choosePro', 'Choose Pro · $29/mo')}</Link>
           </div>
@@ -657,7 +658,12 @@ function Pricing() {
             <ul>
               <li><Check />{t('landing.plan.business1', 'Everything in Pro')}</li>
               <li><Check />{t('landing.plan.business2', 'Up to 5 businesses')}</li>
-              <li><Check />{t('landing.plan.business3', 'API + webhooks (Zapier / Slack / n8n)')}</li>
+              <li>
+                <Check />
+                <Link to="/api-docs" style={{ textDecoration: 'underline', textUnderlineOffset: 2 }}>
+                  {t('landing.plan.business3', 'API + webhooks (Zapier / Slack / n8n)')}
+                </Link>
+              </li>
               <li><Check />{t('landing.plan.business4', 'Priority support')}</li>
             </ul>
             <Link to="/register" className="rh-btn rh-btn-ghost">{t('landing.plan.chooseBusiness', 'Choose Business · $59/mo')}</Link>
