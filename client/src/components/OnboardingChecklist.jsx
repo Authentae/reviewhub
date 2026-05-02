@@ -149,6 +149,8 @@ export default function OnboardingChecklist({
                       className="input text-sm flex-1 max-w-xs"
                       placeholder={t('onboarding.bizNamePlaceholder')}
                       maxLength={100}
+                      autoComplete="organization"
+                      spellCheck={false}
                       autoFocus
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') saveBusinessName();
