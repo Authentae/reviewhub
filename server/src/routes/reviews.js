@@ -1584,7 +1584,10 @@ router.get('/export/csv', exportLimiter, (req, res) => {
     res.setHeader('X-Total-Matching', String(total));
     res.setHeader('X-Returned-Count', String(reviews.length));
     if (total > reviews.length) res.setHeader('X-Truncated', 'true');
-    res.send([header.join(','), ...rows].join('\r\n'));
+    // UTF-8 BOM so Excel for Windows opens UTF-8 instead of falling back
+    // to the system code page (which would render Thai/JA/KO/ZH review
+    // text as mojibake). Same rationale as the import template route.
+    res.send('﻿' + [header.join(','), ...rows].join('\r\n'));
   } catch (err) {
     captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
