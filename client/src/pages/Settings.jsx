@@ -88,9 +88,24 @@ function ConnectCard({ platform, icon, color, connected, onConnect, syncStatus }
       // best-effort so the connect "just works"; if no ChIJ pattern is
       // present (short maps.app.goo.gl URL etc.), let the original string
       // through and let the server-side validator surface the right error.
-      if (platform === 'google' && /^https?:\/\//i.test(cleanId)) {
-        const match = cleanId.match(/ChIJ[A-Za-z0-9_-]{10,}/);
-        if (match) cleanId = match[0];
+      if (/^https?:\/\//i.test(cleanId)) {
+        if (platform === 'google') {
+          const m = cleanId.match(/ChIJ[A-Za-z0-9_-]{10,}/);
+          if (m) cleanId = m[0];
+        } else if (platform === 'yelp') {
+          // https://www.yelp.com/biz/<slug>?<query> → <slug>
+          const m = cleanId.match(/yelp\.com\/biz\/([A-Za-z0-9_-]+)/i);
+          if (m) cleanId = m[1];
+        } else if (platform === 'facebook') {
+          // https://www.facebook.com/<page>[/?...]
+          // https://www.facebook.com/profile.php?id=12345 → 12345
+          const idQuery = cleanId.match(/facebook\.com\/profile\.php\?id=(\d+)/i);
+          if (idQuery) cleanId = idQuery[1];
+          else {
+            const slug = cleanId.match(/facebook\.com\/([A-Za-z0-9._-]+)/i);
+            if (slug && !['profile.php', 'pages'].includes(slug[1])) cleanId = slug[1];
+          }
+        }
       }
       await onConnect(platform, cleanId, { attested: !connected ? true : undefined });
       setOpen(false);
