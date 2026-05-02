@@ -319,7 +319,7 @@ export default function BulkActionBar({ selectedIds, onSent, onDeleted, onTagged
               onChange={(e) => setResponseText(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) handleSend(); }}
               rows={2}
-              maxLength={1000}
+              maxLength={4000}
               disabled={sending}
               placeholder={t('bulk.responsePlaceholder')}
               aria-label={t('bulk.responsePlaceholder')}
@@ -390,14 +390,14 @@ export default function BulkActionBar({ selectedIds, onSent, onDeleted, onTagged
             <button
               type="button"
               onClick={handleSend}
-              disabled={sending || !responseText.trim() || responseText.length > 1000}
+              disabled={sending || !responseText.trim() || responseText.length > 4000}
               aria-busy={sending}
               className="btn-primary text-sm px-4 py-2 whitespace-nowrap disabled:opacity-50"
             >
               {sending ? t('bulk.sending') : t('bulk.send', { n: count })}
             </button>
-            <span className={`text-xs ${responseText.length > 800 ? 'text-red-500' : 'text-gray-400'}`}>
-              {responseText.length}/1000
+            <span className={`text-xs ${responseText.length > 3500 ? 'text-red-500' : 'text-gray-400'}`}>
+              {responseText.length}/4000
             </span>
           </div>
         </div>

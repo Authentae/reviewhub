@@ -1253,7 +1253,7 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
                     <span aria-hidden="true">✨</span>
                     {loading ? t('review.drafting') : draftText ? t('review.regenerate') : t('review.aiDraft')}
                   </button>
-                  <button type="button" onClick={handleSend} disabled={loading || !draftText.trim() || draftText.length > 1000} aria-busy={loading}
+                  <button type="button" onClick={handleSend} disabled={loading || !draftText.trim() || draftText.length > 4000} aria-busy={loading}
                     className="btn-primary text-xs py-1.5 disabled:opacity-50">
                     {loading ? t('review.saving') : t('review.saveResponse')}
                   </button>

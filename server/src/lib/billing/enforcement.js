@@ -10,6 +10,38 @@
 const { get, run, transaction } = require('../../db/schema');
 const { getPlan, planAllows, planMax } = require('./plans');
 
+// Plan ladder used to compute the right "upgrade to X" target for a given
+// gate. Defined once at top so all enforcement helpers can reach it.
+const PLAN_LADDER = ['free', 'starter', 'pro', 'business'];
+
+// Walk the ladder for the first tier with a STRICTLY HIGHER capacity than
+// the user's current plan. Returns null if there is no higher tier (e.g.
+// Business hitting its own cap, Pro hitting a cap that Business shares).
+function findHigherCapacityTier(currentPlanId, capacityKey) {
+  const idx = PLAN_LADDER.indexOf(currentPlanId);
+  if (idx === -1) return null;
+  const currentMax = planMax(currentPlanId, capacityKey);
+  for (let i = idx + 1; i < PLAN_LADDER.length; i++) {
+    const tierMax = planMax(PLAN_LADDER[i], capacityKey);
+    if (tierMax === null && currentMax !== null) return PLAN_LADDER[i];
+    if (tierMax !== null && currentMax !== null && tierMax > currentMax) return PLAN_LADDER[i];
+  }
+  return null;
+}
+
+// Walk the ladder for the first tier above the user's current that includes
+// the requested feature. Without this, the wall message would always tell
+// the user to "upgrade to Starter" — wrong for a Starter user clicking a
+// Pro feature.
+function findUpgradeTier(currentPlanId, featureKey) {
+  const idx = PLAN_LADDER.indexOf(currentPlanId);
+  if (idx === -1) return 'starter';
+  for (let i = idx + 1; i < PLAN_LADDER.length; i++) {
+    if (planAllows(PLAN_LADDER[i], featureKey)) return PLAN_LADDER[i];
+  }
+  return PLAN_LADDER[PLAN_LADDER.length - 1];
+}
+
 // Returns the current ISO month prefix (YYYY-MM-01) — used as the period
 // boundary for monthly quotas. New period => reset counter.
 function currentPeriodStart() {
@@ -159,12 +191,17 @@ function canConnectPlatform(userId, currentPlatformCount) {
   const max = planMax(sub.plan, 'maxPlatforms');
   if (max === null) return { allowed: true };
   if (currentPlatformCount >= max) {
-    const nextTier = sub.plan === 'free' ? 'starter' : sub.plan === 'starter' ? 'pro' : 'business';
+    // Pro and Business both have 6 platforms — a Pro user at 6 platforms
+    // shouldn't be told to "upgrade to Business" because Business won't
+    // add capacity. findHigherCapacityTier returns null in that case.
+    const nextTier = findHigherCapacityTier(sub.plan, 'maxPlatforms');
     return {
       allowed: false,
-      reason: `Your ${plan.name} plan supports up to ${max} platform(s). Upgrade to connect more.`,
+      reason: nextTier
+        ? `Your ${plan.name} plan supports up to ${max} platform(s). Upgrade to connect more.`
+        : `You're at the platform cap for our top tier. Email support if you need more.`,
       status: 402,
-      upgradeTo: nextTier,
+      upgradeTo: nextTier, // may be null
       current: currentPlatformCount,
       max,
     };
@@ -174,6 +211,9 @@ function canConnectPlatform(userId, currentPlatformCount) {
 
 // Feature-gate helper for boolean features (email alerts, CSV export, etc.).
 // Returns the same shape as canUseAiDraft for consistent route handling.
+// Uses findUpgradeTier (defined at top) so a Starter user clicking on a
+// Pro-tier feature gets pointed at Pro, not at Starter (which they already
+// have).
 function requireFeature(userId, featureKey) {
   const sub = getSubscription(userId);
   if (planAllows(sub.plan, featureKey)) return { allowed: true };
@@ -182,7 +222,7 @@ function requireFeature(userId, featureKey) {
     allowed: false,
     reason: `${featureKey.replace(/_/g, ' ')} is not included in your ${plan?.name || 'current'} plan`,
     status: 402,
-    upgradeTo: 'starter',
+    upgradeTo: findUpgradeTier(sub.plan, featureKey),
   };
 }
 

@@ -1562,7 +1562,7 @@ function AutoRules() {
         </div>
         <div>
           <label className="text-xs font-medium text-gray-600 dark:text-gray-300 block mb-0.5">{t('rules.responseText')} *</label>
-          <textarea ref={responseTextareaRef} value={value.response_text} onChange={e => onChange({ ...value, response_text: e.target.value })} rows={2} maxLength={1000} className="input text-xs w-full resize-none" placeholder={t('rules.responseTextPlaceholder')} />
+          <textarea ref={responseTextareaRef} value={value.response_text} onChange={e => onChange({ ...value, response_text: e.target.value })} rows={2} maxLength={4000} className="input text-xs w-full resize-none" placeholder={t('rules.responseTextPlaceholder')} />
           <div className="flex flex-wrap gap-1 mt-1 items-center">
             <span className="text-[10px] text-gray-400 dark:text-gray-500">{t('templateVars.hint')}</span>
             {['{reviewer_name}', '{rating}', '{platform}', '{business_name}'].map(v => (
