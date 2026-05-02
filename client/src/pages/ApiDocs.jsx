@@ -93,8 +93,8 @@ export default function ApiDocs() {
           </h2>
           <p className="mb-3 text-base" style={{ color: 'var(--rh-ink)' }}>
             {isThai
-              ? 'ตั้งค่า webhook URL ใน Settings เราจะ POST ไปที่ URL ของคุณเมื่อมีรีวิวใหม่ ใช้ได้กับ Zapier, Slack, n8n, Discord, etc.'
-              : 'Configure a webhook URL in Settings. We POST to your URL when a new review lands. Compatible with Zapier, Slack incoming webhooks, n8n, Discord, etc.'}
+              ? 'ตั้งค่า webhook URL ใน Settings เราจะ POST ไปที่ URL ของคุณเมื่อมีรีวิวใหม่ JSON เป็นรูปแบบของเรา (ดูด้านล่าง) สำหรับ Slack/Discord ให้ส่งผ่าน Zapier หรือ n8n เพื่อแปลงเป็นข้อความ'
+              : 'Configure a webhook URL in Settings. We POST our JSON shape (below) to your URL when a new review lands. Works directly with Zapier, n8n, Make.com, or any custom endpoint. For Slack or Discord, route via Zapier/n8n — those services expect their own message format and won’t accept our JSON directly.'}
           </p>
           <pre style={{ background: '#1d242c', color: '#e6dfce', padding: 16, borderRadius: 8, overflowX: 'auto', fontSize: 13 }}>
 {`POST https://your-url.example/webhook
