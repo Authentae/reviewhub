@@ -784,7 +784,7 @@ const en = {
   'settings.platform.yelpLabel': 'Yelp Business ID',
   'settings.platform.facebookLabel': 'Facebook Page ID',
   'settings.platform.idPlaceholder': 'Enter your {platform} ID',
-  'settings.platform.googleHelp': 'Find your Place ID at https://developers.google.com/maps/documentation/places/web-service/place-id',
+  'settings.platform.googleHelp': 'Tip: paste your Google Maps URL — we\'ll extract the Place ID automatically. Or find it at https://developers.google.com/maps/documentation/javascript/examples/places-placeid-finder',
   'settings.platform.yelpHelp': 'Find your Business ID in the Yelp for Business dashboard URL.',
   'settings.platform.facebookHelp': 'Find your Page ID in the About section of your Facebook Page.',
 
@@ -1827,7 +1827,7 @@ const es = {
   'settings.platform.yelpLabel': 'ID de negocio de Yelp',
   'settings.platform.facebookLabel': 'ID de página de Facebook',
   'settings.platform.idPlaceholder': 'Introduce tu ID de {platform}',
-  'settings.platform.googleHelp': 'Encuentra tu Place ID en developers.google.com/maps/documentation/places/web-service/place-id',
+  'settings.platform.googleHelp': 'Tip: pega la URL de Google Maps — extraemos el Place ID automáticamente. O búscalo en developers.google.com/maps/documentation/javascript/examples/places-placeid-finder',
   'settings.platform.yelpHelp': 'Encuentra tu Business ID en la URL del panel de Yelp for Business.',
   'settings.platform.facebookHelp': 'Encuentra tu Page ID en la sección Acerca de tu página de Facebook.',
 
@@ -2494,7 +2494,7 @@ const fr = {
   'settings.platform.yelpLabel': 'ID d\'entreprise Yelp',
   'settings.platform.facebookLabel': 'ID de page Facebook',
   'settings.platform.idPlaceholder': 'Entrez votre ID {platform}',
-  'settings.platform.googleHelp': 'Trouvez votre Place ID sur developers.google.com/maps/documentation/places/web-service/place-id',
+  'settings.platform.googleHelp': 'Astuce : collez l\'URL Google Maps — on extrait le Place ID automatiquement. Ou trouvez-le sur developers.google.com/maps/documentation/javascript/examples/places-placeid-finder',
   'settings.platform.yelpHelp': 'Trouvez votre Business ID dans l\'URL du tableau de bord Yelp for Business.',
   'settings.platform.facebookHelp': 'Trouvez votre Page ID dans la section À propos de votre page Facebook.',
 
@@ -3136,7 +3136,7 @@ const de = {
   'settings.platform.yelpLabel': 'Yelp Business-ID',
   'settings.platform.facebookLabel': 'Facebook-Seiten-ID',
   'settings.platform.idPlaceholder': 'Ihre {platform}-ID eingeben',
-  'settings.platform.googleHelp': 'Ihre Place-ID finden Sie unter developers.google.com/maps/documentation/places/web-service/place-id',
+  'settings.platform.googleHelp': 'Tipp: Fügen Sie Ihre Google-Maps-URL ein — wir extrahieren die Place-ID automatisch. Oder finden Sie sie unter developers.google.com/maps/documentation/javascript/examples/places-placeid-finder',
   'settings.platform.yelpHelp': 'Ihre Business-ID finden Sie in der URL des Yelp-for-Business-Dashboards.',
   'settings.platform.facebookHelp': 'Ihre Seiten-ID finden Sie im Abschnitt „Über uns" Ihrer Facebook-Seite.',
 
@@ -3778,7 +3778,7 @@ const pt = {
   'settings.platform.yelpLabel': 'ID do negócio no Yelp',
   'settings.platform.facebookLabel': 'ID da página no Facebook',
   'settings.platform.idPlaceholder': 'Digite seu ID do {platform}',
-  'settings.platform.googleHelp': 'Encontre seu Place ID em developers.google.com/maps/documentation/places/web-service/place-id',
+  'settings.platform.googleHelp': 'Dica: cole a URL do Google Maps — extraímos o Place ID automaticamente. Ou encontre-o em developers.google.com/maps/documentation/javascript/examples/places-placeid-finder',
   'settings.platform.yelpHelp': 'Encontre seu Business ID na URL do painel Yelp for Business.',
   'settings.platform.facebookHelp': 'Encontre seu Page ID na seção Sobre da sua Página do Facebook.',
 
@@ -4420,7 +4420,7 @@ const it = {
   'settings.platform.yelpLabel': 'Yelp Business ID',
   'settings.platform.facebookLabel': 'Facebook Page ID',
   'settings.platform.idPlaceholder': 'Inserisci il tuo ID {platform}',
-  'settings.platform.googleHelp': 'Trova il tuo Place ID su developers.google.com/maps/documentation/places/web-service/place-id',
+  'settings.platform.googleHelp': 'Suggerimento: incolla l\'URL di Google Maps — estraiamo il Place ID automaticamente. Oppure trovalo su developers.google.com/maps/documentation/javascript/examples/places-placeid-finder',
   'settings.platform.yelpHelp': 'Trova il tuo Business ID nell\'URL del pannello Yelp for Business.',
   'settings.platform.facebookHelp': 'Trova il tuo Page ID nella sezione Informazioni della tua Pagina Facebook.',
 
@@ -5062,7 +5062,7 @@ const ja = {
   'settings.platform.yelpLabel': 'Yelp ビジネスID',
   'settings.platform.facebookLabel': 'Facebook ページID',
   'settings.platform.idPlaceholder': '{platform} IDを入力',
-  'settings.platform.googleHelp': 'プレイスIDはdevelopers.google.com/maps/documentation/places/web-service/place-idで確認できます。',
+  'settings.platform.googleHelp': 'ヒント：Google マップのURLを貼り付けると自動でプレイスIDを抽出します。または developers.google.com/maps/documentation/javascript/examples/places-placeid-finder で検索できます。',
   'settings.platform.yelpHelp': 'ビジネスIDはYelp for BusinessダッシュボードのURLで確認できます。',
   'settings.platform.facebookHelp': 'ページIDはFacebookページの「情報」セクションで確認できます。',
 
@@ -5522,7 +5522,7 @@ const zh = {
   'settings.platform.yelpLabel': 'Yelp 商家 ID',
   'settings.platform.facebookLabel': 'Facebook 主页 ID',
   'settings.platform.idPlaceholder': '输入 {platform} ID',
-  'settings.platform.googleHelp': '地点 ID 可在 developers.google.com/maps/documentation/places/web-service/place-id 查找。',
+  'settings.platform.googleHelp': '提示：粘贴 Google 地图链接，我们会自动提取 Place ID。或在 developers.google.com/maps/documentation/javascript/examples/places-placeid-finder 上查找。',
   'settings.platform.yelpHelp': '商家 ID 在 Yelp for Business 仪表盘的 URL 中可找到。',
   'settings.platform.facebookHelp': '主页 ID 在 Facebook 主页的"关于"部分可找到。',
 
@@ -6175,7 +6175,7 @@ const ko = {
   'settings.platform.yelpLabel': 'Yelp 비즈니스 ID',
   'settings.platform.facebookLabel': 'Facebook 페이지 ID',
   'settings.platform.idPlaceholder': '{platform} ID 입력',
-  'settings.platform.googleHelp': '장소 ID는 developers.google.com/maps/documentation/places/web-service/place-id에서 찾을 수 있습니다.',
+  'settings.platform.googleHelp': '팁: Google 지도 URL을 붙여넣으면 Place ID를 자동으로 추출합니다. 또는 developers.google.com/maps/documentation/javascript/examples/places-placeid-finder 에서 찾을 수 있습니다.',
   'settings.platform.yelpHelp': '비즈니스 ID는 Yelp for Business 대시보드 URL에서 찾을 수 있습니다.',
   'settings.platform.facebookHelp': '페이지 ID는 Facebook 페이지의 "정보" 섹션에서 찾을 수 있습니다.',
 
@@ -7019,7 +7019,7 @@ const th = {
   'settings.platform.yelpLabel': 'Yelp Business ID',
   'settings.platform.facebookLabel': 'Facebook Page ID',
   'settings.platform.idPlaceholder': 'ใส่ {platform} ID ของคุณ',
-  'settings.platform.googleHelp': 'ค้นหา Place ID ได้ที่ developers.google.com/maps/documentation/places/web-service/place-id',
+  'settings.platform.googleHelp': 'เคล็ดลับ: วาง URL จาก Google Maps แล้วระบบจะดึง Place ID ให้อัตโนมัติ หรือค้นหาได้ที่ developers.google.com/maps/documentation/javascript/examples/places-placeid-finder',
   'settings.platform.yelpHelp': 'ค้นหา Business ID ใน URL แดชบอร์ด Yelp for Business',
   'settings.platform.facebookHelp': 'ค้นหา Page ID ในส่วน About ของ Facebook Page',
 
