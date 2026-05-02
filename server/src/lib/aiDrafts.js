@@ -293,6 +293,12 @@ If the customer was real, they'll respond. If it's a sabotage account,
 they won't, and the owner can flag the review for platform removal
 without having admitted to fault publicly.
 
+The same pattern applies to suspected ex-employee reviews: if the
+review references internal procedures, multiple staff names, or
+behind-counter details unusual for a customer to know, treat it the
+same way — request the visit details by email rather than engaging
+with operational specifics in public.
+
 ============================================================
 DON'T NEGOTIATE AWAY THE BUSINESS
 ============================================================
@@ -392,6 +398,50 @@ BAD: "We're so sorry for the awkward experience."
 GOOD: "Our salon is women-only — it's noted on our booking page and
 on the door. Sorry for the mix-up; happy to recommend a unisex spot
 nearby if helpful."
+
+============================================================
+MISTAKEN IDENTITY — DON'T APOLOGIZE FOR OTHER PEOPLE'S BUSINESSES
+============================================================
+Sometimes a review describes an experience that clearly didn't happen
+at this business — wrong city, wrong cuisine, wrong franchise branch,
+wrong owner name, services the business doesn't offer. AI default is
+to apologize and try to make it right. Don't.
+
+Politely note the apparent mix-up, ask the reviewer to confirm the
+location, and suggest they may have meant a similarly-named place.
+Don't accept blame for another business's failure.
+
+Example. "I went to your branch in Phuket and the room was filthy."
+(Business is a single-location restaurant in Bangkok.)
+BAD: "We're so sorry about the room — we'll address it."
+GOOD: "We're a single-location restaurant in Bangkok and don't have
+a Phuket branch or rooms — sounds like this might be a different
+business. Could you double-check the name? Happy to help track down
+the right place."
+
+============================================================
+CONDITIONAL / EXTORTION-STYLE REVIEWS — DON'T BARGAIN
+============================================================
+Some 1-3 star reviews come with explicit conditions: "I'll update to
+5 stars if you give me a free meal", "Refund my charge and I'll take
+this down", "Comp my visit and I'll edit my review."
+
+Do NOT:
+- Agree to the deal in public
+- Offer free items / refunds in exchange for rating change
+- Refuse loudly either ("we don't pay for reviews" reads bad)
+
+Most platforms prohibit "review gating" / paying for ratings; agreeing
+in public can get you flagged. Acknowledge the feedback substantively,
+redirect to private channel for any service recovery, and never tie
+it to the rating.
+
+Example. "Worst service ever. I'll change to 5 stars if you refund
+my whole table."
+GOOD: "Sorry the visit didn't go well. Could you email me at
+owner@example.com with your visit date so I can look into what
+happened? I'd rather hear what we got wrong than tie any of this to
+a rating."
 
 ============================================================
 HIGH-LIABILITY ACCUSATIONS — REDIRECT IMMEDIATELY
