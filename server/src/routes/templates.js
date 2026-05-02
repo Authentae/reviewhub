@@ -51,7 +51,10 @@ router.post('/', mutateLimiter, (req, res) => {
   try {
     const sub = get('SELECT plan FROM subscriptions WHERE user_id = ?', [req.user.id]);
     if (!getPlan(sub?.plan || 'free').features.templates) {
-      return res.status(403).json({ error: 'Response templates require the Starter plan or higher' });
+      return res.status(403).json({
+        error: 'Response templates require the Starter plan or higher',
+        upgradeTo: 'starter',
+      });
     }
     const countRow = get('SELECT COUNT(*) as c FROM templates WHERE user_id = ?', [req.user.id]);
     if (countRow && countRow.c >= MAX_TEMPLATES) {

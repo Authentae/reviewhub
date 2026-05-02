@@ -1552,7 +1552,10 @@ router.get('/export/csv', exportLimiter, (req, res) => {
   try {
     const sub = get('SELECT plan FROM subscriptions WHERE user_id = ?', [req.user.id]);
     if (!getPlan(sub?.plan || 'free').features.csv_export) {
-      return res.status(403).json({ error: 'CSV export requires the Pro plan or higher' });
+      return res.status(403).json({
+        error: 'CSV export requires the Pro plan or higher',
+        upgradeTo: 'pro',
+      });
     }
     const business = getUserBusiness(req.user.id);
     if (!business) return res.status(404).json({ error: 'No business found' });
@@ -1594,7 +1597,10 @@ router.get('/export/json', exportLimiter, (req, res) => {
   try {
     const sub = get('SELECT plan FROM subscriptions WHERE user_id = ?', [req.user.id]);
     if (!getPlan(sub?.plan || 'free').features.csv_export) {
-      return res.status(403).json({ error: 'JSON export requires the Pro plan or higher' });
+      return res.status(403).json({
+        error: 'JSON export requires the Pro plan or higher',
+        upgradeTo: 'pro',
+      });
     }
     const business = getUserBusiness(req.user.id);
     if (!business) return res.status(404).json({ error: 'No business found' });

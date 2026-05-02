@@ -47,7 +47,10 @@ router.post('/', limiter, (req, res) => {
   try {
     const plan = getUserPlan(req.user.id);
     if (!plan.features.api_access) {
-      return res.status(403).json({ error: 'API access requires the Business plan' });
+      return res.status(403).json({
+        error: 'API access requires the Business plan',
+        upgradeTo: 'business',
+      });
     }
 
     const name = req.body?.name;

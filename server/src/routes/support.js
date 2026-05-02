@@ -87,6 +87,20 @@ router.post('/', supportLimiter, authOptional, async (req, res) => {
       [req.user?.id || null, email, cat, subj, msg, cleanUrl || null, ua, ip]
     );
 
+    // Priority routing — Business plan customers pay for "priority support".
+    // Make that concrete by tagging the founder-notification subject with
+    // [PRIORITY], so a high-volume support inbox sorts them visibly first.
+    // No SLA promised; this is the minimum implementation that doesn't
+    // make the marketing claim a lie.
+    let isPriority = false;
+    if (req.user?.id) {
+      try {
+        const { planAllows } = require('../lib/billing/plans');
+        const sub = get('SELECT plan FROM subscriptions WHERE user_id = ?', [req.user.id]);
+        if (sub && planAllows(sub.plan, 'priority_support')) isPriority = true;
+      } catch { /* best-effort — degrade to non-priority */ }
+    }
+
     // Email the founder. Fire-and-forget — submitter's UX shouldn't block
     // on SMTP. If email fails, the DB row still exists for follow-up via
     // the /owner inbox view.
@@ -123,7 +137,7 @@ router.post('/', supportLimiter, authOptional, async (req, res) => {
         from: process.env.SMTP_FROM || 'ReviewHub <noreply@reviewhub.review>',
         to: adminEmail,
         replyTo: email,
-        subject: `[SUPPORT][${cat.toUpperCase()}] ${subj}`,
+        subject: `${isPriority ? '[PRIORITY]' : '[SUPPORT]'}[${cat.toUpperCase()}] ${subj}`,
         text,
       }).catch((err) => {
         captureException(err, { route: 'support', op: 'notify-founder', ticketId: id });
