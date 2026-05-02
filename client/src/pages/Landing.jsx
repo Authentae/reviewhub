@@ -695,6 +695,7 @@ function Faq({ t }) {
     { q: t('landing.faq5Q'), a: t('landing.faq5A') },
     { q: t('landing.faq6Q'), a: t('landing.faq6A') },
     { q: t('landing.faq7Q'), a: t('landing.faq7A') },
+    { q: t('landing.faq8Q'), a: t('landing.faq8A') },
   ];
   const [openIdx, setOpenIdx] = useState(0);
   return (

@@ -93,6 +93,8 @@ const en = {
   'landing.faq6A': 'Yes — the Business plan supports up to 5 businesses under one account, each with separate reviews, templates, and analytics. Switch between locations from the Settings page. Agencies managing multiple clients use this feature heavily.',
   'landing.faq7Q': 'Do you work for cannabis / CBD / vape / age-restricted businesses?',
   'landing.faq7A': "Yes — our AI generates replies normally for cannabis dispensaries, CBD/hemp shops, vape shops, smoke shops, kratom retailers, adult-content adjacent businesses, etc. We don't pre-filter your replies for platform-policy compliance — that's between you and Google/Yelp/etc, who each have their own content rules for regulated industries. Healthcare and clinical practice are different — see our Acceptable Use Policy on regulated industries before subscribing if you handle protected health information.",
+  'landing.faq8Q': "I run a hotel / B&B / vacation rental — do you support Booking.com, Airbnb, Hostelworld, Agoda?",
+  'landing.faq8A': "Honest answer: not natively yet. Booking.com / Airbnb / Hostelworld / Agoda all have closed APIs that don't let third-party tools pull reviews. Today the workflow for hospitality is: (1) Google reviews sync automatically, (2) for the platform-locked sites, you can either CSV-import (manual export) OR set up an email-forward rule from your Booking.com / Airbnb new-review notifications to a magic@ address — we'd parse the email and ingest. The forward-parser is on our roadmap; if you're a hospitality buyer evaluating, email us at hello@reviewhub.review and we'll move it up. TripAdvisor is the same email-forward story.",
   'landing.faqFooter': 'Still have questions?',
   'landing.faqFooterCta': 'Try it free — no card needed →',
 
@@ -6611,6 +6613,7 @@ const th = {
   'nav.audit': 'รับ audit ฟรี',
   'nav.auditTitle': 'รับ audit รีวิว 10 อันฟรี เขียนเฉพาะร้านคุณ',
   'nav.langPickerLabel': 'ภาษา',
+  'nav.langVoteForMore': 'ไม่มีภาษาคุณ? โหวตได้ที่นี่ →',
 
   // Dashboard
   'dashboard.title': 'แดชบอร์ดรีวิว',

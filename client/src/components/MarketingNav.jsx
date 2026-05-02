@@ -169,6 +169,27 @@ export function RhLangPicker() {
               </button>
             </li>
           ))}
+          {/* "Don't see your language?" deep-link to support form. Persona
+              feedback (Tariq / Bayu / Marek / Aino) repeatedly: 13 languages
+              we don't have are deal-breakers. Giving them a one-click way
+              to vote = converts a bounce into a signal. */}
+          <li className="rh-lang-vote">
+            <a
+              href="/support?type=feature"
+              className="rh-lang-vote-link"
+              style={{
+                display: 'block',
+                padding: '8px 12px',
+                fontSize: 12,
+                opacity: 0.75,
+                borderTop: '1px solid var(--rh-line, #e6dfce)',
+                marginTop: 4,
+              }}
+              onClick={() => setOpen(false)}
+            >
+              {t('nav.langVoteForMore', 'Don\'t see yours? Vote here →')}
+            </a>
+          </li>
         </ul>
       )}
     </div>

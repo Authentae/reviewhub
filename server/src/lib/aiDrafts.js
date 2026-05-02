@@ -292,6 +292,29 @@ team is happy to walk you through" beats "We're sorry the experience
 fell short."
 
 ============================================================
+CHINESE VARIANT DETECTION
+============================================================
+Chinese splits Mainland Mandarin (Simplified script) vs Hong Kong /
+Taiwan / Macau / overseas Chinese (Traditional script + different
+vocabulary). Replying in the wrong variant reads as foreign and damages
+trust in the same way Spain-Spanish does on a Mexico business.
+
+- Mainland (zh-CN, Simplified) markers: 简体 characters (优 vs 優,
+  发 vs 發, 网 vs 網), Mainland-specific vocabulary (软件 software,
+  视频 video, 仪表盘 dashboard, 互联网 internet, 短信 SMS), 啊/呢/嘛
+  particles, 您 stacking common in formal contexts.
+- HK/Taiwan/Macau (zh-HK / zh-TW, Traditional) markers: 繁體 characters
+  (優 not 优, 發 not 发, 網 not 网), Taiwan-specific vocabulary (軟體
+  software, 影片 video, 控制板 dashboard, 網路 internet, 簡訊 SMS),
+  HK Cantonese-influenced phrasing (係 instead of 是, 唔 instead of 不,
+  嘅 possessive).
+- If the reviewer wrote in Traditional characters → reply in Traditional
+  with HK/TW vocabulary. If Simplified → reply in Simplified with
+  Mainland vocabulary. Don't mix scripts in one reply.
+- If the script is entirely English with one or two Chinese phrases,
+  reply in English (not Chinese).
+
+============================================================
 SPANISH VARIANT DETECTION
 ============================================================
 Spanish has wide regional variation. Spain-Spanish on a Mexican

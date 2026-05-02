@@ -323,14 +323,38 @@ export default function ReplyGeneratorTool() {
             {(() => {
               const text = form.review_text;
               if (!text || text.length < 10) return null;
-              const detected =
+              // Script-based detection (cheap, works for non-Latin scripts).
+              const scriptDetected =
                 /[Ѐ-ӿ]/.test(text) ? 'Russian / Cyrillic' :
                 /[؀-ۿ]/.test(text) ? 'Arabic' :
                 /[֐-׿]/.test(text) ? 'Hebrew' :
                 /[ऀ-ॿ]/.test(text) ? 'Hindi / Devanagari' :
+                /[ঀ-৿]/.test(text) ? 'Bengali' :
                 /[຀-໿]/.test(text) ? 'Lao' :
                 /[ក-៿]/.test(text) ? 'Khmer' :
+                /[က-႟]/.test(text) ? 'Burmese' :
                 null;
+              // Latin-script word-list detection — catches Indonesian / Polish /
+              // Finnish / Swedish / Vietnamese / Turkish / Tagalog / Norwegian /
+              // Danish / etc that share the alphabet with our 5 supported Latin
+              // languages (en/es/fr/de/it/pt). For each language we look for 3-5
+              // high-frequency function words; >=2 hits = strong signal.
+              // Persona-driven coverage — these are the 8 languages most-asked
+              // for by users testing our /tools/review-reply-generator.
+              const lower = ' ' + text.toLowerCase() + ' ';
+              const wordHit = (words) => words.filter(w => lower.includes(' ' + w + ' ')).length;
+              const latinDetected =
+                wordHit(['yang', 'saya', 'anda', 'tidak', 'untuk']) >= 2 ? 'Indonesian / Bahasa' :
+                wordHit(['się', 'jest', 'nie', 'tak', 'oraz', 'również']) >= 2 ? 'Polish' :
+                wordHit(['että', 'olen', 'ovat', 'mutta', 'vain', 'hyvä']) >= 2 ? 'Finnish' :
+                wordHit(['och', 'att', 'inte', 'jag', 'med', 'för']) >= 2 ? 'Swedish' :
+                wordHit(['og', 'ikke', 'jeg', 'meget', 'godt', 'rigtig']) >= 2 ? 'Danish' :
+                wordHit(['og', 'ikke', 'jeg', 'veldig', 'godt', 'mye']) >= 2 ? 'Norwegian' :
+                wordHit(['không', 'rất', 'của', 'được', 'và', 'cảm']) >= 2 ? 'Vietnamese' :
+                wordHit(['ve', 'için', 'ama', 'çok', 'değil', 'bir']) >= 2 ? 'Turkish' :
+                wordHit(['ang', 'ng', 'sa', 'ako', 'mga', 'po']) >= 2 ? 'Tagalog / Filipino' :
+                null;
+              const detected = scriptDetected || latinDetected;
               if (!detected) return null;
               return (
                 <div className="mt-2 text-xs px-3 py-2 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/50 text-amber-900 dark:text-amber-100">
