@@ -119,6 +119,21 @@ X-ReviewHub-Signature: sha256=...
               ? 'ลายเซ็น HMAC SHA-256 ใน X-ReviewHub-Signature — ตรวจสอบก่อนเชื่อ payload'
               : 'HMAC SHA-256 signature in X-ReviewHub-Signature. Verify before trusting the payload (the secret is shown once when you create the webhook).'}
           </p>
+          <pre style={{ background: '#1d242c', color: '#e6dfce', padding: 16, borderRadius: 8, overflowX: 'auto', fontSize: 13, marginTop: 12 }}>
+{`// Node.js — verify the signature before processing
+const crypto = require('crypto');
+
+function verify(rawBody, headerValue, secret) {
+  const expected = 'sha256=' + crypto
+    .createHmac('sha256', secret)
+    .update(rawBody)
+    .digest('hex');
+  return crypto.timingSafeEqual(
+    Buffer.from(expected),
+    Buffer.from(headerValue || '')
+  );
+}`}
+          </pre>
         </section>
 
         <section className="mb-10">
