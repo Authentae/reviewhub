@@ -234,4 +234,34 @@ describe('webhooks', () => {
     );
     assert.strictEqual(deliveries.length, 1, `expected exactly 1 delivery row, got ${deliveries.length}`);
   });
+
+  // ── secret rotation ──────────────────────────────────────────────────────
+
+  test('POST /api/webhooks/:id/rotate returns a new secret different from the old one', async () => {
+    const u = await makeUserWithBusiness();
+    const create = await request(u.app || (await getAgent())).post('/api/webhooks')
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({ url: 'https://example.com/rotate-test' });
+    assert.strictEqual(create.status, 201);
+    const oldSecret = create.body.secret;
+
+    const rotate = await request(await getAgent()).post(`/api/webhooks/${create.body.id}/rotate`)
+      .set('Authorization', `Bearer ${u.token}`);
+    assert.strictEqual(rotate.status, 200);
+    assert.ok(typeof rotate.body.secret === 'string' && rotate.body.secret.length > 0);
+    assert.notStrictEqual(rotate.body.secret, oldSecret, 'rotated secret must differ');
+    assert.ok(rotate.body.rotated_at, 'response must include rotated_at timestamp');
+  });
+
+  test('POST /api/webhooks/:id/rotate rejects another user', async () => {
+    const owner = await makeUserWithBusiness();
+    const other = await makeUserWithBusiness();
+    const create = await request(await getAgent()).post('/api/webhooks')
+      .set('Authorization', `Bearer ${owner.token}`)
+      .send({ url: 'https://example.com/rotate-cross' });
+
+    const rotate = await request(await getAgent()).post(`/api/webhooks/${create.body.id}/rotate`)
+      .set('Authorization', `Bearer ${other.token}`);
+    assert.strictEqual(rotate.status, 404);
+  });
 });

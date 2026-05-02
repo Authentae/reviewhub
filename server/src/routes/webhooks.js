@@ -131,6 +131,25 @@ router.put('/:id', webhookLimiter, (req, res) => {
   }
 });
 
+// POST /api/webhooks/:id/rotate — rotate the signing secret for this webhook.
+// Returns the NEW secret in the response (this is the only place the new
+// secret is ever shown — same "show-once" contract as creation). Useful when
+// a user lost the secret, suspects compromise, or is doing routine rotation.
+router.post('/:id/rotate', webhookLimiter, (req, res) => {
+  try {
+    const whId = parseId(req.params.id);
+    if (!whId) return res.status(400).json({ error: 'Invalid webhook ID' });
+    const hook = get('SELECT id FROM webhooks WHERE id = ? AND user_id = ?', [whId, req.user.id]);
+    if (!hook) return res.status(404).json({ error: 'Webhook not found' });
+    const secret = randomBytes(24).toString('hex');
+    run('UPDATE webhooks SET secret = ? WHERE id = ?', [secret, hook.id]);
+    res.json({ id: hook.id, secret, rotated_at: new Date().toISOString() });
+  } catch (err) {
+    captureException(err, { route: 'webhooks' });
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // DELETE /api/webhooks/:id
 router.delete('/:id', webhookLimiter, (req, res) => {
   try {
