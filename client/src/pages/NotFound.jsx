@@ -35,6 +35,15 @@ export default function NotFound() {
           <Link to="/" className="btn-secondary">{t('notFound.goHome')}</Link>
           {loggedIn && <Link to="/dashboard" className="btn-primary">{t('notFound.goDashboard')}</Link>}
         </div>
+        {/* Stale-link recovery: users following an old link from a docs
+            page or a search-engine result need a way to report it without
+            having to navigate to find /support. */}
+        <p className="mt-8 text-sm text-gray-400 dark:text-gray-500">
+          {t('notFound.brokenLink', 'Followed a broken link? ')}
+          <Link to="/support" className="underline hover:text-gray-600 dark:hover:text-gray-300">
+            {t('notFound.brokenLinkCta', 'Let us know')}
+          </Link>
+        </p>
       </main>
     </div>
   );
