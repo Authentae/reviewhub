@@ -98,15 +98,25 @@ export default function BillingSection({ subscription, onRefresh }) {
             )}
           </div>
           {!isFree && (
-            <button
-              type="button"
-              onClick={handleManage}
-              disabled={busy}
-              aria-busy={busy}
-              className="btn-secondary text-sm disabled:opacity-60"
-            >
-              {busy ? t('billing.loading') : t('billing.manageBilling')}
-            </button>
+            <div className="flex flex-col items-end gap-1">
+              <button
+                type="button"
+                onClick={handleManage}
+                disabled={busy}
+                aria-busy={busy}
+                className="btn-secondary text-sm disabled:opacity-60"
+              >
+                {busy ? t('billing.loading') : t('billing.manageBilling')}
+              </button>
+              {/* Set expectations BEFORE the user clicks through to LS's
+                  hosted portal — the portal itself is bare-bones and won't
+                  reassure them about post-cancel data retention or the
+                  refund window. Persona testers consistently asked these
+                  two questions before touching the cancel button. */}
+              <p className="text-[11px] text-gray-400 dark:text-gray-500 max-w-[200px] text-right leading-tight">
+                {t('billing.manageHint', 'Cancel, downgrade, or update card. Your data stays accessible after cancellation; export anytime.')}
+              </p>
+            </div>
           )}
         </div>
 
