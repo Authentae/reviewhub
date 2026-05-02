@@ -7720,7 +7720,7 @@ const th = {
   'landing.plan.businessSub': 'สำหรับเชน, เอเจนซี และโรงแรมที่มีหลายสาขา/หลายอาคาร',
   'landing.plan.business1': 'ทุกอย่างใน Pro',
   'landing.plan.business2': 'สูงสุด 5 ร้าน',
-  'landing.plan.business3': 'API + webhook (Zapier / Slack / n8n)',
+  'landing.plan.business3': 'API + webhook (Zapier, n8n, custom)',
   'landing.plan.business4': 'ซัพพอร์ตด่วน',
   'landing.plan.chooseBusiness': 'เลือก Business · $59/เดือน',
   'landing.plan.starterCallout': 'อยากได้แค่ฟีเจอร์พื้นฐาน + แจ้งเตือนอีเมล? ',

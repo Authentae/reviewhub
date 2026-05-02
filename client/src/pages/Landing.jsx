@@ -664,7 +664,7 @@ function Pricing() {
               <li>
                 <Check />
                 <Link to="/api-docs" style={{ textDecoration: 'underline', textUnderlineOffset: 2 }}>
-                  {t('landing.plan.business3', 'API + webhooks (Zapier / Slack / n8n)')}
+                  {t('landing.plan.business3', 'API + webhooks (Zapier, n8n, custom)')}
                 </Link>
               </li>
               <li><Check />{t('landing.plan.business4', 'Priority support')}</li>
