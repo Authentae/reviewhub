@@ -228,7 +228,7 @@ const en = {
   'review.aiQuotaBadge': '{n} AI left',
   'review.aiQuotaTitle': '{used} of {max} AI drafts used this month',
   'review.aiQuotaExhausted': 'You\'ve used all {max} AI drafts this month.',
-  'review.aiQuotaExhaustedHint': 'Type manually, pick a template, or upgrade for unlimited drafts.',
+  'review.aiQuotaExhaustedHint': 'You can keep typing replies manually — quota only limits AI drafts. Or upgrade for unlimited drafts.',
   'review.upgrade': 'Upgrade',
 
   // Billing: AI quota meter
@@ -7293,7 +7293,7 @@ const th = {
   'review.aiQuotaBadge': 'เหลือ {n} ครั้ง',
   'review.aiQuotaTitle': 'ใช้ร่าง AI ไปแล้ว {used} จาก {max} ครั้งในเดือนนี้',
   'review.aiQuotaExhausted': 'คุณใช้ร่าง AI ครบ {max} ครั้งในเดือนนี้แล้ว',
-  'review.aiQuotaExhaustedHint': 'พิมพ์เอง เลือกเทมเพลต หรืออัปเกรดเพื่อใช้ไม่จำกัด',
+  'review.aiQuotaExhaustedHint': 'ตอบรีวิวด้วยตัวเองได้ตามปกติ — โควต้าจำกัดเฉพาะ AI ร่างเท่านั้น หรืออัปเกรดเพื่อใช้ AI ไม่จำกัด',
   'review.upgrade': 'อัปเกรด',
 
   // Bulk actions in dashboard — confirmation dialogs are blocking, must be Thai
