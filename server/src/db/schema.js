@@ -414,6 +414,13 @@ function initSchema() {
   migrateAddColumn('subscriptions', 'ai_drafts_used', 'INTEGER NOT NULL DEFAULT 0');
   migrateAddColumn('subscriptions', 'ai_drafts_period_start', 'TEXT DEFAULT NULL');
   migrateAddColumn('businesses', 'widget_enabled', 'INTEGER NOT NULL DEFAULT 0');
+  // Per-business AI reply tone preference. NULL = use default (warm). Other
+  // valid values steered by the AI prompt: 'casual', 'warm', 'formal'.
+  // Persona walkthroughs surfaced strong demand from formal-register
+  // businesses (notaries, fine-dining, healthcare) and casual-register ones
+  // (food trucks, surf schools, indie bookshops) — the default warm
+  // register doesn't fit either end well.
+  migrateAddColumn('businesses', 'reply_tone', 'TEXT DEFAULT NULL');
   migrateAddColumn('reviews', 'pinned', 'INTEGER NOT NULL DEFAULT 0');
   migrateAddColumn('auto_rules', 'match_keywords', 'TEXT DEFAULT NULL');
   migrateAddColumn('reviews', 'flagged', 'INTEGER NOT NULL DEFAULT 0');

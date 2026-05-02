@@ -1236,7 +1236,16 @@ function isJunkReviewerName(raw) {
   return false;
 }
 
-function buildUserMessage({ review, businessName, preferredLang }) {
+// Tone steering. Owner picks a register in Settings; we translate that into a
+// short, prescriptive line that joins the user message. The default (warm) is
+// a no-op — the SYSTEM_PROMPT already lands there.
+const TONE_LINES = {
+  casual: 'Tone: extra casual — short fragments, contractions, no honorifics, allow light slang. Like texting a friend who came in.',
+  warm: null, // default — no extra instruction needed
+  formal: 'Tone: formal register — full sentences, no contractions, address the reviewer by Mr./Ms./san/Mrs. or culturally-equivalent honorific where natural. No slang. Suitable for fine-dining, notaries, healthcare, professional services.',
+};
+
+function buildUserMessage({ review, businessName, preferredLang, replyTone }) {
   // Use the registry's display label so the AI sees "Wongnai" / "Tabelog
   // (食べログ)" / "Dianping (大众点评)" instead of bare lowercase IDs —
   // helps the model adapt tone to the platform's audience and convention.
@@ -1267,6 +1276,10 @@ function buildUserMessage({ review, businessName, preferredLang }) {
     ? Math.round(ratingNum)
     : 5;
 
+  const toneLine = replyTone && Object.prototype.hasOwnProperty.call(TONE_LINES, replyTone)
+    ? TONE_LINES[replyTone]
+    : null;
+
   return [
     `Business: ${businessName || 'this business'}`,
     `Platform: ${platformLabel}`,
@@ -1274,6 +1287,7 @@ function buildUserMessage({ review, businessName, preferredLang }) {
     `Rating: ${safeRating} out of 5 stars`,
     `Review text: ${review.review_text ? `"${review.review_text}"` : '(none provided)'}`,
     langLine,
+    toneLine,
     '',
     'Draft a response.',
   ].filter(Boolean).join('\n');
@@ -1283,7 +1297,7 @@ function buildUserMessage({ review, businessName, preferredLang }) {
 // and gets the module-level lazily-initialised client. `preferredLang` (e.g.
 // 'th', 'ja') overrides the model's auto-language-detection AND picks the
 // matching template for the fallback path.
-async function generateDraft({ review, businessName, preferredLang }, { client } = {}) {
+async function generateDraft({ review, businessName, preferredLang, replyTone }, { client } = {}) {
   const anthropic = client ?? getDefaultClient();
 
   if (!anthropic) {
@@ -1313,7 +1327,7 @@ async function generateDraft({ review, businessName, preferredLang }, { client }
         },
       ],
       messages: [
-        { role: 'user', content: buildUserMessage({ review, businessName, preferredLang }) },
+        { role: 'user', content: buildUserMessage({ review, businessName, preferredLang, replyTone }) },
       ],
     });
 

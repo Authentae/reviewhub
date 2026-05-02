@@ -124,7 +124,7 @@ router.put('/:id', bizMutateLimiter, (req, res) => {
     const biz = get('SELECT * FROM businesses WHERE id = ? AND user_id = ?', [bizId, req.user.id]);
     if (!biz) return res.status(404).json({ error: 'Business not found' });
 
-    const { business_name, google_place_id, yelp_business_id, facebook_page_id, ownership_attested, widget_enabled } = req.body;
+    const { business_name, google_place_id, yelp_business_id, facebook_page_id, ownership_attested, widget_enabled, reply_tone } = req.body;
     const fields = [];
     const params = [];
     // Side effect tracking: when a platform id is set/cleared, mirror it in
@@ -161,6 +161,18 @@ router.put('/:id', bizMutateLimiter, (req, res) => {
     if (widget_enabled !== undefined) {
       fields.push('widget_enabled = ?');
       params.push(widget_enabled ? 1 : 0);
+    }
+    if (reply_tone !== undefined) {
+      // Allowlist guards against arbitrary text getting injected into the AI
+      // prompt steering line. Null/empty resets to the default warm voice.
+      const VALID_TONES = ['casual', 'warm', 'formal'];
+      if (reply_tone === null || reply_tone === '') {
+        fields.push('reply_tone = ?'); params.push(null);
+      } else if (typeof reply_tone === 'string' && VALID_TONES.includes(reply_tone)) {
+        fields.push('reply_tone = ?'); params.push(reply_tone);
+      } else {
+        return res.status(400).json({ error: `reply_tone must be one of: ${VALID_TONES.join(', ')}` });
+      }
     }
 
     if (fields.length === 0) return res.json({ success: true });

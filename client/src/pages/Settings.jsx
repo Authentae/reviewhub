@@ -1166,6 +1166,77 @@ function ImportSection() {
 }
 
 // ─── Widget Section sub-component ────────────────────────────────────────────
+// AI reply-tone selector. Per-business preference that steers the AI draft
+// system prompt at generation time. NULL value = default warm voice.
+function ReplyToneSection({ business, onUpdate }) {
+  const { t } = useI18n();
+  const toast = useToast();
+  const [saving, setSaving] = useState(false);
+  const current = business.reply_tone || 'warm';
+
+  const TONES = [
+    { value: 'casual', labelKey: 'tone.casual', label: 'Casual', descKey: 'tone.casualDesc', desc: 'Short, friendly, like texting a regular' },
+    { value: 'warm',   labelKey: 'tone.warm',   label: 'Warm (default)', descKey: 'tone.warmDesc', desc: 'Approachable, contractions, owner-voice' },
+    { value: 'formal', labelKey: 'tone.formal', label: 'Formal', descKey: 'tone.formalDesc', desc: 'Full sentences, honorifics, professional services' },
+  ];
+
+  async function pick(value) {
+    if (value === current) return;
+    setSaving(true);
+    try {
+      // Send null to reset to default; we use 'warm' as the UI label for null.
+      const apiValue = value === 'warm' ? null : value;
+      await api.put(`/businesses/${business.id}`, { reply_tone: apiValue });
+      onUpdate({ reply_tone: apiValue });
+      toast(t('tone.saved', 'AI reply tone updated'), 'success');
+    } catch (err) {
+      toast(err?.response?.data?.error || t('tone.saveFailed', 'Could not save tone'), 'error');
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <section className="mb-6" aria-labelledby="settings-tone">
+      <h2 id="settings-tone" className="text-base font-semibold text-gray-700 dark:text-gray-300 mb-1">
+        {t('tone.title', 'AI reply tone')}
+      </h2>
+      <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
+        {t('tone.subtitle', 'How AI-drafted replies should sound. You can always edit before sending.')}
+      </p>
+      <div className="card p-4">
+        <div role="radiogroup" aria-labelledby="settings-tone" className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          {TONES.map(tone => {
+            const selected = current === tone.value;
+            return (
+              <button
+                key={tone.value}
+                type="button"
+                role="radio"
+                aria-checked={selected}
+                disabled={saving}
+                onClick={() => pick(tone.value)}
+                className={`text-left rounded-lg border-2 p-3 transition-colors ${
+                  selected
+                    ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20'
+                    : 'border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500'
+                } disabled:opacity-50`}
+              >
+                <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                  {t(tone.labelKey, tone.label)}
+                </div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                  {t(tone.descKey, tone.desc)}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function WidgetSection({ business, onUpdate }) {
   const { t } = useI18n();
   const toast = useToast();
@@ -2995,6 +3066,9 @@ export default function Settings() {
 
         {/* CSV Import */}
         <ImportSection />
+
+        {/* AI reply-tone selector */}
+        {business && <ReplyToneSection business={business} onUpdate={(updated) => setBusiness(b => ({ ...b, ...updated }))} />}
 
         {/* Review Widget */}
         {business && <WidgetSection business={business} onUpdate={(updated) => setBusiness(b => ({ ...b, ...updated }))} />}

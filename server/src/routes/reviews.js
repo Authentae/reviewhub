@@ -1458,6 +1458,7 @@ router.get('/:id/draft', draftLimiter, async (req, res) => {
         review,
         businessName: business.business_name,
         preferredLang,
+        replyTone: business.reply_tone || null,
       }));
     } catch (err) {
       // Unexpected throw — refund the slot so the error doesn't cost the user a draft
