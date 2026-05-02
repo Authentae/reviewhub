@@ -344,6 +344,18 @@ const en = {
   'settings.notif.followUpOff': 'Off',
   'settings.notif.followUpDays': 'After {n} days',
 
+  // AI reply tone — per-business voice preference
+  'tone.title': 'AI reply tone',
+  'tone.subtitle': 'How AI-drafted replies should sound. You can always edit before sending.',
+  'tone.casual': 'Casual',
+  'tone.casualDesc': 'Short, friendly, like texting a regular',
+  'tone.warm': 'Warm (default)',
+  'tone.warmDesc': 'Approachable, contractions, owner-voice',
+  'tone.formal': 'Formal',
+  'tone.formalDesc': 'Full sentences, honorifics, professional services',
+  'tone.saved': 'AI reply tone updated',
+  'tone.saveFailed': 'Could not save tone',
+
   // Auth
   'auth.createAccount': 'Create your account',
   'auth.signIn': 'Sign in',
@@ -7558,6 +7570,18 @@ const th = {
   'settings.notif.followUpSub': 'ส่งซ้ำหนึ่งครั้งให้ลูกค้าที่ยังไม่คลิกลิงก์โดยอัตโนมัติ',
   'settings.notif.followUpOff': 'ปิด',
   'settings.notif.followUpDays': 'หลังจาก {n} วัน',
+
+  // AI reply tone
+  'tone.title': 'โทนเสียงของ AI ในการตอบ',
+  'tone.subtitle': 'AI ควรตอบรีวิวด้วยโทนแบบไหน คุณแก้ไขก่อนส่งได้เสมอ',
+  'tone.casual': 'แบบสบาย ๆ',
+  'tone.casualDesc': 'สั้น เป็นกันเอง เหมือนคุยกับลูกค้าประจำ',
+  'tone.warm': 'แบบอบอุ่น (ค่าเริ่มต้น)',
+  'tone.warmDesc': 'เป็นมิตร ใช้ภาษาไม่ทางการเกินไป น้ำเสียงเจ้าของร้าน',
+  'tone.formal': 'แบบทางการ',
+  'tone.formalDesc': 'ประโยคสมบูรณ์ คำสุภาพ เหมาะกับธุรกิจวิชาชีพ',
+  'tone.saved': 'อัปเดตโทนเสียง AI แล้ว',
+  'tone.saveFailed': 'บันทึกโทนเสียงไม่สำเร็จ',
   'settings.unsubbedDigest': 'คุณยกเลิกการรับอีเมลสรุปประจำสัปดาห์แล้ว เปิดใช้งานใหม่ได้ด้านล่างเมื่อต้องการ',
   'settings.googleConnected': 'เชื่อมต่อ Google แล้ว เราจะเริ่มดึงรีวิวภายในไม่กี่นาที',
   'settings.googleFailed': 'เชื่อมต่อ Google ไม่สำเร็จ ({reason}) กรุณาลองใหม่',
