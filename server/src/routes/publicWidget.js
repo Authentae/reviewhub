@@ -107,6 +107,8 @@ router.get('/widget/:id/badge', widgetLimiter, (req, res) => {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="robots" content="noindex,nofollow">
 <title>${safeName} Reviews</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
@@ -138,6 +140,11 @@ router.get('/widget/:id/badge', widgetLimiter, (req, res) => {
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.setHeader('Cache-Control', 'public, max-age=300');
+  // Don't index the per-business badge URLs themselves. Customer sites
+  // embedding them link to /widget/123/badge, and without this header Google
+  // would crawl + index thousands of low-value badge pages, diluting our
+  // real page-rank for the actual content (Landing, Pricing, Blog).
+  res.setHeader('X-Robots-Tag', 'noindex, nofollow');
   // Allow iframe embedding from any origin — the badge is the entire
   // point of this endpoint, customers paste it on their own websites.
   // Two headers are needed because modern browsers prefer CSP's
