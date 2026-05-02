@@ -106,6 +106,14 @@ export default function Support() {
               <strong>{ticketId}</strong>
             </p>
           )}
+          {/* Spam-folder hint — same friction surfaced in batch 2 personas:
+              founder reply lands in Promotions/Junk on first delivery and
+              users assume nobody answered. */}
+          <p className="text-xs mt-3" style={{ color: 'var(--rh-ink-soft, #9aa3ac)' }}>
+            {isThai
+              ? 'ถ้าไม่เห็นภายในไม่กี่นาที ลองดูในโฟลเดอร์สแปม / โปรโมชั่นด้วยนะ'
+              : 'If you don\'t see it within a few minutes, check your spam / promotions folder.'}
+          </p>
           <Link
             to="/"
             className="inline-block mt-8 px-6 py-3 rounded-xl font-semibold"
