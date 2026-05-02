@@ -1233,6 +1233,11 @@ function isJunkReviewerName(raw) {
   if (/^(user|usr|anon|guest|reviewer|customer)[\d_\-]+$/i.test(s)) return true;
   // Looks like an email address:
   if (/@/.test(s) && /\./.test(s)) return true;
+  // Pure-emoji or pure-symbol "names" — owners can't greet "⭐⭐⭐⭐⭐," or
+  // "❤️" without sounding bot-like. Detected by stripping all letters/digits
+  // (in any script — \p{L} covers CJK, Cyrillic, Devanagari, etc.) and
+  // checking nothing remains.
+  if (!/[\p{L}\p{N}]/u.test(s)) return true;
   return false;
 }
 
