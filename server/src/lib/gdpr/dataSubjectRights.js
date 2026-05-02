@@ -115,11 +115,17 @@ class DataSubjectRights {
     // backup schedule) and idempotent third-party notifications are moved
     // OUT of the transaction below — they don't need atomic guarantees.
     transaction((tx) => {
-      // 1. Personal data erasure (sync DB writes)
-      this.erasePersonalData(tx, userId, erasureLog);
-
-      // 2. Anonymize user-generated content (sync DB writes)
+      // 1. Anonymize user-generated content FIRST — the user-id cascade
+      // from the DELETE in step 2 SETs NULL on support_tickets.user_id,
+      // which would orphan the email + message columns AND make our
+      // WHERE user_id = ? match nothing. Scrub identifiers before the
+      // FK is cleared.
       this.anonymizeUserContent(tx, userId, erasureLog);
+
+      // 2. Personal data erasure (sync DB writes) — DELETE FROM users
+      // cascades via FK to most child tables; survivors are handled by
+      // anonymizeUserContent above.
+      this.erasePersonalData(tx, userId, erasureLog);
 
       // 3. Store minimal erasure record for legal compliance.
       // completed_at is the ACTUAL completion timestamp (now) — was
@@ -176,6 +182,21 @@ class DataSubjectRights {
           customer_email = 'erased@gdpr.local'
       WHERE business_id IN (SELECT id FROM businesses WHERE user_id = ?)
     `, [userId]);
+
+    // Anonymize support tickets — the FK constraint already SET NULL's the
+    // user_id on user delete, but the email + message columns still hold
+    // identifiable content (the user typed it themselves). Scrub them so
+    // the founder still has the ticket-resolution history but no PII.
+    // Pre-fix this was a GDPR-completeness gap: a user invoking erasure
+    // would still have their submitted-support-ticket emails + bodies on
+    // file indefinitely.
+    tx.run(`
+      UPDATE support_tickets
+      SET email = 'erased@gdpr.local',
+          message = '[message erased on user account deletion]'
+      WHERE user_id = ?
+    `, [userId]);
+    log.data_categories.push('support_tickets_anonymized');
 
     log.data_categories.push('review_requests_anonymized');
     log.retention_justifications.push('Business analytics and fraud prevention');
