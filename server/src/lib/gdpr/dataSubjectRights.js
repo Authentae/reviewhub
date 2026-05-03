@@ -84,6 +84,20 @@ class DataSubjectRights {
       api_keys: all(`
         SELECT name, key_prefix, created_at, last_used_at
         FROM api_keys WHERE user_id = ?
+      `, [userId]),
+
+      // Outbound audit-preview history. Owner_user_id ties them to this
+      // user. The reviews_json field contains a third party's (the
+      // prospect's) public Google reviews, which we don't surface in
+      // export — that's not the user's personal data, that's data this
+      // user collected ABOUT a prospect. We export metadata only:
+      // business name they audited, when, share token, view stats. The
+      // ON DELETE CASCADE on the FK auto-removes these rows during
+      // erasure (no anonymization needed).
+      outbound_audits: all(`
+        SELECT id, business_name, share_token, view_count,
+               first_viewed_at, last_viewed_at, created_at, expires_at
+        FROM audit_previews WHERE owner_user_id = ?
       `, [userId])
     };
   }

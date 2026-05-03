@@ -234,6 +234,27 @@ function initSchema() {
     CREATE INDEX IF NOT EXISTS idx_support_status ON support_tickets(status, created_at DESC);
     CREATE INDEX IF NOT EXISTS idx_support_user ON support_tickets(user_id);
 
+    -- audit_previews: outbound demo-first audits the founder generates and
+    -- shares with prospects. Each row holds a snapshot of pasted-in reviews
+    -- + AI-drafted replies, accessible at /audit-preview/<share_token>
+    -- without auth. Rows expire after 30 days (nightly cleanup) so dead
+    -- prospect URLs don't accumulate forever and so prospects can't share
+    -- the audit URL infinitely.
+    CREATE TABLE IF NOT EXISTS audit_previews (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      owner_user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      business_name TEXT NOT NULL,
+      reviews_json TEXT NOT NULL,
+      share_token TEXT UNIQUE NOT NULL,
+      view_count INTEGER NOT NULL DEFAULT 0,
+      first_viewed_at TEXT,
+      last_viewed_at TEXT,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      expires_at TEXT NOT NULL DEFAULT (datetime('now', '+30 days'))
+    );
+    CREATE INDEX IF NOT EXISTS idx_audit_token ON audit_previews(share_token);
+    CREATE INDEX IF NOT EXISTS idx_audit_owner ON audit_previews(owner_user_id, created_at DESC);
+
     CREATE TABLE IF NOT EXISTS review_requests (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       business_id INTEGER NOT NULL REFERENCES businesses(id) ON DELETE CASCADE,

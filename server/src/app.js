@@ -298,6 +298,7 @@ function createApp() {
   app.use('/api/billing', require('./routes/billing'));
   app.use('/api/apikeys', require('./routes/apiKeys'));
   app.use('/api/support', require('./routes/support'));
+  app.use('/api/audit-previews', require('./routes/auditPreviews'));
   app.use('/api/extension', require('./routes/extension'));
   app.use('/api/gdpr', require('./routes/gdpr'));
   app.use('/api/owner', require('./routes/owner'));

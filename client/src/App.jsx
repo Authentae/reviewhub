@@ -18,6 +18,11 @@ const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Analytics = lazy(() => import('./pages/Analytics'));
 const Settings = lazy(() => import('./pages/Settings'));
 const Pricing = lazy(() => import('./pages/Pricing'));
+// Outbound audits — founder-only tool for the demo-first outreach loop.
+// Paste a prospect's reviews → AI drafts replies → shareable URL to DM.
+const OutboundAudits = lazy(() => import('./pages/OutboundAudits'));
+// Public per-prospect view of an outbound audit. No auth, no signup.
+const AuditPreview = lazy(() => import('./pages/AuditPreview'));
 // Auth-adjacent but infrequently hit — keep them out of the main bundle
 const VerifyEmail = lazy(() => import('./pages/VerifyEmail'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
@@ -109,6 +114,8 @@ export default function App() {
         <Route path="/register" element={<PublicOnlyRoute><Register /></PublicOnlyRoute>} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+        <Route path="/outbound-audits" element={<PrivateRoute><OutboundAudits /></PrivateRoute>} />
+        <Route path="/audit-preview/:token" element={<AuditPreview />} />
         <Route path="/analytics" element={<PrivateRoute><Analytics /></PrivateRoute>} />
         <Route path="/review-requests" element={<PrivateRoute><ReviewRequests /></PrivateRoute>} />
         <Route path="/owner" element={<PrivateRoute><OwnerDashboard /></PrivateRoute>} />

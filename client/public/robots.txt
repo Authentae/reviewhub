@@ -9,6 +9,7 @@ Disallow: /dashboard
 Disallow: /settings
 Disallow: /analytics
 Disallow: /review-requests
+Disallow: /outbound-audits
 Disallow: /owner
 
 # Token-bearing landing pages. These URLs include single-use secrets
@@ -20,6 +21,10 @@ Disallow: /reset-password
 Disallow: /email-change
 Disallow: /unsubscribed
 Disallow: /confirm-erasure
+# Outbound audit share URLs are per-prospect signed links (48-char hex
+# tokens). The page also sets useNoIndex() so any crawl attempt won't
+# index it, but Disallow saves the crawl-budget round-trip.
+Disallow: /audit-preview
 
 # In-app auth flow — also blocked from indexing (login/register show on
 # the homepage anyway as buttons; no need for a dedicated indexed page).

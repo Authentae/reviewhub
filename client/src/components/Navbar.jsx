@@ -172,6 +172,7 @@ export default function Navbar() {
                 </Link>
                 <Link to="/analytics" className={isActive('/analytics') ? 'active' : ''} aria-current={isActive('/analytics') ? 'page' : undefined}>{t('nav.analytics')}</Link>
                 <Link to="/review-requests" className={isActive('/review-requests') ? 'active' : ''} aria-current={isActive('/review-requests') ? 'page' : undefined}>{t('nav.reviewRequests')}</Link>
+                <Link to="/outbound-audits" className={isActive('/outbound-audits') ? 'active' : ''} aria-current={isActive('/outbound-audits') ? 'page' : undefined}>{t('nav.outboundAudits', 'Outbound')}</Link>
                 <Link to="/owner" className={isActive('/owner') ? 'active' : ''} aria-current={isActive('/owner') ? 'page' : undefined}>{t('nav.owner', 'Owner')}</Link>
                 <Link to="/pricing" className={isActive('/pricing') ? 'active' : ''} aria-current={isActive('/pricing') ? 'page' : undefined}>{t('nav.pricing')}</Link>
                 {/* Settings lives in the user-avatar dropdown — see below.
