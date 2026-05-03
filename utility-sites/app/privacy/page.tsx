@@ -4,7 +4,7 @@ import { buildMetadata } from '@/lib/seo';
 export const metadata: Metadata = buildMetadata({
   slug: 'privacy',
   title: 'Privacy policy',
-  description: 'How Utility Tools handles cookies, analytics, ads, and your data.',
+  description: 'How Mathstub handles cookies, analytics, ads, and your data.',
 });
 
 export default function PrivacyPage() {
@@ -12,7 +12,7 @@ export default function PrivacyPage() {
     <main className="mx-auto max-w-3xl px-4 py-12 prose prose-gray dark:prose-invert">
       <h1>Privacy policy</h1>
       <p>
-        Utility Tools does not require an account to use our calculators. Inputs you
+        Mathstub does not require an account to use our calculators. Inputs you
         type stay in your browser and are never sent to our servers.
       </p>
 

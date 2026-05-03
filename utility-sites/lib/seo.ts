@@ -3,7 +3,7 @@ import { env } from './env';
 
 const FALLBACK_SITE_URL = 'http://localhost:3000';
 const PLACEHOLDER_PROD_URL = 'https://example.com';
-export const SITE_NAME = 'Utility Tools';
+export const SITE_NAME = 'Mathstub';
 
 let warnedMissingProd = false;
 

@@ -19,7 +19,7 @@ export default function OpengraphImage() {
           justifyContent: 'space-between',
         }}
       >
-        <div style={{ fontSize: 32, fontWeight: 600, color: '#60a5fa' }}>Utility Tools</div>
+        <div style={{ fontSize: 32, fontWeight: 600, color: '#60a5fa' }}>Mathstub</div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div style={{ fontSize: 72, fontWeight: 700, lineHeight: 1.05 }}>
             RSU Tax Shortfall Calculator

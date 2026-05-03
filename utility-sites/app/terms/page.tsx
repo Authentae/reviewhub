@@ -4,7 +4,7 @@ import { buildMetadata } from '@/lib/seo';
 export const metadata: Metadata = buildMetadata({
   slug: 'terms',
   title: 'Terms of use',
-  description: 'Terms of use for Utility Tools.',
+  description: 'Terms of use for Mathstub.',
 });
 
 export default function TermsPage() {
@@ -12,7 +12,7 @@ export default function TermsPage() {
     <main className="mx-auto max-w-3xl px-4 py-12 prose prose-gray dark:prose-invert">
       <h1>Terms of use</h1>
       <p>
-        By using Utility Tools, you agree to these terms. If you do not agree,
+        By using Mathstub, you agree to these terms. If you do not agree,
         please do not use the site.
       </p>
 
@@ -32,7 +32,7 @@ export default function TermsPage() {
 
       <h2>Limitation of liability</h2>
       <p>
-        Utility Tools and its authors are not liable for any direct, indirect,
+        Mathstub and its authors are not liable for any direct, indirect,
         incidental, or consequential damages arising from use of this site or
         reliance on its content.
       </p>

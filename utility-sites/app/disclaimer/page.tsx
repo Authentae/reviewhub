@@ -5,7 +5,7 @@ export const metadata: Metadata = buildMetadata({
   slug: 'disclaimer',
   title: 'Disclaimer',
   description:
-    'Information on Utility Tools is for educational purposes only and is not tax, legal, or financial advice.',
+    'Information on Mathstub is for educational purposes only and is not tax, legal, or financial advice.',
 });
 
 export default function DisclaimerPage() {
@@ -13,7 +13,7 @@ export default function DisclaimerPage() {
     <main className="mx-auto max-w-3xl px-4 py-12 prose prose-gray dark:prose-invert">
       <h1>Disclaimer</h1>
       <p>
-        The calculators and articles on Utility Tools are provided for
+        The calculators and articles on Mathstub are provided for
         educational and informational purposes only. They are not intended as,
         and do not constitute, tax, legal, accounting, investment, or other
         professional advice.
