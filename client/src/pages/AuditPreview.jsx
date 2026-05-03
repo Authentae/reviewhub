@@ -11,9 +11,26 @@ import useNoIndex from '../hooks/useNoIndex';
 // replies side-by-side. Mobile-first because owners open DMs on
 // phones.
 //
-// Single-column on mobile, two-column on desktop. No login wall, no
-// "sign up first" pop-up, no upsell modal — the article's whole
-// genius is "send the result, no friction." Honour that.
+// LOCKED TO LIGHT THEME. The founder may have dark mode set in the
+// dashboard, but this page is shown to PROSPECTS who never opted in
+// to anything. CSS vars (--rh-paper / --rh-ink / etc.) flip with the
+// founder's preference and produced unreadable dark-on-dark draft
+// text. Hardcoding literal hex values + colorScheme:'light' on the
+// root container makes the page render identically regardless of OS,
+// browser, or founder preference. Print-document treatment.
+const COLORS = {
+  paper: '#fbf8f1',     // warm cream background
+  ink: '#1d242c',       // dark ink for primary text
+  inkSoft: '#4a525a',   // muted dark for secondary text
+  inkDim: '#9aa3ac',    // dimmer muted for tertiary
+  ochre: '#c48a2c',     // brand accent for "REPLY SUGGESTIONS FOR" label
+  tealDeep: '#1e4d5e',  // brand teal for buttons and "Suggested reply" label
+  line: '#e6dfce',      // subtle border / divider
+  cardBg: '#ffffff',    // pure white card on cream paper
+  star: '#f59e0b',      // amber for filled stars
+  starEmpty: '#e5e7eb', // neutral for empty stars
+};
+
 export default function AuditPreview() {
   const { token } = useParams();
   const [state, setState] = useState({ status: 'loading', data: null, error: '' });
@@ -42,21 +59,32 @@ export default function AuditPreview() {
     return () => { cancelled = true; };
   }, [token]);
 
+  // Root style — applied to every state branch so loading/error/ok all
+  // honour the light-mode lock. colorScheme:'light' tells the browser
+  // not to auto-invert form controls, and the explicit background +
+  // color ensure no inheritance from the founder's dashboard theme.
+  const rootStyle = {
+    background: COLORS.paper,
+    color: COLORS.ink,
+    colorScheme: 'light',
+    minHeight: '100vh',
+  };
+
   if (state.status === 'loading') {
     return (
-      <div className="rh-design min-h-screen grid place-items-center px-4" style={{ background: 'var(--rh-paper)' }}>
-        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" aria-hidden="true" />
+      <div className="grid place-items-center px-4" style={rootStyle}>
+        <div className="w-10 h-10 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: COLORS.tealDeep, borderTopColor: 'transparent' }} aria-hidden="true" />
       </div>
     );
   }
 
   if (state.status === 'error') {
     return (
-      <div className="rh-design min-h-screen grid place-items-center px-4 py-12" style={{ background: 'var(--rh-paper)' }}>
+      <div className="grid place-items-center px-4 py-12" style={rootStyle}>
         <div className="max-w-md text-center">
           <p className="text-5xl mb-4" aria-hidden="true">🔗</p>
-          <h1 className="text-xl font-bold mb-2" style={{ color: 'var(--rh-ink)' }}>Preview not available</h1>
-          <p className="text-sm" style={{ color: 'var(--rh-ink-soft, #4a525a)' }}>{state.error}</p>
+          <h1 className="text-xl font-bold mb-2" style={{ color: COLORS.ink }}>Preview not available</h1>
+          <p className="text-sm" style={{ color: COLORS.inkSoft }}>{state.error}</p>
         </div>
       </div>
     );
@@ -66,18 +94,18 @@ export default function AuditPreview() {
   const totalDrafts = reviews.filter((r) => r.draft).length;
 
   return (
-    <div className="rh-design min-h-screen" style={{ background: 'var(--rh-paper)' }}>
+    <div style={rootStyle}>
       <main className="max-w-3xl mx-auto px-5 py-12 md:py-16">
         {/* Header — sets context immediately so the prospect doesn't
             wonder "wait, who is this and what am I looking at?" */}
         <header className="mb-10">
-          <p className="text-xs font-mono uppercase tracking-widest mb-2" style={{ color: 'var(--rh-ochre, #c48a2c)' }}>
+          <p className="text-xs font-mono uppercase tracking-widest mb-2" style={{ color: COLORS.ochre }}>
             Reply suggestions for
           </p>
-          <h1 className="text-3xl md:text-4xl font-bold mb-3" style={{ color: 'var(--rh-ink)', letterSpacing: '-0.02em' }}>
+          <h1 className="text-3xl md:text-4xl font-bold mb-3" style={{ color: COLORS.ink, letterSpacing: '-0.02em' }}>
             {business_name}
           </h1>
-          <p className="text-base leading-relaxed" style={{ color: 'var(--rh-ink-soft, #4a525a)' }}>
+          <p className="text-base leading-relaxed" style={{ color: COLORS.inkSoft }}>
             Hand-picked from your recent Google reviews — {totalDrafts} draft {totalDrafts === 1 ? 'reply' : 'replies'} ready
             to copy &amp; paste. No account needed; this page is just for
             you. Edit anything before publishing.
@@ -90,39 +118,39 @@ export default function AuditPreview() {
             <article
               key={i}
               className="rounded-2xl p-5 md:p-6"
-              style={{ background: '#fff', border: '1px solid var(--rh-line, #e6dfce)' }}
+              style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.line}` }}
             >
               {/* The review (what the customer wrote) */}
               <div className="mb-4">
                 <div className="flex items-center justify-between gap-3 mb-2 flex-wrap">
-                  <p className="text-sm font-semibold" style={{ color: 'var(--rh-ink)' }}>
+                  <p className="text-sm font-semibold" style={{ color: COLORS.ink }}>
                     {r.reviewer_name || 'Anonymous'}
                   </p>
-                  <span className="text-sm" style={{ color: '#f59e0b' }} aria-label={`${r.rating} stars`}>
+                  <span className="text-sm" style={{ color: COLORS.star }} aria-label={`${r.rating} stars`}>
                     {'★'.repeat(r.rating)}
-                    <span style={{ color: '#e5e7eb' }}>{'★'.repeat(5 - r.rating)}</span>
+                    <span style={{ color: COLORS.starEmpty }}>{'★'.repeat(5 - r.rating)}</span>
                   </span>
                 </div>
-                <p className="text-sm leading-relaxed whitespace-pre-wrap" style={{ color: 'var(--rh-ink-soft, #4a525a)' }}>
+                <p className="text-sm leading-relaxed whitespace-pre-wrap" style={{ color: COLORS.inkSoft }}>
                   {r.text}
                 </p>
               </div>
 
               {/* Divider */}
-              <div className="h-px my-4" style={{ background: 'var(--rh-line, #e6dfce)' }} />
+              <div className="h-px my-4" style={{ background: COLORS.line }} />
 
               {/* The drafted reply */}
               {r.draft ? (
                 <div>
                   <p
                     className="text-xs font-mono uppercase tracking-widest mb-2"
-                    style={{ color: 'var(--rh-teal-deep, #1e4d5e)' }}
+                    style={{ color: COLORS.tealDeep }}
                   >
                     Suggested reply
                   </p>
                   <p
                     className="text-sm leading-relaxed whitespace-pre-wrap"
-                    style={{ color: 'var(--rh-ink)' }}
+                    style={{ color: COLORS.ink }}
                   >
                     {r.draft}
                   </p>
@@ -131,20 +159,16 @@ export default function AuditPreview() {
                     onClick={async () => {
                       try {
                         await navigator.clipboard.writeText(r.draft);
-                        // Tiny inline confirmation — no toast library to
-                        // keep this page dependency-light. Just flash the
-                        // button text via setState would need a per-card
-                        // index; cheaper to use the title attr trick.
                       } catch { /* clipboard blocked, oh well */ }
                     }}
                     className="mt-3 inline-flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors"
-                    style={{ background: 'var(--rh-teal-deep, #1e4d5e)', color: '#fff' }}
+                    style={{ background: COLORS.tealDeep, color: '#fff' }}
                   >
                     Copy reply
                   </button>
                 </div>
               ) : (
-                <p className="text-xs italic" style={{ color: 'var(--rh-ink-soft, #9aa3ac)' }}>
+                <p className="text-xs italic" style={{ color: COLORS.inkDim }}>
                   Couldn't generate a draft for this one — usually means the review text was too short or in an unsupported language.
                 </p>
               )}
@@ -155,10 +179,10 @@ export default function AuditPreview() {
         {/* Footer — soft pitch, not a hard sell */}
         <footer
           className="mt-12 pt-8 border-t text-sm leading-relaxed"
-          style={{ borderColor: 'var(--rh-line, #e6dfce)', color: 'var(--rh-ink-soft, #4a525a)' }}
+          style={{ borderColor: COLORS.line, color: COLORS.inkSoft }}
         >
           <p className="mb-3">
-            <strong style={{ color: 'var(--rh-ink)' }}>How this got made:</strong>{' '}
+            <strong style={{ color: COLORS.ink }}>How this got made:</strong>{' '}
             ReviewHub pulls your reviews from Google (and 60+ other platforms),
             drafts replies in your voice, sends you an alert when a new review lands.
             You always edit before publishing — nothing posts without your approval.
@@ -168,10 +192,10 @@ export default function AuditPreview() {
             plan is $14/mo (~฿490). Or if you'd rather just use these drafts and
             keep doing it manually, that's also totally fine.
           </p>
-          <p className="text-xs" style={{ color: 'var(--rh-ink-soft, #9aa3ac)' }}>
+          <p className="text-xs" style={{ color: COLORS.inkDim }}>
             <a
               href="https://reviewhub.review/"
-              style={{ color: 'var(--rh-teal-deep)', fontWeight: 600 }}
+              style={{ color: COLORS.tealDeep, fontWeight: 600 }}
             >
               reviewhub.review →
             </a>
