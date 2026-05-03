@@ -7,7 +7,7 @@ export const extraW4: BlogPost = {
     'Step-by-step guide to using Form W-4 line 4(c) to withhold extra federal tax from each paycheck and avoid an April surprise.',
   datePublished: '2026-04-22',
   dateModified: '2026-05-01',
-  authorName: 'Utility Tools Editorial',
+  authorName: 'Mathstub Editorial',
   reviewerName: 'Pending CPA review',
   affiliateOfferIds: ['turbotax-premier', 'empower'],
   blocks: [

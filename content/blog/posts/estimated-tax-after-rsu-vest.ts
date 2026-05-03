@@ -7,7 +7,7 @@ export const estimatedTax: BlogPost = {
     'How the IRS safe-harbor rule works, when an RSU shortfall triggers an underpayment penalty, and the two ways to fix it.',
   datePublished: '2026-04-20',
   dateModified: '2026-05-01',
-  authorName: 'Utility Tools Editorial',
+  authorName: 'Mathstub Editorial',
   reviewerName: 'Pending CPA review',
   affiliateOfferIds: ['turbotax-premier', 'taxact-premier'],
   blocks: [

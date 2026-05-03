@@ -7,7 +7,7 @@ export const supplementalRule: BlogPost = {
     'The IRS supplemental-wage rule taxes your RSU and bonus payments at 22% — until you cross $1M in YTD supplemental wages, when it jumps to 37%. Here is how the threshold actually works.',
   datePublished: '2026-04-18',
   dateModified: '2026-05-01',
-  authorName: 'Utility Tools Editorial',
+  authorName: 'Mathstub Editorial',
   reviewerName: 'Pending CPA review',
   affiliateOfferIds: ['turbotax-premier', 'harness-wealth'],
   blocks: [

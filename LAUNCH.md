@@ -1,31 +1,22 @@
-# Launch checklist — Utility Tools
+# Launch checklist — Mathstub
 
 Step-by-step from "code merged" to "first dollar earned." Do these in order; each step depends on the previous.
 
-## 0. Pick a domain (you)
+## 0. Buy the domain (you, ~5 min)
 
-Brand candidates (pick what feels right; check availability with `whois`):
+**Domain: `mathstub.com`** (verify it's still available before buying).
 
-- `tinkermint.com` — tinker (tools) + mint (money)
-- `smolmath.com` — small math, lowercase-internet brandable
-- `owedy.com` — short, "what you owe" niche-fit but generalizable
-- `plaincalc.com` — plain calculators
-- `mathstub.com` — math from your paystub (works generally too)
-- `tinytools.io` — direct, .io fine for solo
-- `numero.tools` — "numero" + .tools TLD
-- `ledgerly.com` — finance vibe
-- `vestand.com` — vest + and
-- `quickerr.com` — small tools quicker than alternatives
+Buy at **Cloudflare Registrar** for at-cost pricing + free WHOIS privacy + DNS in one place. Alternatives: Namecheap, Porkbun. Avoid GoDaddy.
 
-Buy at Namecheap, Cloudflare Registrar, or Porkbun ($8–15/yr for .com). **Cloudflare Registrar** is recommended — at-cost pricing, free WHOIS privacy, and DNS lives in the same dashboard.
+Rough cost: $8–12/year. Skip every upsell — you don't need WHOIS guard, SSL, or email forwarding from the registrar.
 
-## 1. Create the new GitHub repo (you)
+## 1. Create the new GitHub repo (you, ~3 min)
 
 1. Go to https://github.com/new
-2. Owner: your account or org. Name: match the domain (e.g. `tinkermint`, `owedy`).
+2. Owner: your account or `authentae`. **Name: `mathstub`**.
 3. Public or private: **public** is fine and helps SEO/trust; AdSense doesn't care.
-4. **Do NOT** initialize with README, .gitignore, or license. We're pushing existing history.
-5. Copy the SSH URL (e.g. `git@github.com:<you>/<repo>.git`).
+4. **Do NOT** initialize with README, .gitignore, or license — we're pushing existing history.
+5. Copy the SSH URL (e.g. `git@github.com:<you>/mathstub.git`).
 
 ## 2. Push the pre-staged history (you, one command)
 
@@ -33,8 +24,8 @@ A branch named `utility-sites-only` already exists in this repo with full histor
 
 ```bash
 cd /home/user/reviewhub
-git remote add new-repo git@github.com:<you>/<repo>.git
-git push new-repo utility-sites-only:main
+git remote add mathstub git@github.com:<you>/mathstub.git
+git push mathstub utility-sites-only:main
 ```
 
 That's it. The new repo now has a `main` branch with every commit that touched `utility-sites/`, with paths rewritten so the project sits at the repo root.
@@ -43,14 +34,14 @@ That's it. The new repo now has a `main` branch with every commit that touched `
 
 ```bash
 cd ~/code   # or wherever you keep projects
-git clone git@github.com:<you>/<repo>.git
-cd <repo>
+git clone git@github.com:<you>/mathstub.git
+cd mathstub
 npm install
 cp .env.example .env.local
 npm run dev   # http://localhost:3000
 ```
 
-From this point on, do all utility-sites work in the new repo, not in reviewhub.
+From this point on, do all Mathstub work in the new repo, not in reviewhub.
 
 ## 4. Copy the CI workflow into the new repo (you)
 
@@ -109,32 +100,32 @@ git push
 4. Click **Deploy**. First deploy will succeed but render placeholders — that's expected.
 5. Add Environment Variables (Settings → Environment Variables):
    - **Production:**
-     - `NEXT_PUBLIC_SITE_URL=https://yourdomain.com` (no trailing slash)
+     - `NEXT_PUBLIC_SITE_URL=https://mathstub.com` (no trailing slash)
      - `NEXT_PUBLIC_GA4_ID=` (after step 8)
      - `NEXT_PUBLIC_ADSENSE_CLIENT_ID=` (after step 9)
      - `NEXT_PUBLIC_ADSENSE_SLOT_*=` (after step 9)
      - Affiliate IDs (after step 10) — leave blank for now
    - **Preview:**
      - `ROBOTS_NOINDEX=1` (so previews don't get indexed)
-     - `NEXT_PUBLIC_SITE_URL=https://yourdomain.com` (placeholder OK)
+     - `NEXT_PUBLIC_SITE_URL=https://mathstub.com` (placeholder OK)
 
 ## 6. Connect the custom domain to Vercel (you)
 
 1. Vercel → Project → Settings → Domains → **Add domain**, enter your domain.
 2. Vercel shows DNS instructions — typically:
-   - Apex (`yourdomain.com`): A record to `76.76.21.21`
+   - Apex (`mathstub.com`): A record to `76.76.21.21`
    - `www`: CNAME to `cname.vercel-dns.com`
 3. In Cloudflare Registrar (or wherever you bought it), add those records. Wait 5–15 minutes for DNS to propagate. Vercel auto-issues an HTTPS certificate.
 
 ## 7. Submit to Google Search Console (you, ~5 minutes)
 
 1. Go to https://search.google.com/search-console/welcome
-2. Add property → **URL prefix** → `https://yourdomain.com`
+2. Add property → **URL prefix** → `https://mathstub.com`
 3. Verification method: **HTML tag** → copy the `content="..."` value.
 4. In Vercel, set `NEXT_PUBLIC_GSC_VERIFICATION=<that token>` and redeploy.
 5. Back in Search Console, click **Verify**.
 6. Once verified: **Sitemaps → Add new sitemap → `sitemap.xml`** → Submit.
-7. **URL Inspection** → enter `https://yourdomain.com/rsu-tax-shortfall` → Request indexing.
+7. **URL Inspection** → enter `https://mathstub.com/rsu-tax-shortfall` → Request indexing.
 
 ## 8. Google Analytics 4 (you, ~5 minutes — optional but recommended)
 
@@ -157,7 +148,7 @@ Privacy/consent: the privacy page already discloses GA4. For EEA visitors, Googl
 
 1. Go to https://adsense.google.com → **Get started**.
 2. Sign in with your Google account.
-3. Enter your URL: `https://yourdomain.com`. Pick your country, accept terms.
+3. Enter your URL: `https://mathstub.com`. Pick your country, accept terms.
 4. **Connect your site:** AdSense gives you an HTML snippet (`<script async src="...adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX">`).
    - Extract the `client` value — that's your `NEXT_PUBLIC_ADSENSE_CLIENT_ID` (e.g. `ca-pub-1234567890123456`).
    - Set it in Vercel and redeploy. The site auto-injects the verification snippet via `components/Analytics.tsx → AdsenseLoader`.

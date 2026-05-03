@@ -7,7 +7,7 @@ export const byState: BlogPost = {
     'How state income tax stacks on top of federal RSU withholding in the four biggest tech-worker states, with worked examples.',
   datePublished: '2026-04-25',
   dateModified: '2026-05-01',
-  authorName: 'Utility Tools Editorial',
+  authorName: 'Mathstub Editorial',
   reviewerName: 'Pending CPA review',
   affiliateOfferIds: ['turbotax-premier', 'harness-wealth'],
   blocks: [

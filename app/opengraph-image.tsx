@@ -19,7 +19,7 @@ export default function OpengraphImage() {
           justifyContent: 'space-between',
         }}
       >
-        <div style={{ fontSize: 36, fontWeight: 600, color: '#60a5fa' }}>Utility Tools</div>
+        <div style={{ fontSize: 36, fontWeight: 600, color: '#60a5fa' }}>Mathstub</div>
         <div style={{ fontSize: 80, fontWeight: 700, lineHeight: 1.05 }}>
           Small tools for big money moments.
         </div>

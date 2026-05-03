@@ -5,7 +5,7 @@ export const metadata: Metadata = buildMetadata({
   slug: 'editorial-policy',
   title: 'Editorial policy',
   description:
-    'How Utility Tools researches, reviews, sources, and updates its calculators and tax content.',
+    'How Mathstub researches, reviews, sources, and updates its calculators and tax content.',
 });
 
 export default function EditorialPolicyPage() {

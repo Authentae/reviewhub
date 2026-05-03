@@ -4,15 +4,15 @@ import { buildMetadata } from '@/lib/seo';
 export const metadata: Metadata = buildMetadata({
   slug: 'about',
   title: 'About',
-  description: 'About Utility Tools — small free calculators for big money moments.',
+  description: 'About Mathstub — small free calculators for big money moments.',
 });
 
 export default function AboutPage() {
   return (
     <main className="mx-auto max-w-3xl px-4 py-12 prose prose-gray dark:prose-invert">
-      <h1>About Utility Tools</h1>
+      <h1>About Mathstub</h1>
       <p>
-        Utility Tools ships small, focused calculators for the financial
+        Mathstub ships small, focused calculators for the financial
         situations that catch people off guard — starting with the RSU
         withholding gap that leaves tech workers with a surprise tax bill every
         April.

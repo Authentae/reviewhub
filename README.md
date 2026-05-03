@@ -1,7 +1,9 @@
-# Utility Sites
+# Mathstub
 
 Multi-tool framework hosting small utility web tools, monetized via display ads
 and affiliate links. First tool: **RSU Tax Withholding Shortfall Calculator**.
+
+Lives at https://mathstub.com (after launch).
 
 ## Stack
 
@@ -18,16 +20,16 @@ npm run dev                  # http://localhost:3000
 
 ## Scripts
 
-| Script               | What it does                              |
-| -------------------- | ----------------------------------------- |
-| `npm run dev`        | Next.js dev server                        |
-| `npm run build`      | Production build                          |
-| `npm run start`      | Serve production build                    |
-| `npm run lint`       | next lint                                 |
-| `npm run typecheck`  | `tsc --noEmit`                            |
-| `npm run test`       | Vitest (pure modules under `lib/`)        |
-| `npm run test:coverage` | Vitest + V8 coverage report            |
-| `npm run check`      | typecheck + lint + tests                  |
+| Script                  | What it does                              |
+| ----------------------- | ----------------------------------------- |
+| `npm run dev`           | Next.js dev server                        |
+| `npm run build`         | Production build                          |
+| `npm run start`         | Serve production build                    |
+| `npm run lint`          | next lint                                 |
+| `npm run typecheck`     | `tsc --noEmit`                            |
+| `npm run test`          | Vitest (pure modules under `lib/`)        |
+| `npm run test:coverage` | Vitest + V8 coverage report               |
+| `npm run check`         | typecheck + lint + tests                  |
 
 ## Adding a new tool
 
@@ -35,7 +37,8 @@ npm run dev                  # http://localhost:3000
 2. Add `app/<slug>/page.tsx` (server component) + `<slug>/<Tool>.tsx` (client island).
 3. Add `content/<slug>.ts` (title, description, FAQs, HowTo steps).
 4. Add the pure calc module under `lib/<topic>/` with exhaustive Vitest tests.
-5. Add at least one OG image under `public/og-<slug>.png`.
+5. Add at least one OG image under `public/og-<slug>.png` (or use a dynamic
+   `app/<slug>/opengraph-image.tsx`).
 
 The shell (Header, Footer, Sitemap, ToolShell) requires no changes.
 
@@ -47,17 +50,12 @@ when the corresponding env var is present.
 
 ## Deploy
 
-Vercel project, Root Directory = `utility-sites/` (until repo split). Node 20.
-Set production env vars in the Vercel dashboard. Set `ROBOTS_NOINDEX=1` on
-preview deploys.
+Vercel project, Root Directory = blank (project is at repo root after the
+subtree split — see LAUNCH.md). Node 20. Set production env vars in the
+Vercel dashboard. Set `ROBOTS_NOINDEX=1` on preview deploys.
 
-## Repo migration
+## Launch checklist
 
-This folder is built to be portable. To move it to its own repo with full history:
-
-```bash
-git subtree split --prefix=utility-sites -b utility-sites-only
-git push <new-remote> utility-sites-only:main
-```
-
-Re-point Vercel's Git source to the new repo afterward.
+See [LAUNCH.md](./LAUNCH.md) for the full step-by-step from "code merged" to
+"first dollar earned" — covers domain, repo split, Vercel, DNS, Search Console,
+GA4, AdSense, and affiliate program signups.

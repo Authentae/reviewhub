@@ -7,7 +7,7 @@ export const whyRsuTooHigh: BlogPost = {
     'Your employer withholds 22% federal on RSU vests, but your real marginal rate may be 32–37%. Here is the math, and how to avoid an April surprise.',
   datePublished: '2026-04-15',
   dateModified: '2026-05-01',
-  authorName: 'Utility Tools Editorial',
+  authorName: 'Mathstub Editorial',
   reviewerName: 'Pending CPA review',
   affiliateOfferIds: ['turbotax-premier', 'taxact-premier'],
   blocks: [
