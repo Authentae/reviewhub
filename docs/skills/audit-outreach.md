@@ -21,6 +21,17 @@ drops by an order of magnitude.
 
 Now you send the message.
 
+## CRITICAL: Thai politeness particle — match to YOUR gender
+
+Thai uses gendered politeness particles. Pick once, use everywhere:
+- **Male sender** → use `ครับ` (and `นะครับ`, `ใช่ครับ`, etc.)
+- **Female sender** → use `ค่ะ` (and `นะคะ`, `ใช่ค่ะ`, etc.)
+
+The templates below default to `ครับ` (current sender Singharash is
+male). If you're female, find/replace `ครับ` → `ค่ะ` and `นะครับ` →
+`นะคะ` before sending. NEVER mix the two — using the wrong particle
+reads as either a bot blast OR confused, both kill credibility.
+
 ## The DM template — Thai market (LINE + Instagram + Facebook)
 
 This is the workhorse. Use this for 80% of your Thai outreach. It's
@@ -28,14 +39,14 @@ deliberately short — owners read DMs in 3–5 seconds while serving
 customers.
 
 ```
-สวัสดีค่ะคุณ{owner_name_or_blank}
+สวัสดีครับคุณ{owner_name_or_blank}
 
 แวะดู Google ของ{business_name}แล้วเห็นว่ายังมีรีวิว{N}อันที่ยังไม่ได้
-ตอบ รวมถึง{1_star_or_recent_pain}ด้วย เลยลองร่างคำตอบให้ดูเล่น ๆ ลองดูได้ที่นี่นะคะ
+ตอบ รวมถึง{1_star_or_recent_pain}ด้วย เลยลองร่างคำตอบให้ดูเล่น ๆ ลองดูได้ที่นี่นะครับ
 
 → {audit_url}
 
-ถ้าโอเคจะตั้งระบบให้ตอบรีวิวแบบนี้ไปเรื่อย ๆ เดือนละ $14 (~฿480) ค่ะ ชำระเป็น USD
+ถ้าโอเคจะตั้งระบบให้ตอบรีวิวแบบนี้ไปเรื่อย ๆ เดือนละ $14 (~฿480) ครับ ชำระเป็น USD
 ถ้าสนใจคุยสั้น ๆ 10 นาทีก็ทักได้เลยน้า
 
 — Earth (ReviewHub, Bangkok)
@@ -158,21 +169,21 @@ spam filters and 1 human triage — the subject has to survive all 4.
 ### Email body — Thai market
 
 ```
-สวัสดีค่ะคุณ{owner_name},
+สวัสดีครับคุณ{owner_name},
 
 แวะดู Google ของ{business_name}แล้วเห็นว่ายังมีรีวิว{N}อันที่ยังไม่ได้
 ตอบ รวมถึง{specific_pain}ด้วย
 
 เลยลองร่างคำตอบให้ดูเล่นๆ ใช้ AI ช่วยร่าง แต่เขียนในโทนที่น่าจะใกล้เคียง
-กับวิธีที่{business_name}น่าจะตอบเองค่ะ ลองดูได้ที่นี่นะคะ — ไม่ต้อง
+กับวิธีที่{business_name}น่าจะตอบเองครับ ลองดูได้ที่นี่นะครับ — ไม่ต้อง
 ลงทะเบียนอะไร แค่เปิดดูเฉยๆ:
 
 → {audit_url}
 
-ถ้าโอเคจะใช้คำตอบเหล่านั้นได้เลยฟรีค่ะ ถ้าอยากให้ระบบทำแบบนี้ให้
+ถ้าโอเคจะใช้คำตอบเหล่านั้นได้เลยฟรีครับ ถ้าอยากให้ระบบทำแบบนี้ให้
 เรื่อยๆ มีแพ็กเกจเริ่มต้น $14 (~฿480)/เดือน ตั้งระบบใช้เวลาประมาณ 10 นาที
 
-ไม่กดดันค่ะ ถ้าคุณตอบรีวิวเองอยู่แล้วก็ไม่ต้องใช้ ส่งให้ดูเผื่อมีประโยชน์
+ไม่กดดันครับ ถ้าคุณตอบรีวิวเองอยู่แล้วก็ไม่ต้องใช้ ส่งให้ดูเผื่อมีประโยชน์
 เฉยๆ น้า
 
 — Earth
@@ -236,13 +247,13 @@ No follow-ups after this one — just wanted to leave the door open.
 
 Thai version:
 ```
-สวัสดีอีกครั้งค่ะ
+สวัสดีอีกครั้งครับ
 
-ลิงก์ตัวอย่างคำตอบรีวิวของ{business_name}ยังเปิดได้นะคะ:
+ลิงก์ตัวอย่างคำตอบรีวิวของ{business_name}ยังเปิดได้นะครับ:
 
 → {audit_url}
 
-ไม่ส่งติดตามอีกแล้วค่ะ ทักมาทีหลังก็ได้น้า
+ไม่ส่งติดตามอีกแล้วครับ ทักมาทีหลังก็ได้น้า
 
 — Earth
 ```
@@ -319,10 +330,10 @@ audit URL on a voice call. The whole pitch depends on them clicking.
 ## The follow-up message (only ONE allowed, sent 3+ days later)
 
 ```
-สวัสดีอีกครั้งค่ะ ลิงก์ตัวอย่างคำตอบรีวิวที่ส่งให้ดูยังเปิดได้นะคะ
+สวัสดีอีกครั้งครับ ลิงก์ตัวอย่างคำตอบรีวิวที่ส่งให้ดูยังเปิดได้นะครับ
 → {audit_url}
 
-ไม่กดดันค่ะ ถ้าตอนนี้ยังไม่ใช่จังหวะ ทักมาทีหลังก็ได้น้า
+ไม่กดดันครับ ถ้าตอนนี้ยังไม่ใช่จังหวะ ทักมาทีหลังก็ได้น้า
 ```
 
 English:
@@ -347,7 +358,7 @@ Three reply patterns and how to handle each:
 This is the high-intent reply. They want a call.
 
 ```
-ขอบคุณค่ะ! โทรคุย 10 นาทีเลยดีกว่ามั้ย เลือกเวลาได้ที่นี่
+ขอบคุณครับ! โทรคุย 10 นาทีเลยดีกว่ามั้ย เลือกเวลาได้ที่นี่
 → {your_calendly_url}
 
 หรือถ้าจะคุยทาง LINE ตอนนี้ก็ได้เลย เราจะดู{business_name}ด้วยกันแล้ว
@@ -361,7 +372,7 @@ Aim for the call. The audit got attention; the call closes.
 They saw the audit, like it, but suspect a gotcha. Be direct:
 
 ```
-ไม่มีอะไรซับซ้อนค่ะ:
+ไม่มีอะไรซับซ้อนครับ:
 - $14 (~฿480)/เดือน ยกเลิกได้ตลอด
 - AI ร่างคำตอบให้ คุณกดอนุมัติก่อนเผยแพร่เสมอ — ไม่มีการตอบอัตโนมัติ
 - ข้อมูลรีวิวเก่าทั้งหมดถูก import ให้ตอนเริ่มใช้
@@ -372,10 +383,10 @@ They saw the audit, like it, but suspect a gotcha. Be direct:
 The "no auto-publish" line is the single most reassuring thing for
 owners who've been burned by spam-bots before.
 
-### Reply C: "ไม่สนใจค่ะ ขอบคุณ" / "Not interested, thanks"
+### Reply C: "ไม่สนใจครับ ขอบคุณ" / "Not interested, thanks"
 
 ```
-ไม่เป็นไรค่ะ ขอบคุณที่สละเวลาดูน้า ถ้าเปลี่ยนใจวันไหนทักมาได้เลย
+ไม่เป็นไรครับ ขอบคุณที่สละเวลาดูน้า ถ้าเปลี่ยนใจวันไหนทักมาได้เลย
 
 ขอถามนิดนึงได้มั้ยคะ — ส่วนไหนของ {audit_url} ที่รู้สึกว่ายังไม่ค่อยตรง?
 อยากเอาไปปรับให้ดีขึ้น (ไม่กดดันให้ตอบเลย)
