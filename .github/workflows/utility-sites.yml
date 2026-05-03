@@ -1,0 +1,53 @@
+name: utility-sites · CI
+
+# Validates the /utility-sites Next.js project on PRs and pushes that touch it.
+# This workflow lives at the reviewhub repo root for as long as utility-sites/
+# is hosted here. After the planned `git subtree split` migration, copy this
+# file to the new repo's .github/workflows/ and remove the path filter.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'utility-sites/**'
+      - '.github/workflows/utility-sites.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'utility-sites/**'
+      - '.github/workflows/utility-sites.yml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: typecheck + lint + tests + build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: ./utility-sites
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: utility-sites/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test
+
+      - name: Build (Next)
+        run: npm run build
