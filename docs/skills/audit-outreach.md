@@ -100,6 +100,203 @@ do a 10-min call to walk through it.
   Specific, no clickbait.
 - Keep body shorter than DM (people skim email). 3 sentences + URL.
 
+## Full email outreach playbook
+
+For founders who want email as their primary channel (it works better
+than DM for B2B verticals — hotels, agencies, professional services —
+and is the right starting channel for anyone less comfortable with
+Instagram/LINE).
+
+### CRITICAL: do not send cold email from your transactional domain
+
+Your `noreply@reviewhub.review` sends verification + billing emails
+to paying customers. Do NOT also send cold outreach from that domain.
+
+- Cold email gets flagged as spam by some recipients (always — it's a
+  numbers game, not a quality issue)
+- Spam reports lower the entire `reviewhub.review` domain reputation
+- Paying customers' password-reset emails start landing in spam
+- Customer can't reset password → support ticket → churn → bad time
+
+Use a **dedicated outbound Gmail** for cold sends. Current outbound
+sender: `earth.reviewhub@gmail.com`. Send 1:1 from Gmail's compose
+window. Manual sending only — no automation, no third-party
+mail-blast tools (Lemlist / Apollo / etc. all need a properly
+warmed dedicated sending domain to not destroy your brand).
+
+When outbound proves itself (50+ closes), graduate to a real sending
+domain like `hello@reviewhub.email` with proper SPF/DKIM/DMARC + a
+2-week warm-up. Not before.
+
+### Volume rules
+
+- **Personal Gmail cap**: 10 cold sends per day for the first 2 weeks.
+  Gmail's anti-bulk safeguards kick in around 20+/day on a personal
+  account. Above that and your sends start landing in spam regardless
+  of content quality.
+- After 2 weeks of consistent 10/day, can ramp to 25/day.
+- Above 50/day on a personal Gmail = account suspension risk.
+
+### Subject lines that get opened
+
+Keep specific, factual, no clickbait. Cold email goes through 3
+spam filters and 1 human triage — the subject has to survive all 4.
+
+**Good:**
+- `{business_name} — 6 unanswered Google reviews`
+- `Reply drafts for {business_name}'s Google reviews`
+- `Saw {business_name} on Google`
+- `{business_name} — quick observation`
+
+**Bad (auto-flagged):**
+- "Quick question?" (spam marker, stop using this in 2026)
+- "Boost your reviews!" (corporate-bot)
+- ALL CAPS ANYWHERE
+- Emoji in subject line (cold mail spam-flag)
+- "Re:" / "Fwd:" tricks (gets you blocked)
+
+### Email body — Thai market
+
+```
+สวัสดีค่ะคุณ{owner_name},
+
+แวะดู Google ของ{business_name}แล้วเห็นว่ายังมีรีวิว{N}อันที่ยังไม่ได้
+ตอบ รวมถึง{specific_pain}ด้วย
+
+เลยลองร่างคำตอบให้ดูเล่นๆ ใช้ AI ช่วยร่าง แต่เขียนในโทนที่น่าจะใกล้เคียง
+กับวิธีที่{business_name}น่าจะตอบเองค่ะ ลองดูได้ที่นี่นะคะ — ไม่ต้อง
+ลงทะเบียนอะไร แค่เปิดดูเฉยๆ:
+
+→ {audit_url}
+
+ถ้าโอเคจะใช้คำตอบเหล่านั้นได้เลยฟรีค่ะ ถ้าอยากให้ระบบทำแบบนี้ให้
+เรื่อยๆ มีแพ็กเกจเริ่มต้น 590 บาท/เดือน ตั้งระบบใช้เวลาประมาณ 10 นาที
+
+ไม่กดดันค่ะ ถ้าคุณตอบรีวิวเองอยู่แล้วก็ไม่ต้องใช้ ส่งให้ดูเผื่อมีประโยชน์
+เฉยๆ น้า
+
+— Earth
+ReviewHub · reviewhub.review
+Bangkok
+```
+
+### Email body — English market
+
+```
+Hi {owner_name},
+
+Was looking through {business_name}'s Google profile and noticed
+{N} reviews are unanswered, including {specific_pain}.
+
+I drafted reply suggestions for all of them — AI-drafted, but in a
+tone that sounded like how you might reply yourself. Take a look (no
+signup, just a preview link):
+
+→ {audit_url}
+
+Use any of those drafts directly if you like, on the house. If you
+want this running on autopilot every time a new review lands, the
+entry plan is $14/mo and takes ~10 min to set up.
+
+No pressure. If you're already replying to your own reviews, totally
+fine — just sending in case it's useful.
+
+— Earth
+ReviewHub · reviewhub.review
+Bangkok
+```
+
+### Subject + body substitutions
+
+Same rules as the DM template:
+- `{owner_name}` — only if you can find it. "Hi คุณสมชาย" beats "Hi
+  there." Wrong name is worse than no name; if uncertain, drop it.
+- `{business_name}` — exactly as on Google. Don't translate.
+- `{N}` — the unanswered count from your audit. Don't fudge.
+- `{specific_pain}` — pick ONE concrete thing from their reviews:
+  - "a 1-star from last week about cold coffee"
+  - "two reviews from {month} that look like they expect a reply"
+  - "several customer questions in the comments"
+  Specifics > generics.
+
+### The follow-up email (one allowed, sent 5 days after the first)
+
+```
+Hi again,
+
+The draft replies link for {business_name} is still open if you want
+to peek:
+
+→ {audit_url}
+
+No follow-ups after this one — just wanted to leave the door open.
+
+— Earth
+```
+
+Thai version:
+```
+สวัสดีอีกครั้งค่ะ
+
+ลิงก์ตัวอย่างคำตอบรีวิวของ{business_name}ยังเปิดได้นะคะ:
+
+→ {audit_url}
+
+ไม่ส่งติดตามอีกแล้วค่ะ ทักมาทีหลังก็ได้น้า
+
+— Earth
+```
+
+### Tracking spreadsheet
+
+Set up a Google Sheet with these columns:
+
+| Date sent | Business name | Email | Audit URL | Opened? | Replied? | Reply gist | Closed? | Notes |
+
+Fill it in as you send. The "Opened?" column gets updated by
+checking `/outbound-audits` in the dashboard — it shows view count
++ first opened timestamp per audit.
+
+Review the sheet every Sunday evening:
+- Which subject-line variant got more opens?
+- Which vertical / city is converting?
+- Which prospect ghosted after opening?
+- 5 minutes of pattern-spotting; tighten the next week's outreach
+  based on what you see.
+
+### Email-specific failure modes
+
+In addition to the DM "Don't do these" list above:
+
+- ❌ HTML formatting / colored fonts / images in the email body.
+  Plain text only. Anything fancy = spam-flag for cold.
+- ❌ Tracking pixels (the auto-add by some Gmail extensions).
+  Disable any "track if opened" extension in your Gmail before
+  sending. The view-count comes from the audit URL itself, which
+  is fine — pixels in the email body are not.
+- ❌ Attachments. URL only.
+- ❌ "Reply STOP to opt out" at the bottom — that's a CAN-SPAM-act
+  signature for B2C bulk mail. For 1:1 B2B sends it actually flags
+  you as a bulk sender. Skip it.
+- ❌ BCC'ing yourself or a CRM on every send. CRMs add tracking
+  headers that Gmail's anti-spam learns to recognize on the
+  recipient side. Send clean.
+
+### When you DON'T have an email for the prospect
+
+Some Google profiles list only a phone number. You have three
+options:
+
+1. **Skip them** — there are always more leads. Pace > completionism.
+2. **Visit the website listed on their Google profile** — most
+   businesses publish an email on a Contact page.
+3. **Use the website's contact form** — slowest, lowest reply rate,
+   but works as a last resort for high-priority leads.
+
+Don't cold-call. The article you read suggested cold calling works,
+but for review-management it doesn't — owners can't evaluate the
+audit URL on a voice call. The whole pitch depends on them clicking.
+
 ## Don't do these (failure modes I've seen)
 
 - ❌ "Hope you're doing well!" — corporate-bot tell. Skip pleasantries.
