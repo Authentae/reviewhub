@@ -35,7 +35,7 @@ customers.
 
 → {audit_url}
 
-ถ้าโอเคจะตั้งระบบให้ตอบรีวิวแบบนี้ไปเรื่อย ๆ เดือนละ 590 บาทค่ะ
+ถ้าโอเคจะตั้งระบบให้ตอบรีวิวแบบนี้ไปเรื่อย ๆ เดือนละ $14 (~฿480) ค่ะ ชำระเป็น USD
 ถ้าสนใจคุยสั้น ๆ 10 นาทีก็ทักได้เลยน้า
 
 — Earth (ReviewHub, Bangkok)
@@ -170,7 +170,7 @@ spam filters and 1 human triage — the subject has to survive all 4.
 → {audit_url}
 
 ถ้าโอเคจะใช้คำตอบเหล่านั้นได้เลยฟรีค่ะ ถ้าอยากให้ระบบทำแบบนี้ให้
-เรื่อยๆ มีแพ็กเกจเริ่มต้น 590 บาท/เดือน ตั้งระบบใช้เวลาประมาณ 10 นาที
+เรื่อยๆ มีแพ็กเกจเริ่มต้น $14 (~฿480)/เดือน ตั้งระบบใช้เวลาประมาณ 10 นาที
 
 ไม่กดดันค่ะ ถ้าคุณตอบรีวิวเองอยู่แล้วก็ไม่ต้องใช้ ส่งให้ดูเผื่อมีประโยชน์
 เฉยๆ น้า
@@ -311,9 +311,9 @@ audit URL on a voice call. The whole pitch depends on them clicking.
 - ❌ Using "AI" in the first message — for SMB owners in 2026 that
   word still triggers skepticism. Say "drafted" or "wrote up,"
   reveal the AI angle on the call.
-- ❌ Quoting the price too high in the DM. The "590 บาท / $14" anchor
+- ❌ Quoting the price too high in the DM. The "$14 (~฿480)" anchor
   works because it's lower than they expect. If you say "starting at
-  590" and the call closes at "well actually the Pro plan is $29"
+  $14 (~฿480)" and the call closes at "well actually the Pro plan is $29"
   you've lost trust. Quote the entry price, upsell on the call.
 
 ## The follow-up message (only ONE allowed, sent 3+ days later)
@@ -362,7 +362,7 @@ They saw the audit, like it, but suspect a gotcha. Be direct:
 
 ```
 ไม่มีอะไรซับซ้อนค่ะ:
-- 590 บาท/เดือน ยกเลิกได้ตลอด
+- $14 (~฿480)/เดือน ยกเลิกได้ตลอด
 - AI ร่างคำตอบให้ คุณกดอนุมัติก่อนเผยแพร่เสมอ — ไม่มีการตอบอัตโนมัติ
 - ข้อมูลรีวิวเก่าทั้งหมดถูก import ให้ตอนเริ่มใช้
 
@@ -400,7 +400,7 @@ After they say yes to a call, the call itself is short:
    3. The bulk-respond view for catching up on backlog
 3. **Closing:** "Want me to set this up for you now? I'll import
    your existing reviews, draft replies for the unanswered ones,
-   and you take it from there. Setup is free; the 590-baht/mo
+   and you take it from there. Setup is free; the $14/mo
    starts when your card hits the LemonSqueezy page."
 4. **Handle silence:** if they pause, say "or take a few days, the
    audit URL stays live." Then SHUT UP. Don't fill the silence.
@@ -409,10 +409,10 @@ After they say yes to a call, the call itself is short:
 
 | Setup | Monthly | When to quote |
 |---|---|---|
-| Free setup | 590 ฿ / $14 (Starter) | Default. Use this 80% of the time. |
+| Free setup | $14 (~฿480) (Starter) | Default. Use this 80% of the time. |
 | Free setup | 999 ฿ / $29 (Pro) | If they have 6+ platforms or asked about analytics |
 | Free setup | 1,990 ฿ / $59 (Business) | Multi-location chain only |
-| 3,000 ฿ one-time | 590 ฿/mo | If they ask "can you import all my old reviews and write replies for them?" — that's a setup-fee opportunity. The import itself is free; the manual reply-writing for the backlog is the upsell. |
+| 3,000 ฿ one-time | $14/mo | If they ask "can you import all my old reviews and write replies for them?" — that's a setup-fee opportunity. The import itself is free; the manual reply-writing for the backlog is the upsell. |
 
 Don't invent custom pricing. Stick to the four tiers + the optional
 3,000-baht backlog-cleanup fee. Custom pricing is a trust-killer.
