@@ -25,6 +25,41 @@ export default function Changelog() {
   // a paying user would notice.
   const highlights = [
     {
+      date: '2026-05-04',
+      en: 'Scheduled reply send — draft a reply at 2am, schedule it to post during business hours. New ⏰ Schedule button next to Save in the reply editor. Cron picks up due replies every 5 minutes and posts them via the platform API. Up to 90 days out.',
+      th: 'ตั้งเวลาส่งคำตอบ — ร่างตอน 2 ทุ่ม ตั้งให้โพสต์ตอนเช้า มีปุ่ม ⏰ Schedule ข้างปุ่ม Save ครับ',
+    },
+    {
+      date: '2026-05-04',
+      en: 'Vacation / closed-period mode — pause new-review email and LINE notifications until a future date. Reviews still ingest in the background so nothing is lost. Settings → Vacation.',
+      th: 'โหมดหยุดยาว / ปิดร้านชั่วคราว — หยุดการแจ้งเตือนอีเมลและ LINE ถึงวันที่กำหนด รีวิวยังเก็บอยู่เบื้องหลัง ตั้งค่าได้ที่ Settings → Vacation',
+    },
+    {
+      date: '2026-05-04',
+      en: 'Saved filter presets — save the filter combination you check every morning ("1-star unanswered last 30 days") and recall with one click. Stored per-business, per-device. Visible in the dashboard filter bar as a ★ Presets dropdown.',
+      th: 'บันทึก filter preset ในแดชบอร์ด — บันทึกชุด filter ที่ใช้ประจำ ("1 ดาว ยังไม่ตอบ 30 วันล่าสุด") เรียกใช้ด้วยคลิกเดียว',
+    },
+    {
+      date: '2026-05-04',
+      en: 'Public /status page — live snapshot of platform health (DB, SMTP, AI, billing, …) auto-refreshing every 30 seconds. Prospects checking "is this thing actually working?" get a green/red answer in 1 second.',
+      th: 'หน้า /status สาธารณะ ดูสุขภาพระบบสด (DB, SMTP, AI, ระบบเก็บเงิน ฯลฯ) refresh ทุก 30 วินาที',
+    },
+    {
+      date: '2026-05-04',
+      en: 'Persistent "Posted to Google ✓" badge on each replied review. The success toast vanished after a few seconds; this badge stays so you can tell at a glance which replies actually went live on Google vs. saved locally.',
+      th: 'แบดจ์ "โพสต์ไปที่ Google แล้ว ✓" ติดถาวรกับรีวิวที่ตอบแล้ว — ดูได้ทันทีว่าคำตอบไหนขึ้น Google จริง',
+    },
+    {
+      date: '2026-05-04',
+      en: 'AI replies now post back to Google automatically by default (was opt-in before, which silently broke the headline feature for paying customers). Boot-time logs print the resolved status so misconfigured deploys are loud, not silent.',
+      th: 'คำตอบจาก AI โพสต์กลับไปที่ Google อัตโนมัติเป็นค่าเริ่มต้นแล้ว (เดิมต้องเปิดเอง) มี log ตอนบูตแสดงสถานะ',
+    },
+    {
+      date: '2026-05-04',
+      en: 'Outbound audit-share open-tracking + 48h follow-up reminder — when a prospect opens an audit URL you DM\'d, you get an instant email so you can follow up while the lead is warm. If they opened but you haven\'t closed the loop, a 48h reminder with a copy-paste follow-up template lands in your inbox.',
+      th: 'Outbound audit ติดตามการเปิดดู + แจ้งเตือนติดตามผล 48 ชม. — เมื่อ prospect เปิดดู audit จะมีอีเมลแจ้งเตือนทันที ถ้ายังไม่ได้ปิดดีล จะมีอีเมลพร้อมเทมเพลตติดตามผล',
+    },
+    {
       date: '2026-05-02',
       en: 'AI drafts now reply in 10 languages natively (Thai, Japanese, Korean, Chinese, Spanish, French, German, Italian, Portuguese, English) — with per-language anti-corporate-speak rules. Drafts read like a real owner, not a customer-service bot.',
       th: 'AI ตอบรีวิวเป็นภาษาแม่ของลูกค้าได้แล้ว 10 ภาษา (ไทย ญี่ปุ่น เกาหลี จีน สเปน ฝรั่งเศส เยอรมัน อิตาลี โปรตุเกส อังกฤษ) พร้อมกฎแก้คำตอบให้ฟังเหมือนคนจริง ไม่เหมือนบอท',

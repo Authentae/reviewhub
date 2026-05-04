@@ -51,6 +51,9 @@ const Roadmap = lazy(() => import('./pages/Roadmap'));
 // "is this thing actually working?" before signup get a green/red answer
 // in 1 second instead of inferring from anecdotes. Auto-refreshes 30s.
 const Status = lazy(() => import('./pages/Status'));
+// /year-review/:year — auth-required printable recap of the year's
+// reviews. Aggregations only (no AI calls); cheap to render.
+const YearReview = lazy(() => import('./pages/YearReview'));
 // Support — public-or-authed real-issue intake. Frill (already wired) is
 // for feature feedback; /support is for "this broke" / billing / account.
 const Support = lazy(() => import('./pages/Support'));
@@ -143,6 +146,7 @@ export default function App() {
         <Route path="/changelog" element={<Changelog />} />
         <Route path="/roadmap" element={<Roadmap />} />
         <Route path="/status" element={<Status />} />
+        <Route path="/year-review/:year" element={<PrivateRoute><YearReview /></PrivateRoute>} />
         <Route path="/support" element={<Support />} />
         <Route path="/api-docs" element={<ApiDocs />} />
         <Route path="*" element={<NotFound />} />
