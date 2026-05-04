@@ -25,6 +25,21 @@ export default function Changelog() {
   // a paying user would notice.
   const highlights = [
     {
+      date: '2026-05-05',
+      en: 'Sign in with Google — one-click OAuth sign-in alongside email/password. New "Sign in with Google" button on /login. Existing accounts auto-link by email; new accounts auto-create with email already verified. No password to remember.',
+      th: 'เข้าสู่ระบบด้วย Google — คลิกเดียวด้วย OAuth เพิ่มเติมจากอีเมล/รหัสผ่าน มีปุ่ม "Sign in with Google" บนหน้า /login บัญชีเดิมเชื่อมอัตโนมัติด้วยอีเมล บัญชีใหม่สร้างพร้อมยืนยันอีเมลแล้ว',
+    },
+    {
+      date: '2026-05-05',
+      en: 'Magic-link sign-in — request a one-time link to your inbox, click it, you\'re in. No password needed. Useful for the "forgot my password again" path or shared-device login. Links are single-use, expire in 15 minutes, and respect MFA if enabled.',
+      th: 'เข้าสู่ระบบด้วย magic link — ขอ link ส่งเข้าอีเมล คลิกแล้วเข้าระบบเลย ไม่ต้องกรอกรหัสผ่าน เหมาะสำหรับเวลาลืมรหัสผ่าน หรือล็อกอินจากเครื่องที่ใช้ร่วมกัน link ใช้ได้ครั้งเดียว หมดอายุใน 15 นาที',
+    },
+    {
+      date: '2026-05-05',
+      en: 'Read-only dashboard share links — mint a link from Settings → "Read-only share links" and send it to your accountant or agency. They open /shared/<token> and see a stripped-down read-only view of your reviews. No login required for them. Revoke any link instantly.',
+      th: 'ลิงก์แชร์แดชบอร์ดแบบอ่านอย่างเดียว — สร้างลิงก์จาก Settings → "Read-only share links" ส่งให้นักบัญชีหรือเอเจนซี่ เขาเปิดแล้วเห็นแดชบอร์ดในโหมดอ่านอย่างเดียว ไม่ต้องล็อกอิน ยกเลิกลิงก์ได้ทันที',
+    },
+    {
       date: '2026-05-04',
       en: 'Scheduled reply send — draft a reply at 2am, schedule it to post during business hours. New ⏰ Schedule button next to Save in the reply editor. Cron picks up due replies every 5 minutes and posts them via the platform API. Up to 90 days out.',
       th: 'ตั้งเวลาส่งคำตอบ — ร่างตอน 2 ทุ่ม ตั้งให้โพสต์ตอนเช้า มีปุ่ม ⏰ Schedule ข้างปุ่ม Save ครับ',

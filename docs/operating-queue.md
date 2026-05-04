@@ -95,7 +95,10 @@ list.
 
 The reviewhub.review site itself + everything a prospect sees.
 
-- `[ ]` Update `/changelog` with wave 1-4 ships from today. Right now
+- `[done]` Update `/changelog` — added wave 4 entries (Sign in with
+  Google, magic-link, share-tokens) with EN+TH for each. Was missing
+  three customer-facing ships from May 5.
+- `[skip]` (was) Update `/changelog` with wave 1-4 ships from today. Right now
   the changelog is silent on outbound-audit tracking, follow-up
   reminders, vacation mode, filter presets, status page, posted
   badges. Customers checking what's new will see nothing.
