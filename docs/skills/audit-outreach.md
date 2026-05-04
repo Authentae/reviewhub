@@ -10,6 +10,38 @@ flow ("services are the new software") boils down to one trick: the
 prospect sees the deliverable before they're asked to buy. Resistance
 drops by an order of magnitude.
 
+## Segment by awareness — a 0%-response owner is not the same prospect as a 50%-response owner
+
+Owners who never answer reviews are usually NOT lazy. They genuinely
+don't know that:
+1. New customers read the *responses* (not just reviews) to gauge
+   whether the business cares — BrightLocal surveys: 88%+ of
+   consumers say a business's reply influences their decision.
+2. Google's local-pack algorithm factors response rate into ranking.
+   No-reply businesses rank below otherwise-equivalent reply-active
+   ones.
+3. An unanswered 1-star review reads to a new browser as "the
+   business doesn't even read complaints" — which is much worse than
+   the original complaint.
+
+When sending the audit, segment by their current response rate (visible
+on their Google Business Profile):
+
+- **0% response (never replies)** — UNAWARE segment. Lead with one
+  short education line BEFORE the audit URL. They don't know reviews
+  matter; the audit alone won't move them. One sentence is enough —
+  don't lecture.
+- **1–60% response (replies inconsistently)** — AWARE-BUT-LAZY
+  segment. Skip the education line. Jump straight to "noticed N
+  reviews unanswered, drafted some replies." They know the value;
+  they need the activation energy.
+- **60%+ response (replies consistently)** — DISQUALIFY. They're
+  already doing the work; the demo is unimpressive to them, and the
+  ROI math doesn't work. Skip.
+
+The Thai email template below has both versions — pick based on
+the prospect's response rate.
+
 ## What you've already done before sending the DM
 
 1. Generated the outbound audit on the dashboard
@@ -166,7 +198,46 @@ spam filters and 1 human triage — the subject has to survive all 4.
 - Emoji in subject line (cold mail spam-flag)
 - "Re:" / "Fwd:" tricks (gets you blocked)
 
-### Email body — Thai market
+### Email body — Thai market — UNAWARE segment (0% response rate)
+
+Use this when the prospect has answered ZERO reviews. The opening
+education line is the difference between "delete unread" and "huh,
+I should look at this."
+
+```
+สวัสดีครับ
+
+ลูกค้าใหม่ส่วนใหญ่อ่านรีวิวก่อนจอง — และสิ่งที่หลายคนไม่รู้คือ
+พวกเขาอ่าน "การตอบกลับของร้าน" ด้วย เพื่อดูว่าร้านสนใจลูกค้าจริงไหม
+รีวิวที่ไม่มีใครตอบเลยทำให้ดูเหมือนร้านปิดไปแล้ว
+
+แวะดู Google ของ{business_name}แล้วเห็นว่ารีวิวล่าสุดหลายอันยังไม่ได้
+ตอบเลยครับ {specific_observation_about_their_reviews}
+
+เลยลองร่างคำตอบให้ดูเล่นๆ ใช้ AI ช่วยร่าง {N} รีวิวของจริง ลองดูได้
+เลยครับ — ไม่ต้องลงทะเบียนอะไร:
+
+→ {audit_url}
+
+ใช้ฟรีได้เลย ก๊อปไปแปะใน Google เลย ถ้าอยากให้ระบบทำให้เรื่อยๆ
+มีแพ็กเกจเริ่มต้น $14 หรือประมาณ ฿480 ต่อเดือน (ชำระเป็น USD)
+
+ไม่กดดันครับ — ส่งมาให้ดูเผื่อมีประโยชน์
+
+— Earth
+ReviewHub · reviewhub.review
+Bangkok
+```
+
+`{specific_observation_about_their_reviews}` — ALWAYS pull at least
+one detail from their actual reviews (instructor name they're being
+praised for, dish people keep mentioning, etc.). This is the
+difference between "she actually read mine" vs "templated blast."
+
+### Email body — Thai market — AWARE-BUT-LAZY segment (1–60% response)
+
+Skip the education paragraph. They know reviews matter — they reply
+to some. They just need a frictionless way to do more.
 
 ```
 สวัสดีครับคุณ{owner_name},
