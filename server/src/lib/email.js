@@ -2559,6 +2559,97 @@ async function sendOnboardingEmail(userEmail, dayNumber, lang = 'en', unsubUrl =
   });
 }
 
+// Outbound-audit view notifications — fired when a prospect opens a
+// share URL the founder DM'd them. The signal is "this lead just
+// engaged" — most valuable response window is the next ~30 minutes,
+// so the email is intentionally minimal: who opened, when, link to
+// the dashboard for follow-up. No marketing cruft. The founder is
+// the only recipient.
+const AUDIT_VIEW_STRINGS = {
+  en: {
+    subject: (n) => `Someone just opened your audit for ${n}`,
+    headline: (n) => `${n} just opened your audit`,
+    body: (hours, count) => {
+      const ago = hours < 1
+        ? 'a few minutes ago'
+        : hours < 24
+          ? `${Math.round(hours)} hour${Math.round(hours) === 1 ? '' : 's'} after you sent it`
+          : `${Math.round(hours / 24)} day${Math.round(hours / 24) === 1 ? '' : 's'} after you sent it`;
+      const counted = count > 1 ? ` (${count} total opens so far)` : '';
+      return `They opened the link ${ago}${counted}. Now is the warmest moment to follow up.`;
+    },
+    cta: 'View audit + send follow-up',
+    footer: "You're getting this because you sent an outbound audit. Notifications throttle to once per audit per 24h.",
+  },
+  th: {
+    subject: (n) => `มีคนเพิ่งเปิดดู audit ที่คุณส่งให้ ${n}`,
+    headline: (n) => `${n} เพิ่งเปิดดู audit ของคุณ`,
+    body: (hours, count) => {
+      const ago = hours < 1
+        ? 'เมื่อไม่กี่นาทีที่แล้ว'
+        : hours < 24
+          ? `หลังจากที่คุณส่งไป ${Math.round(hours)} ชั่วโมง`
+          : `หลังจากที่คุณส่งไป ${Math.round(hours / 24)} วัน`;
+      const counted = count > 1 ? ` (เปิดดูทั้งหมด ${count} ครั้ง)` : '';
+      return `เปิดลิงก์${ago}${counted} นี่คือช่วงเวลาที่เหมาะสมที่สุดสำหรับการติดตามผล`;
+    },
+    cta: 'ดู audit และส่งติดตามผล',
+    footer: 'คุณได้รับอีเมลนี้เพราะส่ง outbound audit การแจ้งเตือนจะส่งไม่เกิน 1 ครั้งต่อ audit ต่อ 24 ชั่วโมง',
+  },
+};
+
+async function sendAuditViewNotification(userEmail, opts) {
+  const { businessName = '', viewCount = 1, hoursSinceCreated = 0, lang = 'en' } = opts || {};
+  const s = AUDIT_VIEW_STRINGS[lang] || AUDIT_VIEW_STRINGS.en;
+
+  const safeBizName = escapeHtml(businessName);
+  const safeClientUrl = escapeHtml(process.env.CLIENT_URL || 'http://localhost:5173');
+  const dashboardUrl = `${safeClientUrl}/outbound-audits`;
+
+  // stripHdr — never let business_name (user-controlled at audit-create
+  // time) inject CR/LF into the Subject header. Same pattern as
+  // sendNewReviewNotification.
+  const subject = stripHdr(s.subject(businessName));
+
+  const html = `
+    <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px 16px">
+      <div style="background:#fbf8f1;border:1px solid #e6dfce;border-radius:12px;padding:24px">
+        <p style="font-family:monospace;font-size:11px;letter-spacing:.15em;color:#c48a2c;text-transform:uppercase;margin:0 0 8px">Audit opened</p>
+        <h2 style="color:#1d242c;margin:0 0 12px;font-size:20px">${escapeHtml(s.headline(businessName))}</h2>
+        <p style="color:#4a525a;margin:0 0 20px;line-height:1.55">${escapeHtml(s.body(hoursSinceCreated, viewCount))}</p>
+        <a href="${dashboardUrl}"
+           style="background:#1e4d5e;color:white;padding:10px 18px;border-radius:8px;text-decoration:none;display:inline-block;font-size:14px">
+          ${escapeHtml(s.cta)}
+        </a>
+      </div>
+      <p style="font-size:11px;color:#9aa3ac;margin-top:16px;text-align:center">${escapeHtml(s.footer)}</p>
+    </div>`;
+
+  const text = [
+    s.headline(businessName),
+    '',
+    s.body(hoursSinceCreated, viewCount),
+    '',
+    `${s.cta}: ${process.env.CLIENT_URL || 'http://localhost:5173'}/outbound-audits`,
+    '',
+    s.footer,
+  ].join('\n');
+
+  const transporter = getTransporter();
+  if (!transporter) {
+    console.log(`[EMAIL] Audit view notification → ${userEmail}: ${subject}`);
+    return;
+  }
+
+  await transporter.sendMail({
+    from: process.env.SMTP_FROM || 'ReviewHub <noreply@reviewhub.review>',
+    to: userEmail,
+    subject,
+    html,
+    text,
+  });
+}
+
 module.exports = {
   sendNewReviewNotification,
   sendVerificationEmail,
@@ -2570,6 +2661,7 @@ module.exports = {
   sendReviewRequest,
   sendErasureConfirmation,
   sendOnboardingEmail,
+  sendAuditViewNotification,
   verifySmtp,
   portBlockHint,
 };

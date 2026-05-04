@@ -183,4 +183,21 @@ function signToken(payload, { expiresIn = '7d' } = {}) {
   return jwt.sign(payload, JWT_SECRET, { expiresIn });
 }
 
-module.exports = { authMiddleware, mfaPendingMiddleware, signToken };
+// Soft-auth: returns the authenticated user's id if a valid JWT is on
+// the request, or null otherwise. Never throws, never 401s. Use on
+// public endpoints where knowing the caller is "nice to have" but not
+// required — e.g. suppressing self-view notifications when the founder
+// previews their own outbound audit URL while still logged in.
+function tryGetUserId(req) {
+  try {
+    const token = extractToken(req);
+    if (!token || token.startsWith('rh_')) return null;
+    const claims = jwt.verify(token, JWT_SECRET, { algorithms: ['HS256'] });
+    if (claims?.mfa === 'pending') return null;
+    return typeof claims?.id === 'number' ? claims.id : null;
+  } catch {
+    return null;
+  }
+}
+
+module.exports = { authMiddleware, mfaPendingMiddleware, signToken, tryGetUserId };

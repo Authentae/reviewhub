@@ -20,9 +20,18 @@ const { randomBytes } = require('crypto');
 const router = express.Router();
 const { run, get, all, insert } = require('../db/schema');
 const { captureException } = require('../lib/errorReporter');
-const { authMiddleware } = require('../middleware/auth');
+const { authMiddleware, tryGetUserId } = require('../middleware/auth');
 const { generateDraft } = require('../lib/aiDrafts');
 const { reserveAiDraft, refundAiDraft } = require('../lib/billing/enforcement');
+const { isLikelyBot } = require('../lib/botDetection');
+const { sendAuditViewNotification } = require('../lib/email');
+
+// How long to suppress repeat-view notifications. The first view always
+// fires; subsequent views from the same prospect (refresh, share-with-
+// team, re-open from email) only re-fire after this window. 24h was
+// chosen because that's roughly the founder's follow-up cycle — if the
+// prospect comes back tomorrow and engages, that's a fresh signal.
+const NOTIFICATION_THROTTLE_HOURS = 24;
 
 // Per-user rate limit on audit creation. Each audit costs N AI-draft
 // API calls (one per pasted review), so abusive scripting could rack
@@ -259,7 +268,8 @@ router.get('/share/:token', viewLimiter, (req, res) => {
       return res.status(404).json({ error: 'Not found' });
     }
     const row = get(
-      `SELECT id, business_name, reviews_json, created_at, expires_at, view_count
+      `SELECT id, owner_user_id, business_name, reviews_json, created_at, expires_at,
+              view_count, last_notification_sent_at
          FROM audit_previews
         WHERE share_token = ?
           AND datetime(expires_at) > datetime('now')`,
@@ -267,19 +277,99 @@ router.get('/share/:token', viewLimiter, (req, res) => {
     );
     if (!row) return res.status(404).json({ error: 'Not found or expired' });
 
-    // Bump view count and timestamps. Don't fail the response if this
-    // bookkeeping update errors — the prospect viewing the audit is the
-    // important thing.
-    try {
-      run(
-        `UPDATE audit_previews
-            SET view_count = view_count + 1,
-                first_viewed_at = COALESCE(first_viewed_at, datetime('now')),
-                last_viewed_at = datetime('now')
-          WHERE id = ?`,
-        [row.id]
-      );
-    } catch (e) { /* swallow */ }
+    // Bot/preview-crawler filter. Slack/Twitter/iMessage etc. fetch the
+    // URL the moment it's pasted to render a preview card — those hits
+    // are NOT a real human prospect engaging with the audit, so we skip
+    // both view counting AND owner notification for them. False-positive
+    // here just means one fewer notification; false-negative would mean
+    // a noise notification that erodes founder trust in the signal.
+    const ua = req.headers['user-agent'] || '';
+    const isBot = isLikelyBot(ua);
+
+    let displayViewCount = row.view_count;
+
+    if (!isBot) {
+      // Bump view count and timestamps. Don't fail the response if this
+      // bookkeeping update errors — the prospect viewing the audit is the
+      // important thing.
+      try {
+        run(
+          `UPDATE audit_previews
+              SET view_count = view_count + 1,
+                  first_viewed_at = COALESCE(first_viewed_at, datetime('now')),
+                  last_viewed_at = datetime('now')
+            WHERE id = ?`,
+          [row.id]
+        );
+        displayViewCount = row.view_count + 1;
+      } catch (e) { /* swallow */ }
+
+      // Notification gate. Two suppression rules:
+      //   1. Self-view: the founder previewing their own audit URL while
+      //      logged in shouldn't trigger a "prospect opened your audit"
+      //      email to themselves. tryGetUserId is a soft-decode that
+      //      returns null on missing/invalid token (i.e., a real prospect
+      //      who isn't logged in passes through).
+      //   2. Throttle: re-views within NOTIFICATION_THROTTLE_HOURS of the
+      //      previous notification suppress to avoid emailing the founder
+      //      on every prospect refresh. NULL last_notification_sent_at
+      //      means "never notified" — always fire on first view.
+      const requesterUserId = tryGetUserId(req);
+      const isOwnerSelfView = requesterUserId && requesterUserId === row.owner_user_id;
+
+      let shouldNotify = false;
+      if (!isOwnerSelfView) {
+        if (!row.last_notification_sent_at) {
+          shouldNotify = true;
+        } else {
+          // Compute hours since last notification. SQLite stores ISO
+          // strings; Date parsing handles both 'YYYY-MM-DD HH:MM:SS' and
+          // ISO formats. If the parse fails, default to firing — better
+          // a noise notification than a missed real signal.
+          const last = new Date(String(row.last_notification_sent_at).replace(' ', 'T') + 'Z');
+          const ageHours = (Date.now() - last.getTime()) / (1000 * 60 * 60);
+          if (!Number.isFinite(ageHours) || ageHours >= NOTIFICATION_THROTTLE_HOURS) {
+            shouldNotify = true;
+          }
+        }
+      }
+
+      if (shouldNotify) {
+        try {
+          // Mark the notification as sent BEFORE the SMTP call. If SMTP
+          // fails the founder misses one email but doesn't get spammed
+          // by every refresh; if we marked AFTER the await, a slow SMTP
+          // could let a refresh slip through and double-fire.
+          run(
+            `UPDATE audit_previews SET last_notification_sent_at = datetime('now') WHERE id = ?`,
+            [row.id]
+          );
+
+          const owner = get(
+            `SELECT email, preferred_lang FROM users WHERE id = ?`,
+            [row.owner_user_id]
+          );
+          if (owner && owner.email) {
+            const created = new Date(String(row.created_at).replace(' ', 'T') + 'Z');
+            const hoursSinceCreated = Math.max(0, (Date.now() - created.getTime()) / (1000 * 60 * 60));
+            // Fire-and-forget. Public endpoint must not block on SMTP.
+            // Errors get captured but do not propagate to the response.
+            Promise.resolve(
+              sendAuditViewNotification(owner.email, {
+                businessName: row.business_name,
+                viewCount: displayViewCount,
+                hoursSinceCreated,
+                lang: owner.preferred_lang || 'en',
+              })
+            ).catch((mailErr) => {
+              captureException(mailErr, { route: 'audit-previews', op: 'view-notify' });
+            });
+          }
+        } catch (e) {
+          captureException(e, { route: 'audit-previews', op: 'view-notify-setup' });
+        }
+      }
+    }
 
     let reviews;
     try {
@@ -293,7 +383,7 @@ router.get('/share/:token', viewLimiter, (req, res) => {
       business_name: row.business_name,
       reviews,
       created_at: row.created_at,
-      view_count: row.view_count + 1, // post-increment
+      view_count: displayViewCount,
     });
   } catch (err) {
     captureException(err, { route: 'audit-previews', op: 'share-view' });

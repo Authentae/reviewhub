@@ -339,6 +339,13 @@ function initSchema() {
   migrateAddColumn('users', 'notif_negative_alert', 'INTEGER NOT NULL DEFAULT 1');
   migrateAddColumn('users', 'notif_weekly_summary', 'INTEGER NOT NULL DEFAULT 0');
 
+  // audit_previews.last_notification_sent_at — throttle marker so that a
+  // prospect refreshing the audit URL twenty times doesn't email the
+  // founder twenty times. NULL means "never notified yet"; an ISO
+  // timestamp means "we sent a notification at this time, suppress
+  // further sends until 24h has passed."
+  migrateAddColumn('audit_previews', 'last_notification_sent_at', 'TEXT DEFAULT NULL');
+
   // Email verification + password reset columns.
   // Tokens are stored as SHA-256 hashes; plaintext tokens are only ever sent via email.
   // *_expires_at columns are ISO 8601 strings (UTC) for comparison with datetime('now').
