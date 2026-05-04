@@ -1291,8 +1291,8 @@ router.get('/google/callback', async (req, res) => {
     // Set the session cookie. Same shape the rest of the app expects
     // (sessionCookie lib handles it).
     const token = signToken({ id: user.id });
-    const { writeSessionCookie } = require('../lib/sessionCookie');
-    writeSessionCookie(res, token);
+    const { setSessionCookie } = require('../lib/sessionCookie');
+    setSessionCookie(res, token);
     return res.redirect(`${baseUrl}/dashboard`);
   } catch (err) {
     captureException(err, { route: 'auth', op: 'google-callback' });
