@@ -1288,12 +1288,15 @@ router.get('/google/callback', async (req, res) => {
       return res.redirect(`${baseUrl}/login/mfa?google_pending=${encodeURIComponent(pendingToken)}`);
     }
 
-    // Set the session cookie. Same shape the rest of the app expects
-    // (sessionCookie lib handles it).
+    // Set the session cookie AND pass the JWT via URL fragment so the
+    // client's auth.js can set its localStorage marker (rh_logged_in).
+    // Without the marker, PrivateRoute bounces synchronously to /login
+    // before /me can confirm the cookie. Fragment (not query) keeps the
+    // token out of server logs and Referer headers.
     const token = signToken({ id: user.id });
     const { setSessionCookie } = require('../lib/sessionCookie');
     setSessionCookie(res, token);
-    return res.redirect(`${baseUrl}/dashboard`);
+    return res.redirect(`${baseUrl}/auth/google/done#token=${encodeURIComponent(token)}`);
   } catch (err) {
     captureException(err, { route: 'auth', op: 'google-callback' });
     return failRedirect('server_error');
