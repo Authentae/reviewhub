@@ -199,10 +199,12 @@ The boring-but-load-bearing work.
   recent logs.
 - `[wait:user]` Run `./scripts/prod-smoke.sh` against the live
   deploy. 10 seconds. Verifies all public surfaces respond 200.
-- `[ ]` Memory file refresh — append today's lessons to
-  `~/.claude/projects/.../MEMORY.md`: queue-driven autopilot
-  pattern, demand-gen wave shipping, the "which prospects are good"
-  data once we have it.
+- `[done]` Memory file refresh. Added two new memory files this session:
+  `reference_claude_code_setup.md` (CLAUDE.md + slash commands +
+  hooks + statusline locations) and `project_reviewhub_test_patterns.md`
+  (server node:test patterns, client vitest patterns, gotchas
+  including the Free-tier email_alerts_new=false foot-gun). MEMORY.md
+  index updated.
 - `[done]` This-week's-deploys auto-summary script. Shipped at
   `scripts/weekly-deploys.sh`. Groups commits by prefix (auth,
   dashboard, billing, etc.), separates customer-facing from internal
