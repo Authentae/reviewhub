@@ -1183,6 +1183,100 @@ router.post('/resend-verification', emailSendLimiter, authMiddleware, (req, res)
 
 // ─── Password reset ────────────────────────────────────────────────────────
 
+// Magic-link sign-in. Passwordless alternative to /login. Same
+// no-enumeration guarantee as /forgot-password — always returns 200,
+// never leaks whether the email exists.
+router.post('/magic-link/request', emailSendLimiter, require('../middleware/honeypot').honeypot({ fakeBody: { success: true } }), async (req, res) => {
+  try {
+    const rawEmail = req.body.email;
+    if (typeof rawEmail !== 'string') {
+      return res.json({ success: true });
+    }
+    const email = rawEmail.trim().toLowerCase().slice(0, 254);
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.json({ success: true });
+    }
+    const user = get(`SELECT id, email, preferred_lang FROM users WHERE LOWER(email) = ?`, [email]);
+    if (user) {
+      const crypto = require('crypto');
+      const rawToken = crypto.randomBytes(32).toString('base64url');
+      const tokenHash = crypto.createHash('sha256').update(rawToken).digest('hex');
+      // 15-min TTL — short enough that a forwarded email expires
+      // before the worst-case threat (recipient's inbox compromised
+      // hours later).
+      run(
+        `UPDATE users
+            SET magic_login_token_hash = ?,
+                magic_login_expires_at = datetime('now', '+15 minutes')
+          WHERE id = ?`,
+        [tokenHash, user.id]
+      );
+      const baseUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+      const magicUrl = `${baseUrl}/magic-login?token=${encodeURIComponent(rawToken)}`;
+      const { sendMagicLinkEmail } = require('../lib/email');
+      sendMagicLinkEmail(user.email, magicUrl, user.preferred_lang || 'en')
+        .catch(err => captureException(err, { kind: 'email.send_failed', label: 'magic-link', userId: user.id }));
+    }
+    // Identical response whether or not the email matched a user.
+    res.json({ success: true });
+  } catch (err) {
+    captureException(err, { route: 'auth', op: 'magic-link-request' });
+    // Even on internal errors, don't leak. Generic success keeps the
+    // no-enumeration guarantee.
+    res.json({ success: true });
+  }
+});
+
+// Magic-link consume. The user clicks the link in their inbox; this
+// endpoint validates the token, issues a JWT, and clears the token
+// (single-use). Token is sha256-hashed at rest; we hash the incoming
+// raw token and look up by hash.
+router.post('/magic-link/consume', (req, res) => {
+  try {
+    const rawToken = String(req.body?.token || '').trim();
+    if (!rawToken || rawToken.length > 200) {
+      return res.status(400).json({ error: 'Invalid token' });
+    }
+    const crypto = require('crypto');
+    const tokenHash = crypto.createHash('sha256').update(rawToken).digest('hex');
+    const user = get(
+      `SELECT id, email, mfa_enabled
+         FROM users
+        WHERE magic_login_token_hash = ?
+          AND magic_login_expires_at IS NOT NULL
+          AND datetime(magic_login_expires_at) > datetime('now')`,
+      [tokenHash]
+    );
+    if (!user) {
+      return res.status(400).json({ error: 'Link expired or already used. Request a new one.' });
+    }
+
+    // Single-use: clear the token immediately so a forwarded link
+    // can't be re-used.
+    run(
+      `UPDATE users
+          SET magic_login_token_hash = NULL,
+              magic_login_expires_at = NULL
+        WHERE id = ?`,
+      [user.id]
+    );
+
+    // Honor MFA-enabled users: issue a pending token instead of a
+    // full session, just like /login does. They'll redirect to
+    // /login/mfa to complete the flow with their TOTP code.
+    if (user.mfa_enabled) {
+      const pendingToken = signToken({ id: user.id, mfa: 'pending' }, { expiresIn: '10m' });
+      return res.json({ mfa_required: true, mfa_token: pendingToken });
+    }
+
+    const token = signToken({ id: user.id });
+    res.json({ token, user: { id: user.id, email: user.email } });
+  } catch (err) {
+    captureException(err, { route: 'auth', op: 'magic-link-consume' });
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // Request a password-reset email. Always responds 200 with a generic message
 // regardless of whether the email exists, to avoid account-enumeration.
 router.post('/forgot-password', emailSendLimiter, require('../middleware/honeypot').honeypot({ fakeBody: { success: true } }), (req, res) => {

@@ -2922,6 +2922,59 @@ module.exports = {
   sendOnboardingEmail,
   sendAuditViewNotification,
   sendAuditFollowupReminder,
+  sendMagicLinkEmail,
   verifySmtp,
   portBlockHint,
 };
+
+// Magic-link sign-in email. Single button + paste-fallback URL.
+// 15-minute TTL noted in copy so the recipient doesn't sit on it.
+async function sendMagicLinkEmail(userEmail, magicUrl, lang = 'en') {
+  const STRINGS = {
+    en: {
+      subject: 'Sign in to ReviewHub',
+      headline: 'One click to sign in',
+      body: 'Click the button to sign in. This link expires in 15 minutes and only works once.',
+      cta: 'Sign in',
+      ignore: "Didn't request this? You can safely ignore this email — no one can sign in without your inbox.",
+    },
+    th: {
+      subject: 'เข้าสู่ระบบ ReviewHub',
+      headline: 'คลิกเดียวเข้าระบบ',
+      body: 'กดปุ่มเพื่อเข้าสู่ระบบ ลิงก์นี้หมดอายุใน 15 นาทีและใช้ได้ครั้งเดียวเท่านั้น',
+      cta: 'เข้าสู่ระบบ',
+      ignore: 'ไม่ได้ขอใช่ไหม? ละเลยอีเมลนี้ได้อย่างปลอดภัย ไม่มีใครเข้าระบบได้ถ้าไม่มีอีเมลของคุณ',
+    },
+  };
+  const s = STRINGS[lang] || STRINGS.en;
+  const subject = stripHdr(s.subject);
+  const safeUrl = escapeHtml(magicUrl);
+
+  const html = `
+    <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px 16px">
+      <div style="background:#fbf8f1;border:1px solid #e6dfce;border-radius:12px;padding:28px;text-align:center">
+        <h2 style="color:#1d242c;margin:0 0 12px;font-size:22px">${escapeHtml(s.headline)}</h2>
+        <p style="color:#4a525a;margin:0 0 24px;line-height:1.55">${escapeHtml(s.body)}</p>
+        <a href="${safeUrl}"
+           style="background:#1e4d5e;color:white;padding:12px 28px;border-radius:8px;text-decoration:none;display:inline-block;font-size:15px;font-weight:600">
+          ${escapeHtml(s.cta)}
+        </a>
+        <p style="color:#9aa3ac;margin:24px 0 0;font-size:11px;word-break:break-all">${safeUrl}</p>
+      </div>
+      <p style="font-size:11px;color:#9aa3ac;margin-top:16px;text-align:center">${escapeHtml(s.ignore)}</p>
+    </div>`;
+  const text = [s.headline, '', s.body, '', magicUrl, '', s.ignore].join('\n');
+
+  const transporter = getTransporter();
+  if (!transporter) {
+    console.log(`[EMAIL] Magic link → ${userEmail}: ${magicUrl}`);
+    return;
+  }
+  await transporter.sendMail({
+    from: process.env.SMTP_FROM || 'ReviewHub <noreply@reviewhub.review>',
+    to: userEmail,
+    subject,
+    html,
+    text,
+  });
+}

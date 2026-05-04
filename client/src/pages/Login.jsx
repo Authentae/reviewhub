@@ -171,6 +171,37 @@ export default function Login() {
             </button>
           </form>
 
+          {/* Magic-link sign-in — passwordless alternative for users
+              who don't want to remember another password. Sends a
+              click-once link to the email they typed above. */}
+          <div className="mt-4 text-center">
+            <button
+              type="button"
+              onClick={async () => {
+                if (!form.email || !form.email.includes('@')) {
+                  setError(t('auth.magicLinkNeedEmail', 'Type your email above first.'));
+                  return;
+                }
+                try {
+                  setLoading(true);
+                  await api.post('/auth/magic-link/request', { email: form.email });
+                  setError(null);
+                  // eslint-disable-next-line no-alert
+                  alert(t('auth.magicLinkSent', { email: form.email, defaultValue: `If an account exists for ${form.email}, a sign-in link is on its way. Check your inbox.` }));
+                } catch {
+                  // Endpoint always 200s for no-enumeration, so this
+                  // catch is for network errors only.
+                  setError(t('auth.magicLinkFailed', 'Could not send link. Try again.'));
+                } finally {
+                  setLoading(false);
+                }
+              }}
+              className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+            >
+              {t('auth.magicLinkPrompt', 'Or email me a sign-in link instead →')}
+            </button>
+          </div>
+
           {/* Demo CTA — shown ONLY in dev builds or when the operator
               explicitly opted in at build time via VITE_SHOW_DEMO=1 for a
               public demo deployment. In a real prod launch the demo user
