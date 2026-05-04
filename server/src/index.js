@@ -31,6 +31,27 @@ async function start() {
     startBackupScheduler();
     startOnboardingScheduler();
     startAuditFollowupScheduler();
+    // Loud boot-time visibility for the auto-post setting. The default-on
+    // behavior makes silent breakage harder to ship, but a misconfigured
+    // .env (e.g. REPLY_TO_PLATFORMS=  with empty value) still disables
+    // the headline feature. Print the resolved state every boot so ops
+    // can grep one line and know whether paying customers' replies are
+    // actually being posted.
+    const rawEnv = process.env.REPLY_TO_PLATFORMS;
+    const resolved = rawEnv === undefined
+      ? ['google']
+      : rawEnv.split(',').map(s => s.trim()).filter(Boolean);
+    if (resolved.length === 0) {
+      console.warn(
+        '[REPLY-POST] ⚠  AUTO-POSTING DISABLED. ' +
+        'REPLY_TO_PLATFORMS is set to an empty value — no replies will post ' +
+        'back to source platforms. Paying customers will see drafts saved locally ' +
+        'but nothing on their Google profile. To enable: unset the var (default ' +
+        'is "google") or set REPLY_TO_PLATFORMS=google explicitly.'
+      );
+    } else {
+      console.log(`[REPLY-POST] Auto-posting enabled for: ${resolved.join(', ')}${rawEnv === undefined ? ' (default — env var unset)' : ''}`);
+    }
   }
 
   const app = createApp();
