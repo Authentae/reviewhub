@@ -60,6 +60,43 @@ hooks take over automatically.
    - Source: https://www.facebook.com/loftel22/
 ```
 
+## Research targets for tomorrow's batch
+
+These are surfaced from the May 4 lead-finding research. Verified to
+have own websites; need to (a) extract email from contact page and
+(b) check Google review response rate before adding to "Ready":
+
+```
+4. Niras Bankoc Cultural Hostel — 2-star hostel, family-run, near
+   Grand Palace. Phone +66 2 282 7500. Need to find email.
+5. Buddy Lodge — Khaosan area, mid-size. Need to find website +
+   email.
+6. Bhuthorn Bed and Breakfast — 27 Google reviews, 4.7★, owner-run
+   century-old shophouse. Website thebhuthorn.com (was timing out
+   on May 4; retry). info@oldcapitalbkk.com pattern suggests info@
+   thebhuthorn.com is worth trying via blind send.
+7. Vera Nidhra (already sent May 4) — DO NOT re-send.
+8. Aim House (already sent May 4) — DO NOT re-send.
+9. Better Moon (already sent May 4) — DO NOT re-send.
+10. Sweets Cottage Academy (already sent May 4) — DO NOT re-send.
+11. Tingly Thai Cooking School (already sent May 4) — DO NOT re-send.
+12. May Kaidee Tanao (already sent May 4) — DO NOT re-send.
+```
+
+Verticals to mine fresh tomorrow (highest expected yield based on
+May 4 results — see lead-finding.md for the field-update notes):
+
+- More small B&Bs / homestays / pousadas with own websites in the
+  Banglamphu / Old Town district (Niras, Bhuthorn area)
+- Specialty cooking schools beyond the big-brand Thai-cuisine ones
+  — vegetarian, raw food, dessert, Northeastern cuisine
+- Independent dental clinics outside the BIDC / Thantakit family
+  (skip the multi-location chains)
+- Independent yoga / pilates / Muay Thai studios with English-
+  speaking expat audiences
+- Small wedding photographers with public Google profiles (not
+  Instagram-only)
+
 ## How to add more entries
 
 Goal: 7+ verified prospects in the queue at all times so each morning

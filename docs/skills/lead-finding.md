@@ -127,3 +127,65 @@ Update this file when:
 
 The point of the file is captured tribal knowledge — keep it tight,
 not exhaustive.
+
+## Field updates from the May 4, 2026 batch (9 cold sends)
+
+What worked / didn't work / surprised us:
+
+### Verticals that delivered strong source-availability and 0% reply rate
+
+These produced the highest-yield prospects in the May 4 batch (sample
+size: 9 sends). Reply / conversion data still pending — update this
+section after 7-10 days when responses have had time to land.
+
+- **Small B&Bs with own websites** — White Ivory, Vera Nidhra, Aim
+  House. All had visible owner email on a non-third-party site, 100+
+  Google reviews, 0% reply rate. Email-deliverability rate: 100%
+  (3/3 not bounced).
+- **Vegetarian / pastry / specialty cooking schools** — May Kaidee,
+  Sweets Cottage. Lower-tier Google profiles than mainstream Thai
+  cooking schools (which all reply consistently and disqualified).
+  Pattern: niche cuisine + small operator + 0% replies.
+- **Tingly Thai Cooking School** — outlier example of a high-volume
+  (1,800+ reviews) profile with 0% reply rate. The owner is named
+  "Mr. Tingly" and the operation is clearly solo-operator despite
+  the volume. Suggests owner-personality-driven brands can still be
+  unaware-segment regardless of volume.
+- **Guesthouses with cafe component** — Better Moon. Mixed
+  Thai/English review base, 0% reply rate. Hybrid hospitality +
+  F&B businesses fit even when neither pure category does.
+
+### Verticals that under-delivered
+
+- **Mainstream Thai cooking schools** — Bangkok Thai Cooking
+  Academy (responded 100%), Focal Local (responded 100%). The
+  big-brand Thai cooking schools have already invested in review
+  management. Disqualified per the playbook's 60%+ rule.
+- **4-star+ chain hotels** — too professionally managed; have
+  marketing teams. S15 Sukhumvit hit; visited but didn't pursue.
+
+### Sourcing techniques that worked
+
+- **WebSearch + WebFetch** for "small {vertical} Bangkok contact
+  email" surfaced verified emails on the business's actual website
+  ~50% of the time. The other 50% returned third-party listings
+  with stale emails (Travelfish, old TripAdvisor) which we now
+  always re-verify on the live site before trusting.
+- **Google Maps reviews tab → count "Response from the owner"** is
+  the fastest qualification check. 5-10 visible reviews → if 0
+  responses, UNAWARE; if 1-3, AWARE-LAZY; if 5+, DISQUALIFY.
+- **Email format pattern** — `{name}@{domain}.com` (e.g.
+  `Ron@BangkokThaiCookingAcademy.com`) signals a real personally-
+  managed inbox vs. `info@`/`contact@` which often route to a
+  shared admin queue.
+
+### Sourcing techniques that failed
+
+- **Searching for emails on third-party booking sites** (Agoda,
+  Booking.com, Hostelworld) — those don't expose owner emails;
+  reservations go through the platform's messaging system. Skip.
+- **Searching "small" + "owner-run" qualifiers** — too restrictive,
+  returned 0 results. Drop the qualifiers and filter post-hoc.
+- **Cafés** (per existing playbook) — confirmed: rarely have email
+  on website, IG-DM only. Yesterday's batch was correct to skip
+  cafés for email and route them through IG.

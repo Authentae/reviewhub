@@ -599,3 +599,208 @@ that day is wasted.
 Hits the public surfaces, confirms 200s on landing/pricing/register
 and 404s on bogus audit tokens. Takes ~10 seconds. If it fails, fix
 before sending — a cold email pointing at a 500 destroys credibility.
+
+## Reply playbook — what to say when they respond
+
+When the 9 cold sends start landing replies, the 30-second window to
+respond shapes whether the conversation continues. These are
+pre-written for the 5 most likely cases. Treat them as starting
+points; personalize the first sentence to whatever they actually
+said, then drop in the body verbatim.
+
+### 1. "$14/month is too expensive"
+
+The most common objection on Bangkok SMB price sensitivity. Response:
+acknowledge → reframe to ROI per saved hour → offer a concrete
+"low-volume" entry path. Don't apologize for the price; the cost is
+fair if the customer has the right volume.
+
+**EN:**
+```
+Totally fair — pricing depends on how many reviews you actually get.
+A quick math check: at $14/month you'd break even with about 4-5
+saved minutes per review (tom-yum-gai-shop math: 2 min to read +
+think + type vs 10 sec to approve a draft). If you get fewer than
+~10 reviews/month it probably doesn't pencil. If you're getting 30+
+it pays for itself before lunch.
+
+Want me to send the actual reply drafts for your last 10 reviews
+free, no signup, just so you can decide on real data?
+```
+
+**TH:**
+```
+เข้าใจครับ ราคาเหมาะสมหรือไม่ขึ้นอยู่กับจำนวนรีวิวที่ได้จริง
+ลองคำนวณดู: $14/เดือน คุ้มเมื่อประหยัดเวลาตอบรีวิวประมาณ 4-5 นาทีต่อรีวิว
+(2 นาทีคิด+พิมพ์เอง vs 10 วินาทีกดอนุมัติ draft) ถ้าได้รีวิวน้อยกว่า 10 ต่อเดือน
+อาจไม่คุ้ม แต่ถ้าได้ 30+ คุ้มก่อนกลางวันเลยครับ
+
+อยากให้ส่ง draft คำตอบ 10 รีวิวล่าสุดให้ฟรีไหมครับ? ไม่ต้องสมัคร
+แค่จะได้ตัดสินใจจากตัวเลขจริง
+```
+
+### 2. "I'll do it manually / I have time"
+
+The "I don't need a tool" objection. Don't argue against manual
+reply (you'll lose). Reframe as scaling: tool wins when reviews go
+up, not when they're at current volume. Plant the future-self
+realization without saying it.
+
+**EN:**
+```
+That works great when you're at your current volume. The owners who
+ended up using us were doing it manually for years and then either
+(a) opened a second location and the load doubled, or (b) had a
+viral month where they got 50 reviews in 2 weeks and the backlog
+broke them. The tool's mostly insurance for those moments.
+
+If you ever do find yourself behind, the audit URL I sent you stays
+live for 30 days — feel free to use the drafts manually any time.
+```
+
+**TH:**
+```
+เข้าใจเลยครับ ตอบเองดีที่สุดถ้าพอไหว ลูกค้าที่มาใช้ของเราส่วนใหญ่เคยตอบเอง
+มาก่อน แล้วเจอ (ก) เปิดสาขา 2 แล้วงานเพิ่มเท่าตัว หรือ (ข) มีเดือนที่
+รีวิวเข้ามารัวๆ 50 รีวิวใน 2 อาทิตย์ แล้วตอบไม่ทัน เครื่องมือคือเผื่อช่วงนั้น
+ครับ
+
+URL ที่ส่งไปยังใช้ได้ 30 วัน ก๊อป draft ไปแปะเองได้ตลอดครับ ไม่ต้องใช้แอป
+ก็ได้
+```
+
+### 3. "We already use [competitor X]"
+
+Don't trash-talk the competitor — they'll defend the sunk cost.
+Pivot to differentiator + offer "no switch needed, parallel test."
+Common competitors in this market: Birdeye, Podium, Reviewshake,
+local Thai tools. Most are 5-10× our price.
+
+**EN:**
+```
+Nice — sticking with what works is right. Most owners who switched
+to us came from {competitor} for one specific reason: {one
+differentiator}. We don't need you to cancel anything to find out
+if the drafts are better — the audit URL above is exactly that
+test. Same reviews, our drafts, you compare. If theirs are better,
+that's good info.
+
+Curious what made you pick {competitor} originally — that helps me
+know if we're a fit at all.
+```
+
+Differentiators by competitor:
+- **Birdeye / Podium**: 10× cheaper for the same Google-reply
+  feature; we don't sell a CRM you don't need.
+- **Reviewshake**: We auto-post, they require manual copy-paste.
+- **Local Thai tools**: We support Thai + English natively in the
+  same draft; most local tools force one or the other.
+
+**TH:**
+```
+ดีครับ ที่ใช้อยู่ทำงานได้ก็อย่าเปลี่ยน ลูกค้าส่วนใหญ่ที่ย้ายมาจาก
+{competitor} ย้ายมาเพราะเหตุผลเดียวคือ {differentiator} ไม่ต้องยกเลิก
+ของที่ใช้อยู่เลย — URL audit ด้านบนเปรียบเทียบ draft เราได้ ถ้าของเขา
+ดีกว่าก็ใช้ของเขาต่อครับ ข้อมูลที่ดี
+
+อยากรู้ครับว่าทำไมตอนแรกถึงเลือก {competitor} จะได้รู้ว่าเราเหมาะหรือเปล่า
+```
+
+### 4. "Not interested right now"
+
+Vague brush-off. Two paths: (a) graceful exit + plant a seed for
+later, (b) one-question follow-up to surface the real objection. Go
+with (a) by default; (b) only if they engaged at all (opened the URL,
+said anything beyond "no thanks").
+
+**EN — graceful exit (default):**
+```
+All good — totally understand. The audit URL stays live for 30
+days, so feel free to grab the drafts any time without replying.
+And if your situation changes (new location, new staff, busier
+month), you have my email.
+
+Best of luck with {business_name} — the reviews I read for the
+audit were genuinely impressive.
+```
+
+**EN — surface the objection (if they engaged):**
+```
+Fair enough. Mind if I ask one thing — was it the AI part, the
+price, the fact that you'd rather DIY, something else? I'm trying
+to figure out what tool actually helps small {vertical} owners and
+the "no, because…" answers are more useful to me than the yeses.
+```
+
+**TH — graceful exit:**
+```
+เข้าใจครับ URL audit ใช้ได้อีก 30 วัน ก๊อป draft ไปใช้ได้ตลอดถ้าเปลี่ยนใจ
+ครับ ถ้าสถานการณ์เปลี่ยน (สาขาใหม่ คนใหม่ เดือนยุ่งๆ) ติดต่อกลับมาได้
+
+โชคดีกับ {business_name} ครับ รีวิวที่ผมอ่านจาก audit ดีมาก
+```
+
+### 5. "Send me more info / what's the catch?"
+
+Real interest. Don't dump a brochure — they'll never read. Send 3
+things max: 1-screenshot of the dashboard, 1-paragraph on how
+auto-posting works, 1 link to the live demo / Calendly. Move them to
+a 10-min call ASAP.
+
+**EN:**
+```
+Sure — here's the short version:
+
+1. You connect your Google Business profile once (OAuth, takes 30
+   seconds). We pull your reviews automatically going forward.
+2. Each new review, we draft a reply in your tone. You see it in
+   the dashboard, edit if needed, hit Approve. Reply posts to
+   Google live.
+3. Auto-posting can be off if you want manual review only. Vacation
+   mode pauses notifications. Tone (casual / warm / formal) is
+   per-business.
+
+Catch: there isn't really one — $14/mo, no contract, cancel any
+time. Quirk: it's a small operation (me + the codebase), so support
+is "email me and I reply within a few hours" not a ticket queue.
+
+If you want to see it move: 10-min call, screen-shared, here:
+{calendly_link}. Or sign up at reviewhub.review and I'll watch the
+queue for your account specifically.
+```
+
+**TH:**
+```
+ได้ครับ สรุปสั้นๆ:
+
+1. เชื่อม Google Business ครั้งเดียว (OAuth, 30 วินาที) เราดึงรีวิวให้
+   อัตโนมัติ
+2. รีวิวใหม่ทุกครั้ง เราร่างคำตอบให้ในโทนของคุณ คุณเห็นในแดชบอร์ด
+   แก้ได้ กด Approve คำตอบจะขึ้น Google ทันที
+3. ปิด auto-post ได้ถ้าอยากตรวจเอง โหมดหยุดยาวหยุดการแจ้งเตือนได้
+   ตั้งโทน (สบายๆ / อบอุ่น / ทางการ) แยกแต่ละร้าน
+
+ไม่มี catch — $14/เดือน ไม่มีสัญญา ยกเลิกได้ตลอด ข้อจำกัด: เป็นทีมเล็ก
+(ผม + codebase) support คือ "อีเมลมา ตอบภายในไม่กี่ชั่วโมง" ไม่ใช่
+ticket queue ใหญ่
+
+ถ้าอยากเห็นจริง 10 นาที screen share: {calendly_link} หรือสมัครที่
+reviewhub.review ผมจะดูบัญชีของคุณเป็นพิเศษ
+```
+
+### Variables to fill in
+
+`{calendly_link}` is currently TBD — set up at https://cal.com or
+calendly.com and replace before using template 5. `{competitor}` and
+`{differentiator}` come from the prospect's reply (they'll name the
+competitor; pick the matching differentiator from the table).
+
+### Tone notes
+
+- Don't start with "Thanks for your reply!" — too eager. Open with
+  "Totally fair" / "เข้าใจครับ" / "Nice" — peer-tone, not
+  salesperson-tone.
+- Drop everything else if they ask a specific question. The
+  templates are framing aids, not scripts to read at someone.
+- After 2 follow-ups with no progress, stop. Don't be the founder
+  who emails 5x.
