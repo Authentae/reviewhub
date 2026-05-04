@@ -55,30 +55,29 @@ list.
   Alternative: skip and rely on magic-link only for now —
   passwordless via email already covers the "older owner who
   forgets passwords" use case.
-- `[ ]` Scheduled reply send — let users queue replies for business
-  hours instead of posting at 2am. Schema change (`reviews.scheduled_post_at`),
-  cron-ish poller every 5 min, UI toggle in the reply editor. ~1 hour.
+- `[done]` Scheduled reply send — `server/src/jobs/scheduledReplyPoster.js`
+  cron + `reviews.scheduled_post_at` column, polls every 5min and posts
+  ready replies via the platform provider.
 - `[done]` Read-only role — shipped option B (share-token).
   Owner mints links from Settings → "Read-only share links";
-  recipient opens `/shared/<token>` for a read-only dashboard
-  mirror. Owner can revoke any link instantly.
-- `[ ]` Year-in-review email + dashboard recap — count replies,
-  average rating delta, top-mentioned staff, busiest review month.
-  Triggered manually by founder for now; cron'd in December if
-  we ship before EOY. Schema-free, all aggregations from existing
-  reviews table.
+  recipient opens `/shared/<token>` for a read-only dashboard mirror.
+- `[done]` Year-in-review — `client/src/pages/YearReview.jsx`
+  printable recap at `/year-review/:year`; aggregates from existing
+  reviews table, no schema changes.
+- `[done]` Component test for FilterPresets — shipped at
+  `client/src/__tests__/FilterPresets.test.jsx` (apply/save/delete
+  + localStorage namespacing coverage).
 - `[ ]` Bundle-size split for the dashboard — Settings.jsx is 107KB
-  gzipped/25KB. Move infrequently-touched sub-components (webhook
+  raw / 25KB gzip. Move infrequently-touched sub-components (webhook
   rotation, API key management, timezone picker) behind dynamic
   import so the first paint is faster.
-- `[ ]` Component test for FilterPresets — I shipped without tests.
-  localStorage mocking + apply/save/delete coverage.
 - `[ ]` E2E test for vacation suppression — assert that posting a
   review during a vacation window does NOT fire the new-review
   email + LINE notification.
-- `[ ]` Test for the audit-preview CTA → register → onboarding
-  prefill flow — the wave-2 onboarding-attribution piece has no
-  test, only the manual click-through.
+- `[done]` Test for audit-preview → register attribution flow.
+  Shipped at `client/src/__tests__/RegisterAuditAttribution.test.jsx`
+  (5 cases: happy path, URL-encoded unicode, no `from` guard,
+  non-audit `from` guard, missing-fields tolerance).
 - `[ ]` Smoke-test for the live posted-to-Google badge — when
   REPLY_TO_PLATFORMS includes google + provider returns ok,
   response_posted_at gets set; UI badge renders.
@@ -122,9 +121,11 @@ The reviewhub.review site itself + everything a prospect sees.
 Outbound work + business mechanics. Lower-frequency but higher-
 leverage when triggered.
 
-- `[ ]` Refill `outreach-queue.md` — currently has 3 verified
-  prospects. Target: 7 more for tomorrow's batch. ~5 min per
-  prospect via the workflow in that doc.
+- `[wait:user]` Refill `outreach-queue.md` — has 3 verified prospects
+  + 6 research targets. Refill needs live-website email verification
+  (workflow step 2 in that doc explicitly forbids scraped/stale
+  addresses). Founder needs to spend ~30 min Monday morning verifying.
+  Agent already mined the verticals; verticals-to-mine list is solid.
 - `[wait:signal]` Pricing-objection journal entries — `audit-outreach.md`
   has the format; agent fills in as replies come in. After 10 logged
   rejections, pattern dictates next move (price shift, tier change,
@@ -132,17 +133,17 @@ leverage when triggered.
 - `[wait:signal]` Audit which verticals from today's 9 sends actually
   reply / convert. Need 48-72h of signal first. After that: update
   `lead-finding.md` to upweight the responding verticals.
-- `[ ]` Lead-finding playbook update — add "small B&B with own website"
-  + "vegetarian / pastry cooking school" to the high-yield verticals
-  list (they performed well in source-availability today).
+- `[done]` Lead-finding playbook updated. Both verticals shipped at
+  `docs/skills/lead-finding.md` lines 141-147 (Small B&Bs with own
+  websites; Vegetarian/pastry/specialty cooking schools).
 - `[wait:user]` Decide tomorrow's outreach time-of-day. Email open
   rates are ~25% higher on Tue/Wed AM vs Mon AM (hospitality
   industry data). Agent can schedule reminders if you want a
   consistent send window. Default: send when the queue is full.
-- `[ ]` Set up a "first-customer playbook" — when someone replies
-  YES, what's the first 24h? Welcome message, kickoff call template,
-  setup walkthrough. Pre-written so the founder doesn't improvise
-  under time pressure.
+- `[done]` First-customer playbook shipped at
+  `docs/skills/first-customer-playbook.md`. Covers Hour 0 ack, Hour
+  4-24 setup walkthrough, billing-checkout response, mistake budget,
+  and "what NOT to do under time pressure."
 
 ## CUSTOMER RELATIONS — replies, follow-ups, objection handling
 
