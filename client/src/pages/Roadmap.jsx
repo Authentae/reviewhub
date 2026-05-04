@@ -35,6 +35,18 @@ export default function Roadmap() {
       blurbAfter: isThai ? ' สำหรับรายละเอียดเต็ม' : ' for the full list.',
       items: [
         {
+          en: 'Outbound audit-share tracking — when a prospect opens the audit URL you DM\'d them, you get an instant email so you can follow up while the lead is warm. Bot/preview crawlers filtered out so you only get notified on real human opens.',
+          th: 'Outbound audit ติดตามการเปิดดูแล้ว — เมื่อ prospect เปิดดู audit ที่คุณส่งไป จะมีอีเมลแจ้งเตือนทันที พร้อมกรอง bot/preview crawlers ออกเพื่อให้ได้สัญญาณจริงเท่านั้น',
+        },
+        {
+          en: 'Outbound audit 48h follow-up reminder — if the prospect opened the audit but you haven\'t closed the loop, a templated nudge lands in your inbox so the warm window doesn\'t lapse.',
+          th: 'Outbound audit แจ้งเตือนติดตามผล 48 ชม. — ถ้า prospect เปิดดูแล้วยังไม่ได้ปิดดีล จะมีอีเมลพร้อมเทมเพลตติดตามผลให้ก๊อปไปแปะ',
+        },
+        {
+          en: 'AI replies now post back to Google automatically by default — was opt-in before, which silently broke the headline feature for paying customers.',
+          th: 'คำตอบจาก AI โพสต์กลับไปที่ Google อัตโนมัติเป็นค่าเริ่มต้นแล้ว (เดิมต้องเปิดเอง ทำให้ฟีเจอร์หลักของคนจ่ายเงินใช้ไม่ได้แบบเงียบๆ)',
+        },
+        {
           en: 'Per-business AI reply tone preference (casual / warm / formal) — steers every AI draft from a single Settings switch.',
           th: 'ตั้งโทนเสียง AI ต่อร้านได้ (สบายๆ / อบอุ่น / ทางการ) — ปรับครั้งเดียวที่ Settings, มีผลกับทุกรีวิว',
         },
