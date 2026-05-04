@@ -149,16 +149,15 @@ leverage when triggered.
 What happens when one of the 9 cold sends responds. Pre-build now;
 deploy on first reply.
 
-- `[ ]` Pre-write reply templates for the 5 most likely objections:
-  (1) "$14 too expensive," (2) "I'll do it manually," (3) "We
-  already use [competitor]," (4) "Not interested right now," (5)
-  "Send me more info / what's the catch?" Each gets a 3-4 sentence
-  response in EN + TH that respects the objection without sounding
-  defensive. Lives in `docs/skills/audit-outreach.md` under a new
-  "Reply playbook" section.
-- `[ ]` Pre-write "interested, want to see more" reply: links to a
-  live demo dashboard, screen-recording, or 10-min Calendly link.
-  We don't have any of those yet — also a TODO.
+- `[done]` Pre-write reply templates for the 5 most likely objections.
+  Shipped to `docs/skills/audit-outreach.md` under "Reply playbook"
+  section with EN + TH for each. Five objections covered: price,
+  DIY, competitor, not-now, more-info.
+- `[done]` Pre-write "interested" reply (warm-response template, EN+TH).
+  Shipped to `audit-outreach.md` § Reply playbook #6. Uses
+  `/register?from=audit&business=...` to trigger sessionStorage
+  attribution + prefill. Sub-TODO: 60-second screencast still missing
+  (noted in the playbook).
 - `[wait:signal]` Follow-up template after a "yes": welcome email,
   setup walkthrough, expectation-setting on first-week experience.
   Wait until first paid signup so the language matches their actual

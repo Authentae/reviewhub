@@ -791,13 +791,60 @@ ticket queue ใหญ่
 ถ้าติดอะไรหรือมีบั๊กผมแก้ให้วันนั้นเลย ตอบอีเมลนี้ถ้าติดที่ไหนครับ
 ```
 
+### 6. "Interested! How do I try this?" (warm response — DON'T waste it)
+
+Different from objection #5 ("send me more info"). #5 is skeptical;
+#6 is already convinced and asking for the path. Speed matters —
+this is the highest-conversion moment in the funnel. Reply within
+30 minutes if at all possible.
+
+The reply does THREE things in 4 sentences:
+1. Confirms you saw their reply (no robotic delay)
+2. Gives them the direct link with their business name pre-filled
+3. Sets one expectation about what happens in the first 5 minutes
+
+**EN:**
+```
+Glad it landed! Here's the direct path:
+
+→ reviewhub.review/register?from=audit&business={business_name_url_encoded}
+
+Sign up takes 60 seconds. You'll connect your Google profile (OAuth),
+we'll pull your reviews automatically, and you'll see the first AI-
+drafted reply waiting in your inbox within ~5 minutes. Free plan, no
+card. Reply here if anything's confusing — I personally watch every
+new signup the first week.
+```
+
+**TH:**
+```
+ดีใจที่สนใจครับ! ลิงก์ตรงเลย:
+
+→ reviewhub.review/register?from=audit&business={business_name_url_encoded}
+
+สมัคร 60 วินาที จะให้เชื่อม Google (OAuth) เราดึงรีวิวให้อัตโนมัติ
+แล้วประมาณ 5 นาทีจะเห็นคำตอบแรกที่ AI ร่างให้รออยู่ใน inbox
+แพ็กเกจฟรี ไม่ต้องใช้บัตร ถ้าติดตรงไหนตอบอีเมลนี้เลยครับ ผมดู
+บัญชีใหม่ทุกบัญชีในสัปดาห์แรกเอง
+```
+
+**TODO — sub-asset:** A 60-second screencast of "first signup → first
+reply approved → reply visible on Google" would convert higher than
+the "5 minutes from now" promise. Costs nothing to record once;
+embed in this reply going forward. Loom or QuickTime → upload to
+the static folder served by Railway → link in the reply body.
+
 ### Variables to fill in
 
 `{competitor}` and `{differentiator}` come from the prospect's reply
 (they'll name the competitor; pick the matching differentiator from
-the table). No call-booking link needed — we deliberately route
-prospects to self-serve signup instead. The audit URL already did
-the demo; the signup flow is the conversion event.
+the table). `{business_name_url_encoded}` is `encodeURIComponent()`
+of their business name (e.g. `The%20Corner%20Bistro`) so the
+register page pre-fills cleanly.
+
+No call-booking link needed — we deliberately route prospects to
+self-serve signup instead. The audit URL already did the demo; the
+signup flow is the conversion event.
 
 ### Tone notes
 
