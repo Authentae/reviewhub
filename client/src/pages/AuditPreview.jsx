@@ -176,7 +176,43 @@ export default function AuditPreview() {
           ))}
         </div>
 
-        {/* Footer — soft pitch, not a hard sell */}
+        {/* Primary CTA — placed at peak-interest moment, right after the
+            drafts and BEFORE the educational footer. Footer-only pitch
+            buries the conversion path; a real button here at the moment
+            the prospect just read their own personalised replies captures
+            intent that prose loses. */}
+        {totalDrafts > 0 && (
+          <section
+            className="mt-10 rounded-2xl p-6 md:p-8 text-center"
+            style={{ background: COLORS.tealDeep, color: '#fff' }}
+          >
+            <p
+              className="text-xs font-mono uppercase tracking-widest mb-2"
+              style={{ color: '#f5d8a7', opacity: 0.9 }}
+            >
+              Want this on autopilot?
+            </p>
+            <h2 className="text-xl md:text-2xl font-bold mb-3" style={{ letterSpacing: '-0.01em' }}>
+              Set this up for {business_name} in 10 minutes
+            </h2>
+            <p className="text-sm leading-relaxed mb-5 max-w-md mx-auto" style={{ color: '#fdf2dc' }}>
+              Connect Google once, ReviewHub drafts replies for every new review,
+              you approve with one click, it posts automatically. $14/mo (~฿490).
+            </p>
+            <a
+              href={`/register?from=audit&business=${encodeURIComponent(business_name)}&token=${encodeURIComponent(token || '')}`}
+              className="inline-block px-6 py-3 rounded-lg text-sm font-semibold transition-transform hover:scale-105"
+              style={{ background: '#fff', color: COLORS.tealDeep }}
+            >
+              Yes, set this up for me →
+            </a>
+            <p className="text-xs mt-4" style={{ color: '#fdf2dc', opacity: 0.85 }}>
+              Or keep using these drafts — the link above stays live for 30 days.
+            </p>
+          </section>
+        )}
+
+        {/* Footer — context, not a sales pitch (the CTA above is the pitch) */}
         <footer
           className="mt-12 pt-8 border-t text-sm leading-relaxed"
           style={{ borderColor: COLORS.line, color: COLORS.inkSoft }}
@@ -186,11 +222,6 @@ export default function AuditPreview() {
             ReviewHub pulls your reviews from Google (and 60+ other platforms),
             drafts replies in your voice, sends you an alert when a new review lands.
             You always edit before publishing — nothing posts without your approval.
-          </p>
-          <p className="mb-3">
-            If you want this running for {business_name} on autopilot, the cheapest
-            plan is $14/mo (~฿490). Or if you'd rather just use these drafts and
-            keep doing it manually, that's also totally fine.
           </p>
           <p className="text-xs" style={{ color: COLORS.inkDim }}>
             <a
