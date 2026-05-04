@@ -742,10 +742,10 @@ the "no, because…" answers are more useful to me than the yeses.
 
 ### 5. "Send me more info / what's the catch?"
 
-Real interest. Don't dump a brochure — they'll never read. Send 3
-things max: 1-screenshot of the dashboard, 1-paragraph on how
-auto-posting works, 1 link to the live demo / Calendly. Move them to
-a 10-min call ASAP.
+Real interest. The product IS the demo (audit URL + signup); a sales
+call would just be re-explaining what they already saw. Don't push
+for a call — push them to sign up directly. Self-serve at 11pm beats
+"let me check my calendar."
 
 **EN:**
 ```
@@ -764,9 +764,11 @@ Catch: there isn't really one — $14/mo, no contract, cancel any
 time. Quirk: it's a small operation (me + the codebase), so support
 is "email me and I reply within a few hours" not a ticket queue.
 
-If you want to see it move: 10-min call, screen-shared, here:
-{calendly_link}. Or sign up at reviewhub.review and I'll watch the
-queue for your account specifically.
+Easiest way to see it work: just sign up at reviewhub.review (free
+plan, no card needed). Takes 60 seconds. I watch new signups
+personally for the first week, so if anything's confusing or broken
+I'll fix it the same day. Reply to this email if you get stuck on
+any step.
 ```
 
 **TH:**
@@ -784,16 +786,18 @@ queue for your account specifically.
 (ผม + codebase) support คือ "อีเมลมา ตอบภายในไม่กี่ชั่วโมง" ไม่ใช่
 ticket queue ใหญ่
 
-ถ้าอยากเห็นจริง 10 นาที screen share: {calendly_link} หรือสมัครที่
-reviewhub.review ผมจะดูบัญชีของคุณเป็นพิเศษ
+วิธีที่ง่ายที่สุดคือสมัครเลยที่ reviewhub.review (แพ็กเกจฟรี ไม่ต้องใช้
+บัตรเครดิต) ใช้เวลา 60 วินาที ผมดูบัญชีใหม่ทุกบัญชีในสัปดาห์แรกเอง
+ถ้าติดอะไรหรือมีบั๊กผมแก้ให้วันนั้นเลย ตอบอีเมลนี้ถ้าติดที่ไหนครับ
 ```
 
 ### Variables to fill in
 
-`{calendly_link}` is currently TBD — set up at https://cal.com or
-calendly.com and replace before using template 5. `{competitor}` and
-`{differentiator}` come from the prospect's reply (they'll name the
-competitor; pick the matching differentiator from the table).
+`{competitor}` and `{differentiator}` come from the prospect's reply
+(they'll name the competitor; pick the matching differentiator from
+the table). No call-booking link needed — we deliberately route
+prospects to self-serve signup instead. The audit URL already did
+the demo; the signup flow is the conversion event.
 
 ### Tone notes
 

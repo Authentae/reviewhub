@@ -37,25 +37,31 @@ moves the needle the most goes top, regardless of effort.
 The app side. Roadmap.jsx is the public face; this is the working
 list.
 
-- `[wait:user]` Magic-link / Google sign-in — passwordless reduces
-  signup friction for older / less-techy owners. Decision needed:
-  Google OAuth only (we already have `business.manage` scope, easy
-  add) vs email-OTP (works for non-Google users, more code) vs both.
-  Pick one, agent ships.
+- `[done]` Magic-link sign-in (email-link path of the "both" choice).
+  Passwordless alternative on /login: type email, click "email me a
+  link", click button in inbox, signed in. 15-min TTL, single-use,
+  honors MFA if enabled.
+- `[wait:user]` Google OAuth sign-in (Google-button path of "both").
+  Code is straightforward (~2 hours) but requires you to:
+    1. Open https://console.cloud.google.com → APIs & Services
+       → OAuth consent screen → set up an OAuth app for ReviewHub
+       (most fields can match the existing googleOAuth.js client
+       used for review-fetching, OR be a separate sign-in client)
+    2. Add authorized redirect URI: `https://reviewhub.review/auth/google/callback`
+    3. Copy the client_id + client_secret into prod env vars
+       (GOOGLE_SIGNIN_CLIENT_ID, GOOGLE_SIGNIN_CLIENT_SECRET)
+    4. Tell me the client_id (only — secret stays in env vars)
+  Agent ships the rest immediately after you do (1)-(4).
+  Alternative: skip and rely on magic-link only for now —
+  passwordless via email already covers the "older owner who
+  forgets passwords" use case.
 - `[ ]` Scheduled reply send — let users queue replies for business
   hours instead of posting at 2am. Schema change (`reviews.scheduled_post_at`),
   cron-ish poller every 5 min, UI toggle in the reply editor. ~1 hour.
-- `[wait:user]` Read-only role for accountants / agency staff — two
-  valid architectures, pick one:
-    A. Full team-membership: `business_collaborators` table, email-
-       invite flow, accountant gets a real account joined to the
-       business. ~4 hours. Cleaner long-term; pollutes every query
-       that currently scopes by ownership.
-    B. Share-token: owner generates a per-share link, recipient
-       opens `/shared/<token>` to see a read-only dashboard mirror.
-       No account needed for the accountant. ~2 hours. Simpler;
-       can't enforce identity (anyone with the link can view).
-  Pick A or B and the agent ships it.
+- `[done]` Read-only role — shipped option B (share-token).
+  Owner mints links from Settings → "Read-only share links";
+  recipient opens `/shared/<token>` for a read-only dashboard
+  mirror. Owner can revoke any link instantly.
 - `[ ]` Year-in-review email + dashboard recap — count replies,
   average rating delta, top-mentioned staff, busiest review month.
   Triggered manually by founder for now; cron'd in December if
