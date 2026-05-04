@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>ReviewHub — Chrome extension popup</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    html, body {
+      margin: 0; padding: 0; height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f172a;
+      color: #0f172a;
+      overflow: hidden;
+    }
+    #root { width: 100%; height: 100%; }
+
+    @keyframes rh-spin { to { transform: rotate(360deg); } }
+    @keyframes rh-blink { 50% { opacity: 0; } }
+    @keyframes rh-pop {
+      0% { transform: scale(.94); opacity: 0; }
+      60% { transform: scale(1.02); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes rh-float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+    @keyframes rh-toast-in {
+      from { transform: translateY(8px); opacity: 0; }
+      to   { transform: translateY(0); opacity: 1; }
+    }
+
+    .rh-scene {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      background:
+        radial-gradient(circle at 25% 15%, rgba(99,102,241,0.18), transparent 55%),
+        radial-gradient(circle at 78% 82%, rgba(37,99,235,0.2), transparent 55%),
+        linear-gradient(135deg, #0b1220 0%, #1e1b4b 100%);
+      padding: 24px;
+      box-sizing: border-box;
+    }
+    .rh-stage {
+      position: relative;
+      width: 100%; max-width: 1280px; height: 100%; max-height: 820px;
+      animation: rh-pop .45s cubic-bezier(.2,.8,.2,1);
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+  <script type="text/babel" src="browser-window.jsx"></script>
+  <script type="text/babel" src="popup.jsx"></script>
+  <script type="text/babel" src="maps-bg.jsx"></script>
+
+  <script type="text/babel">
+    const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+      "accent": "indigo",
+      "showBrowser": true,
+      "showPinTooltip": true,
+      "scenario": "mixed"
+    }/*EDITMODE-END*/;
+
+    const ACCENTS = {
+      indigo:  { from: '#6366f1', to: '#8b5cf6', label: 'Indigo → Violet' },
+      blue:    { from: '#2563eb', to: '#4338ca', label: 'Blue → Indigo (brand)' },
+      teal:    { from: '#0ea5e9', to: '#6366f1', label: 'Sky → Indigo' },
+      sunset:  { from: '#f97316', to: '#ec4899', label: 'Sunset' },
+    };
+
+    function App() {
+      const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+      const [platform, setPlatform] = React.useState('google');
+      const [toast, setToast] = React.useState(false);
+      const accent = ACCENTS[t.accent] || ACCENTS.indigo;
+      const review = REVIEWS[platform];
+      const pMeta = PLATFORMS[platform];
+
+      const showToast = () => {
+        setToast(true);
+        setTimeout(() => setToast(false), 2400);
+      };
+
+      // Chrome window URL + tab title follow the active platform
+      const urlByPlatform = {
+        google:      `google.com/maps/place/Ember+Coffee+House`,
+        yelp:        `yelp.com/biz/ember-coffee-house-bangkok`,
+        facebook:    `facebook.com/embercoffee/reviews`,
+        tripadvisor: `tripadvisor.com/Ember_Coffee_House`,
+        trustpilot:  `trustpilot.com/review/embercoffee.co`,
+        amazon:      `amazon.com/sp?seller=EmberCoffee`,
+        etsy:        `etsy.com/shop/EmberCoffee/reviews`,
+      };
+      const tabTitleByPlatform = {
+        google:      'Ember Coffee House — Google Maps',
+        yelp:        'Ember Coffee House - Yelp',
+        facebook:    'Ember Coffee House | Facebook',
+        tripadvisor: 'Ember Coffee House - Tripadvisor',
+        trustpilot:  'Ember Coffee House reviews | Trustpilot',
+        amazon:      'Ember Coffee — Amazon Seller',
+        etsy:        'EmberCoffee - Etsy',
+      };
+
+      return (
+        <div className="rh-scene">
+          <div className="rh-stage" data-screen-label="01 Extension popup over review page">
+            {t.showBrowser ? (
+              <ChromeWindow
+                width="100%"
+                height="100%"
+                url={urlByPlatform[platform]}
+                tabs={[
+                  { title: tabTitleByPlatform[platform] },
+                  { title: 'ReviewHub Dashboard' },
+                  { title: 'Gmail — Inbox (3)' },
+                ]}
+                activeIndex={0}
+              >
+                <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                  <MapsBackground platform={platform} review={review} />
+
+                  {/* Extension icon indicator in corner */}
+                  <div style={{
+                    position: 'absolute', top: 14, right: 20,
+                    display: 'flex', alignItems: 'center', gap: 6,
+                    padding: '5px 9px 5px 7px', borderRadius: 20,
+                    background: '#fff',
+                    boxShadow: '0 2px 10px rgba(15,23,42,.1)',
+                    border: '1px solid #e2e8f0',
+                    fontSize: 11, fontWeight: 600, color: '#0f172a',
+                  }}>
+                    <div style={{
+                      width: 18, height: 18, borderRadius: 5,
+                      background: `linear-gradient(135deg, ${accent.from}, ${accent.to})`,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      boxShadow: `0 2px 6px ${accent.to}66`,
+                    }}>
+                      <svg width="10" height="10" viewBox="0 0 20 20" fill="#fff">
+                        <path d="M10 2.5l1.8 4.5 4.7.4-3.6 3 1.1 4.6L10 12.6 5.9 15l1.1-4.6-3.6-3 4.7-.4L10 2.5z" />
+                      </svg>
+                    </div>
+                    ReviewHub
+                    <span style={{
+                      width: 6, height: 6, borderRadius: '50%',
+                      background: '#22c55e', marginLeft: 2,
+                      boxShadow: '0 0 0 2px #dcfce7',
+                    }} />
+                  </div>
+
+                  {/* The popup, anchored below the extension icon */}
+                  <div style={{
+                    position: 'absolute', top: 54, right: 20,
+                    animation: 'rh-pop .4s cubic-bezier(.2,.8,.2,1) .15s both',
+                  }}>
+                    {/* Pointer tail */}
+                    <div style={{
+                      position: 'absolute', top: -7, right: 42,
+                      width: 14, height: 14, background: '#fff',
+                      transform: 'rotate(45deg)',
+                      boxShadow: '-1px -1px 0 rgba(15,23,42,.08)',
+                      borderRadius: 2,
+                    }} />
+                    <ExtensionPopup
+                      platform={platform}
+                      setPlatform={setPlatform}
+                      accent={accent}
+                      onReplyCopied={showToast}
+                    />
+                  </div>
+
+                  {/* Toast — shown when reply is copied, simulating paste-ready state */}
+                  {toast && (
+                    <div style={{
+                      position: 'absolute', bottom: 30, left: '50%',
+                      transform: 'translateX(-50%)',
+                      padding: '12px 18px', borderRadius: 10,
+                      background: '#0f172a', color: '#fff',
+                      fontSize: 13, fontWeight: 500,
+                      display: 'flex', alignItems: 'center', gap: 10,
+                      boxShadow: '0 12px 32px rgba(0,0,0,.25)',
+                      animation: 'rh-toast-in .25s ease-out',
+                      zIndex: 10,
+                    }}>
+                      <span style={{
+                        width: 20, height: 20, borderRadius: '50%',
+                        background: '#22c55e',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      }}>
+                        <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#fff" strokeWidth="2.4">
+                          <path d="M3 8l3.5 3.5L13 5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </span>
+                      Copied to clipboard · paste into {pMeta.name}'s reply box
+                    </div>
+                  )}
+                </div>
+              </ChromeWindow>
+            ) : (
+              // Clean-popup-only view: just the product, centered on dark bg.
+              <div style={{
+                width: '100%', height: '100%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <ExtensionPopup
+                  platform={platform}
+                  setPlatform={setPlatform}
+                  accent={accent}
+                  onReplyCopied={showToast}
+                />
+              </div>
+            )}
+          </div>
+
+          <TweaksPanel title="Tweaks">
+            <TweakSection label="Scene" />
+            <TweakToggle label="Show browser frame" value={t.showBrowser}
+                         onChange={(v) => setTweak('showBrowser', v)} />
+            <TweakSelect label="Review platform"
+                         value={platform}
+                         options={Object.entries(PLATFORMS).map(([v, p]) => ({ value: v, label: p.name }))}
+                         onChange={(v) => setPlatform(v)} />
+            <TweakSection label="AI accent" />
+            <TweakRadio label="Accent preset"
+                        value={t.accent}
+                        options={[
+                          { value: 'indigo', label: 'Indigo' },
+                          { value: 'blue',   label: 'Blue' },
+                          { value: 'teal',   label: 'Sky' },
+                          { value: 'sunset', label: 'Sunset' },
+                        ]}
+                        onChange={(v) => setTweak('accent', v)} />
+          </TweaksPanel>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

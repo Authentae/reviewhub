@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>ReviewHub — Tweet cards</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #e2e8f0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 32px; }
+  .stack { display: flex; flex-direction: column; gap: 32px; align-items: center; }
+  .label { font-size: 12px; color: #64748b; font-weight: 600; margin-bottom: -20px; align-self: flex-start; max-width: 1200px; width: 100%; }
+  .card {
+    width: 1200px; height: 675px; position: relative; overflow: hidden;
+    border-radius: 14px; box-shadow: 0 10px 40px rgba(15,23,42,0.15);
+    color: #fff; padding: 80px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .card h1 { font-size: 110px; line-height: 1; font-weight: 800; letter-spacing: -0.04em; margin: 0; text-wrap: balance; }
+  .card .small { font-size: 20px; font-weight: 600; letter-spacing: 0.02em; opacity: 0.85; }
+  .logo { display:flex; align-items:center; gap:12px; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; }
+  .mark { width:40px; height:40px; border-radius: 10px; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); display:flex; align-items:center; justify-content:center; }
+  .foot { display: flex; align-items: center; justify-content: space-between; }
+  .tag { padding: 8px 14px; border-radius: 999px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); font-size: 14px; font-weight: 600; backdrop-filter: blur(10px); }
+
+  /* Card 1 — Platforms */
+  .c1 {
+    background:
+      radial-gradient(circle at 80% 20%, rgba(139,92,246,0.4), transparent 50%),
+      linear-gradient(135deg, #1e3a8a 0%, #4338ca 60%, #6d28d9 100%);
+  }
+  .c1 h1 .dot { color: #fbbf24; }
+  .platforms-row { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 20px; }
+  .ptile { padding: 14px 22px; border-radius: 12px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); font-size: 18px; font-weight: 700; display:flex; align-items:center; gap:10px; }
+  .pdot { width: 14px; height: 14px; border-radius: 3px; }
+
+  /* Card 2 — Speed */
+  .c2 {
+    background:
+      radial-gradient(circle at 20% 80%, rgba(37,99,235,0.5), transparent 55%),
+      linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+  }
+  .c2 h1 { font-size: 130px; }
+  .c2 h1 .strike { position: relative; opacity: 0.45; }
+  .c2 h1 .strike::after { content: ''; position: absolute; left: -4%; right: -4%; top: 54%; height: 6px; background: #f87171; transform: rotate(-3deg); border-radius: 3px; }
+  .c2 h1 .good { background: linear-gradient(120deg, #22d3ee, #818cf8); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+  /* Card 3 — Free */
+  .c3 {
+    background:
+      radial-gradient(circle at 30% 30%, rgba(34,197,94,0.4), transparent 50%),
+      linear-gradient(135deg, #064e3b 0%, #1e3a8a 70%, #4338ca 100%);
+  }
+  .c3 h1 .highlight { background: #fbbf24; color: #064e3b; padding: 0 18px; border-radius: 10px; display: inline-block; transform: rotate(-1deg); }
+
+  /* Card 4 — Priced like one */
+  .c4 {
+    background:
+      radial-gradient(circle at 75% 70%, rgba(236,72,153,0.35), transparent 55%),
+      linear-gradient(135deg, #1e3a8a 0%, #4338ca 55%, #7c3aed 100%);
+  }
+  .price-row { display: flex; align-items: baseline; gap: 22px; margin-top: 8px; }
+  .big-price { font-size: 150px; font-weight: 900; letter-spacing: -0.05em; line-height: 1; color: #fbbf24; }
+  .per { font-size: 26px; opacity: 0.7; font-weight: 600; }
+  .strike-price { text-decoration: line-through; opacity: 0.5; font-size: 28px; font-weight: 600; }
+
+  /* Card 5 — Testimonial */
+  .c5 {
+    background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+    color: #0f172a;
+  }
+  .c5 .quote-open { font-size: 180px; line-height: 0.8; color: #6366f1; font-family: Georgia, serif; font-weight: 700; height: 60px; }
+  .c5 h1 { font-size: 62px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; color: #0f172a; max-width: 900px; }
+  .c5 .logo { color: #0f172a; }
+  .c5 .mark { background: linear-gradient(135deg, #2563eb, #6366f1); border-color: transparent; }
+  .c5 .attr { display: flex; align-items: center; gap: 14px; }
+  .c5 .avatar { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #fbbf24, #f472b6); display:flex; align-items:center; justify-content:center; font-weight:800; font-size: 22px; color: #fff; }
+  .c5 .name { font-size: 18px; font-weight: 700; }
+  .c5 .title { font-size: 14px; color: #64748b; }
+  .c5 .placeholder-note { position: absolute; top: 24px; right: 24px; background: #fef3c7; color: #92400e; padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; border: 1px dashed #f59e0b; }
+  .c5 .stars { color: #f59e0b; font-size: 20px; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+<div class="stack">
+
+  <div class="label">Card 1 — "Yelp. Facebook. Google. One AI reply button."</div>
+  <div class="card c1">
+    <div class="logo"><div class="mark"><svg width="22" height="22" viewBox="0 0 64 64" fill="#fff"><path d="M32 10l5.2 11.8 12.8 1.2-9.6 8.5 2.8 12.5L32 37.5l-11.2 6.5 2.8-12.5-9.6-8.5 12.8-1.2L32 10z"/></svg></div> ReviewHub</div>
+    <div>
+      <h1>Yelp<span class="dot">.</span><br/>Facebook<span class="dot">.</span><br/>Google<span class="dot">.</span></h1>
+      <div class="platforms-row">
+        <div class="ptile"><span class="pdot" style="background:#D32323"></span>Yelp</div>
+        <div class="ptile"><span class="pdot" style="background:#1877F2"></span>Facebook</div>
+        <div class="ptile"><span class="pdot" style="background:#4285F4"></span>Google</div>
+        <div class="ptile"><span class="pdot" style="background:#00AF87"></span>Tripadvisor</div>
+        <div class="ptile"><span class="pdot" style="background:#00B67A"></span>Trustpilot</div>
+        <div class="ptile"><span class="pdot" style="background:#FF9900"></span>Amazon</div>
+        <div class="ptile"><span class="pdot" style="background:#F1641E"></span>Etsy</div>
+      </div>
+    </div>
+    <div class="foot">
+      <div class="small">One AI reply button. ✨</div>
+      <div class="tag">reviewhub.co</div>
+    </div>
+  </div>
+
+  <div class="label">Card 2 — "Reply in 10 seconds. Not 10 minutes."</div>
+  <div class="card c2">
+    <div class="logo"><div class="mark"><svg width="22" height="22" viewBox="0 0 64 64" fill="#fff"><path d="M32 10l5.2 11.8 12.8 1.2-9.6 8.5 2.8 12.5L32 37.5l-11.2 6.5 2.8-12.5-9.6-8.5 12.8-1.2L32 10z"/></svg></div> ReviewHub</div>
+    <div>
+      <h1><span class="good">10 seconds.</span><br/><span class="strike">Not 10 minutes.</span></h1>
+    </div>
+    <div class="foot">
+      <div class="small">AI-drafted replies for every review platform.</div>
+      <div class="tag">✨ Try free</div>
+    </div>
+  </div>
+
+  <div class="label">Card 3 — "Free forever — no credit card."</div>
+  <div class="card c3">
+    <div class="logo"><div class="mark"><svg width="22" height="22" viewBox="0 0 64 64" fill="#fff"><path d="M32 10l5.2 11.8 12.8 1.2-9.6 8.5 2.8 12.5L32 37.5l-11.2 6.5 2.8-12.5-9.6-8.5 12.8-1.2L32 10z"/></svg></div> ReviewHub</div>
+    <div>
+      <h1>Free <span class="highlight">forever.</span><br/>No credit card.</h1>
+      <div style="margin-top: 24px; display: flex; gap: 16px; flex-wrap: wrap;">
+        <div class="tag">✓ 3 AI drafts / day</div>
+        <div class="tag">✓ All 8 platforms</div>
+        <div class="tag">✓ 10 languages</div>
+        <div class="tag">✓ No signup to try</div>
+      </div>
+    </div>
+    <div class="foot">
+      <div class="small">Install the extension. Draft your first reply. Done.</div>
+      <div class="tag">Add to Chrome →</div>
+    </div>
+  </div>
+
+  <div class="label">Card 4 — "Made for solo founders. Priced like one."</div>
+  <div class="card c4">
+    <div class="logo"><div class="mark"><svg width="22" height="22" viewBox="0 0 64 64" fill="#fff"><path d="M32 10l5.2 11.8 12.8 1.2-9.6 8.5 2.8 12.5L32 37.5l-11.2 6.5 2.8-12.5-9.6-8.5 12.8-1.2L32 10z"/></svg></div> ReviewHub</div>
+    <div>
+      <h1 style="font-size: 92px;">Made for solo founders.<br/>Priced like one.</h1>
+      <div class="price-row">
+        <div class="big-price">$14</div>
+        <div>
+          <div class="per">/month · unlimited replies</div>
+          <div class="strike-price">Podium starts at $399/mo</div>
+        </div>
+      </div>
+    </div>
+    <div class="foot">
+      <div class="small">No CRM. No onboarding call. Just the feature you need.</div>
+      <div class="tag">reviewhub.co</div>
+    </div>
+  </div>
+
+  <div class="label">Card 5 — Testimonial (placeholder quote)</div>
+  <div class="card c5">
+    <div class="placeholder-note">[ replace with real quote ]</div>
+    <div class="logo"><div class="mark"><svg width="22" height="22" viewBox="0 0 64 64" fill="#fff"><path d="M32 10l5.2 11.8 12.8 1.2-9.6 8.5 2.8 12.5L32 37.5l-11.2 6.5 2.8-12.5-9.6-8.5 12.8-1.2L32 10z"/></svg></div> ReviewHub</div>
+    <div>
+      <div class="quote-open">"</div>
+      <h1>This used to eat an hour of my Sunday. Now it takes two cups of coffee.</h1>
+    </div>
+    <div class="foot">
+      <div class="attr">
+        <div class="avatar">MC</div>
+        <div>
+          <div class="stars">★★★★★</div>
+          <div class="name">Maria Chen</div>
+          <div class="title">Owner, Ember Coffee House · Bangkok</div>
+        </div>
+      </div>
+      <div class="tag" style="background:#0f172a; color:#fff; border-color:transparent;">reviewhub.co</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

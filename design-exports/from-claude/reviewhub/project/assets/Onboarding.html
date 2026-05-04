@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>ReviewHub — Onboarding</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #0b1220; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 40px 20px; display: flex; gap: 32px; align-items: flex-start; justify-content: center; flex-wrap: wrap; min-height: 100vh;
+    background:
+      radial-gradient(circle at 20% 10%, rgba(99,102,241,0.25), transparent 50%),
+      radial-gradient(circle at 85% 85%, rgba(37,99,235,0.25), transparent 55%),
+      linear-gradient(135deg, #0b1220 0%, #1e1b4b 100%);
+  }
+
+  .screen { width: 600px; }
+  .scaffold {
+    background: #fff; border-radius: 16px; overflow: hidden;
+    box-shadow: 0 20px 48px rgba(0,0,0,0.35);
+    color: #0f172a;
+  }
+  .sl { padding: 0 6px; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.72); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .sl .n { width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,0.14); display:flex; align-items:center; justify-content:center; font-size: 11px; font-weight: 700; color: #fff; }
+
+  /* Chrome-extension popup sizing — look believable at 600 wide, since real popup is ~380 */
+  .hero-bar { height: 44px; background: #202124; display:flex; align-items:center; gap:8px; padding: 0 14px; }
+  .hero-bar .tl { width: 12px; height: 12px; border-radius: 50%; }
+  .hero-bar .url { flex: 1; margin-left: 12px; height: 28px; border-radius: 14px; background: #35363a; display:flex; align-items:center; padding: 0 14px; color:#e8eaed; font-size: 12px; gap: 8px; }
+
+  .logo { display:flex; align-items:center; gap:10px; }
+  .logo .mark { width:36px; height:36px; border-radius: 9px; background: linear-gradient(135deg,#2563eb,#6366f1); display:flex; align-items:center; justify-content:center; box-shadow: 0 4px 12px rgba(99,102,241,0.4); }
+  .logo .wm { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; }
+
+  h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.025em; margin: 0 0 8px; line-height: 1.15; text-wrap: balance; }
+  p.lead { font-size: 15px; color: #475569; line-height: 1.55; margin: 0 0 24px; }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 13px 22px; border-radius: 10px; border: 0; cursor: pointer;
+    background: linear-gradient(135deg, #2563eb, #6366f1);
+    color: #fff; font-size: 14px; font-weight: 700;
+    box-shadow: 0 6px 18px rgba(99,102,241,0.4);
+    font-family: inherit;
+  }
+  .btn-ghost { padding: 13px 18px; border: 0; background: transparent; color: #64748b; font-size: 14px; font-weight: 600; cursor: pointer; }
+
+  .progress { display: flex; gap: 6px; margin-bottom: 22px; }
+  .progress i { height: 4px; border-radius: 2px; flex: 1; background: #e2e8f0; }
+  .progress i.on { background: #2563eb; }
+  .progress i.done { background: #22c55e; }
+
+  .step-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #2563eb; margin-bottom: 10px; }
+
+  /* Screen 1: Install confirmation — pins-to-toolbar moment */
+  .s1-body { padding: 40px 44px 36px; position: relative; }
+  .confetti { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  .confetti i { position: absolute; width: 6px; height: 10px; border-radius: 1px; opacity: 0.7; }
+  .pin-pointer {
+    position: absolute; top: 48px; right: 60px;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+  }
+  .pin-arrow {
+    width: 40px; height: 80px; color: #6366f1;
+  }
+  .pin-label { font-size: 11px; font-weight: 700; color: #6366f1; background: #eef2ff; padding: 6px 10px; border-radius: 999px; border: 1px solid #c7d2fe; white-space: nowrap; }
+  .install-viz {
+    margin: 24px 0 32px; padding: 20px; border-radius: 12px;
+    background: linear-gradient(135deg, #eef2ff, #f0f9ff);
+    border: 1px solid #e0e7ff;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .install-viz .big-check { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #22c55e, #16a34a); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 6px 16px rgba(34,197,94,0.35); }
+  .install-viz .label { font-size: 15px; font-weight: 700; }
+  .install-viz .sub { font-size: 12.5px; color: #64748b; margin-top: 2px; }
+
+  .bullets { list-style: none; padding: 0; margin: 0 0 28px; display: flex; flex-direction: column; gap: 12px; }
+  .bullets li { display: flex; gap: 12px; font-size: 13.5px; color: #334155; line-height: 1.5; align-items: flex-start; }
+  .bullets i { width: 22px; height: 22px; border-radius: 6px; background: #f0fdf4; color: #16a34a; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; flex-shrink: 0; }
+
+  /* Screen 2: Paste token */
+  .s2-body { padding: 40px 44px 36px; }
+  .token-field {
+    margin: 24px 0 12px;
+    padding: 18px 18px 18px 50px;
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 14px;
+    color: #94a3b8;
+    background: #fafbfc;
+    position: relative;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: all 0.15s;
+  }
+  .token-field.filled {
+    border-style: solid; border-color: #22c55e; background: #f0fdf4; color: #14532d;
+  }
+  .token-field::before {
+    content: ''; position: absolute; left: 18px; top: 50%; transform: translateY(-50%);
+    width: 20px; height: 20px; border-radius: 6px; background: #e2e8f0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 16 16' fill='none' stroke='%2364748b' stroke-width='1.6'><rect x='3' y='7' width='10' height='7' rx='1.5'/><path d='M5 7V5a3 3 0 016 0v2'/></svg>");
+    background-repeat: no-repeat; background-position: center;
+  }
+  .token-field.filled::before {
+    background-color: #dcfce7;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 16 16' fill='none' stroke='%2316a34a' stroke-width='2.2'><path d='M3 8l3.5 3.5L13 5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  }
+  .token-field .paste { font-size: 12px; font-weight: 700; color: #2563eb; font-family: -apple-system, sans-serif; padding: 4px 10px; border-radius: 6px; background: #dbeafe; }
+  .token-field.filled .paste { color: #16a34a; background: #dcfce7; }
+
+  .token-hint { font-size: 12px; color: #64748b; margin-bottom: 24px; display: flex; align-items: center; gap: 6px; }
+  .token-hint a { color: #2563eb; font-weight: 600; text-decoration: none; }
+
+  .secure-note { background: #f8fafc; border-radius: 10px; padding: 12px 14px; display: flex; gap: 10px; align-items: flex-start; font-size: 12px; color: #475569; line-height: 1.5; margin-bottom: 28px; border: 1px solid #e2e8f0; }
+  .secure-note svg { flex-shrink: 0; margin-top: 1px; }
+
+  /* Screen 3: Try it */
+  .s3-body { padding: 40px 44px 36px; }
+  .platform-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 24px 0 28px; }
+  .pchip { padding: 14px 8px; border: 1px solid #e2e8f0; border-radius: 10px; text-align: center; background: #fff; transition: all .15s; cursor: default; }
+  .pchip:hover { border-color: #cbd5e1; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+  .pchip .pi { width: 28px; height: 28px; border-radius: 7px; color: #fff; font-weight: 800; font-size: 15px; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; }
+  .pchip .pn { font-size: 11.5px; font-weight: 600; color: #0f172a; }
+
+  .magic-banner {
+    background: linear-gradient(135deg, #eef2ff 0%, #fef3c7 100%);
+    border-radius: 12px; padding: 18px 20px;
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 26px;
+    border: 1px solid rgba(99,102,241,0.2);
+  }
+  .magic-banner .spark {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(99,102,241,0.35);
+    font-size: 18px;
+  }
+  .magic-banner .ttl { font-size: 14px; font-weight: 700; color: #0f172a; }
+  .magic-banner .sb { font-size: 12.5px; color: #475569; margin-top: 2px; line-height: 1.45; }
+
+  .foot-row { display: flex; align-items: center; justify-content: space-between; }
+  .tip { font-size: 11.5px; color: #94a3b8; }
+  .tip kbd { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px; padding: 1px 6px; font-family: inherit; font-size: 10.5px; font-weight: 600; color: #475569; }
+
+  .done-check { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #22c55e, #16a34a); display: flex; align-items: center; justify-content: center; margin-bottom: 18px; box-shadow: 0 8px 20px rgba(34,197,94,0.35); }
+</style>
+</head>
+<body>
+
+<!-- ─── Screen 1: Install confirmation ─── -->
+<div class="screen">
+  <div class="sl"><span class="n">1</span> Install confirmation — first thing user sees after adding extension</div>
+  <div class="scaffold">
+    <!-- Mini chrome bar showing the puzzle-piece context -->
+    <div class="hero-bar">
+      <div class="tl" style="background:#ff5f57"></div>
+      <div class="tl" style="background:#febc2e"></div>
+      <div class="tl" style="background:#28c840"></div>
+      <div class="url">chrome-extension://reviewhub/welcome</div>
+      <div style="position:relative; width:28px; height:28px; border-radius:6px; background: linear-gradient(135deg, #2563eb, #6366f1); display:flex; align-items:center; justify-content:center; box-shadow: 0 0 0 3px rgba(99,102,241,0.25);">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="#fff"><path d="M10 2.5l1.8 4.5 4.7.4-3.6 3 1.1 4.6L10 12.6 5.9 15l1.1-4.6-3.6-3 4.7-.4L10 2.5z"/></svg>
+      </div>
+    </div>
+
+    <div class="s1-body">
+      <div class="pin-pointer">
+        <svg class="pin-arrow" viewBox="0 0 40 80" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M20 70 C 30 45, 10 35, 20 10" stroke-dasharray="3 4"/>
+          <path d="M14 14 L 20 8 L 26 14"/>
+        </svg>
+        <div class="pin-label">Pin ReviewHub to your toolbar</div>
+      </div>
+
+      <div class="progress">
+        <i class="done"></i><i></i><i></i>
+      </div>
+
+      <div class="logo" style="margin-bottom: 24px;">
+        <div class="mark">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="#fff"><path d="M10 2.5l1.8 4.5 4.7.4-3.6 3 1.1 4.6L10 12.6 5.9 15l1.1-4.6-3.6-3 4.7-.4L10 2.5z"/></svg>
+        </div>
+        <div class="wm">ReviewHub</div>
+      </div>
+
+      <div class="step-label">Step 1 of 3</div>
+      <h1>You're in. Welcome to ReviewHub.</h1>
+      <p class="lead">The extension is installed and ready. One small thing before we make it useful:</p>
+
+      <div class="install-viz">
+        <div class="big-check">
+          <svg width="24" height="24" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg>
+        </div>
+        <div>
+          <div class="label">ReviewHub added to Chrome</div>
+          <div class="sub">Now pin it so you can reach it in one click ↗</div>
+        </div>
+      </div>
+
+      <ul class="bullets">
+        <li><i>1</i><div>Click the <b>puzzle-piece icon</b> in your toolbar (top-right of Chrome)</div></li>
+        <li><i>2</i><div>Find <b>ReviewHub</b> and click the <b>pin</b> icon next to it</div></li>
+        <li><i>3</i><div>The ✨ logo will stay in your toolbar forever</div></li>
+      </ul>
+
+      <div style="display:flex; gap:8px; align-items:center;">
+        <button class="btn-primary">
+          I've pinned it — continue →
+        </button>
+        <button class="btn-ghost">Skip for now</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Screen 2: Paste token ─── -->
+<div class="screen">
+  <div class="sl"><span class="n">2</span> Paste API token — connects the extension to the user's account</div>
+  <div class="scaffold">
+    <div class="hero-bar">
+      <div class="tl" style="background:#ff5f57"></div>
+      <div class="tl" style="background:#febc2e"></div>
+      <div class="tl" style="background:#28c840"></div>
+      <div class="url">chrome-extension://reviewhub/setup</div>
+    </div>
+
+    <div class="s2-body">
+      <div class="progress">
+        <i class="done"></i><i class="on"></i><i></i>
+      </div>
+
+      <div class="step-label">Step 2 of 3</div>
+      <h1>Connect your account.</h1>
+      <p class="lead">Paste the token from your dashboard so drafts save to your history. Takes ~10 seconds.</p>
+
+      <div class="token-field filled">
+        <span>rh_live_a8k2·••••·••••·••••·p9mq</span>
+        <span class="paste">✓ Pasted</span>
+      </div>
+      <div class="token-hint">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#64748b" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 5v3.5M8 11v.01" stroke-linecap="round"/></svg>
+        No token? <a href="#">Grab it from your dashboard →</a>
+      </div>
+
+      <div class="secure-note">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#64748b" stroke-width="1.6">
+          <path d="M3 7V5a5 5 0 0110 0v2" stroke-linecap="round"/>
+          <rect x="2" y="7" width="12" height="8" rx="1.5"/>
+          <circle cx="8" cy="11" r="1" fill="#64748b" stroke="none"/>
+        </svg>
+        <div>
+          <b style="color:#0f172a;">Your token stays in your browser.</b><br/>
+          We never store review content on our servers. Drafts are generated on-demand and discarded after 24 hours.
+        </div>
+      </div>
+
+      <div style="display:flex; gap:8px; align-items:center; justify-content: space-between;">
+        <button class="btn-ghost">← Back</button>
+        <button class="btn-primary">
+          Connect &amp; continue
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3l5 5-5 5"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Screen 3: Go try it ─── -->
+<div class="screen">
+  <div class="sl"><span class="n">3</span> Go do the thing — user sees magic happen on their own site</div>
+  <div class="scaffold">
+    <div class="hero-bar">
+      <div class="tl" style="background:#ff5f57"></div>
+      <div class="tl" style="background:#febc2e"></div>
+      <div class="tl" style="background:#28c840"></div>
+      <div class="url">chrome-extension://reviewhub/ready</div>
+    </div>
+
+    <div class="s3-body">
+      <div class="progress">
+        <i class="done"></i><i class="done"></i><i class="on"></i>
+      </div>
+
+      <div class="done-check">
+        <svg width="30" height="30" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg>
+      </div>
+
+      <div class="step-label" style="color:#16a34a;">Setup complete · Step 3 of 3</div>
+      <h1>Now go see the magic.</h1>
+      <p class="lead">Open any review on these platforms and click the ✨ button that appears next to it. That's it — no more onboarding.</p>
+
+      <div class="platform-grid">
+        <div class="pchip"><div class="pi" style="background:#4285F4">G</div><div class="pn">Google</div></div>
+        <div class="pchip"><div class="pi" style="background:#D32323">y</div><div class="pn">Yelp</div></div>
+        <div class="pchip"><div class="pi" style="background:#1877F2">f</div><div class="pn">Facebook</div></div>
+        <div class="pchip"><div class="pi" style="background:#00AF87">T</div><div class="pn">Tripadvisor</div></div>
+        <div class="pchip"><div class="pi" style="background:#00B67A">★</div><div class="pn">Trustpilot</div></div>
+        <div class="pchip"><div class="pi" style="background:#FF9900">a</div><div class="pn">Amazon</div></div>
+        <div class="pchip"><div class="pi" style="background:#F1641E">E</div><div class="pn">Etsy</div></div>
+        <div class="pchip" style="background:#f8fafc; border-style:dashed;"><div class="pi" style="background:#cbd5e1; color:#64748b;">+</div><div class="pn" style="color:#64748b;">More soon</div></div>
+      </div>
+
+      <div class="magic-banner">
+        <div class="spark">✨</div>
+        <div>
+          <div class="ttl">Your first draft is free.</div>
+          <div class="sb">Visit any of the platforms above. Next to each review, you'll see a new "Draft reply with AI" button — click it.</div>
+        </div>
+      </div>
+
+      <div class="foot-row">
+        <div class="tip">Pro tip: press <kbd>⌘</kbd><kbd>Shift</kbd><kbd>R</kbd> to open the popup anywhere.</div>
+        <button class="btn-primary">Open my first review →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

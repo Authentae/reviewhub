@@ -10,6 +10,9 @@ import usePageTitle from '../hooks/usePageTitle';
 import { getToken } from '../lib/auth';
 import api from '../lib/api';
 import ReviewTrend from '../components/ReviewTrend';
+// RatingDistribution removed from the dashboard surface (analytics
+// belongs in /analytics — see chats with Claude Design 2026-05-04).
+// Component still exported below for potential reuse.
 import OnboardingChecklist from '../components/OnboardingChecklist';
 import ValueReceipt from '../components/ValueReceipt';
 import { useI18n } from '../context/I18nContext';
@@ -513,30 +516,22 @@ export default function Dashboard() {
           );
         })()}
 
-        {/* Negative review alert — shown when there are unresponded 1-2 star reviews */}
+        {/* Promoted lede — was a timid pink banner with a ghost button.
+            Now a typeset lede: rose eyebrow with the count, serif headline
+            with the *reason* to act, solid CTA. Earns its prominence. */}
         {!loading && data?.stats?.unresponded_negative > 0 && !responded && !sentiment && (
-          <div
-            role="alert"
-            className="rh-banner danger"
-            style={{ marginBottom: 16, borderRadius: 12, border: '1px solid color-mix(in oklab, var(--rh-rose) 30%, var(--rh-rule))', justifyContent: 'space-between' }}
-          >
-            <span style={{ color: 'var(--rh-ink)' }}>
-              <span aria-hidden="true">⚠️ </span>
-              {t('dashboard.negativeAlert', { n: data.stats.unresponded_negative })}
-            </span>
+          <div role="alert" className="rh-lede">
+            <div style={{ minWidth: 0 }}>
+              <div className="eyebrow">
+                {t('dashboard.ledeEyebrow', 'Action needed · {n} guests waiting', { n: data.stats.unresponded_negative })}
+              </div>
+              <h2>{t('dashboard.ledeHeadline', 'Replying within 24 hours triples the chance of a return visit.')}</h2>
+            </div>
             <button
               type="button"
               onClick={() => { setSentiment('negative'); setResponded('no'); setPage(1); }}
-              style={{
-                flexShrink: 0,
-                fontSize: 12, fontWeight: 600,
-                color: 'var(--rh-rose)',
-                border: '1px solid color-mix(in oklab, var(--rh-rose) 35%, var(--rh-rule))',
-                padding: '4px 10px', borderRadius: 8,
-                background: 'transparent', cursor: 'pointer',
-              }}
             >
-              {t('dashboard.negativeAlertAction')}
+              {t('dashboard.ledeAction', 'Show {n} →', { n: data.stats.unresponded_negative })}
             </button>
           </div>
         )}
@@ -545,20 +540,18 @@ export default function Dashboard() {
         {stats && !loading && <ValueReceipt stats={stats} />}
         {stats && !loading && (
           <section aria-label={t('dashboard.statsSection')} className="mb-6">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {/* Number stats run through toLocaleString(lang) so 12,345
-                  shows the user's locale separators — matches the
-                  Analytics page (Analytics.jsx:386 uses the same pattern).
-                  Without this Dashboard rendered "12345" while Analytics
-                  rendered "12,345" for the SAME total, which looked like
-                  a bug. */}
-              <StatCard label={t('dashboard.stats.total')} value={(stats.total ?? 0).toLocaleString(lang)} />
-              <StatCard label={t('dashboard.stats.avgRating')} value={stats.avg_rating ? `${stats.avg_rating} ★` : '—'} />
-              <StatCard label={t('dashboard.stats.positive')} value={(stats.positive ?? 0).toLocaleString(lang)} color="text-green-600 dark:text-green-400" />
-              <StatCard
+            {/* Compressed stat strip — same numbers as the old 4-up grid,
+                ~80px less fold cost. Mono labels + serif values, hairline
+                cell separators. Values still go through toLocaleString
+                (matches Analytics page) so 12,345 shows locale separators. */}
+            <div className="rh-stat-row">
+              <StatRowCell label={t('dashboard.stats.total')} value={(stats.total ?? 0).toLocaleString(lang)} />
+              <StatRowCell label={t('dashboard.stats.avgRating')} value={stats.avg_rating ?? '—'} suffix={stats.avg_rating ? '★' : null} />
+              <StatRowCell label={t('dashboard.stats.positive')} value={(stats.positive ?? 0).toLocaleString(lang)} variant="sage" />
+              <StatRowCell
                 label={t('dashboard.stats.responseRate')}
                 value={stats.total > 0 && stats.responded != null ? `${Math.round((stats.responded / stats.total) * 100)}%` : '—'}
-                color="text-blue-600 dark:text-blue-400"
+                variant="teal"
               />
             </div>
             {/* Per-platform breakdown — always shows global counts for full context */}
@@ -599,26 +592,22 @@ export default function Dashboard() {
           </section>
         )}
 
-        {/* Skeleton stats */}
+        {/* Skeleton stats — matches the compressed strip dimensions */}
         {loading && !data && (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+          <div className="rh-stat-row mb-6 animate-pulse">
             {[1,2,3,4].map(i => (
-              <div key={i} className="card p-4 animate-pulse">
-                <div className="h-3 bg-gray-200 rounded w-2/3 mb-2" />
-                <div className="h-7 bg-gray-100 rounded w-1/2" />
+              <div key={i} className="cell">
+                <div className="h-2.5 rounded w-2/3" style={{ background: 'var(--rh-rule)' }} />
+                <div className="h-5 rounded w-1/2 mt-1.5" style={{ background: 'var(--rh-rule)', opacity: 0.6 }} />
               </div>
             ))}
           </div>
         )}
 
-        {/* Rating distribution */}
-        {!loading && (data?.filteredStats || data?.stats) && (
-          <RatingDistribution
-            stats={hasFilters ? (data.filteredStats ?? data.stats) : data.stats}
-            activeRating={rating}
-            onRatingClick={(r) => { setRating(prev => prev === String(r) ? '' : String(r)); setPage(1); }}
-          />
-        )}
+        {/* Rating distribution removed — was an analytics chart in an inbox.
+            Per Claude Design redesign chats: "It told you what you already
+            know. It cost ~140px of fold for a glance you take once a month."
+            Distribution now lives in /analytics where it belongs. */}
 
         {/* Review trend — only show when no filters active to keep context clear */}
         {!hasFilters && !loading && data?.stats?.total > 0 && (
@@ -861,17 +850,24 @@ export default function Dashboard() {
             <p className="font-semibold text-gray-700 dark:text-gray-300">{t('dashboard.loading')}</p>
           </div>
         ) : !data?.reviews?.length ? (
-          <div className="card p-12 text-center">
-            <p className="text-4xl mb-3" aria-hidden="true">{responded === 'no' ? '🎉' : '📭'}</p>
-            <p className="font-semibold text-gray-700 dark:text-gray-300 mb-1">
-              {responded === 'no'
-                ? t('dashboard.allCaughtUp')
-                : hasFilters ? t('dashboard.noReviewsMatch') : t('dashboard.noReviewsYet')}
-            </p>
+          <div className="rh-empty-editorial">
+            <div className="eyebrow">
+              {responded === 'no' ? t('dashboard.allCaughtUpEyebrow', 'Inbox zero')
+                : hasFilters ? t('dashboard.noMatchEyebrow', 'No matches')
+                : t('dashboard.firstTimeEyebrow', 'Welcome')}
+            </div>
+            <h3>
+              {responded === 'no' ? t('dashboard.allCaughtUp')
+                : hasFilters ? t('dashboard.noReviewsMatch')
+                : t('dashboard.noReviewsYet')}
+            </h3>
+            {hasFilters && (
+              <p>{t('dashboard.tryWidening', 'Try widening to All platforms, or look at the last 30 days.')}</p>
+            )}
             {responded === 'no'
-              ? <button type="button" onClick={clearFilters} className="btn-secondary text-sm mt-3">{t('dashboard.viewAll')}</button>
+              ? <button type="button" onClick={clearFilters} className="btn-secondary text-sm">{t('dashboard.viewAll')}</button>
               : hasFilters
-              ? <button type="button" onClick={clearFilters} className="btn-secondary text-sm mt-3">{t('dashboard.clearFilters')}</button>
+              ? <button type="button" onClick={clearFilters} className="btn-secondary text-sm">{t('dashboard.clearFilters')}</button>
               : (
                 // Fresh-account path — guide the user to connect their first
                 // platform in Settings rather than push them to load fake data.
@@ -1026,6 +1022,22 @@ export default function Dashboard() {
     </div>
   );
 }
+
+// Compressed stat-row cell — replaces the 4-up StatCard tiles. Same numbers,
+// ~80px less fold cost. `variant` maps to the .teal/.sage tints in CSS.
+const StatRowCell = React.memo(function StatRowCell({ label, value, suffix, variant }) {
+  return (
+    <div className={`cell${variant ? ' ' + variant : ''}`}>
+      <div className="label">{label}</div>
+      <div className="row">
+        <span className="v">
+          {value ?? '—'}
+          {suffix && <small>{suffix}</small>}
+        </span>
+      </div>
+    </div>
+  );
+});
 
 const StatCard = React.memo(function StatCard({ label, value, color }) {
   // Editorial stat tile — matches the .rh-stat primitive in dashboard-system.css
