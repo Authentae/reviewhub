@@ -430,6 +430,16 @@ function initSchema() {
   migrateAddColumn('users', 'magic_login_token_hash', 'TEXT DEFAULT NULL');
   migrateAddColumn('users', 'magic_login_expires_at', 'TEXT DEFAULT NULL');
 
+  // Google sign-in. Stores the user's Google account ID (the `sub`
+  // claim from Google's ID token — stable across email changes,
+  // suitable for account linking). NULL means the user has never
+  // signed in via Google. Unique index ensures one Google account
+  // can only be linked to one ReviewHub account at a time. Email is
+  // still the primary identity; Google sign-in is a convenience that
+  // matches by email on first sign-in (linking via email lookup) and
+  // by google_sub thereafter.
+  migrateAddColumn('users', 'google_sub', 'TEXT DEFAULT NULL');
+
   // Two-factor auth (email OTP). When enabled, login returns a short-lived
   // "pending" token and requires a 6-digit code emailed to the user. Recovery
   // codes are stored in a separate table so they can be individually marked used.

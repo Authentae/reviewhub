@@ -1183,6 +1183,123 @@ router.post('/resend-verification', emailSendLimiter, authMiddleware, (req, res)
 
 // ─── Password reset ────────────────────────────────────────────────────────
 
+// Google sign-in (OAuth 2.0 Authorization Code flow).
+//
+// /api/auth/google/login redirects the user to Google with a CSRF
+// state cookie; /api/auth/google/callback verifies state, exchanges
+// the code, decodes the ID token, links/creates the user account,
+// and issues our session JWT. See lib/googleSignin.js for the OAuth
+// mechanics + the account-linking strategy.
+router.get('/google/login', (req, res) => {
+  try {
+    const { isConfigured, buildAuthUrl, genState } = require('../lib/googleSignin');
+    if (!isConfigured()) {
+      return res.status(503).json({ error: 'Google sign-in not configured' });
+    }
+    const state = genState();
+    // Short-TTL httpOnly cookie holds the state for callback comparison.
+    // 10 minutes is well above the realistic time a real user spends
+    // on the Google consent screen; below that, an abandoned flow
+    // doesn't leave the cookie hanging around as long.
+    res.cookie('rh_oauth_state', state, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 10 * 60 * 1000,
+      path: '/api/auth/google',
+    });
+    res.redirect(buildAuthUrl(state));
+  } catch (err) {
+    captureException(err, { route: 'auth', op: 'google-login' });
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+router.get('/google/callback', async (req, res) => {
+  // Where to send the user once we're done. /dashboard for happy path,
+  // /login?google_error=… on failure (so the UI can show a friendly
+  // message instead of a JSON error page).
+  const baseUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+  const failRedirect = (reason) => res.redirect(`${baseUrl}/login?google_error=${encodeURIComponent(reason)}`);
+
+  try {
+    const { isConfigured, exchangeCodeForIdToken } = require('../lib/googleSignin');
+    if (!isConfigured()) return failRedirect('not_configured');
+
+    const code = String(req.query.code || '');
+    const stateParam = String(req.query.state || '');
+    const stateCookie = req.cookies?.rh_oauth_state;
+
+    // Clear the state cookie ASAP so it can't be replayed.
+    res.clearCookie('rh_oauth_state', { path: '/api/auth/google' });
+
+    if (!code || !stateParam || !stateCookie || stateParam !== stateCookie) {
+      return failRedirect('csrf');
+    }
+
+    let claims;
+    try {
+      claims = await exchangeCodeForIdToken(code);
+    } catch (err) {
+      captureException(err, { route: 'auth', op: 'google-callback-exchange' });
+      return failRedirect('exchange_failed');
+    }
+
+    const email = String(claims.email).toLowerCase().slice(0, 254);
+    const googleSub = String(claims.sub);
+
+    // Account linking strategy:
+    //   1. If google_sub already linked → that user, sign in.
+    //   2. Else if email matches an existing user → link google_sub to
+    //      that account, sign in. The user MUST have an existing
+    //      verified email for this branch (preventing a new Google
+    //      account hijack against a forgotten ReviewHub one with the
+    //      same address — Google's email_verified=true assertion is
+    //      our protection here).
+    //   3. Else → auto-create a new user with email_verified_at set
+    //      (Google has already verified the email at their end).
+    let user = get(`SELECT id, email, mfa_enabled FROM users WHERE google_sub = ?`, [googleSub]);
+
+    if (!user) {
+      const existingByEmail = get(`SELECT id, email, mfa_enabled FROM users WHERE LOWER(email) = ?`, [email]);
+      if (existingByEmail) {
+        run(`UPDATE users SET google_sub = ? WHERE id = ?`, [googleSub, existingByEmail.id]);
+        user = existingByEmail;
+      } else {
+        // Auto-create. Password is unset (NULL) — Google sign-in is
+        // the only way in for these accounts unless they later set a
+        // password via /forgot-password.
+        const newId = insert(
+          `INSERT INTO users (email, password_hash, google_sub, email_verified_at,
+                              terms_accepted_at, terms_version_accepted, age_confirmed)
+           VALUES (?, NULL, ?, datetime('now'), datetime('now'), '1.0', 1)`,
+          [email, googleSub]
+        );
+        user = get(`SELECT id, email, mfa_enabled FROM users WHERE id = ?`, [newId]);
+      }
+    }
+
+    if (!user) return failRedirect('unknown');
+
+    // MFA-enabled users get a pending token + bounce to the MFA
+    // completion page, mirroring /login behavior.
+    if (user.mfa_enabled) {
+      const pendingToken = signToken({ id: user.id, mfa: 'pending' }, { expiresIn: '10m' });
+      return res.redirect(`${baseUrl}/login/mfa?google_pending=${encodeURIComponent(pendingToken)}`);
+    }
+
+    // Set the session cookie. Same shape the rest of the app expects
+    // (sessionCookie lib handles it).
+    const token = signToken({ id: user.id });
+    const { writeSessionCookie } = require('../lib/sessionCookie');
+    writeSessionCookie(res, token);
+    return res.redirect(`${baseUrl}/dashboard`);
+  } catch (err) {
+    captureException(err, { route: 'auth', op: 'google-callback' });
+    return failRedirect('server_error');
+  }
+});
+
 // Magic-link sign-in. Passwordless alternative to /login. Same
 // no-enumeration guarantee as /forgot-password — always returns 200,
 // never leaks whether the email exists.
