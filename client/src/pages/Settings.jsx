@@ -1275,7 +1275,7 @@ function VacationSection({ business, onUpdate }) {
       onUpdate({ vacation_until: apiValue });
       toast(
         apiValue
-          ? t('vacation.saved', 'Vacation mode active until {{date}}', { date: apiValue })
+          ? t('vacation.saved', 'Vacation mode active until {date}', { date: apiValue })
           : t('vacation.cleared', 'Vacation mode cleared'),
         'success'
       );
@@ -1317,7 +1317,7 @@ function VacationSection({ business, onUpdate }) {
           >
             <span>
               <span aria-hidden="true">🏖️ </span>
-              {t('vacation.activeBanner', 'Currently on vacation until {{date}}. New-review notifications are paused.', { date: current })}
+              {t('vacation.activeBanner', 'Currently on vacation until {date}. New-review notifications are paused.', { date: current })}
             </span>
             <button
               type="button"

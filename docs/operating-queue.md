@@ -45,11 +45,17 @@ list.
 - `[ ]` Scheduled reply send — let users queue replies for business
   hours instead of posting at 2am. Schema change (`reviews.scheduled_post_at`),
   cron-ish poller every 5 min, UI toggle in the reply editor. ~1 hour.
-- `[ ]` Read-only role for accountants / agency staff — share dashboard
-  view without giving full edit access. Schema change (`business_users`
-  join table with `role` column), middleware gate, UI for the owner
-  to invite read-only collaborators. ~3 hours; security-sensitive,
-  needs careful test coverage.
+- `[wait:user]` Read-only role for accountants / agency staff — two
+  valid architectures, pick one:
+    A. Full team-membership: `business_collaborators` table, email-
+       invite flow, accountant gets a real account joined to the
+       business. ~4 hours. Cleaner long-term; pollutes every query
+       that currently scopes by ownership.
+    B. Share-token: owner generates a per-share link, recipient
+       opens `/shared/<token>` to see a read-only dashboard mirror.
+       No account needed for the accountant. ~2 hours. Simpler;
+       can't enforce identity (anyone with the link can view).
+  Pick A or B and the agent ships it.
 - `[ ]` Year-in-review email + dashboard recap — count replies,
   average rating delta, top-mentioned staff, busiest review month.
   Triggered manually by founder for now; cron'd in December if
