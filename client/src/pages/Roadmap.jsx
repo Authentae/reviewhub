@@ -35,16 +35,32 @@ export default function Roadmap() {
       blurbAfter: isThai ? ' สำหรับรายละเอียดเต็ม' : ' for the full list.',
       items: [
         {
-          en: 'Outbound audit-share tracking — when a prospect opens the audit URL you DM\'d them, you get an instant email so you can follow up while the lead is warm. Bot/preview crawlers filtered out so you only get notified on real human opens.',
-          th: 'Outbound audit ติดตามการเปิดดูแล้ว — เมื่อ prospect เปิดดู audit ที่คุณส่งไป จะมีอีเมลแจ้งเตือนทันที พร้อมกรอง bot/preview crawlers ออกเพื่อให้ได้สัญญาณจริงเท่านั้น',
+          en: 'Vacation / closed-period mode — pause new-review email and LINE notifications until a future date. Reviews still ingest in the background so nothing is lost. Set it from Settings → Vacation.',
+          th: 'โหมดหยุดยาว / ปิดร้านชั่วคราว — หยุดการแจ้งเตือนอีเมลและ LINE ถึงวันที่กำหนด รีวิวยังถูกเก็บอยู่เบื้องหลัง ตั้งค่าได้ที่ Settings → Vacation',
+        },
+        {
+          en: 'Saved filter presets in the dashboard — save the filter combination you check every morning ("1-star unanswered last 30 days") and recall with one click. Stored per-business, per-device.',
+          th: 'บันทึก filter preset ในแดชบอร์ด — บันทึกชุด filter ที่ใช้ประจำ ("1 ดาว ยังไม่ตอบ 30 วันล่าสุด") เรียกใช้ด้วยคลิกเดียว',
+        },
+        {
+          en: 'Public /status page with live component health (DB, SMTP, AI, billing, etc.). Auto-refreshes every 30 seconds. Prospects checking "is this thing actually working?" get a green/red answer in 1 second.',
+          th: 'หน้า /status สาธารณะ ดูสุขภาพระบบสด (DB, SMTP, AI, ระบบเก็บเงิน ฯลฯ) refresh ทุก 30 วินาที',
+        },
+        {
+          en: 'Persistent "Posted to Google ✓" badge on each replied review — the success toast vanished after a few seconds; this badge stays so you can tell at a glance which replies actually went live vs. saved locally.',
+          th: 'แบดจ์ "โพสต์ไปที่ Google แล้ว ✓" ติดถาวรกับรีวิวที่ตอบแล้ว — ดูได้ทันทีว่าคำตอบไหนขึ้น Google จริง ไหนบันทึกในเครื่องเฉยๆ',
+        },
+        {
+          en: 'Outbound audit-share open-tracking — when a prospect opens an audit URL you DM\'d, you get an instant email so you can follow up while the lead is warm. Bot/preview crawlers filtered out so only real human opens fire the alert.',
+          th: 'Outbound audit ติดตามการเปิดดูแล้ว — เมื่อ prospect เปิดดู audit ที่คุณส่งไป จะมีอีเมลแจ้งเตือนทันที กรอง bot/preview crawlers ออกแล้ว',
         },
         {
           en: 'Outbound audit 48h follow-up reminder — if the prospect opened the audit but you haven\'t closed the loop, a templated nudge lands in your inbox so the warm window doesn\'t lapse.',
           th: 'Outbound audit แจ้งเตือนติดตามผล 48 ชม. — ถ้า prospect เปิดดูแล้วยังไม่ได้ปิดดีล จะมีอีเมลพร้อมเทมเพลตติดตามผลให้ก๊อปไปแปะ',
         },
         {
-          en: 'AI replies now post back to Google automatically by default — was opt-in before, which silently broke the headline feature for paying customers.',
-          th: 'คำตอบจาก AI โพสต์กลับไปที่ Google อัตโนมัติเป็นค่าเริ่มต้นแล้ว (เดิมต้องเปิดเอง ทำให้ฟีเจอร์หลักของคนจ่ายเงินใช้ไม่ได้แบบเงียบๆ)',
+          en: 'AI replies now post back to Google automatically by default — was opt-in before, which silently broke the headline feature for paying customers. Boot-time logs print the resolved status so misconfigured deploys are loud, not silent.',
+          th: 'คำตอบจาก AI โพสต์กลับไปที่ Google อัตโนมัติเป็นค่าเริ่มต้นแล้ว (เดิมต้องเปิดเอง) มี log ตอนบูตแสดงสถานะ ไม่ให้พลาดเงียบๆ',
         },
         {
           en: 'Per-business AI reply tone preference (casual / warm / formal) — steers every AI draft from a single Settings switch.',
@@ -75,12 +91,12 @@ export default function Roadmap() {
         : 'Code in a branch or actively being drafted — not "planning to."',
       items: [
         {
-          en: 'Public roadmap page (you are reading it).',
-          th: 'หน้า Roadmap สาธารณะ (คุณกำลังอ่านอยู่นี่)',
+          en: 'Translating remaining UI strings into the 8 non-Thai non-English locales — most flows are now covered (settings, dashboard, audit emails, view notifications) but some edge-case strings still fall back to English in German / Japanese / Korean. Closing as we touch each surface.',
+          th: 'แปลข้อความที่เหลือใน UI เป็นภาษาอื่นนอกเหนือจาก ไทย/อังกฤษ — ส่วนใหญ่ครอบคลุมแล้ว (Settings, dashboard, อีเมล audit, การแจ้งเตือน) แต่บางจุดยัง fall back เป็นอังกฤษ',
         },
         {
-          en: 'Translating remaining UI strings into the 8 non-Thai non-English locales — currently many tooltips and edge-case strings fall back to English even when the rest of the page is German / Japanese / etc.',
-          th: 'แปลข้อความที่เหลือใน UI เป็นภาษาอื่นนอกเหนือจาก ไทย/อังกฤษ — ตอนนี้บาง tooltip ยัง fall back เป็นอังกฤษ',
+          en: 'Onboarding video / explainer for new signups — waiting on the first paying customer to walk through setup so we can record from a real-user perspective rather than founder-perspective.',
+          th: 'วิดีโอแนะนำสำหรับลูกค้าใหม่ — รอลูกค้าจ่ายเงินคนแรกเดินผ่านขั้นตอนตั้งค่า เพื่อบันทึกจากมุมมองผู้ใช้จริง',
         },
       ],
     },
@@ -96,14 +112,6 @@ export default function Roadmap() {
         {
           en: 'Magic-link / Google sign-in. Older or less tech-comfortable owners struggle with passwords; passwordless login is the obvious fix.',
           th: 'เข้าระบบด้วย magic link / Google — คนที่ไม่ถนัดเทคโนโลยีจะเข้าง่ายขึ้น',
-        },
-        {
-          en: 'Vacation / closed-period mode. Pause AI suggestions and email alerts for a date range. Asked for by seasonal businesses (ski lodges, beach resorts, summer-only cafes).',
-          th: 'โหมดหยุดยาว / ปิดร้านชั่วคราว — หยุด AI suggestion และอีเมลแจ้งเตือนตามช่วงวัน',
-        },
-        {
-          en: 'Saved filter presets in the dashboard ("1-star unanswered last 30 days" → one click).',
-          th: 'บันทึก filter preset ในแดชบอร์ด — เช่น "1 ดาว ยังไม่ตอบ 30 วันล่าสุด" ค้นด้วยคลิกเดียว',
         },
         {
           en: 'Scheduled reply send (queue replies for business hours instead of posting at 2am).',
