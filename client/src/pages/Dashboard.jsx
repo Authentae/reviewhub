@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import ReviewCard from '../components/ReviewCard';
 import BulkActionBar from '../components/BulkActionBar';
 import TagBadge from '../components/TagBadge';
+import FilterPresets from '../components/FilterPresets';
 import { useToast } from '../components/Toast';
 import usePageTitle from '../hooks/usePageTitle';
 import { getToken } from '../lib/auth';
@@ -773,6 +774,34 @@ export default function Dashboard() {
                 ✕ {t('dashboard.filter.clearAll')}
               </button>
             )}
+            {/* Saved filter presets — recall a named combination of the
+                filters above with one click. localStorage-backed, scoped
+                per business. */}
+            <FilterPresets
+              businessId={data?.business?.id}
+              hasActiveFilters={!!(hasFilters || sort !== 'newest')}
+              currentFilters={{
+                platform, sentiment, responded, rating, search,
+                tagFilter, pinnedOnly, flaggedOnly, statusFilter,
+                dateFrom, dateTo, sort,
+              }}
+              applyPreset={(f) => {
+                setPlatform(f.platform || '');
+                setSentiment(f.sentiment || '');
+                setResponded(f.responded || '');
+                setRating(f.rating || '');
+                setSearch(f.search || '');
+                setSearchInput(f.search || '');
+                setTagFilter(f.tagFilter ?? null);
+                setPinnedOnly(!!f.pinnedOnly);
+                setFlaggedOnly(!!f.flaggedOnly);
+                setStatusFilter(f.statusFilter || '');
+                setDateFrom(f.dateFrom || '');
+                setDateTo(f.dateTo || '');
+                setSort(f.sort || 'newest');
+                setPage(1);
+              }}
+            />
           </div>
           {/* Tag filter row — only shown when user has tags */}
           {userTags.length > 0 && (
