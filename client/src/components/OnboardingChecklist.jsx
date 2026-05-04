@@ -23,8 +23,29 @@ export default function OnboardingChecklist({
 }) {
   const { t } = useI18n();
   const toast = useToast();
-  const [editingName, setEditingName] = useState(false);
-  const [bizName, setBizName] = useState(business?.business_name || '');
+  // If the user just registered after clicking the CTA on an outbound
+  // audit-preview page, Register.jsx stashed { business, token } in
+  // sessionStorage. Pre-fill the new-business name from that stash so
+  // they don't have to retype what we already know about them. Also
+  // open the editor immediately — they came here to set this up, not
+  // to look at a checklist with a button.
+  const auditPrefill = (() => {
+    try {
+      const raw = sessionStorage.getItem('rh_signup_attribution');
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      // Only use if recent (within 1h) so a stale stash doesn't surprise
+      // someone returning to the dashboard days later.
+      if (parsed?.from === 'audit' && parsed.business && (Date.now() - (parsed.at || 0)) < 3600_000) {
+        return parsed;
+      }
+    } catch { /* ignore */ }
+    return null;
+  })();
+
+  const initialBizName = business?.business_name || auditPrefill?.business || '';
+  const [editingName, setEditingName] = useState(!business?.business_name && !!auditPrefill?.business);
+  const [bizName, setBizName] = useState(initialBizName);
   const [saving, setSaving] = useState(false);
   const [seeding, setSeeding] = useState(false);
 
@@ -53,6 +74,10 @@ export default function OnboardingChecklist({
       }
       toast(t('onboarding.bizSaved'), 'success');
       setEditingName(false);
+      // Clear the audit-flow stash now that we've used it. Without this,
+      // refreshing the dashboard within the 1h window would re-suggest
+      // the same name and could overwrite a user's later rename.
+      try { sessionStorage.removeItem('rh_signup_attribution'); } catch { /* noop */ }
       if (onBusinessCreated) await onBusinessCreated();
     } catch (err) {
       toast(err.response?.data?.error || t('onboarding.bizSaveFailed'), 'error');

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../lib/api';
 import { setToken } from '../lib/auth';
 import PasswordStrength from '../components/PasswordStrength';
@@ -13,6 +13,33 @@ export default function Register() {
   const { t } = useI18n();
   usePageTitle(t('page.createAccount'));
   const navigate = useNavigate();
+  // Audit-flow attribution. When a prospect lands here from clicking
+  // the CTA on /audit-preview/<token>, the URL carries:
+  //   ?from=audit&business=<their business name>&token=<share token>
+  // We stash these in sessionStorage on mount so:
+  //   1. The dashboard's onboarding-checklist can pre-fill the new
+  //      business name (one less step for them to fill in).
+  //   2. We can attribute the signup to a specific outbound audit
+  //      (which one converted) without leaking the data into the URL
+  //      that gets logged in analytics tools.
+  const [searchParams] = useSearchParams();
+  useEffect(() => {
+    const from = searchParams.get('from');
+    if (from === 'audit') {
+      const business = searchParams.get('business') || '';
+      const token = searchParams.get('token') || '';
+      try {
+        sessionStorage.setItem('rh_signup_attribution', JSON.stringify({
+          from: 'audit',
+          business,
+          token,
+          at: Date.now(),
+        }));
+      } catch { /* sessionStorage disabled in private mode — non-fatal */ }
+    }
+    // Run once on mount; we don't want to re-stash if the user edits the URL.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [form, setForm] = useState({ email: '', password: '', confirm: '' });
   // Unchecked by default — this is intentional. Legal formation of a
   // contract via click-wrap requires an affirmative act by the user, not
