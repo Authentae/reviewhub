@@ -113,11 +113,15 @@ The reviewhub.review site itself + everything a prospect sees.
   preview card is empty. Static OG image (we ship one for the rest
   of the site) + per-audit dynamic title ("AI reply drafts for
   {business_name}") would make the cold-DM link feel real.
-- `[ ]` Blog post: "Why your Google reviews need owner replies (and
+- `[done]` Blog post: "Why your Google reviews need owner replies".
+  Shipped at `client/public/blog/why-respond-to-google-reviews.html`.
+- `[skip]` (was) Blog post: "Why your Google reviews need owner replies (and
   what to say to a 1-star)" — long-tail search target for small
   business owners. ~600-800 words, Thai + English. Includes 3
   copy-pasteable reply templates.
-- `[ ]` Blog post: "How to respond to fake/extortion reviews on
+- `[done]` Blog post: "How to respond to fake/extortion Google reviews".
+  Shipped at `client/public/blog/fake-extortion-google-reviews.html`.
+- `[skip]` (was) Blog post: "How to respond to fake/extortion reviews on
   Google" — high-intent search; we already have prompt-rule
   coverage for this in aiDrafts. Make the page that shows up
   when an owner panic-Googles it.

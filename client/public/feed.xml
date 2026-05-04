@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>ReviewHub Blog</title>
+    <link>https://reviewhub.review</link>
+    <description>Practical writing for small business owners on managing Google reviews, replying to feedback, and handling fake or extortion reviews. Maintained by ReviewHub.</description>
+    <language>en</language>
+    <lastBuildDate>Mon, 05 May 2026 00:00:00 GMT</lastBuildDate>
+    <atom:link href="https://reviewhub.review/feed.xml" rel="self" type="application/rss+xml" />
+    <image>
+      <url>https://reviewhub.review/og-image.svg</url>
+      <title>ReviewHub Blog</title>
+      <link>https://reviewhub.review</link>
+    </image>
+
+    <item>
+      <title>Why your Google reviews need owner replies (with a 1-star template)</title>
+      <link>https://reviewhub.review/blog/why-respond-to-google-reviews</link>
+      <guid isPermaLink="true">https://reviewhub.review/blog/why-respond-to-google-reviews</guid>
+      <description>The data on why owner replies to Google reviews matter more than the reviews themselves — plus copy-paste templates for 1-star, 5-star, and the awkward 3-star middle.</description>
+      <pubDate>Mon, 04 May 2026 00:00:00 GMT</pubDate>
+      <category>Reviews</category>
+    </item>
+
+    <item>
+      <title>How to respond to fake or extortion Google reviews (without making it worse)</title>
+      <link>https://reviewhub.review/blog/fake-extortion-google-reviews</link>
+      <guid isPermaLink="true">https://reviewhub.review/blog/fake-extortion-google-reviews</guid>
+      <description>The owner playbook for fake reviews, extortion attempts ("pay or I'll keep this 1-star"), and competitor sabotage on Google. What to reply, when to flag, and what NOT to do.</description>
+      <pubDate>Mon, 04 May 2026 00:00:00 GMT</pubDate>
+      <category>Reviews</category>
+    </item>
+
+    <item>
+      <title>วิธีตอบรีวิว 1 ดาวบน Google ให้กลายเป็นโอกาส (พร้อมตัวอย่าง 2026)</title>
+      <link>https://reviewhub.review/blog/reply-1-star-google-review-th</link>
+      <guid isPermaLink="true">https://reviewhub.review/blog/reply-1-star-google-review-th</guid>
+      <description>คู่มือเจ้าของร้านไทย: ตอบรีวิว 1 ดาวบน Google อย่างมืออาชีพ ใน 5 สถานการณ์จริง พร้อมเทมเพลตที่คัดลอกใช้ได้ทันที และเครื่องมือ AI ช่วยร่างคำตอบฟรี</description>
+      <pubDate>Mon, 27 Apr 2026 00:00:00 GMT</pubDate>
+      <category>Reviews</category>
+    </item>
+  </channel>
+</rss>
