@@ -15,8 +15,12 @@ import { useI18n } from '../context/I18nContext';
 // public commit log on GitHub for anyone who wants the firehose.
 export default function Changelog() {
   const { t, lang } = useI18n();
-  usePageTitle(t('changelog.title', 'Changelog · ReviewHub'));
   const isThai = lang === 'th';
+  // Browser tab title — matches page heading, not English fallback. This is
+  // the only string here that went through t() before; switched to inline
+  // bilingual to match the rest of this page's pattern (8 other isThai
+  // checks render content directly, no key indirection).
+  usePageTitle(isThai ? 'มีอะไรใหม่ · ReviewHub' : 'Changelog · ReviewHub');
 
   const REPO = 'https://github.com/Authentae/reviewhub/commits/main';
 
@@ -120,9 +124,9 @@ export default function Changelog() {
         </h1>
         <p className="text-base mb-10" style={{ color: 'var(--rh-ink-soft, #4a525a)' }}>
           {isThai
-            ? 'สิ่งที่เปลี่ยนแปลงล่าสุด เลือกเฉพาะที่คุณจะได้รู้สึก ไม่ใช่ทุก commit'
+            ? 'สิ่งที่เปลี่ยนแปลงล่าสุด เลือกเฉพาะที่คุณจะได้รู้สึก ไม่ใช่ทุก commit ดู log เต็มๆ ที่ '
             : 'What changed recently. Highlights — not every commit. Full log on '}
-          {!isThai && <a href={REPO} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--rh-teal-deep)', fontWeight: 600 }}>GitHub →</a>}
+          <a href={REPO} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--rh-teal-deep)', fontWeight: 600 }}>GitHub →</a>
         </p>
 
         <ul className="space-y-6">

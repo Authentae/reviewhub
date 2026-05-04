@@ -120,8 +120,13 @@ The reviewhub.review site itself + everything a prospect sees.
   and clicked "set this up for me")? Test once we have a clicked-
   through prospect. Right now the hero assumes the visitor is
   generic-curious.
-- `[ ]` `/changelog` localization audit — same gap as the rest of
-  the i18n work. Likely English-only.
+- `[done]` `/changelog` localization audit. Result: page already had
+  bilingual EN/TH per entry (Thai users were never English-only); the
+  two real gaps were (a) browser tab title was English-only via
+  t('changelog.title') with no TH key — switched to inline isThai
+  matching the rest of the page; (b) intro paragraph rendered the
+  GitHub deep-link only for English readers — Thai readers got no
+  inline link. Both fixed.
 - `[done]` sitemap.xml refresh. /status and /roadmap were already
   there; added missing /audit (high-value funnel landing page) and
   bumped /changelog lastmod to today.
