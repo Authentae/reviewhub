@@ -71,9 +71,11 @@ list.
   raw / 25KB gzip. Move infrequently-touched sub-components (webhook
   rotation, API key management, timezone picker) behind dynamic
   import so the first paint is faster.
-- `[ ]` E2E test for vacation suppression — assert that posting a
-  review during a vacation window does NOT fire the new-review
-  email + LINE notification.
+- `[done]` E2E test for vacation suppression. Shipped at
+  `server/tests/vacationSuppression.test.js`. Six cases: no-vacation
+  baseline, today/future suppress both email+LINE, yesterday (expired)
+  fires normally (off-by-one guard), reviews still ingest during
+  vacation (the worst-failure-mode guard), API-clear restores fires.
 - `[done]` Test for audit-preview → register attribution flow.
   Shipped at `client/src/__tests__/RegisterAuditAttribution.test.jsx`
   (5 cases: happy path, URL-encoded unicode, no `from` guard,
