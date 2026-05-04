@@ -957,11 +957,26 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
           {optimisticResponse && (
             <div className="mt-2 p-3 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-400 rounded-r-lg">
               <div className="flex items-center justify-between mb-1">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                   <p className="text-xs font-semibold text-blue-700 dark:text-blue-300">{t('review.yourResponse')}</p>
                   {review.updated_at && (
                     <span className="text-xs text-blue-400 cursor-default" title={fullDate(review.updated_at)}>
                       · {timeAgo(review.updated_at)}
+                    </span>
+                  )}
+                  {/* Persistent posted-to-platform badge. The success
+                      toast vanishes after a few seconds; this badge
+                      stays so you can tell at a glance which replies
+                      went live on Google vs. which were saved locally
+                      only (e.g. before connecting Google, or when
+                      auto-posting is explicitly disabled). */}
+                  {review.response_posted_at && (
+                    <span
+                      className="inline-flex items-center gap-1 text-xs px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 font-medium"
+                      title={`Posted to ${registryPlatformLabel(review.platform)} at ${fullDate(review.response_posted_at)}`}
+                    >
+                      <span aria-hidden="true">✓</span>
+                      {t('review.postedToPlatform', { platform: registryPlatformLabel(review.platform) })}
                     </span>
                   )}
                 </div>

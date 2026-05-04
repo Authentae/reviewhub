@@ -357,6 +357,16 @@ function initSchema() {
   migrateAddColumn('audit_previews', 'marked_as_replied_at', 'TEXT DEFAULT NULL');
   migrateAddColumn('audit_previews', 'last_followup_reminder_sent_at', 'TEXT DEFAULT NULL');
 
+  // reviews.response_posted_at — persistent record that the reply was
+  // accepted by the source platform (Google etc.). Without this column
+  // the "posted" status was a transient toast that vanished after the
+  // first render — coming back to the dashboard later, the user couldn't
+  // tell which replies actually went live on Google vs. which were just
+  // saved locally because auto-posting was disabled or failed. NULL means
+  // "saved locally, not posted" (or "platform doesn't support posting"
+  // for non-google providers); ISO timestamp means "posted at this time."
+  migrateAddColumn('reviews', 'response_posted_at', 'TEXT DEFAULT NULL');
+
   // Email verification + password reset columns.
   // Tokens are stored as SHA-256 hashes; plaintext tokens are only ever sent via email.
   // *_expires_at columns are ISO 8601 strings (UTC) for comparison with datetime('now').

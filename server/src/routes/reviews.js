@@ -1195,6 +1195,16 @@ router.post('/:id/respond', respondLimiter, async (req, res) => {
           if (provider && typeof provider.replyToReview === 'function') {
             await provider.replyToReview(review.external_id, response_text);
             posted = true;
+            // Persist the posted-state so the UI can show "Posted ✓" on
+            // subsequent renders, not just in the success toast that
+            // disappears. Without this, customers can't tell which
+            // replies actually went live on Google after refreshing.
+            try {
+              run(
+                "UPDATE reviews SET response_posted_at = datetime('now') WHERE id = ?",
+                [review.id]
+              );
+            } catch { /* swallow — toast still shows; persistence is bonus */ }
           }
         }
       } catch (err) {
