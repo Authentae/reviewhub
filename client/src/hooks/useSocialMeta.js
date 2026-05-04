@@ -30,20 +30,24 @@ import { useEffect } from 'react';
 const TARGETS = [
   { selector: 'meta[property="og:title"]',       attr: 'content', from: 'title' },
   { selector: 'meta[property="og:description"]', attr: 'content', from: 'description' },
+  { selector: 'meta[property="og:image"]',       attr: 'content', from: 'image' },
   { selector: 'meta[name="twitter:title"]',      attr: 'content', from: 'title' },
   { selector: 'meta[name="twitter:description"]', attr: 'content', from: 'description' },
+  { selector: 'meta[name="twitter:image"]',      attr: 'content', from: 'image' },
   { selector: 'meta[name="description"]',         attr: 'content', from: 'description' },
 ];
 
-export default function useSocialMeta({ title, description } = {}) {
+export default function useSocialMeta({ title, description, image } = {}) {
   useEffect(() => {
-    if (!title && !description) return undefined;
+    if (!title && !description && !image) return undefined;
     const restorations = [];
 
     for (const t of TARGETS) {
       const node = document.head.querySelector(t.selector);
       if (!node) continue;
-      const newValue = t.from === 'title' ? title : description;
+      const newValue = t.from === 'title' ? title
+        : t.from === 'description' ? description
+        : image;
       if (newValue == null) continue;
       restorations.push({ node, attr: t.attr, original: node.getAttribute(t.attr) });
       node.setAttribute(t.attr, newValue);
@@ -58,5 +62,5 @@ export default function useSocialMeta({ title, description } = {}) {
         }
       }
     };
-  }, [title, description]);
+  }, [title, description, image]);
 }

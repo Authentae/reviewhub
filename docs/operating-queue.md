@@ -102,7 +102,13 @@ The reviewhub.review site itself + everything a prospect sees.
   the changelog is silent on outbound-audit tracking, follow-up
   reminders, vacation mode, filter presets, status page, posted
   badges. Customers checking what's new will see nothing.
-- `[ ]` Open Graph image for `/audit-preview/<token>` URLs — right now
+- `[done]` OG card for /audit-preview pages. Title and description were
+  already per-prospect personalized via useSocialMeta. Added: dedicated
+  og-image-audit.svg (audit-flavored headline + eyebrow), extended
+  useSocialMeta to support og:image + twitter:image override, wired
+  into AuditPreview. Per-prospect images would need server-side image
+  rendering — out of scope; static branded card is the right next step.
+- `[skip]` (was) Open Graph image for `/audit-preview/<token>` URLs — right now
   when a prospect pastes the URL in iMessage/LINE/Discord, the
   preview card is empty. Static OG image (we ship one for the rest
   of the site) + per-audit dynamic title ("AI reply drafts for
