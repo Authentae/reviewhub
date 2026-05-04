@@ -1168,12 +1168,19 @@ router.post('/:id/respond', respondLimiter, async (req, res) => {
       run("UPDATE reviews SET response_text = ?, updated_at = datetime('now') WHERE id = ?", [response_text, review.id]);
     }
 
-    // Optional: post the reply back to the source platform so it shows up
-    // publicly. Gated by REPLY_TO_PLATFORMS env var — set it to something
-    // like "google" (comma-separated) to enable per-provider. Off by default
-    // because it requires the operator to have write-scope on that platform
-    // AND to accept the regulatory/review-platform rules around responses.
-    const enabled = (process.env.REPLY_TO_PLATFORMS || '').split(',').map(s => s.trim()).filter(Boolean);
+    // Post the reply back to the source platform so it shows up
+    // publicly. Gated by REPLY_TO_PLATFORMS env var — comma-separated
+    // list of provider ids to enable. Defaults to "google" because
+    // auto-posting Google replies is the headline feature of the paid
+    // product; if it's off, paying customers see their drafts saved
+    // locally but never appearing on Google, which is the worst kind
+    // of silent breakage. Operators who want to opt out (testing,
+    // staging, or pre-launch checks) can explicitly set
+    // REPLY_TO_PLATFORMS="" — the empty string is honored as "off."
+    const rawEnv = process.env.REPLY_TO_PLATFORMS;
+    const enabled = rawEnv === undefined
+      ? ['google']
+      : rawEnv.split(',').map(s => s.trim()).filter(Boolean);
     let posted = false;
     let postError = null;
     if (enabled.includes(review.platform) && review.external_id) {
