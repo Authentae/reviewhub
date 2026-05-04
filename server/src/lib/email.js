@@ -2596,6 +2596,110 @@ const AUDIT_VIEW_STRINGS = {
     cta: 'ดู audit และส่งติดตามผล',
     footer: 'คุณได้รับอีเมลนี้เพราะส่ง outbound audit การแจ้งเตือนจะส่งไม่เกิน 1 ครั้งต่อ audit ต่อ 24 ชั่วโมง',
   },
+  es: {
+    subject: (n) => `Alguien acaba de abrir tu auditoría para ${n}`,
+    headline: (n) => `${n} acaba de abrir tu auditoría`,
+    body: (hours, count) => {
+      const ago = hours < 1 ? 'hace unos minutos'
+        : hours < 24 ? `${Math.round(hours)} hora${Math.round(hours) === 1 ? '' : 's'} después de enviarla`
+        : `${Math.round(hours / 24)} día${Math.round(hours / 24) === 1 ? '' : 's'} después de enviarla`;
+      const counted = count > 1 ? ` (${count} aperturas en total)` : '';
+      return `Abrieron el enlace ${ago}${counted}. Es el mejor momento para hacer seguimiento.`;
+    },
+    cta: 'Ver auditoría + enviar seguimiento',
+    footer: 'Recibes esto porque enviaste una auditoría externa. Las notificaciones se limitan a una por auditoría cada 24 h.',
+  },
+  fr: {
+    subject: (n) => `Quelqu'un vient d'ouvrir votre audit pour ${n}`,
+    headline: (n) => `${n} vient d'ouvrir votre audit`,
+    body: (hours, count) => {
+      const ago = hours < 1 ? 'il y a quelques minutes'
+        : hours < 24 ? `${Math.round(hours)} heure${Math.round(hours) === 1 ? '' : 's'} après l'envoi`
+        : `${Math.round(hours / 24)} jour${Math.round(hours / 24) === 1 ? '' : 's'} après l'envoi`;
+      const counted = count > 1 ? ` (${count} ouvertures au total)` : '';
+      return `Le lien a été ouvert ${ago}${counted}. C'est le meilleur moment pour relancer.`;
+    },
+    cta: "Voir l'audit + envoyer une relance",
+    footer: "Vous recevez ceci car vous avez envoyé un audit externe. Les notifications sont limitées à une par audit toutes les 24 h.",
+  },
+  de: {
+    subject: (n) => `Jemand hat gerade dein Audit für ${n} geöffnet`,
+    headline: (n) => `${n} hat gerade dein Audit geöffnet`,
+    body: (hours, count) => {
+      const ago = hours < 1 ? 'vor wenigen Minuten'
+        : hours < 24 ? `${Math.round(hours)} Stunde${Math.round(hours) === 1 ? '' : 'n'} nach dem Versand`
+        : `${Math.round(hours / 24)} Tag${Math.round(hours / 24) === 1 ? '' : 'e'} nach dem Versand`;
+      const counted = count > 1 ? ` (${count} Aufrufe insgesamt)` : '';
+      return `Der Link wurde ${ago} geöffnet${counted}. Jetzt ist der beste Zeitpunkt für ein Follow-up.`;
+    },
+    cta: 'Audit ansehen + Follow-up senden',
+    footer: 'Du erhältst diese E-Mail, weil du ein Outbound-Audit verschickt hast. Benachrichtigungen sind auf eine pro Audit alle 24 h begrenzt.',
+  },
+  ja: {
+    subject: (n) => `${n} があなたの audit を開きました`,
+    headline: (n) => `${n} があなたの audit を開きました`,
+    body: (hours, count) => {
+      const ago = hours < 1 ? '数分前'
+        : hours < 24 ? `送信から ${Math.round(hours)} 時間後`
+        : `送信から ${Math.round(hours / 24)} 日後`;
+      const counted = count > 1 ? `(合計 ${count} 回開封)` : '';
+      return `${ago}にリンクが開かれました ${counted}。今がフォローアップの最適なタイミングです。`;
+    },
+    cta: 'audit を表示 + フォローアップを送信',
+    footer: 'outbound audit を送信したため、このメールを受信しています。通知は audit ごとに 24 時間に 1 回までです。',
+  },
+  zh: {
+    subject: (n) => `有人刚刚打开了您发给 ${n} 的审核`,
+    headline: (n) => `${n} 刚刚打开了您的审核`,
+    body: (hours, count) => {
+      const ago = hours < 1 ? '几分钟前'
+        : hours < 24 ? `发送后 ${Math.round(hours)} 小时`
+        : `发送后 ${Math.round(hours / 24)} 天`;
+      const counted = count > 1 ? `(共 ${count} 次打开)` : '';
+      return `${ago}打开了链接 ${counted}。现在是跟进的最佳时机。`;
+    },
+    cta: '查看审核 + 发送跟进',
+    footer: '您收到此邮件是因为您发送了对外审核。通知每个审核每 24 小时最多发送一次。',
+  },
+  pt: {
+    subject: (n) => `Alguém acabou de abrir sua auditoria para ${n}`,
+    headline: (n) => `${n} acabou de abrir sua auditoria`,
+    body: (hours, count) => {
+      const ago = hours < 1 ? 'há alguns minutos'
+        : hours < 24 ? `${Math.round(hours)} hora${Math.round(hours) === 1 ? '' : 's'} depois de enviar`
+        : `${Math.round(hours / 24)} dia${Math.round(hours / 24) === 1 ? '' : 's'} depois de enviar`;
+      const counted = count > 1 ? ` (${count} aberturas no total)` : '';
+      return `O link foi aberto ${ago}${counted}. Esse é o melhor momento para fazer follow-up.`;
+    },
+    cta: 'Ver auditoria + enviar follow-up',
+    footer: 'Você recebe isto porque enviou uma auditoria externa. As notificações são limitadas a uma por auditoria a cada 24 h.',
+  },
+  it: {
+    subject: (n) => `Qualcuno ha appena aperto il tuo audit per ${n}`,
+    headline: (n) => `${n} ha appena aperto il tuo audit`,
+    body: (hours, count) => {
+      const ago = hours < 1 ? 'pochi minuti fa'
+        : hours < 24 ? `${Math.round(hours)} ora${Math.round(hours) === 1 ? '' : 'e'} dopo l'invio`
+        : `${Math.round(hours / 24)} giorno${Math.round(hours / 24) === 1 ? '' : 'i'} dopo l'invio`;
+      const counted = count > 1 ? ` (${count} aperture totali)` : '';
+      return `Il link è stato aperto ${ago}${counted}. È il momento migliore per il follow-up.`;
+    },
+    cta: "Vedi audit + invia follow-up",
+    footer: "Ricevi questa email perché hai inviato un audit esterno. Le notifiche sono limitate a una per audit ogni 24 h.",
+  },
+  ko: {
+    subject: (n) => `누군가 ${n}에게 보낸 audit를 방금 열었습니다`,
+    headline: (n) => `${n}이(가) 방금 audit를 열었습니다`,
+    body: (hours, count) => {
+      const ago = hours < 1 ? '몇 분 전'
+        : hours < 24 ? `발송 후 ${Math.round(hours)}시간`
+        : `발송 후 ${Math.round(hours / 24)}일`;
+      const counted = count > 1 ? `(총 ${count}회 열람)` : '';
+      return `${ago}에 링크를 열었습니다 ${counted}. 지금이 후속 연락하기 가장 좋은 시점입니다.`;
+    },
+    cta: 'audit 보기 + 후속 연락 보내기',
+    footer: 'outbound audit를 보냈기 때문에 이 메일을 받습니다. 알림은 audit당 24시간에 한 번으로 제한됩니다.',
+  },
 };
 
 async function sendAuditViewNotification(userEmail, opts) {
@@ -2675,6 +2779,78 @@ const AUDIT_FOLLOWUP_STRINGS = {
     template: (biz) => `สวัสดีครับ ติดต่อกลับเรื่อง audit ที่ส่งให้ร้าน ${biz} ครับ คำตอบที่ร่างให้ใช้ได้ไหมครับ? ถ้าอยากให้เซ็ตระบบให้โพสต์อัตโนมัติ คุยสั้นๆ 10 นาทีได้นะครับ`,
     cta: 'เปิดแดชบอร์ด',
     markReplied: 'ตอบกลับแล้วใช่ไหม? ทำเครื่องหมายในแดชบอร์ดเพื่อหยุดการแจ้งเตือน',
+  },
+  es: {
+    subject: (n) => `Hora de hacer seguimiento con ${n}`,
+    headline: (n) => `${n} abrió tu auditoría hace ~48 h y aún no ha respondido`,
+    body: 'La mayoría de cierres en outreach frío requieren 2-3 contactos. Mandar una nota corta ahora (cuando ya vieron el valor) convierte mucho mejor que esperar otra semana. Aquí va una plantilla lista para copiar y pegar:',
+    templateLabel: 'Copiar y pegar',
+    template: (biz) => `Hola — pasaba a darle seguimiento a la auditoría que envié para ${biz}. ¿Las respuestas que redactamos te encajan en tono? Si prefieres, hacemos una llamada de 10 min para configurar el envío automático.`,
+    cta: 'Abrir panel',
+    markReplied: '¿Ya respondiste? Márcalo en el panel para que dejemos de recordártelo.',
+  },
+  fr: {
+    subject: (n) => `Il est temps de relancer ${n}`,
+    headline: (n) => `${n} a ouvert votre audit il y a ~48 h et n'a pas encore répondu`,
+    body: 'La plupart des conversions en outreach froid nécessitent 2-3 contacts. Envoyer une relance courte maintenant (alors qu\'ils ont déjà vu la valeur) convertit beaucoup mieux qu\'attendre une semaine de plus. Voici un modèle prêt à copier-coller :',
+    templateLabel: 'À copier-coller',
+    template: (biz) => `Bonjour, je reviens vers vous concernant l'audit que je vous ai envoyé pour ${biz}. Les réponses rédigées vous conviennent-elles en termes de ton ? Je peux aussi faire un appel de 10 min pour configurer l'envoi automatique si c'est plus simple.`,
+    cta: 'Ouvrir le tableau de bord',
+    markReplied: 'Déjà répondu ? Marquez-le dans le tableau de bord pour arrêter les rappels.',
+  },
+  de: {
+    subject: (n) => `Zeit für ein Follow-up mit ${n}`,
+    headline: (n) => `${n} hat dein Audit vor ~48 h geöffnet — noch keine Antwort`,
+    body: 'Die meisten Conversions aus Cold Outreach brauchen 2-3 Touchpoints. Eine kurze Erinnerung jetzt (während sie den Wert noch frisch im Kopf haben) konvertiert deutlich besser als noch eine Woche zu warten. Hier ist eine kopierfertige Vorlage:',
+    templateLabel: 'Zum Kopieren',
+    template: (biz) => `Hi, ich melde mich nochmal wegen des Audits, den ich für ${biz} geschickt habe. Passen die entworfenen Antworten zu deinem Tonfall? Wenn ein 10-min-Call einfacher ist, richten wir das Auto-Posting gemeinsam ein.`,
+    cta: 'Dashboard öffnen',
+    markReplied: 'Schon geantwortet? Markiere es im Dashboard, damit wir aufhören dich zu erinnern.',
+  },
+  ja: {
+    subject: (n) => `${n} へのフォローアップの時間です`,
+    headline: (n) => `${n} は約48時間前に audit を開きましたが、まだ返信がありません`,
+    body: 'コールドアウトリーチの成約は通常 2〜3 回の接触が必要です。価値を見たばかりの今、短いフォローアップを送る方が、もう1週間待つよりずっと効果的です。コピペ用のテンプレートはこちら:',
+    templateLabel: 'コピー & 貼り付け',
+    template: (biz) => `こんにちは。${biz} 様にお送りした audit についてフォローアップさせていただきます。下書きされた返信のトーンはご希望に合っていましたか？自動投稿の設定について 10 分ほどお話しすることも可能です。`,
+    cta: 'ダッシュボードを開く',
+    markReplied: 'もう返信されましたか？ダッシュボードでマークするとリマインダーは停止します。',
+  },
+  zh: {
+    subject: (n) => `该跟进 ${n} 了`,
+    headline: (n) => `${n} 在约 48 小时前打开了您的审核 — 尚未回复`,
+    body: '冷开发的大多数成交需要 2-3 次接触。在他们刚看到价值的此刻发一条简短跟进,转化率远高于再等一周。下面是可以直接复制粘贴的模板:',
+    templateLabel: '复制粘贴',
+    template: (biz) => `您好,跟进一下我之前发给 ${biz} 的审核。起草的回复在语气上是否合适?如果方便,可以安排 10 分钟通话,我帮您设置自动发布。`,
+    cta: '打开仪表盘',
+    markReplied: '已经回复了吗?请在仪表盘中标记,我们就不再提醒。',
+  },
+  pt: {
+    subject: (n) => `Hora de fazer follow-up com ${n}`,
+    headline: (n) => `${n} abriu sua auditoria há ~48 h — ainda sem resposta`,
+    body: 'A maioria das conversões em cold outreach precisa de 2-3 toques. Mandar um lembrete curto agora (enquanto eles ainda têm o valor fresco) converte muito mais do que esperar mais uma semana. Aqui vai um modelo pronto pra copiar e colar:',
+    templateLabel: 'Copiar e colar',
+    template: (biz) => `Oi, voltando aqui sobre a auditoria que enviei para ${biz}. As respostas que rascunhamos fazem sentido no seu tom? Se preferir, marcamos um call de 10 min para configurar o envio automático.`,
+    cta: 'Abrir painel',
+    markReplied: 'Já respondeu? Marque no painel para a gente parar de lembrar.',
+  },
+  it: {
+    subject: (n) => `È ora di fare follow-up con ${n}`,
+    headline: (n) => `${n} ha aperto il tuo audit ~48 ore fa — ancora nessuna risposta`,
+    body: 'La maggior parte delle conversioni da cold outreach richiede 2-3 contatti. Mandare un breve sollecito ora (mentre il valore è ancora fresco) converte molto meglio che aspettare un\'altra settimana. Ecco un modello pronto da copiare e incollare:',
+    templateLabel: 'Copia e incolla',
+    template: (biz) => `Ciao, ti ricontatto riguardo all'audit che ho inviato per ${biz}. Le risposte abbozzate ti tornano a livello di tono? Se preferisci, possiamo fare una chiamata di 10 min per impostare la pubblicazione automatica.`,
+    cta: 'Apri dashboard',
+    markReplied: 'Hai già risposto? Segnalalo nella dashboard per fermare i promemoria.',
+  },
+  ko: {
+    subject: (n) => `${n}에게 후속 연락할 시간입니다`,
+    headline: (n) => `${n}이(가) 약 48시간 전 audit를 열었지만 아직 답변이 없습니다`,
+    body: '콜드 아웃리치 전환의 대부분은 2-3회 접촉이 필요합니다. 가치를 막 본 지금 짧은 알림을 보내는 것이 한 주 더 기다리는 것보다 훨씬 더 잘 전환됩니다. 복사해서 붙여넣을 수 있는 템플릿입니다:',
+    templateLabel: '복사 & 붙여넣기',
+    template: (biz) => `안녕하세요, ${biz}에 대해 보내드린 audit 관련해서 다시 연락드립니다. 작성된 답변이 톤에 맞으셨나요? 원하시면 10분 통화로 자동 게시 설정을 도와드리겠습니다.`,
+    cta: '대시보드 열기',
+    markReplied: '이미 답변하셨나요? 대시보드에서 표시하시면 알림을 중지합니다.',
   },
 };
 
