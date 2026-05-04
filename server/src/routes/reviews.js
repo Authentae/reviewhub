@@ -1165,15 +1165,47 @@ router.post('/:id/respond', respondLimiter, async (req, res) => {
     if (rawTrimmed.length > 4000) return res.status(400).json({ error: 'Response too long (max 4000 chars)' });
     const response_text = substituteVars(rawTrimmed, review, business);
 
+    // Optional schedule: if `scheduled_post_at` is provided in the body,
+    // we save the reply locally but DO NOT fire the platform call now —
+    // the scheduledReplyPoster cron picks it up at the queued time.
+    // Validate ISO 8601 + must be in the future (otherwise scheduling is
+    // pointless; immediate-post is the existing default flow).
+    let scheduledPostAt = null;
+    if (req.body.scheduled_post_at !== undefined && req.body.scheduled_post_at !== null && req.body.scheduled_post_at !== '') {
+      const v = String(req.body.scheduled_post_at);
+      const parsed = Date.parse(v);
+      if (!Number.isFinite(parsed)) {
+        return res.status(400).json({ error: 'scheduled_post_at must be a valid ISO 8601 timestamp' });
+      }
+      // Reject schedules in the past — almost certainly a UI bug or a typo.
+      // Allow up to 60s of clock skew so a "schedule for now" round-trip
+      // doesn't bounce on a slow request.
+      if (parsed < Date.now() - 60_000) {
+        return res.status(400).json({ error: 'scheduled_post_at cannot be in the past' });
+      }
+      // Cap how far ahead someone can schedule (90 days). Beyond that,
+      // the original review context is stale and the queued reply may
+      // no longer fit.
+      if (parsed > Date.now() + 90 * 24 * 3600 * 1000) {
+        return res.status(400).json({ error: 'scheduled_post_at cannot be more than 90 days in the future' });
+      }
+      // Store as ISO string with seconds resolution (matches the rest of
+      // our timestamp columns).
+      scheduledPostAt = new Date(parsed).toISOString().replace('T', ' ').slice(0, 19);
+    }
+
     // Save locally first (source of truth) — even if the optional external
     // post-back fails, the user's reply is preserved in our DB so the UI
     // shows it and the next export/digest captures it.
     // responded_at is set only the first time a response is saved (first reply timestamp).
     const isFirstResponse = !review.response_text || review.response_text.trim() === '';
     if (isFirstResponse) {
-      run("UPDATE reviews SET response_text = ?, responded_at = datetime('now'), updated_at = datetime('now') WHERE id = ?", [response_text, review.id]);
+      run("UPDATE reviews SET response_text = ?, responded_at = datetime('now'), updated_at = datetime('now'), scheduled_post_at = ? WHERE id = ?", [response_text, scheduledPostAt, review.id]);
     } else {
-      run("UPDATE reviews SET response_text = ?, updated_at = datetime('now') WHERE id = ?", [response_text, review.id]);
+      // On edit, also update the scheduled_post_at — re-scheduling or
+      // un-scheduling a queued reply uses the same endpoint as the
+      // original save, so the column needs to follow the body's intent.
+      run("UPDATE reviews SET response_text = ?, updated_at = datetime('now'), scheduled_post_at = ? WHERE id = ?", [response_text, scheduledPostAt, review.id]);
     }
 
     // Post the reply back to the source platform so it shows up
@@ -1191,7 +1223,9 @@ router.post('/:id/respond', respondLimiter, async (req, res) => {
       : rawEnv.split(',').map(s => s.trim()).filter(Boolean);
     let posted = false;
     let postError = null;
-    if (enabled.includes(review.platform) && review.external_id) {
+    // Don't immediate-post if the user scheduled this reply for later;
+    // the scheduledReplyPoster cron will fire it at the queued time.
+    if (!scheduledPostAt && enabled.includes(review.platform) && review.external_id) {
       try {
         const conn = get(
           `SELECT * FROM platform_connections WHERE business_id = ? AND provider = ?`,
@@ -1242,7 +1276,7 @@ router.post('/:id/respond', respondLimiter, async (req, res) => {
         response_text,
       });
     }
-    res.json({ success: true, response_text, posted, postError });
+    res.json({ success: true, response_text, posted, postError, scheduled_post_at: scheduledPostAt });
   } catch (err) {
     captureException(err, { route: 'reviews' });
     res.status(500).json({ error: 'Server error' });
@@ -1881,6 +1915,133 @@ router.post('/import', importLimiter, express.text({ type: ['text/plain', 'text/
     res.json({ imported, skipped, errors: errors.slice(0, 50) });
   } catch (err) {
     captureException(err, { route: 'reviews' });
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// GET /api/year-review/:year — aggregations for a calendar year.
+// Used by the /year-review/:year page (and eventually a December
+// recap email). Auth-required, scoped to the user's active business.
+//
+// Returns:
+//   total_reviews, total_responded, response_rate
+//   average_rating, average_rating_change_vs_prior_year
+//   ratings_breakdown (1..5 star counts)
+//   busiest_month (1..12 with the most reviews)
+//   top_words — most-mentioned terms in reviews (capped, naive split)
+//
+// Cheap aggregations only; no AI calls. Adds ~3 SQL queries per
+// request, which is fine for a once-per-year recap.
+router.get('/year-review/:year', authMiddleware, (req, res) => {
+  try {
+    const year = parseInt(req.params.year, 10);
+    const currentYear = new Date().getFullYear();
+    if (!Number.isFinite(year) || year < 2000 || year > currentYear + 1) {
+      return res.status(400).json({ error: 'Invalid year' });
+    }
+    const business = getUserBusiness(req.user.id);
+    if (!business) return res.status(404).json({ error: 'No business found' });
+
+    const yearStart = `${year}-01-01 00:00:00`;
+    const yearEnd = `${year + 1}-01-01 00:00:00`;
+    const priorStart = `${year - 1}-01-01 00:00:00`;
+
+    // Headline counts
+    const totals = get(
+      `SELECT COUNT(*) AS total,
+              SUM(CASE WHEN response_text IS NOT NULL AND response_text != '' THEN 1 ELSE 0 END) AS responded,
+              AVG(rating) AS avg_rating
+         FROM reviews
+        WHERE business_id = ?
+          AND created_at >= ? AND created_at < ?`,
+      [business.id, yearStart, yearEnd]
+    );
+    const total = totals?.total || 0;
+    const responded = totals?.responded || 0;
+
+    // Prior-year average for delta
+    const prior = get(
+      `SELECT AVG(rating) AS avg_rating, COUNT(*) AS total
+         FROM reviews
+        WHERE business_id = ?
+          AND created_at >= ? AND created_at < ?`,
+      [business.id, priorStart, yearStart]
+    );
+
+    // Ratings breakdown
+    const breakdown = all(
+      `SELECT rating, COUNT(*) AS n
+         FROM reviews
+        WHERE business_id = ?
+          AND created_at >= ? AND created_at < ?
+        GROUP BY rating
+        ORDER BY rating DESC`,
+      [business.id, yearStart, yearEnd]
+    );
+    const ratings_breakdown = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    for (const r of breakdown) ratings_breakdown[r.rating] = r.n;
+
+    // Busiest month (1..12)
+    const monthly = all(
+      `SELECT CAST(strftime('%m', created_at) AS INTEGER) AS month, COUNT(*) AS n
+         FROM reviews
+        WHERE business_id = ?
+          AND created_at >= ? AND created_at < ?
+        GROUP BY month
+        ORDER BY n DESC
+        LIMIT 1`,
+      [business.id, yearStart, yearEnd]
+    );
+
+    // Top words — naive lowercase-tokenize over review_text + filter
+    // tiny stopwords. Not Thai-tokenizer-aware (Thai needs a real
+    // tokenizer; this is best-effort). Capped at 10 terms.
+    const reviews = all(
+      `SELECT review_text FROM reviews
+        WHERE business_id = ?
+          AND created_at >= ? AND created_at < ?
+          AND review_text IS NOT NULL AND review_text != ''`,
+      [business.id, yearStart, yearEnd]
+    );
+    const STOPWORDS = new Set([
+      'the','a','an','and','or','but','is','are','was','were','be','been','being',
+      'to','of','in','on','at','for','with','by','from','as','this','that','these',
+      'those','i','my','me','we','our','you','your','they','their','it','its',
+      'have','has','had','do','does','did','can','will','would','should','could',
+      'so','if','not','no','yes','very','really','just','too','also','here','there',
+      'is','am','than','then','now',
+    ]);
+    const wordCounts = new Map();
+    for (const r of reviews) {
+      const tokens = String(r.review_text).toLowerCase().match(/[a-z]+/g) || [];
+      for (const t of tokens) {
+        if (t.length < 4 || STOPWORDS.has(t)) continue;
+        wordCounts.set(t, (wordCounts.get(t) || 0) + 1);
+      }
+    }
+    const top_words = [...wordCounts.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 10)
+      .map(([word, count]) => ({ word, count }));
+
+    res.json({
+      year,
+      business_name: business.business_name,
+      total_reviews: total,
+      total_responded: responded,
+      response_rate: total > 0 ? responded / total : 0,
+      average_rating: totals?.avg_rating ?? null,
+      average_rating_prior_year: prior?.avg_rating ?? null,
+      average_rating_change: (totals?.avg_rating != null && prior?.avg_rating != null)
+        ? totals.avg_rating - prior.avg_rating
+        : null,
+      ratings_breakdown,
+      busiest_month: monthly[0]?.month ?? null,
+      busiest_month_count: monthly[0]?.n ?? 0,
+      top_words,
+    });
+  } catch (err) {
+    captureException(err, { route: 'reviews.year-review' });
     res.status(500).json({ error: 'Server error' });
   }
 });

@@ -383,20 +383,26 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
     void actuallyDraft();
   }
 
-  async function handleSend() {
+  async function handleSend(scheduledIso) {
     if (!draftText.trim()) return;
     setLoading(true);
     setOptimisticResponse(draftText);
     setSaved(true);
     setDrafting(false);
     try {
-      const { data } = await api.post(`/reviews/${review.id}/respond`, { response_text: draftText });
-      // Three cases:
-      //   posted === true          → platform accepted the reply (no need for manual-post reminder)
-      //   posted === false + error → saved locally, but the platform call failed — show why
-      //   posted === false + no err → feature not enabled; user needs to manually post (existing flow)
+      const body = { response_text: draftText };
+      if (scheduledIso) body.scheduled_post_at = scheduledIso;
+      const { data } = await api.post(`/reviews/${review.id}/respond`, body);
+      // Four cases now:
+      //   scheduled                 → reply queued; cron will post at time
+      //   posted === true           → platform accepted the reply
+      //   posted === false + error  → saved locally, platform call failed
+      //   posted === false + no err → feature not enabled; manual post
       clearDraft(review.id);
-      if (data?.posted) {
+      if (data?.scheduled_post_at) {
+        const when = new Date(data.scheduled_post_at + 'Z').toLocaleString();
+        toast(t('toast.responseScheduled', { when, defaultValue: 'Reply scheduled for {when}' }), 'success');
+      } else if (data?.posted) {
         toast(t('toast.responsePosted', { platform: registryPlatformLabel(review.platform) }), 'success');
       } else if (data?.postError) {
         toast(t('toast.responseSavedPostFailed', { err: data.postError }), 'warning');
@@ -979,6 +985,15 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
                       {t('review.postedToPlatform', { platform: registryPlatformLabel(review.platform) })}
                     </span>
                   )}
+                  {review.scheduled_post_at && !review.response_posted_at && (
+                    <span
+                      className="inline-flex items-center gap-1 text-xs px-1.5 py-0.5 rounded bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 font-medium"
+                      title={`Scheduled to post at ${fullDate(review.scheduled_post_at)}`}
+                    >
+                      <span aria-hidden="true">⏰</span>
+                      {t('review.scheduledFor', { when: fullDate(review.scheduled_post_at), defaultValue: 'Scheduled for {when}' })}
+                    </span>
+                  )}
                 </div>
                 <button type="button" onClick={() => handleCopy(optimisticResponse)} aria-label={t('review.copyAria')} className="text-xs text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
                   {t('review.copy')}
@@ -1268,9 +1283,40 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
                     <span aria-hidden="true">✨</span>
                     {loading ? t('review.drafting') : draftText ? t('review.regenerate') : t('review.aiDraft')}
                   </button>
-                  <button type="button" onClick={handleSend} disabled={loading || !draftText.trim() || draftText.length > 4000} aria-busy={loading}
+                  <button type="button" onClick={() => handleSend()} disabled={loading || !draftText.trim() || draftText.length > 4000} aria-busy={loading}
                     className="btn-primary text-xs py-1.5 disabled:opacity-50">
                     {loading ? t('review.saving') : t('review.saveResponse')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      // Default to "tomorrow at 9am" — the most common
+                      // case for "draft now, post during business hours."
+                      // Pre-fill the prompt so the user can edit if needed.
+                      const tomorrow9am = new Date();
+                      tomorrow9am.setDate(tomorrow9am.getDate() + 1);
+                      tomorrow9am.setHours(9, 0, 0, 0);
+                      const defaultIso = tomorrow9am.toISOString().slice(0, 16);
+                      // eslint-disable-next-line no-alert
+                      const input = window.prompt(
+                        t('review.schedulePrompt', 'Schedule reply for (YYYY-MM-DD HH:MM):'),
+                        defaultIso.replace('T', ' ')
+                      );
+                      if (!input) return;
+                      // Accept either ISO or "YYYY-MM-DD HH:MM" format
+                      const cleaned = input.trim().replace(' ', 'T');
+                      const ms = Date.parse(cleaned);
+                      if (!Number.isFinite(ms)) {
+                        toast(t('review.scheduleInvalid', 'Invalid date/time format'), 'error');
+                        return;
+                      }
+                      handleSend(new Date(ms).toISOString());
+                    }}
+                    disabled={loading || !draftText.trim() || draftText.length > 4000}
+                    className="text-xs py-1.5 px-3 rounded-lg border border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-900/50 disabled:opacity-50 transition-colors"
+                    title={t('review.scheduleTitle', 'Save the reply now, post it later')}
+                  >
+                    <span aria-hidden="true">⏰</span> {t('review.schedule', 'Schedule')}
                   </button>
                   <button type="button" onClick={() => { setDrafting(false); setShowTemplates(false); }} className="btn-secondary text-xs py-1.5">
                     {t('review.cancel')}

@@ -378,6 +378,18 @@ function initSchema() {
   // (ski lodges, beach resorts) but useful to anyone going on PTO.
   migrateAddColumn('businesses', 'vacation_until', 'TEXT DEFAULT NULL');
 
+  // reviews.scheduled_post_at — ISO timestamp at which a queued reply
+  // should be posted to the source platform. NULL means "post
+  // immediately on save" (legacy default). When set, the /respond
+  // route saves response_text but does NOT call replyToReview;
+  // instead, the scheduledReplyPoster job picks up due rows on its
+  // 5-minute tick and fires the platform call. Lets owners draft at
+  // 2am without the reply landing on Google at 2am — schedule for
+  // 9am, look professional. Cleared (set to NULL) the moment the
+  // reply is actually posted, so a row's queue/posted state is
+  // unambiguous from these two columns.
+  migrateAddColumn('reviews', 'scheduled_post_at', 'TEXT DEFAULT NULL');
+
   // Email verification + password reset columns.
   // Tokens are stored as SHA-256 hashes; plaintext tokens are only ever sent via email.
   // *_expires_at columns are ISO 8601 strings (UTC) for comparison with datetime('now').
