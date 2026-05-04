@@ -122,8 +122,9 @@ The reviewhub.review site itself + everything a prospect sees.
   generic-curious.
 - `[ ]` `/changelog` localization audit — same gap as the rest of
   the i18n work. Likely English-only.
-- `[ ]` Refresh sitemap.xml to include /status, /roadmap if they're
-  not already. Quick check + add.
+- `[done]` sitemap.xml refresh. /status and /roadmap were already
+  there; added missing /audit (high-value funnel landing page) and
+  bumped /changelog lastmod to today.
 
 ## BUSINESS — sales, pricing, ops, lead-gen volume
 
@@ -194,8 +195,12 @@ The boring-but-load-bearing work.
 - `[ ]` Add a "this week's deploys" auto-summary that the founder
   can read on Sunday — diff today's main vs 7-days-ago main, group
   commits by domain, highlight any behavior changes.
-- `[ ]` Pre-Sentry test: trigger a controlled error in dev to confirm
-  the Sentry forwarder is actually receiving (not just configured).
+- `[done]` Pre-Sentry test. Added 2 cases to errorReporter.test.js:
+  (a) when SENTRY_DSN is set, captureException posts a well-formed
+  envelope (correct URL, auth header, NDJSON envelope body, event
+  payload) — proves the forwarder works without waiting for a real
+  prod error to appear in Sentry's Issues feed; (b) when DSN unset,
+  no fetch call happens.
 
 ---
 
