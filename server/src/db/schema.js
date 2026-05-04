@@ -255,6 +255,28 @@ function initSchema() {
     CREATE INDEX IF NOT EXISTS idx_audit_token ON audit_previews(share_token);
     CREATE INDEX IF NOT EXISTS idx_audit_owner ON audit_previews(owner_user_id, created_at DESC);
 
+    -- business_share_tokens — read-only share links for accountants /
+    -- agency staff / spouses-who-want-to-watch. Owner generates a token
+    -- via Settings, sends the link to whoever needs to see the dashboard
+    -- without giving them edit or billing access. Trade-off vs full
+    -- team-membership: anyone with the link can view (no identity check),
+    -- but setup is one-click + no account needed for the recipient.
+    -- Tokens are 24-byte random hex (48 chars), matching audit-preview.
+    -- revoked_at kills the token before its 1-year expiry.
+    CREATE TABLE IF NOT EXISTS business_share_tokens (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      business_id INTEGER NOT NULL REFERENCES businesses(id) ON DELETE CASCADE,
+      share_token TEXT UNIQUE NOT NULL,
+      label TEXT,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      expires_at TEXT NOT NULL DEFAULT (datetime('now', '+365 days')),
+      revoked_at TEXT,
+      last_viewed_at TEXT,
+      view_count INTEGER NOT NULL DEFAULT 0
+    );
+    CREATE INDEX IF NOT EXISTS idx_share_token ON business_share_tokens(share_token);
+    CREATE INDEX IF NOT EXISTS idx_share_business ON business_share_tokens(business_id);
+
     CREATE TABLE IF NOT EXISTS review_requests (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       business_id INTEGER NOT NULL REFERENCES businesses(id) ON DELETE CASCADE,
@@ -390,6 +412,7 @@ function initSchema() {
   // unambiguous from these two columns.
   migrateAddColumn('reviews', 'scheduled_post_at', 'TEXT DEFAULT NULL');
 
+
   // Email verification + password reset columns.
   // Tokens are stored as SHA-256 hashes; plaintext tokens are only ever sent via email.
   // *_expires_at columns are ISO 8601 strings (UTC) for comparison with datetime('now').
@@ -398,6 +421,14 @@ function initSchema() {
   migrateAddColumn('users', 'email_verify_sent_at', 'TEXT DEFAULT NULL');
   migrateAddColumn('users', 'password_reset_token_hash', 'TEXT DEFAULT NULL');
   migrateAddColumn('users', 'password_reset_expires_at', 'TEXT DEFAULT NULL');
+
+  // Magic-link sign-in. Passwordless alternative to email + password
+  // for users who don't want to remember another password (mostly older
+  // owners). Token is sha256-hashed at rest. Single-use: cleared on
+  // successful login. 15-minute TTL — short enough that a stolen
+  // forwarded email link expires before the threat model matures.
+  migrateAddColumn('users', 'magic_login_token_hash', 'TEXT DEFAULT NULL');
+  migrateAddColumn('users', 'magic_login_expires_at', 'TEXT DEFAULT NULL');
 
   // Two-factor auth (email OTP). When enabled, login returns a short-lived
   // "pending" token and requires a 6-digit code emailed to the user. Recovery

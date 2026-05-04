@@ -299,6 +299,12 @@ function createApp() {
   app.use('/api/apikeys', require('./routes/apiKeys'));
   app.use('/api/support', require('./routes/support'));
   app.use('/api/audit-previews', require('./routes/auditPreviews'));
+  // business_share_tokens — owner-side endpoints mounted under
+  // /api/businesses (matches the resource ownership), public read
+  // endpoint exposed at /api/share/:token (single share-table read,
+  // not a generic share namespace; document as such on the route).
+  app.use('/api/businesses', require('./routes/businessShareTokens'));
+  app.use('/api', require('./routes/businessShareTokens'));
   app.use('/api/extension', require('./routes/extension'));
   app.use('/api/gdpr', require('./routes/gdpr'));
   app.use('/api/owner', require('./routes/owner'));
@@ -412,6 +418,20 @@ function createApp() {
     // 'not-configured' = endpoint returns 401 (intentional — secret-only addresses
     //   still resolve via /api/inbound/address, just no live mail flow yet).
     components.inbound_email = process.env.MAILGUN_WEBHOOK_SIGNING_KEY ? 'configured' : 'not-configured';
+
+    // Auto-post platforms — surfaces the resolved REPLY_TO_PLATFORMS
+    // value so external monitors (and the founder running ./scripts/
+    // prod-smoke.sh) can verify the headline-feature toggle without
+    // needing log access. An empty array here means paying customers'
+    // replies stay local — silent breakage we want to catch loudly.
+    const replyEnv = process.env.REPLY_TO_PLATFORMS;
+    const replyEnabled = replyEnv === undefined
+      ? ['google']
+      : replyEnv.split(',').map(s => s.trim()).filter(Boolean);
+    components.auto_post = replyEnabled.length > 0
+      ? `enabled:${replyEnabled.join(',')}`
+      : 'DISABLED';
+    if (replyEnabled.length === 0) overallOk = false;
 
     const payload = {
       ok: overallOk,

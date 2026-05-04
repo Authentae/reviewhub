@@ -1358,6 +1358,150 @@ function VacationSection({ business, onUpdate }) {
   );
 }
 
+// Share-token section — read-only links for accountants / agency
+// staff. Owner mints a token from here, sends the URL to the
+// recipient. Recipient opens /shared/<token> and sees a read-only
+// dashboard mirror. Owner can revoke any token instantly.
+function ShareTokensSection({ business }) {
+  const { t } = useI18n();
+  const toast = useToast();
+  const [tokens, setTokens] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+  const [creating, setCreating] = React.useState(false);
+  const [labelDraft, setLabelDraft] = React.useState('');
+
+  const load = React.useCallback(async () => {
+    if (!business?.id) return;
+    setLoading(true);
+    try {
+      const { data } = await api.get(`/businesses/${business.id}/share-tokens`);
+      setTokens(data?.tokens || []);
+    } catch { /* non-fatal */ }
+    finally { setLoading(false); }
+  }, [business?.id]);
+
+  React.useEffect(() => { load(); }, [load]);
+
+  async function create() {
+    setCreating(true);
+    try {
+      await api.post(`/businesses/${business.id}/share-tokens`, {
+        label: labelDraft.trim() || null,
+      });
+      setLabelDraft('');
+      toast(t('shareTokens.created', 'Share link created'), 'success');
+      load();
+    } catch (err) {
+      toast(err?.response?.data?.error || t('shareTokens.createFailed', 'Could not create link'), 'error');
+    } finally {
+      setCreating(false);
+    }
+  }
+
+  async function revoke(tokenId, label) {
+    // eslint-disable-next-line no-alert
+    if (!window.confirm(t('shareTokens.revokeConfirm', `Revoke ${label || 'this link'}? Anyone using it will lose access immediately.`))) return;
+    try {
+      await api.delete(`/businesses/${business.id}/share-tokens/${tokenId}`);
+      toast(t('shareTokens.revoked', 'Link revoked'), 'info');
+      load();
+    } catch {
+      toast(t('shareTokens.revokeFailed', 'Could not revoke link'), 'error');
+    }
+  }
+
+  async function copyUrl(url) {
+    try {
+      await navigator.clipboard.writeText(url);
+      toast(t('shareTokens.copied', 'Link copied'), 'success');
+    } catch {
+      toast(t('shareTokens.copyFailed', 'Could not copy. Select and copy manually.'), 'error');
+    }
+  }
+
+  return (
+    <section className="mb-6" aria-labelledby="settings-share-tokens">
+      <h2 id="settings-share-tokens" className="text-base font-semibold text-gray-700 dark:text-gray-300 mb-1">
+        {t('shareTokens.title', 'Read-only share links')}
+      </h2>
+      <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
+        {t('shareTokens.subtitle', 'Generate a link that lets your accountant, agency, or partner view this dashboard without an account. View-only — no edit, no billing access.')}
+      </p>
+      <div className="card p-4">
+        <div className="flex flex-wrap items-end gap-3 mb-4">
+          <label className="flex flex-col gap-1 flex-1 min-w-[14rem]">
+            <span className="text-xs text-gray-500 dark:text-gray-400">
+              {t('shareTokens.labelLabel', 'Label (e.g. Bookkeeper Sarah)')}
+            </span>
+            <input
+              type="text"
+              value={labelDraft}
+              onChange={(e) => setLabelDraft(e.target.value)}
+              placeholder={t('shareTokens.labelPlaceholder', 'Optional — helps you remember who got which link')}
+              maxLength={80}
+              className="input text-sm"
+            />
+          </label>
+          <button type="button" onClick={create} disabled={creating} className="btn btn-primary text-sm">
+            {creating ? t('common.creating', 'Creating…') : t('shareTokens.create', 'Create link')}
+          </button>
+        </div>
+
+        {loading && <p className="text-xs text-gray-500">{t('common.loading', 'Loading…')}</p>}
+        {!loading && tokens.length === 0 && (
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            {t('shareTokens.empty', 'No share links yet.')}
+          </p>
+        )}
+        {tokens.length > 0 && (
+          <ul className="space-y-2">
+            {tokens.map(tk => (
+              <li
+                key={tk.id}
+                className="flex items-center gap-2 px-3 py-2 rounded border"
+                style={{
+                  borderColor: tk.active ? '#e6dfce' : '#fca5a5',
+                  background: tk.active ? '#fff' : '#fef2f2',
+                  opacity: tk.active ? 1 : 0.7,
+                }}
+              >
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium truncate">
+                    {tk.label || t('shareTokens.unlabeled', '(unlabeled)')}
+                    {!tk.active && (
+                      <span className="ml-2 text-xs text-red-600">
+                        {tk.revoked_at ? t('shareTokens.revokedTag', 'revoked') : t('shareTokens.expiredTag', 'expired')}
+                      </span>
+                    )}
+                  </p>
+                  <p className="text-xs text-gray-500 truncate">
+                    {tk.share_url}
+                    {tk.view_count > 0 && (
+                      <span className="ml-2">· opened {tk.view_count}×</span>
+                    )}
+                  </p>
+                </div>
+                {tk.active && (
+                  <>
+                    <button type="button" onClick={() => copyUrl(tk.share_url)}
+                      className="text-xs px-2 py-1 rounded border border-gray-300 hover:bg-gray-50">
+                      {t('shareTokens.copy', 'Copy')}
+                    </button>
+                    <button type="button" onClick={() => revoke(tk.id, tk.label)}
+                      className="text-xs px-2 py-1 rounded text-red-600 hover:bg-red-50 border border-red-200">
+                      {t('shareTokens.revoke', 'Revoke')}
+                    </button>
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </section>
+  );
+}
+
 function WidgetSection({ business, onUpdate }) {
   const { t } = useI18n();
   const toast = useToast();
@@ -3193,6 +3337,9 @@ export default function Settings() {
 
         {/* Vacation / closed-period mode */}
         {business && <VacationSection business={business} onUpdate={(updated) => setBusiness(b => ({ ...b, ...updated }))} />}
+
+        {/* Read-only share links for accountants / agency staff */}
+        {business && <ShareTokensSection business={business} />}
 
         {/* Review Widget */}
         {business && <WidgetSection business={business} onUpdate={(updated) => setBusiness(b => ({ ...b, ...updated }))} />}

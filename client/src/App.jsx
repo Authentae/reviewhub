@@ -54,6 +54,12 @@ const Status = lazy(() => import('./pages/Status'));
 // /year-review/:year — auth-required printable recap of the year's
 // reviews. Aggregations only (no AI calls); cheap to render.
 const YearReview = lazy(() => import('./pages/YearReview'));
+// /shared/:token — public read-only dashboard for accountants /
+// agency staff. No auth; share-token gates access.
+const Shared = lazy(() => import('./pages/Shared'));
+// /magic-login?token=… — destination of the magic-link email. Auto-
+// consumes the token, sets JWT, redirects to /dashboard.
+const MagicLogin = lazy(() => import('./pages/MagicLogin'));
 // Support — public-or-authed real-issue intake. Frill (already wired) is
 // for feature feedback; /support is for "this broke" / billing / account.
 const Support = lazy(() => import('./pages/Support'));
@@ -147,6 +153,8 @@ export default function App() {
         <Route path="/roadmap" element={<Roadmap />} />
         <Route path="/status" element={<Status />} />
         <Route path="/year-review/:year" element={<PrivateRoute><YearReview /></PrivateRoute>} />
+        <Route path="/shared/:token" element={<Shared />} />
+        <Route path="/magic-login" element={<MagicLogin />} />
         <Route path="/support" element={<Support />} />
         <Route path="/api-docs" element={<ApiDocs />} />
         <Route path="*" element={<NotFound />} />
