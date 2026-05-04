@@ -346,6 +346,17 @@ function initSchema() {
   // further sends until 24h has passed."
   migrateAddColumn('audit_previews', 'last_notification_sent_at', 'TEXT DEFAULT NULL');
 
+  // audit_previews follow-up reminder columns. The reminder job emails
+  // the founder ~48h after the prospect first viewed the audit IF the
+  // founder hasn't marked it as replied — closing the "they opened it,
+  // I forgot to follow up, the warm window passed" gap that was the
+  // main attribution leak before this. Both columns NULL by default.
+  // marked_as_replied_at is set when the founder hits "mark as replied"
+  // in the dashboard (suppresses the reminder); last_followup_reminder_sent_at
+  // is set by the cron job after sending so we don't double-send.
+  migrateAddColumn('audit_previews', 'marked_as_replied_at', 'TEXT DEFAULT NULL');
+  migrateAddColumn('audit_previews', 'last_followup_reminder_sent_at', 'TEXT DEFAULT NULL');
+
   // Email verification + password reset columns.
   // Tokens are stored as SHA-256 hashes; plaintext tokens are only ever sent via email.
   // *_expires_at columns are ISO 8601 strings (UTC) for comparison with datetime('now').

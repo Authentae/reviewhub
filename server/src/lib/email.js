@@ -2650,6 +2650,89 @@ async function sendAuditViewNotification(userEmail, opts) {
   });
 }
 
+// Outbound-audit follow-up reminder. Fires ~48h after a prospect first
+// viewed the audit URL if the founder hasn't marked it as replied. The
+// goal is just "remind the founder to nudge them" — we don't have the
+// prospect's contact info on record (the founder DM'd / emailed them
+// themselves), so we can't auto-send to the prospect. We email the
+// founder a copy-pasteable follow-up template + a link back to the
+// outbound-audits dashboard where they can mark it replied.
+const AUDIT_FOLLOWUP_STRINGS = {
+  en: {
+    subject: (n) => `Time to follow up with ${n}`,
+    headline: (n) => `${n} opened your audit ~48h ago — no reply yet`,
+    body: 'Most cold conversions need 2-3 touches. Sending a short nudge now (when they\'ve already seen the value) converts dramatically better than waiting another week. Here\'s a templated follow-up you can paste:',
+    templateLabel: 'Copy-paste follow-up',
+    template: (biz) => `Hey — circling back on the audit I sent for ${biz}. Did the drafted replies make sense for your tone? Happy to walk you through the auto-posting setup over a 10-min call if that's easier.`,
+    cta: 'Open dashboard',
+    markReplied: 'Already replied? Mark it in the dashboard so I stop reminding you.',
+  },
+  th: {
+    subject: (n) => `ถึงเวลาติดตามผลกับ ${n}`,
+    headline: (n) => `${n} เปิดดู audit ของคุณเมื่อ ~48 ชั่วโมงก่อน — ยังไม่มีการตอบกลับ`,
+    body: 'การปิดดีลผ่าน cold outreach ส่วนใหญ่ต้องติดต่อ 2-3 ครั้ง ส่งข้อความสั้นๆ ตอนนี้ (ตอนที่เขาเห็นคุณค่าแล้ว) ได้ผลดีกว่ารออีกสัปดาห์มาก นี่คือเทมเพลตที่คุณก๊อปไปแปะได้เลย:',
+    templateLabel: 'ก๊อปไปแปะ',
+    template: (biz) => `สวัสดีครับ ติดต่อกลับเรื่อง audit ที่ส่งให้ร้าน ${biz} ครับ คำตอบที่ร่างให้ใช้ได้ไหมครับ? ถ้าอยากให้เซ็ตระบบให้โพสต์อัตโนมัติ คุยสั้นๆ 10 นาทีได้นะครับ`,
+    cta: 'เปิดแดชบอร์ด',
+    markReplied: 'ตอบกลับแล้วใช่ไหม? ทำเครื่องหมายในแดชบอร์ดเพื่อหยุดการแจ้งเตือน',
+  },
+};
+
+async function sendAuditFollowupReminder(userEmail, opts) {
+  const { businessName = '', lang = 'en' } = opts || {};
+  const s = AUDIT_FOLLOWUP_STRINGS[lang] || AUDIT_FOLLOWUP_STRINGS.en;
+
+  const safeBizName = escapeHtml(businessName);
+  const safeClientUrl = escapeHtml(process.env.CLIENT_URL || 'http://localhost:5173');
+  const dashboardUrl = `${safeClientUrl}/outbound-audits`;
+  const subject = stripHdr(s.subject(businessName));
+  const templateText = s.template(businessName);
+
+  const html = `
+    <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px 16px">
+      <div style="background:#fbf8f1;border:1px solid #e6dfce;border-radius:12px;padding:24px">
+        <p style="font-family:monospace;font-size:11px;letter-spacing:.15em;color:#c48a2c;text-transform:uppercase;margin:0 0 8px">Follow-up reminder</p>
+        <h2 style="color:#1d242c;margin:0 0 12px;font-size:18px">${escapeHtml(s.headline(businessName))}</h2>
+        <p style="color:#4a525a;margin:0 0 18px;line-height:1.55">${escapeHtml(s.body)}</p>
+        <p style="font-size:11px;font-family:monospace;letter-spacing:.1em;color:#1e4d5e;text-transform:uppercase;margin:0 0 6px">${escapeHtml(s.templateLabel)}</p>
+        <pre style="background:#fff;border:1px solid #e6dfce;border-radius:8px;padding:14px;white-space:pre-wrap;font-family:sans-serif;font-size:13px;line-height:1.5;margin:0 0 18px;color:#1d242c">${escapeHtml(templateText)}</pre>
+        <a href="${dashboardUrl}"
+           style="background:#1e4d5e;color:white;padding:10px 18px;border-radius:8px;text-decoration:none;display:inline-block;font-size:14px">
+          ${escapeHtml(s.cta)}
+        </a>
+      </div>
+      <p style="font-size:11px;color:#9aa3ac;margin-top:16px;text-align:center">${escapeHtml(s.markReplied)}</p>
+    </div>`;
+
+  const text = [
+    s.headline(businessName),
+    '',
+    s.body,
+    '',
+    `--- ${s.templateLabel} ---`,
+    templateText,
+    '---',
+    '',
+    `${s.cta}: ${process.env.CLIENT_URL || 'http://localhost:5173'}/outbound-audits`,
+    '',
+    s.markReplied,
+  ].join('\n');
+
+  const transporter = getTransporter();
+  if (!transporter) {
+    console.log(`[EMAIL] Audit follow-up reminder → ${userEmail}: ${subject}`);
+    return;
+  }
+
+  await transporter.sendMail({
+    from: process.env.SMTP_FROM || 'ReviewHub <noreply@reviewhub.review>',
+    to: userEmail,
+    subject,
+    html,
+    text,
+  });
+}
+
 module.exports = {
   sendNewReviewNotification,
   sendVerificationEmail,
@@ -2662,6 +2745,7 @@ module.exports = {
   sendErasureConfirmation,
   sendOnboardingEmail,
   sendAuditViewNotification,
+  sendAuditFollowupReminder,
   verifySmtp,
   portBlockHint,
 };

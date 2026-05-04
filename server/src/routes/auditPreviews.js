@@ -211,7 +211,8 @@ router.post('/', createLimiter, authMiddleware, async (req, res) => {
 router.get('/', authMiddleware, (req, res) => {
   try {
     const rows = all(
-      `SELECT id, business_name, share_token, view_count, first_viewed_at, last_viewed_at, created_at, expires_at
+      `SELECT id, business_name, share_token, view_count, first_viewed_at, last_viewed_at,
+              marked_as_replied_at, last_followup_reminder_sent_at, created_at, expires_at
          FROM audit_previews
         WHERE owner_user_id = ?
           AND datetime(expires_at) > datetime('now')
@@ -228,6 +229,32 @@ router.get('/', authMiddleware, (req, res) => {
     });
   } catch (err) {
     captureException(err, { route: 'audit-previews', op: 'list' });
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// POST /api/audit-previews/:id/mark-replied — founder tells us the
+// prospect responded so we stop nudging them with follow-up reminders.
+// Idempotent: re-flagging an already-flagged audit just refreshes the
+// timestamp.
+router.post('/:id/mark-replied', authMiddleware, (req, res) => {
+  try {
+    const auditId = parseInt(req.params.id, 10);
+    if (!Number.isFinite(auditId) || auditId <= 0) {
+      return res.status(400).json({ error: 'Invalid audit ID' });
+    }
+    const audit = get(
+      `SELECT id FROM audit_previews WHERE id = ? AND owner_user_id = ?`,
+      [auditId, req.user.id]
+    );
+    if (!audit) return res.status(404).json({ error: 'Not found' });
+    run(
+      `UPDATE audit_previews SET marked_as_replied_at = datetime('now') WHERE id = ?`,
+      [auditId]
+    );
+    res.json({ marked: true });
+  } catch (err) {
+    captureException(err, { route: 'audit-previews', op: 'mark-replied' });
     res.status(500).json({ error: 'Server error' });
   }
 });

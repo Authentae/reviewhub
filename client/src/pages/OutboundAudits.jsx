@@ -129,6 +129,18 @@ export default function OutboundAudits() {
     }
   }
 
+  async function handleMarkReplied(id) {
+    // Suppresses the 48h follow-up reminder for this audit. Idempotent
+    // server-side, so a misclick on an already-marked row is harmless.
+    try {
+      await api.post(`/audit-previews/${id}/mark-replied`);
+      toast('Marked as replied — follow-up reminder suppressed.', 'success');
+      loadAudits();
+    } catch {
+      toast('Could not mark as replied', 'error');
+    }
+  }
+
   async function handleRevoke(id) {
     if (!confirm('Revoke this share URL? The prospect will get a 404 if they open it.')) return;
     try {
@@ -291,6 +303,12 @@ Mali 4
                         </span>
                         <span>·</span>
                         <span>{expiresIn}d left</span>
+                        {a.marked_as_replied_at && (
+                          <>
+                            <span>·</span>
+                            <span className="text-blue-500 dark:text-blue-400">Replied ✓</span>
+                          </>
+                        )}
                       </p>
                     </div>
                     <div className="flex gap-1.5 flex-shrink-0">
@@ -309,6 +327,16 @@ Mali 4
                       >
                         View
                       </Link>
+                      {opened && !a.marked_as_replied_at && (
+                        <button
+                          type="button"
+                          onClick={() => handleMarkReplied(a.id)}
+                          className="text-xs px-2 py-1 rounded border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                          title="Suppresses the 48h follow-up reminder"
+                        >
+                          Replied ✓
+                        </button>
+                      )}
                       <button
                         type="button"
                         onClick={() => handleRevoke(a.id)}
