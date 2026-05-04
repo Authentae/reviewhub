@@ -530,3 +530,72 @@ Not life-changing income on its own. But:
   is small)
 
 The math works. Patience does.
+
+## Pricing-objection journal — log every "no" so the next "yes" is closer
+
+Cold-outreach pricing isn't validated by guessing. It's validated by
+collecting actual rejections and seeing the pattern. Every time a
+prospect replies negatively (or worse — opens, doesn't reply, then
+later turns down the follow-up), capture the objection here. After
+~10 entries, the price is either right (objections are rare and split
+across reasons) or wrong (one reason dominates → adjust).
+
+### How to log
+Append a bullet after each declined conversation. Keep it terse —
+2-3 fields max. Don't editorialize; capture words verbatim where
+possible.
+
+```
+- {date} · {business_name} · {plan tier they declined} · "{verbatim
+  objection in their language}" → {your interpretation in 5 words}
+```
+
+### Pattern thresholds
+After 10 logged entries:
+- **>5 cite price-too-high**: pricing is wrong for this segment, not
+  the product. Test a $7/mo Starter or quarterly billing before
+  changing the offer.
+- **>5 cite "I'll do it manually"**: the value-prop doesn't beat
+  zero-cost manual reply. Tighten the why-this-matters (response-rate
+  → ranking, etc.) in the cold email; or pivot to a higher-ticket
+  vertical (hotels, dental clinics) where opportunity cost is bigger.
+- **>5 cite "we already use {X}"**: there's a competitor we're losing
+  to. Find them, reverse-engineer their pricing/positioning, decide
+  whether to differentiate or pivot.
+- **>5 ghost (open URL, never reply)**: the audit-preview page isn't
+  closing. The CTA isn't compelling, or the drafts aren't good enough
+  to feel valuable. A/B the page; show it to 3 friends and ask "would
+  you click 'set this up for me' here?"
+- **Mixed pattern, no winner > 3**: pricing is approximately right.
+  Keep volume-grinding.
+
+### The journal
+
+```
+- 2026-05-04 · Pink Chili Thai Cooking · n/a · (no reply yet) → too early to interpret
+- 2026-05-04 · House of Taste · n/a · (no reply yet) → too early
+- 2026-05-04 · White Ivory B&B · n/a · (no reply yet) → too early
+- 2026-05-04 · Vera Nidhra B&B · n/a · (no reply yet) → too early
+- 2026-05-04 · Aim House Bangkok · n/a · (no reply yet) → too early
+- 2026-05-04 · Better Moon Guesthouse · n/a · (no reply yet) → too early
+- 2026-05-04 · May Kaidee Tanao · n/a · (no reply yet) → too early
+- 2026-05-04 · Tingly Thai Cooking · n/a · (no reply yet) → too early
+- 2026-05-04 · Sweets Cottage Academy · n/a · (no reply yet) → too early
+```
+
+(Add new entries above this line as conversations land.)
+
+## Production health check before each outreach session
+
+Before sending the day's batch, run the smoke script to make sure the
+prospect-facing URLs are healthy. A broken `/audit-preview/<token>`
+(500 page, expired SSL, deploy mid-flight) means every audit URL DM'd
+that day is wasted.
+
+```bash
+./scripts/prod-smoke.sh
+```
+
+Hits the public surfaces, confirms 200s on landing/pricing/register
+and 404s on bogus audit tokens. Takes ~10 seconds. If it fails, fix
+before sending — a cold email pointing at a 500 destroys credibility.
