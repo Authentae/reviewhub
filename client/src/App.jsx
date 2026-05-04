@@ -47,6 +47,10 @@ const Changelog = lazy(() => import('./pages/Changelog'));
 // building. The "decided not to build" column lets prospects self-qualify
 // out before signing up. No Q-dated promises (they always slip).
 const Roadmap = lazy(() => import('./pages/Roadmap'));
+// Status — public live snapshot of /api/health. Lets prospects checking
+// "is this thing actually working?" before signup get a green/red answer
+// in 1 second instead of inferring from anecdotes. Auto-refreshes 30s.
+const Status = lazy(() => import('./pages/Status'));
 // Support — public-or-authed real-issue intake. Frill (already wired) is
 // for feature feedback; /support is for "this broke" / billing / account.
 const Support = lazy(() => import('./pages/Support'));
@@ -138,6 +142,7 @@ export default function App() {
         <Route path="/audit" element={<AuditLanding />} />
         <Route path="/changelog" element={<Changelog />} />
         <Route path="/roadmap" element={<Roadmap />} />
+        <Route path="/status" element={<Status />} />
         <Route path="/support" element={<Support />} />
         <Route path="/api-docs" element={<ApiDocs />} />
         <Route path="*" element={<NotFound />} />

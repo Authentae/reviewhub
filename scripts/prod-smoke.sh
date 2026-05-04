@@ -59,6 +59,7 @@ check "pricing"       "$BASE/pricing"    "200"
 check "terms"         "$BASE/terms"      "200"
 check "privacy"       "$BASE/privacy"    "200"
 check "roadmap"       "$BASE/roadmap"    "200"
+check "status page"   "$BASE/status"     "200"
 
 # Auth pages
 check "login"         "$BASE/login"      "200"
