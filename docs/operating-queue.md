@@ -80,9 +80,13 @@ list.
   Shipped at `client/src/__tests__/RegisterAuditAttribution.test.jsx`
   (5 cases: happy path, URL-encoded unicode, no `from` guard,
   non-audit `from` guard, missing-fields tolerance).
-- `[ ]` Smoke-test for the live posted-to-Google badge — when
-  REPLY_TO_PLATFORMS includes google + provider returns ok,
-  response_posted_at gets set; UI badge renders.
+- `[done]` Smoke test for posted-to-Google badge pipeline. Shipped at
+  `server/tests/postedToPlatformBadge.test.js`. Four cases: happy
+  path sets response_posted_at and badge data surfaces in GET;
+  REPLY_TO_PLATFORMS='' disables auto-post; selective platform list
+  doesn't post excluded platforms; manual reviews (no external_id)
+  skip auto-post entirely. Also added `replyToReview()` to MockProvider
+  so the wiring is testable without real Google creds.
 - `[wait:signal]` Native iOS / Android app — out of scope without
   weeks of investment + App Store review pipeline. Defer until a
   paying customer specifically asks.

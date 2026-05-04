@@ -40,6 +40,23 @@ class MockProvider extends BaseProvider {
     return true; // always works — no external deps
   }
 
+  // Mock reply-to-review — used by the auto-post-back path in
+  // routes/reviews.js to verify the wiring works end-to-end without
+  // hitting Google's My Business API. Returns immediately with a fake
+  // posted-confirmation. In production this only activates when the
+  // operator opts in via ENABLE_MOCK_PROVIDER=1, so it can't accidentally
+  // shadow real Google posts.
+  async replyToReview(externalId, replyText) {
+    return {
+      ok: true,
+      external_id: externalId,
+      posted_at: new Date().toISOString(),
+      // Don't echo the full reply text in case a future caller logs the
+      // return value — keeps test output noise-free.
+      reply_length: (replyText || '').length,
+    };
+  }
+
   async fetchReviews({ since } = {}) {
     const isFirstSync = !since;
     const count = isFirstSync
