@@ -950,7 +950,15 @@ router.post('/', reviewCreateLimiter, async (req, res) => {
       const planFeatures = getPlan(user.plan || 'free').features;
       const wantsNew = user.notif_new_review !== 0 && planFeatures.email_alerts_new;
       const wantsNeg = user.notif_negative_alert !== 0 && planFeatures.email_alerts_negative && sentiment === 'negative';
-      if (wantsNew || wantsNeg) {
+      // Vacation suppression — if the business has an active
+      // vacation_until set and today's date is on/before it, skip
+      // sending the new-review email. The review still ingests; the
+      // owner just doesn't get pinged while they're away. business.
+      // vacation_until is YYYY-MM-DD; string comparison vs today's
+      // YYYY-MM-DD is lexicographically correct.
+      const todayIso = new Date().toISOString().slice(0, 10);
+      const onVacation = business.vacation_until && business.vacation_until >= todayIso;
+      if ((wantsNew || wantsNeg) && !onVacation) {
         // Locale supported by NEW_REVIEW_STRINGS (en/th/es/ja). Anything
         // else falls through to en — the email lib handles unknown lang
         // safely via its `|| .en` fallback, but checking here keeps the

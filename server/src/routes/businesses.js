@@ -174,6 +174,31 @@ router.put('/:id', bizMutateLimiter, (req, res) => {
         return res.status(400).json({ error: `reply_tone must be one of: ${VALID_TONES.join(', ')}` });
       }
     }
+    if (req.body.vacation_until !== undefined) {
+      // Vacation/closed-period mode. While the current date is on or
+      // before this value, suppress new-review email notifications and
+      // the AI auto-draft pipeline (reviews still ingest). NULL or empty
+      // string clears any existing vacation. Validate ISO YYYY-MM-DD
+      // shape; refuse anything else so a typo can't silently disable
+      // notifications forever.
+      const v = req.body.vacation_until;
+      if (v === null || v === '') {
+        fields.push('vacation_until = ?'); params.push(null);
+      } else if (typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v)) {
+        // Sanity: refuse dates in the past — that's almost certainly a
+        // typo (entered last year by accident). Same-day still allowed
+        // since "vacation through today" is a valid request at midnight
+        // on the last day. Comparison is string-safe because YYYY-MM-DD
+        // is lexicographically sortable.
+        const today = new Date().toISOString().slice(0, 10);
+        if (v < today) {
+          return res.status(400).json({ error: 'vacation_until cannot be in the past' });
+        }
+        fields.push('vacation_until = ?'); params.push(v);
+      } else {
+        return res.status(400).json({ error: 'vacation_until must be a YYYY-MM-DD date string' });
+      }
+    }
 
     if (fields.length === 0) return res.json({ success: true });
     params.push(biz.id);

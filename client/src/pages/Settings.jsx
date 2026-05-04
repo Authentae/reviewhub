@@ -1247,6 +1247,117 @@ function ReplyToneSection({ business, onUpdate }) {
   );
 }
 
+// Vacation/closed-period mode. Lets the owner pause new-review email
+// notifications + LINE pings until a future date. Reviews still ingest
+// (so you don't lose data while away); only the proactive surfaces
+// silence. Asked for by seasonal businesses (ski lodges, beach resorts,
+// summer-only cafes) but useful to anyone going on PTO.
+function VacationSection({ business, onUpdate }) {
+  const { t } = useI18n();
+  const toast = useToast();
+  const [saving, setSaving] = useState(false);
+  const todayIso = new Date().toISOString().slice(0, 10);
+  const current = business.vacation_until || '';
+  const onVacation = current && current >= todayIso;
+
+  // Local input state so the user can pick a date and we can send the
+  // exact picker value without re-rendering on every keystroke. Reset
+  // when the saved value changes (e.g. another tab updated it).
+  const [draft, setDraft] = React.useState(current);
+  React.useEffect(() => { setDraft(current); }, [current]);
+
+  async function save() {
+    if (draft === current) return;
+    setSaving(true);
+    try {
+      const apiValue = draft || null;
+      await api.put(`/businesses/${business.id}`, { vacation_until: apiValue });
+      onUpdate({ vacation_until: apiValue });
+      toast(
+        apiValue
+          ? t('vacation.saved', 'Vacation mode active until {{date}}', { date: apiValue })
+          : t('vacation.cleared', 'Vacation mode cleared'),
+        'success'
+      );
+    } catch (err) {
+      toast(err?.response?.data?.error || t('vacation.saveFailed', 'Could not save vacation'), 'error');
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function clearNow() {
+    setSaving(true);
+    try {
+      await api.put(`/businesses/${business.id}`, { vacation_until: null });
+      onUpdate({ vacation_until: null });
+      setDraft('');
+      toast(t('vacation.cleared', 'Vacation mode cleared'), 'success');
+    } catch (err) {
+      toast(err?.response?.data?.error || t('vacation.saveFailed', 'Could not save vacation'), 'error');
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <section className="mb-6" aria-labelledby="settings-vacation">
+      <h2 id="settings-vacation" className="text-base font-semibold text-gray-700 dark:text-gray-300 mb-1">
+        {t('vacation.title', 'Vacation / closed-period mode')}
+      </h2>
+      <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
+        {t('vacation.subtitle', 'Pause new-review email + LINE notifications until a future date. Reviews still ingest in the background so you don\'t lose data.')}
+      </p>
+      <div className="card p-4">
+        {onVacation && (
+          <div
+            role="status"
+            className="mb-3 px-3 py-2 rounded-lg text-sm flex items-center justify-between"
+            style={{ background: '#fef3c7', color: '#92400e' }}
+          >
+            <span>
+              <span aria-hidden="true">🏖️ </span>
+              {t('vacation.activeBanner', 'Currently on vacation until {{date}}. New-review notifications are paused.', { date: current })}
+            </span>
+            <button
+              type="button"
+              onClick={clearNow}
+              disabled={saving}
+              className="text-xs font-semibold px-2 py-1 rounded bg-white hover:bg-amber-50 disabled:opacity-50"
+              style={{ color: '#92400e', border: '1px solid #fde68a' }}
+            >
+              {t('vacation.endNow', 'End now')}
+            </button>
+          </div>
+        )}
+        <div className="flex flex-wrap items-end gap-3">
+          <label className="flex flex-col gap-1 flex-1 min-w-[12rem]">
+            <span className="text-xs text-gray-500 dark:text-gray-400">
+              {t('vacation.untilLabel', 'Pause notifications until (last day, inclusive)')}
+            </span>
+            <input
+              type="date"
+              value={draft}
+              min={todayIso}
+              onChange={(e) => setDraft(e.target.value)}
+              disabled={saving}
+              className="input text-sm"
+            />
+          </label>
+          <button
+            type="button"
+            onClick={save}
+            disabled={saving || draft === current}
+            className="btn btn-primary text-sm"
+          >
+            {saving ? t('common.saving', 'Saving…') : t('common.save', 'Save')}
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function WidgetSection({ business, onUpdate }) {
   const { t } = useI18n();
   const toast = useToast();
@@ -3079,6 +3190,9 @@ export default function Settings() {
 
         {/* AI reply-tone selector */}
         {business && <ReplyToneSection business={business} onUpdate={(updated) => setBusiness(b => ({ ...b, ...updated }))} />}
+
+        {/* Vacation / closed-period mode */}
+        {business && <VacationSection business={business} onUpdate={(updated) => setBusiness(b => ({ ...b, ...updated }))} />}
 
         {/* Review Widget */}
         {business && <WidgetSection business={business} onUpdate={(updated) => setBusiness(b => ({ ...b, ...updated }))} />}

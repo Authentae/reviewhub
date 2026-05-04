@@ -367,6 +367,17 @@ function initSchema() {
   // for non-google providers); ISO timestamp means "posted at this time."
   migrateAddColumn('reviews', 'response_posted_at', 'TEXT DEFAULT NULL');
 
+  // businesses.vacation_until — date string (YYYY-MM-DD) marking the
+  // last day of an active vacation/closed-period. While the current
+  // date is on or before this value, the business is considered "on
+  // vacation": new-review email notifications and the AI auto-draft
+  // pipeline both suppress to avoid pinging an owner who's away or
+  // a place that's not serving customers. Reviews still ingest (we
+  // don't lose data); only the proactive surfaces silence. NULL means
+  // "no vacation set" (default). Asked for by seasonal businesses
+  // (ski lodges, beach resorts) but useful to anyone going on PTO.
+  migrateAddColumn('businesses', 'vacation_until', 'TEXT DEFAULT NULL');
+
   // Email verification + password reset columns.
   // Tokens are stored as SHA-256 hashes; plaintext tokens are only ever sent via email.
   // *_expires_at columns are ISO 8601 strings (UTC) for comparison with datetime('now').
