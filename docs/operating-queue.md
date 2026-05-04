@@ -203,9 +203,12 @@ The boring-but-load-bearing work.
   `~/.claude/projects/.../MEMORY.md`: queue-driven autopilot
   pattern, demand-gen wave shipping, the "which prospects are good"
   data once we have it.
-- `[ ]` Add a "this week's deploys" auto-summary that the founder
-  can read on Sunday — diff today's main vs 7-days-ago main, group
-  commits by domain, highlight any behavior changes.
+- `[done]` This-week's-deploys auto-summary script. Shipped at
+  `scripts/weekly-deploys.sh`. Groups commits by prefix (auth,
+  dashboard, billing, etc.), separates customer-facing from internal
+  (test/docs/infra/refactor), text or markdown output. Run as
+  `bash scripts/weekly-deploys.sh [days] [--markdown]`. Use the
+  markdown form to seed /changelog candidates each Sunday.
 - `[done]` Pre-Sentry test. Added 2 cases to errorReporter.test.js:
   (a) when SENTRY_DSN is set, captureException posts a well-formed
   envelope (correct URL, auth header, NDJSON envelope body, event
