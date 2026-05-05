@@ -160,6 +160,8 @@ export default function App() {
         <Route path="/for-restaurants" element={<VerticalLanding vertical="restaurants" />} />
         <Route path="/for-dentists" element={<VerticalLanding vertical="dentists" />} />
         <Route path="/for-hotels" element={<VerticalLanding vertical="hotels" />} />
+        <Route path="/for-spas" element={<VerticalLanding vertical="spas" />} />
+        <Route path="/for-cafes" element={<VerticalLanding vertical="cafes" />} />
         <Route path="/changelog" element={<Changelog />} />
         <Route path="/roadmap" element={<Roadmap />} />
         <Route path="/status" element={<Status />} />

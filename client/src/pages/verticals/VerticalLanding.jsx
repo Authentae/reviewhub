@@ -12,11 +12,53 @@
 // paper background). Content is per-vertical: industry-specific
 // review platforms, common review patterns, customer voice examples.
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import MarketingNav from '../../components/MarketingNav';
 import usePageTitle from '../../hooks/usePageTitle';
 import useSocialMeta from '../../hooks/useSocialMeta';
+
+// Inject a Service JSON-LD schema while mounted, restore on unmount.
+// Google uses this to render rich-result cards in SERP — name, provider,
+// price range, audience type. Without it, the page is just a regular
+// blue-link result; with it, eligible for Service / SoftwareApplication
+// rich snippets.
+function useServiceSchema(vertical, v) {
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = 'rh-service-schema';
+    script.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      name: v.title,
+      description: v.sub,
+      provider: {
+        '@type': 'Organization',
+        name: 'ReviewHub',
+        url: 'https://reviewhub.review/',
+      },
+      areaServed: 'Worldwide',
+      audience: { '@type': 'BusinessAudience', audienceType: v.eyebrow },
+      offers: {
+        '@type': 'Offer',
+        price: '14',
+        priceCurrency: 'USD',
+        priceSpecification: {
+          '@type': 'UnitPriceSpecification',
+          price: '14',
+          priceCurrency: 'USD',
+          unitText: 'MONTH',
+        },
+      },
+      url: `https://reviewhub.review/for-${vertical}`,
+    });
+    document.head.appendChild(script);
+    return () => {
+      if (script.parentNode) script.parentNode.removeChild(script);
+    };
+  }, [vertical, v]);
+}
 
 // Per-vertical content. Add a new vertical by adding a key here + a
 // route in App.jsx. The actual SEO win is one of these per common
@@ -70,6 +112,38 @@ const VERTICALS = {
     quote: '"Replying in five languages used to mean five different copy-paste tabs. Now it\'s one click."',
     quoteAttribution: '— Phuket boutique hotel, beta',
   },
+  spas: {
+    title: 'AI Google Review Replies for Spas, Salons & Wellness',
+    pageTitle: 'AI review replies for spas & salons',
+    eyebrow: 'For spas, salons & wellness studios',
+    heroLine1: 'Reply between treatments —',
+    heroLine2: 'in your tone, not a robot\'s.',
+    sub: 'Massage spas, hair salons, yoga studios, and Muay Thai gyms live or die by Google reviews. Therapists are mid-treatment, owners are at the front desk. ReviewHub drafts each reply in your voice — relaxed and warm for spa, sharper for fitness — and posts to Google when you approve.',
+    platforms: ['Google', 'Yelp', 'Booksy', 'Fresha', 'Mindbody', 'Facebook', 'Instagram (link-in-bio)', 'TripAdvisor'],
+    painPoints: [
+      'Five-star regular naming your therapist by name — warm thanks that mentions the therapist back, not a generic "we appreciate your visit"',
+      'Three-star "the music was too loud" — empathetic acknowledgment + a specific change you\'ll make, not a defensive explanation',
+      'One-star "double-booked, waited 40 minutes" — apology with a concrete fix (booking system change) and a private invite to come back',
+    ],
+    quote: '"My front desk used to leave reviews unanswered for a week. Now they\'re replied to before the next session ends."',
+    quoteAttribution: '— Bangkok wellness studio, beta',
+  },
+  cafes: {
+    title: 'AI Google Review Replies for Cafés & Coffee Shops',
+    pageTitle: 'AI review replies for cafés',
+    eyebrow: 'For cafés & coffee shops',
+    heroLine1: 'Reply between pours,',
+    heroLine2: 'not at midnight.',
+    sub: 'Cafés get reviewed faster than they get reviewed back. ReviewHub drafts each reply in your café\'s voice — warm but quick — so you can clear ten reviews in the time between two pour-overs. Works with Google, TripAdvisor, foodpanda, Grab, and the platforms tourists actually use.',
+    platforms: ['Google', 'TripAdvisor', 'Yelp', 'Foursquare', 'foodpanda', 'Grab Food', 'Facebook', 'Instagram'],
+    painPoints: [
+      '"Best flat white in Bangkok" — quick, warm thanks that doesn\'t feel templated; mention what they liked back',
+      '"Music too loud / wifi too slow" — single-line empathy + a real fix (volume note to staff, wifi upgrade); no defensiveness',
+      'Tourist review in a language you don\'t read — auto-translation, draft reply in their language so it lands properly',
+    ],
+    quote: '"I run two locations. Used to mean two unread review queues. Now it\'s one inbox, ten seconds per reply."',
+    quoteAttribution: '— independent café owner, Chiang Mai beta',
+  },
 };
 
 export default function VerticalLanding({ vertical }) {
@@ -84,6 +158,7 @@ export default function VerticalLanding({ vertical }) {
     title: v.title,
     description: v.sub,
   });
+  useServiceSchema(vertical, v);
 
   return (
     <div className="rh-design min-h-screen" style={{ background: 'var(--rh-paper, #fbf8f1)', color: 'var(--rh-ink, #1d242c)' }}>
