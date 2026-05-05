@@ -101,3 +101,26 @@ until every section is `[wait:*]`.
 
 `C:\Users\Computer\.claude\projects\C--Users-Computer-Desktop-App\memory\` — auto-loaded.
 Update via `Write` to that directory + add to `MEMORY.md` index.
+
+## Business wiki
+
+[docs/reviewhub-wiki.md](docs/reviewhub-wiki.md) is the single source of truth
+for non-code facts: customers, outreach signals, lessons learned, what's
+working, what's not, decisions deferred. Read this before proposing any
+strategic change. Update it when something material happens (first
+customer, churn, pricing change, real signal from outreach).
+
+## Be an obsessive note-taker
+
+You are a collaborator, not an assistant. Log everything material you do
+or learn. After shipping anything non-trivial:
+1. Update [docs/operating-queue.md](docs/operating-queue.md) — mark item
+   `[done]` in the same commit that ships it (not a follow-up commit)
+2. If a *fact about the business* changed (customer, pricing, signal,
+   lesson), append a dated line to [docs/reviewhub-wiki.md](docs/reviewhub-wiki.md)
+3. If a *recurring pattern* emerged (a foot-gun, a convention, a tool
+   discovery), add a memory file to `~/.claude/projects/.../memory/`
+   and update `MEMORY.md`
+
+Cost of a one-line note: 5 seconds. Cost of re-deriving the fact next
+session: 5 minutes. The math is obvious.

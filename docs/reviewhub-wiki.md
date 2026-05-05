@@ -1,0 +1,101 @@
+# ReviewHub wiki — the business in one searchable file
+
+Karpathy-style memory wiki. Single source of truth for *non-code* facts
+about ReviewHub: who's using it, what's making money, what's blocked,
+what worked, what didn't. Claude reads this every session before
+proposing big changes.
+
+**Update rule:** when something material happens (first paying customer,
+a real outreach reply, a churn, a pricing change, a competitor move,
+a learned lesson), add a line here. Not git-commit-detail, not
+operating-queue-task — just the *fact* that future-you needs to know.
+
+Sections grow over time. Don't archive — just date-stamp.
+
+---
+
+## Customers
+
+_(empty — pre-revenue as of 2026-05-05)_
+
+When the first paying customer lands, log: business name, plan,
+acquisition channel (cold email / audit funnel / inbound / referral),
+date, and any pre-purchase friction worth remembering.
+
+## Active outreach signals
+
+- **2026-05-05** — Outreach queue has 3 verified prospects + 6 research
+  targets. Wave 1 sent May 4 (9 emails). Awaiting 48h reply window
+  before pattern-matching which verticals respond.
+- Verticals showing source-availability so far: small B&Bs with own
+  websites, vegetarian/pastry cooking schools, independent dental
+  clinics, yoga/Muay Thai studios.
+
+## Pricing
+
+- Free + Starter $14/mo + Pro $29/mo + Business $59/mo (all annual = ~17% off)
+- 14-day trial KILLED — caused tire-kickers, signup→pay conversion
+  worse than direct paid signup
+- Source of truth: `server/src/lib/billing/plans.js`
+- Free tier intentionally has `email_alerts_new: false` — pushing free
+  users toward Starter, the headline upgrade reason
+
+## Lessons learned (the painful ones)
+
+- **2026-05-05** — Production OAuth callback used `writeSessionCookie`
+  (typo) instead of `setSessionCookie`. No integration test caught it.
+  Lesson: any new auth route needs a route-level happy-path test before
+  shipping.
+- **2026-05-05** — Google sign-in callback set the session cookie but
+  the React app uses a localStorage `rh_logged_in` marker for
+  synchronous PrivateRoute checks. User bounced back to /login. Fix
+  was a `/auth/google/done#token=…` handoff route. Lesson: any new
+  auth path that lands on a private route needs both server cookie AND
+  localStorage marker.
+- **2026-05-05** — Queue file got stale (4 items marked `[ ]` were
+  already shipped in earlier sessions). Lesson: agent should mark items
+  `[done]` in the same commit that ships them, not as a follow-up.
+- **2026-05-04** — `REPLY_TO_PLATFORMS` defaulted to OFF when env var
+  was unset. Headline paid feature (auto-post replies to Google) was
+  silently broken in prod. Now defaults ON when unset, with loud boot
+  log. Lesson: defaults for paid-tier features should fail loud, not silent.
+
+## What's making money
+
+_(nothing yet — pre-revenue)_
+
+When MRR > $0, log monthly: total MRR, by plan, churn, top acquisition
+channel, biggest single-customer concentration risk.
+
+## What's not working
+
+- Cold email open rates — no data yet, May 4 wave too recent
+- Audit funnel conversion — no signups attributed to audit yet
+- LinkedIn / Twitter — not pursued; no time
+- Paid ads — explicitly not pursuing pre-PMF
+
+## Competitor moves
+
+_(empty — track here when a relevant change is observed)_
+
+Watch list: BirdEye, Podium, NiceJob, ReviewTrackers (US-focused but
+relevant feature creep).
+
+## Decisions deferred to future-you
+
+- **Telegram bot for ops alerts** — needs always-on machine. Re-evaluate
+  when first customer lands or when a $5-20/mo VPS becomes cheap relative
+  to revenue.
+- **Multi-agent crew formalization** — premature pre-revenue. Re-evaluate
+  when one founder hour is worth more than agent ceremony cost (probably
+  ~5-10 paying customers).
+- **Bundle-size split for Settings.jsx (107KB)** — risky refactor, low
+  user-visible payoff pre-revenue. Revisit if a customer complains about
+  Settings load time.
+
+## Glossary
+
+- **Wave** — a single batch of cold outreach emails (Wave 1 = May 4 send)
+- **Audit funnel** — outbound: send a free AI-generated reply audit, link
+  to /register?from=audit&business=… for self-serve signup
+- **Operating queue** — `docs/operating-queue.md`, the cross-domain todo list

@@ -184,6 +184,50 @@ A typical day with this setup:
 
 ---
 
+## 6. Mission Control HTML dashboard
+
+**File:** `scripts/mission-control.sh`
+
+**What it is:** A static HTML dashboard showing your project at a glance —
+queue counts per section (todo/blocked/done), last 10 commits, production
+health, free disk, memory file index. No server, no always-on machine.
+Open it whenever you want a snapshot.
+
+**How to use:**
+```bash
+bash scripts/mission-control.sh > /tmp/mc.html
+start /tmp/mc.html        # Windows
+# or: open /tmp/mc.html   # Mac
+# or: xdg-open /tmp/mc.html  # Linux
+```
+
+**When to use:** Sunday morning, after a deploy, or any time you want
+"where is the project right now" in one screen. Re-run the script for
+fresh data (it reads files + hits production each time).
+
+**Why not a live always-on dashboard?** That would need a dedicated
+machine you don't have. Static snapshot covers 95% of the value. If
+you eventually run a 24/7 setup, this script is the seed for a
+proper dashboard.
+
+## 7. Business wiki
+
+**File:** [docs/reviewhub-wiki.md](docs/reviewhub-wiki.md)
+
+**What it is:** Single source of truth for *non-code* facts about the
+business — customers, outreach signals, lessons learned, what's making
+money, decisions deferred. Karpathy LLM-wiki style. Claude reads this
+every session before proposing strategic changes.
+
+**How to use:** Update it when something material happens. Examples:
+- First paying customer → add to "Customers" with name, plan, channel
+- Real reply to an outreach email → add to "Active outreach signals"
+- Pricing change → update "Pricing"
+- Painful debugging session → add the lesson to "Lessons learned"
+
+**Why this matters:** Without it, every session I have to ask "what's
+working, what's blocked, who's a customer." With it, I just know.
+
 ## What's NOT installed (and why)
 
 - **Telegram/Discord bot** — needs an always-on machine. You don't have one. Ping
