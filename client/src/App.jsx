@@ -40,6 +40,10 @@ const ReplyGeneratorTool = lazy(() => import('./pages/ReplyGeneratorTool'));
 // prospect submits Google Business URL, founder hand-crafts a 10-reply audit
 // and emails it back. Public, no signup.
 const AuditLanding = lazy(() => import('./pages/AuditLanding'));
+// Per-vertical SEO landing pages — long-tail "review reply tool for X" search intent
+const VerticalLanding = lazy(() => import('./pages/verticals/VerticalLanding'));
+// /blog index — internal entry point for the static HTML blog posts under /blog/<slug>
+const BlogIndex = lazy(() => import('./pages/BlogIndex'));
 // Changelog — public, tech-savvy buyers ("where's the changelog?") asked
 // for this in persona testing. Curated highlights, no firehose.
 const Changelog = lazy(() => import('./pages/Changelog'));
@@ -151,6 +155,11 @@ export default function App() {
         <Route path="/tools/review-reply-generator" element={<ReplyGeneratorTool />} />
         {/* Cold-outreach lead-capture landing — see AuditLanding.jsx */}
         <Route path="/audit" element={<AuditLanding />} />
+        {/* Per-vertical SEO pages */}
+        <Route path="/blog" element={<BlogIndex />} />
+        <Route path="/for-restaurants" element={<VerticalLanding vertical="restaurants" />} />
+        <Route path="/for-dentists" element={<VerticalLanding vertical="dentists" />} />
+        <Route path="/for-hotels" element={<VerticalLanding vertical="hotels" />} />
         <Route path="/changelog" element={<Changelog />} />
         <Route path="/roadmap" element={<Roadmap />} />
         <Route path="/status" element={<Status />} />
