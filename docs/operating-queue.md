@@ -67,13 +67,12 @@ list.
 - `[done]` Component test for FilterPresets — shipped at
   `client/src/__tests__/FilterPresets.test.jsx` (apply/save/delete
   + localStorage namespacing coverage).
-- `[done]` Bundle-size split phase 1: WebhooksSection extracted to
-  `client/src/pages/settings/WebhooksSection.jsx`, lazy-loaded via
-  React.lazy + Suspense. Settings: 114.57 → 103.34 KB raw (-11 KB),
-  24.49 KB gzip (-2.4 KB). New WebhooksSection chunk: 11.59 KB / 3.5
-  KB gzip, fetched only when user scrolls to that section. Phase 2
-  (AutoRules + ResponseTemplates) deferred — same pattern, ship when
-  bandwidth allows.
+- `[done]` Bundle-size split (phases 1 + 2): WebhooksSection and
+  AutoRules extracted to `client/src/pages/settings/`, lazy-loaded via
+  React.lazy + Suspense. Settings: 114.57 → 92.13 KB raw (-22.4 KB /
+  -20%), 26.90 → 22.38 KB gzip (-4.5 KB). Two new lazy chunks:
+  WebhooksSection 11.59 KB / 3.5 KB gzip, AutoRules 11.68 KB / 3.3 KB
+  gzip. ResponseTemplates (~273 lines) is the next obvious candidate.
 - `[done]` E2E test for vacation suppression. Shipped at
   `server/tests/vacationSuppression.test.js`. Six cases: no-vacation
   baseline, today/future suppress both email+LINE, yesterday (expired)
