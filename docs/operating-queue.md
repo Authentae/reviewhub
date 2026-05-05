@@ -196,6 +196,27 @@ deploy on first reply.
   (recommend 15 min for discovery, 30 min for setup). Send the link;
   agent backfills templates.
 
+## CONTENT — onboarding emails, blog topics, lead magnets
+
+Surfaced from the 2026-05-05 onboarding email audit
+([docs/onboarding-email-audit.md](docs/onboarding-email-audit.md)) and
+the SEO surface expansion. Smaller wins; ship in batches.
+
+- `[done]` Day 7 onboarding email — trimmed dense plan list,
+  links to /pricing for full comparison.
+- `[ ]` Write a blog post: "How to transfer Google Business Profile
+  ownership" — Day 1 onboarding email currently tells users to Google
+  it. Hosting our own guide keeps them in the funnel.
+- `[ ]` Day 3 onboarding email — add pseudonymous attribution to the
+  cafe story ("A Sukhumvit café we work with" instead of anonymous).
+- `[ ]` Day 14 onboarding email — add fifth churn-survey bucket: "It
+  worked, just unsubscribing from tips". Forces no users into an
+  ill-fitting "no" bucket.
+- `[wait:user]` 60-second screencast for the warm-response outreach
+  reply (audit-outreach.md § Reply playbook #6). Outside-agent task —
+  founder records "first signup → first reply approved → reply visible
+  on Google" once and we host it.
+
 ## OPS / META — infrastructure, monitoring, internal docs
 
 The boring-but-load-bearing work.

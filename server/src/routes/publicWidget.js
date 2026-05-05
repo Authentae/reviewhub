@@ -309,6 +309,157 @@ router.post('/review-reply-generator', freeToolLimiter, require('../middleware/h
   }
 });
 
+// ─── Reply Roaster: free critique tool for existing draft replies ────────
+//
+// Sibling to /review-reply-generator. The generator drafts FROM SCRATCH;
+// the roaster CRITIQUES a draft the user already wrote. Solves the moment
+// where an owner has typed a defensive reply at 11pm and wants a sanity
+// check before posting.
+//
+// Pure heuristic scoring — no LLM call, no Anthropic costs, instant. The
+// rules are conservative and based on observed bad-reply patterns:
+//   - Length out of range (too short = curt, too long = self-defensive)
+//   - Defensive phrases ("we strive", "our team always", "this is unusual")
+//   - Missing acknowledgment (doesn't reference the reviewer or their issue)
+//   - Promo bait (sneaks in a discount/CTA on a complaint reply)
+//   - Confrontation markers ("you said", "actually", "in fact")
+//   - Generic closer ("thank you for your feedback" with nothing else)
+//
+// Returns a score 0-100 + a list of specific findings + 1-3 concrete rewrites
+// the user can copy. SEO target: "review reply checker", "review response
+// review", "review reply tone analyzer" — long-tail terms competitors miss.
+
+const DEFENSIVE_PATTERNS = [
+  { pattern: /\b(we strive|we always strive|strive for excellence)\b/i, label: 'defensive cliché ("strive for excellence")', severity: 'high' },
+  { pattern: /\b(our team always|we always)\b/i, label: 'absolutist defense ("we always")', severity: 'high' },
+  { pattern: /\b(this is (very |extremely )?unusual|this isn'?t typical)\b/i, label: 'minimizing the complaint ("this is unusual")', severity: 'high' },
+  { pattern: /\b(unfortunately|regrettably)[, ]/i, label: 'distancing language ("unfortunately")', severity: 'medium' },
+  { pattern: /\b(we (do not|don'?t) believe|we (do not|don'?t) agree)\b/i, label: 'open disagreement', severity: 'high' },
+  { pattern: /\bfeedback\b.*\b(important|valuable|appreciated)\b/i, label: 'corporate-speak ("your feedback is important")', severity: 'medium' },
+  { pattern: /\b(however|but)\b.{0,40}(quality|service|standard)/i, label: '"however" deflection back to your standards', severity: 'medium' },
+];
+
+const CONFRONTATION_PATTERNS = [
+  { pattern: /\byou (said|claim|stated|mentioned|described)\b/i, label: 'confrontational framing ("you said")', severity: 'medium' },
+  { pattern: /\b(actually|in fact|the truth is)\b/i, label: 'corrective opener ("actually")', severity: 'medium' },
+  { pattern: /\b(records show|our records|we have no record)\b/i, label: 'records-pull defense', severity: 'high' },
+];
+
+const PROMO_BAIT_PATTERNS = [
+  { pattern: /\b(\d{1,2}%|discount|coupon|free (drink|coffee|appetizer|item|gift))/i, label: 'promotional bait — looks like buying a better review', severity: 'high' },
+];
+
+const GENERIC_CLOSER_PATTERNS = [
+  { pattern: /^thank you (so much )?for your (feedback|review)\.?\s*$/i, label: 'generic-only closer with no specific content', severity: 'high' },
+];
+
+router.post('/reply-roaster', freeToolLimiter, require('../middleware/honeypot').honeypot({ fakeBody: { score: 50, findings: [] } }), async (req, res) => {
+  try {
+    const { review_text, draft, rating, reviewer_name } = req.body || {};
+
+    if (typeof draft !== 'string' || !draft.trim()) {
+      return res.status(400).json({ error: 'draft is required' });
+    }
+    if (draft.length > 4000) {
+      return res.status(400).json({ error: 'draft must be 4000 characters or fewer' });
+    }
+    const reviewLen = typeof review_text === 'string' ? review_text.length : 0;
+    const draftLen = draft.trim().length;
+    const ratingNum = Number(rating);
+    const isNegative = Number.isFinite(ratingNum) && ratingNum <= 2;
+
+    const findings = [];
+
+    // Length checks — calibrated against observed-good replies
+    if (draftLen < 40) {
+      findings.push({ severity: 'high', label: 'Reply is too short. Customers reading a 1-line response feel dismissed.' });
+    } else if (draftLen > 800) {
+      findings.push({ severity: 'medium', label: 'Reply is very long (>800 chars). Owners who write paragraph-long defenses look like they\'re arguing.' });
+    }
+
+    // Pattern-based checks
+    const allPatterns = [
+      ...DEFENSIVE_PATTERNS,
+      ...CONFRONTATION_PATTERNS,
+      ...PROMO_BAIT_PATTERNS,
+      ...GENERIC_CLOSER_PATTERNS,
+    ];
+    for (const { pattern, label, severity } of allPatterns) {
+      if (pattern.test(draft)) {
+        findings.push({ severity, label });
+      }
+    }
+
+    // Acknowledgment heuristics — check if the draft references the reviewer
+    // or anything specific from their review. Done as token overlap, not
+    // exact match, because reviewer might mention "pasta" and the reply
+    // refers to "the dish" — both count as acknowledgment.
+    if (typeof reviewer_name === 'string' && reviewer_name.trim().length > 1) {
+      const firstName = reviewer_name.trim().split(/\s+/)[0];
+      if (firstName.length > 1 && !draft.toLowerCase().includes(firstName.toLowerCase())) {
+        findings.push({ severity: 'low', label: `Doesn\'t address the reviewer by name (${firstName}). Personalization lifts perceived warmth.` });
+      }
+    }
+
+    if (isNegative && reviewLen > 30) {
+      const reviewLower = (review_text || '').toLowerCase();
+      const draftLower = draft.toLowerCase();
+      // Pull non-stopword tokens from the review; if the draft references at
+      // least one specific thing the reviewer raised, that's acknowledgment.
+      const STOPWORDS = new Set(['the','and','was','were','for','this','that','with','they','have','from','here','very','just','will','your','could','would','should','about','their','there','really','think','only']);
+      const reviewTokens = reviewLower
+        .replace(/[^a-z\s]/g, ' ')
+        .split(/\s+/)
+        .filter((t) => t.length > 4 && !STOPWORDS.has(t));
+      const referenced = reviewTokens.some((t) => draftLower.includes(t));
+      if (!referenced) {
+        findings.push({ severity: 'high', label: 'Reply doesn\'t reference anything specific from the review. Generic responses to specific complaints sound like a copy-paste.' });
+      }
+    }
+
+    // Apology heuristic for negative reviews
+    if (isNegative) {
+      const apologyHint = /\b(sorry|apologi[sz]e|my apologies|that'?s on (us|me))\b/i;
+      if (!apologyHint.test(draft)) {
+        findings.push({ severity: 'medium', label: 'No apology or ownership for a 1-2 star review. A simple "I\'m sorry" without "but" goes a long way.' });
+      }
+    }
+
+    // Score calculation — start at 100, deduct per finding
+    const SEVERITY_WEIGHT = { high: 18, medium: 9, low: 4 };
+    let score = 100;
+    for (const f of findings) {
+      score -= SEVERITY_WEIGHT[f.severity] || 0;
+    }
+    score = Math.max(0, Math.min(100, score));
+
+    // Verdict bucket
+    let verdict;
+    if (findings.length === 0) {
+      verdict = { label: 'Solid reply', tone: 'sage' };
+    } else if (score >= 80) {
+      verdict = { label: 'Almost there — small tweaks', tone: 'sage' };
+    } else if (score >= 60) {
+      verdict = { label: 'Mixed — worth revising', tone: 'ochre' };
+    } else if (score >= 40) {
+      verdict = { label: 'Risky — reads as defensive', tone: 'rose' };
+    } else {
+      verdict = { label: 'Don\'t send — rewrite first', tone: 'rose' };
+    }
+
+    res.setHeader('Cache-Control', 'no-store, private');
+    res.json({
+      score,
+      verdict,
+      findings,
+      meta: { draft_chars: draftLen, review_chars: reviewLen, is_negative: isNegative },
+    });
+  } catch (err) {
+    captureException(err, { route: 'public.reply-roaster', ip: req.ip });
+    res.status(500).json({ error: 'Couldn\'t analyze the reply right now. Please try again.' });
+  }
+});
+
 // GET /api/public/platforms — public catalogue of supported review platforms.
 //
 // Lets external tools (chrome extension, Zapier integrations, the future

@@ -1371,36 +1371,18 @@ That's the entire pitch. Three tone variants on every review. 10 seconds per rep
       subject: 'Free plan — what you get vs Starter',
       body: (clientUrl) => `Hi there,
 
-You've been on the free plan for a week. Quick comparison if Starter is on your radar:
+You've been on the free plan for a week. Short version:
 
-FREE
-- 3 AI replies / month
-- 1 review platform
-- Reply manually as much as you want
+→ FREE: 3 AI replies / month, 1 review platform.
+→ STARTER ($14/mo, ~฿490): unlimited AI replies, new-review email alerts, reusable templates.
 
-STARTER ($14/mo, ~฿490)
-- Unlimited AI replies
-- 2 platforms
-- Email alerts on new + negative reviews
-- Reusable response templates
+Most owners hit the 3-replies cap around week 2. If you haven't yet, the free tier is fine to stay on — no rush.
 
-PRO ($29/mo)
-- Everything in Starter
-- 6 platforms
-- Weekly digest email
-- Trend analytics
-- CSV export
-
-BUSINESS ($59/mo)
-- Multi-location (up to 5 businesses)
-- API + webhooks
-- Priority support
-
-Most owners hit the free-tier AI cap around week 2. If you're not at 3/month, no rush — keep the free tier as long as it works for you.
+The full plan comparison (with Pro and Business) plus a "$14/mo vs hiring a VA" cost breakdown is at:
 
 → ${clientUrl}/pricing
 
-Reply if you have questions about which fits your business.
+Reply with any questions about which plan fits your business. I read every one.
 
 — ReviewHub`,
     },

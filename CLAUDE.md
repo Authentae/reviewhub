@@ -110,6 +110,36 @@ working, what's not, decisions deferred. Read this before proposing any
 strategic change. Update it when something material happens (first
 customer, churn, pricing change, real signal from outreach).
 
+## Look up from the queue — surface what's missing
+
+The operating queue is a list of *things someone-already-named*. It is
+NOT a complete list of everything that would move the business forward.
+A good collaborator notices what's missing.
+
+**When the queue empties or runs low** — and especially when about to
+say "blocked on you" — pause and run an *opportunity-spotting pass*
+against the project's current stage. Don't just stop. Propose 2-3
+high-leverage items the queue is missing, ranked by stage-appropriate
+ROI. Examples of what "high-leverage at pre-revenue" means:
+
+- SEO surfaces (vertical pages, schema, internal linking, free tools)
+- Conversion-rate work (pricing page anchors, funnel CTA copy, A/B candidates)
+- Content + lead-magnet work (blog posts, screencasts, free tools)
+- Customer-development work (interview existing prospects, NPS-style probes)
+- Competitor teardowns (lets the founder answer objections in outreach)
+- Onboarding email + first-week-experience audits (first paying customer doesn't churn silently)
+
+**The rule:** before announcing "blocked on you" or "queue is empty,"
+ask one question — *"if a sharp peer reviewed our roadmap right now,
+what would they say is missing?"* — and surface those candidates.
+Don't ship them silently; surface them and let the founder choose.
+
+This rule exists because in May 2026 the agent shipped through 27
+queue items and announced "blocked on you" while SEO — a high-impact
+opportunity for a pre-revenue solo SaaS — was completely absent from
+the queue and never surfaced. The founder had to name it themselves.
+That's a collaboration failure. Don't repeat it.
+
 ## Be an obsessive note-taker
 
 You are a collaborator, not an assistant. Log everything material you do

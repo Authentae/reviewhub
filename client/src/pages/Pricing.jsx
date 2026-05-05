@@ -340,6 +340,100 @@ export default function Pricing() {
           </div>
         </section>
 
+        {/* Pricing in context — anchor block. $14 looks cheap or expensive
+            depending on what you compare it against. We compare against
+            the three alternatives an SMB owner already considers: doing
+            it themselves, hiring a VA, or going with a managed agency.
+            Numbers are conservative and defensible (no fake "save $5k!"
+            claims). Inline EN/TH so we don't add 10 translation keys for
+            one block. */}
+        <section className="rh-section" aria-label="Pricing in context" style={{ paddingTop: 0 }}>
+          <div className="rh-shell" style={{ maxWidth: 920 }}>
+            <div className="rh-section-head" style={{ marginBottom: 24 }}>
+              <div className="kicker">
+                <div className="num">04</div>
+                <div className="cat">§ {lang === 'th' ? 'เปรียบเทียบราคา' : 'Pricing in context'}</div>
+              </div>
+              <h2 style={{
+                fontFamily: 'var(--rh-serif)', fontWeight: 400,
+                fontSize: 'clamp(28px, 3.4vw, 40px)', lineHeight: 1.1,
+                letterSpacing: '-0.02em', margin: 0, maxWidth: '24ch',
+              }}>
+                {lang === 'th' ? '$14/เดือน เทียบกับทางเลือกอื่น' : '$14/mo vs. the alternatives.'}
+              </h2>
+            </div>
+            <div style={{
+              display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+              gap: 16,
+            }}>
+              {[
+                {
+                  label: lang === 'th' ? 'จ้าง VA / ฟรีแลนซ์' : 'Hire a VA / freelancer',
+                  cost: lang === 'th' ? '$200–500/เดือน' : '$200–500/mo',
+                  tradeoff: lang === 'th'
+                    ? 'จ่ายตามชั่วโมง · ตอนกลางคืนต้องรอ · ไม่รู้โทนของคุณ'
+                    : 'Hourly billing · sleeps when you need them · doesn\'t know your tone',
+                },
+                {
+                  label: lang === 'th' ? 'จ้างเอเจนซี่จัดการรีวิว' : 'Managed-review agency',
+                  cost: lang === 'th' ? '$300–800/เดือน' : '$300–800/mo',
+                  tradeoff: lang === 'th'
+                    ? 'สัญญารายปี · ใช้เทมเพลตทั่วไป · รอ 24–48 ชม. ก่อนตอบ'
+                    : 'Annual contracts · generic templates · 24-48h reply turnaround',
+                },
+                {
+                  label: lang === 'th' ? 'ทำเองทั้งหมด (ฟรี)' : 'Do it all yourself (free)',
+                  cost: lang === 'th' ? '~3 ชม./สัปดาห์' : '~3 hrs/week',
+                  tradeoff: lang === 'th'
+                    ? 'ที่ $30/ชม. คือ ~$360/เดือน · เป็นงานที่หยุดไม่ได้และเลื่อนไม่ได้'
+                    : 'At $30/hr = ~$360/mo of your time · the work you can\'t skip but can\'t delegate',
+                },
+                {
+                  label: 'ReviewHub',
+                  cost: lang === 'th' ? '$14/เดือน' : '$14/mo',
+                  tradeoff: lang === 'th'
+                    ? 'ไม่มีสัญญา · ตอบใน 10 วินาที · เรียนรู้โทนคุณจากการแก้แต่ละครั้ง'
+                    : 'No contract · 10-second approve-and-post · learns your tone from your edits',
+                  highlight: true,
+                },
+              ].map((row, i) => (
+                <div
+                  key={i}
+                  style={{
+                    padding: '18px 20px',
+                    borderRadius: 12,
+                    background: row.highlight ? 'color-mix(in oklab, var(--rh-teal) 8%, var(--rh-paper))' : '#fff',
+                    border: row.highlight
+                      ? '1px solid color-mix(in oklab, var(--rh-teal) 35%, var(--rh-rule))'
+                      : '1px solid var(--rh-rule)',
+                  }}
+                >
+                  <div style={{
+                    fontFamily: 'var(--rh-mono)', fontSize: 10, letterSpacing: '0.12em',
+                    textTransform: 'uppercase', color: 'var(--rh-ink-3)', marginBottom: 8,
+                  }}>{row.label}</div>
+                  <div style={{
+                    fontFamily: 'var(--rh-serif)', fontSize: 22, fontWeight: 600,
+                    color: row.highlight ? 'var(--rh-teal-deep)' : 'var(--rh-ink)',
+                    marginBottom: 6, letterSpacing: '-0.01em',
+                  }}>{row.cost}</div>
+                  <div style={{ fontSize: 13, color: 'var(--rh-ink-2)', lineHeight: 1.45 }}>
+                    {row.tradeoff}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p style={{
+              fontSize: 12, color: 'var(--rh-ink-3)', marginTop: 16,
+              fontFamily: 'var(--rh-mono)', letterSpacing: '0.05em',
+            }}>
+              {lang === 'th'
+                ? '* ตัวเลขประมาณการสำหรับร้านขนาดเล็ก ~30 รีวิว/เดือน ในไทยและสหรัฐฯ'
+                : '* Rough numbers for a small business with ~30 reviews/month in Thailand or US.'}
+            </p>
+          </div>
+        </section>
+
         {/* FAQ — same accordion semantics as the Landing FAQ */}
         <section className="rh-section rh-faq-section" aria-label="Pricing FAQ">
           <div className="rh-shell">
