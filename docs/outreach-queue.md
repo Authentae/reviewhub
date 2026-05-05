@@ -9,11 +9,40 @@ needed to execute end-to-end without research time:
   pulled from old web search results, which have ~30% bounce rate)
 - **Vertical** — for matching to email template (cooking-school,
   hotel/B&B, restaurant, etc.)
-- **Email language** — based on review-language plurality + audience
+- **Email language** — see decision tree below; this field is a
+  recommendation not a commandment.
 - **Review-response status** — UNAWARE (0%) / AWARE-LAZY (1-60%) /
   DISQUALIFIED (60%+); only the first two are worth sending
 - **Notes** — anything specific worth referencing in the email
   (instructor name, signature dish, recurring complaint, etc.)
+
+### Email language decision tree
+
+The owner being Thai doesn't mean Thai email always wins. The
+owner serving English-speaking guests doesn't mean English email
+always wins. Decide based on **the owner's likely first inbox-
+language preference**, not the guest audience's language.
+
+**Default to Thai when:**
+- Property is family-run / small / Thai-feeling brand name
+- Owner has not been quoted in English-language press
+- Property positioning is local-tourist or domestic-market
+- Reviews are mixed Thai/English (signals owner replies in Thai too)
+
+**Default to English when:**
+- Owner is publicly quoted in English-language press / has English
+  bio / runs a property positioned for international clientele
+- Property name is English / international-brand-styled
+- Owner replies to existing reviews in English consistently
+- Property is clearly upmarket/internationally-positioned (Chakrabongse,
+  Mandarin Oriental tier)
+
+**When in doubt: send Thai.** A Thai owner getting an English cold
+email from a Bangkok-based founder reads as "this person doesn't
+know my market." A Thai owner getting Thai email reads as "this
+person lives here, like me." Cost of misjudging Thai → English
+(slight register mismatch) is much smaller than cost of misjudging
+English → Thai (alienation).
 
 ## Workflow
 
@@ -38,7 +67,10 @@ hooks take over automatically.
 1. Chakrabongse Villas
    - Email: reservation@chakrabongse.com
    - Vertical: boutique heritage hotel (riverfront, owner-run since 1998)
-   - Email language: English (international guests)
+   - Email language: **English** — owner Narisa Chakrabongse is publicly
+     English-fluent, property positioning is upscale international,
+     reviews are predominantly English from international guests.
+     Per the decision tree, English fits this one cleanly.
    - Notes: Owned by Narisa Chakrabongse, granddaughter of HRH Prince
      Chakrabongse. Verify response rate before sending. If 60%+ → skip.
    - Source: https://www.chakrabongsevillas.com
@@ -46,7 +78,9 @@ hooks take over automatically.
 2. Old Capital Bike Inn
    - Email: info@oldcapitalbkk.com
    - Vertical: family-run heritage B&B near Old City temples
-   - Email language: English (tourist-facing)
+   - Email language: **Thai** — family-run, smaller property, Thai
+     ownership likely defaults to Thai inbox. Per decision tree, family
+     properties → Thai unless there's a counter-signal.
    - Notes: Family-run, charm-focused. Reviews likely mention specific
      staff or family member by name — pull that into the email.
    - Source: https://www.oldcapitalbkk.com/contact-us.html
@@ -54,7 +88,9 @@ hooks take over automatically.
 3. Loftel 22 Hostel
    - Email: loftel22bangkok@gmail.com
    - Vertical: small independent hostel
-   - Email language: English (backpacker audience)
+   - Email language: **Thai** — small indie property, Thai-style brand,
+     "loftel22bangkok@gmail.com" is a personal Gmail not a corporate
+     domain (signals owner-direct). Thai better.
    - Notes: Hostel scene is highly review-driven (Hostelworld + Google
      ranking). High-leverage if owner is unaware.
    - Source: https://www.facebook.com/loftel22/

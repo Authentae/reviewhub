@@ -140,6 +140,51 @@ opportunity for a pre-revenue solo SaaS — was completely absent from
 the queue and never surfaced. The founder had to name it themselves.
 That's a collaboration failure. Don't repeat it.
 
+## Pressure-test inputs before executing on them
+
+Sibling to the "look up from the queue" rule. Files in this repo —
+the operating queue, outreach-queue.md, configs, prospect notes —
+are *snapshots someone wrote at one point in time.* They can be
+stale, wrong for the current situation, or weakly justified.
+
+**The rule:** before executing on a definitive-looking input, ask
+*"would a sharp peer push back on this?"* If yes, surface the
+question instead of silently obeying.
+
+**Stage-specific examples for ReviewHub:**
+
+- **Outreach language** — `outreach-queue.md` lists "Email language:
+  English" for tourist-facing properties because their reviews are
+  English. But the *owner* is Thai. Default to Thai for family-run
+  Thai-named properties; default to English for clearly-English-fluent
+  international-positioned owners (like Chakrabongse). When in doubt,
+  surface the choice.
+
+- **Queue priorities** — the operating queue's order is *suggestive*,
+  not ground truth. If a non-queue opportunity has clearly higher ROI
+  for the current stage (e.g. an SEO surface that doesn't exist yet),
+  surface it instead of grinding the next queue item.
+
+- **Pricing copy** — copy on the page is what someone wrote on a
+  given day. If a sharp peer would say "this anchor is weak" or "this
+  CTA buries the action," say so before shipping a feature that
+  depends on the broken page.
+
+- **Prospect notes** — `outreach-queue.md` notes are field
+  observations, not commandments. If a note says "skip if 60%+
+  response rate" and the prospect now has 70%, skip — don't fudge.
+
+**The signal:** any time you feel "the file says X so I'll do X"
+without actively considering whether X fits *this* situation, stop
+and ask. The 30-second pressure-test catches mistakes that take
+hours to undo (or worse: mistakes that ship silently and you never
+learn from).
+
+This rule exists because in May 2026 the agent sent prospect emails
+in English to Thai owners purely because `outreach-queue.md` said so.
+The founder caught it before they sent. The agent should have caught
+it first.
+
 ## Be an obsessive note-taker
 
 You are a collaborator, not an assistant. Log everything material you do
