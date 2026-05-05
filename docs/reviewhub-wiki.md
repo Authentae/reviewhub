@@ -22,6 +22,21 @@ When the first paying customer lands, log: business name, plan,
 acquisition channel (cold email / audit funnel / inbound / referral),
 date, and any pre-purchase friction worth remembering.
 
+## SEO infrastructure
+
+- **2026-05-05** — Google Search Console verified for
+  `https://reviewhub.review` (URL prefix property, HTML-tag method).
+  Verification meta tag in `client/index.html`. Sitemap.xml submitted.
+  Owner: earth.reviewhub@gmail.com.
+- **Bing Webmaster Tools** — TODO. Cleanest path: log into
+  https://www.bing.com/webmasters → Import from Google Search
+  Console (one click).
+- 5 vertical landing pages live: `/for-restaurants`, `/for-dentists`,
+  `/for-hotels`, `/for-spas`, `/for-cafes`. Each has Service JSON-LD.
+- `/blog` index live + 3 static blog posts cross-linked.
+- 2 free tools: `/tools/review-reply-generator` (AI-powered) and
+  `/tools/reply-roaster` (heuristic critique).
+
 ## Active outreach signals
 
 - **2026-05-05** — Outreach queue has 3 verified prospects + 6 research
