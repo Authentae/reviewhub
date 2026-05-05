@@ -7,6 +7,7 @@ import Navbar from '../components/Navbar';
 import { isLoggedIn } from '../lib/auth';
 import { useI18n } from '../context/I18nContext';
 import HoneypotField from '../components/HoneypotField';
+import detectReplyLanguage from '../lib/detectReplyLanguage';
 
 // Free, no-signup AI review-reply generator.
 //
@@ -374,6 +375,35 @@ export default function ReplyGeneratorTool() {
               {error}
             </div>
           )}
+
+          {/* "Reply will be in: 🇹🇭 Thai" indicator — turns the invisible
+              auto-detect into a visible feature. Live-updates as the user
+              types. The actual reply language is decided server-side; this
+              is purely a UX hint to demonstrate multilingual support. */}
+          {form.review_text.trim().length >= 4 && (() => {
+            const detected = detectReplyLanguage(form.review_text, lang);
+            return (
+              <div
+                className="text-sm flex items-center gap-2 px-3 py-2 rounded-lg"
+                style={{ background: 'rgba(30, 77, 94, 0.06)', color: 'var(--rh-ink, #1d242c)' }}
+                aria-live="polite"
+              >
+                <span aria-hidden="true">{detected.flag}</span>
+                <span>
+                  Reply will be in <strong>{detected.name}</strong>
+                  {detected.autoDetected ? (
+                    <span style={{ color: 'var(--rh-ink-3, #8b939c)', marginLeft: 6, fontSize: 12 }}>
+                      · auto-detected from the review
+                    </span>
+                  ) : (
+                    <span style={{ color: 'var(--rh-ink-3, #8b939c)', marginLeft: 6, fontSize: 12 }}>
+                      · default (paste a non-English review to see auto-detect)
+                    </span>
+                  )}
+                </span>
+              </div>
+            );
+          })()}
 
           <button
             type="submit" disabled={loading} aria-busy={loading}

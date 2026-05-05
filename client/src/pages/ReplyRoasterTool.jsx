@@ -17,6 +17,7 @@ import usePageTitle from '../hooks/usePageTitle';
 import useSocialMeta from '../hooks/useSocialMeta';
 import MarketingNav from '../components/MarketingNav';
 import HoneypotField from '../components/HoneypotField';
+import detectReplyLanguage from '../lib/detectReplyLanguage';
 import { useI18n } from '../context/I18nContext';
 
 const SAMPLE_BAD_REPLY = {
@@ -196,6 +197,32 @@ export default function ReplyRoasterTool() {
               {error}
             </div>
           )}
+
+          {/* "Checking against: 🇹🇭 Thai" indicator — same auto-detect as the
+              Reply Generator. Roasts a Thai draft against Thai-specific anti-
+              patterns when the source is Thai. */}
+          {(form.review_text.trim().length >= 4 || form.draft.trim().length >= 4) && (() => {
+            // Prefer the review's language; fall back to the draft's
+            const sample = form.review_text.trim().length >= 4 ? form.review_text : form.draft;
+            const detected = detectReplyLanguage(sample, lang);
+            return (
+              <div
+                className="text-sm flex items-center gap-2 px-3 py-2 rounded-lg"
+                style={{ background: 'rgba(30, 77, 94, 0.06)', color: 'var(--rh-ink, #1d242c)' }}
+                aria-live="polite"
+              >
+                <span aria-hidden="true">{detected.flag}</span>
+                <span>
+                  Roasting against <strong>{detected.name}</strong>-language patterns
+                  {detected.autoDetected && (
+                    <span style={{ color: 'var(--rh-ink-3, #8b939c)', marginLeft: 6, fontSize: 12 }}>
+                      · auto-detected
+                    </span>
+                  )}
+                </span>
+              </div>
+            );
+          })()}
 
           <button
             type="submit"
