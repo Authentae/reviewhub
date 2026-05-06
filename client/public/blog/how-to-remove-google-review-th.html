@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>วิธีลบรีวิว Google (และอะไรที่ Google ลบจริงๆ ได้บ้าง) — ReviewHub</title>
+<meta name="description" content="คู่มือซื่อๆ: Google ลบรีวิวอะไรได้ ลบไม่ได้ กระบวนการ flag กี่วัน เส้นทาง escalation ที่เจ้าของส่วนใหญ่ไม่รู้ว่ามี และต้องทำอะไรเมื่อรีวิวยังคงอยู่">
+<link rel="canonical" href="https://reviewhub.review/blog/how-to-remove-google-review-th">
+
+<meta property="og:title" content="วิธีลบรีวิว Google (และอะไรที่ Google ลบจริงๆ ได้บ้าง)">
+<meta property="og:description" content="Google ลบอะไรได้ ลบไม่ได้ กระบวนการ flag เส้นทาง escalation และทำอะไรเมื่อรีวิวยังคงอยู่">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://reviewhub.review/blog/how-to-remove-google-review-th">
+<meta property="og:image" content="https://reviewhub.review/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://reviewhub.review/og-image.png">
+<meta property="og:locale" content="th_TH">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "วิธีลบรีวิว Google (และอะไรที่ Google ลบจริงๆ ได้บ้าง)",
+  "inLanguage": "th",
+  "author": {"@type": "Organization", "name": "ReviewHub", "url": "https://reviewhub.review/"},
+  "publisher": {"@type": "Organization", "name": "ReviewHub", "logo": {"@type": "ImageObject", "url": "https://reviewhub.review/logo.svg"}},
+  "datePublished": "2026-05-07",
+  "image": "https://reviewhub.review/og-image.png",
+  "mainEntityOfPage": "https://reviewhub.review/blog/how-to-remove-google-review-th"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "หน้าหลัก", "item": "https://reviewhub.review/"},
+    {"@type": "ListItem", "position": 2, "name": "บล็อก", "item": "https://reviewhub.review/blog"},
+    {"@type": "ListItem", "position": 3, "name": "วิธีลบรีวิว Google"}
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper:#fbf8f1; --cream:#f3ecdb; --ink:#1d242c; --ink-2:#4b5560;
+    --rule:#e8dec7; --teal:#2c7889; --teal-deep:#1e4d5e; --teal-soft:#d6e7eb;
+    --ochre:#c48a2c; --rose:#b54a4a; --sage:#5d7a52;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter Tight',sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:0 24px}
+  .topnav{padding:24px 0;border-bottom:1px solid var(--rule)}
+  .topnav .row{display:flex;justify-content:space-between;align-items:center}
+  .brand{font-family:'Instrument Serif',Georgia,serif;font-size:22px;text-decoration:none;color:var(--ink)}
+  .brand em{color:var(--teal-deep);font-style:italic}
+  .topnav nav a{margin-left:18px;color:var(--ink-2);text-decoration:none;font-size:14px;font-weight:500}
+  article{padding:48px 0 32px}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ochre);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:14px}
+  h1{font-family:'Instrument Serif',Georgia,serif;font-size:clamp(30px,5vw,42px);line-height:1.18;margin-bottom:18px;font-weight:400}
+  h1 em{color:var(--teal-deep);font-style:italic}
+  .meta{display:flex;gap:18px;color:var(--ink-2);font-size:13px;margin-bottom:32px;padding-bottom:20px;border-bottom:1px solid var(--rule)}
+  .meta span:before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--teal);margin-right:8px;vertical-align:middle}
+  .lede{font-size:19px;line-height:1.6;color:var(--ink-2);margin-bottom:36px;font-family:'Instrument Serif',Georgia,serif}
+  h2{font-family:'Instrument Serif',Georgia,serif;font-size:28px;line-height:1.2;margin:48px 0 14px;font-weight:500}
+  h3{font-size:17px;margin:24px 0 8px;font-weight:700;color:var(--teal-deep)}
+  p{margin-bottom:16px}
+  article a{color:var(--teal-deep);text-decoration:underline;text-underline-offset:3px}
+  ul,ol{margin:0 0 18px 22px}
+  li{margin-bottom:8px}
+  .yes-no{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0 30px}
+  .yes-no .col{padding:18px 20px;border-radius:10px;border:1px solid var(--rule)}
+  .yes-no .col.yes{background:#e9f3ec;border-color:#bcd9c5}
+  .yes-no .col.no{background:#fdf0ec;border-color:#f5d4cc}
+  .yes-no .col h4{margin:0 0 12px;font-size:14px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.08em}
+  .yes-no .col.yes h4{color:var(--sage)}
+  .yes-no .col.no h4{color:var(--rose)}
+  .yes-no ul{margin:0 0 0 18px}
+  .yes-no li{font-size:14.5px;margin-bottom:6px}
+  @media (max-width: 600px){.yes-no{grid-template-columns:1fr}}
+  .step{background:var(--cream);border-left:3px solid var(--teal-deep);padding:14px 18px;margin:14px 0;border-radius:0 8px 8px 0}
+  .step h3{margin-top:0;color:var(--teal-deep)}
+  .callout{background:linear-gradient(135deg,var(--teal-deep) 0%,var(--teal) 100%);color:var(--paper);border-radius:14px;padding:28px;margin:48px 0 32px;text-align:center}
+  .callout h3{font-family:'Instrument Serif',Georgia,serif;font-size:24px;font-weight:400;margin:0 0 8px;color:var(--paper)}
+  .callout p{color:var(--paper);opacity:0.92;margin-bottom:18px;font-size:15px}
+  .callout a.cta{display:inline-block;background:var(--paper);color:var(--teal-deep);padding:12px 24px;border-radius:8px;font-weight:600;font-size:15px;text-decoration:none}
+  footer{padding:40px 0 60px;color:var(--ink-2);font-size:13px;border-top:1px solid var(--rule);margin-top:60px;text-align:center}
+  footer a{color:var(--teal-deep);text-decoration:underline}
+  mark{background:var(--teal-soft);color:var(--teal-deep);padding:1px 4px;border-radius:3px}
+</style>
+</head>
+<body>
+
+<header class="topnav">
+  <div class="wrap row">
+    <a href="/" class="brand">Review<em>Hub</em></a>
+    <nav>
+      <a href="/blog">บล็อก</a>
+      <a href="/audit">ขอ audit ฟรี</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+<article>
+  <p class="eyebrow">คู่มือซื่อๆ · 2026-05-07</p>
+  <h1>วิธี<em>ลบรีวิว</em> Google (และอะไรที่ Google ลบจริงๆ ได้บ้าง)</h1>
+
+  <div class="meta">
+    <span>ใช้เวลาอ่าน 9 นาที</span>
+    <span>ภาษาไทย</span>
+    <span>เผยแพร่ 7 พ.ค. 2026</span>
+  </div>
+
+  <p class="lede">
+    คำตอบสั้นๆ ก่อน: <mark>Google ไม่ลบรีวิวเพราะคุณไม่ชอบ</mark> ลบเพราะรีวิวผิด
+    policy ของ Google เท่านั้น คู่มือนี้บอกว่า policy คืออะไร flag เมื่อไหร่
+    รอ 3 วันหรือ 30 วัน และเส้นทาง escalation ถ้า flag ไม่ผ่าน
+  </p>
+
+  <h2>Google ลบรีวิวไหนได้ — และไม่ได้</h2>
+
+  <div class="yes-no">
+    <div class="col yes">
+      <h4>✓ ลบได้</h4>
+      <ul>
+        <li>Spam หรือรีวิวซ้ำ (เนื้อหาเหมือนกันลงหลายร้าน)</li>
+        <li>ภาษาหยาบคาย / hate speech / threats</li>
+        <li>ข้อมูลส่วนตัวของคนอื่น (เลขที่นั่ง / เบอร์โทรพนักงาน / ชื่อจริงเต็ม)</li>
+        <li>โฆษณาในรีวิว ("มาที่ร้าน X ดีกว่า")</li>
+        <li>Conflict of interest (รีวิวจากคู่แข่งหรือพนักงานเก่า)</li>
+        <li>ภาพ NSFW / ภาพไม่เหมาะสม</li>
+        <li>Off-topic (รีวิวร้านผิด — ผิดที่อยู่)</li>
+        <li>Fake engagement (รีวิวจากคนที่ไม่เคยมา)</li>
+      </ul>
+    </div>
+    <div class="col no">
+      <h4>✗ ลบไม่ได้</h4>
+      <ul>
+        <li>รีวิวลบที่เป็น "ความเห็น" ("อาหารไม่อร่อย")</li>
+        <li>รีวิวที่ลูกค้ามาจริง แต่คุณคิดว่าเขาเข้าใจผิด</li>
+        <li>1 ดาวที่ไม่มีคำเขียน (Google อนุญาตให้รีวิวด้วยดาวอย่างเดียว)</li>
+        <li>รีวิวที่ "ไม่ยุติธรรม" แต่ไม่ละเมิด policy</li>
+        <li>รีวิวเก่า (Google ไม่ลบเพราะเก่า — ลบเพราะผิด policy)</li>
+        <li>ความขัดแย้งระหว่างคุณกับลูกค้าโดยตรง</li>
+      </ul>
+    </div>
+  </div>
+
+  <p>
+    <strong>หลักการสำคัญ:</strong> Google ไม่ใช่ผู้ตัดสินว่ารีวิวยุติธรรมหรือไม่
+    เป็นผู้ตัดสินว่ารีวิว <em>ผิด policy</em> หรือไม่ ความต่างนี้สำคัญ
+  </p>
+
+  <h2>กระบวนการ Flag — ทีละขั้น</h2>
+
+  <div class="step">
+    <h3>ขั้นที่ 1: ตรวจให้ชัดว่าผิด policy ข้อไหน</h3>
+    <p>
+      ถ้า flag โดยไม่มีข้อ policy ที่ชัดเจน Google จะปฏิเสธ และโอกาสที่คุณจะ flag
+      อันต่อๆ ไปสำเร็จก็จะลดลง (Google เก็บประวัติการ flag ของแต่ละ profile)
+      เลือก policy ข้อใดข้อหนึ่งจาก 8 ข้อในตารางด้านบน
+    </p>
+  </div>
+
+  <div class="step">
+    <h3>ขั้นที่ 2: Flag ผ่าน Google Business Profile</h3>
+    <ol>
+      <li>เข้า Google Business Profile (business.google.com)</li>
+      <li>ไปที่ Reviews → คลิกรีวิวที่อยากลบ</li>
+      <li>คลิก 3 จุด (⋮) ข้างรีวิว → "Report review"</li>
+      <li>เลือก policy ข้อที่ตรงที่สุด — ใส่คำอธิบายสั้นๆ ภาษาอังกฤษ</li>
+      <li>กด Submit</li>
+    </ol>
+  </div>
+
+  <div class="step">
+    <h3>ขั้นที่ 3: รอ 3-7 วัน</h3>
+    <p>
+      Google ไม่ตอบกลับเป็น email ส่วนใหญ่ — แค่ลบรีวิวเงียบๆ ถ้าผ่าน หรือไม่ลบ
+      (ก็ไม่ได้บอกว่าทำไม) ตรวจวันละครั้งว่ารีวิวยังอยู่ไหม
+    </p>
+  </div>
+
+  <div class="step">
+    <h3>ขั้นที่ 4: ถ้า flag ไม่ผ่าน — escalation</h3>
+    <p>
+      ส่วนใหญ่เจ้าของไม่รู้ว่าเส้นทางนี้มี: <a href="https://support.google.com/business/contact/business_other" target="_blank" rel="noopener">support.google.com/business/contact/business_other</a> — ฟอร์มสนับสนุน Business
+      ที่ส่งให้คนตรวจจริง ไม่ใช่ AI
+    </p>
+    <p>
+      ในฟอร์มนี้: เลือก "Issue with my Business Profile" → "Reviews" → "Other"
+      อธิบายปัญหาเป็นภาษาอังกฤษเพราะคนตรวจส่วนใหญ่ไม่ได้พูดภาษาไทย
+      อ้างอิง URL ของรีวิว + นโยบายข้อที่อ้าง + ทำไม flag แรกควรผ่าน
+    </p>
+  </div>
+
+  <h2>เคสที่ Google ลบเร็ว vs ลบช้า</h2>
+
+  <h3>ลบเร็ว (มัก 3-5 วัน):</h3>
+  <ul>
+    <li>มีคำหยาบคายชัดเจน</li>
+    <li>ข้อมูลส่วนตัว (เบอร์โทร / เลขบัตร) ปรากฏในรีวิว</li>
+    <li>โฆษณาแฝง ("ไปร้าน X ดีกว่า") ในรีวิว</li>
+    <li>ภาพ NSFW</li>
+  </ul>
+
+  <h3>ลบช้า / มักไม่ลบ (อัตราผ่านต่ำ):</h3>
+  <ul>
+    <li>"ทุกคนรู้ว่าร้านนี้แย่" — เป็นความเห็น Google ไม่ลบ</li>
+    <li>"ฉันได้ยินว่าร้านนี้..." — แม้จะเป็นข่าวลือ ถ้าใช้คำว่า "ได้ยินว่า"
+      Google มองว่าเป็น opinion</li>
+    <li>1 ดาว ไม่มีคำเขียน — Google ไม่บังคับให้ผู้รีวิวเขียนข้อความ</li>
+  </ul>
+
+  <h2>เมื่อรีวิวยังคงอยู่ — ทำอะไรต่อ</h2>
+
+  <p>
+    ถ้า flag ไม่ผ่าน + escalation ไม่ผ่าน — ยอมรับและตอบมืออาชีพ
+    คำตอบของคุณเป็นเสียงของร้านในรีวิวนั้น คนอ่านในอนาคตเห็นทั้ง 2 ฝั่ง
+  </p>
+
+  <p>
+    ถ้ารีวิวมีจริง (ลูกค้ามาจริงแต่ไม่พอใจ) — ตอบให้เห็นว่าฟัง + ขอโทษ +
+    เสนอทางแก้ในที่ส่วนตัว ดู
+    <a href="/blog/reply-1-star-google-review-th">วิธีตอบรีวิว 1 ดาวให้กลายเป็นโอกาส</a>
+  </p>
+
+  <p>
+    ถ้ารีวิวเป็นเก๊หรือคู่แข่ง (และ flag ไม่ผ่าน) — ดู
+    <a href="/blog/fake-extortion-google-reviews-th">วิธีรับมือกับรีวิวปลอม / รีวิวแบล็กเมล / รีวิวจากคู่แข่ง</a>
+    สำหรับเทมเพลตการตอบโดยไม่กล่าวหาในที่สาธารณะ
+  </p>
+
+  <h2>กลวิธีที่ใช้ได้ผลแต่เจ้าของส่วนใหญ่ไม่รู้</h2>
+
+  <p>
+    <strong>1. ขอลูกค้าเดิมที่ไม่พอใจให้แก้รีวิวเอง.</strong> ทาง Google
+    คนเขียนรีวิวสามารถแก้หรือลบได้ตลอด — ถ้าคุณติดต่อเขาส่วนตัว แก้ปัญหาให้เขา
+    เขาอาจจะอัปเดตรีวิวเอง 5-10% ของรีวิวที่ "แก้" เป็น 4-5 ดาวภายหลังจริง
+  </p>
+
+  <p>
+    <strong>2. ดึงรีวิวเก่าให้ขึ้นมาใหม่ผ่านการตอบ.</strong> Google จัดเรียงรีวิวให้
+    "ที่มีเจ้าของตอบ" ขึ้นบนสุดในบางการ์ด — ตอบรีวิว 5 ดาวเก่าๆ จะดันรีวิว 1 ดาว
+    ลงล่าง
+  </p>
+
+  <p>
+    <strong>3. รวบรวมรีวิว 5 ดาวสดๆ.</strong> รีวิวใหม่ๆ มี weight สูงกว่ารีวิวเก่า
+    การได้รีวิว 5 ดาวเพิ่ม 5-10 อันใหม่จะดันค่าเฉลี่ยขึ้นเร็ว
+    ดู <a href="/blog/how-to-ask-for-google-reviews">วิธีขอรีวิวจากลูกค้าโดยไม่ดูยัดเยียด</a>
+  </p>
+
+  <h2>สรุปสั้นๆ</h2>
+
+  <ol>
+    <li>Google ไม่ลบเพราะคุณไม่ชอบ — ลบเพราะผิด policy</li>
+    <li>Flag ผ่าน 3 จุด (⋮) ในรีวิว → เลือก policy ที่ตรง → รอ 3-7 วัน</li>
+    <li>ถ้าไม่ผ่าน — ใช้ฟอร์ม support.google.com/business/contact/business_other</li>
+    <li>ถ้าทุกทางไม่ผ่าน — ตอบมืออาชีพ + รวบรวมรีวิว 5 ดาวใหม่ๆ</li>
+    <li>ห้ามจ่ายแบล็กเมล ห้ามจ้าง agency ปั่นรีวิว</li>
+  </ol>
+
+  <div class="callout">
+    <h3>ตอบทุกรีวิวให้ทันใน 10 วินาที</h3>
+    <p>ReviewHub ร่างคำตอบในเสียงคุณทันทีที่มีรีวิวใหม่ — ทั้งดี ไม่ดี และที่สงสัย
+    คุณกด approve เราโพสต์ขึ้น Google ให้</p>
+    <a href="/audit" class="cta">ขอ audit ฟรี →</a>
+  </div>
+
+  <p style="color:var(--ink-2);font-size:15px;border-top:1px solid var(--rule);padding-top:20px;margin-top:40px">
+    บทความที่เกี่ยวข้อง:
+    <a href="/blog/fake-extortion-google-reviews-th">วิธีรับมือกับรีวิวปลอม / แบล็กเมล / คู่แข่ง</a> ·
+    <a href="/blog/reply-1-star-google-review-th">วิธีตอบรีวิว 1 ดาวให้กลายเป็นโอกาส</a> ·
+    <a href="/blog/why-respond-to-google-reviews-th">ทำไมร้านของคุณถึงต้องตอบรีวิว Google</a>
+  </p>
+</article>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>© 2026 ReviewHub · <a href="/blog">โพสต์ทั้งหมด</a> · <a href="/">หน้าหลัก</a></p>
+    <p style="opacity:0.7;font-size:12px">เขียนในกรุงเทพฯ สำหรับเจ้าของร้านไทย</p>
+  </div>
+</footer>
+
+</body>
+</html>

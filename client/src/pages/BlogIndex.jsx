@@ -23,6 +23,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'how-to-remove-google-review-th',
+    title: 'วิธีลบรีวิว Google (และอะไรที่ Google ลบจริงๆ ได้บ้าง)',
+    description: 'คู่มือซื่อๆ: Google ลบรีวิวอะไรได้ ลบไม่ได้ กระบวนการ flag กี่วัน เส้นทาง escalation ที่เจ้าของส่วนใหญ่ไม่รู้ว่ามี และต้องทำอะไรเมื่อรีวิวยังคงอยู่',
+    date: '2026-05-07',
+    readingMins: 9,
+    lang: 'th',
+  },
+  {
     slug: 'fake-extortion-google-reviews-th',
     title: 'วิธีรับมือกับรีวิวปลอม / รีวิวแบล็กเมล / รีวิวจากคู่แข่งบน Google',
     description: 'คู่มือเจ้าของร้าน: รับมือกับรีวิว 1 ดาวที่เป็นเก๊ ที่เป็นการแบล็กเมล ("จ่ายไม่งั้นจะคงไว้") และรีวิวจากคู่แข่งบน Google ตอบยังไง flag เมื่อไร และไม่ควรทำอะไร',
