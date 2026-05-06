@@ -238,6 +238,19 @@ leverage when triggered.
   `bangkok-hospitality-review-mistakes` (Wave 3-targeted) and
   `google-review-reply-length` (counter-intuitive length-by-type
   table).
+- `[done]` TH translations for both new EN posts (2026-05-08) —
+  `bangkok-hospitality-review-mistakes-th` +
+  `google-review-reply-length-th`. 16 blog posts total,
+  EN/TH parity 7/7 + 2 Thai-only.
+- `[done]` Stale-positioning fixes (2026-05-08) — Thai homepage
+  hero CTA was "ติดตั้งส่วนขยาย Chrome" (Install Chrome extension)
+  for weeks after the extension was dropped. Plus
+  landing.step3P referenced "the extension posts." Both fixed.
+  `scripts/check-stale-positioning.js` now wired into pre-commit
+  to catch class regressions.
+- `[done]` Blog index UX (2026-05-08) — language filter pills
+  (All / EN / TH) with localStorage persistence. Default infers
+  from UI language, but explicit user toggle sticks.
 
 ## CUSTOMER RELATIONS — replies, follow-ups, objection handling
 
