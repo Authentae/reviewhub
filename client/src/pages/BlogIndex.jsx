@@ -23,6 +23,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'wongnai-vs-google-reviews-bangkok',
+    title: 'Wongnai vs Google reviews — which one should Bangkok restaurants prioritize?',
+    description: 'Honest breakdown of where to spend your review-management time as a Bangkok restaurant: Wongnai vs Google. Audience differences, search visibility, owner-reply mechanics, and what a 100-cover restaurant should actually do.',
+    date: '2026-05-08',
+    readingMins: 6,
+    lang: 'en',
+  },
+  {
     slug: 'google-review-reply-length-th',
     title: 'คำตอบรีวิว Google ควรยาวแค่ไหน? (ข้อมูลและสูตรง่ายๆ)',
     description: 'ความยาวที่เหมาะสมของคำตอบรีวิว Google แยกตามประเภทรีวิว ทำไมเจ้าของส่วนใหญ่เขียนยาวเกินสำหรับ 5 ดาว และสั้นเกินสำหรับ 1 ดาว พร้อมเทมเพลตแบ่งตามความยาว',
