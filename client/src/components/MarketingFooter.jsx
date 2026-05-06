@@ -53,7 +53,7 @@ export default function MarketingFooter() {
     {
       heading: isThai ? 'ทรัพยากร' : 'Resources',
       links: [
-        { href: '/blog',                                                       label: isThai ? 'บล็อก (26 บทความ)' : 'Blog (26 posts)' },
+        { href: '/blog',                                                       label: isThai ? 'บล็อก' : 'Blog' },
         { href: isThai ? '/blog/why-respond-to-google-reviews-th' : '/blog/why-respond-to-google-reviews', label: isThai ? 'ทำไมต้องตอบรีวิว' : 'Why respond to reviews' },
         { href: isThai ? '/blog/how-to-ask-for-google-reviews-th' : '/blog/how-to-ask-for-google-reviews', label: isThai ? 'วิธีขอรีวิวจากลูกค้า' : 'How to ask for reviews' },
         { href: isThai ? '/blog/fake-extortion-google-reviews-th' : '/blog/fake-extortion-google-reviews', label: isThai ? 'รีวิวปลอม / รีดไถ' : 'Fake & extortion reviews' },
