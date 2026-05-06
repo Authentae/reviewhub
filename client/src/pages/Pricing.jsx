@@ -355,12 +355,25 @@ export default function Pricing() {
                 <div className="num">04</div>
                 <div className="cat">§ {lang === 'th' ? 'เปรียบเทียบราคา' : 'Pricing in context'}</div>
               </div>
-              <h2 style={{
-                fontFamily: 'var(--rh-serif)', fontWeight: 400,
-                fontSize: 'clamp(28px, 3.4vw, 40px)', lineHeight: 1.1,
-                letterSpacing: '-0.02em', margin: 0, maxWidth: '24ch',
-              }}>
-                {lang === 'th' ? '$14/เดือน เทียบกับทางเลือกอื่น' : '$14/mo vs. the alternatives.'}
+              <h2
+                lang={lang === 'th' ? 'th' : 'en'}
+                style={{
+                  fontFamily: 'var(--rh-serif)', fontWeight: 400,
+                  fontSize: 'clamp(28px, 3.4vw, 40px)', lineHeight: 1.1,
+                  letterSpacing: '-0.02em', margin: 0, maxWidth: '24ch',
+                }}
+              >
+                {lang === 'th' ? (
+                  <>
+                    {/* Thai: split into two natural clauses with an explicit
+                        break to prevent the browser from breaking mid-phrase
+                        (between เทียบ and กับ). CSS word-break:keep-all only
+                        covers CJK, not Thai, so we control the break manually. */}
+                    <span style={{ whiteSpace: 'nowrap' }}>$14/เดือน</span>
+                    {' '}
+                    <span style={{ whiteSpace: 'nowrap' }}>เทียบกับทางเลือกอื่น</span>
+                  </>
+                ) : '$14/mo vs. the alternatives.'}
               </h2>
             </div>
             <div style={{
@@ -403,7 +416,7 @@ export default function Pricing() {
                   style={{
                     padding: '18px 20px',
                     borderRadius: 12,
-                    background: row.highlight ? 'color-mix(in oklab, var(--rh-teal) 8%, var(--rh-paper))' : '#fff',
+                    background: row.highlight ? 'color-mix(in oklab, var(--rh-teal) 8%, var(--rh-paper))' : 'var(--rh-card)',
                     border: row.highlight
                       ? '1px solid color-mix(in oklab, var(--rh-teal) 35%, var(--rh-rule))'
                       : '1px solid var(--rh-rule)',
