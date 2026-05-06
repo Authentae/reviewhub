@@ -28,15 +28,67 @@ export default function AuditLanding() {
   const [status, setStatus] = useState('idle'); // idle | submitting | success | error
   const [error, setError] = useState('');
 
-  // Inject simple structured data for SEO.
+  // Inject Service + FAQ structured data for SEO. The FAQPage block
+  // makes /audit eligible for Google's FAQ rich-results carousel in
+  // SERPs — instead of just a blue link, the result expands to show
+  // the question/answer pairs inline. Big visual real-estate boost.
   useEffect(() => {
     const schema = {
       '@context': 'https://schema.org',
-      '@type': 'Service',
-      'serviceType': 'Free review-reply audit',
-      'provider': { '@type': 'Organization', 'name': 'ReviewHub', 'url': 'https://reviewhub.review' },
-      'description': 'Free expert audit of 10 recent reviews on your Google Business profile, with AI-drafted replies you can copy and paste.',
-      'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'USD' },
+      '@graph': [
+        {
+          '@type': 'Service',
+          'serviceType': 'Free review-reply audit',
+          'provider': { '@type': 'Organization', 'name': 'ReviewHub', 'url': 'https://reviewhub.review' },
+          'description': 'Free expert audit of 10 recent reviews on your Google Business profile, with AI-drafted replies you can copy and paste.',
+          'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'USD' },
+        },
+        {
+          '@type': 'FAQPage',
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'Is the review-reply audit really free?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. The audit is fully free — no credit card, no signup required, no upsell email sequence. We hand-craft 10 reply drafts for your most recent Google reviews and send you a shareable preview link. You can copy/paste any of them straight to Google, even if you never become a customer.',
+              },
+            },
+            {
+              '@type': 'Question',
+              'name': 'How long does the audit take?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'You get a confirmation email immediately. The hand-crafted audit lands in your inbox within 24 hours, usually faster. Each reply is reviewed by the founder before sending — this is not an automated drip.',
+              },
+            },
+            {
+              '@type': 'Question',
+              'name': 'What languages do you support?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Ten: English, Thai, Japanese, Korean, Chinese, Spanish, French, German, Italian, and Portuguese. Reviews are auto-detected and replied in the same language. Most review-reply tools only handle English; this is one of our differentiators.',
+              },
+            },
+            {
+              '@type': 'Question',
+              'name': 'Do I have to sign up to use the drafts?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'No. The audit page is a static share-link — you can copy any draft directly to your Google Business profile. If you want this to run automatically every time a new review lands, ReviewHub plans start at $14/mo with a free tier available.',
+              },
+            },
+            {
+              '@type': 'Question',
+              'name': 'Will the AI replies sound like me or like a robot?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Replies are drafted to sound like a real owner — natural contractions, specific references to what the customer mentioned, no corporate clichés like "we strive for excellence." You can pick a tone (relaxed / warm / formal) per business.',
+              },
+            },
+          ],
+        },
+      ],
     };
     const el = document.createElement('script');
     el.type = 'application/ld+json';
