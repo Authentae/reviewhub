@@ -52,7 +52,7 @@ export default function BlogIndex() {
   const { lang } = useI18n();
   const isThai = lang === 'th';
 
-  usePageTitle(isThai ? 'บล็อก' : 'Blog');
+  usePageTitle(isThai ? 'บล็อก — เคล็ดลับการตอบรีวิว Google' : 'Blog — Google review-reply playbooks & templates');
   useSocialMeta({
     title: isThai ? 'บล็อก ReviewHub' : 'ReviewHub Blog',
     description: 'Practical writing for small business owners on managing Google reviews, replying to feedback, and handling fake or extortion reviews.',

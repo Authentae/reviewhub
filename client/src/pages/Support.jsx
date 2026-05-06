@@ -23,7 +23,7 @@ export default function Support() {
   const { t, lang } = useI18n();
   const { user } = useUser();
   const location = useLocation();
-  usePageTitle(t('support.title', 'Support · ReviewHub'));
+  usePageTitle(t('support.title', 'Support — direct line to the founder'));
 
   // Pre-select category from ?type= so e.g. a billing-error toast can
   // link to /support?type=billing and the user lands with the right

@@ -19,7 +19,7 @@ import { useI18n } from '../context/I18nContext';
 // To suggest something missing: /support → category "feature".
 export default function Roadmap() {
   const { t, lang } = useI18n();
-  usePageTitle(t('roadmap.title', 'Roadmap · ReviewHub'));
+  usePageTitle(t('roadmap.title', 'Product roadmap — shipped, building, and considered'));
   const isThai = lang === 'th';
 
   // Each entry is { en, th } — both languages inline so we don't need

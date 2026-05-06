@@ -21,7 +21,7 @@ import { useI18n } from '../context/I18nContext';
 // When volume > 10 leads/day, swap the human step for a server-side job.
 export default function AuditLanding() {
   const { t, lang } = useI18n();
-  usePageTitle(t('audit.title', 'Free 10-reply review audit · ReviewHub'));
+  usePageTitle(t('audit.title', 'Free Google review-reply audit · 10 drafts in your tone'));
 
   const [form, setForm] = useState({ businessName: '', businessUrl: '', email: '', notes: '' });
   const [honeypot, setHoneypot] = useState('');

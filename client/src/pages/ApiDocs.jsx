@@ -16,7 +16,7 @@ import { useI18n } from '../context/I18nContext';
 // contract first.
 export default function ApiDocs() {
   const { t, lang } = useI18n();
-  usePageTitle(t('apiDocs.title', 'API Reference · ReviewHub'));
+  usePageTitle(t('apiDocs.title', 'API reference — webhooks, REST endpoints, auth'));
   const isThai = lang === 'th';
 
   return (

@@ -59,7 +59,7 @@ function statusColor(state) {
 
 export default function Status() {
   const { t } = useI18n();
-  usePageTitle(t('status.title', 'System status · ReviewHub'));
+  usePageTitle(t('status.title', 'System status — live health snapshot'));
 
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
