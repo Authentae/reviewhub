@@ -207,11 +207,10 @@ the SEO surface expansion. Smaller wins; ship in batches.
 - `[ ]` Write a blog post: "How to transfer Google Business Profile
   ownership" — Day 1 onboarding email currently tells users to Google
   it. Hosting our own guide keeps them in the funnel.
-- `[ ]` Day 3 onboarding email — add pseudonymous attribution to the
-  cafe story ("A Sukhumvit café we work with" instead of anonymous).
-- `[ ]` Day 14 onboarding email — add fifth churn-survey bucket: "It
-  worked, just unsubscribing from tips". Forces no users into an
-  ill-fitting "no" bucket.
+- `[done]` Day 3 onboarding email — pseudonymous attribution shipped.
+  "A Sukhumvit-area café owner I work with (anonymized at her request)".
+- `[done]` Day 14 onboarding email — added fifth bucket: "It worked,
+  just unsubscribing from these emails (totally fine — reply 'stop')".
 - `[wait:user]` 60-second screencast for the warm-response outreach
   reply (audit-outreach.md § Reply playbook #6). Outside-agent task —
   founder records "first signup → first reply approved → reply visible

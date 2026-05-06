@@ -1352,7 +1352,7 @@ Not for you? Reply with one word and I'll close the loop. No follow-ups.
 
 Quick story:
 
-A Bangkok cafe owner I work with had a 1-star review:
+A Sukhumvit-area café owner I work with (anonymized at her request) had a 1-star review:
 "Coffee was cold, server ignored us for 20 minutes."
 
 Most owners would either ignore it or write a defensive "We strive for excellence" reply. He used ReviewHub. The AI drafted this:
@@ -1398,6 +1398,7 @@ If ReviewHub isn't the right fit, I'd genuinely love to know why. Hit reply with
 - Wrong moment? (busy with other priorities)
 - Wrong UX? (something specific frustrated you)
 - Wrong price? (would $X make it work)
+- It worked, just unsubscribing from these emails (totally fine — reply "stop")
 
 I read every reply and the answers shape what I build next.
 
