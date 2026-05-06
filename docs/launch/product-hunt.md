@@ -1,5 +1,9 @@
 # Product Hunt Launch — ReviewHub
 
+> **Refreshed 2026-05-07** for current product (web dashboard only —
+> Chrome extension dropped from scope). Earlier draft positioned the
+> extension as the hero feature; that copy is no longer accurate.
+
 Everything you need to paste into Product Hunt's launch form. Target launch
 day: a Tuesday or Wednesday (best for category-leader slots). Avoid Monday
 (crowded) and Friday (low traffic).
@@ -9,24 +13,24 @@ day: a Tuesday or Wednesday (best for category-leader slots). Avoid Monday
 Pick one for your launch — A/B test across your own channels beforehand
 if you have time:
 
-1. **"The AI reply button for every review platform"** (47 chars — too long, trim below)
-2. **"AI review replies. Every platform. One tap."** (45 chars — too long)
-3. **"Reply to reviews in 10 sec — on any platform"** (44 chars — still over)
-4. **"AI review replies, every platform, one tap"** (42 chars — over by 2)
-5. **"One-click AI review replies, any platform"** (40 chars — fits!) ✅ **pick**
-6. **"AI review replies for every platform"** (36 chars — safe fallback) ✅
+1. **"AI replies for every Google review you get"** (44 chars — over by 4)
+2. **"Reply to every Google review in 10 seconds"** (42 chars — over by 2)
+3. **"AI-drafted replies for every review you get"** (43 chars — over by 3)
+4. **"AI replies for every review, in your voice"** (42 chars — over by 2)
+5. **"Reply to every review in 10 seconds"** (35 chars — fits!) ✅
+6. **"AI review replies in your voice"** (31 chars — safe fallback) ✅
 
-**Final recommendation: "AI review replies for every platform"** — short,
-complete, keyword-rich.
+**Final recommendation: "Reply to every review in 10 seconds"** — short,
+specific, time-as-value.
 
 ## Short description (260 char max)
 
-> Reply to Google, Yelp, Facebook, TripAdvisor, Trustpilot, Amazon, and
-> Etsy reviews in 10 seconds with AI. One Chrome extension injects an
-> ✨ AI Draft button next to every review. Free forever. Built by a
-> solo founder.
+> AI-drafted replies for every Google review you get. Connect once;
+> ReviewHub reads each review, drafts a reply in your voice, you approve,
+> it posts. 10 seconds per reply. 60+ platforms via CSV. Free forever
+> tier. Built solo in Bangkok.
 
-*(243 chars — fits with room to spare.)*
+*(254 chars — fits.)*
 
 ## Topics
 
@@ -43,36 +47,36 @@ trending that week.
 ```
 Hi Product Hunt 👋
 
-I'm [NAME], the solo maker of ReviewHub. Quick story: I kept watching
-small business owners I know burn out on a dumb problem — they'd end a
-14-hour shift, sit down, and then spend 30 more minutes typing "Thanks
-so much for your kind review!" into Google one at a time. Then the
-next week a 1-star review would hit and they'd stare at it for days
-before mustering the energy to respond.
+I'm Earth, the solo maker of ReviewHub. Quick story: I kept watching
+small business owners I know burn out on a dumb problem — they'd end
+a 14-hour shift, sit down, and then spend 30 more minutes typing
+"Thanks so much for your kind review!" into Google one at a time.
+Then the next week a 1-star review would hit and they'd stare at it
+for days before mustering the energy to respond.
 
-Existing tools (Birdeye, Podium, NiceJob, Reviewflowz) all cost
-$70-300/month and are built for multi-location chains with marketing
+Existing tools (Birdeye, Podium, ReviewTrackers) all cost $250-$1200
+a month and are built for multi-location chains with marketing
 departments. Overkill for the solo café or the one-person salon.
 
-So I built ReviewHub. Two parts:
+So I built ReviewHub — a focused web dashboard that:
 
-🧩 A Chrome extension that injects an "✨ AI Draft" button next to
-every review on Yelp, Facebook, TripAdvisor, Trustpilot, Amazon, Etsy,
-and more. Click → get a context-aware reply → copy → paste. 10 seconds.
-
-🌐 A web dashboard where you can see all your reviews across platforms
-in one feed, send review-request emails, and track trends — if you
-want that. Not required.
+✨ Pulls your Google reviews automatically (one OAuth click).
+✨ Drafts a reply for each review in your voice — sharp for cocktail
+   bars, calm for spas, brief for cafés. Specific to negative reviews
+   too: takes ownership, no "we strive for excellence" filler.
+✨ Posts approved replies back to Google with one click.
+✨ Imports 60+ other platforms via CSV (Wongnai, Yelp, TripAdvisor,
+   Trustpilot, Facebook, Foursquare, Tabelog, Naver Place, Dianping...).
 
 Pricing:
-- Free forever: 3 AI drafts per month, all platforms via the extension
-- Solo ($14/mo): unlimited AI drafts, alerts, multi-platform dashboard
-- Agency ($59/mo): up to 5 businesses
+- Free forever: 3 AI drafts per month, 1 platform
+- Starter ($14/mo): unlimited AI drafts, new-review alerts
+- Pro ($29/mo): scheduled replies, response templates
+- Business ($59/mo): up to 5 businesses
 
-The whole product is built in Node + React. 601 tests. Solo-maker
-solo-vibe. Happy to answer any questions about the tech, the pricing,
-or the LINE-layer/SE-Asia roadmap (spoiler: probably launching a
-LINE-integrated Thai version next quarter).
+Built in Node + React. 1,000+ tests. Solo-maker, no funding, no team.
+Happy to answer questions about the tech, the pricing, or the LINE
+integration on the SEA roadmap (spoiler: probably Q3).
 
 Would love to hear what reviews you've been putting off responding to
 😅 — paste one in the comments and I'll draft a reply right here to
@@ -81,16 +85,20 @@ show the product in action.
 
 ## Screenshots checklist (5 slots, 1280×800 or 1270×760)
 
-1. **Hero screenshot (most-important)** — a Yelp review page with the ✨
-   AI Draft button visible next to a review + the draft dialog open.
-   This is what a visitor needs to see in 1 second to "get it."
-2. **Multi-platform collage** — 4-up: same button on Yelp, Facebook,
-   TripAdvisor, and Trustpilot.
-3. **The dashboard** — main reviews feed showing cross-platform data.
-4. **The free no-signup tool** — `/tools/review-reply-generator` with a
-   sample review + drafted reply visible.
-5. **Price card** — clean Free/$14/$59 comparison with permanent-free
-   callout highlighted.
+1. **Hero screenshot (most-important)** — the dashboard reviews feed
+   with one review expanded, the AI-drafted reply visible underneath
+   in the brand's teal-soft "Your response" box. This is what a
+   visitor needs to see in 1 second to "get it."
+2. **Audit-preview page** — `/audit-preview/<token>` showing 5 of a
+   real prospect's reviews + 5 drafted replies side-by-side. Most
+   visceral demo of the product in action.
+3. **Free no-signup tools** — `/tools` index showing the three free
+   tools (Reply Generator, Reply Roaster, Review Impact Scorer).
+4. **Pricing in context** — `/pricing` § "Pricing in context" showing
+   the comparison cards ($14/mo vs $200-500 VA vs $300-800 agency vs
+   ~$360/mo of your own time).
+5. **Multi-language** — same review in EN + Thai with the matching
+   drafted reply in each language.
 
 ## Gallery order strategy
 
@@ -104,12 +112,13 @@ showing "the homepage."
 Send via the hunter's public PH profile message or their Twitter DMs —
 no call, just a copy-paste:
 
-> Hi [NAME] — I'm launching ReviewHub on PH next week. It's a Chrome
-> extension that drafts AI replies to reviews on every platform
-> (Yelp/FB/TripAdvisor/Trustpilot/Amazon/Etsy/Google). Free forever
-> tier. Built solo. Would you be up for hunting it? No pressure, and if
-> you'd rather just upvote on the day that also works for me. Product
-> preview: [link]. Thanks either way 🙏
+> Hi [NAME] — I'm launching ReviewHub on PH next week. It's an
+> AI-drafted-reply tool for Google reviews — connects via OAuth, drafts
+> in the owner's voice, posts back to Google with one click. Free
+> forever tier, $14/mo for unlimited. Built solo in Bangkok. Would you
+> be up for hunting it? No pressure, and if you'd rather just upvote
+> on the day that also works. Product preview: [link]. Thanks either
+> way 🙏
 
 ## Day-of timeline (00:01 PST launch time)
 
@@ -144,9 +153,8 @@ no call, just a copy-paste:
 
 - **Day 2-3:** write a "here's what I learned from my PH launch" post
   on IndieHackers + Twitter (content from the launch itself)
-- **Day 7:** tweet metrics transparently. "Got 340 upvotes, 84
-  extension installs, 12 paid signups." Good or bad, transparency
-  builds trust.
+- **Day 7:** tweet metrics transparently. "Got 340 upvotes, 60 free
+  signups, 4 paid." Good or bad, transparency builds trust.
 - **Day 14:** submit to Hacker News as "Show HN" (different audience,
   fresh content angle)
 
@@ -158,9 +166,10 @@ A respectable indie SaaS PH launch looks like:
 |---|---|---|---|
 | Upvotes | 100 | 300 | 500+ |
 | Visits to site | 500 | 1,500 | 4,000+ |
-| Extension installs (launch week) | 20 | 80 | 200 |
-| Free signups | 5 | 25 | 80 |
+| Free signups | 10 | 40 | 150 |
+| Free-tool runs (audit / roaster / impact) | 30 | 120 | 400 |
 | Paid conversions (week 1) | 0-1 | 3-5 | 10+ |
 
-Don't measure the launch by upvote count. Measure by installs + signups.
-Product Hunt is a distribution channel, not a popularity contest.
+Don't measure the launch by upvote count. Measure by signups + paid
+conversions. Product Hunt is a distribution channel, not a popularity
+contest.

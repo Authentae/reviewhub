@@ -76,12 +76,12 @@ public social — every edit shows as edited and damages trust.
 |---|---|---|
 | Display name | "ReviewHub" | ✓ set |
 | Handle | @reviewhubreview | ✓ set |
-| Bio (160 char) | "AI-drafted Google review replies in your voice. Made in Bangkok for the cafés, hotels, and shops who never had time to reply." | ✓ set |
+| Bio (160 char) | "AI-drafted review replies in your voice. Google + 60 platforms via CSV. 10 seconds per reply. Made in Bangkok. reviewhub.review" | **TO UPDATE** (current bio still mentions cafés/hotels/shops + Google-only — too narrow) |
 | Location | "Bangkok" | ✓ set |
 | Website | https://reviewhub.review | ✓ set |
-| Avatar (400×400 PNG or JPG) | Brand wordmark or monogram on brand teal/paper background. Must be square. | **MISSING** — currently default letter avatar |
-| Header (1500×500 PNG or JPG) | Brand visual + maybe one-line tagline. Wide aspect. | **MISSING** — currently empty grey |
-| Pinned tweet | One strong post that explains what ReviewHub is | **PENDING** — need first proper post |
+| Avatar (400×400 PNG) | **Use the official `client/public/logo.svg` rendered at 400×400.** Just the sparkle tile — no wordmark (illegible at avatar size). The official brand mark, already shipped to production via `Logo.jsx`. | **TO UPLOAD** — render via sharp; do NOT use the earlier `x-avatar.png` I generated (had a redundant wordmark) |
+| Header (1500×500 PNG) | Screenshot of one of the 5 cards in `docs/launch/tweet-cards.html` (Card 2 "10 seconds. Not 10 minutes." is the strongest standalone). Crop to 1500×500 for X. | **TO UPLOAD** |
+| Pinned tweet | One strong post explaining what ReviewHub is | **PENDING** — see §5 Type A/B for templates |
 
 ### LinkedIn (when created)
 
@@ -213,6 +213,9 @@ Before I (the agent) take ANY social-presence action, I run this:
 
 ```
 [ ] Did I read this skill in the current session?
+[ ] Did I check `docs/launch/` for existing brand assets BEFORE
+    generating my own? (See §10. Generating duplicate assets when the
+    designed ones already exist is a real failure mode.)
 [ ] Does the action match the brand voice in §1?
 [ ] Have I run the §2 pre-post checklist (if posting)?
 [ ] If profile change: are the assets in §3 actually generated/loaded?
@@ -221,6 +224,39 @@ Before I (the agent) take ANY social-presence action, I run this:
 ```
 
 If any answer is "no," stop. Fix first.
+
+## 10. Use existing brand assets — do NOT regenerate
+
+Earth flagged on 2026-05-07 that I (the agent) was generating brand
+assets (X avatar, X header) without first checking `docs/launch/`,
+which already has a designed asset suite from a real brand session.
+
+**The rule:** before generating any brand asset (logo, header, OG
+image, tweet graphic, slide deck cover), I check `docs/launch/`
+first. Specifically:
+
+| Need | Use this | NOT this |
+|---|---|---|
+| Avatar / logo mark | `client/public/logo.svg` (rendered at target size via sharp). Just the sparkle — no wordmark. | A new sparkle SVG with a wordmark added. |
+| X header / banner | A screenshot of one of the cards in `docs/launch/tweet-cards.html`, cropped to 1500×500. Card 2 ("10 seconds. Not 10 minutes.") works best standalone. | A new SVG header. |
+| OG card | `client/public/og-image.png` (rendered from `og-image.svg` via sharp). | A new design from scratch. |
+| Tweet graphic | One of the 5 cards in `tweet-cards.html`, screenshotted at 1200×675. | A new graphic. |
+| Launch playbook | `docs/launch/product-hunt.md` (refreshed 2026-05-07 for web-only product). | New positioning copy. |
+
+**Historical assets — do not use:** `docs/launch/web-store-hero.html`
+was designed when the Chrome extension was the hero feature. Extension
+dropped 2026-05; this asset is unused. The README and asset-index.html
+flag it as `[HISTORICAL — extension-era]`.
+
+**When generating IS legitimate:** when there's a real gap that the
+launch deck doesn't cover (e.g. Reddit avatar that needs a different
+crop, LinkedIn banner at a specific aspect ratio). Even then: render
+from the SAME source SVGs in `client/public/logo.svg` or
+`og-image.svg` for consistency, don't author a new design.
+
+**If the source asset itself is wrong** (e.g. wordmark too big, color
+slightly off), update the source `client/public/logo.svg` so the
+change propagates everywhere. Do not fork into a parallel design.
 
 ---
 

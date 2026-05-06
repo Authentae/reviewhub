@@ -4,23 +4,32 @@ Screenshot-ready HTML mockups from the Claude Design session. Each file
 renders at the final output dimensions — open in a browser, maximize the
 window, and screenshot directly. No build step.
 
+> **Status note (2026-05-07):** The Chrome extension was dropped from
+> scope. The current product is web-only (dashboard at reviewhub.review).
+> Some assets in this folder were authored when the extension was the
+> hero feature — those are flagged below as `[HISTORICAL — extension-era]`
+> and should not be used as positioning references for current marketing.
+
 ## Files
 
-| File | Dimensions | Usage |
-|---|---|---|
-| `web-store-hero.html` | 1400×560 | Chrome Web Store marquee promo tile. Open in browser, use DevTools device toolbar set to 1400×560, screenshot. |
-| `tweet-cards.html` | 1200×675 each (5 stacked) | Product Hunt launch day + Twitter thread graphics. Screenshot each card individually at 1200×675. |
-| `logo-sheet.html` | Variable | Reference — 5 logo concepts side-by-side at multiple sizes. Concept A (Star + Spark) was chosen and shipped to production via `client/src/components/Logo.jsx`. |
-| `asset-index.html` | — | Dashboard linking all the above. Designed as the cover page for a handoff doc. |
-| `logo-concepts.jsx` | — | Source of the 5 logo concept SVGs. Useful reference if we ever re-brand. |
-| `product-hunt.md` | — | Pre-existing Product Hunt launch playbook — taglines, screenshots brief, day-of timeline. |
+| File | Dimensions | Status | Usage |
+|---|---|---|---|
+| `tweet-cards.html` | 1200×675 each (5 stacked) | **Current** (refreshed 2026-05-07) | Twitter thread graphics. Screenshot each card individually at 1200×675. Card 5 still needs a real customer quote. |
+| `logo-sheet.html` | Variable | **Current** | Reference — 5 logo concepts at multiple sizes. Concept A (Star + Spark) was chosen and shipped to production via `client/src/components/Logo.jsx`. |
+| `logo-concepts.jsx` | — | **Current** | Source of the 5 logo concept SVGs. Useful reference if we ever re-brand. |
+| `product-hunt.md` | — | **Current** (refreshed 2026-05-07) | Product Hunt launch playbook — taglines, description, maker's comment, gallery shotlist. Web-only product. |
+| `asset-index.html` | — | **Current** | Dashboard linking the above. Designed as the cover page for a handoff doc. |
+| `web-store-hero.html` | 1400×560 | `[HISTORICAL — extension-era]` | Chrome Web Store marquee. We aren't shipping the extension; this asset is unused. Kept for reference if the extension is ever revived. |
 
 ## What shipped to the app (not just docs)
 
 - **Logo Concept A** → `client/src/components/Logo.jsx` + `client/public/logo.svg` + `client/public/favicon.svg`. Used in Navbar, Landing footer, and all 4 auth pages.
-- **Extension popup redesign** → `extension/popup.{html,css,js}` (done in prior session).
 - **Emails** → `server/src/lib/email.js` (redesigned per prototype).
-- **Onboarding flow** → `extension/welcome.html` + `background.js` install listener.
+- **og-image.png** (rendered from `og-image.svg` via sharp) — used as the social-card image on every reviewhub.review URL.
+
+> Removed from "shipped" list (2026-05-07): Extension popup, extension
+> welcome flow, extension background.js. The `extension/` folder may
+> still exist as legacy code; treat as un-shipped until we revisit.
 
 ## How to screenshot the tweet cards
 
