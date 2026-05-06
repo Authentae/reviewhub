@@ -304,7 +304,7 @@ function HowItWorks() {
       ),
     },
     { n: 'III', cat: t('landing.step3Cat', 'Post'), h: t('landing.step3H', "One tap. It's published."),
-      p: t('landing.step3P', "The extension posts on whatever platform page you're on — no copy-paste, no tab juggling, no logins to remember. Median reply time: 12 seconds."),
+      p: t('landing.step3P', "We post the approved reply directly to Google via the Business Profile API — no copy-paste, no tab juggling, no second login. Median reply time: 12 seconds."),
       illo: (
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontFamily: 'var(--rh-mono)', fontSize: 10, color: 'var(--rh-ink-3)', letterSpacing: '0.08em', marginBottom: 8 }}>MEDIAN</div>

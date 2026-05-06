@@ -7809,7 +7809,7 @@ const th = {
 
   // Landing page — highest-traffic surface, hero CTAs and "how it works"
   // sections that drive conversion.
-  'landing.heroCtaPrimary': 'ติดตั้งส่วนขยาย Chrome',
+  'landing.heroCtaPrimary': 'เริ่มใช้ฟรี',
   'landing.heroCtaSecondary': 'ลองใช้ฟรี — ไม่ต้องสมัคร',
   'landing.heroCtaPrimaryNewTab': '(เปิดในแท็บใหม่)',
   'landing.platformsLabel': 'รองรับแพลตฟอร์มที่ลูกค้าใช้รีวิวกันจริง',
@@ -7856,7 +7856,7 @@ const th = {
   'landing.step2P': 'AI เรียนจากคำตอบ 20 รายการล่าสุดของร้านคุณ ร่างออกมาเป็นโทนของคุณเอง รองรับ 10 ภาษา — ไทย ญี่ปุ่น เกาหลี เป็นเจ้าของภาษาจริงๆ ไม่ใช่แค่แปลตรงตัว',
   'landing.step3Cat': 'โพสต์',
   'landing.step3H': 'กดครั้งเดียว ขึ้นเลย',
-  'landing.step3P': 'ส่วนขยาย Chrome โพสต์ให้ตรงที่หน้ารีวิว — ไม่ต้องคัดลอก ไม่ต้องสลับแท็บ ไม่ต้องล็อกอินซ้ำ เฉลี่ยตอบรีวิว 1 อันใช้เวลา 12 วินาที',
+  'landing.step3P': 'เราโพสต์คำตอบที่คุณ approve ลง Google ผ่าน Business Profile API ให้ — ไม่ต้องคัดลอก ไม่ต้องสลับแท็บ ไม่ต้องล็อกอินซ้ำ เฉลี่ยตอบรีวิว 1 อันใช้เวลา 12 วินาที',
   'landing.footerFreeTool': 'เครื่องมือฟรี',
   'landing.footerDashboard': 'แดชบอร์ด',
   'landing.footerPricing': 'ราคา',
