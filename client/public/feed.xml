@@ -8,10 +8,19 @@
     <lastBuildDate>Thu, 07 May 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://reviewhub.review/feed.xml" rel="self" type="application/rss+xml" />
     <image>
-      <url>https://reviewhub.review/og-image.svg</url>
+      <url>https://reviewhub.review/og-image.png</url>
       <title>ReviewHub Blog</title>
       <link>https://reviewhub.review</link>
     </image>
+
+    <item>
+      <title>ตอบรีวิว Google ภาษาอังกฤษให้ดูเป็นมืออาชีพ — คู่มือสำหรับเจ้าของโรงแรมและคาเฟ่ไทย</title>
+      <link>https://reviewhub.review/blog/reply-english-reviews-thai-owners-th</link>
+      <guid isPermaLink="true">https://reviewhub.review/blog/reply-english-reviews-thai-owners-th</guid>
+      <description>คู่มือเจ้าของร้านไทย: ตอบรีวิวภาษาอังกฤษจากนักท่องเที่ยวต่างชาติให้ดูเป็นมืออาชีพ ไม่แข็ง ไม่เหมือนแปลจากเครื่อง พร้อมเทมเพลต 5 สถานการณ์จริง</description>
+      <pubDate>Thu, 07 May 2026 00:00:00 GMT</pubDate>
+      <category>Reviews</category>
+    </item>
 
     <item>
       <title>How to remove a Google review (and what Google actually allows)</title>
