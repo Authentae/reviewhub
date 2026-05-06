@@ -30,6 +30,41 @@ export default function Changelog() {
   // a paying user would notice.
   const highlights = [
     {
+      date: '2026-05-07',
+      en: 'New Thai blog post — "Replying to English Google reviews professionally" (8 min read). For Bangkok hotel and café owners whose tourists leave reviews in English. Six principles + five copy-pasteable scenarios.',
+      th: 'บทความใหม่ภาษาไทย — "ตอบรีวิว Google ภาษาอังกฤษให้ดูเป็นมืออาชีพ" (อ่าน 8 นาที) สำหรับเจ้าของโรงแรมและคาเฟ่ในกรุงเทพฯ ที่นักท่องเที่ยวเขียนรีวิวเป็นภาษาอังกฤษ มีหลักการ 6 ข้อ + 5 สถานการณ์จริงพร้อมเทมเพลต',
+    },
+    {
+      date: '2026-05-07',
+      en: 'Cleaner link previews — every blog post and the audit-preview page now ship with PNG og:image + Twitter Card meta + breadcrumb structured data. When you paste a ReviewHub link into iMessage, LINE, Slack, or Discord, the preview card now renders properly instead of a generic placeholder.',
+      th: 'ลิงก์พรีวิวสะอาดขึ้น — บทความทุกตอน + หน้า /audit-preview แสดงรูปการ์ด og:image แบบ PNG พร้อม Twitter Card meta + breadcrumb structured data วาง URL ของ ReviewHub ใน iMessage / LINE / Slack / Discord ตอนนี้ขึ้นการ์ดพรีวิวสวยแล้ว ไม่ใช่ placeholder',
+    },
+    {
+      date: '2026-05-07',
+      en: 'Onboarding emails (Day 0 / 1 / 7 / 14) rewritten in founder voice — single CTA, real expectations, signed off by Earth instead of by "the ReviewHub team". Available in EN / TH / ES / JA.',
+      th: 'อีเมลต้อนรับ (วันที่ 0 / 1 / 7 / 14) เขียนใหม่ในเสียงของเจ้าของจริง — call-to-action เดียว คาดหวังตามความเป็นจริง เซ็นชื่อโดย Earth แทนที่จะเป็น "ทีม ReviewHub" มีให้เลือก EN / TH / ES / JA',
+    },
+    {
+      date: '2026-05-07',
+      en: 'New blog post — "How to remove a Google review (the honest playbook)" (9 min read). What Google actually removes vs. what they won\'t, the flag-and-wait process, and the escalation path most owners don\'t know exists.',
+      th: 'บทความใหม่ — "How to remove a Google review (the honest playbook)" (อ่าน 9 นาที) Google ลบรีวิวอะไรได้บ้าง อะไรลบไม่ได้ flag แล้วต้องรอนานแค่ไหน และเส้นทาง escalation ที่เจ้าของส่วนใหญ่ไม่รู้ว่ามี',
+    },
+    {
+      date: '2026-05-06',
+      en: 'New blog post — "How to ask customers for Google reviews without being pushy" (7 min read). Five natural ask-windows, why discount-for-review violates Google policy, the QR-code mistake, and the 1-star prevention move.',
+      th: 'บทความใหม่ — วิธีขอรีวิว Google จากลูกค้าโดยไม่ดูยัดเยียด (อ่าน 7 นาที) มี 5 จังหวะที่เป็นธรรมชาติในการขอ ทำไมแลกส่วนลดกับรีวิวผิดนโยบาย Google ความผิดพลาดเรื่อง QR code และเทคนิคป้องกันรีวิว 1 ดาว',
+    },
+    {
+      date: '2026-05-06',
+      en: 'New blog post — "How to transfer Google Business Profile ownership" (8 min read). Adding a manager vs transferring primary ownership, the 7-day waiting period, and the shortcut nobody mentions.',
+      th: 'บทความใหม่ — วิธีโอนเจ้าของ Google Business Profile (อ่าน 8 นาที) เพิ่ม manager กับโอนเจ้าของจริงต่างกันยังไง รอ 7 วันคืออะไร และทางลัดที่ไม่ค่อยมีใครพูดถึง',
+    },
+    {
+      date: '2026-05-06',
+      en: 'Audit-preview page polish — CTA trust line ("No credit card to start · 14-day refund window · cancel anytime"), inline FAQ with the 5 questions SMB owners actually ask, dark-mode background bug fixed, and a sharper time-saved claim ("Replies that took 30 minutes each take 30 seconds").',
+      th: 'ปรับหน้า /audit-preview — เพิ่มข้อความ trust ใต้ CTA ("ไม่ต้องใส่บัตรเครดิต · คืนเงินภายใน 14 วัน · ยกเลิกได้ตลอด") เพิ่ม FAQ ตอบ 5 คำถามที่เจ้าของร้านถามจริง แก้ bug background dark mode และปรับข้อความใหม่ให้คมขึ้น',
+    },
+    {
       date: '2026-05-05',
       en: 'Sign in with Google — one-click OAuth sign-in alongside email/password. New "Sign in with Google" button on /login. Existing accounts auto-link by email; new accounts auto-create with email already verified. No password to remember.',
       th: 'เข้าสู่ระบบด้วย Google — คลิกเดียวด้วย OAuth เพิ่มเติมจากอีเมล/รหัสผ่าน มีปุ่ม "Sign in with Google" บนหน้า /login บัญชีเดิมเชื่อมอัตโนมัติด้วยอีเมล บัญชีใหม่สร้างพร้อมยืนยันอีเมลแล้ว',
