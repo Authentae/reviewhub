@@ -23,6 +23,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'reply-to-old-google-reviews-th',
+    title: 'ควรตอบรีวิว Google เก่าๆ ไหม? (ย้อนหลังได้แค่ไหน)',
+    description: 'คำตอบซื่อๆ ว่าควรตอบรีวิวอายุ 6 เดือน 1 ปี หรือ 3 ปีไหม กฎ 30 วันที่ดีกว่า "ตอบทุกอัน" และข้อยกเว้นเดียวที่ควรรู้',
+    date: '2026-05-08',
+    readingMins: 5,
+    lang: 'th',
+  },
+  {
     slug: 'reply-to-old-google-reviews',
     title: 'Should you reply to old Google reviews? (and how far back to go)',
     description: 'The honest answer on whether to reply to Google reviews from 6 months, 1 year, or 3 years ago. Why the 30-day rule beats "reply to everything", with the one exception worth knowing.',
