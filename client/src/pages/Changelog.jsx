@@ -30,6 +30,21 @@ export default function Changelog() {
   // a paying user would notice.
   const highlights = [
     {
+      date: '2026-05-08',
+      en: 'New EN blog post — "5 Google review mistakes Bangkok hospitality owners keep making" (7 min read). Patterns from real Bangkok properties, what 200+ review properties do differently, and the 48-hour reply window that lifts star-rating updates 4×.',
+      th: 'บทความใหม่ภาษาอังกฤษ — "5 Google review mistakes Bangkok hospitality owners keep making" (อ่าน 7 นาที) Pattern จากโรงแรม/ร้านอาหารในกรุงเทพฯ จริง ว่าทำไมร้านที่มี 200+ รีวิวต่างจากร้านอื่น และ 48 ชั่วโมงทำไมสำคัญ',
+    },
+    {
+      date: '2026-05-08',
+      en: 'Thai-English blog parity reached 7/7 — translated all remaining EN posts (transfer-ownership, how-to-ask, how-to-remove, fake-extortion, why-respond) into Thai for Bangkok hospitality owners. Each post is its own page with native Thai script, Schema.org markup, and bilingual breadcrumbs.',
+      th: 'บทความครบทั้ง EN/TH 7 ต่อ 7 — แปลบทความที่เหลือทั้งหมด (โอนเจ้าของ, ขอรีวิว, ลบรีวิว, รีวิวปลอม/แบล็กเมล, ทำไมต้องตอบ) เป็นภาษาไทย แต่ละบทความเป็นหน้าของตัวเอง พร้อม Schema.org และ breadcrumb สองภาษา',
+    },
+    {
+      date: '2026-05-08',
+      en: 'Internal-linking pass — every blog post now ships with a "Related posts" section linking to its 2 most-related siblings. Lifts session length and SEO internal-link signal.',
+      th: 'ทำ internal linking — ทุกบทความตอนนี้มีส่วน "บทความที่เกี่ยวข้อง" ลิงก์ไปบทความใกล้เคียง 2 อัน เพิ่มเวลาที่อ่านและสัญญาณ SEO',
+    },
+    {
       date: '2026-05-07',
       en: 'New Thai blog post — "Replying to English Google reviews professionally" (8 min read). For Bangkok hotel and café owners whose tourists leave reviews in English. Six principles + five copy-pasteable scenarios.',
       th: 'บทความใหม่ภาษาไทย — "ตอบรีวิว Google ภาษาอังกฤษให้ดูเป็นมืออาชีพ" (อ่าน 8 นาที) สำหรับเจ้าของโรงแรมและคาเฟ่ในกรุงเทพฯ ที่นักท่องเที่ยวเขียนรีวิวเป็นภาษาอังกฤษ มีหลักการ 6 ข้อ + 5 สถานการณ์จริงพร้อมเทมเพลต',
