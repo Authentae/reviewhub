@@ -23,6 +23,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'track-google-review-reply-rate-th',
+    title: 'วิธี track อัตราการตอบรีวิว Google (เมตริกที่สำคัญที่สุด)',
+    description: 'ทำไม reply rate สำคัญกว่าจำนวนคำตอบ วิธีวัดโดยไม่ต้องใช้เครื่องมือ เป้าหมาย 80% และอัตราของคุณตอนนี้กำลังบอกอะไรเกี่ยวกับการดำเนินงาน',
+    date: '2026-05-08',
+    readingMins: 5,
+    lang: 'th',
+  },
+  {
     slug: 'track-google-review-reply-rate',
     title: 'How to track your Google review reply rate (the one metric that actually matters)',
     description: 'Why reply rate beats reply quantity, how to measure it without a tool, the 80% target, and what your current rate is telling you about your operations.',
