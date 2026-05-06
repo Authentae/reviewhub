@@ -11,7 +11,11 @@
     "build": "cd client && npm run build",
     "test": "npm run test:server && npm run test:client",
     "test:server": "cd server && npm test",
-    "test:client": "cd client && npm test"
+    "test:client": "cd client && npm test",
+    "check:seo": "node scripts/validate-blog-seo.js",
+    "check:positioning": "node scripts/check-stale-positioning.js",
+    "check:all": "npm run check:seo && npm run check:positioning",
+    "hooks:install": "bash scripts/install-hooks.sh"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
