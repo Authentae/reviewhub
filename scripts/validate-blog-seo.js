@@ -31,6 +31,25 @@ const FORBIDDEN = [
   { regex: /og-image\.svg/, msg: 'og-image.svg referenced (should be .png)' },
 ];
 
+// First pass: build EN/TH pair map so we can require hreflang on
+// paired posts (and skip the requirement on single-language posts).
+const slugBase = (slug) => slug.replace(/-th$/, '');
+const pairs = {};
+for (const file of fs.readdirSync(BLOG_DIR)) {
+  if (!file.endsWith('.html')) continue;
+  const slug = file.replace(/\.html$/, '');
+  const html = fs.readFileSync(path.join(BLOG_DIR, file), 'utf8');
+  const isThai = /<html lang="th"/.test(html);
+  const base = slugBase(slug);
+  pairs[base] = pairs[base] || {};
+  if (isThai) pairs[base].th = slug;
+  else pairs[base].en = slug;
+}
+const isPaired = (slug) => {
+  const p = pairs[slugBase(slug)];
+  return p && p.en && p.th;
+};
+
 let errors = 0;
 let posts = 0;
 
@@ -39,6 +58,7 @@ for (const file of fs.readdirSync(BLOG_DIR)) {
   posts++;
   const fp = path.join(BLOG_DIR, file);
   const html = fs.readFileSync(fp, 'utf8');
+  const slug = file.replace(/\.html$/, '');
 
   const fileErrors = [];
 
@@ -50,6 +70,12 @@ for (const file of fs.readdirSync(BLOG_DIR)) {
   }
   for (const { regex, msg } of FORBIDDEN) {
     if (regex.test(html)) fileErrors.push(`FORBIDDEN  ${msg}`);
+  }
+  // Paired posts MUST have hreflang link tags
+  if (isPaired(slug)) {
+    if (!/hreflang="en"/.test(html)) fileErrors.push('HREFLANG  hreflang="en" missing (paired post)');
+    if (!/hreflang="th"/.test(html)) fileErrors.push('HREFLANG  hreflang="th" missing (paired post)');
+    if (!/hreflang="x-default"/.test(html)) fileErrors.push('HREFLANG  hreflang="x-default" missing (paired post)');
   }
 
   if (fileErrors.length > 0) {
