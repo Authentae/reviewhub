@@ -64,35 +64,32 @@ hooks take over automatically.
 ## Ready to send
 
 ```
-1. Chakrabongse Villas
+1. ~~Chakrabongse Villas~~ — **[wait:user] DISQUALIFIED for stock cold-outreach**
    - Email: reservation@chakrabongse.com
-   - Vertical: boutique heritage hotel (riverfront, owner-run since 1998)
-   - Email language: **English** — owner Narisa Chakrabongse is publicly
-     English-fluent, property positioning is upscale international,
-     reviews are predominantly English from international guests.
-     Per the decision tree, English fits this one cleanly.
-   - Notes: Owned by Narisa Chakrabongse, granddaughter of HRH Prince
-     Chakrabongse. Verify response rate before sending. If 60%+ → skip.
-   - Source: https://www.chakrabongsevillas.com
+   - 2026-05-06: research showed ~46% Google response rate overall,
+     ~60% on recent reviews. Owner Narisa responds personally, signs
+     with her name. Sending the stock "you have unanswered reviews"
+     pitch would land tone-deaf — she's not unaware, she's selective.
+     Different pitch needed (e.g. "you reply beautifully — would you
+     like to scale that voice in 5 languages via AI?"). Founder call.
 
-2. Old Capital Bike Inn
+2. ~~Old Capital Bike Inn~~ — **DRAFT QUEUED 2026-05-06**
    - Email: info@oldcapitalbkk.com
-   - Vertical: family-run heritage B&B near Old City temples
-   - Email language: **Thai** — family-run, smaller property, Thai
-     ownership likely defaults to Thai inbox. Per decision tree, family
-     properties → Thai unless there's a counter-signal.
-   - Notes: Family-run, charm-focused. Reviews likely mention specific
-     staff or family member by name — pull that into the email.
+   - Status: 0% response rate confirmed (UNAWARE). Audit URL generated
+     at /audit-preview/eb9b38c20d1921abfae1cf571bd89d120c946a51624d34fd
+     with 3 of their 5★ reviews. Gmail draft created (id r8475...).
+     Founder needs to review + click Send.
+   - Specific observation pulled: owner "Jason" is named in reviews
+     leading the night bike tour; breakfast praised in nearly every
+     review.
    - Source: https://www.oldcapitalbkk.com/contact-us.html
 
-3. Loftel 22 Hostel
+3. ~~Loftel 22 Hostel~~ — **DRAFT QUEUED 2026-05-06**
    - Email: loftel22bangkok@gmail.com
-   - Vertical: small independent hostel
-   - Email language: **Thai** — small indie property, Thai-style brand,
-     "loftel22bangkok@gmail.com" is a personal Gmail not a corporate
-     domain (signals owner-direct). Thai better.
-   - Notes: Hostel scene is highly review-driven (Hostelworld + Google
-     ranking). High-leverage if owner is unaware.
+   - Status: 0% response rate (UNAWARE). Two unanswered 1-star reviews
+     (one EN, one TH brutal one) sitting open — high-value prospect.
+     Audit URL at /audit-preview/5413ee40f24edbe66a9766e7cfaea91382be83e59cefedc2.
+     Gmail draft created (id r3562...). Founder needs to review + Send.
    - Source: https://www.facebook.com/loftel22/
 ```
 
