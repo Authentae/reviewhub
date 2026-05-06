@@ -1311,22 +1311,22 @@ const ONBOARDING_STRINGS = {
       subject: "Welcome to ReviewHub — let's reply to your first review",
       body: (clientUrl) => `Hi there,
 
-You're in. Quick orientation:
+You're in. One step left:
 
-1. Connect your first review platform (1 min)
-   → ${clientUrl}/dashboard
+→ Connect your Google account (1 minute)
+   ${clientUrl}/dashboard
 
-2. Pick any review and click "Draft reply"
-   AI gives you 3 tone variants. Edit, copy, paste on Google.
-   Done in 10 seconds.
+After that, every new review lands in your inbox with an AI-drafted reply. You approve, it posts. The first few drafts will feel slightly off-tone — edit them, and the system learns your voice.
 
-3. Want a personalized 10-reply audit before you commit?
-   → ${clientUrl}/audit (free, no upsell)
+Two things worth knowing day one:
+
+- The drafts are starting points, not finished replies. Edit anything you want before posting; ReviewHub picks up your edits and gets closer next time.
+- For 1-star reviews, the system writes very differently than for 5-stars — specific acknowledgment, ownership, no "we strive for excellence" filler. You'll see.
 
 Reply to this email if you get stuck. I read every one.
 
-— ReviewHub
-Bangkok`,
+— Earth
+ReviewHub · Bangkok`,
     },
     1: {
       subject: 'Stuck on setup? 60-second walkthrough',
@@ -1414,26 +1414,24 @@ Either way, thanks for trying it.
   th: {
     0: {
       subject: 'ยินดีต้อนรับ — มาตอบรีวิวแรกกัน',
-      body: (clientUrl) => `สวัสดีครับ/ค่ะ
+      body: (clientUrl) => `สวัสดีครับ
 
-ยินดีต้อนรับสู่ ReviewHub!
+ยินดีต้อนรับสู่ ReviewHub! เหลืออีกขั้นตอนเดียว:
 
-ขั้นตอนเริ่มต้น:
+→ เชื่อม Google account (1 นาที)
+   ${clientUrl}/dashboard
 
-1. เชื่อมแพลตฟอร์มรีวิวอันแรก (1 นาที)
-   → ${clientUrl}/dashboard
+หลังจากนั้นทุกรีวิวใหม่จะมาถึง inbox พร้อมคำตอบที่ AI ร่างให้แล้ว คุณกด approve มันก็โพสต์ ช่วงแรกๆ คำตอบอาจจะยังไม่ตรงโทนของคุณเป๊ะ แก้ไขได้ ระบบเรียนรู้จากการแก้แต่ละครั้ง
 
-2. เลือกรีวิว แล้วกด "Draft reply"
-   AI จะให้คำตอบ 3 แบบให้เลือก แก้ไข copy ไปวางบน Google
-   เสร็จใน 10 วินาที
+สองเรื่องที่ควรรู้ตั้งแต่วันแรก:
 
-3. อยากรับ audit ฟรี 10 รีวิวก่อนตัดสินใจ?
-   → ${clientUrl}/audit (ฟรีจริง ไม่บังคับขาย)
+- คำตอบที่ระบบร่างให้เป็น "จุดตั้งต้น" ไม่ใช่คำตอบสำเร็จรูป แก้ก่อนโพสต์ได้เลย แล้วระบบจะใกล้เคียงโทนของคุณมากขึ้นเรื่อยๆ
+- รีวิว 1 ดาว ระบบจะเขียนต่างจากรีวิว 5 ดาวมาก — ขอโทษเฉพาะเรื่อง รับผิดชอบ ไม่มีคำพูดทั่วไปแบบ "เรามุ่งมั่นพัฒนา"
 
-ติดอะไร ตอบกลับอีเมลนี้ได้ ผม/ดิฉันอ่านทุกฉบับ
+ติดอะไรตอบกลับอีเมลนี้ได้ ผมอ่านทุกฉบับ
 
-— ReviewHub
-Bangkok`,
+— Earth
+ReviewHub · Bangkok`,
     },
     1: {
       subject: 'ติดอยู่ตรงไหน? 60 วินาทีพอ',
@@ -1540,22 +1538,22 @@ BUSINESS ($59/เดือน)
       subject: 'Bienvenido a ReviewHub — vamos a por tu primera respuesta',
       body: (clientUrl) => `Hola,
 
-Ya estás dentro. Orientación rápida:
+Ya estás dentro. Solo queda un paso:
 
-1. Conecta tu primera plataforma de reseñas (1 min)
-   → ${clientUrl}/dashboard
+→ Conecta tu cuenta de Google (1 minuto)
+   ${clientUrl}/dashboard
 
-2. Elige cualquier reseña y pulsa "Borrador con IA"
-   La IA te da 3 variantes de tono. Editas, copias, pegas en Google.
-   Listo en 10 segundos.
+Después de eso, cada reseña nueva llega a tu bandeja con un borrador de respuesta hecho con IA. Tú apruebas, se publica. Los primeros borradores van a sentirse algo descalibrados — edítalos, y el sistema aprende tu voz.
 
-3. ¿Quieres una auditoría gratis de 10 respuestas antes de comprometerte?
-   → ${clientUrl}/audit (gratis, sin compromiso)
+Dos cosas que vale la pena saber el primer día:
 
-Si te atascas en algo, responde a este correo. Lo leo todos.
+- Los borradores son puntos de partida, no respuestas finales. Edita lo que quieras antes de publicar; ReviewHub aprende de tus ediciones.
+- Para reseñas de 1 estrella, el sistema escribe muy distinto que para 5 estrellas — reconocimiento específico, asumir responsabilidad, sin frases tipo "nos esforzamos por la excelencia".
 
-— ReviewHub
-Bangkok`,
+Si te atascas, responde a este correo. Lo leo todos.
+
+— Earth
+ReviewHub · Bangkok`,
     },
     1: {
       subject: '¿Atascado configurando? Aquí va el atajo',
@@ -1662,22 +1660,22 @@ Sea como sea, gracias por probarlo.
       subject: 'ReviewHubへようこそ — 最初の口コミに返信してみましょう',
       body: (clientUrl) => `こんにちは、
 
-登録ありがとうございます。簡単な案内です：
+登録ありがとうございます。あと一歩だけ：
 
-1. 最初の口コミプラットフォームを接続（1分）
-   → ${clientUrl}/dashboard
+→ Googleアカウントを接続（1分）
+   ${clientUrl}/dashboard
 
-2. 口コミを選んで「AIで下書き」をクリック
-   AIが3種類のトーンの下書きを作ります。編集して、コピーして、Googleに貼り付け。
-   10秒で完了です。
+接続後、新しい口コミが届くたびにAIが下書きを作って受信箱に届きます。承認すれば自動投稿。最初の数件はトーンが少しずれるかもしれませんが、編集していただければシステムがあなたの声を学習していきます。
 
-3. 登録前に、無料で10件分の返信診断を試してみたいですか？
-   → ${clientUrl}/audit （無料、押し売りなし）
+最初の日に知っておくと良いこと2つ：
+
+- 下書きは「出発点」であり、完成形ではありません。投稿前に好きなだけ編集してください。あなたの編集からReviewHubは学習します。
+- 1つ星の口コミと5つ星の口コミでは、システムの書き方が大きく違います — 具体的に何が問題だったかを認め、責任を持つ。「努力します」のような決まり文句は使いません。
 
 詰まったらこのメールに返信してください。私が全部読みます。
 
-— ReviewHub
-Bangkok`,
+— Earth
+ReviewHub · Bangkok`,
     },
     1: {
       subject: 'セットアップで止まっていますか？60秒で説明します',
