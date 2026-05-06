@@ -212,17 +212,21 @@ export default function AuditPreview() {
               Set this up for {business_name} in 10 minutes
             </h2>
             <p className="text-sm leading-relaxed mb-5 max-w-md mx-auto" style={{ color: '#fdf2dc' }}>
-              Connect Google once, ReviewHub drafts replies for every new review,
-              you approve with one click, it posts automatically. $14/mo (~฿490).
+              Connect Google once. New reviews land — ReviewHub drafts a reply in
+              your voice. You approve with one click; it posts to Google.
+              Replies that took 30 min each take 30 seconds. $14/mo (~฿490).
             </p>
             <a
               href={`/register?from=audit&business=${encodeURIComponent(business_name)}&token=${encodeURIComponent(token || '')}`}
               className="inline-block px-6 py-3 rounded-lg text-sm font-semibold transition-transform hover:scale-105"
-              style={{ background: 'var(--rh-card)', color: COLORS.tealDeep }}
+              style={{ background: COLORS.cardBg, color: COLORS.tealDeep }}
             >
               Yes, set this up for me →
             </a>
-            <p className="text-xs mt-4" style={{ color: '#fdf2dc', opacity: 0.85 }}>
+            <p className="text-xs mt-3" style={{ color: '#fdf2dc', opacity: 0.85 }}>
+              No credit card to start · 14-day refund window · cancel anytime
+            </p>
+            <p className="text-xs mt-2" style={{ color: '#fdf2dc', opacity: 0.7 }}>
               Or keep using these drafts — the link above stays live for 30 days.
             </p>
           </section>
