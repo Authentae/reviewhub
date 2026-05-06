@@ -218,7 +218,7 @@ export default function AuditPreview() {
             <a
               href={`/register?from=audit&business=${encodeURIComponent(business_name)}&token=${encodeURIComponent(token || '')}`}
               className="inline-block px-6 py-3 rounded-lg text-sm font-semibold transition-transform hover:scale-105"
-              style={{ background: '#fff', color: COLORS.tealDeep }}
+              style={{ background: 'var(--rh-card)', color: COLORS.tealDeep }}
             >
               Yes, set this up for me →
             </a>

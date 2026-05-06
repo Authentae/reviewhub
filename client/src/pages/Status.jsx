@@ -164,7 +164,7 @@ export default function Status() {
                 <div
                   key={key}
                   className="flex items-center gap-3 px-4 py-3 rounded-xl"
-                  style={{ background: '#fff', border: '1px solid var(--rh-line, #e6dfce)' }}
+                  style={{ background: 'var(--rh-card)', border: '1px solid var(--rh-line, #e6dfce)' }}
                 >
                   <span
                     className="inline-block w-2.5 h-2.5 rounded-full flex-shrink-0"

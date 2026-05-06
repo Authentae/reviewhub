@@ -151,7 +151,7 @@ export default function ReviewImpactTool() {
               type="button"
               onClick={() => loadSample(SAMPLE_LEGITIMATE_FRUSTRATED)}
               className="text-xs px-3 py-1.5 rounded-lg font-medium"
-              style={{ border: '1px solid var(--rh-rule, #e8e3d6)', background: '#fff' }}
+              style={{ border: '1px solid var(--rh-rule, #e8e3d6)', background: 'var(--rh-card)' }}
             >
               Try a legitimate complaint →
             </button>
@@ -159,7 +159,7 @@ export default function ReviewImpactTool() {
               type="button"
               onClick={() => loadSample(SAMPLE_EXTORTION)}
               className="text-xs px-3 py-1.5 rounded-lg font-medium"
-              style={{ border: '1px solid var(--rh-rule, #e8e3d6)', background: '#fff' }}
+              style={{ border: '1px solid var(--rh-rule, #e8e3d6)', background: 'var(--rh-card)' }}
             >
               Try a possible extortion →
             </button>
@@ -167,7 +167,7 @@ export default function ReviewImpactTool() {
               type="button"
               onClick={() => loadSample(SAMPLE_VENTING)}
               className="text-xs px-3 py-1.5 rounded-lg font-medium"
-              style={{ border: '1px solid var(--rh-rule, #e8e3d6)', background: '#fff' }}
+              style={{ border: '1px solid var(--rh-rule, #e8e3d6)', background: 'var(--rh-card)' }}
             >
               Try angry venting →
             </button>
@@ -184,7 +184,7 @@ export default function ReviewImpactTool() {
               maxLength={4000}
               placeholder="Paste the Google review here — the full text, exactly as the customer wrote it."
               className="w-full p-3 rounded-lg outline-none text-sm"
-              style={{ background: '#fff', border: '1px solid var(--rh-rule, #e8e3d6)', resize: 'vertical' }}
+              style={{ background: 'var(--rh-card)', border: '1px solid var(--rh-rule, #e8e3d6)', resize: 'vertical' }}
             />
             <p className="text-xs mt-1" style={{ color: 'var(--rh-ink-3, #8b939c)' }}>
               {form.review_text.length}/4000 characters
@@ -198,7 +198,7 @@ export default function ReviewImpactTool() {
                 value={form.rating}
                 onChange={(e) => setForm({ ...form, rating: Number(e.target.value) })}
                 className="w-full p-3 rounded-lg outline-none text-sm"
-                style={{ background: '#fff', border: '1px solid var(--rh-rule, #e8e3d6)' }}
+                style={{ background: 'var(--rh-card)', border: '1px solid var(--rh-rule, #e8e3d6)' }}
               >
                 {[1, 2, 3, 4, 5].map((n) => (
                   <option key={n} value={n}>{'★'.repeat(n) + '☆'.repeat(5 - n)} ({n})</option>
@@ -214,7 +214,7 @@ export default function ReviewImpactTool() {
                 maxLength={200}
                 placeholder="James K."
                 className="w-full p-3 rounded-lg outline-none text-sm"
-                style={{ background: '#fff', border: '1px solid var(--rh-rule, #e8e3d6)' }}
+                style={{ background: 'var(--rh-card)', border: '1px solid var(--rh-rule, #e8e3d6)' }}
               />
             </div>
           </div>
@@ -249,7 +249,7 @@ export default function ReviewImpactTool() {
         {result && (
           <section
             className="mt-12 p-6 rounded-xl"
-            style={{ background: '#fff', border: '1px solid var(--rh-rule, #e8e3d6)' }}
+            style={{ background: 'var(--rh-card)', border: '1px solid var(--rh-rule, #e8e3d6)' }}
           >
             <div className="flex items-baseline gap-4 mb-6 flex-wrap">
               <div

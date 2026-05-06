@@ -116,7 +116,7 @@ export default function ReplyRoasterTool() {
               type="button"
               onClick={() => loadSample(SAMPLE_BAD_REPLY)}
               className="text-xs px-3 py-1.5 rounded-lg font-medium"
-              style={{ border: '1px solid var(--rh-rule, #e8e3d6)', background: '#fff' }}
+              style={{ border: '1px solid var(--rh-rule, #e8e3d6)', background: 'var(--rh-card)' }}
             >
               Try a defensive reply →
             </button>
@@ -124,7 +124,7 @@ export default function ReplyRoasterTool() {
               type="button"
               onClick={() => loadSample(SAMPLE_GOOD_REPLY)}
               className="text-xs px-3 py-1.5 rounded-lg font-medium"
-              style={{ border: '1px solid var(--rh-rule, #e8e3d6)', background: '#fff' }}
+              style={{ border: '1px solid var(--rh-rule, #e8e3d6)', background: 'var(--rh-card)' }}
             >
               Try a strong reply →
             </button>
@@ -141,7 +141,7 @@ export default function ReplyRoasterTool() {
               maxLength={2000}
               placeholder="Paste the customer's review here so we can check if your reply addresses what they actually said."
               className="w-full p-3 rounded-lg outline-none text-sm"
-              style={{ background: '#fff', border: '1px solid var(--rh-rule, #e8e3d6)', resize: 'vertical' }}
+              style={{ background: 'var(--rh-card)', border: '1px solid var(--rh-rule, #e8e3d6)', resize: 'vertical' }}
             />
           </div>
 
@@ -152,7 +152,7 @@ export default function ReplyRoasterTool() {
                 value={form.rating}
                 onChange={(e) => setForm({ ...form, rating: Number(e.target.value) })}
                 className="w-full p-3 rounded-lg outline-none text-sm"
-                style={{ background: '#fff', border: '1px solid var(--rh-rule, #e8e3d6)' }}
+                style={{ background: 'var(--rh-card)', border: '1px solid var(--rh-rule, #e8e3d6)' }}
               >
                 {[1, 2, 3, 4, 5].map((n) => (
                   <option key={n} value={n}>{'★'.repeat(n) + '☆'.repeat(5 - n)} ({n})</option>
@@ -168,7 +168,7 @@ export default function ReplyRoasterTool() {
                 maxLength={200}
                 placeholder="Marcus T."
                 className="w-full p-3 rounded-lg outline-none text-sm"
-                style={{ background: '#fff', border: '1px solid var(--rh-rule, #e8e3d6)' }}
+                style={{ background: 'var(--rh-card)', border: '1px solid var(--rh-rule, #e8e3d6)' }}
               />
             </div>
           </div>
@@ -182,7 +182,7 @@ export default function ReplyRoasterTool() {
               maxLength={4000}
               placeholder="Paste the reply you were about to post."
               className="w-full p-3 rounded-lg outline-none text-sm"
-              style={{ background: '#fff', border: '1px solid var(--rh-rule, #e8e3d6)', resize: 'vertical' }}
+              style={{ background: 'var(--rh-card)', border: '1px solid var(--rh-rule, #e8e3d6)', resize: 'vertical' }}
             />
             <p className="text-xs mt-1" style={{ color: 'var(--rh-ink-3, #8b939c)' }}>
               {form.draft.length}/4000 characters
@@ -245,7 +245,7 @@ export default function ReplyRoasterTool() {
         {result && (
           <section
             className="mt-12 p-6 rounded-xl"
-            style={{ background: '#fff', border: '1px solid var(--rh-rule, #e8e3d6)' }}
+            style={{ background: 'var(--rh-card)', border: '1px solid var(--rh-rule, #e8e3d6)' }}
           >
             <div className="flex items-baseline gap-4 mb-4 flex-wrap">
               <div
@@ -333,7 +333,7 @@ export default function ReplyRoasterTool() {
                 <Link
                   to="/tools/review-reply-generator"
                   className="px-4 py-2 rounded-lg text-sm font-semibold"
-                  style={{ border: '1px solid var(--rh-rule, #e8e3d6)', background: '#fff', color: 'var(--rh-ink, #1d242c)', textDecoration: 'none' }}
+                  style={{ border: '1px solid var(--rh-rule, #e8e3d6)', background: 'var(--rh-card)', color: 'var(--rh-ink, #1d242c)', textDecoration: 'none' }}
                 >
                   Or try the Reply Generator
                 </Link>

@@ -180,7 +180,7 @@ export default function AuditLanding() {
 
         <div
           className="rounded-2xl p-6 md:p-10 shadow-sm"
-          style={{ background: '#fff', border: '1px solid var(--rh-line, #e6dfce)' }}
+          style={{ background: 'var(--rh-card)', border: '1px solid var(--rh-line, #e6dfce)' }}
         >
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>

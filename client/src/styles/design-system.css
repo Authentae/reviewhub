@@ -2,6 +2,13 @@
   --rh-paper: oklch(0.985 0.006 85);
   --rh-paper-2: oklch(0.965 0.010 82);
   --rh-cream: oklch(0.955 0.022 82);
+  /* Semantic surface tokens — used for cards, modals, elevated panels.
+     Light mode: pure white reads as "elevated" against off-white paper.
+     Dark mode: lighter than paper to read as "elevated" against the dark base.
+     ALWAYS use these (or other --rh-* tokens) for inline backgrounds —
+     never hardcode '#fff' or similar, which won't flip in dark mode. */
+  --rh-card: oklch(1 0 0);
+  --rh-card-2: oklch(0.97 0.008 85);
   --rh-ink: oklch(0.18 0.02 220);
   --rh-ink-2: oklch(0.34 0.025 220);
   --rh-ink-3: oklch(0.54 0.02 220);
@@ -32,6 +39,8 @@
   --rh-paper: oklch(0.15 0.015 220);
   --rh-paper-2: oklch(0.20 0.018 220);
   --rh-cream: oklch(0.23 0.025 75);
+  --rh-card: oklch(0.22 0.02 220);
+  --rh-card-2: oklch(0.27 0.022 220);
   --rh-ink: oklch(0.97 0.008 85);
   --rh-ink-2: oklch(0.85 0.012 220);
   --rh-ink-3: oklch(0.62 0.02 220);
@@ -45,6 +54,17 @@
   --rh-rose-soft: oklch(0.28 0.07 32);
 }
 .rh-design ::selection { background: var(--rh-teal); color: var(--rh-paper); }
+
+/* Dark-mode safety net: anywhere inside .rh-design that uses Tailwind's
+   .bg-white (a hardcoded white background that doesn't flip), redirect
+   to the theme-aware --rh-card token. The :not(.rounded-full) excludes
+   tiny circular elements like toggle-switch thumbs, which legitimately
+   stay white in both modes (they're the visible "thumb" against a
+   colored switch track). Higher specificity than the Tailwind utility
+   so !important isn't needed. */
+.dark .rh-design .bg-white:not(.rounded-full) { background-color: var(--rh-card); }
+.dark .rh-design .bg-gray-50 { background-color: var(--rh-paper-2); }
+.dark .rh-design .bg-gray-100 { background-color: var(--rh-paper-2); }
 .rh-shell { max-width: 1320px; margin: 0 auto; padding: 0 48px; position: relative; }
 @media (max-width: 720px) { .rh-shell { padding: 0 20px; } }
 .rh-mono { font-family: var(--rh-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rh-ink-3); font-weight: 500; }

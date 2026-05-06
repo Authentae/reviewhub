@@ -221,7 +221,7 @@ export default function ComparisonLanding({ competitor }) {
         {/* Pricing delta — surface the headline number first */}
         <section
           className="mb-12 p-6 rounded-xl"
-          style={{ background: '#fff', border: '1px solid var(--rh-rule, #e8e3d6)' }}
+          style={{ background: 'var(--rh-card)', border: '1px solid var(--rh-rule, #e8e3d6)' }}
         >
           <p
             className="text-[10px] uppercase tracking-[0.15em] mb-2 font-bold"
@@ -255,7 +255,7 @@ export default function ComparisonLanding({ competitor }) {
             Feature by feature
           </h2>
           <div className="rounded-lg overflow-hidden" style={{ border: '1px solid var(--rh-rule, #e8e3d6)' }}>
-            <table className="w-full text-sm" style={{ background: '#fff' }}>
+            <table className="w-full text-sm" style={{ background: 'var(--rh-card)' }}>
               <thead style={{ background: 'var(--rh-cream, #f3ecdb)' }}>
                 <tr>
                   <th className="text-left p-3 font-semibold" style={{ width: '40%' }}>Feature</th>
@@ -278,7 +278,7 @@ export default function ComparisonLanding({ competitor }) {
 
         {/* Honest positioning — when each tool wins */}
         <section className="mb-12 grid md:grid-cols-2 gap-6">
-          <div className="p-6 rounded-xl" style={{ background: '#fff', border: '1px solid var(--rh-rule, #e8e3d6)' }}>
+          <div className="p-6 rounded-xl" style={{ background: 'var(--rh-card)', border: '1px solid var(--rh-rule, #e8e3d6)' }}>
             <h3
               className="text-xl font-bold mb-4"
               style={{ fontFamily: 'Instrument Serif, Georgia, serif', fontWeight: 600 }}
@@ -318,7 +318,7 @@ export default function ComparisonLanding({ competitor }) {
         {/* CTA */}
         <section
           className="text-center p-8 rounded-xl"
-          style={{ background: '#fff', border: '1px solid var(--rh-rule, #e8e3d6)' }}
+          style={{ background: 'var(--rh-card)', border: '1px solid var(--rh-rule, #e8e3d6)' }}
         >
           <h2
             className="text-2xl font-bold mb-3"
@@ -355,7 +355,7 @@ export default function ComparisonLanding({ competitor }) {
                   to={`/vs/${key}`}
                   className="px-3 py-1.5 rounded-full text-sm"
                   style={{
-                    background: '#fff',
+                    background: 'var(--rh-card)',
                     border: '1px solid var(--rh-rule, #e8e3d6)',
                     color: 'var(--rh-ink, #1d242c)',
                     textDecoration: 'none',

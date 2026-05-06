@@ -93,7 +93,7 @@ export default function ToolsIndex() {
               to={tool.href}
               className="block p-6 rounded-xl"
               style={{
-                background: '#fff',
+                background: 'var(--rh-card)',
                 border: '1px solid var(--rh-rule, #e8e3d6)',
                 textDecoration: 'none',
                 color: 'inherit',

@@ -261,7 +261,7 @@ export default function VerticalLanding({ vertical }) {
             <Link
               to="/pricing"
               className="inline-block px-5 py-3 rounded-lg font-semibold text-sm"
-              style={{ border: '1px solid var(--rh-rule, #e8e3d6)', background: '#fff', color: 'var(--rh-ink, #1d242c)', textDecoration: 'none' }}
+              style={{ border: '1px solid var(--rh-rule, #e8e3d6)', background: 'var(--rh-card)', color: 'var(--rh-ink, #1d242c)', textDecoration: 'none' }}
             >
               See pricing
             </Link>
@@ -281,7 +281,7 @@ export default function VerticalLanding({ vertical }) {
               <span
                 key={p}
                 className="px-3 py-1.5 rounded-full text-sm"
-                style={{ background: '#fff', border: '1px solid var(--rh-rule, #e8e3d6)' }}
+                style={{ background: 'var(--rh-card)', border: '1px solid var(--rh-rule, #e8e3d6)' }}
               >
                 {p}
               </span>
@@ -302,7 +302,7 @@ export default function VerticalLanding({ vertical }) {
               <li
                 key={i}
                 className="flex gap-4 p-4 rounded-lg"
-                style={{ background: '#fff', border: '1px solid var(--rh-rule, #e8e3d6)' }}
+                style={{ background: 'var(--rh-card)', border: '1px solid var(--rh-rule, #e8e3d6)' }}
               >
                 <span
                   className="text-2xl font-bold flex-shrink-0"

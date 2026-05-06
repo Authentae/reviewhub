@@ -160,7 +160,7 @@ export default function Support() {
           </p>
         </div>
 
-        <div className="rounded-2xl p-6 md:p-8" style={{ background: '#fff', border: '1px solid var(--rh-line, #e6dfce)' }}>
+        <div className="rounded-2xl p-6 md:p-8" style={{ background: 'var(--rh-card)', border: '1px solid var(--rh-line, #e6dfce)' }}>
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label htmlFor="category" className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--rh-ink)' }}>
@@ -294,7 +294,7 @@ export default function Support() {
             <h2 className="text-2xl font-bold mb-4" style={{ color: 'var(--rh-ink)', letterSpacing: '-0.01em' }}>
               {isThai ? 'เรื่องที่คุณส่งมา' : 'Your past tickets'}
             </h2>
-            <div className="rounded-2xl overflow-hidden" style={{ background: '#fff', border: '1px solid var(--rh-line, #e6dfce)' }}>
+            <div className="rounded-2xl overflow-hidden" style={{ background: 'var(--rh-card)', border: '1px solid var(--rh-line, #e6dfce)' }}>
               <ul className="divide-y" style={{ borderColor: 'var(--rh-line, #e6dfce)' }}>
                 {myTickets.map(t => {
                   const status = t.resolved_at

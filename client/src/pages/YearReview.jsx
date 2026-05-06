@@ -169,7 +169,7 @@ export default function YearReview() {
                   key={word}
                   className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full"
                   style={{
-                    background: '#fff',
+                    background: 'var(--rh-card)',
                     border: '1px solid var(--rh-line, #e6dfce)',
                     color: 'var(--rh-ink)',
                     // Size up by frequency — biggest term ~1.2x base
@@ -209,7 +209,7 @@ function Stat({ value, unit, label, sub }) {
   return (
     <div
       className="rounded-2xl p-5"
-      style={{ background: '#fff', border: '1px solid var(--rh-line, #e6dfce)' }}
+      style={{ background: 'var(--rh-card)', border: '1px solid var(--rh-line, #e6dfce)' }}
     >
       <p className="text-3xl font-bold leading-none mb-2" style={{ color: 'var(--rh-ink)', letterSpacing: '-0.02em' }}>
         {value}
