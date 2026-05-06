@@ -175,6 +175,9 @@ export default function App() {
         <Route path="/for-hotels" element={<VerticalLanding vertical="hotels" />} />
         <Route path="/for-spas" element={<VerticalLanding vertical="spas" />} />
         <Route path="/for-cafes" element={<VerticalLanding vertical="cafes" />} />
+        <Route path="/for-bars" element={<VerticalLanding vertical="bars" />} />
+        <Route path="/for-fitness" element={<VerticalLanding vertical="fitness" />} />
+        <Route path="/for-pharmacies" element={<VerticalLanding vertical="pharmacies" />} />
         <Route path="/vs/birdeye" element={<ComparisonLanding competitor="birdeye" />} />
         <Route path="/vs/podium" element={<ComparisonLanding competitor="podium" />} />
         <Route path="/vs/reviewtrackers" element={<ComparisonLanding competitor="reviewtrackers" />} />

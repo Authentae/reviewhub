@@ -139,12 +139,9 @@ The reviewhub.review site itself + everything a prospect sees.
   is right for, then pivot to who we're right for) — no smear copy.
   Each page: pricing snapshot, 10-11 row feature table, "pick them if"/
   "pick us if" blocks, Article+SoftwareApplication schema, cross-links.
-- `[ ]` Tools index page at /tools — currently we have three free tools at
-  /tools/review-reply-generator, /tools/reply-roaster, /tools/review-impact
-  with NO index page tying them together. Google can't crawl the cluster
-  as a related set; humans can't discover sibling tools after using one.
-  Index page = "free tools" landing with descriptions, screenshots, and
-  cross-links. SEO + UX win.
+- `[done]` Tools index page at /tools. Three structured cards tying
+  the free-tool cluster together. Bilingual EN/TH. Cross-links to /audit.
+  Wired into routes + sitemap.
 - `[ ]` Blog post: "How to ask customers for Google reviews without being
   pushy" — high-intent search ("how to get Google reviews"). Evergreen.
   Long-tail keyword competition lower than head terms.

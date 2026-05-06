@@ -45,6 +45,9 @@ export default function MarketingFooter() {
         { href: '/for-cafes',       label: isThai ? 'คาเฟ่' : 'Cafés' },
         { href: '/for-spas',        label: isThai ? 'สปา / ซาลอน' : 'Spas & salons' },
         { href: '/for-dentists',    label: isThai ? 'คลินิกทันตกรรม' : 'Dental clinics' },
+        { href: '/for-bars',         label: isThai ? 'บาร์ / ผับ' : 'Bars & pubs' },
+        { href: '/for-fitness',      label: isThai ? 'ฟิตเนส / โยคะ / มวยไทย' : 'Gyms & studios' },
+        { href: '/for-pharmacies',   label: isThai ? 'ร้านขายยา' : 'Pharmacies' },
       ],
     },
     {
