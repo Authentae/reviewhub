@@ -293,6 +293,9 @@ export default function BlogIndex() {
               ? 'บทความสำหรับเจ้าของร้านเรื่องรีวิว Google การตอบลูกค้า และการจัดการรีวิวปลอม'
               : 'Practical writing for owners on Google reviews, replying to feedback, and handling fake or extortion reviews.'}
           </p>
+          <p className="text-sm mt-2" style={{ color: 'var(--rh-ink-3, #8b939c)', fontFamily: 'JetBrains Mono, ui-monospace, monospace' }}>
+            {POSTS.length} {isThai ? 'บทความ · ภาษาไทย' : 'posts · English'} {POSTS.filter(p => p.lang === 'en').length} · {isThai ? 'อังกฤษ' : 'Thai'} {POSTS.filter(p => p.lang === 'th').length}
+          </p>
         </div>
 
         {/* Language filter pills — useful now that we have 14+ posts split EN/TH */}
