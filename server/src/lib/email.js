@@ -1344,7 +1344,8 @@ Not for you? Reply with one word and I'll close the loop. No follow-ups.
 
 → ${clientUrl}/dashboard
 
-— ReviewHub`,
+— Earth
+ReviewHub · Bangkok`,
     },
     3: {
       subject: 'The reply that brought a customer back (1-min read)',
