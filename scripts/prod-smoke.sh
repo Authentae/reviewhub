@@ -81,6 +81,26 @@ check_contains "robots disallows /audit-preview" "$BASE/robots.txt" "/audit-prev
 # Sitemap exists and lists indexable pages
 check "sitemap.xml accessible"       "$BASE/sitemap.xml"       "200"
 
+# Blog cluster — the SEO surface. Spot-check 4 representative posts
+# (one EN cluster + one TH cluster). If any 404, deploy missed the
+# blog HTML — common when client/public/ symlinks break in Docker.
+check "blog index"                   "$BASE/blog"                                            "200"
+check "blog: how-to-remove-google"   "$BASE/blog/how-to-remove-google-review"                "200"
+check "blog: bangkok mistakes"       "$BASE/blog/bangkok-hospitality-review-mistakes"        "200"
+check "blog: track reply rate"       "$BASE/blog/track-google-review-reply-rate"             "200"
+check "blog (TH): why respond"       "$BASE/blog/why-respond-to-google-reviews-th"           "200"
+
+# RSS + OG image (link-preview reliability — Slack/iMessage/X
+# crawl these on every paste; a broken og-image.png means cards
+# look unprofessional even when content is fine)
+check "feed.xml accessible"          "$BASE/feed.xml"          "200"
+check "og-image.png accessible"      "$BASE/og-image.png"      "200"
+
+# Free tools — SEO-targeted landing pages
+check "tools index"                  "$BASE/tools"             "200"
+check "tools: reply-roaster"         "$BASE/tools/reply-roaster"  "200"
+check "tools: review-impact"         "$BASE/tools/review-impact"  "200"
+
 # Server health (if exposed)
 check "API up (any non-5xx on /api/health)" "$BASE/api/health" "200"
 
