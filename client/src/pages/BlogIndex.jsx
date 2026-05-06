@@ -23,6 +23,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'how-to-ask-for-google-reviews-th',
+    title: 'วิธีขอรีวิว Google จากลูกค้าโดยไม่ดูยัดเยียด (และไม่ใช้ส่วนลด)',
+    description: 'คู่มือเจ้าของร้าน: 5 จังหวะธรรมชาติในการขอรีวิว ทำไมแลกส่วนลดกับรีวิวผิดนโยบาย Google ความผิดพลาดเรื่อง QR code และเทคนิคป้องกันรีวิว 1 ดาว',
+    date: '2026-05-07',
+    readingMins: 7,
+    lang: 'th',
+  },
+  {
     slug: 'how-to-remove-google-review-th',
     title: 'วิธีลบรีวิว Google (และอะไรที่ Google ลบจริงๆ ได้บ้าง)',
     description: 'คู่มือซื่อๆ: Google ลบรีวิวอะไรได้ ลบไม่ได้ กระบวนการ flag กี่วัน เส้นทาง escalation ที่เจ้าของส่วนใหญ่ไม่รู้ว่ามี และต้องทำอะไรเมื่อรีวิวยังคงอยู่',
