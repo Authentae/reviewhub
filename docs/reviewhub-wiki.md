@@ -128,6 +128,17 @@ reviewhub.app) for outreach links. Not now.
   was unset. Headline paid feature (auto-post replies to Google) was
   silently broken in prod. Now defaults ON when unset, with loud boot
   log. Lesson: defaults for paid-tier features should fail loud, not silent.
+- **2026-05-07** — Treated the launch playbook (`docs/launch/`) as
+  authoritative without checking it matched current product state.
+  Wrote a brand bio mentioning the Chrome extension, which was dropped
+  weeks earlier. Lesson: every piece of repo content is a snapshot from
+  a moment in time — pressure-test before executing on it.
+  See `docs/skills/content-writing.md` §5 (stale-input check).
+- **2026-05-07** — Posted a tweet on @reviewhubreview that went out as
+  URL-only because JS execCommand insertText dropped the body text.
+  Skipped the "verify rendered body in composer BEFORE Post" check.
+  Lesson: every public-post action has a read-back gate. Codified in
+  `docs/skills/social-presence.md` §2 + `content-writing.md` §4.
 
 ## What's making money
 
@@ -138,9 +149,21 @@ channel, biggest single-customer concentration risk.
 
 ## What's not working
 
-- Cold email open rates — no data yet, May 4 wave too recent
-- Audit funnel conversion — no signups attributed to audit yet
-- LinkedIn / Twitter — not pursued; no time
+- **Wave 1 cooking schools (2026-05-04)** — 0 of 9 audit URLs opened,
+  0 replies, 0 conversions. Mail-tester scored 8.2/10 (deliverability
+  fine), so root cause was audience: cooking schools have a different
+  review-management pain (students vs customers). See
+  [wave-postmortems/wave-1-cooking-schools.md](wave-postmortems/wave-1-cooking-schools.md)
+  for four falsifiable hypotheses guiding Wave 4.
+- **Wave 2 (2026-05-06, hospitality 200+ reviews)** — reply window
+  closes 2026-05-08 14:39 ICT (Old Capital + Loftel 22), ~16:00
+  ICT (Chakrabongse). No data yet.
+- **X / Twitter** — account live at @reviewhubreview as of 2026-05-07
+  with brand sparkle avatar + bio, but no posts yet (URL-only first
+  attempt was deleted; first 7 drafts in
+  [launch/x-first-week-posts.md](launch/x-first-week-posts.md)
+  awaiting Earth's approval).
+- LinkedIn — not pursued; no time
 - Paid ads — explicitly not pursuing pre-PMF
 
 ## Competitor moves
