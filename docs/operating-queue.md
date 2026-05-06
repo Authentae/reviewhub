@@ -218,6 +218,26 @@ leverage when triggered.
   spanning post types A/B/C/D/E across 2 weeks at
   `docs/launch/x-first-week-posts.md`. Earth approves before
   posting; Post 1 (pinned intro) goes first.
+- `[done]` browser-automation.md skill (2026-05-08) — Chrome MCP
+  foot-gun catalogue. 8 verified workarounds (Trusted-Types,
+  insertText newlines, file_upload "Not allowed", base64 chunking,
+  OAuth consent gates, dynamic-state polling, stale refs, multi-
+  tab targeting). Manual-vs-automation judgment table included.
+- `[done]` TH/EN blog parity reached 7/7 (2026-05-08) — translated
+  the remaining 4 EN posts (transfer, how-to-ask, how-to-remove,
+  fake-extortion) to Thai. Each is full-post (not synopsis).
+- `[done]` Internal linking pass (2026-05-08) — every blog post
+  now ships with a "Related posts" section linking 2 most-related
+  siblings. Idempotent script at `scripts/add-related-posts.js`.
+- `[done]` Blog SEO validator + tracked pre-commit hook
+  (2026-05-08) — `scripts/validate-blog-seo.js` checks 14 posts
+  for required meta + schema + forbidden patterns.
+  `scripts/hooks/pre-commit` runs it on any blog HTML change.
+  `scripts/install-hooks.sh` for fresh clones.
+- `[done]` 2 new EN blog posts (2026-05-08) —
+  `bangkok-hospitality-review-mistakes` (Wave 3-targeted) and
+  `google-review-reply-length` (counter-intuitive length-by-type
+  table).
 
 ## CUSTOMER RELATIONS — replies, follow-ups, objection handling
 
