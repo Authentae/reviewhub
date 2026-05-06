@@ -23,6 +23,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'what-one-star-reviews-tell-you-th',
+    title: 'รีวิว 1 ดาวบน Google บอกอะไรคุณจริงๆ (3 pattern ที่เจ้าของส่วนใหญ่มองข้าม)',
+    description: 'รีวิว 1 ดาวไม่ใช่แค่คำตำหนิ — เป็น operations audit ฟรีที่ลูกค้าจ่ายเงินให้คุณอ่าน 3 pattern ในรีวิว 1 ดาว 20 อันล่าสุดของคุณ พร้อมปัญหาทางการดำเนินงานที่แต่ละ pattern เผยออกมา',
+    date: '2026-05-08',
+    readingMins: 6,
+    lang: 'th',
+  },
+  {
     slug: 'what-one-star-reviews-tell-you',
     title: 'What your 1-star Google reviews are actually telling you (3 patterns most owners miss)',
     description: '1-star reviews aren\'t just complaints — they\'re a free operations audit. Three specific patterns to watch for in your last 20 negative reviews, with the operational problem each one reveals.',
