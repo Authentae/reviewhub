@@ -251,6 +251,21 @@ leverage when triggered.
 - `[done]` Blog index UX (2026-05-08) — language filter pills
   (All / EN / TH) with localStorage persistence. Default infers
   from UI language, but explicit user toggle sticks.
+- `[done]` 4 more new EN posts (2026-05-08 evening) —
+  `wongnai-vs-google-reviews-bangkok` (comparison post),
+  `what-one-star-reviews-tell-you` (operations angle),
+  `reply-to-old-google-reviews` (30-day rule), and
+  `track-google-review-reply-rate` (the reply-rate metric).
+- `[done]` 4 matching TH translations (2026-05-08 evening).
+  Total: 24 blog posts, 12 EN + 12 TH parity.
+- `[done]` Marketing footer expansion (2026-05-08) — 5 specific
+  blog posts surfaced (was 2), each auto-routes to EN or TH based
+  on UI language.
+- `[done]` content-stats.js + npm run stats:content (2026-05-08).
+  Reports total posts / EN-TH split / word count / posts-per-date.
+- `[done]` prod-smoke.sh extended (2026-05-08) — 24 checks now
+  (was 14): blog cluster spot-checks + RSS + og-image + tools
+  index + free tools.
 
 ## CUSTOMER RELATIONS — replies, follow-ups, objection handling
 
