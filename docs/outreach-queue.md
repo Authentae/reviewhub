@@ -111,17 +111,31 @@ right targets.
 - 60%+ response rate (Chakrabongse-tier — disqualified per playbook)
 - International chains (less likely to need a $14/mo SMB tool)
 
-**Candidate list — Banglamphu / Old Town district (preliminary):**
+**Candidate list — Banglamphu / Old Town district:**
 
 ```
-WAVE 3 CANDIDATES (need verification):
+WAVE 3 CANDIDATES (verified status as of 2026-05-06 23:30 ICT):
 
-A. Cherie Bangkok Boutique Hotel — 4.7★ (54 reviews) — TOO LOW VOLUME, skip
-B. CHERN Hostel — 4.4★ (1,357 reviews) — high volume, hostel target, verify
-C. Methavalai Residence Hotel — 4.4★ (716 reviews) — strong target
-D. Lilit Bang Lumphu Hotel — 4.6★ (606 reviews) — good fit
-E. The Raweekanlaya Bangkok Wellness — 4.4★ (686 reviews) — wellness/hotel hybrid
+A. Cherie Bangkok Boutique Hotel — 4.7★ (54 reviews) — SKIP, too low volume
+B. CHERN Hostel — 4.4★ (1,357 reviews) — SKIP
+   - Website chernbangkok.com has Privacy/SSL error (cert dead)
+   - Per "verified live website" rule, can't email a prospect whose
+     site doesn't load — they look untrustworthy themselves
+   - Phone +66 2 621 1133 noted but we don't cold-call
+   - Address: ซอย 17 Trok Ratchasak, Samran Rat, Phra Nakhon, Bangkok 10200
+C. Methavalai Residence Hotel — 4.4★ (716 reviews) — NEEDS RESEARCH
+D. Lilit Bang Lumphu Hotel — 4.6★ (606 reviews) — NEEDS RESEARCH
+E. The Raweekanlaya Bangkok Wellness — 4.4★ (686 reviews) — NEEDS RESEARCH
 ```
+
+**Resume next session:**
+1. Direct nav: `google.com/maps/place/Methavalai+Residence+Hotel+Bangkok`
+2. Per-prospect: count owner-reply ratio, find website + email, capture 5 reviews
+3. Generate audit URL via reviewhub.review/outbound-audits
+4. Draft personalized cold email (Thai if Thai-named ownership)
+5. Queue for Earth's send approval
+
+If 3/5 verify clean, that's enough for one Wave 3 batch.
 
 **Next session research checklist (per prospect):**
 1. Open Google Maps profile
