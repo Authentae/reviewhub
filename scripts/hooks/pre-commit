@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+# ReviewHub pre-commit hook — runs build + relevant tests on changed packages.
+# Bypass with: git commit --no-verify (only if you know what you're doing)
+#
+# Decisions made:
+#  - Only run server tests if server/ changed (faster than full suite)
+#  - Only run client build if client/ changed (faster than always-build)
+#  - Skip on docs-only commits (no .js/.jsx/.ts/.tsx/.css/.json changes)
+#  - Always validate blog SEO when a blog HTML changes (even docs-only)
+
+set -e
+
+cd "$(git rev-parse --show-toplevel)"
+
+CHANGED=$(git diff --cached --name-only)
+echo "📋 Pre-commit: checking $(echo "$CHANGED" | wc -l) staged files"
+
+# Blog-post SEO validator — runs whenever a blog post HTML changed.
+# Catches stale extension references, SVG og:images, missing schema.
+# Runs BEFORE the docs-only exit so HTML-only blog commits get checked.
+if echo "$CHANGED" | grep -qE '^client/public/blog/.*\.html$'; then
+  echo "🔍 Validating blog-post SEO…"
+  node scripts/validate-blog-seo.js > /tmp/rh-seo.log 2>&1 || {
+    echo "❌ Blog SEO validation failed:"
+    cat /tmp/rh-seo.log
+    exit 1
+  }
+  echo "✅ Blog SEO OK"
+fi
+
+# Skip if no code files changed (docs-only commits ship straight)
+if ! echo "$CHANGED" | grep -qE '\.(js|jsx|ts|tsx|css|json)$'; then
+  echo "✅ Docs-only commit — skipping build/test"
+  exit 0
+fi
+
+# Server changes → run server tests
+if echo "$CHANGED" | grep -qE '^server/'; then
+  echo "🧪 Running server tests…"
+  (cd server && npm test --silent) || {
+    echo "❌ Server tests failed. Fix or use --no-verify if intentional."
+    exit 1
+  }
+fi
+
+# Client changes → run build (faster than full test suite + catches type errors)
+if echo "$CHANGED" | grep -qE '^client/'; then
+  echo "🔨 Building client…"
+  (cd client && npm run build --silent) > /tmp/rh-build.log 2>&1 || {
+    echo "❌ Client build failed:"
+    tail -20 /tmp/rh-build.log
+    echo "Full log: /tmp/rh-build.log"
+    exit 1
+  }
+  echo "✅ Client build OK"
+fi
+
+echo "✅ Pre-commit checks passed"
