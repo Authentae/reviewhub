@@ -23,6 +23,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'words-to-avoid-in-review-replies',
+    title: '5 words to never use in a Google review reply (and what to say instead)',
+    description: 'Common words that make your reply sound defensive, dismissive, or insincere — even when you mean well — and the alternatives that read as a real person responding.',
+    date: '2026-05-08',
+    readingMins: 4,
+    lang: 'en',
+  },
+  {
     slug: 'words-to-avoid-in-review-replies-th',
     title: '5 คำที่ห้ามใช้ในคำตอบรีวิว Google (และคำที่ใช้แทน)',
     description: 'คำธรรมดาที่ทำให้คำตอบของคุณดูแก้ตัว ปัด หรือไม่จริงใจ — และคำที่ใช้แทนเพื่อให้ดูเหมือนคนคุยกัน',
