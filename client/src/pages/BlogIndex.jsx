@@ -23,6 +23,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'track-google-review-reply-rate',
+    title: 'How to track your Google review reply rate (the one metric that actually matters)',
+    description: 'Why reply rate beats reply quantity, how to measure it without a tool, the 80% target, and what your current rate is telling you about your operations.',
+    date: '2026-05-08',
+    readingMins: 5,
+    lang: 'en',
+  },
+  {
     slug: 'reply-to-old-google-reviews-th',
     title: 'ควรตอบรีวิว Google เก่าๆ ไหม? (ย้อนหลังได้แค่ไหน)',
     description: 'คำตอบซื่อๆ ว่าควรตอบรีวิวอายุ 6 เดือน 1 ปี หรือ 3 ปีไหม กฎ 30 วันที่ดีกว่า "ตอบทุกอัน" และข้อยกเว้นเดียวที่ควรรู้',

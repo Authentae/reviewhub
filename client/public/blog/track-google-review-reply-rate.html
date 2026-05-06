@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How to track your Google review reply rate (the one metric that actually matters) — ReviewHub</title>
+<meta name="description" content="Why reply rate beats reply quantity, how to measure it without a tool, the 80% target, and what your current rate is telling you about your operations.">
+<link rel="canonical" href="https://reviewhub.review/blog/track-google-review-reply-rate">
+
+<meta property="og:title" content="How to track your Google review reply rate (the one metric that actually matters)">
+<meta property="og:description" content="Why reply rate beats reply quantity, how to measure it, and the 80% target most properties miss.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://reviewhub.review/blog/track-google-review-reply-rate">
+<meta property="og:image" content="https://reviewhub.review/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://reviewhub.review/og-image.png">
+<meta property="og:locale" content="en_US">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to track your Google review reply rate (the one metric that actually matters)",
+  "inLanguage": "en",
+  "author": {"@type": "Organization", "name": "ReviewHub", "url": "https://reviewhub.review/"},
+  "publisher": {"@type": "Organization", "name": "ReviewHub", "logo": {"@type": "ImageObject", "url": "https://reviewhub.review/logo.svg"}},
+  "datePublished": "2026-05-08",
+  "image": "https://reviewhub.review/og-image.png",
+  "mainEntityOfPage": "https://reviewhub.review/blog/track-google-review-reply-rate"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://reviewhub.review/"},
+    {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://reviewhub.review/blog"},
+    {"@type": "ListItem", "position": 3, "name": "How to track your Google review reply rate"}
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{--paper:#fbf8f1;--cream:#f3ecdb;--ink:#1d242c;--ink-2:#4b5560;--rule:#e8dec7;--teal:#2c7889;--teal-deep:#1e4d5e;--teal-soft:#d6e7eb;--ochre:#c48a2c;--rose:#b54a4a;--sage:#5d7a52}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter Tight',sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:0 24px}
+  .topnav{padding:24px 0;border-bottom:1px solid var(--rule)}
+  .topnav .row{display:flex;justify-content:space-between;align-items:center}
+  .brand{font-family:'Instrument Serif',Georgia,serif;font-size:22px;text-decoration:none;color:var(--ink)}
+  .brand em{color:var(--teal-deep);font-style:italic}
+  .topnav nav a{margin-left:18px;color:var(--ink-2);text-decoration:none;font-size:14px;font-weight:500}
+  article{padding:48px 0 32px}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ochre);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:14px}
+  h1{font-family:'Instrument Serif',Georgia,serif;font-size:clamp(28px,4.5vw,40px);line-height:1.18;margin-bottom:18px;font-weight:400}
+  h1 em{color:var(--teal-deep);font-style:italic}
+  .meta{display:flex;gap:18px;color:var(--ink-2);font-size:13px;margin-bottom:32px;padding-bottom:20px;border-bottom:1px solid var(--rule)}
+  .meta span:before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--teal);margin-right:8px;vertical-align:middle}
+  .lede{font-size:19px;line-height:1.6;color:var(--ink-2);margin-bottom:36px;font-family:'Instrument Serif',Georgia,serif}
+  h2{font-family:'Instrument Serif',Georgia,serif;font-size:28px;line-height:1.2;margin:48px 0 14px;font-weight:500}
+  h3{font-size:17px;margin:24px 0 8px;font-weight:700;color:var(--teal-deep)}
+  p{margin-bottom:16px}
+  article a{color:var(--teal-deep);text-decoration:underline;text-underline-offset:3px}
+  ul,ol{margin:0 0 18px 22px}
+  li{margin-bottom:8px}
+  .formula{background:var(--cream);border:1px solid var(--rule);border-radius:10px;padding:18px 22px;margin:18px 0;font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--ink)}
+  table.bands{width:100%;border-collapse:collapse;margin:24px 0;font-size:14.5px}
+  table.bands th,table.bands td{padding:10px 12px;border-bottom:1px solid var(--rule);text-align:left;vertical-align:top}
+  table.bands th{background:var(--cream);font-weight:600;color:var(--ink)}
+  table.bands td.num{font-family:'JetBrains Mono',monospace;color:var(--teal-deep);font-weight:600;white-space:nowrap}
+  .callout{background:linear-gradient(135deg,var(--teal-deep) 0%,var(--teal) 100%);color:var(--paper);border-radius:14px;padding:28px;margin:48px 0 32px;text-align:center}
+  .callout h3{font-family:'Instrument Serif',Georgia,serif;font-size:24px;font-weight:400;margin:0 0 8px;color:var(--paper)}
+  .callout p{color:var(--paper);opacity:0.92;margin-bottom:18px;font-size:15px}
+  .callout a.cta{display:inline-block;background:var(--paper);color:var(--teal-deep);padding:12px 24px;border-radius:8px;font-weight:600;font-size:15px;text-decoration:none}
+  footer{padding:40px 0 60px;color:var(--ink-2);font-size:13px;border-top:1px solid var(--rule);margin-top:60px;text-align:center}
+  footer a{color:var(--teal-deep);text-decoration:underline}
+  mark{background:var(--teal-soft);color:var(--teal-deep);padding:1px 4px;border-radius:3px}
+</style>
+</head>
+<body>
+
+<header class="topnav">
+  <div class="wrap row">
+    <a href="/" class="brand">Review<em>Hub</em></a>
+    <nav>
+      <a href="/blog">Blog</a>
+      <a href="/audit">Free audit</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+<article>
+  <p class="eyebrow">Operator metrics · 2026-05-08</p>
+  <h1>How to <em>track</em> your Google review reply rate</h1>
+
+  <div class="meta">
+    <span>5 min read</span>
+    <span>English</span>
+    <span>Published May 8, 2026</span>
+  </div>
+
+  <p class="lede">
+    Most owners count reviews and ratings. Almost none track
+    <mark>reply rate</mark> — the percentage of received reviews
+    that have an owner reply. It's the single most useful operator
+    metric you can pick up this week. Here's how to measure it,
+    what to target, and what your current rate is quietly telling you.
+  </p>
+
+  <h2>The metric</h2>
+
+  <div class="formula">
+    Reply rate (last 30 days) = replies posted / reviews received × 100%
+  </div>
+
+  <p>
+    Pick a 30-day window because anything longer is just history.
+    Anything shorter has too little data. 30 days is roughly one
+    operations cycle for most hospitality and retail businesses.
+  </p>
+
+  <h2>How to measure (no tools needed)</h2>
+
+  <ol>
+    <li>Open Google Business Profile → Reviews</li>
+    <li>Filter to "Last 30 days"</li>
+    <li>Count the total reviews</li>
+    <li>Count the ones with a "Response from the owner" line</li>
+    <li>Divide. Note the date. Repeat next month.</li>
+  </ol>
+
+  <p>
+    Three minutes the first time, ninety seconds every subsequent
+    month. Track it in any spreadsheet — Google Sheets, paper,
+    notebook on the bar.
+  </p>
+
+  <h2>What's a good number?</h2>
+
+  <table class="bands">
+    <thead><tr><th>Reply rate (30-day)</th><th>What it means</th></tr></thead>
+    <tbody>
+      <tr><td class="num">95-100%</td><td>You're operating at a high level. Sustain.</td></tr>
+      <tr><td class="num">80-94%</td><td>Good — the realistic target. The misses are usually short 5-stars.</td></tr>
+      <tr><td class="num">50-79%</td><td>Inconsistent. You probably reply when you remember, miss when you don't.</td></tr>
+      <tr><td class="num">20-49%</td><td>You're putting it off. The 1-stars are getting through; future readers see it.</td></tr>
+      <tr><td class="num">&lt; 20%</td><td>Dormant. You'd benefit more from this metric than almost anyone.</td></tr>
+    </tbody>
+  </table>
+
+  <p>
+    Aim for 80%+. The 100% target is theoretical — there will
+    always be reviews that land while you're on holiday or asleep,
+    and old short 5-stars that drift past the 30-day window before
+    you reply.
+  </p>
+
+  <h2>What it tells you about operations</h2>
+
+  <p>
+    Your current reply rate is data about <em>you</em>, not about
+    the business:
+  </p>
+
+  <ul>
+    <li><strong>Below 50% with high review volume (20+ reviews/month):</strong>
+      replying isn't anyone's job. Make it someone's job. 10 minutes
+      every Monday morning, blocked on the calendar.</li>
+    <li><strong>Below 50% with low review volume (under 10 reviews/month):</strong>
+      you're not aware when reviews land. Turn on email alerts in
+      Google Business Profile. Set them to "Daily digest" if individual
+      pings are too noisy.</li>
+    <li><strong>50-80% with high volume:</strong> you reply when reviews
+      come in clusters, miss the trickles. Schedule the Monday block;
+      you'll catch the trickles.</li>
+    <li><strong>80%+ but disproportionately to negatives:</strong> good
+      that you're handling 1-stars but you're skipping the easy
+      5-star wins. Two-second "Thank you, [Name]" replies are still
+      worth posting.</li>
+  </ul>
+
+  <h2>Where this metric beats "review count" and "average star"</h2>
+
+  <p>
+    Review count is not a dial you control directly — customers
+    decide whether to review. Average star is a 6-month lagging
+    indicator that takes years to move.
+  </p>
+
+  <p>
+    Reply rate, by contrast, is <strong>a dial you control 100%</strong>.
+    It's a leading indicator. Restaurants that grow their reply rate
+    from 40% to 85% over a quarter typically see star-rating lift in
+    months 4-6 — not because the replies move stars directly, but
+    because the discipline of replying surfaces operational issues
+    (see <a href="/blog/what-one-star-reviews-tell-you">what 1-stars tell you</a>)
+    and forces fixes.
+  </p>
+
+  <h2>The metric trap to avoid</h2>
+
+  <p>
+    Don't optimize reply rate by templating short replies on
+    everything just to hit 100%. The metric goes up; the customer
+    perception goes down. The point of the metric is to track
+    <em>thoughtful</em> replies on the reviews that need them. If
+    you're typing the same sentence 30 times in a row to game your
+    own dashboard, the metric is misleading you.
+  </p>
+
+  <p>
+    A 75% reply rate of personal, specific replies beats a 100%
+    reply rate of "Thank you for your feedback" copy-paste. The
+    metric is a guide, not the goal.
+  </p>
+
+  <div class="callout">
+    <h3>Get your reply rate to 90%+ this month</h3>
+    <p>ReviewHub drafts replies the moment a review lands — you
+    approve, we post. The 10-minute Monday block becomes 2 minutes.</p>
+    <a href="/audit" class="cta">Get a free audit →</a>
+  </div>
+
+  <p data-related-posts="injected" style="color:#4b5560;font-size:15px;border-top:1px solid #e8dec7;padding-top:20px;margin-top:40px">
+    Related posts:
+    <a href="/blog/what-one-star-reviews-tell-you">What 1-star reviews tell you about your operations</a> ·
+    <a href="/blog/google-review-reply-length">How long should a reply be?</a> ·
+    <a href="/blog/why-respond-to-google-reviews">Why reviews need owner replies</a>
+  </p>
+</article>
+</div>
+
+<footer>
+  <p>© 2026 ReviewHub · <a href="/blog">All posts</a> · <a href="/">Home</a></p>
+</footer>
+
+</body>
+</html>
