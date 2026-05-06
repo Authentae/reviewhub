@@ -159,6 +159,85 @@ Char count: ~150. ✓. No link — pure conversation starter.
 
 ---
 
+---
+
+## Week 2 drafts (post 8-14)
+
+If week 1 lands without major engagement issues, continue with these.
+Cadence drops to 3-4 posts/week starting week 2 unless a real product
+ship justifies more.
+
+### Post 8 — Type A (specific tip) · day 8
+
+> The single fastest way to lift your Google review reply rate:
+>
+> Block 10 minutes every Monday morning. Reply to every review from
+> the past week. Don't bring in email, Slack, or anything else.
+>
+> Most owners reply when they remember. The ones who hit 80%+ reply
+> rate scheduled it.
+
+### Post 9 — Type C (data pattern) · day 10
+
+> A hospitality pattern from this week's audits:
+>
+> Properties that reply within 48h have a 4× higher rate of the
+> reviewer updating their star rating later, vs properties that
+> reply 2+ weeks later.
+>
+> Speed is a signal of care. Late replies feel like crisis-management.
+
+### Post 10 — Type B (counter-take) · day 11
+
+> "Don't engage with bad reviews — it draws more attention to them."
+>
+> This is wrong for SMBs. Future customers read every reply. A
+> well-written response to a 1-star is the strongest signal you can
+> send that you actually care.
+>
+> Silent owners look guilty. Replying owners look professional.
+
+### Post 11 — Type A (Thai-grounded tip) · day 12
+
+> If you run a Bangkok property and most of your reviews are in
+> English from tourists, reply in English — not Thai.
+>
+> The reviewer might be Thai or might be tourist. The future readers
+> are the audience that matters, and they'll skew toward the
+> language of the visible reviews.
+
+### Post 12 — Type D (free tool deep cut) · day 13
+
+> /tools/review-impact takes a negative review and returns:
+>
+> - Damage score (0-100)
+> - Risk category (extortion / venting / legitimate / competitor)
+> - Recommended action (apologize / clarify / flag / ignore)
+>
+> Free, no signup. Useful when a 1-star lands and you need a sanity
+> check before responding emotionally.
+>
+> reviewhub.review/tools/review-impact
+
+### Post 13 — Type E (open question) · day 14
+
+> Hospitality owners — what's the most useful piece of feedback
+> you've gotten from a Google review?
+>
+> Looking for the kind that actually changed how you operate.
+
+### Post 14 — Type B (industry counter-take) · day 14 evening or 15
+
+> The "review reply software" category is mostly built for US chains.
+>
+> Replying to 50 reviews/day with a workflow tool: makes sense.
+> Replying to 10 reviews/week as a Bangkok café owner: just needs a
+> draft button + a publish button.
+>
+> Tooling shouldn't be heavier than the problem.
+
+---
+
 ## Cadence
 
 - Daily through week 1 (7 posts)
