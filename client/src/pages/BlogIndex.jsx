@@ -23,6 +23,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'reply-english-reviews-thai-owners-th',
+    title: 'ตอบรีวิว Google ภาษาอังกฤษให้ดูเป็นมืออาชีพ — คู่มือสำหรับเจ้าของโรงแรมและคาเฟ่ไทย',
+    description: 'คู่มือเจ้าของร้านไทย: ตอบรีวิวภาษาอังกฤษจากนักท่องเที่ยวต่างชาติให้ดูเป็นมืออาชีพ ไม่แข็ง ไม่เหมือนแปลจากเครื่อง พร้อมเทมเพลต 5 สถานการณ์จริง',
+    date: '2026-05-07',
+    readingMins: 8,
+    lang: 'th',
+  },
+  {
     slug: 'how-to-remove-google-review',
     title: 'How to remove a Google review (and what Google actually allows)',
     description: 'The honest playbook: what Google will and won\'t remove, the flag-and-wait process, the escalation path most owners don\'t know exists, and what to do when the review stays up.',
