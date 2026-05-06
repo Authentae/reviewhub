@@ -961,12 +961,18 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
           )}
 
           {optimisticResponse && (
-            <div className="mt-2 p-3 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-400 rounded-r-lg">
+            <div
+              className="mt-2 p-3 border-l-4 rounded-r-lg"
+              style={{
+                background: 'var(--rh-teal-soft)',
+                borderLeftColor: 'var(--rh-teal)',
+              }}
+            >
               <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <p className="text-xs font-semibold text-blue-700 dark:text-blue-300">{t('review.yourResponse')}</p>
+                  <p className="text-xs font-semibold" style={{ color: 'var(--rh-teal-deep)' }}>{t('review.yourResponse')}</p>
                   {review.updated_at && (
-                    <span className="text-xs text-blue-400 cursor-default" title={fullDate(review.updated_at)}>
+                    <span className="text-xs cursor-default" style={{ color: 'var(--rh-ink-3)' }} title={fullDate(review.updated_at)}>
                       · {timeAgo(review.updated_at)}
                     </span>
                   )}
@@ -995,11 +1001,17 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
                     </span>
                   )}
                 </div>
-                <button type="button" onClick={() => handleCopy(optimisticResponse)} aria-label={t('review.copyAria')} className="text-xs text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
+                <button
+                  type="button"
+                  onClick={() => handleCopy(optimisticResponse)}
+                  aria-label={t('review.copyAria')}
+                  className="text-xs hover:underline"
+                  style={{ color: 'var(--rh-teal)' }}
+                >
                   {t('review.copy')}
                 </button>
               </div>
-              <p className="text-sm text-blue-900 dark:text-blue-100 whitespace-pre-wrap">{optimisticResponse}</p>
+              <p className="text-sm whitespace-pre-wrap" style={{ color: 'var(--rh-ink)' }}>{optimisticResponse}</p>
             </div>
           )}
 
