@@ -39,6 +39,14 @@ const POSTS = [
     lang: 'en',
   },
   {
+    slug: 'bangkok-hospitality-review-mistakes-th',
+    title: '5 ข้อผิดพลาดในการตอบรีวิว Google ที่เจ้าของโรงแรมและร้านอาหารในกรุงเทพฯ ทำซ้ำๆ',
+    description: 'Pattern จากโรงแรม คาเฟ่ และร้านอาหารในกรุงเทพฯ จริง — เทมเพลตซ้ำซาก ตอบช้าให้ลูกค้าต่างชาติ ปัญหาภาษาไม่ตรง และร้านที่มี 200+ รีวิวต่างจากร้านอื่นยังไง',
+    date: '2026-05-08',
+    readingMins: 7,
+    lang: 'th',
+  },
+  {
     slug: 'bangkok-hospitality-review-mistakes',
     title: '5 Google review mistakes Bangkok hospitality owners keep making',
     description: 'Patterns from real Bangkok hotels and restaurants — copy-paste replies, late responses to international guests, the language-mismatch trap, and what 200+ review properties do differently.',
