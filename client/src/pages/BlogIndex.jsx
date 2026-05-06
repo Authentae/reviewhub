@@ -23,6 +23,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'bangkok-hospitality-review-mistakes',
+    title: '5 Google review mistakes Bangkok hospitality owners keep making',
+    description: 'Patterns from real Bangkok hotels and restaurants — copy-paste replies, late responses to international guests, the language-mismatch trap, and what 200+ review properties do differently.',
+    date: '2026-05-08',
+    readingMins: 7,
+    lang: 'en',
+  },
+  {
     slug: 'transfer-google-business-profile-ownership-th',
     title: 'วิธีโอนเจ้าของ Google Business Profile (ขั้นตอนจริง)',
     description: 'คู่มือเจ้าของร้าน: เพิ่ม manager ต่างกับโอนเจ้าของจริงยังไง รอ 7 วันคืออะไร และทางลัดที่ไม่ค่อยมีใครพูดถึง',
