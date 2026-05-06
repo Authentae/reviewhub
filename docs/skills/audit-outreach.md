@@ -239,6 +239,11 @@ difference between "she actually read mine" vs "templated blast."
 Skip the education paragraph. They know reviews matter — they reply
 to some. They just need a frictionless way to do more.
 
+For tourist-facing properties (hotels, hostels, restaurants in
+tourist zones, cooking schools), include the multilingual mention.
+It's the line that makes a Bangkok owner say "oh, this is built for
+my market." For purely-Thai-audience businesses, skip it — irrelevant.
+
 ```
 สวัสดีครับคุณ{owner_name},
 
@@ -250,6 +255,10 @@ to some. They just need a frictionless way to do more.
 ลงทะเบียนอะไร แค่เปิดดูเฉยๆ:
 
 → {audit_url}
+
+ระบบตอบเป็นภาษาเดียวกับรีวิวอัตโนมัติด้วยครับ — รีวิวภาษาญี่ปุ่น/เกาหลี/
+จีน/อังกฤษ ก็ตอบกลับเป็นภาษานั้นๆ ไม่ใช่ตอบอังกฤษทุกภาษา (เครื่องมือ
+ส่วนใหญ่ทำได้แค่อังกฤษ)
 
 ถ้าโอเคจะใช้คำตอบเหล่านั้นได้เลยฟรีครับ ถ้าอยากให้ระบบทำแบบนี้ให้
 เรื่อยๆ มีแพ็กเกจเริ่มต้น $14 (~฿480)/เดือน ตั้งระบบใช้เวลาประมาณ 10 นาที
@@ -264,6 +273,11 @@ Bangkok
 
 ### Email body — English market
 
+Use the multilingual mention specifically for international-facing
+properties (hotels, hostels, tour operators, anywhere that gets
+reviews in 5+ languages). Skip it for purely-English-audience
+properties (US Yelp users etc.) — irrelevant noise for them.
+
 ```
 Hi {owner_name},
 
@@ -275,6 +289,10 @@ tone that sounded like how you might reply yourself. Take a look (no
 signup, just a preview link):
 
 → {audit_url}
+
+The drafts auto-detect the reviewer's language too — so the Japanese,
+Korean, and Chinese reviews get replies in those languages, not
+English ones. Most review-reply tools only do English.
 
 Use any of those drafts directly if you like, on the house. If you
 want this running on autopilot every time a new review lands, the
