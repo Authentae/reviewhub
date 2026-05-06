@@ -23,6 +23,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'fake-extortion-google-reviews-th',
+    title: 'วิธีรับมือกับรีวิวปลอม / รีวิวแบล็กเมล / รีวิวจากคู่แข่งบน Google',
+    description: 'คู่มือเจ้าของร้าน: รับมือกับรีวิว 1 ดาวที่เป็นเก๊ ที่เป็นการแบล็กเมล ("จ่ายไม่งั้นจะคงไว้") และรีวิวจากคู่แข่งบน Google ตอบยังไง flag เมื่อไร และไม่ควรทำอะไร',
+    date: '2026-05-07',
+    readingMins: 8,
+    lang: 'th',
+  },
+  {
     slug: 'why-respond-to-google-reviews-th',
     title: 'ทำไมร้านของคุณถึงต้องตอบรีวิว Google (พร้อมเทมเพลตตอบรีวิว 1 ดาว)',
     description: 'ทำไมการตอบรีวิวจากเจ้าของร้านมีผลต่อยอดขายมากกว่ารีวิวเอง พร้อมเทมเพลตที่คัดลอกใช้ได้สำหรับรีวิว 1 ดาว 5 ดาว และ 3 ดาวที่อยู่ตรงกลาง',
