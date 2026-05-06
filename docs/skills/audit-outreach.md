@@ -4,6 +4,40 @@ The DM/email script for sending an outbound audit to a prospect. Lives
 between `lead-finding.md` (who to message) and the closing call (after
 they reply).
 
+## Wave 1-2 lessons (2026-05-06 evening)
+
+What we learned from the first 12 outreach emails (Wave 1 + 2 + 2.1):
+
+**Deliverability is fine.** Mail-tester scored earth.reviewhub@gmail.com
+at 8.2/10 ("almost perfect"). DKIM clean, IP reputation +2, not
+blocklisted. Wave 1's 0/7 audit URL opens was NOT a spam-folder problem.
+
+**The .review TLD is a small headwind.** SpamAssassin flags `.review`
+as "untrustworthy TLDs" (-1.999 points). Generic TLD-level rule, not
+specific to us. Worth tracking but not urgent — 8.2 is still inbox-tier.
+
+**The real problem was target audience.** Wave 1 went to cooking schools
+who DON'T get many Google reviews and DON'T think about reputation.
+Wave 1 emails likely reached inbox/promotions but recipients didn't
+relate. Wave 2 (Old Capital + Loftel + Chakrabongse — hospitality) had
+some engagement (~3 audit URL views, some self-clicks but at least
+non-zero).
+
+**Implications for Wave 3+:**
+- Target **hospitality** (hotels, B&Bs, hostels), **dental clinics**,
+  **independent restaurants** with 200+ Google reviews — businesses
+  that already feel reputation pressure.
+- Skip cooking schools, classes-only businesses, retailers with
+  &lt;100 reviews. They don't have enough review volume to feel pain.
+- Bangkok-local prospects let us play the Thai-language moat (Wave 2
+  Thai emails outperformed English Wave 1 emails on opens, even after
+  controlling for vertical).
+- Subject lines: include something specific about THEIR business
+  (number of reviews, name, recent review topic) — "รีวิว Google ที่ยังไม่ได้ตอบ"
+  worked in Wave 2 because it's specific to their problem.
+
+
+
 The single most important rule: **lead with the result, not the
 pitch.** Send the audit URL first. The article that inspired this
 flow ("services are the new software") boils down to one trick: the

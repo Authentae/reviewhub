@@ -92,7 +92,50 @@ hooks take over automatically.
    - Hook: 2 unanswered 1-stars (EN + TH brutal) sitting open
 ```
 
-## Research targets for tomorrow's batch
+## Wave 3 strategy (locked 2026-05-06 evening, post-deliverability test)
+
+**Mail-tester scored 8.2/10 — deliverability is fine.** Wave 1's 0/7
+opens was an audience problem, not spam folder. Wave 3 must hit the
+right targets.
+
+**Wave 3 target profile (LOCK):**
+- Bangkok hospitality (hotels, B&Bs, hostels)
+- 200+ Google reviews (high enough volume to feel reputation pressure)
+- Owner reply rate 0-30% (UNAWARE or AWARE-LAZY segment per audit-outreach.md)
+- Has live website with contact email (NOT third-party listing email)
+- Thai-named ownership (lets us use Thai email — opened 4x better than English)
+
+**SKIP for Wave 3:**
+- Cooking schools, classes-only businesses (Wave 1 0/7 opens proved wrong fit)
+- &lt;100-review businesses (not enough hooks)
+- 60%+ response rate (Chakrabongse-tier — disqualified per playbook)
+- International chains (less likely to need a $14/mo SMB tool)
+
+**Candidate list — Banglamphu / Old Town district (preliminary):**
+
+```
+WAVE 3 CANDIDATES (need verification):
+
+A. Cherie Bangkok Boutique Hotel — 4.7★ (54 reviews) — TOO LOW VOLUME, skip
+B. CHERN Hostel — 4.4★ (1,357 reviews) — high volume, hostel target, verify
+C. Methavalai Residence Hotel — 4.4★ (716 reviews) — strong target
+D. Lilit Bang Lumphu Hotel — 4.6★ (606 reviews) — good fit
+E. The Raweekanlaya Bangkok Wellness — 4.4★ (686 reviews) — wellness/hotel hybrid
+```
+
+**Next session research checklist (per prospect):**
+1. Open Google Maps profile
+2. Click Reviews tab → count owner-reply ratio across recent 10 reviews
+3. Click website link → find contact / about / footer for email
+4. Verify email is on the live page (NOT scraped from third-party listing)
+5. Note one specific recent review for personalization hook
+6. Generate audit URL via /outbound-audits dashboard (5 real reviews)
+7. Draft personalized cold email (Thai if Thai-named ownership)
+8. Queue for Earth's send approval
+
+Time per prospect: ~10-15 min. Goal: 5 verified prospects per Wave 3 batch.
+
+## Research targets from earlier (May 4) — pruned
 
 These are surfaced from the May 4 lead-finding research. Verified to
 have own websites; need to (a) extract email from contact page and

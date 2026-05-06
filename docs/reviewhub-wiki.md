@@ -68,6 +68,29 @@ date, and any pre-purchase friction worth remembering.
   Yahoo listing was stale third-party. Reinforced verified-live-website-
   email-only rule.
 
+## Deliverability diagnostic — 2026-05-06 evening
+
+Mail-tester result for earth.reviewhub@gmail.com: **8.2/10 "almost
+perfect"**. Authentication clean (DKIM signed + valid + AU + EF, IP
+reputation +2). NOT in a spam folder.
+
+The 1.8-point deduction breakdown:
+- **PDS_OTHER_BAD_TLD: -1.999** — `.review` TLD on SpamAssassin's
+  untrustworthy-TLDs list (generic flag for all `.review` domains
+  due to historical spammer use, not flagged specifically against us)
+- minor: FREEMAIL_FROM, HTML_MESSAGE, SPF_HELO_NONE (each -0.001)
+
+**Strategic implication:** Wave 1 0/7 opens is NOT a deliverability
+problem. Emails landed in inbox/promotions but recipients didn't engage.
+Root cause: wrong audience (cooking schools don't care about Google
+reviews). Don't double down on Wave 1 prospects with a follow-up;
+instead send Wave 3 to better-fit verticals (hotels, B&Bs, dental).
+
+**.review TLD as future concern:** worth tracking but not urgent. 8.2
+is still inbox-tier. If outreach response stays poor across waves,
+consider acquiring a more-trusted secondary domain (reviewhub.io /
+reviewhub.app) for outreach links. Not now.
+
 ## Active outreach signals
 
 - **2026-05-05** — Outreach queue has 3 verified prospects + 6 research
