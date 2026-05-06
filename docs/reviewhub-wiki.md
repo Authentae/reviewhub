@@ -162,6 +162,21 @@ _(nothing yet — pre-revenue)_
 When MRR > $0, log monthly: total MRR, by plan, churn, top acquisition
 channel, biggest single-customer concentration risk.
 
+## Content surface (as of 2026-05-08)
+
+- **Blog**: 26 posts (13 EN, 13 TH, 11 paired with hreflang). Total
+  ~22k words. Run `npm run stats:content` for live count.
+- **Free tools**: 3 (review-reply-generator, reply-roaster,
+  review-impact). Each indexed individually in /tools.
+- **Vertical landing pages**: 8 (/for-restaurants, /for-cafes,
+  /for-bars, /for-hotels, /for-spas, /for-dentists, /for-fitness,
+  /for-pharmacies).
+- **Comparison pages**: 3 (/vs/birdeye, /vs/podium, /vs/reviewtrackers).
+- **SEO infrastructure**: PNG og:image + Twitter Card + BreadcrumbList
+  + Article schema + hreflang on every paired blog post. Pre-commit
+  hook blocks regressions via `npm run check:seo` and
+  `npm run check:positioning`.
+
 ## What's not working
 
 - **Wave 1 cooking schools (2026-05-04)** — 0 of 9 audit URLs opened,
