@@ -139,11 +139,24 @@ The reviewhub.review site itself + everything a prospect sees.
   is right for, then pivot to who we're right for) — no smear copy.
   Each page: pricing snapshot, 10-11 row feature table, "pick them if"/
   "pick us if" blocks, Article+SoftwareApplication schema, cross-links.
-- `[ ]` Free tool: Negative review scoring — paste any 1-2 star review,
-  get a heuristic-based "how much will this hurt" score + suggested
-  reply tone. No API needed (heuristics + Anthropic Haiku for the
-  reply suggestion only). Same pattern as Reply Roaster. Highly
-  shareable in restaurant/hospitality forums.
+- `[ ]` Tools index page at /tools — currently we have three free tools at
+  /tools/review-reply-generator, /tools/reply-roaster, /tools/review-impact
+  with NO index page tying them together. Google can't crawl the cluster
+  as a related set; humans can't discover sibling tools after using one.
+  Index page = "free tools" landing with descriptions, screenshots, and
+  cross-links. SEO + UX win.
+- `[ ]` Blog post: "How to ask customers for Google reviews without being
+  pushy" — high-intent search ("how to get Google reviews"). Evergreen.
+  Long-tail keyword competition lower than head terms.
+- `[ ]` More verticals: /for-bars, /for-fitness, /for-pharmacies. Same
+  VerticalLanding template, ~30 min each, more long-tail SEO surfaces.
+- `[done]` Free tool: Review Impact Scorer at /tools/review-impact.
+  Paste a negative review, get damage score (0-100), risk category,
+  reviewer-type guess (legitimate / venting / extortion / competitor),
+  and a recommended action (apologize / clarify / flag / ignore).
+  Pure heuristic, no AI cost. Sibling pattern to /tools/reply-roaster.
+  Shareable in restaurant/hospitality forums when owners panic about
+  a fresh 1-star.
 - `[ ]` Free tool: Response-rate audit — paste Google Maps URL, fetch
   reviews via Places API, show response rate vs industry average.
   **[wait:user] for `GOOGLE_PLACES_API_KEY` setup** — Earth needs to
