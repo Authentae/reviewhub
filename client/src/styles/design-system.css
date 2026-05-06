@@ -47,9 +47,14 @@
   --rh-rule: oklch(0.28 0.02 220);
   --rh-rule-2: oklch(0.38 0.02 220);
   --rh-teal: oklch(0.68 0.12 220);
+  /* In light mode "deep" = darker for emphasis. In dark mode we INVERT
+     that: "deep" = brighter, since darker teals would vanish into the
+     dark-teal-soft background. Same logic for ochre-soft below. */
+  --rh-teal-deep: oklch(0.82 0.13 220);
   --rh-teal-soft: oklch(0.28 0.06 220);
   --rh-ochre: oklch(0.80 0.12 75);
   --rh-ochre-deep: oklch(0.72 0.13 70);
+  --rh-ochre-soft: oklch(0.30 0.04 75);
   --rh-sage-soft: oklch(0.26 0.05 155);
   --rh-rose-soft: oklch(0.28 0.07 32);
 }
