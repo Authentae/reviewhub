@@ -158,9 +158,20 @@ export default function BlogIndex() {
 
   // Filter pill: 'all' | 'en' | 'th'. Default to user's UI language so a
   // Thai-mode visitor lands on Thai posts; an English-mode visitor on EN.
-  // The pill lets either flip — useful for a Thai owner browsing the
-  // bilingual list to see both versions of a post side-by-side.
-  const [filter, setFilter] = useState(isThai ? 'th' : 'en');
+  // Persists the choice in localStorage so a visitor who explicitly
+  // toggled to "all" gets "all" on their next visit, not the inferred
+  // default.
+  const [filter, setFilter] = useState(() => {
+    try {
+      const saved = localStorage.getItem('rh_blog_lang_filter');
+      if (saved && ['all', 'en', 'th'].includes(saved)) return saved;
+    } catch { /* SSR or storage blocked */ }
+    return isThai ? 'th' : 'en';
+  });
+  const setFilterPersist = (next) => {
+    setFilter(next);
+    try { localStorage.setItem('rh_blog_lang_filter', next); } catch { /* ignore */ }
+  };
   const visiblePosts = filter === 'all' ? POSTS : POSTS.filter((p) => p.lang === filter);
 
   usePageTitle(isThai ? 'บล็อก — เคล็ดลับการตอบรีวิว Google' : 'Blog — Google review-reply playbooks & templates');
@@ -214,7 +225,7 @@ export default function BlogIndex() {
                 type="button"
                 role="tab"
                 aria-selected={active}
-                onClick={() => setFilter(k)}
+                onClick={() => setFilterPersist(k)}
                 className="px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors"
                 style={{
                   background: active ? 'var(--rh-teal-deep, #1e4d5e)' : 'transparent',
