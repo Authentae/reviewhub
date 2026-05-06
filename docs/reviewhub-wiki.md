@@ -53,6 +53,20 @@ date, and any pre-purchase friction worth remembering.
   - Skipped: Chakrabongse Villas — recent response rate ~60%, owner
     Narisa replies personally. Stock pitch wouldn't land. Either
     needs a custom pitch or skip.
+- **Wave 2.1 — 2026-05-06 ~16:00 ICT:** 1 email sent (custom pitch).
+  - Chakrabongse Villas (reservation@chakrabongse.com) — English,
+    custom-pitch (not stock outreach). Acknowledged Narisa's existing
+    reply quality first, framed ReviewHub as voice-scaling not voice-
+    replacing. Audit included 1 critical 4★ review to demo nuance.
+    Audit URL 9326cf61…4340 (initial send had a 3-char typo in the
+    token from screenshot transcription; follow-up apology + correct
+    link sent 5 min later). Subject: "A small thought after reading your
+    replies on Google". Lesson: high-context prospects deserve
+    fresh-per-prospect emails (per CLAUDE.md "templates → fresh-per-
+    prospect when context is high" rule).
+- **Wave 1 bounce logged:** baansukhumvit@yahoo.com address not found;
+  Yahoo listing was stale third-party. Reinforced verified-live-website-
+  email-only rule.
 
 ## Active outreach signals
 

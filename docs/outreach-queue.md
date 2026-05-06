@@ -64,14 +64,20 @@ hooks take over automatically.
 ## Ready to send
 
 ```
-1. ~~Chakrabongse Villas~~ — **[wait:user] DISQUALIFIED for stock cold-outreach**
+1. ~~Chakrabongse Villas~~ — **SENT 2026-05-06 ~16:00 ICT** (custom-pitch, Wave 2.1)
    - Email: reservation@chakrabongse.com
-   - 2026-05-06: research showed ~46% Google response rate overall,
-     ~60% on recent reviews. Owner Narisa responds personally, signs
-     with her name. Sending the stock "you have unanswered reviews"
-     pitch would land tone-deaf — she's not unaware, she's selective.
-     Different pitch needed (e.g. "you reply beautifully — would you
-     like to scale that voice in 5 languages via AI?"). Founder call.
+   - 48h reply window: by 2026-05-08 ~16:00
+   - Audit URL 9326cf61…4340 (corrected — initial send had typo'd token,
+     follow-up apology + correct link sent 5 min later. Lesson logged
+     to feedback_never_transcribe_urls_from_screenshots.md.)
+   - Subject: "A small thought after reading your replies on Google"
+   - Pitch angle (NOT stock cold-outreach): acknowledged Narisa's
+     existing reply quality (Khun honorific, personal sign-off, brief
+     grace), framed ReviewHub as voice-scaling not voice-replacing.
+     5 audit drafts include 1 critical (Ankana 4★ mosquitoes/policy)
+     to demo nuance handling. English (per language decision tree —
+     internationally-positioned, English-fluent owner).
+   - Founder choice: chose B (custom pitch) over A (skip per 60%+ rule).
 
 2. ~~Old Capital Bike Inn~~ — **SENT 2026-05-06 14:39 ICT** (Wave 2)
    - Email: info@oldcapitalbkk.com
@@ -95,6 +101,12 @@ have own websites; need to (a) extract email from contact page and
 ```
 4. Niras Bankoc Cultural Hostel — 2-star hostel, family-run, near
    Grand Palace. Phone +66 2 282 7500. Need to find email.
+
+**Wave 1 bounces (2026-05-06):**
+- baansukhumvit@yahoo.com — address not found, message returned.
+  Yahoo address from third-party listing was stale. Lesson reinforced:
+  rule #2 above (only verified live-website emails) prevented other
+  bounces; this one slipped because email pre-dated rule.
 5. Buddy Lodge — Khaosan area, mid-size. Need to find website +
    email.
 6. Bhuthorn Bed and Breakfast — 27 Google reviews, 4.7★, owner-run
