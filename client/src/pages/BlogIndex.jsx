@@ -23,6 +23,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'how-to-ask-for-google-reviews',
+    title: 'How to ask for Google reviews without being pushy (and without giving discounts)',
+    description: 'Five natural moments to ask, the wording that doesn\'t sound desperate, the QR-code mistake most owners make, why coupons-for-reviews violate Google policy, and the 1-star prevention move.',
+    date: '2026-05-06',
+    readingMins: 7,
+    lang: 'en',
+  },
+  {
     slug: 'transfer-google-business-profile-ownership',
     title: 'How to transfer Google Business Profile ownership (the actual steps)',
     description: 'Adding a manager vs transferring primary ownership, the 7-day waiting period, and the shortcut nobody mentions — written for owners not consultants.',

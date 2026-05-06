@@ -145,8 +145,9 @@ The reviewhub.review site itself + everything a prospect sees.
 - `[ ]` Blog post: "How to ask customers for Google reviews without being
   pushy" — high-intent search ("how to get Google reviews"). Evergreen.
   Long-tail keyword competition lower than head terms.
-- `[ ]` More verticals: /for-bars, /for-fitness, /for-pharmacies. Same
-  VerticalLanding template, ~30 min each, more long-tail SEO surfaces.
+- `[done]` More verticals: /for-bars, /for-fitness, /for-pharmacies.
+  Three new long-tail SEO pages, each with tone-matched pain-point
+  copy (sharper for bars, mixed for fitness, privacy-aware for pharmacies).
 - `[done]` Free tool: Review Impact Scorer at /tools/review-impact.
   Paste a negative review, get damage score (0-100), risk category,
   reviewer-type guess (legitimate / venting / extortion / competitor),
