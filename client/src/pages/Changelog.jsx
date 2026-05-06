@@ -31,6 +31,16 @@ export default function Changelog() {
   const highlights = [
     {
       date: '2026-05-08',
+      en: 'New blog post — "Wongnai vs Google reviews — which one should Bangkok restaurants prioritize?" (6 min read, EN + TH). Honest breakdown by customer mix: tourist-heavy → 100% Google, local-heavy → 70/30 Wongnai. Plus the audience and search-visibility tables.',
+      th: 'บทความใหม่ — "Wongnai vs รีวิว Google สำหรับร้านอาหารในกรุงเทพฯ" (อ่าน 6 นาที, EN + TH) ตัดสินใจตามลูกค้าที่มาร้าน: ต่างชาติ → 100% Google, คนไทย → 70/30 Wongnai พร้อมตารางเปรียบเทียบ',
+    },
+    {
+      date: '2026-05-08',
+      en: 'Blog index now has language filter pills (All / EN / TH) with localStorage persistence — visitors land on posts in their UI language by default but can flip to "All" to see both versions side-by-side.',
+      th: 'หน้าบล็อกตอนนี้มีปุ่มกรองภาษา (ทั้งหมด / EN / TH) จำตัวเลือกไว้ใน localStorage — เห็นโพสต์ภาษา UI โดย default แต่กด "ทั้งหมด" เพื่อดูทั้งสองภาษาเทียบกันได้',
+    },
+    {
+      date: '2026-05-08',
       en: 'New EN blog post — "5 Google review mistakes Bangkok hospitality owners keep making" (7 min read). Patterns from real Bangkok properties, what 200+ review properties do differently, and the 48-hour reply window that lifts star-rating updates 4×.',
       th: 'บทความใหม่ภาษาอังกฤษ — "5 Google review mistakes Bangkok hospitality owners keep making" (อ่าน 7 นาที) Pattern จากโรงแรม/ร้านอาหารในกรุงเทพฯ จริง ว่าทำไมร้านที่มี 200+ รีวิวต่างจากร้านอื่น และ 48 ชั่วโมงทำไมสำคัญ',
     },
