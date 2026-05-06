@@ -28,6 +28,18 @@ if echo "$CHANGED" | grep -qE '^client/public/blog/.*\.html$'; then
   echo "✅ Blog SEO OK"
 fi
 
+# Stale-positioning checker — runs when client source / i18n changes.
+# Catches Chrome extension / iOS app references that snuck back in.
+if echo "$CHANGED" | grep -qE '^client/src/(pages|components|i18n)/'; then
+  echo "🔍 Checking for stale positioning…"
+  node scripts/check-stale-positioning.js > /tmp/rh-stale.log 2>&1 || {
+    echo "❌ Stale positioning detected:"
+    cat /tmp/rh-stale.log
+    exit 1
+  }
+  echo "✅ Positioning OK"
+fi
+
 # Skip if no code files changed (docs-only commits ship straight)
 if ! echo "$CHANGED" | grep -qE '\.(js|jsx|ts|tsx|css|json)$'; then
   echo "✅ Docs-only commit — skipping build/test"
