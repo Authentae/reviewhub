@@ -11,7 +11,7 @@
 // philosophy as the changelog. Three posts is fine; when there are 30,
 // revisit.
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import MarketingNav from '../components/MarketingNav';
 import MarketingFooter from '../components/MarketingFooter';
@@ -140,11 +140,28 @@ export default function BlogIndex() {
   const { lang } = useI18n();
   const isThai = lang === 'th';
 
+  // Filter pill: 'all' | 'en' | 'th'. Default to user's UI language so a
+  // Thai-mode visitor lands on Thai posts; an English-mode visitor on EN.
+  // The pill lets either flip — useful for a Thai owner browsing the
+  // bilingual list to see both versions of a post side-by-side.
+  const [filter, setFilter] = useState(isThai ? 'th' : 'en');
+  const visiblePosts = filter === 'all' ? POSTS : POSTS.filter((p) => p.lang === filter);
+
   usePageTitle(isThai ? 'บล็อก — เคล็ดลับการตอบรีวิว Google' : 'Blog — Google review-reply playbooks & templates');
   useSocialMeta({
     title: isThai ? 'บล็อก ReviewHub' : 'ReviewHub Blog',
     description: 'Practical writing for small business owners on managing Google reviews, replying to feedback, and handling fake or extortion reviews.',
   });
+
+  const pillLabel = (k) => {
+    if (k === 'all') return isThai ? 'ทั้งหมด' : 'All';
+    if (k === 'en') return 'English';
+    return 'ภาษาไทย';
+  };
+  const pillCount = (k) => {
+    if (k === 'all') return POSTS.length;
+    return POSTS.filter((p) => p.lang === k).length;
+  };
 
   return (
     <div className="rh-design min-h-screen" style={{ background: 'var(--rh-paper, #fbf8f1)', color: 'var(--rh-ink, #1d242c)' }}>
@@ -171,8 +188,35 @@ export default function BlogIndex() {
           </p>
         </div>
 
+        {/* Language filter pills — useful now that we have 14+ posts split EN/TH */}
+        <div className="flex gap-2 mb-8" role="tablist" aria-label={isThai ? 'กรองตามภาษา' : 'Filter by language'}>
+          {['all', 'en', 'th'].map((k) => {
+            const active = filter === k;
+            return (
+              <button
+                key={k}
+                type="button"
+                role="tab"
+                aria-selected={active}
+                onClick={() => setFilter(k)}
+                className="px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors"
+                style={{
+                  background: active ? 'var(--rh-teal-deep, #1e4d5e)' : 'transparent',
+                  color: active ? '#fff' : 'var(--rh-ink-2, #4a525a)',
+                  border: active ? '1px solid var(--rh-teal-deep, #1e4d5e)' : '1px solid var(--rh-rule, #e8e3d6)',
+                  fontFamily: 'JetBrains Mono, ui-monospace, monospace',
+                  fontSize: '12px',
+                  letterSpacing: '0.04em',
+                }}
+              >
+                {pillLabel(k)} <span style={{ opacity: 0.6 }}>· {pillCount(k)}</span>
+              </button>
+            );
+          })}
+        </div>
+
         <ul className="space-y-8">
-          {POSTS.map((p) => (
+          {visiblePosts.map((p) => (
             <li
               key={p.slug}
               className="pb-8"
