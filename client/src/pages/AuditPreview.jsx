@@ -232,6 +232,65 @@ export default function AuditPreview() {
           </section>
         )}
 
+        {/* Inline FAQ — addresses the four objections SMB owners actually
+            think when first looking at AI-drafted review replies. Each one
+            is the kind of question that, if unanswered, makes the prospect
+            close the tab. Inline collapsibles (native <details>) are fine
+            for SEO + accessibility, no JS needed. */}
+        {totalDrafts > 0 && (
+          <section className="mt-10">
+            <h3
+              className="text-sm font-mono uppercase tracking-widest mb-4"
+              style={{ color: COLORS.inkDim }}
+            >
+              Common questions
+            </h3>
+            <div className="space-y-2">
+              {[
+                {
+                  q: 'Can I edit the replies before they post?',
+                  a: 'Always. Every draft lands in your inbox — you review, edit, or rewrite before anything goes to Google. Nothing posts without your one-click approval.',
+                },
+                {
+                  q: 'What if a reply is wrong or off-tone?',
+                  a: 'You edit it. ReviewHub learns from every edit you make — over time the drafts match your voice more closely. The first week is the worst; week three usually needs only minor tweaks.',
+                },
+                {
+                  q: 'How does it handle 1-star or angry reviews?',
+                  a: 'Differently than 5-stars. Negative reviews get drafts that acknowledge specifically what went wrong, take ownership without "but", and invite the reviewer back privately — never the canned "we strive for excellence" template.',
+                },
+                {
+                  q: 'Is my Google account / data safe?',
+                  a: 'ReviewHub reads reviews and posts replies via Google\'s official Business Profile API — same connection a Google-Workspace admin would use. We don\'t store your password (OAuth only), don\'t see your other Google data, and you can revoke access anytime from your Google account settings.',
+                },
+                {
+                  q: 'What if I cancel mid-month?',
+                  a: 'You keep access through the end of the billing period, then it ends. No clawback of replies already posted. 14-day refund window on the first month, no questions asked.',
+                },
+              ].map((item, i) => (
+                <details
+                  key={i}
+                  className="rounded-xl"
+                  style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.line}` }}
+                >
+                  <summary
+                    className="px-4 py-3 cursor-pointer text-sm font-semibold list-none"
+                    style={{ color: COLORS.ink }}
+                  >
+                    {item.q}
+                  </summary>
+                  <p
+                    className="px-4 pb-4 pt-1 text-sm leading-relaxed"
+                    style={{ color: COLORS.inkSoft }}
+                  >
+                    {item.a}
+                  </p>
+                </details>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Footer — context, not a sales pitch (the CTA above is the pitch) */}
         <footer
           className="mt-12 pt-8 border-t text-sm leading-relaxed"
