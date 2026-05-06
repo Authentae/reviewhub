@@ -28,6 +28,7 @@ SaaS copy.
 | [`lead-finding.md`](lead-finding.md) | Finding qualified outbound prospects (city + vertical → ranked list) |
 | [`audit-outreach.md`](audit-outreach.md) | The DM script for sending an outbound audit URL to a prospect (paired with the /outbound-audits dashboard tool) |
 | [`ship-readiness-audit.md`](ship-readiness-audit.md) | Engineering checklist after shipping any feature touching pricing / schema / i18n / public pages / plan gates |
+| [`content-writing.md`](content-writing.md) | Writing any customer-facing prose — blog posts, landing copy, changelog, free-tool copy, public announcements. Meta-skill; links out to per-format skills (onboarding-email, audit-outreach, social-presence, support-response). |
 
 ## When to update these
 
