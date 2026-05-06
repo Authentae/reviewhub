@@ -460,6 +460,211 @@ router.post('/reply-roaster', freeToolLimiter, require('../middleware/honeypot')
   }
 });
 
+// POST /api/public/review-impact — heuristic damage-scorer for a negative
+// review the owner just received. The owner's actual question when a 1-star
+// lands isn't "what should I write" — it's "how bad is this and what type
+// of reviewer am I dealing with?" This tool answers both in one shot, with
+// no AI cost, so it can run free forever.
+//
+// Output dimensions:
+//   - damage_score (0-100): how much SEO/conversion harm this is likely to do
+//   - risk_category: critical/high/moderate/low
+//   - reviewer_type: legitimate-frustrated / venting / suspicious-extortion /
+//                    competitor-likely / mild-disappointment
+//   - recommended_action: apologize-and-fix / clarify-respectfully / flag-to-google /
+//                         brief-acknowledgment / ignore
+//   - findings: array of {severity, label, evidence}
+//
+// SEO + virality value: shareable in restaurateur / hospitality forums when
+// owners are panicking about a fresh 1-star. "Run it through this thing"
+// is the kind of casual share that compounds.
+const SPECIFICITY_PATTERNS = [
+  // Names of staff/managers — high credibility marker
+  { pattern: /\b(manager|owner|server|waiter|waitress|chef|barista|hostess|receptionist|host|staff member)\b\s+(named|called)?\s*[A-Z][a-z]+/i, label: 'Names a specific staff member', weight: 8 },
+  // Dates / times — higher credibility
+  { pattern: /\b(yesterday|last (week|night|tuesday|monday|wednesday|thursday|friday|saturday|sunday)|on \w+day|(\d{1,2})(:\d{2})?\s*(am|pm)|\d{1,2}\/\d{1,2})\b/i, label: 'Specific date or time', weight: 6 },
+  // Money amounts — credible specifics
+  { pattern: /\$\d+|\d+\s*(baht|usd|euro|pound|dollars)/i, label: 'Specific money amount', weight: 5 },
+  // Order details — credibility
+  { pattern: /\b(ordered|got|received|asked for)\s+(the |a |an )?[a-z]+/i, label: 'Specific order detail', weight: 4 },
+];
+
+const ANGER_PATTERNS = [
+  // All caps words (3+ letters) — anger marker, lower credibility
+  { pattern: /\b[A-Z]{4,}\b/, label: 'ALL CAPS shouting', weight: -6 },
+  // Multiple exclamations
+  { pattern: /!{2,}/, label: 'Multiple exclamations (!!!)', weight: -4 },
+  // Strong dismissive phrases
+  { pattern: /\b(never (again|coming back|going back)|absolute (joke|disaster|trash)|worst (place|experience|service|food) ever)\b/i, label: 'Extreme dismissal language', weight: -3 },
+  // Profanity (mild detection — full lists are too much)
+  { pattern: /\b(damn|hell|shit|crap|fucking|bullshit|ass)\b/i, label: 'Profanity', weight: -5 },
+];
+
+const EXTORTION_RED_FLAGS = [
+  { pattern: /\b(remove this|delete this|take down)\b.{0,40}\b(if|unless|when)\b/i, label: 'Conditional removal threat', weight: 'extortion' },
+  { pattern: /\b(give|offer|provide)\s+(me|us)\s+(a |the )?(refund|free|discount|coupon|gift)/i, label: 'Compensation demand', weight: 'extortion' },
+  { pattern: /\b(or i('| wi)ll|or else|otherwise i('| wi)ll)\b/i, label: 'Threat language', weight: 'extortion' },
+  { pattern: /\b(other (places|restaurants|cafes|hotels)|competitor)\b.{0,30}\b(better|cheaper|nicer)\b/i, label: 'Competitor name-drop in 1-star', weight: 'competitor-likely' },
+];
+
+const RESOLVABLE_COMPLAINT_PATTERNS = [
+  { pattern: /\b(wait(ed|ing)?|slow|long\s+(wait|line))\b/i, label: 'Wait time complaint', resolvable: true },
+  { pattern: /\b(rude|disrespect|unprofessional|dismissive)\b/i, label: 'Staff behavior complaint', resolvable: true },
+  { pattern: /\b(cold|undercooked|overcooked|burnt|stale|spoiled)\b/i, label: 'Food quality complaint', resolvable: true },
+  { pattern: /\b(dirty|filthy|smelly|gross|disgusting|hair|insect|bug|hairline)\b/i, label: 'Cleanliness complaint', resolvable: true },
+  { pattern: /\b(price|expensive|overcharg|wrong\s+(bill|charge))/i, label: 'Pricing complaint', resolvable: true },
+  { pattern: /\b(charg(ed|ing)|bill|payment|wrong\s+(amount|total))/i, label: 'Billing dispute', resolvable: true },
+];
+
+router.post('/review-impact', freeToolLimiter, require('../middleware/honeypot').honeypot({ fakeBody: { damage_score: 50, findings: [] } }), async (req, res) => {
+  try {
+    const { review_text, rating, reviewer_name } = req.body || {};
+
+    if (typeof review_text !== 'string' || !review_text.trim()) {
+      return res.status(400).json({ error: 'review_text is required' });
+    }
+    if (review_text.length > 4000) {
+      return res.status(400).json({ error: 'review_text must be 4000 characters or fewer' });
+    }
+
+    const text = review_text.trim();
+    const len = text.length;
+    const ratingNum = Number(rating);
+    const isNegative = Number.isFinite(ratingNum) && ratingNum <= 2;
+    const isMildlyNegative = Number.isFinite(ratingNum) && ratingNum === 3;
+
+    const findings = [];
+    let credibilityDelta = 0;
+
+    // Length-based credibility (longer = more thought = more damage)
+    if (len < 50) {
+      findings.push({ severity: 'low', label: 'Very short review (<50 chars). Lower-effort reviews carry less weight in Google\'s ranking.' });
+      credibilityDelta -= 8;
+    } else if (len > 400) {
+      findings.push({ severity: 'high', label: 'Long detailed review (>400 chars). Detailed negative reviews carry more weight and are read more.' });
+      credibilityDelta += 10;
+    } else if (len > 200) {
+      credibilityDelta += 5;
+    }
+
+    // Specificity markers
+    for (const { pattern, label, weight } of SPECIFICITY_PATTERNS) {
+      if (pattern.test(text)) {
+        findings.push({ severity: 'medium', label: `${label} — increases credibility for readers.` });
+        credibilityDelta += weight;
+      }
+    }
+
+    // Anger markers (lower credibility, but more visible)
+    for (const { pattern, label, weight } of ANGER_PATTERNS) {
+      if (pattern.test(text)) {
+        findings.push({ severity: 'low', label: `${label} — readers discount these somewhat, but they still see the star rating.` });
+        credibilityDelta += weight;
+      }
+    }
+
+    // Extortion / competitor-sabotage red flags
+    let extortionFlag = false;
+    let competitorFlag = false;
+    for (const { pattern, label, weight } of EXTORTION_RED_FLAGS) {
+      if (pattern.test(text)) {
+        if (weight === 'extortion') {
+          extortionFlag = true;
+          findings.push({ severity: 'high', label: `${label} — possible extortion or fake-review red flag. Eligible for Google flag-and-remove.` });
+        } else if (weight === 'competitor-likely') {
+          competitorFlag = true;
+          findings.push({ severity: 'medium', label: `${label} — competitor sabotage is a known pattern; document and consider flagging.` });
+        }
+      }
+    }
+
+    // Resolvable complaints — these are GOOD news for the owner
+    const resolvableHits = [];
+    for (const { pattern, label } of RESOLVABLE_COMPLAINT_PATTERNS) {
+      if (pattern.test(text)) {
+        resolvableHits.push(label);
+      }
+    }
+    if (resolvableHits.length > 0) {
+      findings.push({
+        severity: 'good',
+        label: `Specific resolvable issue: ${resolvableHits.join(', ').toLowerCase()}. These are the easiest to recover from — acknowledge + fix + invite back.`,
+      });
+    }
+
+    // Reviewer-type classification
+    let reviewer_type, recommended_action;
+    if (extortionFlag) {
+      reviewer_type = 'suspicious-extortion';
+      recommended_action = 'flag-to-google';
+    } else if (competitorFlag && resolvableHits.length === 0) {
+      reviewer_type = 'competitor-likely';
+      recommended_action = 'brief-acknowledgment';
+    } else if (isNegative && resolvableHits.length > 0 && credibilityDelta >= 5) {
+      reviewer_type = 'legitimate-frustrated';
+      recommended_action = 'apologize-and-fix';
+    } else if (isNegative && credibilityDelta < -5) {
+      reviewer_type = 'venting';
+      recommended_action = 'brief-acknowledgment';
+    } else if (isMildlyNegative) {
+      reviewer_type = 'mild-disappointment';
+      recommended_action = 'apologize-and-fix';
+    } else if (isNegative) {
+      reviewer_type = 'legitimate-frustrated';
+      recommended_action = 'apologize-and-fix';
+    } else {
+      reviewer_type = 'positive-or-neutral';
+      recommended_action = 'thank-warmly';
+    }
+
+    // Damage score: starts from rating-based baseline, then adjusts
+    let baseDamage;
+    if (ratingNum === 1) baseDamage = 70;
+    else if (ratingNum === 2) baseDamage = 55;
+    else if (ratingNum === 3) baseDamage = 35;
+    else if (ratingNum === 4) baseDamage = 15;
+    else if (ratingNum === 5) baseDamage = 5;
+    else baseDamage = 50;
+
+    let damage_score = baseDamage + credibilityDelta;
+
+    // Extortion suppresses score (eligible for removal)
+    if (extortionFlag) damage_score -= 25;
+
+    damage_score = Math.max(0, Math.min(100, Math.round(damage_score)));
+
+    // Risk category
+    let risk_category, risk_label;
+    if (damage_score >= 75) {
+      risk_category = 'critical';
+      risk_label = 'Critical — respond within 24h';
+    } else if (damage_score >= 55) {
+      risk_category = 'high';
+      risk_label = 'High — respond within 48h';
+    } else if (damage_score >= 30) {
+      risk_category = 'moderate';
+      risk_label = 'Moderate — respond when convenient';
+    } else {
+      risk_category = 'low';
+      risk_label = 'Low — minimal damage expected';
+    }
+
+    res.setHeader('Cache-Control', 'no-store, private');
+    res.json({
+      damage_score,
+      risk_category,
+      risk_label,
+      reviewer_type,
+      recommended_action,
+      findings,
+      meta: { review_chars: len, is_negative: isNegative, rating: ratingNum },
+    });
+  } catch (err) {
+    captureException(err, { route: 'public.review-impact', ip: req.ip });
+    res.status(500).json({ error: 'Couldn\'t score the review right now. Please try again.' });
+  }
+});
+
 // GET /api/public/platforms — public catalogue of supported review platforms.
 //
 // Lets external tools (chrome extension, Zapier integrations, the future

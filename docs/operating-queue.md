@@ -133,11 +133,12 @@ The reviewhub.review site itself + everything a prospect sees.
   and clicked "set this up for me")? Test once we have a clicked-
   through prospect. Right now the hero assumes the visitor is
   generic-curious. Self-blocked: needs real conversion data first.
-- `[ ]` Comparison page: ReviewHub vs Birdeye / Podium / ReviewTrackers.
-  Bottom-funnel SEO target ("Birdeye alternative", "cheaper than
-  Podium"). Arms outreach with objection-handling ammo when prospects
-  push back ("we already use X"). One static page at /vs/birdeye,
-  /vs/podium, /vs/reviewtrackers — same template, vertical specifics.
+- `[done]` Comparison pages: ReviewHub vs Birdeye / Podium / ReviewTrackers.
+  Single ComparisonLanding component shipped at /vs/birdeye, /vs/podium,
+  /vs/reviewtrackers. Honest positioning (acknowledge who $competitor
+  is right for, then pivot to who we're right for) — no smear copy.
+  Each page: pricing snapshot, 10-11 row feature table, "pick them if"/
+  "pick us if" blocks, Article+SoftwareApplication schema, cross-links.
 - `[ ]` Free tool: Negative review scoring — paste any 1-2 star review,
   get a heuristic-based "how much will this hurt" score + suggested
   reply tone. No API needed (heuristics + Anthropic Haiku for the

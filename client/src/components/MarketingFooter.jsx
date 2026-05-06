@@ -33,6 +33,7 @@ export default function MarketingFooter() {
         { href: '/pricing', label: isThai ? 'ราคา' : 'Pricing' },
         { href: '/tools/review-reply-generator', label: isThai ? 'Reply Generator (ฟรี)' : 'Reply Generator (free)' },
         { href: '/tools/reply-roaster', label: isThai ? 'Reply Roaster (ฟรี)' : 'Reply Roaster (free)' },
+        { href: '/tools/review-impact', label: isThai ? 'Review Impact (ฟรี)' : 'Review Impact (free)' },
         { href: '/api-docs', label: isThai ? 'API' : 'API docs' },
       ],
     },

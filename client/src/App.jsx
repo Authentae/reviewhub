@@ -49,6 +49,9 @@ const BlogIndex = lazy(() => import('./pages/BlogIndex'));
 // /tools/reply-roaster — free heuristic critique of a draft reply. Sibling to
 // the existing /tools/review-reply-generator. SEO play for "review reply checker".
 const ReplyRoasterTool = lazy(() => import('./pages/ReplyRoasterTool'));
+// /tools/review-impact — free heuristic damage-scorer for a negative review.
+// Owner just got a 1-star, wants to know "how bad?" before responding.
+const ReviewImpactTool = lazy(() => import('./pages/ReviewImpactTool'));
 // Changelog — public, tech-savvy buyers ("where's the changelog?") asked
 // for this in persona testing. Curated highlights, no firehose.
 const Changelog = lazy(() => import('./pages/Changelog'));
@@ -159,6 +162,7 @@ export default function App() {
         {/* Public no-signup SEO/PLG tool */}
         <Route path="/tools/review-reply-generator" element={<ReplyGeneratorTool />} />
         <Route path="/tools/reply-roaster" element={<ReplyRoasterTool />} />
+        <Route path="/tools/review-impact" element={<ReviewImpactTool />} />
         {/* Cold-outreach lead-capture landing — see AuditLanding.jsx */}
         <Route path="/audit" element={<AuditLanding />} />
         {/* Per-vertical SEO pages */}
