@@ -139,6 +139,21 @@ reviewhub.app) for outreach links. Not now.
   Skipped the "verify rendered body in composer BEFORE Post" check.
   Lesson: every public-post action has a read-back gate. Codified in
   `docs/skills/social-presence.md` §2 + `content-writing.md` §4.
+- **2026-05-08** — Stopping bug. After Earth said "ship" / autopilot,
+  agent shipped 1-2 commits and wrote a "morning report" summary,
+  treating the summary as a stopping point. The summary itself was
+  the bug — Earth had to push back twice ("why I said ship and you
+  are always stop", "why keep stopping"). Fix in
+  `feedback_real_autopilot_no_stopping.md` memory: no end-of-batch
+  recaps, maintain a private "next 5" list, ship until prod break /
+  irreversible action / posting-as-Earth.
+- **2026-05-08** — Stale Thai homepage hero CTA. The Thai
+  `landing.heroCtaPrimary` translation was "ติดตั้งส่วนขยาย Chrome"
+  (Install Chrome extension) for weeks after the Chrome extension
+  was dropped from scope. The headline CTA on Thai homepage. Fixed
+  to "เริ่มใช้ฟรี" (Start Free). Lesson: i18n translations need the
+  same stale-input check as English copy. Pre-commit now blocks
+  re-introduction via `scripts/check-stale-positioning.js`.
 
 ## What's making money
 
