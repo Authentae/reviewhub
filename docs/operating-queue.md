@@ -142,9 +142,10 @@ The reviewhub.review site itself + everything a prospect sees.
 - `[done]` Tools index page at /tools. Three structured cards tying
   the free-tool cluster together. Bilingual EN/TH. Cross-links to /audit.
   Wired into routes + sitemap.
-- `[ ]` Blog post: "How to ask customers for Google reviews without being
-  pushy" — high-intent search ("how to get Google reviews"). Evergreen.
-  Long-tail keyword competition lower than head terms.
+- `[done]` Blog post: "How to ask customers for Google reviews without
+  being pushy". 7-min read covering the five natural ask-windows, why
+  discount-for-review violates Google policy, the QR-code mistake,
+  and the 1-star prevention move.
 - `[done]` More verticals: /for-bars, /for-fitness, /for-pharmacies.
   Three new long-tail SEO pages, each with tone-matched pain-point
   copy (sharper for bars, mixed for fitness, privacy-aware for pharmacies).
@@ -155,10 +156,13 @@ The reviewhub.review site itself + everything a prospect sees.
   Pure heuristic, no AI cost. Sibling pattern to /tools/reply-roaster.
   Shareable in restaurant/hospitality forums when owners panic about
   a fresh 1-star.
-- `[ ]` Free tool: Response-rate audit — paste Google Maps URL, fetch
-  reviews via Places API, show response rate vs industry average.
-  **[wait:user] for `GOOGLE_PLACES_API_KEY` setup** — Earth needs to
-  enable Places API in Google Cloud Console (~10 min).
+- `[skip]` (was) Free tool: Response-rate audit via Places API.
+  Earth paused at the Google Cloud billing form (2026-05-06) and asked
+  the right question: "is this really worth it?" Honest answer: no —
+  not until the existing two free tools (Reply Roaster, Review Impact)
+  show usage signal. Don't build the third instance when the first two
+  are unproven. Revisit only after Plausible shows traction on the
+  existing tools. Lesson logged to memory.
 - `[done]` `/changelog` localization audit. Result: page already had
   bilingual EN/TH per entry (Thai users were never English-only); the
   two real gaps were (a) browser tab title was English-only via
