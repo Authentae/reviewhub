@@ -207,22 +207,24 @@ I should look at this."
 ```
 สวัสดีครับ
 
-ลูกค้าใหม่ส่วนใหญ่อ่านรีวิวก่อนจอง — และสิ่งที่หลายคนไม่รู้คือ
-พวกเขาอ่าน "การตอบกลับของร้าน" ด้วย เพื่อดูว่าร้านสนใจลูกค้าจริงไหม
-รีวิวที่ไม่มีใครตอบเลยทำให้ดูเหมือนร้านปิดไปแล้ว
+ผม Earth ทำเครื่องมือชื่อ ReviewHub ครับ ช่วยเจ้าของร้านตอบรีวิว
+Google ให้เร็วขึ้น
 
-แวะดู Google ของ{business_name}แล้วเห็นว่ารีวิวล่าสุดหลายอันยังไม่ได้
-ตอบเลยครับ {specific_observation_about_their_reviews}
+ลูกค้าใหม่ส่วนใหญ่อ่านรีวิวก่อนจอง และที่หลายคนไม่รู้คือเขาดู "การ
+ตอบกลับของร้าน" ด้วย รีวิวที่ไม่มีใครตอบเลยทำให้ดูเหมือนร้านปิดไปแล้ว
 
-เลยลองร่างคำตอบให้ดูเล่นๆ ใช้ AI ช่วยร่าง {N} รีวิวของจริง ลองดูได้
-เลยครับ — ไม่ต้องลงทะเบียนอะไร:
+แวะดู Google ของ{business_name}เมื่อกี้ เห็นว่ารีวิวล่าสุดหลายอันยังไม่
+ได้ตอบเลย {specific_observation_about_their_reviews}
+
+เลยลองให้ AI ของเราร่างคำตอบ {N} อันให้ดูครับ ลองเปิดดูได้เลย ไม่ต้อง
+สมัครอะไร
 
 → {audit_url}
 
-ใช้ฟรีได้เลย ก๊อปไปแปะใน Google เลย ถ้าอยากให้ระบบทำให้เรื่อยๆ
-มีแพ็กเกจเริ่มต้น $14 หรือประมาณ ฿480 ต่อเดือน (ชำระเป็น USD)
+เอาไปใช้ได้เลยฟรี ก๊อปไปแปะใน Google ก็ได้ครับ ถ้าอยากให้ระบบทำให้
+ทุกครั้งที่มีรีวิวใหม่ มีแพ็กเกจเริ่มต้น $14 (~฿480)/เดือน (ชำระเป็น USD)
 
-ส่งมาให้ดูเผื่อมีประโยชน์เฉยๆ ครับ
+ส่งมาให้ดูเผื่อมีประโยชน์เฉยๆ ครับ ขอบคุณที่อ่านครับ
 
 — Earth
 ReviewHub · reviewhub.review
@@ -241,29 +243,41 @@ to some. They just need a frictionless way to do more.
 
 For tourist-facing properties (hotels, hostels, restaurants in
 tourist zones, cooking schools), include the multilingual mention.
-It's the line that makes a Bangkok owner say "oh, this is built for
-my market." For purely-Thai-audience businesses, skip it — irrelevant.
+For purely-Thai-audience businesses, skip it.
+
+**Structural rules (don't translate from English shape):**
+- Open with brief self-intro right after the greeting. Thai readers
+  want to know who's writing before they engage. English skips this
+  because the signature does the work; Thai readers don't read
+  signatures the same way.
+- No em-dashes (`—`). Anglo punctuation. Use natural connectors or
+  new lines.
+- No "setup takes X minutes" detail. That's US-copywriting "time
+  investment" framing — sounds salesy in Thai.
+- Soft close with the standard "ส่งให้ดูเผื่อ..." pattern; don't
+  add "no pressure" calques.
 
 ```
-สวัสดีครับคุณ{owner_name},
+สวัสดีครับคุณ{owner_name}
 
-แวะดู Google ของ{business_name}แล้วเห็นว่ายังมีรีวิว{N}อันที่ยังไม่ได้
-ตอบ รวมถึง{specific_pain}ด้วย
+ผม Earth ทำเครื่องมือชื่อ ReviewHub ครับ ช่วยเจ้าของร้านตอบรีวิว
+Google ให้เร็วขึ้น
 
-เลยลองร่างคำตอบให้ดูเล่นๆ ใช้ AI ช่วยร่าง แต่เขียนในโทนที่น่าจะใกล้เคียง
-กับวิธีที่{business_name}น่าจะตอบเองครับ ลองดูได้ที่นี่นะครับ — ไม่ต้อง
-ลงทะเบียนอะไร แค่เปิดดูเฉยๆ:
+แวะดู Google ของ{business_name}เมื่อกี้ เห็นว่ายังมีรีวิว{N}อันที่
+ยังไม่ได้ตอบ รวมถึง{specific_pain}
+
+เลยลองให้ AI ของเราร่างคำตอบให้ดูครับ พยายามเขียนในโทนที่น่าจะใกล้กับ
+สไตล์ของ{business_name} ลองเปิดดูได้เลย ไม่ต้องสมัครอะไร
 
 → {audit_url}
 
-ระบบตอบเป็นภาษาเดียวกับรีวิวอัตโนมัติด้วยครับ — รีวิวภาษาญี่ปุ่น/เกาหลี/
-จีน/อังกฤษ ก็ตอบกลับเป็นภาษานั้นๆ ไม่ใช่ตอบอังกฤษทุกภาษา (เครื่องมือ
-ส่วนใหญ่ทำได้แค่อังกฤษ)
+ระบบของเราตอบเป็นภาษาเดียวกับรีวิวอัตโนมัติด้วยครับ รีวิวญี่ปุ่น/เกาหลี/
+จีน/อังกฤษ ก็ตอบเป็นภาษานั้น เครื่องมืออื่นส่วนใหญ่ทำได้แค่อังกฤษ
 
-ถ้าโอเคจะใช้คำตอบเหล่านั้นได้เลยฟรีครับ ถ้าอยากให้ระบบทำแบบนี้ให้
-เรื่อยๆ มีแพ็กเกจเริ่มต้น $14 (~฿480)/เดือน ตั้งระบบใช้เวลาประมาณ 10 นาที
+คำตอบที่ร่างให้เอาไปใช้ได้เลยฟรีครับ ถ้าอยากให้ระบบทำแบบนี้ทุกครั้งที่มี
+รีวิวใหม่ มีแพ็กเกจเริ่มต้น $14 (~฿480)/เดือน
 
-ถ้าคุณตอบรีวิวเองอยู่แล้วก็ไม่ต้องใช้ครับ ส่งให้ดูเผื่อมีประโยชน์เฉยๆ ครับ
+ส่งให้ดูเผื่อมีประโยชน์เฉยๆ ครับ ขอบคุณที่อ่านครับ
 
 — Earth
 ReviewHub · reviewhub.review
