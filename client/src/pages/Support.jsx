@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import api from '../lib/api';
 import usePageTitle from '../hooks/usePageTitle';
 import MarketingNav from '../components/MarketingNav';
+import MarketingFooter from '../components/MarketingFooter';
 import HoneypotField from '../components/HoneypotField';
 import { useI18n } from '../context/I18nContext';
 import { useUser } from '../context/UserContext';
@@ -337,6 +338,7 @@ export default function Support() {
           </div>
         )}
       </main>
+      <MarketingFooter />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import api from '../lib/api';
 import usePageTitle from '../hooks/usePageTitle';
 import { useI18n } from '../context/I18nContext';
 import MarketingNav from '../components/MarketingNav';
+import MarketingFooter from '../components/MarketingFooter';
 import Navbar from '../components/Navbar';
 import Logo from '../components/Logo';
 import { isLoggedIn } from '../lib/auth';
@@ -977,6 +978,7 @@ export default function Landing() {
         <Faq t={t} />
         <BigCta />
       </main>
+      <MarketingFooter />
       <Footer />
       <GimmickLayer />
     </div>

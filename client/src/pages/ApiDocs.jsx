@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import MarketingNav from '../components/MarketingNav';
+import MarketingFooter from '../components/MarketingFooter';
 import usePageTitle from '../hooks/usePageTitle';
 import { useI18n } from '../context/I18nContext';
 
@@ -165,6 +166,7 @@ function verify(rawBody, headerValue, secret) {
           </p>
         </div>
       </main>
+      <MarketingFooter />
     </div>
   );
 }

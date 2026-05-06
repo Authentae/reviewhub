@@ -14,6 +14,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import MarketingNav from '../components/MarketingNav';
+import MarketingFooter from '../components/MarketingFooter';
 import usePageTitle from '../hooks/usePageTitle';
 import useSocialMeta from '../hooks/useSocialMeta';
 import { useI18n } from '../context/I18nContext';
@@ -144,6 +145,7 @@ export default function BlogIndex() {
           </p>
         </section>
       </main>
+      <MarketingFooter />
     </div>
   );
 }

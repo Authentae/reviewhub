@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import MarketingNav from '../components/MarketingNav';
+import MarketingFooter from '../components/MarketingFooter';
 import usePageTitle from '../hooks/usePageTitle';
 import { useI18n } from '../context/I18nContext';
 
@@ -154,6 +155,7 @@ export default function Changelog() {
           </p>
         </div>
       </main>
+      <MarketingFooter />
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import api from '../lib/api';
 import usePageTitle from '../hooks/usePageTitle';
 import MarketingNav from '../components/MarketingNav';
+import MarketingFooter from '../components/MarketingFooter';
 import HoneypotField from '../components/HoneypotField';
 import { useI18n } from '../context/I18nContext';
 
@@ -277,6 +278,7 @@ export default function AuditLanding() {
           </Link>
         </div>
       </main>
+      <MarketingFooter />
     </div>
   );
 }

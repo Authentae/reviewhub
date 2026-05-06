@@ -16,6 +16,7 @@ import api from '../lib/api';
 import usePageTitle from '../hooks/usePageTitle';
 import useSocialMeta from '../hooks/useSocialMeta';
 import MarketingNav from '../components/MarketingNav';
+import MarketingFooter from '../components/MarketingFooter';
 import HoneypotField from '../components/HoneypotField';
 import detectReplyLanguage from '../lib/detectReplyLanguage';
 import { useI18n } from '../context/I18nContext';
@@ -362,6 +363,7 @@ export default function ReplyRoasterTool() {
           </p>
         </section>
       </main>
+      <MarketingFooter />
     </div>
   );
 }

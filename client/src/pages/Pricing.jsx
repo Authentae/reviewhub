@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import MarketingNav from '../components/MarketingNav';
+import MarketingFooter from '../components/MarketingFooter';
 import Navbar from '../components/Navbar';
 import { useToast } from '../components/Toast';
 import { isLoggedIn } from '../lib/auth';
@@ -460,6 +461,7 @@ export default function Pricing() {
           </div>
         </section>
       </main>
+      <MarketingFooter />
     </div>
   );
 }

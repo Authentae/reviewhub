@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import MarketingNav from '../components/MarketingNav';
+import MarketingFooter from '../components/MarketingFooter';
 import usePageTitle from '../hooks/usePageTitle';
 import { useI18n } from '../context/I18nContext';
 import api from '../lib/api';
@@ -221,6 +222,7 @@ export default function Status() {
           </p>
         </div>
       </main>
+      <MarketingFooter />
     </div>
   );
 }

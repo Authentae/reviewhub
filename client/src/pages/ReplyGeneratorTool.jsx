@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import api from '../lib/api';
 import usePageTitle from '../hooks/usePageTitle';
 import MarketingNav from '../components/MarketingNav';
+import MarketingFooter from '../components/MarketingFooter';
 import Navbar from '../components/Navbar';
 import { isLoggedIn } from '../lib/auth';
 import { useI18n } from '../context/I18nContext';
@@ -491,6 +492,7 @@ export default function ReplyGeneratorTool() {
           </p>
         </section>
       </main>
+      <MarketingFooter />
     </div>
   );
 }
