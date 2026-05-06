@@ -53,9 +53,12 @@ export default function MarketingFooter() {
     {
       heading: isThai ? 'ทรัพยากร' : 'Resources',
       links: [
-        { href: '/blog',                                label: isThai ? 'บล็อก' : 'Blog' },
-        { href: '/blog/why-respond-to-google-reviews',  label: isThai ? 'ทำไมต้องตอบรีวิว' : 'Why respond to reviews' },
-        { href: '/blog/fake-extortion-google-reviews',  label: isThai ? 'รีวิวปลอม / รีดไถ' : 'Fake & extortion reviews' },
+        { href: '/blog',                                                       label: isThai ? 'บล็อก (24 บทความ)' : 'Blog (24 posts)' },
+        { href: isThai ? '/blog/why-respond-to-google-reviews-th' : '/blog/why-respond-to-google-reviews', label: isThai ? 'ทำไมต้องตอบรีวิว' : 'Why respond to reviews' },
+        { href: isThai ? '/blog/how-to-ask-for-google-reviews-th' : '/blog/how-to-ask-for-google-reviews', label: isThai ? 'วิธีขอรีวิวจากลูกค้า' : 'How to ask for reviews' },
+        { href: isThai ? '/blog/fake-extortion-google-reviews-th' : '/blog/fake-extortion-google-reviews', label: isThai ? 'รีวิวปลอม / รีดไถ' : 'Fake & extortion reviews' },
+        { href: isThai ? '/blog/bangkok-hospitality-review-mistakes-th' : '/blog/bangkok-hospitality-review-mistakes', label: isThai ? '5 ข้อผิดพลาดของเจ้าของในกรุงเทพฯ' : '5 Bangkok hospitality mistakes' },
+        { href: isThai ? '/blog/track-google-review-reply-rate-th' : '/blog/track-google-review-reply-rate', label: isThai ? 'Track อัตราการตอบรีวิว' : 'Track your reply rate' },
         { href: '/changelog',                           label: isThai ? 'มีอะไรใหม่' : 'Changelog' },
         { href: '/roadmap',                             label: 'Roadmap' },
         { href: '/status',                              label: 'Status' },
