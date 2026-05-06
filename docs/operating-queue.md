@@ -128,11 +128,25 @@ The reviewhub.review site itself + everything a prospect sees.
   Google" — high-intent search; we already have prompt-rule
   coverage for this in aiDrafts. Make the page that shows up
   when an owner panic-Googles it.
-- `[ ]` Landing page hero — does it speak to the audit-first
+- `[wait:signal]` Landing page hero — does it speak to the audit-first
   prospect (someone who arrived via a /audit-preview/<token> CTA
   and clicked "set this up for me")? Test once we have a clicked-
   through prospect. Right now the hero assumes the visitor is
-  generic-curious.
+  generic-curious. Self-blocked: needs real conversion data first.
+- `[ ]` Comparison page: ReviewHub vs Birdeye / Podium / ReviewTrackers.
+  Bottom-funnel SEO target ("Birdeye alternative", "cheaper than
+  Podium"). Arms outreach with objection-handling ammo when prospects
+  push back ("we already use X"). One static page at /vs/birdeye,
+  /vs/podium, /vs/reviewtrackers — same template, vertical specifics.
+- `[ ]` Free tool: Negative review scoring — paste any 1-2 star review,
+  get a heuristic-based "how much will this hurt" score + suggested
+  reply tone. No API needed (heuristics + Anthropic Haiku for the
+  reply suggestion only). Same pattern as Reply Roaster. Highly
+  shareable in restaurant/hospitality forums.
+- `[ ]` Free tool: Response-rate audit — paste Google Maps URL, fetch
+  reviews via Places API, show response rate vs industry average.
+  **[wait:user] for `GOOGLE_PLACES_API_KEY` setup** — Earth needs to
+  enable Places API in Google Cloud Console (~10 min).
 - `[done]` `/changelog` localization audit. Result: page already had
   bilingual EN/TH per entry (Thai users were never English-only); the
   two real gaps were (a) browser tab title was English-only via
@@ -204,9 +218,11 @@ the SEO surface expansion. Smaller wins; ship in batches.
 
 - `[done]` Day 7 onboarding email — trimmed dense plan list,
   links to /pricing for full comparison.
-- `[ ]` Write a blog post: "How to transfer Google Business Profile
-  ownership" — Day 1 onboarding email currently tells users to Google
-  it. Hosting our own guide keeps them in the funnel.
+- `[done]` Blog post: "How to transfer Google Business Profile
+  ownership". Shipped at `client/public/blog/transfer-google-business-
+  profile-ownership.html` (~2000 words, 8 min read). Wired into
+  BlogIndex, sitemap, RSS feed. Day 1 onboarding email (EN/TH/ES/JA)
+  updated to link our guide instead of Google search.
 - `[done]` Day 3 onboarding email — pseudonymous attribution shipped.
   "A Sukhumvit-area café owner I work with (anonymized at her request)".
 - `[done]` Day 14 onboarding email — added fifth bucket: "It worked,

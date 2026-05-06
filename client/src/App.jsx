@@ -42,6 +42,8 @@ const ReplyGeneratorTool = lazy(() => import('./pages/ReplyGeneratorTool'));
 const AuditLanding = lazy(() => import('./pages/AuditLanding'));
 // Per-vertical SEO landing pages — long-tail "review reply tool for X" search intent
 const VerticalLanding = lazy(() => import('./pages/verticals/VerticalLanding'));
+// Per-competitor comparison pages — bottom-funnel SEO + outreach objection-handling ammo
+const ComparisonLanding = lazy(() => import('./pages/comparisons/ComparisonLanding'));
 // /blog index — internal entry point for the static HTML blog posts under /blog/<slug>
 const BlogIndex = lazy(() => import('./pages/BlogIndex'));
 // /tools/reply-roaster — free heuristic critique of a draft reply. Sibling to
@@ -166,6 +168,9 @@ export default function App() {
         <Route path="/for-hotels" element={<VerticalLanding vertical="hotels" />} />
         <Route path="/for-spas" element={<VerticalLanding vertical="spas" />} />
         <Route path="/for-cafes" element={<VerticalLanding vertical="cafes" />} />
+        <Route path="/vs/birdeye" element={<ComparisonLanding competitor="birdeye" />} />
+        <Route path="/vs/podium" element={<ComparisonLanding competitor="podium" />} />
+        <Route path="/vs/reviewtrackers" element={<ComparisonLanding competitor="reviewtrackers" />} />
         <Route path="/changelog" element={<Changelog />} />
         <Route path="/roadmap" element={<Roadmap />} />
         <Route path="/status" element={<Status />} />
