@@ -23,6 +23,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'words-to-avoid-in-review-replies-th',
+    title: '5 คำที่ห้ามใช้ในคำตอบรีวิว Google (และคำที่ใช้แทน)',
+    description: 'คำธรรมดาที่ทำให้คำตอบของคุณดูแก้ตัว ปัด หรือไม่จริงใจ — และคำที่ใช้แทนเพื่อให้ดูเหมือนคนคุยกัน',
+    date: '2026-05-08',
+    readingMins: 4,
+    lang: 'th',
+  },
+  {
     slug: 'track-google-review-reply-rate-th',
     title: 'วิธี track อัตราการตอบรีวิว Google (เมตริกที่สำคัญที่สุด)',
     description: 'ทำไม reply rate สำคัญกว่าจำนวนคำตอบ วิธีวัดโดยไม่ต้องใช้เครื่องมือ เป้าหมาย 80% และอัตราของคุณตอนนี้กำลังบอกอะไรเกี่ยวกับการดำเนินงาน',
