@@ -23,6 +23,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'google-review-reply-length',
+    title: 'How long should a Google review reply be? (the data and the rule of thumb)',
+    description: 'The optimal length for Google review replies, broken down by review type. Why most owners write too much for 5-stars and too little for 1-stars, with copy-paste templates by length.',
+    date: '2026-05-08',
+    readingMins: 5,
+    lang: 'en',
+  },
+  {
     slug: 'bangkok-hospitality-review-mistakes',
     title: '5 Google review mistakes Bangkok hospitality owners keep making',
     description: 'Patterns from real Bangkok hotels and restaurants — copy-paste replies, late responses to international guests, the language-mismatch trap, and what 200+ review properties do differently.',
