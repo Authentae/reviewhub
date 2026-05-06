@@ -198,6 +198,49 @@ spam filters and 1 human triage — the subject has to survive all 4.
 - Emoji in subject line (cold mail spam-flag)
 - "Re:" / "Fwd:" tricks (gets you blocked)
 
+## Templates vs. fresh-per-prospect emails — read this before copying anything
+
+The email examples below are **reference shapes, not copy-paste
+templates.** They exist as a fallback for low-context sending (you
+have an email + a name and not much else).
+
+**When the sender has done per-prospect research** (Google Maps review
+read, owner name found, specific pain identified, platform mix
+mapped) — write a *fresh* email per prospect. The template constraint
+flattens the personalization the research earned.
+
+### Required ingredients (checklist — not order)
+
+Every outreach email must include:
+
+1. **The audit URL** — the value-proof link, hosted on /audit-preview
+2. **Price anchor** — $14/mo (~฿480) once, no time-investment detail
+   ("takes 10 min to set up" reads salesy)
+3. **One specific observation that proves you read their reviews** —
+   a staff name praised, a recurring complaint, the platform mix,
+   anything concrete. Generic hooks are a poison pill.
+4. **Soft handover** — "ส่งให้ดูเผื่อมีประโยชน์เฉยๆ" / "just sending
+   in case useful." Never a hard ask.
+
+### Tone rules
+
+- No corporate clichés (English "we strive for excellence", Thai
+  "ทางร้านขอกราบขอบพระคุณ").
+- No power claims (Thai "ไม่กดดัน" implies the speaker has the
+  standing to pressure — they don't).
+- Match the owner's likely inbox-language register (see "Email
+  language decision tree" in `outreach-queue.md`).
+- Self-intro line in Thai when the owner doesn't know who you are —
+  Thai readers want "who's writing me" before engaging. Skip when
+  redundant.
+- Length matches what you actually have to say. Some prospects need
+  4 sentences. Some need 8. Stretching to fit a template is a tell.
+
+### Two reference shapes (study, don't copy)
+
+Examples follow. **Adapt them per prospect.** If your fresh email
+ends up structurally different — that's fine, often better.
+
 ### Email body — Thai market — UNAWARE segment (0% response rate)
 
 Use this when the prospect has answered ZERO reviews. The opening
