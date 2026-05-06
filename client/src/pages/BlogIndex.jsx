@@ -23,6 +23,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'google-review-reply-length-th',
+    title: 'คำตอบรีวิว Google ควรยาวแค่ไหน? (ข้อมูลและสูตรง่ายๆ)',
+    description: 'ความยาวที่เหมาะสมของคำตอบรีวิว Google แยกตามประเภทรีวิว ทำไมเจ้าของส่วนใหญ่เขียนยาวเกินสำหรับ 5 ดาว และสั้นเกินสำหรับ 1 ดาว พร้อมเทมเพลตแบ่งตามความยาว',
+    date: '2026-05-08',
+    readingMins: 5,
+    lang: 'th',
+  },
+  {
     slug: 'google-review-reply-length',
     title: 'How long should a Google review reply be? (the data and the rule of thumb)',
     description: 'The optimal length for Google review replies, broken down by review type. Why most owners write too much for 5-stars and too little for 1-stars, with copy-paste templates by length.',
