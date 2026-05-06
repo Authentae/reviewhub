@@ -37,6 +37,23 @@ date, and any pre-purchase friction worth remembering.
 - 2 free tools: `/tools/review-reply-generator` (AI-powered) and
   `/tools/reply-roaster` (heuristic critique).
 
+## Outreach waves
+
+- **Wave 1 — 2026-05-04:** 9 emails sent. No replies as of 2026-05-06.
+  Mix of cooking schools + B&Bs. Verticals targeted: Pink Chili,
+  House of Taste, Sweets Cottage, Tingly Thai, May Kaidee, Better
+  Moon, White Ivory, Vera Nidhra, Aim House.
+- **Wave 2 — 2026-05-06 14:39 ICT:** 2 emails sent.
+  - Old Capital Bike Inn (info@oldcapitalbkk.com) — Thai, UNAWARE
+    segment (0% response), specific observation: owner Jason +
+    bike tour. Audit URL eb9b38c2…
+  - Loftel 22 Hostel (loftel22bangkok@gmail.com) — Thai, UNAWARE
+    segment (0% response), specific observation: 2 unanswered 1-stars.
+    Audit URL 5413ee40…
+  - Skipped: Chakrabongse Villas — recent response rate ~60%, owner
+    Narisa replies personally. Stock pitch wouldn't land. Either
+    needs a custom pitch or skip.
+
 ## Active outreach signals
 
 - **2026-05-05** — Outreach queue has 3 verified prospects + 6 research

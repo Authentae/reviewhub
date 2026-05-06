@@ -73,24 +73,17 @@ hooks take over automatically.
      Different pitch needed (e.g. "you reply beautifully — would you
      like to scale that voice in 5 languages via AI?"). Founder call.
 
-2. ~~Old Capital Bike Inn~~ — **DRAFT QUEUED 2026-05-06**
+2. ~~Old Capital Bike Inn~~ — **SENT 2026-05-06 14:39 ICT** (Wave 2)
    - Email: info@oldcapitalbkk.com
-   - Status: 0% response rate confirmed (UNAWARE). Audit URL generated
-     at /audit-preview/eb9b38c20d1921abfae1cf571bd89d120c946a51624d34fd
-     with 3 of their 5★ reviews. Gmail draft created (id r8475...).
-     Founder needs to review + click Send.
-   - Specific observation pulled: owner "Jason" is named in reviews
-     leading the night bike tour; breakfast praised in nearly every
-     review.
-   - Source: https://www.oldcapitalbkk.com/contact-us.html
+   - 48h reply window: by 2026-05-08 14:39
+   - Audit URL eb9b38c2…34fd
+   - Hook: owner Jason + night bike tour mentioned in many reviews
 
-3. ~~Loftel 22 Hostel~~ — **DRAFT QUEUED 2026-05-06**
+3. ~~Loftel 22 Hostel~~ — **SENT 2026-05-06 14:39 ICT** (Wave 2)
    - Email: loftel22bangkok@gmail.com
-   - Status: 0% response rate (UNAWARE). Two unanswered 1-star reviews
-     (one EN, one TH brutal one) sitting open — high-value prospect.
-     Audit URL at /audit-preview/5413ee40f24edbe66a9766e7cfaea91382be83e59cefedc2.
-     Gmail draft created (id r3562...). Founder needs to review + Send.
-   - Source: https://www.facebook.com/loftel22/
+   - 48h reply window: by 2026-05-08 14:39
+   - Audit URL 5413ee40…edc2
+   - Hook: 2 unanswered 1-stars (EN + TH brutal) sitting open
 ```
 
 ## Research targets for tomorrow's batch
