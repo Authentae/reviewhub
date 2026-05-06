@@ -27,16 +27,13 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://reviewhub.review/" />
     <meta property="og:site_name" content="ReviewHub" />
-    <!-- og:image was previously /og-image.png, which never existed in the
-         repo or in production — every social share returned 404 and rendered
-         a text-only card. Now points at /og-image.svg, a static brand card
-         in the editorial palette. Most modern crawlers (LinkedIn, Slack,
-         Discord, WhatsApp, iMessage) render SVG OG images; older Twitter
-         and Facebook may show no image, which is still strictly better than
-         the previous 404 (gives the headline + description to render).
-         When a designer ships a real PNG, swap this path. -->
-    <meta property="og:image" content="https://reviewhub.review/og-image.svg" />
-    <meta property="og:image:type" content="image/svg+xml" />
+    <!-- og:image: PNG primary (X/Facebook crawlers don't render SVG reliably),
+         SVG kept available at og-image.svg as a high-DPI fallback for crawlers
+         that DO support it (LinkedIn, Slack, Discord). The PNG is rendered from
+         the SVG at 1200×630 via sharp; regenerate with:
+           cd client && node -e "require('sharp')(require('fs').readFileSync('public/og-image.svg'),{density:300}).resize(1200,630).png({quality:90}).toFile('public/og-image.png')" -->
+    <meta property="og:image" content="https://reviewhub.review/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="ReviewHub — All your reviews, one editorial dashboard." />
@@ -46,7 +43,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="ReviewHub — Reply to every Google review in 10 seconds" />
     <meta name="twitter:description" content="Reply to Google + Wongnai reviews in 10 seconds. AI drafts replies in 10 languages, in your voice. From $14 / ฿490 a month. Free plan." />
-    <meta name="twitter:image" content="https://reviewhub.review/og-image.svg" />
+    <meta name="twitter:image" content="https://reviewhub.review/og-image.png" />
     <link rel="canonical" href="https://reviewhub.review/" />
     <!-- Hreflang alternates: ReviewHub ships in 10 languages via the in-app
          language switcher. The site uses a single URL for all locales (the

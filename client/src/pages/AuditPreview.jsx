@@ -52,7 +52,7 @@ export default function AuditPreview() {
     // lives in title/description above; the image is static because
     // generating per-business images needs a server-side renderer
     // we don't have yet.
-    image: 'https://reviewhub.review/og-image-audit.svg',
+    image: 'https://reviewhub.review/og-image-audit.png',
   } : undefined);
 
   useEffect(() => {
