@@ -29,6 +29,7 @@ SaaS copy.
 | [`audit-outreach.md`](audit-outreach.md) | The DM script for sending an outbound audit URL to a prospect (paired with the /outbound-audits dashboard tool) |
 | [`ship-readiness-audit.md`](ship-readiness-audit.md) | Engineering checklist after shipping any feature touching pricing / schema / i18n / public pages / plan gates |
 | [`content-writing.md`](content-writing.md) | Writing any customer-facing prose — blog posts, landing copy, changelog, free-tool copy, public announcements. Meta-skill; links out to per-format skills (onboarding-email, audit-outreach, social-presence, support-response). |
+| [`browser-automation.md`](browser-automation.md) | Driving Chrome MCP in Earth's authed session — Gmail compose, X / LinkedIn / Reddit posting, OAuth flows, file uploads. Cumulative foot-gun catalogue with verified workarounds (Trusted-Types, file_upload "Not allowed", base64 chunking, OAuth consent gates). |
 
 ## When to update these
 
