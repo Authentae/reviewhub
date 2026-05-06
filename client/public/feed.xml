@@ -5,13 +5,22 @@
     <link>https://reviewhub.review</link>
     <description>Practical writing for small business owners on managing Google reviews, replying to feedback, and handling fake or extortion reviews. Maintained by ReviewHub.</description>
     <language>en</language>
-    <lastBuildDate>Wed, 06 May 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 07 May 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://reviewhub.review/feed.xml" rel="self" type="application/rss+xml" />
     <image>
       <url>https://reviewhub.review/og-image.svg</url>
       <title>ReviewHub Blog</title>
       <link>https://reviewhub.review</link>
     </image>
+
+    <item>
+      <title>How to remove a Google review (and what Google actually allows)</title>
+      <link>https://reviewhub.review/blog/how-to-remove-google-review</link>
+      <guid isPermaLink="true">https://reviewhub.review/blog/how-to-remove-google-review</guid>
+      <description>The honest playbook: what Google will and won't remove, the flag-and-wait process, the escalation path most owners don't know, and what to do when the review stays up.</description>
+      <pubDate>Thu, 07 May 2026 00:00:00 GMT</pubDate>
+      <category>Reviews</category>
+    </item>
 
     <item>
       <title>How to ask for Google reviews without being pushy (and without giving discounts)</title>

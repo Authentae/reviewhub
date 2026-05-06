@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How to remove a Google review (and what Google actually allows) — ReviewHub</title>
+<meta name="description" content="The honest playbook: what Google will and won't remove, the flag-and-wait process, the escalation path, and what to do when the review stays up.">
+<link rel="canonical" href="https://reviewhub.review/blog/how-to-remove-google-review">
+
+<meta property="og:title" content="How to remove a Google review (and what Google actually allows)">
+<meta property="og:description" content="The honest playbook on Google's review removal policy — what they remove, what they won't, and the escalation path most owners don't know exists.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://reviewhub.review/blog/how-to-remove-google-review">
+<meta property="og:image" content="https://reviewhub.review/og-image.svg">
+<meta property="og:locale" content="en_US">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to remove a Google review (and what Google actually allows)",
+  "inLanguage": "en",
+  "author": {"@type": "Organization", "name": "ReviewHub", "url": "https://reviewhub.review/"},
+  "publisher": {"@type": "Organization", "name": "ReviewHub", "logo": {"@type": "ImageObject", "url": "https://reviewhub.review/logo.svg"}},
+  "datePublished": "2026-05-07",
+  "image": "https://reviewhub.review/og-image.svg",
+  "mainEntityOfPage": "https://reviewhub.review/blog/how-to-remove-google-review"
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper:#fbf8f1; --cream:#f3ecdb; --ink:#1d242c; --ink-2:#4b5560;
+    --rule:#e8dec7; --teal:#2c7889; --teal-deep:#1e4d5e; --teal-soft:#d6e7eb;
+    --ochre:#c48a2c; --rose:#b54a4a; --sage:#5d7a52;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter Tight',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    background:var(--paper);color:var(--ink);line-height:1.65;font-size:17px;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:0 24px}
+  .topnav{padding:24px 0;border-bottom:1px solid var(--rule);background:var(--paper)}
+  .topnav .row{display:flex;justify-content:space-between;align-items:center}
+  .brand{font-family:'Instrument Serif',Georgia,serif;font-size:22px;text-decoration:none;color:var(--ink)}
+  .brand em{font-style:italic;color:var(--teal-deep)}
+  .topnav a.cta{padding:8px 14px;background:var(--teal-deep);color:#fff;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600}
+  article{padding:48px 0 80px}
+  h1{font-family:'Instrument Serif',Georgia,serif;font-size:40px;line-height:1.15;margin-bottom:16px;letter-spacing:-0.01em}
+  h2{font-family:'Instrument Serif',Georgia,serif;font-size:26px;line-height:1.2;margin-top:48px;margin-bottom:14px;letter-spacing:-0.01em}
+  h3{font-size:18px;font-weight:700;margin-top:32px;margin-bottom:8px;color:var(--teal-deep)}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ochre);margin-bottom:12px}
+  .lede{font-size:20px;line-height:1.55;color:var(--ink-2);margin-bottom:32px}
+  p{margin-bottom:18px;color:var(--ink-2)}
+  p strong{color:var(--ink)}
+  .alert{background:#fef3c7;border-left:4px solid var(--ochre);padding:18px 20px;border-radius:0 12px 12px 0;margin:24px 0;font-size:15px}
+  .alert strong{display:block;margin-bottom:6px;color:#92400e;font-weight:700}
+  .danger{background:#fee2e2;border-left:4px solid var(--rose);padding:18px 20px;border-radius:0 12px 12px 0;margin:24px 0;font-size:15px}
+  .danger strong{display:block;margin-bottom:6px;color:#991b1b;font-weight:700}
+  .info{background:var(--teal-soft);border-left:4px solid var(--teal-deep);padding:18px 20px;border-radius:0 12px 12px 0;margin:24px 0;font-size:15px}
+  .info strong{display:block;margin-bottom:6px;color:var(--teal-deep);font-weight:700}
+  ol.steps{padding-left:24px;margin-bottom:18px;color:var(--ink-2)}
+  ol.steps li{margin-bottom:14px}
+  ol.steps li strong{color:var(--ink)}
+  ul,ol{padding-left:24px;margin-bottom:18px;color:var(--ink-2)}
+  ul li,ol li{margin-bottom:8px}
+  .footer-cta{margin-top:64px;padding:32px;background:var(--cream);border-radius:16px;text-align:center}
+  .footer-cta a{display:inline-block;margin-top:12px;padding:12px 24px;background:var(--teal-deep);color:#fff;text-decoration:none;border-radius:8px;font-weight:600}
+  .meta{font-size:13px;color:var(--ink-2);opacity:0.7;margin-top:48px;padding-top:24px;border-top:1px solid var(--rule)}
+  a{color:var(--teal-deep)}
+  table{width:100%;border-collapse:collapse;margin:20px 0;font-size:15px}
+  th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--rule)}
+  th{background:var(--cream);font-weight:600;color:var(--ink)}
+</style>
+</head>
+<body>
+
+<nav class="topnav"><div class="wrap"><div class="row">
+  <a class="brand" href="/">Review<em>Hub</em></a>
+  <a class="cta" href="/register">Try free</a>
+</div></div></nav>
+
+<article class="wrap">
+
+<div class="eyebrow">Owner playbook · 9 min read</div>
+
+<h1>How to remove a Google review (and what Google actually allows)</h1>
+
+<p class="lede">The honest answer first: Google removes very few reviews. They protect the right to leave a negative opinion, even a harsh one. But there ARE specific cases where they will remove a review — and most owners don't know which cases qualify or how to escalate when the first flag gets ignored. Here's what works.</p>
+
+<h2>The mental model: Google is a publisher, not your lawyer</h2>
+
+<p>Google's review system is built on the principle that if you operate publicly, the public gets to comment. Their removal threshold is high on purpose. The bar isn't "this review is unfair" — it's "this review violates a specific written policy."</p>
+
+<p>That distinction matters because the wrong instinct is to flag every negative review as "inappropriate." That gets your flags <em>ignored</em> over time. The right instinct is to read Google's actual policies, identify which one this review breaks, and flag with the matching reason.</p>
+
+<h2>What Google WILL remove</h2>
+
+<p>From Google's <a href="https://support.google.com/contributionpolicy/answer/7400114" target="_blank" rel="noopener">prohibited content policies</a>. These are the only categories that get review-removal action with reliability:</p>
+
+<table>
+  <thead>
+    <tr><th>Category</th><th>What it covers</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Off-topic</strong></td><td>Review isn't about your business. E.g. political rants, complaints about a different location, questions disguised as reviews.</td></tr>
+    <tr><td><strong>Spam / fake</strong></td><td>Same review posted across multiple businesses, promotional content, links to scams, AI-generated content stuffed with keywords.</td></tr>
+    <tr><td><strong>Conflict of interest</strong></td><td>Review by current/former employee, owner of a competing business, paid review (incentivized in exchange for content).</td></tr>
+    <tr><td><strong>Restricted content</strong></td><td>Mentions illegal products, regulated services in unsupported ways, gambling without context.</td></tr>
+    <tr><td><strong>Illegal / dangerous</strong></td><td>Threats, harassment, doxing, content promoting violence.</td></tr>
+    <tr><td><strong>Sexually explicit</strong></td><td>Sexual content, profanity targeting individuals.</td></tr>
+    <tr><td><strong>Personal information</strong></td><td>Reviewer reveals private info about you or staff (full name + address, phone, identifying photos).</td></tr>
+    <tr><td><strong>Impersonation</strong></td><td>Pretending to be your business, your staff, or another customer.</td></tr>
+  </tbody>
+</table>
+
+<h2>What Google will NOT remove (the hard truths)</h2>
+
+<p>This is where most owners get stuck. None of these qualify for removal, no matter how unfair they feel:</p>
+
+<ul>
+  <li><strong>Genuine negative experience.</strong> A customer who waited 45 min for cold food and hated it gets to say so, even harshly.</li>
+  <li><strong>Disagreement over facts.</strong> "They charged me ฿200 extra" — even if you have records proving otherwise, Google won't adjudicate. Reply with your side; that's what owner replies are for.</li>
+  <li><strong>Strong opinions or harsh language.</strong> "Worst service in Bangkok" is allowed. "F*** this place" by itself is allowed unless directed at a specific person.</li>
+  <li><strong>Old reviews.</strong> A 1-star from 3 years ago counts the same as one from yesterday in Google's eyes. They don't auto-expire.</li>
+  <li><strong>Anonymous reviews.</strong> Google doesn't require reviewers to use real names. "John Smith" or "Anonymous" or a number-handle all count.</li>
+  <li><strong>Reviews you suspect but can't prove are fake.</strong> If you suspect competitor sabotage but the review describes a generic-enough experience, Google won't act on suspicion alone.</li>
+</ul>
+
+<div class="alert"><strong>The most painful case</strong>
+A customer is wrong about facts but their experience is what they remember. Google sees this as protected speech. Your only path is a respectful owner reply that corrects the record without sounding defensive — see our <a href="/blog/fake-extortion-google-reviews">guide to handling unfair reviews</a> for templates.</div>
+
+<h2>The flag-and-wait process</h2>
+
+<p>For reviews that DO violate one of Google's policies, here's the path:</p>
+
+<ol class="steps">
+  <li><strong>Sign in to your Google Business Profile.</strong> Go to <a href="https://business.google.com" target="_blank" rel="noopener">business.google.com</a> and select your location.</li>
+  <li><strong>Open the Reviews tab.</strong> Find the review you want to flag.</li>
+  <li><strong>Click the three-dot menu (⋮) on the review → "Report review" / "Flag as inappropriate".</strong></li>
+  <li><strong>Pick the matching policy violation.</strong> This is the most-skipped step. Google asks "what's wrong?" — answer specifically. "Off-topic" gets faster action than generic "spam." Pick the most precise category.</li>
+  <li><strong>Submit and wait.</strong> Google's typical response: 2-7 days. Some take longer. You'll get an email with the outcome.</li>
+</ol>
+
+<h3>Two flagging gotchas</h3>
+
+<p><strong>Don't flag the same review repeatedly.</strong> If Google said "no removal" once, re-flagging won't change the outcome. Worse, it can flag YOUR ACCOUNT as a abuser of the flag system, slowing future legitimate flags.</p>
+
+<p><strong>Don't ask employees or friends to flag the same review.</strong> Google detects coordinated flagging and discounts those flags. One legitimate flag from the verified owner is more effective than 10 flags from random accounts.</p>
+
+<h2>The escalation path most owners don't know</h2>
+
+<p>If the first flag comes back "no policy violation found" but you genuinely believe the review violates a policy, you can escalate via <a href="https://support.google.com/business/answer/4596773" target="_blank" rel="noopener">Google's Business Profile Support</a>. The path:</p>
+
+<ol class="steps">
+  <li><strong>Go to <a href="https://support.google.com/business" target="_blank" rel="noopener">support.google.com/business</a> → Contact us.</strong></li>
+  <li><strong>Pick "Reviews" as the topic.</strong></li>
+  <li><strong>Choose phone, chat, or email.</strong> Phone is fastest in our experience (15-30 min hold during US business hours, less during APAC business hours). Email is slowest (3-7 days).</li>
+  <li><strong>Be specific.</strong> Don't argue "this review is unfair." Say "this review violates Google's policy on [exact category] because [specific evidence]." Reference the policy name from Google's docs.</li>
+  <li><strong>Provide evidence.</strong> Screenshots, receipts, employment records, anything that supports your case.</li>
+</ol>
+
+<div class="info"><strong>The unwritten rule of escalation</strong>
+Google support agents have discretion. They're more likely to remove when (a) the case is policy-clear, not subjective, and (b) the owner is calm and specific, not combative. Treat the agent as your ally trying to solve a puzzle, not as a judge you're trying to convince.</div>
+
+<h2>The legal path (when it's worth it)</h2>
+
+<p>For reviews that are genuinely defamatory or illegal — false statements of fact (not opinion), threats, identity theft — there's a separate <a href="https://support.google.com/legal/answer/3110420" target="_blank" rel="noopener">legal removal request form</a>.</p>
+
+<p>This is the slow path: Google reviews legal removal requests separately, often takes 2-4 weeks, and they err on the side of NOT removing. You typically need:</p>
+
+<ul>
+  <li>A specific, false statement of fact (not "they're terrible" — that's opinion).</li>
+  <li>Evidence the statement is false (records, witnesses, etc.).</li>
+  <li>Sometimes a court order. For serious defamation cases, getting a court ruling first then submitting it via the legal form is the most effective path.</li>
+</ul>
+
+<p>For most owners, this is overkill. The cost-benefit only makes sense for: doxing, identity theft, false statements with real business impact (e.g., "they served me food poisoning" when no incident occurred and it's hurting bookings).</p>
+
+<h2>What to do when the review stays up</h2>
+
+<p>For 80% of "I want this removed" cases, Google won't remove it. The review stays. Your real options:</p>
+
+<h3>Option 1: Reply well</h3>
+
+<p>An owner reply that acknowledges what may have been frustrating, takes ownership of fixable issues, and corrects facts respectfully often does more long-term good than removal would. Future readers see the review AND your reply — and the reply is what shows you care. <a href="/blog/why-respond-to-google-reviews">More on this here</a>.</p>
+
+<h3>Option 2: Outweigh with new reviews</h3>
+
+<p>One bad review weighs more if it's recent and one of few. The same review buried under 50 newer ones has less impact. Focus on getting more reviews from happy customers — see our <a href="/blog/how-to-ask-for-google-reviews">playbook on asking without being pushy</a>.</p>
+
+<h3>Option 3: Take the loss</h3>
+
+<p>Sometimes a 1-star review is a fair signal that something genuinely went wrong. Address what they raised, in the reply and in your operations. The review stays, but the lesson sticks. Owners who treat negative reviews as data outperform owners who treat them as attacks.</p>
+
+<h2>What ReviewHub does (and doesn't do)</h2>
+
+<p>ReviewHub doesn't remove Google reviews. Nobody's tool can — only Google can. What we do is help you respond to every review (positive, negative, awkward) in a tone that reads like you, in 10 seconds instead of 30 minutes. The 1-star you can't remove still gets a thoughtful reply that future readers actually see.</p>
+
+<p>If you're spending nights writing replies and second-guessing tone, that's the workflow we automate — not the removal fight.</p>
+
+<div class="footer-cta">
+  <strong>Got a review you can't reply to without sounding defensive?</strong>
+  <p>Try our free <a href="/tools/reply-roaster">Reply Roaster</a> — paste your draft, get an instant tone critique. Or get an AI-drafted reply in your business voice via the <a href="/tools/review-reply-generator">Reply Generator</a>.</p>
+  <a href="/audit">Try ReviewHub free →</a>
+</div>
+
+<p class="meta">Published 2026-05-07 · ReviewHub · <a href="/blog">More posts</a></p>
+
+</article>
+
+</body>
+</html>

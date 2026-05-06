@@ -23,6 +23,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'how-to-remove-google-review',
+    title: 'How to remove a Google review (and what Google actually allows)',
+    description: 'The honest playbook: what Google will and won\'t remove, the flag-and-wait process, the escalation path most owners don\'t know exists, and what to do when the review stays up.',
+    date: '2026-05-07',
+    readingMins: 9,
+    lang: 'en',
+  },
+  {
     slug: 'how-to-ask-for-google-reviews',
     title: 'How to ask for Google reviews without being pushy (and without giving discounts)',
     description: 'Five natural moments to ask, the wording that doesn\'t sound desperate, the QR-code mistake most owners make, why coupons-for-reviews violate Google policy, and the 1-star prevention move.',
