@@ -1385,7 +1385,8 @@ The full plan comparison (with Pro and Business) plus a "$14/mo vs hiring a VA" 
 
 Reply with any questions about which plan fits your business. I read every one.
 
-— ReviewHub`,
+— Earth
+ReviewHub · Bangkok`,
     },
     14: {
       subject: 'One last thing before I stop emailing you',
@@ -1409,7 +1410,8 @@ If it IS still useful — Starter starts at $14/mo with unlimited AI replies + n
 
 Either way, thanks for trying it.
 
-— ReviewHub`,
+— Earth
+ReviewHub · Bangkok`,
     },
   },
   th: {
