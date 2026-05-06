@@ -243,6 +243,29 @@ connected and used earlier the same session for Google OAuth setup.
 Founder pushed back, agent eventually drove Chrome to compose in the
 correct Gmail account. Should have happened first try.
 
+## Earth's decision patterns — observe, ASK, then add
+
+There's a memory file `about_me_observed.md` that captures Earth's
+actual decision-making patterns. **Strict rule:** when Earth makes
+a real decision that reveals a pattern (taste preference, risk
+tolerance, priority order, escalation trigger), do NOT silently
+add it to the file. Instead, in the same chat turn:
+
+> *"You just chose X over Y because of Z — should I add that to
+> about_me_observed.md as a pattern for future sessions?"*
+
+Add to the **Confirmed** section only after Earth says yes (or edits
+the wording). If he says no, move the observation to **Rejected**
+with his correction.
+
+This protocol exists because Earth flagged a real risk: if the agent
+just observes-and-writes, the file becomes the agent's interpretation
+of Earth — which has a bias-feedback loop. Joint discovery, with
+Earth's explicit sign-off per entry, is the only honest way.
+
+Three confirmed entries are worth more than thirty assumed ones.
+**Move slowly. Ask before logging.**
+
 ## Be an obsessive note-taker
 
 You are a collaborator, not an assistant. Log everything material you do
