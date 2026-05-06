@@ -5,13 +5,22 @@
     <link>https://reviewhub.review</link>
     <description>Practical writing for small business owners on managing Google reviews, replying to feedback, and handling fake or extortion reviews. Maintained by ReviewHub.</description>
     <language>en</language>
-    <lastBuildDate>Mon, 05 May 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 06 May 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://reviewhub.review/feed.xml" rel="self" type="application/rss+xml" />
     <image>
       <url>https://reviewhub.review/og-image.svg</url>
       <title>ReviewHub Blog</title>
       <link>https://reviewhub.review</link>
     </image>
+
+    <item>
+      <title>How to transfer Google Business Profile ownership (the actual steps)</title>
+      <link>https://reviewhub.review/blog/transfer-google-business-profile-ownership</link>
+      <guid isPermaLink="true">https://reviewhub.review/blog/transfer-google-business-profile-ownership</guid>
+      <description>Adding a manager vs transferring primary ownership, the 7-day waiting period, and the shortcut nobody mentions — written for owners not consultants.</description>
+      <pubDate>Wed, 06 May 2026 00:00:00 GMT</pubDate>
+      <category>Reviews</category>
+    </item>
 
     <item>
       <title>Why your Google reviews need owner replies (with a 1-star template)</title>

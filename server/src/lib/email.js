@@ -1338,7 +1338,7 @@ Noticed you haven't connected a review platform yet — most people get stuck on
 → Wongnai: Paste your Wongnai URL. We poll it for new reviews.
 → Yelp / Trustpilot / TripAdvisor: Paste the URL. Same idea.
 
-If you don't have access to your Google Business Profile, that's fixable — search "transfer Google Business Profile ownership" or reply and I'll walk you through it.
+If you don't have access to your Google Business Profile, that's fixable — we wrote a step-by-step guide here: https://reviewhub.review/blog/transfer-google-business-profile-ownership (or just reply and I'll walk you through it).
 
 Not for you? Reply with one word and I'll close the loop. No follow-ups.
 
@@ -1445,7 +1445,7 @@ Bangkok`,
 → Wongnai: paste URL ร้านบน Wongnai เราตรวจรีวิวใหม่ให้
 → Yelp / Trustpilot / TripAdvisor: paste URL เช่นกัน
 
-ถ้าไม่มีสิทธิ์เข้า Google Business Profile บอกมาได้ ผม/ดิฉันแนะนำขั้นตอนโอนสิทธิ์ให้
+ถ้าไม่มีสิทธิ์เข้า Google Business Profile แก้ได้ครับ/ค่ะ — เราเขียนคู่มือทีละขั้นไว้ที่ https://reviewhub.review/blog/transfer-google-business-profile-ownership (หรือตอบกลับมา จะแนะนำให้)
 
 ไม่ใช่สิ่งที่คุณต้องการ? ตอบกลับมาคำเดียว จะหยุดส่งทันที
 
@@ -1567,7 +1567,7 @@ Veo que aún no has conectado ninguna plataforma — la mayoría se atasca en el
 → Yelp / Trustpilot / TripAdvisor: pega la URL pública. Igual de fácil.
 → Otras: importa por CSV (te pasamos una plantilla).
 
-¿Sin acceso a tu Google Business Profile? Tiene arreglo — busca "transferir propiedad de Google Business Profile" o respóndeme y te guío paso a paso.
+¿Sin acceso a tu Google Business Profile? Tiene arreglo — escribimos una guía paso a paso aquí: https://reviewhub.review/blog/transfer-google-business-profile-ownership (o respóndeme y te guío).
 
 ¿No es para ti? Respóndeme con una palabra y cierro el bucle. No te molesto más.
 
@@ -1689,7 +1689,7 @@ Bangkok`,
 → 食べログ / Retty / ホットペッパー: URLを貼り付けてください。新着口コミを定期的にチェックします。
 → Yelp / TripAdvisor: URLを貼り付けるだけ。
 
-Google Business Profileのオーナー権限がない場合も解決できます — 「Google Business Profile オーナー譲渡」で検索するか、このメールに返信してください。手順を案内します。
+Google Business Profileのオーナー権限がない場合も解決できます — 手順をこちらにまとめました: https://reviewhub.review/blog/transfer-google-business-profile-ownership (またはこのメールに返信していただければ案内します)
 
 合わなさそう？「不要」とだけ返信いただければ、もう連絡しません。
 

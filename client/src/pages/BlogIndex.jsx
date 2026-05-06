@@ -23,6 +23,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'transfer-google-business-profile-ownership',
+    title: 'How to transfer Google Business Profile ownership (the actual steps)',
+    description: 'Adding a manager vs transferring primary ownership, the 7-day waiting period, and the shortcut nobody mentions — written for owners not consultants.',
+    date: '2026-05-06',
+    readingMins: 8,
+    lang: 'en',
+  },
+  {
     slug: 'why-respond-to-google-reviews',
     title: 'Why your Google reviews need owner replies (with a 1-star template)',
     description: 'The data on why owner replies move conversion more than the reviews themselves — plus copy-paste templates for 1-star, 5-star, and the awkward 3-star middle.',
