@@ -202,6 +202,22 @@ leverage when triggered.
   `docs/skills/first-customer-playbook.md`. Covers Hour 0 ack, Hour
   4-24 setup walkthrough, billing-checkout response, mistake budget,
   and "what NOT to do under time pressure."
+- `[done]` Wave 1 cooking-schools post-mortem (2026-05-07) at
+  `docs/wave-postmortems/wave-1-cooking-schools.md`. Audience-fit
+  failure (not deliverability). Four falsifiable hypotheses pre-
+  registered for Wave 4.
+- `[done]` Wave 2 post-mortem template (2026-05-07) at
+  `docs/wave-postmortems/wave-2-bangkok-hospitality-template.md`.
+  Scaffolded with predictions; fill in actuals after 2026-05-08
+  reply window.
+- `[done]` content-writing.md skill (2026-05-07) — meta-skill for
+  customer-facing prose (blog/landing/changelog/free-tools); links
+  out to per-format skills for emails/outreach/social/support.
+  Shipped at `docs/skills/content-writing.md`.
+- `[done]` X first-week post drafts (2026-05-07) — 14 drafts
+  spanning post types A/B/C/D/E across 2 weeks at
+  `docs/launch/x-first-week-posts.md`. Earth approves before
+  posting; Post 1 (pinned intro) goes first.
 
 ## CUSTOMER RELATIONS — replies, follow-ups, objection handling
 
@@ -232,6 +248,18 @@ Surfaced from the 2026-05-05 onboarding email audit
 ([docs/onboarding-email-audit.md](docs/onboarding-email-audit.md)) and
 the SEO surface expansion. Smaller wins; ship in batches.
 
+- `[done]` New TH blog post (2026-05-07) — "ตอบรีวิว Google
+  ภาษาอังกฤษให้ดูเป็นมืออาชีพ" (`reply-english-reviews-thai-owners-th`).
+  8-min read for Bangkok hospitality owners. Targets the Wave 3
+  audience.
+- `[done]` TH translation (2026-05-07) — `why-respond-to-google-reviews-th`.
+  Foundational post translated. ~1100 Thai words. Bilingual schema.
+- `[done]` SEO meta upgrade (2026-05-07) — PNG og:image + Twitter
+  Card meta + BreadcrumbList JSON-LD across all 7 blog posts.
+  Idempotent script at `scripts/add-breadcrumb-schema.js`.
+- `[done]` Changelog refresh (2026-05-07) — 7 new EN+TH entries
+  for May 6-7 ships (onboarding rewrites, audit-preview FAQ, 3
+  new EN blog posts, OG meta upgrades).
 - `[done]` Day 7 onboarding email — trimmed dense plan list,
   links to /pricing for full comparison.
 - `[done]` Blog post: "How to transfer Google Business Profile
