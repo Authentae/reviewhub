@@ -23,6 +23,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'transfer-google-business-profile-ownership-th',
+    title: 'วิธีโอนเจ้าของ Google Business Profile (ขั้นตอนจริง)',
+    description: 'คู่มือเจ้าของร้าน: เพิ่ม manager ต่างกับโอนเจ้าของจริงยังไง รอ 7 วันคืออะไร และทางลัดที่ไม่ค่อยมีใครพูดถึง',
+    date: '2026-05-07',
+    readingMins: 8,
+    lang: 'th',
+  },
+  {
     slug: 'how-to-ask-for-google-reviews-th',
     title: 'วิธีขอรีวิว Google จากลูกค้าโดยไม่ดูยัดเยียด (และไม่ใช้ส่วนลด)',
     description: 'คู่มือเจ้าของร้าน: 5 จังหวะธรรมชาติในการขอรีวิว ทำไมแลกส่วนลดกับรีวิวผิดนโยบาย Google ความผิดพลาดเรื่อง QR code และเทคนิคป้องกันรีวิว 1 ดาว',
