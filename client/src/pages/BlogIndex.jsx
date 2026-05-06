@@ -23,6 +23,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'wongnai-vs-google-reviews-bangkok-th',
+    title: 'Wongnai vs รีวิว Google — ร้านอาหารในกรุงเทพฯ ควรโฟกัสที่ไหนก่อน?',
+    description: 'คู่มือซื่อๆ สำหรับร้านอาหารในกรุงเทพฯ — เลือกใช้เวลา 30 นาทีต่อสัปดาห์กับรีวิว Wongnai หรือ Google ขึ้นกับว่าลูกค้าคุณคือใคร พร้อมตารางเปรียบเทียบและสูตรตัดสินใจ',
+    date: '2026-05-08',
+    readingMins: 6,
+    lang: 'th',
+  },
+  {
     slug: 'wongnai-vs-google-reviews-bangkok',
     title: 'Wongnai vs Google reviews — which one should Bangkok restaurants prioritize?',
     description: 'Honest breakdown of where to spend your review-management time as a Bangkok restaurant: Wongnai vs Google. Audience differences, search visibility, owner-reply mechanics, and what a 100-cover restaurant should actually do.',
