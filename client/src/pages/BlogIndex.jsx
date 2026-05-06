@@ -23,6 +23,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'reply-to-old-google-reviews',
+    title: 'Should you reply to old Google reviews? (and how far back to go)',
+    description: 'The honest answer on whether to reply to Google reviews from 6 months, 1 year, or 3 years ago. Why the 30-day rule beats "reply to everything", with the one exception worth knowing.',
+    date: '2026-05-08',
+    readingMins: 5,
+    lang: 'en',
+  },
+  {
     slug: 'what-one-star-reviews-tell-you-th',
     title: 'รีวิว 1 ดาวบน Google บอกอะไรคุณจริงๆ (3 pattern ที่เจ้าของส่วนใหญ่มองข้าม)',
     description: 'รีวิว 1 ดาวไม่ใช่แค่คำตำหนิ — เป็น operations audit ฟรีที่ลูกค้าจ่ายเงินให้คุณอ่าน 3 pattern ในรีวิว 1 ดาว 20 อันล่าสุดของคุณ พร้อมปัญหาทางการดำเนินงานที่แต่ละ pattern เผยออกมา',
