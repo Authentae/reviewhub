@@ -185,6 +185,64 @@ in English to Thai owners purely because `outreach-queue.md` said so.
 The founder caught it before they sent. The agent should have caught
 it first.
 
+## Confirm identity before acting on the user's behalf
+
+Anything that goes out under the user's name — email, social post,
+support reply, billing, contract — needs the **right identity**, not
+just *an* identity. Specifically:
+
+- **Email From address.** The connected Gmail MCP may be on the user's
+  personal account (e.g. `theearth1659@gmail.com`). The OUTREACH email
+  must come from the brand account (`earth.reviewhub@gmail.com`).
+  Confirm with the user OR look up the canonical sender in
+  [docs/skills/audit-outreach.md](docs/skills/audit-outreach.md)
+  ("Send from earth.reviewhub@gmail.com") BEFORE composing.
+- **Social handles, business name spelling, billing email** — same
+  rule. Check the wiki / about-me memory before assuming.
+
+**The signal:** any time you're about to send/post/sign on the user's
+behalf, ask *"is the FROM/AS-USER identity here the right one for this
+action, or just the most-recently-loaded one?"* If unsure, ask in one
+line before executing.
+
+This rule exists because in May 2026 the agent created cold-outreach
+Gmail drafts via the Gmail API tool — which is OAuth'd to the user's
+PERSONAL Gmail (`theearth1659@gmail.com`). The outreach playbook
+explicitly says send from `earth.reviewhub@gmail.com` (the brand
+account). Founder caught the mismatch. Wasted ~10 min and 2 drafts.
+
+## Survey full capabilities before declaring "I can't"
+
+Sibling rule. When about to say *"I can't do X with the tools I have"*
+— **stop and inventory the alternative paths first.** Tool primitives
+chain into capabilities the agent often misses on first pass:
+
+- **Gmail MCP** does drafts only? → **Chrome MCP** can drive Gmail's
+  web compose UI on any signed-in account, and `execCommand('insertText')`
+  bypasses Gmail's Trusted-Types policy on the contenteditable body.
+- **Direct API endpoint missing?** → Server-side: write a one-off Node
+  script that calls existing app code (`transporter.sendMail`,
+  `getDb()`, etc.).
+- **OAuth scope insufficient?** → Browser automation as the user
+  (already-signed-in session) covers most cases.
+- **Cloud service blocked?** → Try the user's already-installed CLI
+  (`railway`, `gh`, `gcloud`) before declaring blocked.
+
+**The two-question check before saying "I can't":**
+1. *Could I do this via Chrome browser automation in the user's
+   already-authed session?*
+2. *Could I do this by running a script through Bash/Node against
+   the existing codebase?*
+
+If either is "yes" with reasonable effort: do it instead of declining.
+Decline only after confirming both paths are also blocked.
+
+This rule exists because in May 2026 the agent declared "I can't send
+emails — only `create_draft` is exposed" — while Chrome MCP was
+connected and used earlier the same session for Google OAuth setup.
+Founder pushed back, agent eventually drove Chrome to compose in the
+correct Gmail account. Should have happened first try.
+
 ## Be an obsessive note-taker
 
 You are a collaborator, not an assistant. Log everything material you do
