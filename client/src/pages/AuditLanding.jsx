@@ -158,15 +158,15 @@ export default function AuditLanding() {
             className="inline-block px-3 py-1 mb-6 text-xs font-bold uppercase tracking-widest rounded-full"
             style={{ background: 'rgba(196,138,44,0.12)', color: 'var(--rh-ochre, #c48a2c)' }}
           >
-            {isThai ? 'ฟรี · รับ 20 ร้านต่อสัปดาห์เท่านั้น' : 'Free · 20 audits per week'}
+            {isThai ? 'ฟรี · Earth ทำเอง · 1 ครั้งต่อร้าน' : 'Free · Hand-crafted by Earth · One per business'}
           </div>
           <h1
             className="text-4xl md:text-5xl font-bold mb-6 leading-tight"
             style={{ color: 'var(--rh-ink)', letterSpacing: '-0.02em' }}
           >
             {isThai
-              ? 'รับคำตอบรีวิว 10 อัน เขียนเฉพาะให้ร้านคุณ ฟรี'
-              : 'Get 10 expert review replies, hand-crafted for your business. Free.'}
+              ? 'รับคำตอบรีวิว 10 อัน เขียนในเสียงของร้านคุณ ฟรี'
+              : 'Get 10 review replies, hand-crafted for your business in your tone. Free.'}
           </h1>
           <p
             className="text-lg md:text-xl leading-relaxed max-w-2xl mx-auto"
