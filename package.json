@@ -16,7 +16,8 @@
     "check:positioning": "node scripts/check-stale-positioning.js",
     "check:all": "npm run check:seo && npm run check:positioning",
     "hooks:install": "bash scripts/install-hooks.sh",
-    "stats:content": "node scripts/content-stats.js"
+    "stats:content": "node scripts/content-stats.js",
+    "check:outreach": "node scripts/validate-outreach.js"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
