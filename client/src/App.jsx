@@ -181,6 +181,8 @@ export default function App() {
         <Route path="/vs/birdeye" element={<ComparisonLanding competitor="birdeye" />} />
         <Route path="/vs/podium" element={<ComparisonLanding competitor="podium" />} />
         <Route path="/vs/reviewtrackers" element={<ComparisonLanding competitor="reviewtrackers" />} />
+        <Route path="/vs/chatgpt" element={<ComparisonLanding competitor="chatgpt" />} />
+        <Route path="/vs/agency" element={<ComparisonLanding competitor="agency" />} />
         <Route path="/changelog" element={<Changelog />} />
         <Route path="/roadmap" element={<Roadmap />} />
         <Route path="/status" element={<Status />} />

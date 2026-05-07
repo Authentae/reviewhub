@@ -354,4 +354,16 @@
     <changefreq>quarterly</changefreq>
     <priority>0.85</priority>
   </url>
+  <url>
+    <loc>https://reviewhub.review/vs/chatgpt</loc>
+    <lastmod>2026-05-08</lastmod>
+    <changefreq>quarterly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://reviewhub.review/vs/agency</loc>
+    <lastmod>2026-05-08</lastmod>
+    <changefreq>quarterly</changefreq>
+    <priority>0.85</priority>
+  </url>
 </urlset>
