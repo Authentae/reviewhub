@@ -188,6 +188,12 @@ The reviewhub.review site itself + everything a prospect sees.
 Outbound work + business mechanics. Lower-frequency but higher-
 leverage when triggered.
 
+- `[done]` AuditPreview component test — `client/src/__tests__/AuditPreview.test.jsx`.
+  Four cases: loading spinner, 404-expired-link branch, happy-path
+  business-name + draft + Copy buttons + founder-reply alt-CTA, and
+  the register CTA's `?from=audit&business=...&token=...` attribution
+  encoding. Pins down the wave-2-bottleneck page so future CTA
+  iterations don't silently break the funnel. 206/206 client tests green.
 - `[done]` Audit-preview alt-CTA — added founder-transparency line +
   "just reply to my email" path on the audit-preview CTA section
   (2026-05-07). Wave 2 lesson was 100% open / 0 reply, suggesting the
