@@ -188,6 +188,20 @@ The reviewhub.review site itself + everything a prospect sees.
 Outbound work + business mechanics. Lower-frequency but higher-
 leverage when triggered.
 
+- `[done]` Audit-preview alt-CTA — added founder-transparency line +
+  "just reply to my email" path on the audit-preview CTA section
+  (2026-05-07). Wave 2 lesson was 100% open / 0 reply, suggesting the
+  audit-preview register-CTA is too high-commitment. New paragraph
+  gives a one-line "tell me more / not for me" path. On-strategy for
+  the Wave 4 audit-preview-CTA test. `client/src/pages/AuditPreview.jsx`.
+- `[done]` All 12 outreach emails scheduled-send for Tue 2026-05-12
+  10:00 AM ICT (2026-05-07 evening, via Chrome MCP UI). Three Wave 2
+  follow-ups (Chakrabongse, Loftel 22, Old Capital) + four TH
+  customer-dev (Pink Chili, House of Taste, Better Moon, Sweets
+  Cottage) + five EN customer-dev (Vera Nidhra, White Ivory, Tingly
+  Thai, May Kaidee, Aim House). Verified in Scheduled folder (12 of 12
+  unique recipients). Sender: earth.reviewhub@gmail.com (brand). Ship
+  fires at 10:00 AM Tue without further intervention.
 - `[wait:user]` Refill `outreach-queue.md` — has 3 verified prospects
   + 6 research targets. Refill needs live-website email verification
   (workflow step 2 in that doc explicitly forbids scraped/stale

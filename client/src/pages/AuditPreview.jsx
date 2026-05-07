@@ -226,6 +226,11 @@ export default function AuditPreview() {
             <p className="text-xs mt-3" style={{ color: '#fdf2dc', opacity: 0.85 }}>
               No credit card to start · 14-day refund window · cancel anytime
             </p>
+            <p className="text-xs mt-4 max-w-md mx-auto" style={{ color: '#fdf2dc', opacity: 0.85 }}>
+              Not ready to sign up? Just reply to my email — I'm Earth, the
+              solo founder building this in Bangkok, and a one-line "tell me
+              more" or "not for me, here's why" is genuinely useful either way.
+            </p>
             <p className="text-xs mt-2" style={{ color: '#fdf2dc', opacity: 0.7 }}>
               Or keep using these drafts — the link above stays live for 30 days.
             </p>
