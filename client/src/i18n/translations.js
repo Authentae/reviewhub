@@ -32,7 +32,7 @@ const en = {
   'landing.pageTitle': 'AI Review Replies in 10 Languages.',
   'landing.heroBadge': 'Free plan forever · 10 languages · From $14 USD a month',
   'landing.heroTitle': 'Reply to every review in 10 seconds.',
-  'landing.heroSubtitle': 'AI drafts replies in 10 languages — in your voice, not a machine\'s. Use it for the 50 quick "thanks for visiting" 5-stars OR for the wedding-day 4-star you\'ll spend 5 minutes carefully editing. Google syncs automatically. TripAdvisor, Yelp, Trustpilot, Wongnai, Tabelog, Naver, and 60+ more via CSV import. From $14 USD a month — no sales call, no contract.',
+  'landing.heroSubtitle': 'AI drafts replies in your voice, not a machine\'s. Use it for the 50 quick "thanks for visiting" 5-stars OR for the wedding-day 4-star you\'ll spend 5 minutes carefully editing. Google syncs automatically; 60+ more platforms via CSV.',
   'landing.heroCtaPrimary': 'Start Free',
   'landing.heroCtaSecondary': 'Try free — no signup',
   'landing.heroCtaPrimaryNewTab': '(opens in a new tab)',
