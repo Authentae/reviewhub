@@ -113,6 +113,37 @@ relationship to follow up on.
 
 ---
 
+## Monday morning execution protocol (15 min)
+
+Wave 2 follow-ups are already drafted in Gmail (Drafts folder,
+3 emails). Wave 1 customer-dev wasn't drafted because Gmail's SPA
+fought programmatic recipient-extraction. Monday morning, do this:
+
+1. Open **earth.reviewhub@gmail.com** (Gmail account /u/5)
+2. Open the **Sent** folder
+3. Filter to May 4: `in:sent after:2026/5/3 before:2026/5/5`
+4. For each of the 9 prospects (skip Baan Sukhumvit — bounced):
+
+   Click the original sent thread → copy the recipient email
+   (right side of the thread header) → open a new compose
+   (`c` keyboard shortcut) → paste recipient → paste subject
+   "Quick question — 30 seconds" → paste body from the
+   template above (TH for Pink Chili / House of Taste /
+   Sweets Cottage / Better Moon, EN for the other 5)
+
+   ~90 sec per prospect × 9 = ~14 min
+
+5. Save each as draft (Gmail auto-saves; just close the compose)
+
+6. **Send all together** Tue 9-11am ICT (after the 3 Wave 2
+   follow-ups go out). Different recipients, no inbox-fatigue
+   risk.
+
+**Do this BEFORE the Wave 4 verification work** — customer-dev
+information takes priority because it shapes Wave 4 targeting.
+If 3+ Wave 1 cohort reply with "I use ChatGPT" or "I never check
+this email," Wave 4's channel/audience strategy needs to update.
+
 ## What to do with replies
 
 Aggregate every reply (or "didn't see it" / "deleted because…")
