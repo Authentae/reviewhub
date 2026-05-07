@@ -191,6 +191,14 @@ const POSTS = [
     lang: 'th',
   },
   {
+    slug: 'reply-english-reviews-thai-owners',
+    title: 'Replying to English Google reviews professionally — a guide for Thai hotel and café owners',
+    description: 'A guide for Thai owners on replying to tourist reviews in English without sounding stiff or machine-translated. Six principles + five copy-pasteable scenarios.',
+    date: '2026-05-08',
+    readingMins: 8,
+    lang: 'en',
+  },
+  {
     slug: 'reply-english-reviews-thai-owners-th',
     title: 'ตอบรีวิว Google ภาษาอังกฤษให้ดูเป็นมืออาชีพ — คู่มือสำหรับเจ้าของโรงแรมและคาเฟ่ไทย',
     description: 'คู่มือเจ้าของร้านไทย: ตอบรีวิวภาษาอังกฤษจากนักท่องเที่ยวต่างชาติให้ดูเป็นมืออาชีพ ไม่แข็ง ไม่เหมือนแปลจากเครื่อง พร้อมเทมเพลต 5 สถานการณ์จริง',
