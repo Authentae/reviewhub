@@ -141,25 +141,27 @@ eye on Thai/EN review patterns).
 
 | # | Name | Website | Likely email | Outreach notes |
 |---|------|---------|--------------|----------------|
-| 1 | Methavalai Residence | methavalairesidence.com | not surfaced — site has TLS-cert mismatch in tooling, try contact form in browser | Phone +66 2 621 0606. Khaosan/Phra Nakon area. |
+| 1 | Methavalai Residence | methavalairesidence.com | **not surfaced** — site has TLS-cert mismatch blocking automated fetch, web search didn't surface it. Open in browser. | Phone +66 986 088 499 or +66 2 621 0606. Khaosan/Phra Nakon area. |
 | 2 | Lilit Bang Lamphu | lilithotel.com | res@lilithotel.com | reservations dept email — for outreach prefer to find owner email via contact page. |
 | 3 | The Raweekanlaya Wellness | raweekanlaya.com | info@raweekanlaya.com | rsvn@ also available; info@ better for owner. Wellness-positioned. |
 | 4 | Lamphu Tree House | lamphutreehotel.com | hotel@lamphutreehotel.com | Canal-side antique-teak. Small owner-loved property. |
 | 5 | Lamphu House | lamphuhouse.com (verify live) | info@lamphuhouse.com | Original doc thought it was FB-only — search surfaced own site. Confirm at https://lamphuhouse.com |
 | 6 | Baan 2459 | baan2459hotel.com | baan2459@gmail.com | 4 rooms. Gmail address = solo owner-operator. Strongest "owner cares about voice" hook. |
 | 7 | Nouvo City Hotel | nouvocityhotel.com | info@nouvocityhotel.com | Halal-certified niche. |
-| 8 | Public House Hotel | publichouse-hotels.com | Cloudflare-obfuscated — open in browser to read | Owner: Paul + Angie Sachdev (family). 78 rooms, design-hotel member. Send EN. |
-| 9 | Volve Hotel | volvehotel.com | site visible via Chrome MCP — check footer | 28 rooms. Pitiphat Chongsomchit was the DESIGNER not owner per press. Re-confirm Thai vs international owner before language call. |
-| 10 | IR-ON Hotel | ir-onhotel.com | site visible via Chrome MCP — check footer | 22 rooms. Thai steel-industry family background → Thai owner. Send TH. |
+| 8 | Public House Hotel | publichouse-hotels.com | info@publichouse-hotels.com | Owner: Paul + Angie Sachdev (family). 78 rooms, design-hotel member. Send EN. |
+| 9 | Volve Hotel | volvehotel.com | hello@volvehotel.com | 28 rooms. Pitiphat Chongsomchit was the DESIGNER not owner per press. Re-confirm Thai vs international owner before language call (press@/pavee.t@volvehotel.com is the press contact — Pavee may be the owner). |
+| 10 | IR-ON Hotel | ir-onhotel.com | not surfaced — open in browser, footer should show it | 22 rooms. Thai steel-industry family background → Thai owner. Send TH. |
 | 11 | Bangkok Voyage Boutique | bangkok-voyage.com | Voyagearthostel@gmail.com | 7 rooms only. Ari residential area. Smallest of the cohort. |
-| 12 | Baan Vajra Silom | baanvajra.com | not surfaced — check site footer or contact page | Silom area boutique. |
+| 12 | Baan Vajra Silom | baanvajra.com | baanvajra@gmail.com | Silom area boutique. Gmail address = solo owner-operator (same pattern as Baan 2459). Worth noting: 2 of 12 use gmail.com — both are the smallest properties; signals very small owner-run vs corporate-managed. |
 
-**What Earth still has to do per candidate (~3-5 min each, down from 10-15):**
+**What Earth still has to do per candidate (~3 min each, down from 10-15):**
 
 1. Open the Google Maps listing → count owner-reply ratio in last 10 reviews. DISQUALIFY if ≥4/10. KEEP if ≤3/10.
-2. For the 4 candidates without surfaced emails (#1, #8, #9, #12): open the website in browser and read the contact page directly.
+2. For the 2 candidates still without emails (#1 Methavalai, #10 IR-ON): open the website in browser and read the contact page.
 3. Cross-check the language call (TH vs EN) against actual ownership signals (Thai-script vs English reviews; owner names in press).
 4. Generate the audit URL via /outbound-audits dashboard.
+
+**Email surface stats:** 10/12 surfaced via web research. The 2 misses (Methavalai, IR-ON) are the only ones that need browser-eyeball lookup. Earth's total verification time across 12 prospects: ~36 min (was 2-3 hrs).
 
 **Corrections to original doc:**
 
