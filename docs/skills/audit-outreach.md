@@ -899,6 +899,55 @@ ticket queue ใหญ่
 ถ้าติดอะไรหรือมีบั๊กผมแก้ให้วันนั้นเลย ตอบอีเมลนี้ถ้าติดที่ไหนครับ
 ```
 
+### 5b. "I'd just use ChatGPT / I have AI already"
+
+The fastest-growing objection in 2026. Tech-aware Bangkok owners
+(especially the Thonglor / Asoke / Sukhumvit Soi 11 cohort) have
+ChatGPT or Claude open and assume "general AI = review tool."
+
+Don't argue against the AI — argue against the *workflow* it forces.
+ChatGPT is a brilliant one-shot drafter; it's a terrible review-
+management system because it has no memory between sessions, no
+ingestion, no post-back to Google, and no per-business voice that
+sharpens over time. The owner becomes the integration glue.
+
+**EN:**
+```
+ChatGPT writes a great reply when you remember to paste a review
+into it. The problem is the workflow around that single reply —
+you still notice the new review yourself (Google rarely emails
+you), copy it into ChatGPT, paste the draft back into Google
+Business Profile, and start over from scratch next time. The voice
+also resets every session.
+
+What ReviewHub does differently: it watches your reviews
+automatically, drafts every new one within 60 seconds, learns from
+your edits over time so the drafts sound progressively more like
+you, and posts to Google on your one-tap approval. Same AI
+underneath; different operation around it.
+
+If you've already wired this together yourself with ChatGPT, that's
+genuinely impressive — keep doing it. If the gap-between-reviews
+keeps stretching out, the audit URL above shows what the
+streamlined version looks like.
+```
+
+**TH:**
+```
+ChatGPT เขียนคำตอบเก่งครับ ถ้าคุณจำได้ว่าต้องวางรีวิวเข้าไป ปัญหาคือ
+workflow รอบๆ คำตอบนั้น — คุณต้องสังเกตเองว่ามีรีวิวใหม่ (Google แทบไม่
+ส่งอีเมลแจ้ง) ก๊อปไป ChatGPT, ก๊อป draft กลับมาวาง Google Business
+Profile, แล้วเริ่มใหม่ทุกครั้ง โทนเสียงก็ reset ทุก session ด้วย
+
+สิ่งที่ ReviewHub ต่างคือ: ดูรีวิวให้อัตโนมัติ, ร่างคำตอบใหม่ใน 60 วินาที,
+เรียนจากที่คุณแก้เพื่อให้ draft โทนเหมือนคุณมากขึ้นเรื่อยๆ, แล้วโพสต์ขึ้น
+Google เมื่อกด approve AI ตัวเดียวกัน แต่ระบบรอบๆ ต่างกัน
+
+ถ้าต่อ ChatGPT เองได้แล้วก็เก่งครับ — ทำต่อไปได้เลย ถ้าช่วงห่างระหว่าง
+รีวิวเริ่มยืดออก URL audit ด้านบนแสดงให้เห็นว่าแบบที่ streamline แล้ว
+หน้าตาเป็นยังไง
+```
+
 ### 6. "Interested! How do I try this?" (warm response — DON'T waste it)
 
 Different from objection #5 ("send me more info"). #5 is skeptical;
