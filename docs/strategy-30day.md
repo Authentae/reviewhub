@@ -121,8 +121,8 @@ This is the harder half. Listed by ranked temptation:
 | Ship more blog posts | We have 30. Marginal post moves nothing measurable. SEO compounds in months, not weeks. |
 | Ship more /vs pages | Same. The 5 we have is enough. |
 | Build new features | We have a product. Adding features without customer feedback = guessing. |
-| Drive Chrome to post X tweets | 0 followers + week-1 brand awareness ≠ paying customers. Drafts are queued; ship them later when there's a story to tell. |
-| Set up LinkedIn / Reddit / IndieHackers | Channels without a story to put in them are noise. |
+| Have the agent auto-post to X via Chrome MCP | Voice mismatch (it's Earth's account, not the agent's), identity-rule violation (CLAUDE.md), and posting cadence isn't an agent attention sink the strategy can afford. **But Earth posting himself is fine and encouraged** — 14 drafts ready in `docs/launch/x-first-week-posts.md`, 60 sec/post from his phone. The "no story to tell" reasoning is now stale: Wave 2 100% opens, audit-funnel iteration, 12 sends Tuesday IS the story. |
+| Set up LinkedIn / Reddit / IndieHackers as new channels | Different from X — these need brand-new account setup, time on platform building presence. X account already exists; LinkedIn/Reddit don't. Defer until X is producing real engagement signal. |
 | Run another autopilot blog-post sprint | 50-commit days are visible-productivity, not customer-productivity. Use saved hours for outreach + Wave 2 inbox watching. |
 | A/B test 5 things | A/B testing requires traffic volume we don't have. Pick the ONE highest-leverage variant (audit-preview CTA, post-Wave-2) and ship that. |
 | Refactor / cleanup | Codebase is fine. 0 customer-value from refactoring. |
