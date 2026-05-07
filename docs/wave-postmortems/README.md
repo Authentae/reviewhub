@@ -19,9 +19,14 @@ observations only.
 ## Index
 
 - [wave-1-cooking-schools.md](wave-1-cooking-schools.md) — 2026-05-04
-  send to 9 cooking-school prospects. 0 replies, 0 audit views.
-  Audience problem, not deliverability.
+  send to 9 mixed-vertical prospects (4 cooking schools + 5 B&Bs/
+  hotel/vegan). **1/9 opened (Pink Chili, 4 views, no reply)**,
+  0 replies. The "cooking schools wrong audience" framing was sloppy —
+  the data says 8/9 didn't open at all, which is more about reach
+  than vertical fit.
 - [wave-2-bangkok-hospitality.md](wave-2-bangkok-hospitality.md) —
   2026-05-06 send to 3 Bangkok hospitality properties (200+ reviews).
-  Reply window closes 2026-05-08; template scaffolded with hypotheses
-  to fill in after.
+  **3/3 opened (100% vs Wave 1's 11%)** — 9× audience-fit lift.
+  0 replies yet (window closes ~16:00 ICT 2026-05-08). New hypothesis:
+  the audit-preview CTA isn't compelling enough to convert "opened"
+  to "replied".
