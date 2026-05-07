@@ -31,6 +31,14 @@ const POSTS = [
     lang: 'en',
   },
   {
+    slug: 'when-not-to-reply-to-a-google-review',
+    title: 'When NOT to reply to a Google review (5 cases where silence is the right answer)',
+    description: 'Most owners reply to everything. Five specific cases where silence beats engagement: extortion, serial-account flooding, exposed PII, hot-emotional reviews, and active legal-action territory.',
+    date: '2026-05-08',
+    readingMins: 5,
+    lang: 'en',
+  },
+  {
     slug: 'words-to-avoid-in-review-replies-th',
     title: '5 คำที่ห้ามใช้ในคำตอบรีวิว Google (และคำที่ใช้แทน)',
     description: 'คำธรรมดาที่ทำให้คำตอบของคุณดูแก้ตัว ปัด หรือไม่จริงใจ — และคำที่ใช้แทนเพื่อให้ดูเหมือนคนคุยกัน',
