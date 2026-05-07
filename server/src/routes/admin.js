@@ -81,6 +81,44 @@ router.get('/stats', (req, res) => {
   }
 });
 
+// GET /api/admin/outreach-stats — per-audit view-count + reply status for
+// outbound audit URLs sent to prospects. The diagnostic that distinguishes
+// "audience problem" from "pitch problem" in cold-outreach post-mortems.
+//
+// 0 views after 72h → wrong audience (they didn't open the link). Views > 0
+// but no reply → pitch problem. Without this data, post-mortems are guesses.
+router.get('/outreach-stats', (req, res) => {
+  try {
+    const rows = all(
+      `SELECT id, business_name, share_token,
+              view_count,
+              first_viewed_at,
+              last_viewed_at,
+              marked_as_replied_at,
+              last_followup_reminder_sent_at,
+              created_at,
+              expires_at,
+              ROUND((julianday('now') - julianday(created_at)) * 24, 1) AS hours_since_sent,
+              CASE WHEN view_count > 0 THEN 1 ELSE 0 END AS opened
+         FROM audit_previews
+        ORDER BY created_at DESC
+        LIMIT 200`
+    );
+    const summary = {
+      total: rows.length,
+      opened: rows.filter(r => r.opened).length,
+      not_opened: rows.filter(r => !r.opened).length,
+      replied: rows.filter(r => r.marked_as_replied_at).length,
+      total_views: rows.reduce((s, r) => s + (r.view_count || 0), 0),
+    };
+    res.setHeader('Cache-Control', 'no-store, private');
+    res.json({ ok: true, summary, audits: rows, ts: new Date().toISOString() });
+  } catch (err) {
+    captureException(err, { route: 'admin.outreach-stats' });
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // GET /api/admin/audit?event=user.login&limit=100&before=<id>&user_id=N&ip=1.2.3.4&since=<iso>
 // Cursor-based pagination: pass `before=<id>` from the previous page's
 // last row to fetch the next page. Older-first-rows would be ambiguous
