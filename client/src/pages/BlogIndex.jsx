@@ -31,6 +31,14 @@ const POSTS = [
     lang: 'en',
   },
   {
+    slug: 'when-not-to-reply-to-a-google-review-th',
+    title: 'เมื่อไหร่ที่ไม่ควรตอบรีวิว Google (5 กรณีที่เงียบเป็นคำตอบที่ถูก)',
+    description: 'คำแนะนำส่วนใหญ่บอก "ตอบทุกอัน" — แต่มี 5 กรณีเฉพาะที่ความเงียบดีกว่าการตอบ การตอบในกรณีเหล่านี้ทำให้ profile ของคุณแย่ลง',
+    date: '2026-05-08',
+    readingMins: 5,
+    lang: 'th',
+  },
+  {
     slug: 'when-not-to-reply-to-a-google-review',
     title: 'When NOT to reply to a Google review (5 cases where silence is the right answer)',
     description: 'Most owners reply to everything. Five specific cases where silence beats engagement: extortion, serial-account flooding, exposed PII, hot-emotional reviews, and active legal-action territory.',
