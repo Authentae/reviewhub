@@ -132,6 +132,40 @@ research and queues them.
 
 ---
 
+## Pre-research findings (agent, 2026-05-08 evening)
+
+Agent did the web-search pass per CLAUDE.md "look up from queue"
+rule — confirmed websites for 11/12, surfaced emails for 8/12.
+Owner-reply-ratio is still Earth's job (needs Google Maps + human
+eye on Thai/EN review patterns).
+
+| # | Name | Website | Likely email | Outreach notes |
+|---|------|---------|--------------|----------------|
+| 1 | Methavalai Residence | methavalairesidence.com | not surfaced — site has TLS-cert mismatch in tooling, try contact form in browser | Phone +66 2 621 0606. Khaosan/Phra Nakon area. |
+| 2 | Lilit Bang Lamphu | lilithotel.com | res@lilithotel.com | reservations dept email — for outreach prefer to find owner email via contact page. |
+| 3 | The Raweekanlaya Wellness | raweekanlaya.com | info@raweekanlaya.com | rsvn@ also available; info@ better for owner. Wellness-positioned. |
+| 4 | Lamphu Tree House | lamphutreehotel.com | hotel@lamphutreehotel.com | Canal-side antique-teak. Small owner-loved property. |
+| 5 | Lamphu House | lamphuhouse.com (verify live) | info@lamphuhouse.com | Original doc thought it was FB-only — search surfaced own site. Confirm at https://lamphuhouse.com |
+| 6 | Baan 2459 | baan2459hotel.com | baan2459@gmail.com | 4 rooms. Gmail address = solo owner-operator. Strongest "owner cares about voice" hook. |
+| 7 | Nouvo City Hotel | nouvocityhotel.com | info@nouvocityhotel.com | Halal-certified niche. |
+| 8 | Public House Hotel | publichouse-hotels.com | Cloudflare-obfuscated — open in browser to read | Owner: Paul + Angie Sachdev (family). 78 rooms, design-hotel member. Send EN. |
+| 9 | Volve Hotel | volvehotel.com | site visible via Chrome MCP — check footer | 28 rooms. Pitiphat Chongsomchit was the DESIGNER not owner per press. Re-confirm Thai vs international owner before language call. |
+| 10 | IR-ON Hotel | ir-onhotel.com | site visible via Chrome MCP — check footer | 22 rooms. Thai steel-industry family background → Thai owner. Send TH. |
+| 11 | Bangkok Voyage Boutique | bangkok-voyage.com | Voyagearthostel@gmail.com | 7 rooms only. Ari residential area. Smallest of the cohort. |
+| 12 | Baan Vajra Silom | baanvajra.com | not surfaced — check site footer or contact page | Silom area boutique. |
+
+**What Earth still has to do per candidate (~3-5 min each, down from 10-15):**
+
+1. Open the Google Maps listing → count owner-reply ratio in last 10 reviews. DISQUALIFY if ≥4/10. KEEP if ≤3/10.
+2. For the 4 candidates without surfaced emails (#1, #8, #9, #12): open the website in browser and read the contact page directly.
+3. Cross-check the language call (TH vs EN) against actual ownership signals (Thai-script vs English reviews; owner names in press).
+4. Generate the audit URL via /outbound-audits dashboard.
+
+**Corrections to original doc:**
+
+- Lamphu House — original said "FB-only"; search surfaced lamphuhouse.com. Don't skip; verify the URL is live.
+- Volve — original said "Thai owner-designer"; press actually says Pitiphat Chongsomchit was the DESIGNER (interior firm Private Scale), not the owner. Re-derive language call from actual ownership before sending.
+
 ## Earth's verification protocol (Tuesday morning)
 
 For each candidate, in 10-15 minutes:

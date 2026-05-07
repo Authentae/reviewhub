@@ -48,14 +48,19 @@ reply path is broken — fix it before scaling outreach.
 
 ### Week 1 (this week — Wave 2 maturation)
 
+> **Date-label correction (2026-05-08):** earlier rows used Thu/Mon
+> labels but May 8 is Friday and May 12 is Tuesday. Dates below are
+> the source of truth; day-of-week labels in older entries are off.
+
 | When | Action | Status |
 |---|---|---|
-| Today (Thu 5/8) | Watch earth.reviewhub@gmail.com inbox until Wave 2 reply window closes (~16:00 ICT). | Done — 0 replies. Plan continues to follow-up phase. |
-| Today (Thu 5/8) | Refill outreach-queue.md with 10+ Bangkok hospitality 200+ reviews prospects. Verify owner emails live. | `[wait:user]` — agent can mine candidates; Earth verifies live emails |
-| Mon 5/12 | Send +3-day follow-ups to Wave 2 (Old Capital, Loftel 22, Chakrabongse). | Drafts ready: `wave-2-followups-monday.md` |
-| Mon 5/12 | Send +5-day follow-up to Pink Chili (Wave 1 sole opener). | Combine with #2 below — same morning send |
-| Mon 5/12 | Send 9 customer-dev emails to Wave 1 cohort. | Drafts ready: `wave-1-customer-dev-emails.md` |
-| Tue 5/13 | Send Wave 4 (10+ new Bangkok hospitality 200+ reviews prospects). | Blocked on outreach-queue refill |
+| Fri 5/8 | Watch earth.reviewhub@gmail.com inbox until Wave 2 reply window closes (~16:00 ICT). | ✓ Done — 0 replies. |
+| Fri 5/8 | Refill outreach-queue.md with 10+ Bangkok hospitality 200+ reviews prospects. Verify owner emails live. | `[in-progress]` — `wave-4-candidates.md` has 12 candidates; agent pre-researching websites + emails 2026-05-08 to reduce Earth's verification time. |
+| Fri 5/8 | Audit-preview measurement: Plausible tagged-events on register CTA. | ✓ Done — `client/index.html` switched to `script.tagged-events.js`; `AuditPreview.jsx` register CTA tagged `plausible-event-name=AuditRegisterClick`. Unblocks Scenario A CTA-variant A/B. Plausible.io activation still `[wait:user]` (5 min). |
+| Tue 5/12 | Send +3-day follow-ups to Wave 2 (Old Capital, Loftel 22, Chakrabongse). | ✓ Scheduled in Gmail for 10:00 AM ICT 2026-05-12. |
+| Tue 5/12 | Send +5-day follow-up to Pink Chili (Wave 1 sole opener). | ✓ Scheduled (Pink Chili gets the customer-dev TH variant since Wave 1 was customer-dev cohort). |
+| Tue 5/12 | Send 9 customer-dev emails to Wave 1 cohort. | ✓ All 9 scheduled (4 TH: Pink Chili, House of Taste, Better Moon, Sweets Cottage / 5 EN: Vera Nidhra, White Ivory, Tingly Thai, May Kaidee, Aim House). Baan Sukhumvit excluded — bounced address. |
+| Wed 5/13 | Send Wave 4 (10+ new Bangkok hospitality 200+ reviews prospects). | Blocked on outreach-queue refill — see `wave-4-candidates.md`. Agent pre-research Fri 5/8 evening; Earth verifies owner-reply ratios + finalizes Mon 5/11. |
 
 ### Week 2 (5/13–5/19 — pitch tightening)
 
@@ -182,3 +187,15 @@ Format for changes:
 **New direction:** [what we're doing instead]
 **Why:** [the reasoning — 2 sentences]
 ```
+
+### 2026-05-08 — Wave 2 + Wave 1-customer-dev sends moved to Tue 5/12 + audit-preview measurement shipped
+**Driven by:** Wave 2 reply window closed at 16:00 ICT 2026-05-08 with 0/3 replies (per inbox check). Strategy doc's "still 0 replies" branch (Scenario A, Week 2) requires audit-preview CTA-variant A/B, which requires conversion measurement — we had none.
+**Old direction:** Send follow-ups + customer-dev manually Mon morning. No instrumented funnel for the post-Wave-2 CTA-variant ship.
+**New direction:** All 12 emails (3 follow-ups + 9 customer-dev) schedule-sent in Gmail for Tue 5/12 10:00 AM ICT — fires without further action. Plausible tagged-events instrumented on the audit-preview register CTA so Wave 4 conversion data starts flowing the moment Plausible.io is activated (`[wait:user]`, 5-min sign-up).
+**Why:** Both moves are pure execution of the existing plan, not pivots. Schedule-send removes Mon-morning friction; tagging the CTA is the prerequisite for the Scenario A CTA-variant ship (Week 2) and costs nothing if Scenario B happens instead.
+
+### 2026-05-08 — Tunnel-vision course correction
+**Driven by:** Earth flagged that the agent was proposing X posting / LinkedIn / free-tools / dashboards while the strategy doc explicitly forbids those at this stage ("0 followers + week-1 brand awareness ≠ paying customers"; "channels without a story to put in them are noise"; "don't add another free tool").
+**Old direction:** Agent was about to ship a "free Google Reply Generator" lead magnet as the next high-leverage item.
+**New direction:** Re-anchor on the strategy doc. Next agent-shippable item per Week 1 row: pre-research Wave 4 candidates (websites + emails) to reduce Earth's verification time before Wed 5/13 send.
+**Why:** Strategy doc's CLAUDE.md anchor ("strategy supersedes the queue when they conflict") exists exactly for this failure mode — agents drift toward visible-productivity work when the customer-acquisition path is slow. Wave 4 pre-research IS in scope; the rest was pivot-driven-by-FOMO.
