@@ -73,6 +73,47 @@ describe('admin routes', () => {
     delete process.env.ADMIN_EMAIL;
   });
 
+  test('admin outreach-stats: returns summary + audits, omits share_token', async () => {
+    const u = await makeUser();
+    process.env.ADMIN_EMAIL = u.email;
+
+    const res = await request(app).get('/api/admin/outreach-stats')
+      .set('Authorization', `Bearer ${u.token}`);
+    assert.strictEqual(res.status, 200);
+    assert.ok(res.body.summary, 'summary present');
+    assert.ok(typeof res.body.summary.total === 'number', 'total is number');
+    assert.ok(typeof res.body.summary.opened === 'number', 'opened is number');
+    assert.ok(typeof res.body.summary.not_opened === 'number', 'not_opened is number');
+    assert.ok(typeof res.body.summary.replied === 'number', 'replied is number');
+    assert.ok(typeof res.body.summary.total_views === 'number', 'total_views is number');
+    assert.ok(Array.isArray(res.body.audits), 'audits is array');
+    assert.strictEqual(typeof res.body.audits_truncated, 'boolean', 'audits_truncated flag present');
+    // Security invariant: share_token MUST NOT appear in any row.
+    for (const row of res.body.audits) {
+      assert.strictEqual(row.share_token, undefined, 'share_token leaked into row');
+    }
+
+    delete process.env.ADMIN_EMAIL;
+  });
+
+  test('admin __whoami: reports env + match status without leaking values', async () => {
+    const u = await makeUser();
+    process.env.ADMIN_EMAIL = u.email;
+
+    const res = await request(app).get('/api/admin/__whoami')
+      .set('Authorization', `Bearer ${u.token}`);
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.body.admin_email_set, true);
+    assert.strictEqual(typeof res.body.admin_email_length, 'number');
+    assert.strictEqual(res.body.caller_email_present, true);
+    assert.strictEqual(res.body.match, true);
+    // Doesn't leak the actual values
+    assert.strictEqual(res.body.admin_email, undefined);
+    assert.strictEqual(res.body.caller_email, undefined);
+
+    delete process.env.ADMIN_EMAIL;
+  });
+
   test('admin metrics exposes request counts + latency percentiles', async () => {
     const u = await makeUser();
     process.env.ADMIN_EMAIL = u.email;

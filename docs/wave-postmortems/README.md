@@ -16,6 +16,13 @@ view across waves):
 Don't write fluff. Don't write aspirations. Specific, falsifiable
 observations only.
 
+## How to query the view-count data
+
+Hit `GET /api/admin/outreach-stats` while logged in as the admin
+(ADMIN_EMAIL on Railway). Returns per-prospect view counts +
+summary aggregates. If the gate misbehaves, hit
+`GET /api/admin/__whoami` first to confirm env + match.
+
 ## Index
 
 - [wave-1-cooking-schools.md](wave-1-cooking-schools.md) — 2026-05-04
