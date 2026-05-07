@@ -1,5 +1,14 @@
 # Operating queue — single source of truth for "what's next"
 
+> **STRATEGIC ANCHOR:** The 30-day plan in
+> [`docs/strategy-30day.md`](strategy-30day.md) supersedes
+> the queue when they conflict. The queue lists work that's
+> available; the strategy says which work matters. Right now
+> the strategy says: stop adding queue items unrelated to
+> Wave 2 follow-ups, Wave 4 send, and customer-development
+> emails. If you're tempted to add a "ship more SEO posts"
+> item, don't — read the strategy doc first.
+
 The unified work list across **code / web / business / customer-
 relations**. Replaces the founder having to context-switch between
 roadmap.jsx + lead-finding.md + audit-outreach.md + outreach-queue.md

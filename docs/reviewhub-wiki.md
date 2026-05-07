@@ -185,9 +185,17 @@ channel, biggest single-customer concentration risk.
   review-management pain (students vs customers). See
   [wave-postmortems/wave-1-cooking-schools.md](wave-postmortems/wave-1-cooking-schools.md)
   for four falsifiable hypotheses guiding Wave 4.
-- **Wave 2 (2026-05-06, hospitality 200+ reviews)** — reply window
-  closes 2026-05-08 14:39 ICT (Old Capital + Loftel 22), ~16:00
-  ICT (Chakrabongse). No data yet.
+- **Wave 2 (2026-05-06, hospitality 200+ reviews)** — **3/3 opened
+  (100% vs Wave 1's 11% — 9× lift) but 0/3 replied.** Reply window
+  closed 2026-05-08 ~16:00 ICT with no replies. Audience-fit
+  confirmed; pitch / audit-preview-page conversion is the new
+  bottleneck. +3-day follow-ups drafted for Mon 2026-05-12, see
+  `docs/wave-postmortems/wave-2-followups-monday.md`.
+- **Bonus Wave 1 finding (2026-05-08)** — Baan Sukhumvit Inn email
+  bounced (`baansukhumvit@yahoo.com — Address not found`). Wave 1
+  was effectively 1/8 opens not 1/9. Confirms the importance of
+  the outreach-queue.md "verify live email before adding"
+  workflow rule.
 - **X / Twitter** — account live at @reviewhubreview as of 2026-05-07
   with brand sparkle avatar + bio, but no posts yet (URL-only first
   attempt was deleted; first 7 drafts in
