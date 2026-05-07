@@ -24,15 +24,40 @@ the reply window effectively closed.
 - **Sender persona:** Earth (founder voice), single CTA to open
   the audit URL.
 
-## Result
+## Result (queried from production audit_previews 2026-05-08)
 
-- **Opens:** Mail-tester scored deliverability 8.2/10 (inbox-tier),
-  but per-recipient open data unavailable (no email tracker
-  pixel — we won't ship one, see "What worked" below).
-- **Audit URL views:** 0 of 9. Zero prospects clicked the
-  personalized URL.
+- **Opens (email):** Mail-tester scored deliverability 8.2/10
+  (inbox-tier). Per-recipient open data unavailable (no email
+  tracker pixel — we won't ship one).
+- **Audit URL views:** **1 of 9** opened. Specifically Pink Chili
+  Thai Cooking School (4 views over the window). The other 8
+  prospects (House of Taste, White Ivory B&B, Vera Nidhra B&B,
+  Aim House Hotel, Better Moon Guesthouse, May Kaidee Tanao
+  Vegetarian, Tingly Thai Cooking, Sweets Cottage Academy)
+  never opened the URL.
 - **Replies:** 0 of 9.
 - **Conversions:** 0 of 9.
+
+### What the data actually says
+
+The original assumption — "0 audit URL views, must be deliverability
+or audience" — was wrong about the count. **One prospect (Pink
+Chili) viewed 4 times and didn't reply.** That changes the
+diagnosis:
+
+- 8 of 9 didn't open → audience problem (or email never reached
+  the decision-maker, but we have no way to distinguish without
+  asking)
+- 1 of 9 (Pink Chili) opened, viewed 4 times, didn't reply →
+  **pitch problem** for that subset
+
+The fact that the one opener was a cooking school — supposedly the
+"wrong audience" — partially undermines the "audience" framing.
+More likely: the wave was mixed (4 cooking schools + 5
+non-cooking-schools mixed in: B&Bs, a hotel, a vegan restaurant).
+The "cooking schools were wrong" framing was sloppy; the actual
+batch was a mixed-vertical experiment that mostly didn't reach
+decision-makers.
 
 ## What worked
 
@@ -79,27 +104,34 @@ the reply window effectively closed.
 
 ## Hypotheses for next wave
 
-These are testable predictions, not guesses:
+These are testable predictions, not guesses (revised after seeing
+the data):
 
-1. **Bangkok hospitality 200+ reviews ≠ cooking schools** — the
-   problem-fit is different. Wave 3 is testing this directly with
-   Methavalai, Lilit, Raweekanlaya as targets.
+1. **Wave 2 (Bangkok hospitality 200+ reviews) opens at much
+   higher rate than Wave 1.** *Confirmed early:* Wave 2 hit
+   3/3 opens (100%) vs Wave 1's 1/9 (11%). The audience-fit
+   hypothesis is real.
 
-2. **Tuesday 9-11am ICT outperforms Sunday/Monday.** If Wave 3
-   sends Tuesday and gets a response within 48h, that's signal —
-   not proof, but signal. Wave 2 was sent at 14:39 ICT on a
-   weekday; reply window closes 2026-05-08, so we'll have a data
-   point.
+2. **Pink Chili (the 1/9 Wave 1 opener) deserves a follow-up.**
+   They viewed 4 times — engagement signal even without reply.
+   A "noticed you opened the audit" follow-up at +5 days could
+   convert them or surface their objection. Did NOT happen during
+   this wave. Add to Wave 4 protocol: track openers separately
+   and follow up.
 
-3. **Send + 1 follow-up beats send-only.** If Wave 3 includes the
-   follow-up template at +5 days and the follow-up generates a
-   reply, we'll know follow-ups work for our audience. Don't
-   skip them again.
+3. **The "didn't open" cohort needs a different test.** 8 of 9
+   never opened. Two possible causes we can't distinguish:
+   email-didn't-reach-decision-maker vs audience-doesn't-care.
+   Wave 4 should test: send via a different channel (LINE OA, FB
+   DM) to a small subset of the same audience type. If LINE
+   opens > 11%, the email channel was the bottleneck; if not,
+   audience-fit was.
 
-4. **Audit URL view count 0/N → audience problem** is a useful
-   diagnostic rule. Adopt as part of the audit-outreach playbook:
-   if views = 0 after 72 hours, the audience is wrong, not the
-   pitch. If views > 0 but replies = 0, the pitch is wrong.
+4. **Audit URL view count is the diagnostic** — adopt as part
+   of `audit-outreach.md`. After 72 hours:
+   - 0 views → audience or channel problem (don't blame pitch)
+   - 1+ views, 0 replies → pitch problem (or follow-up gap)
+   - View + reply → conversion path working, scale
 
 ## Lessons that became rules
 
@@ -118,13 +150,21 @@ them:
 ## Status
 
 Pivoted 2026-05-06 to Bangkok hospitality 200+ reviews. Wave 2
-sent late on 2026-05-06; Wave 3 prospect research in progress
-(Chrome MCP flake blocking). Wave 4 will be the first wave to
-incorporate the "Tuesday 9-11am + 1 follow-up at +5 days" rules
-above.
+sent late on 2026-05-06 — confirmed 3/3 opens (sharp contrast to
+Wave 1's 1/9). Wave 3 prospect research in progress (Chrome MCP
+flake blocking).
 
-Cooking schools are not on the Wave 4 target list. They might be
-revisited at the 200+ reviews tier as a niche (specifically,
-high-end international cooking academies with Western
-clientele who write detailed reviews) — but only after we have
-a working customer in our primary segment.
+**Action items from this revised post-mortem:**
+
+1. Send a +5-day follow-up to Pink Chili Thai Cooking School —
+   they viewed 4 times. Don't waste the only Wave 1 engagement
+   signal we got.
+2. Drop the "cooking schools = wrong audience" framing in the
+   wiki / lead-finding doc. The truth is Wave 1 was mixed-vertical
+   and mostly didn't reach decision-makers.
+3. Wave 4 protocol: track openers separately + queue +5-day
+   follow-up automatically when view_count > 0 and reply not
+   marked.
+4. Test channel hypothesis: send a small Wave 3.5 batch via
+   LINE OA or FB DM to similar audience to distinguish "channel
+   bottleneck" from "audience bottleneck."

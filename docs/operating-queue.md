@@ -207,7 +207,7 @@ leverage when triggered.
   failure (not deliverability). Four falsifiable hypotheses pre-
   registered for Wave 4.
 - `[done]` Wave 2 post-mortem template (2026-05-07) at
-  `docs/wave-postmortems/wave-2-bangkok-hospitality-template.md`.
+  `docs/wave-postmortems/wave-2-bangkok-hospitality.md`.
   Scaffolded with predictions; fill in actuals after 2026-05-08
   reply window.
 - `[done]` content-writing.md skill (2026-05-07) — meta-skill for
