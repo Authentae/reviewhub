@@ -113,7 +113,39 @@ relationship to follow up on.
 
 ---
 
-## Monday morning execution protocol (15 min)
+## Monday morning execution protocol
+
+**Gmail Drafts folder status (as of 2026-05-08):**
+
+10 of 12 drafts queued via Chrome MCP. Definite saves:
+- 3 Wave 2 follow-ups (Old Capital, Loftel 22, Chakrabongse)
+- 4 TH customer-dev (Pink Chili, House of Taste, Better Moon,
+  Sweets Cottage)
+- 3 EN customer-dev (3 of: Tingly, May Kaidee, Aim House, Vera
+  Nidhra, White Ivory — Gmail's auto-save was flaky on rapid
+  navigation, exact 3 of 5 unconfirmed)
+
+**Monday morning verification (5 min):**
+
+1. Open Drafts folder at gmail.com (account /u/5,
+   earth.reviewhub@gmail.com)
+2. Count the drafts. Should be 12.
+3. For each EN customer-dev draft (subject "Quick question —
+   30 seconds"), click open and check the "To" chip — note
+   which 3 of 5 saved.
+4. Re-create the missing 2 manually (~3 min) using the
+   templates already in this doc + the recipient emails:
+   - Tingly Thai: Tinglythaicooking@hotmail.com
+   - May Kaidee: reservations@maykaidee.com
+   - Aim House: info@aimhousehotel.com
+   - Vera Nidhra: veranidhra@gmail.com
+   - White Ivory: info@whiteivorybangkok.com
+
+**Then send all 12 Tue 2026-05-12 9-11am ICT.**
+
+---
+
+## Original Monday execution protocol (kept for reference)
 
 Wave 2 follow-ups are already drafted in Gmail (Drafts folder,
 3 emails). Wave 1 customer-dev wasn't drafted because Gmail's SPA
