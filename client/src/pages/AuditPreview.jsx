@@ -216,9 +216,14 @@ export default function AuditPreview() {
               your voice. You approve with one click; it posts to Google.
               Replies that took 30 min each take 30 seconds. $14/mo (~฿490).
             </p>
+            {/* Plausible tagged-events: clicking this fires "AuditRegisterClick"
+                in Plausible (when prod analytics is active). Lets us measure
+                audit-preview → register click rate for Wave 4 conversion
+                analysis. The class is parsed by script.tagged-events.js
+                loaded in client/index.html. */}
             <a
               href={`/register?from=audit&business=${encodeURIComponent(business_name)}&token=${encodeURIComponent(token || '')}`}
-              className="inline-block px-6 py-3 rounded-lg text-sm font-semibold transition-transform hover:scale-105"
+              className="plausible-event-name=AuditRegisterClick inline-block px-6 py-3 rounded-lg text-sm font-semibold transition-transform hover:scale-105"
               style={{ background: COLORS.cardBg, color: COLORS.tealDeep }}
             >
               Yes, set this up for me →

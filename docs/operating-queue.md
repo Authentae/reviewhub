@@ -188,6 +188,20 @@ The reviewhub.review site itself + everything a prospect sees.
 Outbound work + business mechanics. Lower-frequency but higher-
 leverage when triggered.
 
+- `[wait:user]` Activate Plausible.io account for `reviewhub.review`.
+  Tagged-events tracking is now wired (script.tagged-events.js loads
+  inline on prod hostname; AuditPreview register CTA carries class
+  `plausible-event-name=AuditRegisterClick`). Once Earth signs up at
+  plausible.io and adds reviewhub.review as a site (~5 min), every
+  audit-preview register-click fires a custom event. That gives Wave
+  4 the funnel measurement (audit-preview view → register click rate)
+  the post-mortem said was missing.
+- `[done]` Plausible tagged-events on audit-preview register CTA
+  (2026-05-07). `client/index.html` switched to script.tagged-events.js;
+  `AuditPreview.jsx` register CTA tagged with
+  `plausible-event-name=AuditRegisterClick`. Test pins the class so
+  refactors don't strip it. CSP auto-rehashes the inline script at
+  server boot, no manual hash bump needed. 207/207 tests green.
 - `[done]` AuditPreview component test — `client/src/__tests__/AuditPreview.test.jsx`.
   Four cases: loading spinner, 404-expired-link branch, happy-path
   business-name + draft + Copy buttons + founder-reply alt-CTA, and

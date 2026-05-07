@@ -118,4 +118,21 @@ describe('AuditPreview', () => {
     expect(href).toContain('business=Old%20Capital%20Bike%20Inn');
     expect(href).toContain('token=sharetoken123');
   });
+
+  it('register CTA carries the Plausible tagged-events class so clicks are tracked', async () => {
+    // The class `plausible-event-name=AuditRegisterClick` is parsed by
+    // script.tagged-events.js (loaded inline on prod hostname). Without
+    // it we have no signal on whether audit-preview viewers actually
+    // click the register CTA — the entire Wave 4 conversion-funnel
+    // measurement depends on this class staying put. Pin it down.
+    apiGet.mockResolvedValue({ data: SAMPLE });
+    renderAt('/audit-preview/sharetoken123');
+
+    await waitFor(() => {
+      expect(screen.getByText('Old Capital Bike Inn')).toBeTruthy();
+    });
+
+    const cta = screen.getByText(/set this up for me/i).closest('a');
+    expect(cta.className).toContain('plausible-event-name=AuditRegisterClick');
+  });
 });
