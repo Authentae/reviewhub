@@ -13,6 +13,19 @@ Rules carried into every draft below:
 - Honest stage signal (pre-revenue, founder-built)
 - Link unfurls correctly (og-image.png is live; verified 2026-05-07)
 
+**⚠ Data-verification flags (added 2026-05-08):**
+- **Post 4** ("Hotel owners reply 3× more often to long detailed reviews…")
+  is an unverified hypothesis, not a measured fact. Either drop the "3×"
+  or replace with the new Post 15 below (Wave 2 audience-fit pattern,
+  which is a real measured number).
+- **Post 9** ("Properties that reply within 48h have a 4× higher rate of
+  the reviewer updating their star rating later…") is also unverified.
+  Drop the number or pull from a citable BrightLocal / Womply study and
+  attribute it. Don't post the claim with no source.
+
+The honesty gate is the brand's moat — losing it on a numbers-claim
+that turns out wrong destroys 5+ posts of trust.
+
 ---
 
 ## Post 1 — pinned introduction (Type D)
@@ -235,6 +248,54 @@ ship justifies more.
 > draft button + a publish button.
 >
 > Tooling shouldn't be heavier than the problem.
+
+---
+
+### Post 15 — Type C (real measured pattern from Wave 1+2) · use anytime
+
+A genuinely measured pattern from our own outreach (Wave 1 vs Wave 2).
+This replaces the unverified "3×" claim in Post 4 with a number we
+can defend.
+
+> Cold-email pattern from this week:
+>
+> 9 owners with under-100-review businesses → 1 read the email.
+> 3 owners with 200+-review hospitality businesses → 3 read it.
+>
+> The audience that already feels the problem doesn't need to be
+> convinced to open the email. The pitch survives on its own.
+
+Char count: ~263. ✓. Real measured numbers (Wave 1: 1/9 opens,
+Wave 2: 3/3 opens, both verified via audit-URL view counts in prod).
+No claim about replies — that data isn't in yet.
+
+### Post 16 — Type A (Tuesday-send tip, grounded in our own send data) · use anytime
+
+> Cold email tip for SMB outreach:
+>
+> Sunday sends got 11% opens. Tuesday afternoon sends got 100%.
+>
+> Same audience would still be 100%. But Sunday afternoon is when
+> owners are off the clock. Tuesday 2-3pm is when they're at their
+> desk and inbox-zero-curious.
+
+Char count: ~272. ✓. Numbers are from our own Wave 1 (Sunday) vs
+Wave 2 (Tuesday) sends. Honest framing, no faked details.
+
+### Post 17 — Type B (counter-take, the "this isn't replicable" caveat) · use after Post 15 or 16
+
+For after the above lands. Adds intellectual honesty so the brand
+doesn't read as "always-winning startup."
+
+> Caveat on the 3/3 open rate from earlier: N=3 isn't statistical
+> proof. Could be noise.
+>
+> If next week's batch lands at 3/12 instead of 12/12, the segment
+> wasn't actually the unlock. Pre-revenue means publishing the
+> hypothesis before the data is in.
+
+Char count: ~270. ✓. Self-aware, technical, founder-voice — feels
+real because it admits the hypothesis could fail.
 
 ---
 

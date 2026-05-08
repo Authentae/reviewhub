@@ -227,6 +227,21 @@ leverage when triggered.
   (workflow step 2 in that doc explicitly forbids scraped/stale
   addresses). Founder needs to spend ~30 min Monday morning verifying.
   Agent already mined the verticals; verticals-to-mine list is solid.
+- `[wait:user]` **Wave 4 send (Tue 5/12 + Wed 5/13).** 12 candidates
+  fully researched in `docs/wave-postmortems/wave-4-candidates.md` (10/12
+  emails surfaced; #1 Methavalai blocked on TLS-cert mismatch, #10 IR-ON
+  surfaced 2026-05-08 evening as `info@ir-onhotel.com`). 12 fresh
+  per-prospect drafts written and saved to
+  `docs/wave-postmortems/wave-4-drafts.md` (9 TH + 3 EN, with EN
+  fallbacks where useful). Earth's remaining job per prospect (~3 min):
+  open Maps, count owner-reply ratio (DISQUALIFY if ≥4/10), confirm `{N}`
+  unanswered count, replace `{PAIN}` with one specific observation,
+  generate audit URL via dashboard, replace `{AUDIT_URL}`, schedule send
+  9-11am ICT Tue or Wed (split 6/6 to stay under Gmail's 10/day cap).
+- `[done]` Volve Hotel ownership re-verified (was wrongly noted as
+  Pitiphat Chongsomchit-owned in earlier wave-4-candidates.md;
+  Pitiphat is the interior designer, owner is referenced in press as
+  Thai "Khun Um"). Language call confirmed TH. Updated in drafts file.
 - `[wait:signal]` Pricing-objection journal entries — `audit-outreach.md`
   has the format; agent fills in as replies come in. After 10 logged
   rejections, pattern dictates next move (price shift, tier change,

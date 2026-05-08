@@ -67,6 +67,23 @@ date, and any pre-purchase friction worth remembering.
 - **Wave 1 bounce logged:** baansukhumvit@yahoo.com address not found;
   Yahoo listing was stale third-party. Reinforced verified-live-website-
   email-only rule.
+- **Wave 4 — staged for Tue 5/12 + Wed 5/13:** 12 prospects researched
+  (`docs/wave-postmortems/wave-4-candidates.md`); 12 fresh
+  per-prospect emails drafted (`docs/wave-postmortems/wave-4-drafts.md`).
+  9 TH + 3 EN. Send split 6/6 across Tue and Wed to stay under Gmail
+  10/day cap. All emails surfaced via web research except Methavalai
+  Residence (TLS cert mismatch — needs Earth browser eyeball pass).
+  IR-ON email surfaced as `info@ir-onhotel.com` (2026-05-08 evening).
+  Volve language call corrected to TH after press confirmed Thai owner
+  ("Khun Um"); previous note had wrongly attributed ownership to interior
+  designer Pitiphat Chongsomchit.
+- **Wave 2 / Wave 1 follow-ups — scheduled in Gmail for Tue 5/12 10:00
+  AM ICT:** all 12 sends already in Scheduled folder, fire without
+  intervention. Includes Wave 2 +3-day follow-ups (Old Capital, Loftel
+  22, Chakrabongse), Pink Chili +5-day follow-up (Wave 1 sole opener),
+  and 9 customer-dev emails to Wave 1 cohort (Pink Chili variant TH;
+  House of Taste, Better Moon, Sweets Cottage TH; Vera Nidhra, White
+  Ivory, Tingly Thai, May Kaidee, Aim House EN).
 
 ## Deliverability diagnostic — 2026-05-06 evening
 
