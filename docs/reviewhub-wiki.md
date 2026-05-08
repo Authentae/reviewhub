@@ -73,12 +73,11 @@ date, and any pre-purchase friction worth remembering.
     earlier docs stated. Pink Chili was Wave 1's sole engager with
     significantly more engagement than recorded.
   - **"Voiij coffee and stuff"** appears in the dashboard with **7 opens**
-    (last 5/7 5:31 AM, the most-engaged audit on the account) but is
-    NOT documented in any Wave doc. Likely a side/pilot/personal audit
-    Earth created outside the formal Wave 1-2 sequence. Real coffee
-    shop, 3 reviews mixing TH + EN, clearly a legitimate prospect.
-    Worth investigating whether this represents a "warm intro" path
-    that didn't go through cold outreach.
+    (last 5/7 5:31 AM). **Resolved 2026-05-08 by Earth: Voiij is a
+    research/test audit the agent generated in a past session, NOT
+    real outreach.** The 7 opens were Earth + agent verifying the
+    audit-preview page during development. The "Replied ✓" badge on
+    Voiij is a testing artifact, not a real customer reply.
   - **4 audits marked "Replied ✓"** in the dashboard: Chakrabongse,
     Loftel 22, Old Capital (Wave 2), Pink Chili (Wave 1), Voiij. The
     brand inbox shows 0 prospect replies. Two interpretations: (a) Earth
