@@ -69,6 +69,8 @@ export default function Pricing() {
       '@type': 'Product',
       'name': 'ReviewHub',
       'description': 'AI review reply tool for local businesses. Drafts replies for every Google review in 10 seconds.',
+      'image': 'https://reviewhub.review/og-image.png',
+      'url': 'https://reviewhub.review/pricing',
       'brand': { '@type': 'Brand', 'name': 'ReviewHub' },
       'offers': {
         '@type': 'AggregateOffer',
