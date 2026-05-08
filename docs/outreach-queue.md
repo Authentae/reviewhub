@@ -98,6 +98,16 @@ hooks take over automatically.
 opens was an audience problem, not spam folder. Wave 3 must hit the
 right targets.
 
+> **2026-05-08 update:** the "NEEDS RESEARCH" candidates below
+> (Methavalai, Lilit, Raweekanlaya) are now part of **Wave 4**, not
+> Wave 3. Wave 4 = 12 candidates total (these 3 + 9 newly mined). All
+> 12 are fully researched in
+> `docs/wave-postmortems/wave-4-candidates.md`; ready-to-send drafts
+> are in `docs/wave-postmortems/wave-4-drafts.md`; Tuesday/Wednesday
+> verification workflow in `docs/wave-postmortems/wave-4-verification-checklist.md`.
+> Don't re-research from this section — it's stale snapshot. Use the
+> Wave 4 docs as canonical.
+
 **Wave 3 target profile (LOCK):**
 - Bangkok hospitality (hotels, B&Bs, hostels)
 - 200+ Google reviews (high enough volume to feel reputation pressure)

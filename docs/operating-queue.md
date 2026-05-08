@@ -222,11 +222,28 @@ leverage when triggered.
   Thai, May Kaidee, Aim House). Verified in Scheduled folder (12 of 12
   unique recipients). Sender: earth.reviewhub@gmail.com (brand). Ship
   fires at 10:00 AM Tue without further intervention.
-- `[wait:user]` Refill `outreach-queue.md` — has 3 verified prospects
-  + 6 research targets. Refill needs live-website email verification
-  (workflow step 2 in that doc explicitly forbids scraped/stale
-  addresses). Founder needs to spend ~30 min Monday morning verifying.
-  Agent already mined the verticals; verticals-to-mine list is solid.
+- `[done]` Refill outreach pipeline — Wave 4 fully prepared (was
+  `wait:user` for refill of `outreach-queue.md`). 12 prospects in
+  `docs/wave-postmortems/wave-4-candidates.md` (10/12 emails surfaced,
+  2 need browser-eyeball lookup); 12 fresh per-prospect drafts in
+  `docs/wave-postmortems/wave-4-drafts.md`; Tuesday/Wednesday
+  verification workflow in
+  `docs/wave-postmortems/wave-4-verification-checklist.md`; +5-day
+  follow-up template in `docs/wave-postmortems/wave-4-followup-template.md`;
+  outcomes decision tree in
+  `docs/wave-postmortems/wave-4-outcomes-tree.md`. Stale Wave 3
+  section in `docs/outreach-queue.md` flagged with pointer to canonical
+  Wave 4 docs.
+- `[done]` Audit-views diagnostic CLI — `server/scripts/audit-views.js`.
+  Read-only per-prospect view-count report (status / view count /
+  hours-since-send / hours-since-last-view / audit URL). Optional
+  substring filter. Run via `railway run` for prod data. Replaces
+  manual dashboard navigation when checking 12 prospects.
+- `[done]` Audit-preview CTA variant copy ready — 4 variants in
+  `docs/audit-preview-cta-variants.md` with hypothesis per variant +
+  recommended A/B pair (Permission-asking variant E vs control). ~30
+  min code ship when triggered. Don't ship until Tuesday's data
+  confirms Scenario A.
 - `[wait:user]` **Wave 4 send (Tue 5/12 + Wed 5/13).** 12 candidates
   fully researched in `docs/wave-postmortems/wave-4-candidates.md` (10/12
   emails surfaced; #1 Methavalai blocked on TLS-cert mismatch, #10 IR-ON
