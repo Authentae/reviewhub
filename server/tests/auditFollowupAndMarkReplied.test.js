@@ -83,6 +83,81 @@ describe('POST /api/audit-previews/:id/mark-replied', () => {
   });
 });
 
+describe('POST /api/audit-previews/:id/unmark-replied', () => {
+  let app;
+  let owner;
+  let other;
+
+  before(async () => {
+    app = await getAgent();
+    owner = await makeUser();
+    other = await makeUser();
+  });
+
+  async function freshAudit(forUser = owner) {
+    const r = await request(app)
+      .post('/api/audit-previews')
+      .set('Authorization', `Bearer ${forUser.token}`)
+      .send({
+        business_name: 'Unmark Co',
+        reviews: [{ reviewer_name: 'X', rating: 5, text: 'Great spot, friendly service.' }],
+      });
+    assert.strictEqual(r.status, 200, r.text);
+    return r.body.id;
+  }
+
+  function readRow(id) {
+    const { get } = require('../src/db/schema');
+    return get(`SELECT * FROM audit_previews WHERE id = ?`, [id]);
+  }
+
+  test('unmarking a flagged audit clears the timestamp', async () => {
+    const id = await freshAudit();
+    await request(app).post(`/api/audit-previews/${id}/mark-replied`).set('Authorization', `Bearer ${owner.token}`);
+    assert.ok(readRow(id).marked_as_replied_at, 'should be flagged before unmark');
+
+    const r = await request(app)
+      .post(`/api/audit-previews/${id}/unmark-replied`)
+      .set('Authorization', `Bearer ${owner.token}`);
+    assert.strictEqual(r.status, 200);
+    assert.strictEqual(r.body.marked, false);
+    assert.strictEqual(readRow(id).marked_as_replied_at, null, 'timestamp should be cleared');
+  });
+
+  test('unmarking is idempotent on already-cleared audit', async () => {
+    const id = await freshAudit();
+    assert.strictEqual(readRow(id).marked_as_replied_at, null);
+    const r = await request(app)
+      .post(`/api/audit-previews/${id}/unmark-replied`)
+      .set('Authorization', `Bearer ${owner.token}`);
+    assert.strictEqual(r.status, 200);
+    assert.strictEqual(readRow(id).marked_as_replied_at, null);
+  });
+
+  test("cannot unmark another user's audit", async () => {
+    const id = await freshAudit(owner);
+    await request(app).post(`/api/audit-previews/${id}/mark-replied`).set('Authorization', `Bearer ${owner.token}`);
+    const r = await request(app)
+      .post(`/api/audit-previews/${id}/unmark-replied`)
+      .set('Authorization', `Bearer ${other.token}`);
+    assert.strictEqual(r.status, 404, 'should 404 not 403 — leaks no info about audit existence');
+    assert.ok(readRow(id).marked_as_replied_at, 'flag should still be set after rejected unmark');
+  });
+
+  test('rejects invalid audit id', async () => {
+    const r = await request(app)
+      .post(`/api/audit-previews/abc/unmark-replied`)
+      .set('Authorization', `Bearer ${owner.token}`);
+    assert.strictEqual(r.status, 400);
+  });
+
+  test('requires auth', async () => {
+    const id = await freshAudit();
+    const r = await request(app).post(`/api/audit-previews/${id}/unmark-replied`);
+    assert.strictEqual(r.status, 401);
+  });
+});
+
 describe('Audit follow-up reminder cron', () => {
   let app;
   let owner;

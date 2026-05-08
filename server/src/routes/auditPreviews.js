@@ -259,6 +259,32 @@ router.post('/:id/mark-replied', authMiddleware, (req, res) => {
   }
 });
 
+// POST /api/audit-previews/:id/unmark-replied — clear the "Replied" flag.
+// Mirror of mark-replied for fixing accidental marks (e.g. agent flagged
+// during testing without real customer evidence). Idempotent: clearing
+// an already-clear flag is a no-op.
+router.post('/:id/unmark-replied', authMiddleware, (req, res) => {
+  try {
+    const auditId = parseInt(req.params.id, 10);
+    if (!Number.isFinite(auditId) || auditId <= 0) {
+      return res.status(400).json({ error: 'Invalid audit ID' });
+    }
+    const audit = get(
+      `SELECT id FROM audit_previews WHERE id = ? AND owner_user_id = ?`,
+      [auditId, req.user.id]
+    );
+    if (!audit) return res.status(404).json({ error: 'Not found' });
+    run(
+      `UPDATE audit_previews SET marked_as_replied_at = NULL WHERE id = ?`,
+      [auditId]
+    );
+    res.json({ marked: false });
+  } catch (err) {
+    captureException(err, { route: 'audit-previews', op: 'unmark-replied' });
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // DELETE /api/audit-previews/:id — let the founder revoke a share URL
 // before its 30-day expiry (e.g. prospect closed; don't want the URL
 // floating around).

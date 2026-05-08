@@ -141,6 +141,18 @@ export default function OutboundAudits() {
     }
   }
 
+  async function handleUnmarkReplied(id) {
+    // Clears the Replied flag — for fixing accidental marks (e.g.
+    // agent flagged during testing without a real reply).
+    try {
+      await api.post(`/audit-previews/${id}/unmark-replied`);
+      toast('Replied flag cleared.', 'success');
+      loadAudits();
+    } catch {
+      toast('Could not unmark replied', 'error');
+    }
+  }
+
   async function handleRevoke(id) {
     if (!confirm('Revoke this share URL? The prospect will get a 404 if they open it.')) return;
     try {
@@ -335,6 +347,16 @@ Mali 4
                           title="Suppresses the 48h follow-up reminder"
                         >
                           Replied ✓
+                        </button>
+                      )}
+                      {a.marked_as_replied_at && (
+                        <button
+                          type="button"
+                          onClick={() => handleUnmarkReplied(a.id)}
+                          className="text-xs px-2 py-1 rounded border border-gray-200 dark:border-gray-700 text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800"
+                          title="Clear the Replied flag (use if marked by mistake)"
+                        >
+                          Unmark
                         </button>
                       )}
                       <button
