@@ -59,7 +59,7 @@ export default function Pricing() {
       .map(p => ({
         '@type': 'Offer',
         'name': p.name,
-        'price': String(p.price?.monthly ?? 0),
+        'price': String(p.priceMonthlyUsd ?? 0),
         'priceCurrency': 'USD',
         'availability': 'https://schema.org/InStock',
         'url': 'https://reviewhub.review/pricing',
