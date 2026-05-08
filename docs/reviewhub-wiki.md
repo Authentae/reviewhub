@@ -67,6 +67,29 @@ date, and any pre-purchase friction worth remembering.
 - **Wave 1 bounce logged:** baansukhumvit@yahoo.com address not found;
   Yahoo listing was stale third-party. Reinforced verified-live-website-
   email-only rule.
+- **2026-05-08 dashboard reconciliation (queried via /outbound-audits):**
+  Real audit-views data caught two corrections to the wiki/strategy:
+  - **Pink Chili: 4 opens** (last 5/4 6PM), not the "1 opener" that
+    earlier docs stated. Pink Chili was Wave 1's sole engager with
+    significantly more engagement than recorded.
+  - **"Voiij coffee and stuff"** appears in the dashboard with **7 opens**
+    (last 5/7 5:31 AM, the most-engaged audit on the account) but is
+    NOT documented in any Wave doc. Likely a side/pilot/personal audit
+    Earth created outside the formal Wave 1-2 sequence. Real coffee
+    shop, 3 reviews mixing TH + EN, clearly a legitimate prospect.
+    Worth investigating whether this represents a "warm intro" path
+    that didn't go through cold outreach.
+  - **4 audits marked "Replied ✓"** in the dashboard: Chakrabongse,
+    Loftel 22, Old Capital (Wave 2), Pink Chili (Wave 1), Voiij. The
+    brand inbox shows 0 prospect replies. Two interpretations: (a) Earth
+    manually marked them via dashboard to silence follow-up reminders,
+    OR (b) replies came in via a non-email channel (LINE / IG / FB DM).
+    **Open question — Earth needs to clarify which.** If (b), Tuesday's
+    follow-up plan changes (some prospects already converted-or-rejected).
+  - All 8 other Wave 1 prospects (Sweets Cottage, Tingly Thai, May
+    Kaidee, Better Moon, Aim House, Vera Nidhra, White Ivory, House of
+    Taste): 0 opens. Wave 1 audience-fit miss confirmed.
+  - Baan Sukhumvit (bounced): 0 opens. Consistent with bounce.
 - **Wave 4 — staged for Tue 5/12 + Wed 5/13:** 12 prospects researched
   (`docs/wave-postmortems/wave-4-candidates.md`); 12 fresh
   per-prospect emails drafted (`docs/wave-postmortems/wave-4-drafts.md`).
