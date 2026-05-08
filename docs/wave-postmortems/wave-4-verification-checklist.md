@@ -47,20 +47,22 @@ do all 12 in one sitting — do 6 Tuesday morning, 6 Wednesday morning
 
 ## Tracker — fill in as you go
 
-| # | Property | Email | Lang | Reply ratio | {N} | Status | Audit URL |
+Review counts confirmed via Maps 2026-05-08. Reply ratio still your call.
+
+| # | Property | Reviews | Email | Lang | Reply ratio | {N} | Status |
 |---|---|---|---|---|---|---|---|
-| 1 | Methavalai Residence | __NEEDS LOOKUP__ | TH | _ /10 | _ | [ ] | _ |
-| 2 | Lilit Bang Lamphu | res@lilithotel.com | TH | _ /10 | _ | [ ] | _ |
-| 3 | Raweekanlaya Wellness | info@raweekanlaya.com | TH | _ /10 | _ | [ ] | _ |
-| 4 | Lamphu Tree House | hotel@lamphutreehotel.com | TH | _ /10 | _ | [ ] | _ |
-| 5 | Lamphu House | info@lamphuhouse.com | TH | _ /10 | _ | [ ] | _ |
-| 6 | Baan 2459 | baan2459@gmail.com | TH | _ /10 | _ | [ ] | _ |
-| 7 | Nouvo City Hotel | info@nouvocityhotel.com | EN | _ /10 | _ | [ ] | _ |
-| 8 | Public House Hotel | info@publichouse-hotels.com | EN | _ /10 | _ | [ ] | _ |
-| 9 | Volve Hotel | hello@volvehotel.com | TH | _ /10 | _ | [ ] | _ |
-| 10 | IR-ON Hotel | info@ir-onhotel.com | TH | _ /10 | _ | [ ] | _ |
-| 11 | Bangkok Voyage | Voyagearthostel@gmail.com | TH | _ /10 | _ | [ ] | _ |
-| 12 | Baan Vajra Silom | baanvajra@gmail.com | TH | _ /10 | _ | [ ] | _ |
+| 1 | Methavalai Residence | 716 | NEEDS BROWSER LOOKUP | TH | _ /10 | _ | [ ] |
+| 2 | Lilit Bang Lamphu | 606 | res@lilithotel.com | TH | _ /10 | _ | [ ] |
+| 3 | Raweekanlaya Wellness | 686 | info@raweekanlaya.com | TH | _ /10 | _ | [ ] |
+| 4 | Lamphu Tree House | 926 | hotel@lamphutreehotel.com | TH | _ /10 | _ | [ ] |
+| 5 | Lamphu House | 1,263 | info@lamphuhousebangkok.com | TH | _ /10 | _ | [ ] |
+| ~~6~~ | ~~Baan 2459~~ | **120** | — | — | — | — | **[DQ <200]** |
+| 7 | Nouvo City Hotel | 3,918 | info@nouvocityhotel.com | EN/TH? | _ /10 | _ | [ ] |
+| 8 | Public House Hotel | 855 | info@publichouse-hotels.com | EN | _ /10 | _ | [ ] |
+| 9 | Volve Hotel | 527 | hello@volvehotel.com | TH | _ /10 | _ | [ ] |
+| 10 | IR-ON Hotel | 317 | info@ir-onhotel.com | TH | _ /10 | _ | [ ] |
+| ~~11~~ | ~~Bangkok Voyage~~ | **120** | — | — | — | — | **[DQ <200]** |
+| ~~12~~ | ~~Baan Vajra~~ | **163** | — | — | — | — | **[DQ <200]** |
 
 **Status legend:**
 - `[ ]` — not started
@@ -70,36 +72,49 @@ do all 12 in one sitting — do 6 Tuesday morning, 6 Wednesday morning
 
 ---
 
-## Suggested send schedule
+## Suggested send schedule (REVISED 2026-05-08 after Maps DQ pre-filter)
 
-**Tuesday 5/12 (9-11 AM ICT):**
+> **The original split was wrong.** Maps verification 2026-05-08
+> confirmed Baan 2459 (120 reviews), Bangkok Voyage (120), and Baan
+> Vajra (163) are below the 200-review threshold. The "smallest owner-
+> run / voice-matters" cohort the original schedule fronted on Tuesday
+> mostly DOESN'T qualify — they're small *because* they're small, which
+> is exactly why they have fewer reviews. Wave 4 effective batch is
+> **9 of 12.**
 
-The 6 highest-fit prospects (smallest, most owner-run, "voice matters"
-hook strongest):
+**Tuesday 5/12 (9-11 AM ICT) — 5 sends:**
 
-1. #6 Baan 2459 (4 rooms, gmail address)
-2. #11 Bangkok Voyage (7 rooms, gmail address)
-3. #12 Baan Vajra Silom (gmail address)
-4. #4 Lamphu Tree House (owner-decorated)
-5. #9 Volve Hotel (owner-curator, design hotel)
-6. #3 Raweekanlaya Wellness (wellness-positioned, voice-matters)
+The smaller mid-tier where review counts are healthy but not enormous,
+and Thai-named ownership preserves the voice-matters hook:
 
-**Wednesday 5/13 (9-11 AM ICT):**
+1. #10 IR-ON Hotel (317 reviews, Thai design, TH)
+2. #9 Volve Hotel (527 reviews, Khun Um Thai owner-curator, TH)
+3. #2 Lilit Bang Lamphu (606 reviews, Banglamphu boutique, TH)
+4. #3 Raweekanlaya Wellness (686 reviews, wellness-positioned, TH)
+5. #4 Lamphu Tree (926 reviews, owner-decorated antique-teak, TH)
 
-The 6 mid-tier (larger, more institutional, but still independent):
+**Wednesday 5/13 (9-11 AM ICT) — 4 sends:**
 
-7. #1 Methavalai Residence (716 reviews, large backlog) — IF email surfaced
-8. #2 Lilit Bang Lamphu (606 reviews, 4.6★)
-9. #5 Lamphu House (Khao San boutique)
-10. #10 IR-ON Hotel (industrial design, family business)
-11. #7 Nouvo City Hotel (halal niche, EN)
-12. #8 Public House Hotel (design hotel, family-owned, EN)
+The largest properties + Methavalai (still needs email surfaced):
 
-**Why this order:** the smallest owner-run properties have the highest
-"owner cares about voice" hook, AND match the Wave 2 winning pattern
-(Old Capital Bike Inn = small Old Town historic, opened 1/1). Front-load
-the highest-likelihood-to-open prospects on Tuesday so we get a fast
-read on whether Wave 4 replicates Wave 2's 100%.
+6. #1 Methavalai Residence (716 reviews, Pranakorn) — **IF** Earth surfaces email via browser
+7. #8 Public House Bangkok (855 reviews, 5★ Design Hotels member, EN, Sachdev family)
+8. #5 Lamphu House Bangkok (1,263 reviews, Khao San, TH; verify website `lamphuhousebangkok.com`)
+9. #7 Nouvo City Hotel (3,918 reviews, halal-certified, Thai-script branding suggests bilingual or flip TH from original EN call)
+
+**DISQUALIFIED — DO NOT SEND:**
+
+- #6 Baan 2459 (120 reviews, below 200 threshold)
+- #11 Bangkok Voyage (120 reviews)
+- #12 Baan Vajra (163 reviews)
+
+**Why this revised order:** front-load the smaller-but-qualifying TH
+prospects Tuesday for fast read on whether Wave 4 replicates Wave 2's
+100% open. Save Methavalai for Wednesday since email is still pending,
+and put the very-large properties (Lamphu House 1,263, Nouvo 3,918)
+later because they're more institutional — Wave 2's winning pattern was
+small Old Town historic (Old Capital Bike Inn). Mid-size + Thai-named
++ owner-engaged is where the audience-fit signal landed strongest.
 
 ---
 

@@ -4,6 +4,41 @@ Drafted 2026-05-08 evening by agent. Each email is **fresh-per-prospect**
 per the audit-outreach playbook (not copy-paste-template). Length and
 hook matched to what we actually know about each property.
 
+> **2026-05-08 (afternoon update — Maps verification by agent):** Three
+> prospects DISQUALIFIED at the 200-review-threshold pre-filter and
+> their drafts below should NOT be sent:
+>
+> - **#6 Baan 2459 — 120 reviews ✗** (was: "check")
+> - **#11 Bangkok Voyage — 120 reviews ✗** (was: unspecified)
+> - **#12 Baan Vajra Silom — 163 reviews ✗** (was: unspecified)
+>
+> Wave 4 effective send count: **9 of 12.** The "small owner-run /
+> voice matters strongly" cohort (which the verification checklist's
+> Tuesday split prioritized) has fewer reviews precisely *because*
+> they're small — the 200+ criterion fights the voice-matters criterion.
+> Lesson for Wave 5+: pre-filter by review count BEFORE doing per-
+> prospect research.
+>
+> Other corrections from Maps verification:
+>
+> - **#5 Lamphu House** — website is `lamphuhousebangkok.com`,
+>   NOT `lamphuhouse.com` as drafted. Fix the email's TO field.
+> - **#7 Nouvo City** — Thai-script branding "โรงแรมนูโว ซิตี" plus
+>   3,918 reviews suggests the audience may skew more bilingual than
+>   the original "halal-international = EN" framing. Earth's call:
+>   keep EN, or send TH version, or send both languages in one body.
+> - **#10 IR-ON** — 317 reviews (smallest of the 9 qualifying), 22
+>   rooms, Thai-design-positioned. Hook angle still solid.
+> - **#9 Volve** — 527 reviews. Owner is Thai per WebFetch ("Khun Um").
+>   TH default holds.
+> - **#4 Lamphu Tree** — 926 reviews, 4.5★. Owner-decorated property
+>   hook still solid; smallest-of-the-mid-tier.
+>
+> Ratings on the qualifying 9 range 4.2 (Lamphu House) to 4.8 (Public
+> House) — all healthy. Owner-reply ratio still needs Earth's eyeball
+> pass per prospect; that's editorial judgment Chrome MCP can't reliably
+> do at scale.
+
 ## Earth's pre-send checklist (per email)
 
 For each draft below, before clicking Send:
@@ -225,7 +260,7 @@ Bangkok
 
 ## #5 — Lamphu House Bangkok
 
-- **To:** `info@lamphuhouse.com` (verify lamphuhouse.com is the live own-site, not the third-party listing)
+- **To:** `info@lamphuhousebangkok.com` (corrected from `lamphuhouse.com` — verified 2026-05-08 via Maps that real domain is `lamphuhousebangkok.com`)
 - **Language:** TH (Khao San boutique, Thai-script-native owner likely)
 - **Hook angle:** Khao San area boutique, smaller property than #4
 
