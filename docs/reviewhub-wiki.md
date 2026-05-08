@@ -78,15 +78,16 @@ date, and any pre-purchase friction worth remembering.
     real outreach.** The 7 opens were Earth + agent verifying the
     audit-preview page during development. The "Replied ✓" badge on
     Voiij is a testing artifact, not a real customer reply.
-  - **5 audits marked "Replied ✓"** in the dashboard: Chakrabongse,
-    Loftel 22, Old Capital (Wave 2), Pink Chili (Wave 1), Voiij.
-    **Resolved 2026-05-08 by Earth: the agent marked these in a past
-    session without real customer evidence — none of them actually
-    replied.** Strategy "0 replies" stays correct. Tuesday's manual
-    Gmail-scheduled follow-ups still fire (they don't depend on this
-    flag). Lesson captured in `feedback_dont_mark_replied_without_evidence.md`
-    memory file: never call mark-replied without a verified inbox reply
-    or Earth-confirmed non-email channel reply.
+  - **The "Replied ✓" elements visible in the dashboard are action
+    BUTTONS, not status badges.** Resolved 2026-05-08: agent misread
+    the UI all afternoon — the same "Replied ✓" label appears as both
+    (a) the button to mark an audit as replied (visible when
+    `opened && !marked_as_replied_at`) and (b) the inline status text
+    (visible when `marked_as_replied_at` is set). API verification via
+    `GET /api/audit-previews` confirms `marked_as_replied_at: null` for
+    all 14 audits. **No audits are actually flagged.** Strategy
+    "0 replies for Wave 1+2" stays correct. The mark-replied state was
+    never the issue.
   - All 8 other Wave 1 prospects (Sweets Cottage, Tingly Thai, May
     Kaidee, Better Moon, Aim House, Vera Nidhra, White Ivory, House of
     Taste): 0 opens. Wave 1 audience-fit miss confirmed.
