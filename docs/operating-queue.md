@@ -188,14 +188,19 @@ The reviewhub.review site itself + everything a prospect sees.
 Outbound work + business mechanics. Lower-frequency but higher-
 leverage when triggered.
 
-- `[wait:user]` Activate Plausible.io account for `reviewhub.review`.
-  Tagged-events tracking is now wired (script.tagged-events.js loads
-  inline on prod hostname; AuditPreview register CTA carries class
-  `plausible-event-name=AuditRegisterClick`). Once Earth signs up at
-  plausible.io and adds reviewhub.review as a site (~5 min), every
-  audit-preview register-click fires a custom event. That gives Wave
-  4 the funnel measurement (audit-preview view → register click rate)
-  the post-mortem said was missing.
+- `[skip]` Plausible.io activation — parked 2026-05-08. Earth asked
+  "why do we need Plausible?" — honest answer is we don't, at least
+  not yet. We already have server-side `audit_previews.view_count`
+  per prospect and Railway access logs for traffic + referers. The
+  one thing Plausible would add is the `AuditRegisterClick` event
+  for measuring CTA click-through on the Scenario A A/B variant test.
+  But that experiment isn't live yet, and if/when it activates we
+  can ship a server-side equivalent in ~30 min: `POST /api/audit-clicks`
+  endpoint + new `audit_clicks` table + fire from the Register button
+  in `AuditPreview.jsx`. No third-party dependency, no privacy banner,
+  no extra account. The Plausible script tag stays in HTML (cheap,
+  doesn't hurt) — it's only the Plausible.io account/dashboard side
+  we're skipping. Re-evaluate if Scenario A actually fires in Week 2.
 - `[done]` Plausible tagged-events on audit-preview register CTA
   (2026-05-07). `client/index.html` switched to script.tagged-events.js;
   `AuditPreview.jsx` register CTA tagged with
