@@ -13,6 +13,17 @@ Rules carried into every draft below:
 - Honest stage signal (pre-revenue, founder-built)
 - Link unfurls correctly (og-image.png is live; verified 2026-05-07)
 
+**⚠ STATUS UPDATE 2026-05-08 evening:** Earth decided to skip Posts 2-17
+for now. Pre-revenue priority filter says X (category 4 — compounding
+investment) only when categories 1-3 are saturated. Wave 4 isn't even
+sent yet, so 1-3 aren't saturated. **Only Post 1 (the pinned brand
+intro) ships now** — its 5-min cost has a direct path to Wave 4
+revenue (prospects Googling "ReviewHub" find an active presence).
+Posts 2-17 stay as inventory; re-evaluate in 3 months when there's
+real customer signal. Also: Posts 2-17 lean founder-influencer voice
+which isn't right for an @reviewhubreview brand account anyway —
+they'd need a rewrite or a separate founder handle before posting.
+
 **⚠ Data-verification flags (added 2026-05-08):**
 - **Post 4** ("Hotel owners reply 3× more often to long detailed reviews…")
   is an unverified hypothesis, not a measured fact. Either drop the "3×"
