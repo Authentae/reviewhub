@@ -105,14 +105,28 @@ read on whether Wave 4 replicates Wave 2's 100%.
 
 ## After sending — instrumentation
 
-You don't need to do anything special; the audit URLs auto-track view
-counts in the `audit_previews` table. To check progress later:
+The audit URLs auto-track view counts in the `audit_previews` table.
+
+**Fast-read CLI (added 2026-05-08):**
 
 ```bash
-# Open the dashboard at /audit-previews — view counts visible there
+# Run against production DB via Railway:
+railway run node server/scripts/audit-views.js
+
+# Filter to a specific prospect (case-insensitive substring match):
+railway run node server/scripts/audit-views.js Methavalai
+railway run node server/scripts/audit-views.js bang   # all "Bangkok*" properties
 ```
 
-Or via the existing diagnostic hook in the wave-2 post-mortem doc.
+Output: per-prospect status (cold/OPENED/REPLIED ✓), view count, hours
+since send, hours since last view, and the audit URL. Plus a "recently
+active in last 48h" section if anyone re-opened.
+
+Faster than loading the dashboard, especially for checking 12 prospects
+at once Tuesday/Wednesday.
+
+**Or via the dashboard:** open `/audit-previews` (signed-in) — view
+counts visible per audit.
 
 **Reply window:** 5 days after send for Wave 4. So Tue 5/12 sends → check
 inbox through Sun 5/17. Wed 5/13 sends → check through Mon 5/18.
