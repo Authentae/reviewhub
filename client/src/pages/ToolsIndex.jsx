@@ -141,8 +141,8 @@ export default function ToolsIndex() {
         >
           <p className="text-sm mb-4" style={{ color: 'var(--rh-ink-2, #4a525a)' }}>
             {isThai
-              ? 'ใช้เครื่องมือเหล่านี้บ่อยมั้ย? ReviewHub เป็นแอปที่รวมทุกอย่าง — รับรีวิวอัตโนมัติ ร่างคำตอบ และโพสต์กลับไป Google ในที่เดียว'
-              : 'Using these tools often? ReviewHub is the app that bundles all of it — auto-syncs your reviews, drafts replies in your voice, and posts back to Google. One inbox.'}
+              ? 'ใช้เครื่องมือเหล่านี้บ่อยมั้ย? ReviewHub เป็นแอปที่รวมทุกอย่าง — รับรีวิวอัตโนมัติ ส่งร่างคำตอบเข้า LINE คุณตอนรีวิวใหม่เด้ง แตะก็อปแล้ววางใน Google ที่เดียว'
+              : 'Using these tools often? ReviewHub is the app that bundles all of it — auto-syncs your reviews, pings you on LINE with an AI draft when a new review lands, tap to copy, paste in Google. One inbox.'}
           </p>
           <Link
             to="/audit"
