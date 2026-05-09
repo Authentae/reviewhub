@@ -63,11 +63,11 @@ export default function LinePivot() {
 
   useSocialMeta({
     title: isThai
-      ? 'แจ้งเตือนรีวิว Google ผ่าน LINE — ตอบกลับใน 10 วินาที'
-      : 'Google review notifications via LINE — reply in 10 seconds',
+      ? 'แจ้งเตือนรีวิว Google ผ่าน LINE — ตอบกลับใน 30 วินาที'
+      : 'Google review notifications via LINE — reply in 30 seconds',
     description: isThai
-      ? 'รีวิวใหม่บน Google → LINE แจ้งทันทีพร้อมร่างคำตอบ → กดอนุมัติ → โพสต์ให้ ทำในกรุงเทพสำหรับเจ้าของโรงแรม ร้านอาหาร คลินิก'
-      : 'New Google review → LINE notification with AI-drafted reply → tap approve → posted. Built in Bangkok for hospitality, restaurants, clinics, salons.',
+      ? 'รีวิวใหม่บน Google → LINE แจ้งทันทีพร้อมร่างคำตอบ AI → แตะก็อปแล้ววางใน Google ทำในกรุงเทพสำหรับเจ้าของโรงแรม ร้านอาหาร คลินิก'
+      : 'New Google review → LINE notification with AI-drafted reply → tap to copy → paste in Google. Built in Bangkok for hospitality, restaurants, clinics, salons.',
   });
 
   return (

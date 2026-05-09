@@ -31,6 +31,11 @@ export default function Changelog() {
   const highlights = [
     {
       date: '2026-05-10',
+      en: 'Settings → Connect LINE OA section shipped. The LINE-pivot headline feature was half-built — webhook + push existed but no UI for users to actually link their LINE account. Now there is: generate a one-time link code in Settings, send "/link <code>" to the ReviewHub LINE OA bot, the section flips to "Connected" within ~10s. After that, every new Google review pings your LINE chat with the AI-drafted reply. Privacy policy updated to disclose LINE Corp as a sub-processor.',
+      th: 'เพิ่มส่วน "เชื่อม LINE OA" ที่ Settings — ฟีเจอร์หัวเรือของ LINE pivot ที่เคยทำได้ครึ่งหนึ่ง (มี webhook + push แต่ไม่มี UI ให้ผู้ใช้เชื่อม) ตอนนี้สร้างโค้ดเชื่อมที่ Settings ส่ง "/link <โค้ด>" ให้ LINE OA ของ ReviewHub แล้วเชื่อมเสร็จใน ~10 วินาที จากนั้นรีวิว Google ใหม่ทุกอันจะเด้งเข้า LINE คุณพร้อมร่างคำตอบ AI / อัปเดต privacy เพิ่ม LINE Corp เป็น sub-processor แล้ว',
+    },
+    {
+      date: '2026-05-10',
       en: 'New /guide page — central "How ReviewHub works" walkthrough. Four numbered steps (sign up → connect Google → connect LINE → tap-to-copy) with the LINE notification flow diagram and 7 FAQs targeting the actual signup-to-activation friction. Linked from the footer Product menu.',
       th: 'เพิ่มหน้า /guide — สาธิตการใช้งาน 4 ขั้นตอน (สมัคร → เชื่อม Google → เชื่อม LINE → แตะก็อป) พร้อมแผนภาพการแจ้งเตือนผ่าน LINE และ FAQ 7 ข้อสำหรับคำถามที่ลูกค้าใหม่ติดบ่อย ลิงก์จาก footer',
     },
