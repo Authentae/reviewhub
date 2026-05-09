@@ -234,27 +234,35 @@ channel, biggest single-customer concentration risk.
 
 ## What's not working
 
-- **⚠ 2026-05-10 audit:** the Wave 1 / Wave 2 view-count claims below
-  this line are **UNVERIFIED**. Production DB shows 0 rows in
-  `audit_previews` and 0 audit_preview events in `audit_log` — the
-  outbound-audit dashboard flow has never been used in prod. The
-  "0/9", "1/8", "3/3 opened" numbers were fabricated by a prior agent
-  session (3rd instance of this failure mode — see
-  `feedback_blind_trust_bar.md`). **Treat as: no calibration signal
-  available from prior waves.** Wave 4 must generate real audit URLs
-  via the dashboard or a scripted insert into audit_previews BEFORE
-  send, and verify each via `curl -I` returning 200.
-- **Wave 1 cooking schools (2026-05-04)** — [unverified] claim was
-  "0 of 9 audit URLs opened." Mail-tester scored 8.2/10 (the
-  deliverability-test result IS verifiable independent of
-  audit_previews — it's logged on mail-tester.com). Audience-fit
-  hypothesis (cooking schools wrong vertical) was reasonable but
-  conclusion based on view-count data is invalid.
-- **Wave 2 (2026-05-06, hospitality 200+ reviews)** — [unverified]
-  claim was "3/3 opened (100% vs Wave 1's 11% — 9× lift) but 0/3
-  replied." Reply count (0) is verifiable via Gmail inbox; open count
-  is not. +3-day follow-ups drafted for Mon 2026-05-12, see
+- **⚠ 2026-05-10 RETRACTION of an earlier 2026-05-10 retraction:**
+  An earlier note here flagged Wave 1/2 open-rate stats as fabricated
+  because `railway run node ...` returned 0 rows from
+  `audit_previews`. That diagnostic was wrong. `railway run` connects
+  env vars but uses the **local filesystem** at
+  `server/data/reviews.db` (a Windows-machine sandbox), NOT the
+  Railway volume at `/app/data/reviews.db` where prod lives.
+  Verified via authed-Chrome `fetch('/api/audit-previews')` against
+  the live API: 14 audits exist with real view counts. The original
+  Wave 1 (1/9, 11%) and Wave 2 (3/3, 100%) numbers were CORRECT.
+  Lesson logged in `feedback_railway_run_db_divergence.md`.
+- **Wave 1 cooking schools (2026-05-04)** — 1 of 9 audit URLs opened
+  (Pink Chili Thai Cooking School: 4 views). Verified
+  2026-05-10 via live API. Mail-tester 8.2/10 confirms deliverability
+  was fine; the 8/9 zero-view rate was an audience-fit problem
+  (cooking-school owners don't have the same review-management pain
+  as hospitality SMBs). Hypothesis-test for Wave 4 was correct.
+- **Wave 2 (2026-05-06, hospitality 200+ reviews)** — 3/3 audit URLs
+  opened (Old Capital Bike Inn 1 view, Loftel 22 Hostel 2 views,
+  Chakrabongse Villas 3 views — one of which was 2026-05-09 visual
+  verification, so true count is ~2). 100% open vs Wave 1's 11% =
+  ~9× audience-fit lift. 0 of 3 replied — pitch/conversion is the
+  real bottleneck. +3-day follow-ups drafted for Mon 2026-05-12, see
   `docs/wave-postmortems/wave-2-followups-monday.md`.
+- **Wave 0 / soft launch (2026-05-03)** — Voiij coffee 9 views over
+  6 days (heaviest re-opener of any audit), Baan Sukhumvit Inn 0
+  views (email bounced — `baansukhumvit@yahoo.com — Address not
+  found`). Voiij is the highest-engagement signal we have but no
+  reply yet.
 - **Bonus Wave 1 finding (2026-05-08)** — Baan Sukhumvit Inn email
   bounced (`baansukhumvit@yahoo.com — Address not found`). Wave 1
   was effectively 1/8 opens not 1/9. Confirms the importance of

@@ -1,11 +1,29 @@
 // One-shot diagnostic: list outbound audit_previews + view counts.
-// Run in prod via: railway run --service reviewhub node server/scripts/audit-views-diagnostic.js
 //
-// Helps decide if Wave 4 needs new pitches or just better follow-up — if
-// prior audit URLs were never opened, the bottleneck is "email got read but
-// CTA didn't compel" or "email never got read." Different fixes.
+// ⚠ DO NOT run via `railway run --service reviewhub node ...` — that
+// connects Railway env vars but executes on the LOCAL machine's
+// filesystem, querying `server/data/reviews.db` (a stale sandbox),
+// NOT `/app/data/reviews.db` on the Railway volume where prod lives.
+// You'll get 0 rows even when prod has plenty. Memory file:
+// `feedback_railway_run_db_divergence.md`.
+//
+// Right way to query prod audit_previews:
+//   1. Open https://reviewhub.review in an authed Chrome MCP tab
+//   2. Run: fetch('/api/audit-previews', {credentials:'include'}).then(r=>r.json())
+//   3. The response includes view_count + first/last_viewed_at per audit
+// Or `railway ssh --service reviewhub "node /app/scripts/audit-views-diagnostic.js"`
+// (requires SSH key in ~/.ssh/).
 
 (async () => {
+  const path = require('path');
+  const dbPath = process.env.DATABASE_PATH ||
+    path.join(__dirname, '../data/reviews.db');
+  console.log(`[DIAG] DB path: ${dbPath}`);
+  console.log(`[DIAG] cwd: ${process.cwd()}`);
+  if (!dbPath.startsWith('/app/')) {
+    console.warn('[DIAG] ⚠ DB path is NOT inside /app/ — this is a local sandbox, NOT prod.');
+    console.warn('[DIAG]   Results will reflect local filesystem, not Railway volume.');
+  }
   const { getDb, all } = require('../src/db/schema');
   await getDb();
   const rows = all(
