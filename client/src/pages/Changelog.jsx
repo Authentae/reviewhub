@@ -30,6 +30,36 @@ export default function Changelog() {
   // a paying user would notice.
   const highlights = [
     {
+      date: '2026-05-10',
+      en: 'New /guide page — central "How ReviewHub works" walkthrough. Four numbered steps (sign up → connect Google → connect LINE → tap-to-copy) with the LINE notification flow diagram and 7 FAQs targeting the actual signup-to-activation friction. Linked from the footer Product menu.',
+      th: 'เพิ่มหน้า /guide — สาธิตการใช้งาน 4 ขั้นตอน (สมัคร → เชื่อม Google → เชื่อม LINE → แตะก็อป) พร้อมแผนภาพการแจ้งเตือนผ่าน LINE และ FAQ 7 ข้อสำหรับคำถามที่ลูกค้าใหม่ติดบ่อย ลิงก์จาก footer',
+    },
+    {
+      date: '2026-05-10',
+      en: 'AuditPreview page polish — bigger Copy button (44×44 tap target with "Copied ✓" feedback state), paper-lift card shadow, sticky bottom CTA bar, Plausible funnel events on Copy clicks + scroll depth (25/50/75/100%) so we can measure prospect engagement on Wave 4 sends.',
+      th: 'ปรับปรุงหน้า audit-preview — ปุ่ม Copy ใหญ่ขึ้น (44×44 พร้อมแสดงสถานะ "Copied ✓"), เพิ่มเงาการ์ด, แถบ CTA ติดด้านล่าง, ติด Plausible event บนปุ่ม Copy และวัดการเลื่อนหน้า เพื่อติดตามผลของลูกค้า Wave 4',
+    },
+    {
+      date: '2026-05-10',
+      en: 'Pricing + Landing + /line + AuditPreview copy aligned with LINE-pivot reality — every "we post to Google for you" claim updated to "tap to copy from LINE → paste in Google" with the honest Q3 2026 auto-post roadmap (waiting on Google Business Profile API approval, case 8-9395000041442 submitted 2026-05-09).',
+      th: 'ปรับ copy ทุกหน้า (Pricing, Landing, /line, audit-preview) ให้ตรงกับ LINE pivot — เปลี่ยนจาก "เราโพสต์ให้อัตโนมัติ" เป็น "แตะก็อปจาก LINE → วางใน Google" พร้อมระบุไตรมาส 3 ปี 2026 สำหรับฟีเจอร์โพสต์อัตโนมัติ (รอ Google อนุมัติ Business Profile API)',
+    },
+    {
+      date: '2026-05-10',
+      en: 'Dashboard rating-distribution bug fix — the 4★ and 2★ bars were rendering with a 12% paper-mix opacity instead of their saturated Tailwind colours, making them nearly invisible against the warm cream background. Brand-token CSS override was bundling solid data-viz classes (`bg-lime-400`, `bg-orange-400`) with soft-tint classes (`bg-xxx-50/100/200`); split them.',
+      th: 'แก้บั๊ก: แถบ 4 ดาวและ 2 ดาวบนแดชบอร์ดมองไม่เห็น สี Tailwind ถูก override จากระบบ brand token เลยกลายเป็นสีจางมาก แยก class สีหลักออกจาก class สีอ่อนแล้ว',
+    },
+    {
+      date: '2026-05-09',
+      en: 'LINE Official Account integration shipped — webhook handler with HMAC-SHA256 signature verification, /link <code> chat command for owner-account binding, push-notification helper, Flex card template for review notifications. Once you connect LINE in Settings, every new Google review pings your LINE chat with the AI-drafted reply ready to copy.',
+      th: 'เชื่อม LINE Official Account แล้ว — มี webhook พร้อมตรวจลายเซ็น HMAC-SHA256, คำสั่ง /link <โค้ด> ในแชทเพื่อเชื่อมบัญชี, ระบบส่งแจ้งเตือนแบบ push, การ์ด Flex สำหรับการแจ้งเตือนรีวิว เชื่อม LINE ที่ Settings แล้ว รีวิว Google ใหม่จะแจ้งเตือนเข้า LINE พร้อมร่างคำตอบให้ก็อปได้เลย',
+    },
+    {
+      date: '2026-05-09',
+      en: 'Places API (NEW) v1 read-only adapter — `googlePlaces.js` provider + 30-min cron poller + Settings UI Place ID lookup-by-name + 27 unit/integration tests. Lets v1 launch without waiting on Google Business Profile API approval. Activates when GOOGLE_MAPS_API_KEY env var is set.',
+      th: 'อะแดปเตอร์ Places API (NEW) แบบอ่านอย่างเดียว — `googlePlaces.js` + cron poll ทุก 30 นาที + UI ค้นหา Place ID จากชื่อ + tests 27 ตัว เปิดให้ใช้ v1 ได้โดยไม่ต้องรอ Google อนุมัติ Business Profile API จะเริ่มทำงานเมื่อ set ตัวแปร GOOGLE_MAPS_API_KEY',
+    },
+    {
       date: '2026-05-08',
       en: 'New blog post — "Wongnai vs Google reviews — which one should Bangkok restaurants prioritize?" (6 min read, EN + TH). Honest breakdown by customer mix: tourist-heavy → 100% Google, local-heavy → 70/30 Wongnai. Plus the audience and search-visibility tables.',
       th: 'บทความใหม่ — "Wongnai vs รีวิว Google สำหรับร้านอาหารในกรุงเทพฯ" (อ่าน 6 นาที, EN + TH) ตัดสินใจตามลูกค้าที่มาร้าน: ต่างชาติ → 100% Google, คนไทย → 70/30 Wongnai พร้อมตารางเปรียบเทียบ',
