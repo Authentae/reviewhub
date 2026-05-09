@@ -155,6 +155,32 @@ changes. Once landing.jsx hero changes, we're committed for at least
   validation triggers build. Don't build before pitch validates.
 - **/vs/ pages content rewrite for Thai competitors.** None exist
   worth comparing to. The pages just demote in nav, content unchanged.
-- **Founder conversations with Thai SMB friends.** Those are confirmatory,
-  not blocking. Earth can do them in parallel as Wave 5 runs. Removing
-  the gate per agent's earlier deference correction.
+- **Founder conversations with Thai SMB friends.** Earth's strategy is
+  explicitly async/written-exchange — not customer calls or DMs.
+  Generic YC-style "talk to customers" advice doesn't fit this founder.
+  Removed from the plan 2026-05-09.
+
+## Validation paths (all async, no founder conversations required)
+
+The LINE pivot validates or invalidates entirely through written /
+metric channels:
+
+1. **Wave 5 reply rate vs Wave 4 baseline.** If Wave 5 (LINE pitch)
+   outperforms Wave 4 (current pitch) on opens or replies, the
+   positioning resonates. Decisive metric.
+2. **Waitlist signups on `/line` page.** Earth doesn't talk to
+   prospects — they sign up to a waitlist on a public page. 5+
+   signups in 14 days = clear demand signal.
+3. **Audit-URL view rate.** Passive metric. If Wave 5 audits get
+   re-opened more (multiple views per prospect) vs Wave 4, the
+   pitch is generating more consideration.
+4. **Conversion lift on landing page A/B.** If LINE-native landing
+   variant lifts /register click-through over current generic landing,
+   the positioning works for organic traffic too.
+5. **Public Pantip / Facebook group probe.** Anonymous written
+   post asking "ถ้ามีระบบที่แจ้งเตือนรีวิว Google ผ่าน LINE คุณจะใช้ไหม?" —
+   no founder identity required, captures N=10-30 in a day. Earth
+   can post this without "talking to" anyone.
+
+**None of these require Earth to do customer calls, demos, or DMs.**
+The async-execution constraint is preserved.
