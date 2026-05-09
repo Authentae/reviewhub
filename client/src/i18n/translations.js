@@ -30,9 +30,9 @@ const en = {
 
   // Landing page
   'landing.pageTitle': 'AI Review Replies in 10 Languages.',
-  'landing.heroBadge': 'Free plan forever · 10 languages · From $14 USD a month',
-  'landing.heroTitle': 'Reply to every review in 10 seconds.',
-  'landing.heroSubtitle': 'AI drafts replies in your voice, not a machine\'s. Use it for the 50 quick "thanks for visiting" 5-stars OR for the wedding-day 4-star you\'ll spend 5 minutes carefully editing. Google syncs automatically; 60+ more platforms via CSV.',
+  'landing.heroBadge': 'Built for Bangkok · Free forever · From ฿490 / $14 a month',
+  'landing.heroTitle': 'Reply to Google reviews in 10 seconds — from LINE.',
+  'landing.heroSubtitle': 'AI drafts a reply in your voice for every new Google review. You approve from LINE OA; we post it to Google. Built in Bangkok for hospitality, restaurants, clinics, and salons — owners who live in LINE, not Slack. Audits and drafts work today; full LINE OA notifications launch June 2026.',
   'landing.heroCtaPrimary': 'Start Free',
   'landing.heroCtaSecondary': 'Try free — no signup',
   'landing.heroCtaPrimaryNewTab': '(opens in a new tab)',
@@ -6800,9 +6800,9 @@ const th = {
 
   // Landing page
   'landing.pageTitle': 'รวมรีวิวทั้งหมด ในแดชบอร์ดเดียว',
-  'landing.heroBadge': 'ฟรีตลอดไป · ไม่ต้องใช้บัตรเครดิต · 10 ภาษา',
-  'landing.heroTitle': 'ตอบทุกรีวิว Google ภายใน 10 วินาที',
-  'landing.heroSubtitle': 'รวมรีวิว Google ของคุณไว้ในแดชบอร์ดเดียว AI ร่างคำตอบมืออาชีพในสไตล์ของคุณ — ใน 10 ภาษา รวมไทย ญี่ปุ่น เกาหลี จีน นำเข้ารีวิวจาก 60+ แพลตฟอร์มผ่าน CSV (Wongnai, Tabelog, Naver, Dianping, TripAdvisor…)',
+  'landing.heroBadge': 'ทำในกรุงเทพ · ฟรีตลอดไป · เริ่มต้น ฿490/เดือน',
+  'landing.heroTitle': 'ตอบรีวิว Google ใน 10 วินาที — ผ่าน LINE',
+  'landing.heroSubtitle': 'AI ร่างคำตอบในโทนของร้านสำหรับทุกรีวิวใหม่ คุณกดอนุมัติใน LINE OA ระบบโพสต์ให้บน Google ทำในกรุงเทพสำหรับเจ้าของโรงแรม ร้านอาหาร คลินิก และร้านเสริมสวย ฟีเจอร์ audit + ร่างคำตอบใช้งานได้แล้ว · LINE OA แจ้งเตือนเปิดตัวมิถุนายน 2026',
   'landing.heroCta': 'เริ่มต้นฟรี — แพ็กเกจเริ่มต้น $14/เดือน',
   'landing.heroNote': 'แพ็กเกจฟรี · ไม่ต้องใช้บัตร · 10 ภาษา',
   'landing.featuresTitle': 'ทุกอย่างที่ต้องใช้กับรีวิว มีให้ครบ',

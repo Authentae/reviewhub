@@ -231,6 +231,12 @@ export default function AuditPreview() {
             <p className="text-xs mt-3" style={{ color: '#fdf2dc', opacity: 0.85 }}>
               No credit card to start · 14-day refund window · cancel anytime
             </p>
+            <p className="text-xs mt-3 max-w-md mx-auto font-mono uppercase tracking-widest" style={{ color: '#f5d8a7', opacity: 0.85 }}>
+              Coming June 2026 — LINE notifications.{' '}
+              <a href="/line" style={{ color: '#f5d8a7', textDecoration: 'underline' }}>
+                See roadmap →
+              </a>
+            </p>
             <p className="text-xs mt-4 max-w-md mx-auto" style={{ color: '#fdf2dc', opacity: 0.85 }}>
               Not ready to sign up? Just reply to my email — I'm Earth, the
               solo founder building this in Bangkok, and a one-line "tell me

@@ -65,6 +65,11 @@ const Roadmap = lazy(() => import('./pages/Roadmap'));
 // "is this thing actually working?" before signup get a green/red answer
 // in 1 second instead of inferring from anecdotes. Auto-refreshes 30s.
 const Status = lazy(() => import('./pages/Status'));
+// /line — LINE-native positioning landing page. Built 2026-05-09 as
+// part of the LINE-pivot strategy. Frames ReviewHub as the
+// Bangkok-native review tool that fits how Thai SMBs actually work
+// (LINE OA, not Slack). CTA → /audit?from=line for attribution.
+const LinePivot = lazy(() => import('./pages/LinePivot'));
 // /year-review/:year — auth-required printable recap of the year's
 // reviews. Aggregations only (no AI calls); cheap to render.
 const YearReview = lazy(() => import('./pages/YearReview'));
@@ -185,6 +190,7 @@ export default function App() {
         <Route path="/vs/agency" element={<ComparisonLanding competitor="agency" />} />
         <Route path="/changelog" element={<Changelog />} />
         <Route path="/roadmap" element={<Roadmap />} />
+        <Route path="/line" element={<LinePivot />} />
         <Route path="/status" element={<Status />} />
         <Route path="/year-review/:year" element={<PrivateRoute><YearReview /></PrivateRoute>} />
         <Route path="/shared/:token" element={<Shared />} />
