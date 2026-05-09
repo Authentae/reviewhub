@@ -155,23 +155,7 @@ async function webhookHandler(req, res) {
   // Signature verification (only enforce if we have a secret configured)
   if (process.env.LINE_CHANNEL_SECRET) {
     const signature = req.headers['x-line-signature'];
-    const sigOk = verifySignature(rawBody, signature);
-    if (!sigOk) {
-      // Temporary debug logging while wiring up LINE OA — remove after Verify
-      // succeeds. Logs never include the secret itself, just the body and
-      // observed/expected sigs so the mismatch is debuggable.
-      const expected = require('crypto')
-        .createHmac('sha256', process.env.LINE_CHANNEL_SECRET || '')
-        .update(rawBody)
-        .digest('base64');
-      console.warn('[LINE-WEBHOOK] sig-mismatch', JSON.stringify({
-        bodyLen: rawBody.length,
-        bodyPreview: rawBody.slice(0, 200),
-        gotSig: signature,
-        expectedSig: expected,
-        contentType: req.headers['content-type'],
-        userAgent: req.headers['user-agent'],
-      }));
+    if (!verifySignature(rawBody, signature)) {
       return res.status(401).json({ error: 'Invalid signature' });
     }
   }
