@@ -381,30 +381,21 @@ export default function AuditPreview() {
 //  - Same plausible-event-name as the in-page CTA so we can tell which
 //    surface drove the click in funnel analysis (event-prop "source").
 function StickyConversionBar({ businessName, token, show }) {
-  const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
 
-  useEffect(() => {
-    if (!show) return;
-    function onScroll() {
-      // 250px threshold = past page header on mobile + desktop. Below
-      // that the prospect is reading the intro, not yet at decision time.
-      setVisible(window.scrollY > 250);
-    }
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
-  }, [show]);
+  if (!show || dismissed) return null;
 
-  if (!show || dismissed || !visible) return null;
-
+  // No scroll gate. Earlier versions waited for `window.scrollY > 250`
+  // before appearing, but on prod the window scroll event reliably did
+  // NOT fire even though `document.documentElement.scrollTop` advanced
+  // (verified via Chrome MCP probe — same-origin programmatic scroll
+  // didn't trigger a window scroll listener; the underlying cause was
+  // unclear and not worth a deep dive for a CTA bar). The simpler
+  // version: always-visible when drafts exist. The bar lives at the
+  // viewport bottom so it doesn't compete with the page header on
+  // first paint, and dismissal still works per-session via the ×
+  // button.
   function handleDismiss() {
-    // Dismiss is per-session-only via component state. Persisting via
-    // sessionStorage was causing the bar to not render under unclear
-    // conditions (Chrome's MCP/extension sandbox seemed to interact
-    // oddly with sessionStorage); the simpler in-state version is
-    // robust and the worst case is "user dismissed, refreshed, sees
-    // it again" — which is fine for a free demo page.
     setDismissed(true);
   }
 
