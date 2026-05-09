@@ -60,8 +60,12 @@ export default function Roadmap() {
           th: 'Outbound audit แจ้งเตือนติดตามผล 48 ชม. — ถ้า prospect เปิดดูแล้วยังไม่ได้ปิดดีล จะมีอีเมลพร้อมเทมเพลตติดตามผลให้ก๊อปไปแปะ',
         },
         {
-          en: 'AI replies now post back to Google automatically by default — was opt-in before, which silently broke the headline feature for paying customers. Boot-time logs print the resolved status so misconfigured deploys are loud, not silent.',
-          th: 'คำตอบจาก AI โพสต์กลับไปที่ Google อัตโนมัติเป็นค่าเริ่มต้นแล้ว (เดิมต้องเปิดเอง) มี log ตอนบูตแสดงสถานะ ไม่ให้พลาดเงียบๆ',
+          en: 'LINE Official Account integration — webhook receiver, link-token flow, signed-message verification, push-notification helper, rate-limit guard, /link <code> chat command. Once a user connects their LINE in Settings, every new Google review pings their LINE chat with the AI-drafted reply (Flex card with Copy + Edit buttons). Built end-to-end in one push 2026-05-08.',
+          th: 'เชื่อม LINE Official Account — รับ webhook, ระบบเชื่อมบัญชีด้วย token, ยืนยันลายเซ็นข้อความ, ส่งแจ้งเตือนแบบ push, จำกัด rate, คำสั่ง /link <โค้ด> ในแชท เมื่อเชื่อม LINE ที่ Settings แล้ว รีวิว Google ใหม่จะแจ้งเตือนเข้า LINE พร้อมร่างคำตอบ (Flex card มีปุ่ม Copy + Edit) เปิดใช้งาน 2026-05-08',
+        },
+        {
+          en: 'Google Places API (NEW) read-only adapter — `googlePlaces.js` provider + 30-min cron poller + Settings-UI Place ID lookup-by-name + 27 unit/integration tests. Gives v1 review-fetch without waiting on Business Profile API approval. Activates once GOOGLE_MAPS_API_KEY is set on the deployment. Spec: docs/line-pivot/places-api-v1-spec.md.',
+          th: 'อะแดปเตอร์ Google Places API (NEW) แบบอ่านอย่างเดียว — provider ใน googlePlaces.js + cron poll ทุก 30 นาที + UI ค้นหา Place ID จากชื่อร้านที่ Settings + tests 27 ตัว ใช้แทนระหว่างรอ Google อนุมัติ Business Profile API เปิดใช้งานเมื่อ set ตัวแปร GOOGLE_MAPS_API_KEY บนฝั่ง deploy',
         },
         {
           en: 'Per-business AI reply tone preference (casual / warm / formal) — steers every AI draft from a single Settings switch.',
@@ -91,6 +95,10 @@ export default function Roadmap() {
         ? 'มีโค้ดอยู่ใน branch แล้วหรือเริ่มร่างจริง ๆ ไม่ใช่ "วางแผน"'
         : 'Code in a branch or actively being drafted — not "planning to."',
       items: [
+        {
+          en: 'Waiting on Google Business Profile API approval (case 8-9395000041442 submitted 2026-05-09, 7-10 business day SLA → ETA 2026-05-19 to 2026-05-22). When it lands: one-tap approve from LINE → auto-post to Google. Code is in `server/src/lib/providers/google.js` (OAuth path) + `server/src/jobs/scheduledReplyPoster.js` (auto-post). Migration from the Places API placeholder is ~2 hours per docs/line-pivot/places-api-v1-spec.md.',
+          th: 'รอ Google อนุมัติ Business Profile API (case 8-9395000041442 ส่งคำขอ 2026-05-09, SLA 7-10 วันทำการ → คาดได้รับอนุมัติ 2026-05-19 ถึง 2026-05-22) เมื่ออนุมัติแล้ว: อนุมัติคำตอบจาก LINE คลิกเดียว → โพสต์ลง Google อัตโนมัติ',
+        },
         {
           en: 'Translating remaining UI strings into the 8 non-Thai non-English locales — most flows are now covered (settings, dashboard, audit emails, view notifications) but some edge-case strings still fall back to English in German / Japanese / Korean. Closing as we touch each surface.',
           th: 'แปลข้อความที่เหลือใน UI เป็นภาษาอื่นนอกเหนือจาก ไทย/อังกฤษ — ส่วนใหญ่ครอบคลุมแล้ว (Settings, dashboard, อีเมล audit, การแจ้งเตือน) แต่บางจุดยัง fall back เป็นอังกฤษ',
