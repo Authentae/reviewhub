@@ -82,8 +82,8 @@ export default function LinePivot() {
             style={{ color: 'var(--rh-teal)', opacity: 0.85 }}
           >
             {isThai
-              ? 'ทำในกรุงเทพ · เปิดตัวมิถุนายน 2026'
-              : 'Built in Bangkok · Launching June 2026'}
+              ? 'ทำในกรุงเทพ · LINE OA เปิดให้ใช้แล้ว'
+              : 'Built in Bangkok · LINE OA live now'}
           </p>
 
           <h1
@@ -100,8 +100,8 @@ export default function LinePivot() {
             style={{ color: 'var(--rh-ink-soft)' }}
           >
             {isThai
-              ? 'ตอบกลับใน 10 วินาที ผ่าน LINE OA ของร้าน เครื่องมือต่างประเทศใช้ Slack/อีเมล ซึ่งเจ้าของร้านในกรุงเทพไม่ได้เปิดบ่อย ReviewHub สร้างมาเฉพาะสำหรับวิธีทำงานของคุณ'
-              : "Reply in 10 seconds via your LINE Official Account. Foreign tools (Birdeye, Podium) notify via Slack and email — channels Bangkok owners don't actually check. ReviewHub fits how you actually work."}
+              ? 'รีวิวใหม่เด้งเข้า LINE ของคุณภายในไม่กี่นาที พร้อมร่างคำตอบที่ AI เขียนไว้ แตะก็อปแล้ววางใน Google เครื่องมือต่างประเทศใช้ Slack/อีเมล ซึ่งเจ้าของร้านในกรุงเทพไม่ได้เปิดบ่อย ReviewHub สร้างมาเฉพาะสำหรับวิธีทำงานของคุณ'
+              : "New reviews ping your LINE Official Account within minutes, with an AI-drafted reply ready. Tap to copy, paste in Google. Foreign tools (Birdeye, Podium) notify via Slack and email — channels Bangkok owners don't actually check. ReviewHub fits how you actually work."}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
@@ -235,8 +235,8 @@ export default function LinePivot() {
               </span>
               <p className="text-sm md:text-base" style={{ color: 'var(--rh-ink-soft)' }}>
                 {isThai
-                  ? 'AI ร่างคำตอบรีวิว Google ใน 10 ภาษา · audit-preview ฟรีให้ลูกค้าใหม่ดู · เชื่อม Google Business Profile แล้วโพสต์ให้อัตโนมัติ'
-                  : 'AI-drafted Google review replies in 10 languages · free audit-preview links for prospects · Google Business Profile auto-post'}
+                  ? 'AI ร่างคำตอบรีวิว Google ใน 10 ภาษา · audit-preview ฟรีให้ลูกค้าใหม่ดู · LINE OA แจ้งเตือนรีวิวใหม่พร้อมร่างคำตอบ'
+                  : 'AI-drafted Google review replies in 10 languages · free audit-preview links for prospects · LINE OA notifications with drafted reply for every new review'}
               </p>
             </div>
 
@@ -248,12 +248,12 @@ export default function LinePivot() {
                   color: 'var(--rh-ink)',
                 }}
               >
-                {isThai ? 'มิ.ย. 2026' : 'JUN 2026'}
+                {isThai ? 'ไตรมาส 3 2026' : 'Q3 2026'}
               </span>
               <p className="text-sm md:text-base" style={{ color: 'var(--rh-ink-soft)' }}>
                 {isThai
-                  ? 'LINE OA แจ้งเตือนรีวิวใหม่ + อนุมัติคำตอบจาก LINE'
-                  : 'LINE OA notifications for new reviews + approve-reply directly from LINE'}
+                  ? 'อนุมัติคำตอบจาก LINE คลิกเดียว แล้วระบบโพสต์ลง Google ให้อัตโนมัติ (รอ Google อนุมัติ Business Profile API — case 8-9395000041442)'
+                  : 'One-tap approve from LINE → auto-post to Google (waiting for Google Business Profile API approval — case 8-9395000041442)'}
               </p>
             </div>
 
@@ -290,8 +290,8 @@ export default function LinePivot() {
             </Link>
             <p className="text-xs mt-3" style={{ color: 'var(--rh-ink-soft)', opacity: 0.7 }}>
               {isThai
-                ? 'ลูกค้าที่ลงทะเบียนช่วงก่อน LINE OA เปิดตัว ได้ใช้ฟรี 1 เดือน'
-                : 'Sign up before June 2026 launch and get the first month of LINE notifications free.'}
+                ? 'LINE OA เปิดให้ใช้แล้ววันนี้ — ลงทะเบียนเชื่อมบัญชีได้ที่ Settings'
+                : 'LINE OA notifications are live today — connect your account in Settings after signup.'}
             </p>
           </div>
         </div>
