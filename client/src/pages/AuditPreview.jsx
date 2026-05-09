@@ -212,9 +212,9 @@ export default function AuditPreview() {
               Set this up for {business_name} in 10 minutes
             </h2>
             <p className="text-sm leading-relaxed mb-5 max-w-md mx-auto" style={{ color: '#fdf2dc' }}>
-              Connect Google once. New reviews land — ReviewHub drafts a reply in
-              your voice. You approve with one click; it posts to Google.
-              Replies that took 30 min each take 30 seconds. $14/mo (~฿490).
+              Connect Google once. New reviews ping you on LINE — with an AI-drafted
+              reply in your voice. Tap to copy, paste in Google. Replies that took
+              30 min each take 30 seconds. $14/mo (~฿490).
             </p>
             {/* Plausible tagged-events: clicking this fires "AuditRegisterClick"
                 in Plausible (when prod analytics is active). Lets us measure
@@ -229,12 +229,12 @@ export default function AuditPreview() {
               Yes, set this up for me →
             </a>
             <p className="text-xs mt-3" style={{ color: '#fdf2dc', opacity: 0.85 }}>
-              No credit card to start · 14-day refund window · cancel anytime
+              No credit card to start · 30-day refund window · cancel anytime
             </p>
             <p className="text-xs mt-3 max-w-md mx-auto font-mono uppercase tracking-widest" style={{ color: '#f5d8a7', opacity: 0.85 }}>
-              Coming June 2026 — LINE notifications.{' '}
+              LINE notifications live now —{' '}
               <a href="/line" style={{ color: '#f5d8a7', textDecoration: 'underline' }}>
-                See roadmap →
+                see how it works →
               </a>
             </p>
             <p className="text-xs mt-4 max-w-md mx-auto" style={{ color: '#fdf2dc', opacity: 0.85 }}>
@@ -265,7 +265,7 @@ export default function AuditPreview() {
               {[
                 {
                   q: 'Can I edit the replies before they post?',
-                  a: 'Always. Every draft lands in your inbox — you review, edit, or rewrite before anything goes to Google. Nothing posts without your one-click approval.',
+                  a: 'Always. Every draft pings you on LINE — you review, edit, or rewrite before anything goes to Google. Nothing posts without your approval; you copy the final reply and paste it into Google yourself (one-tap auto-post launches once Google approves our API access).',
                 },
                 {
                   q: 'What if a reply is wrong or off-tone?',
@@ -281,7 +281,7 @@ export default function AuditPreview() {
                 },
                 {
                   q: 'What if I cancel mid-month?',
-                  a: 'You keep access through the end of the billing period, then it ends. No clawback of replies already posted. 14-day refund window on the first month, no questions asked.',
+                  a: 'You keep access through the end of the billing period, then it ends. No clawback of replies already posted. 30-day refund window on the first month, no questions asked.',
                 },
               ].map((item, i) => (
                 <details
