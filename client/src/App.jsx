@@ -70,6 +70,10 @@ const Status = lazy(() => import('./pages/Status'));
 // Bangkok-native review tool that fits how Thai SMBs actually work
 // (LINE OA, not Slack). CTA → /audit?from=line for attribution.
 const LinePivot = lazy(() => import('./pages/LinePivot'));
+// /guide — central "How ReviewHub works" + getting-started walkthrough.
+// Closes the 17-signups → 1-activated gap by giving new users a clear
+// 4-step path. Linked from footer + onboarding emails + audit-preview FAQs.
+const Guide = lazy(() => import('./pages/Guide'));
 // /year-review/:year — auth-required printable recap of the year's
 // reviews. Aggregations only (no AI calls); cheap to render.
 const YearReview = lazy(() => import('./pages/YearReview'));
@@ -191,6 +195,7 @@ export default function App() {
         <Route path="/changelog" element={<Changelog />} />
         <Route path="/roadmap" element={<Roadmap />} />
         <Route path="/line" element={<LinePivot />} />
+        <Route path="/guide" element={<Guide />} />
         <Route path="/status" element={<Status />} />
         <Route path="/year-review/:year" element={<PrivateRoute><YearReview /></PrivateRoute>} />
         <Route path="/shared/:token" element={<Shared />} />

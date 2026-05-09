@@ -31,6 +31,7 @@ export default function MarketingFooter() {
         { href: '/', label: isThai ? 'หน้าหลัก' : 'Home' },
         { href: '/audit', label: isThai ? 'Audit ฟรี' : 'Free audit' },
         { href: '/pricing', label: isThai ? 'ราคา' : 'Pricing' },
+        { href: '/guide', label: isThai ? 'วิธีใช้งาน' : 'How it works' },
         { href: '/tools/review-reply-generator', label: isThai ? 'Reply Generator (ฟรี)' : 'Reply Generator (free)' },
         { href: '/tools/reply-roaster', label: isThai ? 'Reply Roaster (ฟรี)' : 'Reply Roaster (free)' },
         { href: '/tools/review-impact', label: isThai ? 'Review Impact (ฟรี)' : 'Review Impact (free)' },
