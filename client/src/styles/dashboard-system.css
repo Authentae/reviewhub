@@ -488,20 +488,21 @@
 .rh-design.rh-app .bg-rose-50,   .rh-design .rh-app .bg-rose-50,
 .rh-design.rh-app .bg-rose-500,  .rh-design .rh-app .bg-rose-500 { background-color: color-mix(in oklab, var(--rh-rose) 12%, var(--rh-paper)) !important; }
 
+/* Tint group — soft panel backgrounds only. Do NOT include the
+   xxx-400 / xxx-500 saturation tiers here: those are used as
+   data-visualisation fills (e.g. RatingDistribution rating bars,
+   Analytics platform legend) where reducing them to a 12% paper-mix
+   makes the bar visually disappear against --rh-paper. The xxx-50 /
+   xxx-100 / xxx-200 tiers ARE meant as soft tints; they stay. */
 .rh-design.rh-app .bg-green-50,    .rh-design .rh-app .bg-green-50,
 .rh-design.rh-app .bg-green-100,   .rh-design .rh-app .bg-green-100,
-.rh-design.rh-app .bg-emerald-50,  .rh-design .rh-app .bg-emerald-50,
-.rh-design.rh-app .bg-emerald-400, .rh-design .rh-app .bg-emerald-400,
-.rh-design.rh-app .bg-lime-400,    .rh-design .rh-app .bg-lime-400,
-.rh-design.rh-app .bg-lime-500,    .rh-design .rh-app .bg-lime-500 { background-color: color-mix(in oklab, var(--rh-sage) 12%, var(--rh-paper)) !important; }
+.rh-design.rh-app .bg-emerald-50,  .rh-design .rh-app .bg-emerald-50 { background-color: color-mix(in oklab, var(--rh-sage) 12%, var(--rh-paper)) !important; }
 
 .rh-design.rh-app .bg-amber-50,   .rh-design .rh-app .bg-amber-50,
 .rh-design.rh-app .bg-amber-100,  .rh-design .rh-app .bg-amber-100,
 .rh-design.rh-app .bg-yellow-50,  .rh-design .rh-app .bg-yellow-50,
 .rh-design.rh-app .bg-yellow-200, .rh-design .rh-app .bg-yellow-200,
-.rh-design.rh-app .bg-orange-50,  .rh-design .rh-app .bg-orange-50,
-.rh-design.rh-app .bg-orange-400, .rh-design .rh-app .bg-orange-400,
-.rh-design.rh-app .bg-orange-500, .rh-design .rh-app .bg-orange-500 { background-color: color-mix(in oklab, var(--rh-ochre) 16%, var(--rh-paper)) !important; }
+.rh-design.rh-app .bg-orange-50,  .rh-design .rh-app .bg-orange-50 { background-color: color-mix(in oklab, var(--rh-ochre) 16%, var(--rh-paper)) !important; }
 
 /* Purple → teal-deep (no purple in the editorial palette) */
 .rh-design.rh-app .bg-purple-500, .rh-design .rh-app .bg-purple-500 { background-color: var(--rh-teal-deep) !important; }
