@@ -1311,16 +1311,23 @@ const ONBOARDING_STRINGS = {
       subject: "Welcome to ReviewHub — let's reply to your first review",
       body: (clientUrl) => `Hi there,
 
-You're in. One step left:
+You're in. Two steps left:
 
-→ Connect your Google account (1 minute)
-   ${clientUrl}/dashboard
+→ Step 1: Connect your Google account (1 minute)
+   ${clientUrl}/settings
 
-After that, every new review lands in your inbox with an AI-drafted reply. You approve, it posts. The first few drafts will feel slightly off-tone — edit them, and the system learns your voice.
+→ Step 2: Connect LINE so new reviews ping you in chat
+   ${clientUrl}/settings (Connect LINE section)
+
+The full walkthrough with screenshots is at ${clientUrl}/guide if you'd rather see it before clicking.
+
+After that, every new Google review pings your LINE chat with an AI-drafted reply ready to send. You tap "Copy reply" in LINE, switch to Google, paste. ~30 seconds total.
+
+(One-tap auto-post launches Q3 2026 once Google approves our Business Profile API access. Until then, copy-paste is the path — honest about the v1 reality.)
 
 Two things worth knowing day one:
 
-- The drafts are starting points, not finished replies. Edit anything you want before posting; ReviewHub picks up your edits and gets closer next time.
+- The drafts are starting points, not finished replies. Edit anything you want; ReviewHub picks up your edits and gets closer next time.
 - For 1-star reviews, the system writes very differently than for 5-stars — specific acknowledgment, ownership, no "we strive for excellence" filler. You'll see.
 
 Reply to this email if you get stuck. I read every one.
@@ -1362,7 +1369,7 @@ Most owners would either ignore it or write a defensive "We strive for excellenc
 
 The reviewer DMed back, came in, left a 5-star edit.
 
-That's the entire pitch. Three tone variants on every review. 10 seconds per reply.
+That's the entire pitch. AI drafts in your voice. New reviews ping your LINE. Tap to copy, paste in Google. 30 seconds per reply.
 
 → ${clientUrl}/dashboard
 
@@ -1419,17 +1426,24 @@ ReviewHub · Bangkok`,
       subject: 'ยินดีต้อนรับ — มาตอบรีวิวแรกกัน',
       body: (clientUrl) => `สวัสดีครับ
 
-ยินดีต้อนรับสู่ ReviewHub! เหลืออีกขั้นตอนเดียว:
+ยินดีต้อนรับสู่ ReviewHub! เหลืออีกสองขั้นตอน:
 
-→ เชื่อม Google account (1 นาที)
-   ${clientUrl}/dashboard
+→ ขั้นที่ 1: เชื่อม Google account (1 นาที)
+   ${clientUrl}/settings
 
-หลังจากนั้นทุกรีวิวใหม่จะมาถึง inbox พร้อมคำตอบที่ AI ร่างให้แล้ว คุณกด approve มันก็โพสต์ ช่วงแรกๆ คำตอบอาจจะยังไม่ตรงโทนของคุณเป๊ะ แก้ไขได้ ระบบเรียนรู้จากการแก้แต่ละครั้ง
+→ ขั้นที่ 2: เชื่อม LINE เพื่อรับแจ้งเตือนรีวิวใหม่ในแชท
+   ${clientUrl}/settings (ส่วน Connect LINE)
+
+ดูวิธีใช้งานพร้อมรูปได้ที่ ${clientUrl}/guide
+
+หลังจากนั้น รีวิว Google ใหม่จะเด้งเข้าแชท LINE คุณ พร้อมคำตอบที่ AI ร่างไว้แล้ว แตะ "ก็อปคำตอบ" ใน LINE สลับมา Google วาง ใช้เวลา 30 วินาที
+
+(โพสต์อัตโนมัติคลิกเดียว เปิดตัวไตรมาส 3 ปี 2026 เมื่อ Google อนุมัติ Business Profile API ก่อนหน้านั้นใช้วิธีก็อป-วางครับ)
 
 สองเรื่องที่ควรรู้ตั้งแต่วันแรก:
 
-- คำตอบที่ระบบร่างให้เป็น "จุดตั้งต้น" ไม่ใช่คำตอบสำเร็จรูป แก้ก่อนโพสต์ได้เลย แล้วระบบจะใกล้เคียงโทนของคุณมากขึ้นเรื่อยๆ
-- รีวิว 1 ดาว ระบบจะเขียนต่างจากรีวิว 5 ดาวมาก — ขอโทษเฉพาะเรื่อง รับผิดชอบ ไม่มีคำพูดทั่วไปแบบ "เรามุ่งมั่นพัฒนา"
+- คำตอบที่ระบบร่างให้เป็น "จุดตั้งต้น" แก้ก่อนโพสต์ได้เลย ระบบเรียนรู้จากการแก้แต่ละครั้ง
+- รีวิว 1 ดาว ระบบเขียนต่างจาก 5 ดาวมาก — ขอโทษเฉพาะเรื่อง รับผิดชอบ ไม่มี "เรามุ่งมั่นพัฒนา"
 
 ติดอะไรตอบกลับอีเมลนี้ได้ ผมอ่านทุกฉบับ
 
