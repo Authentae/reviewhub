@@ -10,6 +10,7 @@ const { startBackupScheduler, stopBackupScheduler } = require('./jobs/dailyBacku
 const { startOnboardingScheduler, stopOnboardingScheduler } = require('./jobs/onboardingEmails');
 const { startAuditFollowupScheduler, stopAuditFollowupScheduler } = require('./jobs/auditFollowupReminders');
 const { startScheduledReplyPoster, stopScheduledReplyPoster } = require('./jobs/scheduledReplyPoster');
+const { startPlacesPoller, stopPlacesPoller } = require('./jobs/placesPoller');
 const { installGlobalHandlers } = require('./lib/errorReporter');
 
 // Install process-wide error handlers before anything else runs so failures
@@ -33,6 +34,7 @@ async function start() {
     startOnboardingScheduler();
     startAuditFollowupScheduler();
     startScheduledReplyPoster();
+    startPlacesPoller();
     // Loud boot-time visibility for the auto-post setting. The default-on
     // behavior makes silent breakage harder to ship, but a misconfigured
     // .env (e.g. REPLY_TO_PLATFORMS=  with empty value) still disables
@@ -70,6 +72,7 @@ async function start() {
     stopOnboardingScheduler();
     stopAuditFollowupScheduler();
     stopScheduledReplyPoster();
+    stopPlacesPoller();
     server.close(async () => {
       try {
         const db = await getDb();
