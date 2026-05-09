@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../lib/api';
 import usePageTitle from '../hooks/usePageTitle';
@@ -26,10 +26,18 @@ const COLORS = {
   inkDim: '#9aa3ac',    // dimmer muted for tertiary
   ochre: '#c48a2c',     // brand accent for "REPLY SUGGESTIONS FOR" label
   tealDeep: '#1e4d5e',  // brand teal for buttons and "Suggested reply" label
-  line: '#e6dfce',      // subtle border / divider
+  line: '#e6dfce',      // subtle border around cards
+  divider: '#f0e9d8',   // softer than `line` — used INSIDE cards (review/draft separator)
+                         // so the inside-the-card line doesn't visually merge with
+                         // the outside-the-card border.
   cardBg: '#ffffff',    // pure white card on cream paper
+  cardShadow: '0 1px 3px rgba(29,36,44,0.05), 0 1px 2px rgba(29,36,44,0.03)',
+                         // tiny paper-lift; cream-on-cream borders alone left
+                         // cards visually merging with background. Very subtle —
+                         // not a SaaS-y elevation tier, just enough to read.
   star: '#f59e0b',      // amber for filled stars
-  starEmpty: '#e5e7eb', // neutral for empty stars
+  starEmpty: '#dcd4c0', // warm-neutral empty star (was #e5e7eb cool gray which
+                         // fought the warm paper background)
 };
 
 export default function AuditPreview() {
@@ -111,20 +119,20 @@ export default function AuditPreview() {
 
   return (
     <div style={rootStyle}>
-      <main className="max-w-3xl mx-auto px-5 py-12 md:py-16">
+      <main className="max-w-3xl mx-auto px-5 py-8 md:py-16">
         {/* Header — sets context immediately so the prospect doesn't
-            wonder "wait, who is this and what am I looking at?" */}
-        <header className="mb-10">
+            wonder "wait, who is this and what am I looking at?" Tightened
+            on mobile so the first review card peeks above the fold —
+            seeing your own review text is the "wait this is real" moment. */}
+        <header className="mb-8 md:mb-10">
           <p className="text-xs font-mono uppercase tracking-widest mb-2" style={{ color: COLORS.ochre }}>
             Reply suggestions for
           </p>
-          <h1 className="text-3xl md:text-4xl font-bold mb-3" style={{ color: COLORS.ink, letterSpacing: '-0.02em' }}>
+          <h1 className="text-2xl md:text-4xl font-bold mb-2 md:mb-3" style={{ color: COLORS.ink, letterSpacing: '-0.02em' }}>
             {business_name}
           </h1>
-          <p className="text-base leading-relaxed" style={{ color: COLORS.inkSoft }}>
-            Hand-picked from your recent Google reviews — {totalDrafts} draft {totalDrafts === 1 ? 'reply' : 'replies'} ready
-            to copy &amp; paste. No account needed; this page is just for
-            you. Edit anything before publishing.
+          <p className="text-sm md:text-base leading-relaxed" style={{ color: COLORS.inkSoft }}>
+            {totalDrafts} draft {totalDrafts === 1 ? 'reply' : 'replies'} ready to copy &amp; paste — no account needed.
           </p>
         </header>
 
@@ -134,7 +142,11 @@ export default function AuditPreview() {
             <article
               key={i}
               className="rounded-2xl p-5 md:p-6"
-              style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.line}` }}
+              style={{
+                background: COLORS.cardBg,
+                border: `1px solid ${COLORS.line}`,
+                boxShadow: COLORS.cardShadow,
+              }}
             >
               {/* The review (what the customer wrote) */}
               <div className="mb-4">
@@ -142,18 +154,19 @@ export default function AuditPreview() {
                   <p className="text-sm font-semibold" style={{ color: COLORS.ink }}>
                     {r.reviewer_name || 'Anonymous'}
                   </p>
-                  <span className="text-sm" style={{ color: COLORS.star }} aria-label={`${r.rating} stars`}>
+                  <span className="text-base" style={{ color: COLORS.star }} aria-label={`${r.rating} stars`}>
                     {'★'.repeat(r.rating)}
                     <span style={{ color: COLORS.starEmpty }}>{'★'.repeat(5 - r.rating)}</span>
                   </span>
                 </div>
-                <p className="text-sm leading-relaxed whitespace-pre-wrap" style={{ color: COLORS.inkSoft }}>
+                <p className="leading-relaxed whitespace-pre-wrap" style={{ color: COLORS.inkSoft, fontSize: '15px' }}>
                   {r.text}
                 </p>
               </div>
 
-              {/* Divider */}
-              <div className="h-px my-4" style={{ background: COLORS.line }} />
+              {/* Divider — uses softer `divider` colour so the inside-card
+                  separator doesn't visually merge with the outside-card border. */}
+              <div className="h-px my-4" style={{ background: COLORS.divider }} />
 
               {/* The drafted reply */}
               {r.draft ? (
@@ -165,23 +178,12 @@ export default function AuditPreview() {
                     Suggested reply
                   </p>
                   <p
-                    className="text-sm leading-relaxed whitespace-pre-wrap"
-                    style={{ color: COLORS.ink }}
+                    className="leading-relaxed whitespace-pre-wrap"
+                    style={{ color: COLORS.ink, fontSize: '15px' }}
                   >
                     {r.draft}
                   </p>
-                  <button
-                    type="button"
-                    onClick={async () => {
-                      try {
-                        await navigator.clipboard.writeText(r.draft);
-                      } catch { /* clipboard blocked, oh well */ }
-                    }}
-                    className="mt-3 inline-flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors"
-                    style={{ background: COLORS.tealDeep, color: '#fff' }}
-                  >
-                    Copy reply
-                  </button>
+                  <CopyButton text={r.draft} />
                 </div>
               ) : (
                 <p className="text-xs italic" style={{ color: COLORS.inkDim }}>
@@ -231,19 +233,11 @@ export default function AuditPreview() {
             <p className="text-xs mt-3" style={{ color: '#fdf2dc', opacity: 0.85 }}>
               No credit card to start · 30-day refund window · cancel anytime
             </p>
-            <p className="text-xs mt-3 max-w-md mx-auto font-mono uppercase tracking-widest" style={{ color: '#f5d8a7', opacity: 0.85 }}>
+            <p className="text-xs mt-2 max-w-md mx-auto font-mono uppercase tracking-widest" style={{ color: '#f5d8a7', opacity: 0.85 }}>
               LINE notifications live now —{' '}
               <a href="/line" style={{ color: '#f5d8a7', textDecoration: 'underline' }}>
                 see how it works →
               </a>
-            </p>
-            <p className="text-xs mt-4 max-w-md mx-auto" style={{ color: '#fdf2dc', opacity: 0.85 }}>
-              Not ready to sign up? Just reply to my email — I'm Earth, the
-              solo founder building this in Bangkok, and a one-line "tell me
-              more" or "not for me, here's why" is genuinely useful either way.
-            </p>
-            <p className="text-xs mt-2" style={{ color: '#fdf2dc', opacity: 0.7 }}>
-              Or keep using these drafts — the link above stays live for 30 days.
             </p>
           </section>
         )}
@@ -307,16 +301,19 @@ export default function AuditPreview() {
           </section>
         )}
 
-        {/* Footer — context, not a sales pitch (the CTA above is the pitch) */}
+        {/* Footer — context + the "no pressure" personal note. Pulled
+            here from the CTA card so the conversion-moment teal panel
+            is button-focused, not text-overloaded. */}
         <footer
           className="mt-12 pt-8 border-t text-sm leading-relaxed"
           style={{ borderColor: COLORS.line, color: COLORS.inkSoft }}
         >
           <p className="mb-3">
-            <strong style={{ color: COLORS.ink }}>How this got made:</strong>{' '}
-            ReviewHub pulls your reviews from Google (and 60+ other platforms),
-            drafts replies in your voice, sends you an alert when a new review lands.
-            You always edit before publishing — nothing posts without your approval.
+            <strong style={{ color: COLORS.ink }}>Not ready to sign up?</strong>{' '}
+            Just reply to my email — I'm Earth, the solo founder building this
+            in Bangkok, and a one-line "tell me more" or "not for me, here's why"
+            is genuinely useful either way. Or keep using these drafts — the link
+            above stays live for 30 days.
           </p>
           <p className="text-xs" style={{ color: COLORS.inkDim }}>
             <a
@@ -329,5 +326,63 @@ export default function AuditPreview() {
         </footer>
       </main>
     </div>
+  );
+}
+
+// Per-card copy button. Lives at the value-delivery moment so it gets
+// dedicated styling: WCAG-passing 44px tap target, clipboard icon for
+// affordance, and a 1.6s "Copied ✓" state-swap so the prospect sees the
+// click landed (the previous silent version triggered repeat-click
+// frustration in critique).
+function CopyButton({ text }) {
+  const [copied, setCopied] = useState(false);
+  const timerRef = useRef(null);
+
+  // Clear the timeout on unmount so a tab-switched-mid-copy doesn't leak.
+  useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); }, []);
+
+  async function handleClick() {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      // Clipboard blocked (insecure context, permissions). Still show
+      // "copied" so the user gets feedback; if it really didn't copy,
+      // they'll notice when they paste and a re-click is one tap away.
+    }
+    setCopied(true);
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => setCopied(false), 1600);
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleClick}
+      aria-live="polite"
+      className="mt-4 inline-flex items-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-lg transition-all"
+      style={{
+        background: copied ? COLORS.cardBg : COLORS.tealDeep,
+        color: copied ? COLORS.tealDeep : '#fff',
+        border: `1px solid ${COLORS.tealDeep}`,
+        minHeight: '44px',
+      }}
+    >
+      {copied ? (
+        <>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+          Copied
+        </>
+      ) : (
+        <>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+          </svg>
+          Copy reply
+        </>
+      )}
+    </button>
   );
 }
