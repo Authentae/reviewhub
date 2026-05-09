@@ -37,7 +37,7 @@ const SECTIONS = [
 export default function Privacy() {
   const { t } = useI18n();
   usePageTitle(t('page.privacy'));
-  const updated = '2025-04-22';
+  const updated = '2026-05-10';
 
   return (
     <div className="rh-design rh-app min-h-screen">
