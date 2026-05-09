@@ -883,6 +883,43 @@ function initSchema() {
     console.error('[DB] business_claims / review_responses table creation:', err.message);
   }
 
+  // line_oa_links — maps a ReviewHub user to their LINE userId (after they
+  // add the ReviewHub LINE OA bot as a friend). LINE userId is opaque per
+  // bot, not the user's phone number — stable for push notifications.
+  //
+  // Linked via a one-time link token: user clicks "Connect LINE" in
+  // settings → ReviewHub generates short-lived link_token → user opens
+  // LINE, sends `/link <token>` to the bot → webhook handler matches
+  // token to user, stores line_user_id. Simpler than account-link UI.
+  //
+  // Once linked, the cron job that detects new reviews fires a push
+  // message to line_user_id with the review + an AI-drafted reply.
+  try {
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS line_oa_links (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        line_user_id TEXT,
+        display_name TEXT,
+        picture_url TEXT,
+        link_token TEXT,
+        link_token_expires_at TEXT,
+        linked_at TEXT,
+        last_message_sent_at TEXT,
+        created_at TEXT DEFAULT (datetime('now')),
+        updated_at TEXT DEFAULT (datetime('now')),
+        UNIQUE(user_id)
+      );
+      CREATE INDEX IF NOT EXISTS idx_line_oa_links_user ON line_oa_links(user_id);
+      CREATE INDEX IF NOT EXISTS idx_line_oa_links_line_user ON line_oa_links(line_user_id);
+      CREATE INDEX IF NOT EXISTS idx_line_oa_links_token
+        ON line_oa_links(link_token)
+        WHERE link_token IS NOT NULL;
+    `);
+  } catch (err) {
+    console.error('[DB] line_oa_links table creation:', err.message);
+  }
+
   // Index token hashes so verify/reset lookups are O(log n) even at scale.
   // Partial indexes (WHERE … IS NOT NULL) keep them tiny — only rows with active tokens.
   try {

@@ -183,6 +183,20 @@ function createApp() {
     }
   );
 
+  // LINE Messaging API webhook. Same raw-body pattern as billing — the
+  // X-Line-Signature header is HMAC-SHA256 over the raw body, so we can't
+  // let express.json() parse it before verification.
+  // Behind LINE_OA_ENABLED feature flag (default off → no-op + 200).
+  app.post(
+    '/api/webhooks/line',
+    webhookLimiter,
+    express.raw({ type: '*/*', limit: '1mb' }),
+    (req, res, next) => {
+      const { webhookHandler } = require('./routes/lineWebhook');
+      return webhookHandler(req, res, next);
+    }
+  );
+
   app.use(express.json({ limit: '50kb' }));
   // Parse Cookie headers so readSessionCookie() in middleware/auth can read
   // the httpOnly session cookie. No signing key needed — the cookie VALUE
