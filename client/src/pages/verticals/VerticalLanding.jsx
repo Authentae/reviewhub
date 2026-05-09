@@ -71,7 +71,7 @@ const VERTICALS = {
     eyebrow: 'For restaurants',
     heroLine1: 'Reply to every review',
     heroLine2: 'between dinner shifts.',
-    sub: 'Your guests rate the food on Google, TripAdvisor, and Wongnai while you\'re running the kitchen. ReviewHub drafts replies in your voice, you approve in 10 seconds.',
+    sub: 'Your guests rate the food on Google, TripAdvisor, and Wongnai while you\'re running the kitchen. ReviewHub pings you on LINE with a draft reply in your voice — tap to copy, paste in Google, ~30 seconds.',
     platforms: ['Google', 'TripAdvisor', 'Yelp', 'Facebook', 'Wongnai (TH)', 'Tabelog (JP)', 'foodpanda', 'Grab Food'],
     painPoints: [
       'Slow service complaint at 9pm — reply needs to be empathetic, specific, and posted before they tell their friends',
@@ -119,7 +119,7 @@ const VERTICALS = {
     eyebrow: 'For spas, salons & wellness studios',
     heroLine1: 'Reply between treatments —',
     heroLine2: 'in your tone, not a robot\'s.',
-    sub: 'Massage spas, hair salons, yoga studios, and Muay Thai gyms live or die by Google reviews. Therapists are mid-treatment, owners are at the front desk. ReviewHub drafts each reply in your voice — relaxed and warm for spa, sharper for fitness — and posts to Google when you approve.',
+    sub: 'Massage spas, hair salons, yoga studios, and Muay Thai gyms live or die by Google reviews. Therapists are mid-treatment, owners are at the front desk. ReviewHub pings you on LINE with each draft in your voice — relaxed and warm for spa, sharper for fitness — tap to copy and paste in Google.',
     platforms: ['Google', 'Yelp', 'Booksy', 'Fresha', 'Mindbody', 'Facebook', 'Instagram (link-in-bio)', 'TripAdvisor'],
     painPoints: [
       'Five-star regular naming your therapist by name — warm thanks that mentions the therapist back, not a generic "we appreciate your visit"',
