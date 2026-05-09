@@ -38,6 +38,25 @@ hook matched to what we actually know about each property.
 > House) — all healthy. Owner-reply ratio still needs Earth's eyeball
 > pass per prospect; that's editorial judgment Chrome MCP can't reliably
 > do at scale.
+>
+> **2026-05-09 — partial reply-ratio pass via Chrome MCP (agent):**
+>
+> - **#10 IR-ON Hotel — DQ added.** Reply ratio: 7 of 8 visible Google
+>   reviews have owner responses (~88%). Per audit-outreach playbook,
+>   60%+ response rate disqualifies (they're already doing the work;
+>   demo unimpressive; ROI math fails). Drop. Wave 4 effective batch:
+>   8 of 12.
+> - **#9 Volve Hotel — KEEP, UNAWARE segment.** Reply ratio: 0 of 6
+>   visible Google reviews have owner responses. Strong UNAWARE-segment
+>   fit — use the education-line-opener variant in the TH draft below
+>   (the version that mentions "ลูกค้าใหม่ส่วนใหญ่อ่านรีวิวก่อนจอง และที่
+>   หลายคนไม่รู้คือเขาดู 'การตอบกลับของร้าน' ด้วย"). 4.7★, 527 reviews,
+>   mostly 5-stars — {PAIN} hook will be hardest here; lean on a
+>   specific 4-star or recent guest's name.
+> - Remaining 7 (Lilit, Raweekanlaya, Lamphu Tree, Methavalai,
+>   Public House, Lamphu House, Nouvo): reply-ratio pass deferred to
+>   Earth's browser session — Chrome MCP layout variations made
+>   per-prospect data extraction unreliable past 2 prospects.
 
 ## Earth's pre-send checklist (per email)
 
