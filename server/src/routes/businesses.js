@@ -291,4 +291,54 @@ router.put('/:id', bizMutateLimiter, (req, res) => {
   }
 });
 
+// POST /api/businesses/:id/lookup-place-id
+// Auto-suggest Google Place ID from a free-text business name. Calls Places
+// API (NEW) text-search and returns the top 3 matches so the Settings UI
+// can let the owner pick the right one (Thai-name overlap, franchise
+// locations, etc. make the top match wrong sometimes).
+//
+// Owner-only (must own the business). Rate limit shares the mutate bucket
+// to avoid free-tier API key burn from a misbehaving client.
+//
+// Returns:
+//   200 { suggestions: [{ placeId, displayName, formattedAddress }, ...] }
+//   400 if `name` missing
+//   404 if business not owned by caller
+//   503 if GOOGLE_MAPS_API_KEY not configured
+//   502 on upstream Places API errors (preserves Places' status code)
+router.post('/:id/lookup-place-id', bizMutateLimiter, async (req, res) => {
+  try {
+    const id = parseId(req.params.id);
+    if (!id) return res.status(400).json({ error: 'Invalid business id' });
+    const biz = get('SELECT id FROM businesses WHERE id = ? AND user_id = ?', [id, req.user.id]);
+    if (!biz) return res.status(404).json({ error: 'Business not found' });
+
+    const nameField = asTrimmedString(req.body?.name, 'name', { maxLen: 200 });
+    if (!nameField.ok) return res.status(400).json({ error: nameField.error });
+    if (!nameField.value) return res.status(400).json({ error: 'name is required' });
+
+    const hintField = asTrimmedString(req.body?.hint, 'hint', { maxLen: 100, allowEmpty: true });
+    const hint = hintField.ok ? (hintField.value || 'Bangkok') : 'Bangkok';
+
+    const googlePlaces = require('../lib/providers/googlePlaces');
+    if (!googlePlaces.isConfigured()) {
+      return res.status(503).json({ error: 'Place ID lookup unavailable (server not configured)' });
+    }
+
+    let result;
+    try {
+      result = await googlePlaces.lookupByName(nameField.value, hint);
+    } catch (err) {
+      const status = err.status && err.status >= 400 && err.status < 600 ? 502 : 500;
+      return res.status(status).json({ error: `Places API: ${err.message || 'lookup failed'}` });
+    }
+
+    if (!result) return res.json({ suggestions: [] });
+    res.json({ suggestions: result.suggestions || [] });
+  } catch (err) {
+    captureException(err, { route: 'businesses.lookup-place-id' });
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 module.exports = router;

@@ -46,6 +46,22 @@ moves the needle the most goes top, regardless of effort.
 The app side. Roadmap.jsx is the public face; this is the working
 list.
 
+- `[done] 2026-05-09` LINE pivot v1: Places API integration shipped.
+  `googlePlaces.js` + `placesPoller.js` (30-min cron) + Settings UI
+  Place ID lookup + honest landing copy ("Tap to copy, paste in
+  Google. One-tap auto-post launches Q3 2026"). 27 unit + integration
+  tests green. Plumbed end-to-end except for **Earth's env var**:
+  set `GOOGLE_MAPS_API_KEY` on Railway (Cloud Console → enable
+  "Places API (New)" → Credentials → Create API key → restrict to
+  Places API New). Until that's set, the poller no-ops on every tick.
+- `[wait:signal] 2026-05-09` Google Business Profile API approval
+  (case 8-9395000041442, 7-10 business days SLA). On approval, swap
+  `placesPoller.js` calls to OAuth-based `GoogleProvider`, wire
+  `/api/reviews/:id/approve-from-line` to auto-post, update landing
+  copy from "Tap to copy" back to "one-tap approve, we post it."
+  ~2 hours of work post-approval; see `docs/line-pivot/places-api-v1-spec.md`
+  "v1 → v2 migration."
+
 - `[done]` Magic-link sign-in (email-link path of the "both" choice).
   Passwordless alternative on /login: type email, click "email me a
   link", click button in inbox, signed in. 15-min TTL, single-use,

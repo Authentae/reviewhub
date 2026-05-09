@@ -44,10 +44,10 @@ const STEPS = [
   },
   {
     n: '3',
-    titleEn: 'Tap approve',
-    titleTh: 'แตะอนุมัติ',
-    descEn: 'One tap to approve. We post the reply to Google. Done in 10 seconds.',
-    descTh: 'แตะอนุมัติครั้งเดียว ระบบโพสต์คำตอบให้บน Google เสร็จใน 10 วินาที',
+    titleEn: 'Tap to copy, paste in Google',
+    titleTh: 'แตะก็อป แล้ววางใน Google',
+    descEn: 'Tap to copy the AI draft to your clipboard, then paste into Google. (One-tap auto-post launches Q3 2026 when Google approves our API access.)',
+    descTh: 'แตะเพื่อก็อปคำตอบที่ AI ร่างให้ แล้ววางใน Google (โพสต์อัตโนมัติแบบคลิกเดียว เปิดตัวไตรมาส 3 ปี 2026 เมื่อ Google อนุมัติ API)',
   },
 ];
 
