@@ -142,6 +142,19 @@ reviewhub.app) for outreach links. Not now.
   websites, vegetarian/pastry cooking schools, independent dental
   clinics, yoga/Muay Thai studios.
 
+## Google Business Profile API application
+
+- **Submitted 2026-05-09** under `earth.reviewhub@gmail.com`.
+- **Case ID:** `8-9395000041442`
+- **SLA:** 7-10 business days, up to 42 worst-case.
+- **Cloud project:** `helpful-kingdom-495316-u4` (project number `562869028383`).
+- **Verified-listing artifact:** brother's family business `บ้านแสนสุข กำแพงแสน`
+  (brand account added as Manager, "1 business 100% verified" gate passed).
+- **Until approved:** Places API v1 (read-only, no approval gate) ships
+  manual-paste flow. See `docs/line-pivot/places-api-v1-spec.md`.
+- **When approved:** swap fetch + post path to Business Profile API,
+  upgrade landing copy to "one-tap auto-post."
+
 ## Pricing
 
 - Free + Starter $14/mo + Pro $29/mo + Business $59/mo (all annual = ~17% off)

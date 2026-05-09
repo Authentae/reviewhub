@@ -113,6 +113,8 @@ already varied. Don't normalize them.
 
 ระบบตอบเป็นภาษาเดียวกับรีวิวอัตโนมัติด้วยครับ รีวิวญี่ปุ่น/เกาหลี/จีน/อังกฤษ ก็ตอบเป็นภาษานั้น เครื่องมืออื่นส่วนใหญ่ทำได้แค่อังกฤษ
 
+อีกอย่างคือ ระบบส่งแจ้งเตือนรีวิวใหม่เข้า LINE ด้วยครับ ไม่ต้องเปิด Google ทุกวันก็รู้ว่ามีรีวิวเข้ามา
+
 คำตอบที่ร่างให้เอาไปใช้ได้เลยฟรีครับ ถ้าอยากให้ระบบทำแบบนี้ทุกครั้งที่มีรีวิวใหม่ มีแพ็กเกจเริ่มต้น $14 (~฿480)/เดือน
 
 ส่งให้ดูเผื่อมีประโยชน์เฉย ๆ ครับ ขอบคุณที่อ่านครับ
@@ -139,6 +141,9 @@ signup, just a preview link):
 The drafts auto-detect the reviewer's language too — so the Japanese,
 Korean, and Chinese reviews get replies in those languages, not
 English. Most review-reply tools only do English.
+
+New reviews also ping you on LINE — no need to check Google daily
+to know one came in.
 
 Use any of those drafts directly if you like, on the house. If you
 want this running on autopilot every time a new review lands, the
@@ -174,6 +179,8 @@ Bangkok
 
 ระบบตอบเป็นภาษาเดียวกับรีวิวอัตโนมัติด้วยครับ รีวิวญี่ปุ่น/เกาหลี/จีน/อังกฤษ ก็ตอบเป็นภาษานั้น
 
+อีกอย่างคือ ระบบส่งแจ้งเตือนรีวิวใหม่เข้า LINE ด้วยครับ ไม่ต้องเปิด Google ทุกวันก็รู้ว่ามีรีวิวเข้ามา
+
 คำตอบที่ร่างเอาไปใช้ได้เลยฟรีครับ ถ้าอยากให้ระบบทำแบบนี้ทุกครั้งที่มีรีวิวใหม่ มีแพ็กเกจเริ่มต้น $14 (~฿480)/เดือน
 
 ส่งให้ดูเผื่อมีประโยชน์เฉย ๆ ครับ ขอบคุณที่อ่านครับ
@@ -198,6 +205,8 @@ like how you might reply yourself. Take a look (no signup):
 
 The drafts auto-detect the reviewer's language too — Japanese, Korean,
 Chinese reviews get replies in those languages.
+
+New reviews also ping you on LINE — no need to check Google daily.
 
 Use any of the drafts directly. If you'd like this running on autopilot
 when new reviews land, the entry plan is $14/mo.
@@ -231,6 +240,8 @@ Bangkok
 → {AUDIT_URL}
 
 ระบบตอบเป็นภาษาเดียวกับรีวิวอัตโนมัติด้วยครับ
+
+อีกอย่างคือ ระบบส่งแจ้งเตือนรีวิวใหม่เข้า LINE ด้วยครับ ไม่ต้องเปิด Google ทุกวันก็รู้ว่ามีรีวิวเข้ามา
 
 คำตอบที่ร่างเอาไปใช้ได้เลยฟรีครับ ถ้าอยากให้ระบบทำแบบนี้ทุกครั้งที่มีรีวิวใหม่ มีแพ็กเกจเริ่มต้น $14 (~฿480)/เดือน
 
@@ -266,6 +277,8 @@ Bangkok
 
 ระบบตอบเป็นภาษาเดียวกับรีวิวอัตโนมัติด้วยครับ รีวิวญี่ปุ่น/เกาหลี/จีน/อังกฤษ ก็ตอบเป็นภาษานั้น
 
+อีกอย่างคือ ระบบส่งแจ้งเตือนรีวิวใหม่เข้า LINE ด้วยครับ ไม่ต้องเปิด Google ทุกวันก็รู้ว่ามีรีวิวเข้ามา
+
 คำตอบที่ร่างเอาไปใช้ได้เลยฟรีครับ ถ้าอยากให้ระบบทำแบบนี้ทุกครั้งที่มีรีวิวใหม่ มีแพ็กเกจเริ่มต้น $14 (~฿480)/เดือน
 
 ส่งให้ดูเผื่อมีประโยชน์เฉย ๆ ครับ ขอบคุณที่อ่านครับ
@@ -299,6 +312,8 @@ Bangkok
 → {AUDIT_URL}
 
 ระบบตอบเป็นภาษาเดียวกับรีวิวอัตโนมัติด้วยครับ ลูกค้าต่างชาติเขียนภาษาไหน ก็ตอบเป็นภาษานั้น
+
+อีกอย่างคือ ระบบส่งแจ้งเตือนรีวิวใหม่เข้า LINE ด้วยครับ ไม่ต้องเปิด Google ทุกวันก็รู้ว่ามีรีวิวเข้ามา
 
 คำตอบที่ร่างเอาไปใช้ได้เลยฟรีครับ ถ้าอยากให้ระบบทำแบบนี้ทุกครั้งที่มีรีวิวใหม่ มีแพ็กเกจเริ่มต้น $14 (~฿480)/เดือน
 
@@ -373,6 +388,9 @@ languages. The drafts auto-detect the reviewer's language, so the
 Arabic, Hindi, Urdu reviews get replies in those languages. Most
 review-reply tools only do English.
 
+New reviews also ping you on LINE — no need to check Google daily
+to know one came in.
+
 Use any of the drafts directly. If you want this running on autopilot
 every time a new review lands, the entry plan is $14/mo.
 
@@ -410,6 +428,9 @@ signup, just a preview link):
 The drafts also auto-detect the reviewer's language — Japanese,
 Korean, Chinese reviews get replies in those languages, not English.
 
+New reviews also ping you on LINE — no need to check Google daily
+to know one came in.
+
 Use any directly if useful. If you want this running on autopilot
 every time a new review lands, the entry plan is $14/mo.
 
@@ -445,6 +466,8 @@ Bangkok
 → {AUDIT_URL}
 
 ระบบตอบเป็นภาษาเดียวกับรีวิวอัตโนมัติด้วยครับ รีวิวญี่ปุ่น/เกาหลี/จีน/อังกฤษ ก็ตอบเป็นภาษานั้น
+
+อีกอย่างคือ ระบบส่งแจ้งเตือนรีวิวใหม่เข้า LINE ด้วยครับ ไม่ต้องเปิด Google ทุกวันก็รู้ว่ามีรีวิวเข้ามา
 
 คำตอบที่ร่างเอาไปใช้ได้เลยฟรีครับ ถ้าอยากให้ระบบทำแบบนี้ทุกครั้งที่มีรีวิวใหม่ มีแพ็กเกจเริ่มต้น $14 (~฿480)/เดือน
 
