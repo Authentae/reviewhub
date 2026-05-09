@@ -303,13 +303,13 @@ function HowItWorks() {
         </div>
       ),
     },
-    { n: 'III', cat: t('landing.step3Cat', 'Post'), h: t('landing.step3H', "One tap. It's published."),
-      p: t('landing.step3P', "We post the approved reply directly to Google via the Business Profile API — no copy-paste, no tab juggling, no second login. Median reply time: 12 seconds."),
+    { n: 'III', cat: t('landing.step3Cat', 'LINE → Copy → Paste'), h: t('landing.step3H', "Tap to copy, paste in Google."),
+      p: t('landing.step3P', "New reviews ping you on LINE with the AI draft ready. Tap Copy, switch to Google, paste. 30 seconds instead of 30 minutes. (One-tap auto-post launches Q3 2026 when Google's Business Profile API approval lands — case 8-9395000041442.)"),
       illo: (
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontFamily: 'var(--rh-mono)', fontSize: 10, color: 'var(--rh-ink-3)', letterSpacing: '0.08em', marginBottom: 8 }}>MEDIAN</div>
-          <div style={{ fontFamily: 'var(--rh-serif)', fontSize: 68, lineHeight: 1, color: 'var(--rh-sage)', fontStyle: 'italic', letterSpacing: '-0.03em' }}>12<span style={{ fontSize: 24, color: 'var(--rh-ink-3)', fontStyle: 'normal' }}>s</span></div>
-          <div style={{ fontFamily: 'var(--rh-mono)', fontSize: 10, color: 'var(--rh-sage)', letterSpacing: '0.08em', marginTop: 6 }}>↓ 94% FASTER</div>
+          <div style={{ fontFamily: 'var(--rh-mono)', fontSize: 10, color: 'var(--rh-ink-3)', letterSpacing: '0.08em', marginBottom: 8 }}>TIME PER REPLY</div>
+          <div style={{ fontFamily: 'var(--rh-serif)', fontSize: 68, lineHeight: 1, color: 'var(--rh-sage)', fontStyle: 'italic', letterSpacing: '-0.03em' }}>30<span style={{ fontSize: 24, color: 'var(--rh-ink-3)', fontStyle: 'normal' }}>s</span></div>
+          <div style={{ fontFamily: 'var(--rh-mono)', fontSize: 10, color: 'var(--rh-sage)', letterSpacing: '0.08em', marginTop: 6 }}>↓ 60× FASTER</div>
         </div>
       ),
     },
