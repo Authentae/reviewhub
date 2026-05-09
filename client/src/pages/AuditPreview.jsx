@@ -385,15 +385,7 @@ function StickyConversionBar({ businessName, token, show }) {
   const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
-    try {
-      if (sessionStorage.getItem('audit-sticky-dismissed') === '1') {
-        setDismissed(true);
-      }
-    } catch { /* sessionStorage blocked, no-op */ }
-  }, []);
-
-  useEffect(() => {
-    if (!show || dismissed) return;
+    if (!show) return;
     function onScroll() {
       // 250px threshold = past page header on mobile + desktop. Below
       // that the prospect is reading the intro, not yet at decision time.
@@ -402,13 +394,18 @@ function StickyConversionBar({ businessName, token, show }) {
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener('scroll', onScroll);
-  }, [show, dismissed]);
+  }, [show]);
 
   if (!show || dismissed || !visible) return null;
 
   function handleDismiss() {
+    // Dismiss is per-session-only via component state. Persisting via
+    // sessionStorage was causing the bar to not render under unclear
+    // conditions (Chrome's MCP/extension sandbox seemed to interact
+    // oddly with sessionStorage); the simpler in-state version is
+    // robust and the worst case is "user dismissed, refreshed, sees
+    // it again" — which is fine for a free demo page.
     setDismissed(true);
-    try { sessionStorage.setItem('audit-sticky-dismissed', '1'); } catch { /* ok */ }
   }
 
   return (
