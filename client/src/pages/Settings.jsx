@@ -451,6 +451,233 @@ const PRESET_COLORS = [
   { hex: '#6b7280', name: 'Gray' },
 ];
 
+// LineConnectSection — owner-side UI for binding the user's LINE
+// account to their ReviewHub user_id so new-review notifications can
+// be pushed via LINE OA. Talks to /api/line-oa/{status, generate-token,
+// unlink}. Three render states:
+//
+// 1. Server reports `enabled: false` → render a stub explaining LINE
+//    OA isn't configured on this deployment (deploy lacks env vars).
+// 2. `linked: true` → render the linked-account card (display name,
+//    picture, "linked since"), with an Unlink button.
+// 3. `linked: false` → render the link flow: Generate token → show
+//    the `/link <token>` command + a copy button + the "Open
+//    @bot_id in LINE" deep link.
+function LineConnectSection() {
+  const { lang } = useI18n();
+  const isThai = lang === 'th';
+  const toast = useToast();
+  const [state, setState] = useState({ status: 'loading' });
+  const [tokenInfo, setTokenInfo] = useState(null);
+  const [busy, setBusy] = useState(false);
+
+  // Initial status fetch + light polling (every 8s) while a token is
+  // pending. The webhook hits the DB in the background when the user
+  // sends `/link <token>` from LINE, so the only way the client knows
+  // they linked is to poll.
+  useEffect(() => {
+    let cancelled = false;
+    let interval = null;
+    function load() {
+      api.get('/line-oa/status').then(({ data }) => {
+        if (cancelled) return;
+        setState({ status: 'ok', data });
+        if (data.linked && interval) {
+          clearInterval(interval);
+          interval = null;
+          toast(isThai
+            ? 'เชื่อม LINE เรียบร้อย — รีวิวใหม่จะแจ้งเตือนที่ LINE'
+            : 'LINE connected — new reviews will ping you on LINE.', 'success');
+        }
+      }).catch(() => {
+        if (cancelled) return;
+        setState({ status: 'error' });
+      });
+    }
+    load();
+    // Start polling only AFTER tokenInfo is set (user just generated a
+    // token and is going to LINE to redeem it). 8s is gentle enough
+    // not to spam the API and fast enough that the success toast
+    // arrives within ~10 seconds of the user redeeming.
+    if (tokenInfo) {
+      interval = setInterval(load, 8000);
+    }
+    return () => {
+      cancelled = true;
+      if (interval) clearInterval(interval);
+    };
+  }, [tokenInfo, isThai, toast]);
+
+  async function handleGenerate() {
+    setBusy(true);
+    try {
+      const { data } = await api.post('/line-oa/generate-token');
+      setTokenInfo(data);
+      toast(isThai
+        ? 'สร้างโค้ดแล้ว — ส่งคำสั่งใน LINE ภายใน 15 นาที'
+        : 'Token generated — send the command in LINE within 15 minutes.', 'success');
+    } catch (err) {
+      toast(err?.response?.data?.error || (isThai ? 'สร้างโค้ดไม่สำเร็จ' : 'Could not generate token'), 'error');
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function handleUnlink() {
+    if (!confirm(isThai
+      ? 'ปลดการเชื่อม LINE? คุณจะไม่ได้รับแจ้งเตือนผ่าน LINE จนกว่าจะเชื่อมใหม่'
+      : 'Unlink your LINE account? You won\'t receive LINE notifications until you re-link.')) return;
+    setBusy(true);
+    try {
+      await api.post('/line-oa/unlink');
+      setTokenInfo(null);
+      const { data } = await api.get('/line-oa/status');
+      setState({ status: 'ok', data });
+      toast(isThai ? 'ปลดการเชื่อมเรียบร้อย' : 'Unlinked.', 'success');
+    } catch (err) {
+      toast(err?.response?.data?.error || (isThai ? 'ปลดการเชื่อมไม่สำเร็จ' : 'Could not unlink'), 'error');
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function copyToClipboard(text, msg) {
+    try { await navigator.clipboard.writeText(text); toast(msg, 'success'); }
+    catch { toast(isThai ? 'คัดลอกไม่ได้' : 'Could not copy', 'error'); }
+  }
+
+  if (state.status === 'loading') {
+    return (
+      <section aria-label="LINE OA connection" className="card p-5 mb-6 animate-pulse h-32" />
+    );
+  }
+  if (state.status === 'error') return null;
+
+  const data = state.data;
+
+  // Deployment doesn't have LINE OA wired (env vars missing). Don't
+  // pretend the feature exists; tell ops to set the env vars.
+  if (!data.enabled) {
+    return (
+      <section aria-label="LINE OA connection" className="card p-5 mb-6">
+        <h2 className="text-lg font-semibold mb-1" style={{ fontFamily: 'var(--rh-serif)' }}>
+          {isThai ? 'เชื่อม LINE OA' : 'Connect LINE OA'}
+        </h2>
+        <p className="text-sm" style={{ color: 'var(--rh-ink-2, #4a525a)' }}>
+          {isThai
+            ? 'LINE OA ยังไม่ได้เปิดใช้งานบน deployment นี้ (ต้องตั้งค่า LINE_CHANNEL_SECRET + LINE_CHANNEL_ACCESS_TOKEN + LINE_OA_ENABLED=true ก่อน)'
+            : 'LINE OA is not enabled on this deployment (LINE_CHANNEL_SECRET + LINE_CHANNEL_ACCESS_TOKEN + LINE_OA_ENABLED=true required).'}
+        </p>
+      </section>
+    );
+  }
+
+  return (
+    <section aria-label="LINE OA connection" className="card p-5 mb-6">
+      <div className="flex items-start justify-between gap-3 mb-3 flex-wrap">
+        <div className="min-w-0">
+          <h2 className="text-lg font-semibold" style={{ fontFamily: 'var(--rh-serif)' }}>
+            {isThai ? 'เชื่อม LINE OA' : 'Connect LINE OA'}
+          </h2>
+          <p className="text-xs" style={{ color: 'var(--rh-ink-3, #888)' }}>
+            {isThai ? 'รีวิว Google ใหม่ → แจ้งเตือนเข้า LINE คุณทันที' : 'New Google reviews → instant LINE ping with the AI draft'}
+          </p>
+        </div>
+        {data.linked && (
+          <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full"
+            style={{ background: 'rgba(107,142,122,0.15)', color: 'var(--rh-sage, #6b8e7a)' }}>
+            <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--rh-sage, #6b8e7a)' }} aria-hidden="true" />
+            {isThai ? 'เชื่อมแล้ว' : 'Connected'}
+          </span>
+        )}
+      </div>
+
+      {data.linked ? (
+        <div className="space-y-3">
+          <div className="flex items-center gap-3 p-3 rounded-lg" style={{ background: 'var(--rh-paper, #fbf8f1)', border: '1px solid var(--rh-line, #e6dfce)' }}>
+            {data.picture_url && (
+              <img src={data.picture_url} alt="" className="w-10 h-10 rounded-full" />
+            )}
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium truncate">{data.display_name || (isThai ? '(ไม่มีชื่อแสดง)' : '(no display name)')}</p>
+              {data.linked_at && (
+                <p className="text-xs" style={{ color: 'var(--rh-ink-3, #888)' }}>
+                  {isThai ? 'เชื่อมเมื่อ ' : 'Connected '}{new Date(data.linked_at).toLocaleDateString(isThai ? 'th-TH' : 'en-US', { dateStyle: 'medium' })}
+                </p>
+              )}
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={handleUnlink}
+            disabled={busy}
+            className="btn-secondary text-xs py-2 px-3 disabled:opacity-50"
+          >
+            {isThai ? 'ปลดการเชื่อม' : 'Unlink'}
+          </button>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {!tokenInfo && !data.pending_token && (
+            <>
+              <ol className="text-sm space-y-2 list-decimal pl-5" style={{ color: 'var(--rh-ink-2, #4a525a)' }}>
+                <li>{isThai ? 'เพิ่มเพื่อน LINE OA ของ ReviewHub: ' : 'Add ReviewHub LINE OA as friend: '}<strong>{data.bot_id}</strong></li>
+                <li>{isThai ? 'กดปุ่มด้านล่างเพื่อสร้างโค้ดเชื่อมบัญชี' : 'Click the button below to generate a one-time link code'}</li>
+                <li>{isThai ? 'ส่งโค้ดให้ ReviewHub OA ใน LINE' : 'Send the code to ReviewHub OA in LINE chat'}</li>
+              </ol>
+              <button
+                type="button"
+                onClick={handleGenerate}
+                disabled={busy}
+                className="btn-primary text-sm py-2.5 px-4 disabled:opacity-50"
+              >
+                {busy ? (isThai ? 'กำลังสร้าง…' : 'Generating…') : (isThai ? 'สร้างโค้ดเชื่อมบัญชี' : 'Generate link code')}
+              </button>
+            </>
+          )}
+          {(tokenInfo || data.pending_token) && (() => {
+            const t = tokenInfo || data.pending_token;
+            const command = `/link ${t.token}`;
+            return (
+              <div className="space-y-3">
+                <p className="text-sm" style={{ color: 'var(--rh-ink, #1d242c)' }}>
+                  {isThai
+                    ? <>เปิด LINE → คุยกับ <strong>{data.bot_id}</strong> → ส่งข้อความนี้:</>
+                    : <>Open LINE → chat with <strong>{data.bot_id}</strong> → send this message:</>}
+                </p>
+                <div className="flex gap-2 items-center p-3 rounded-lg font-mono text-sm" style={{ background: 'var(--rh-paper, #fbf8f1)', border: '1px solid var(--rh-line, #e6dfce)' }}>
+                  <code className="flex-1 break-all">{command}</code>
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard(command, isThai ? 'คัดลอกแล้ว' : 'Copied')}
+                    className="btn-secondary text-xs py-1.5 px-3 whitespace-nowrap"
+                  >
+                    {isThai ? 'คัดลอก' : 'Copy'}
+                  </button>
+                </div>
+                <p className="text-xs" style={{ color: 'var(--rh-ink-3, #888)' }}>
+                  {isThai
+                    ? `โค้ดนี้หมดอายุภายใน 15 นาที · กำลังรอการเชื่อมจาก LINE…`
+                    : `This code expires in 15 minutes · Waiting for confirmation from LINE…`}
+                </p>
+                <a
+                  href={`https://line.me/R/ti/p/${encodeURIComponent(data.bot_id)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block text-xs font-semibold underline"
+                  style={{ color: 'var(--rh-teal-deep, #1e4d5e)' }}
+                >
+                  {isThai ? `เปิด ${data.bot_id} ใน LINE →` : `Open ${data.bot_id} in LINE →`}
+                </a>
+              </div>
+            );
+          })()}
+        </div>
+      )}
+    </section>
+  );
+}
+
 function TagManager() {
   const { t } = useI18n();
   const toast = useToast();
@@ -2493,6 +2720,11 @@ export default function Settings() {
               Import section further down on this page. */}
           <CsvOnlyPlatforms lang={lang} />
         </section>
+
+        {/* LINE OA connection — owner-side flow to bind their LINE userId
+            so new-review notifications can ping them. The headline
+            differentiator vs Birdeye/Podium for the LINE-pivot v1. */}
+        <LineConnectSection />
 
         {/* Review Tags */}
         <TagManager />

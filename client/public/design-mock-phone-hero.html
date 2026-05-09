@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Design mockup — Phone hero / AuditPreview / Direction B</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --rh-paper: #fbf8f1;
+      --rh-ink: #1d242c;
+      --rh-ink-soft: #4a525a;
+      --rh-ink-dim: #9aa3ac;
+      --rh-teal-deep: #1e4d5e;
+      --rh-line: #e6dfce;
+      --rh-divider: #f0e9d8;
+      --rh-card-bg: #ffffff;
+      --rh-ochre: #c48a2c;
+      --rh-star: #f59e0b;
+      --rh-star-empty: #dcd4c0;
+      --rh-line-green: #00c300;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      background: var(--rh-paper);
+      color: var(--rh-ink);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      color-scheme: light;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 40px 20px 120px;
+    }
+    @media (min-width: 768px) {
+      .container { padding: 64px 20px 64px; }
+    }
+
+    /* Tag at top — design mockup banner so reviewer knows what they're looking at */
+    .mock-banner {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      background: var(--rh-ink);
+      color: var(--rh-paper);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      z-index: 100;
+    }
+
+    /* Header */
+    .eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--rh-ochre);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin: 0 0 8px;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 0 0 8px;
+    }
+    @media (min-width: 768px) {
+      h1 { font-size: 40px; }
+    }
+    .header-sub {
+      color: var(--rh-ink-soft);
+      margin: 0 0 32px;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    /* THE NEW PIECE — phone hero block. This is what makes Direction B
+       different from the current page: a visual demonstration of the
+       LINE notification feature ABOVE the review cards, so the prospect
+       sees the differentiator in 2 seconds without having to read copy. */
+    .phone-hero {
+      background: linear-gradient(180deg, rgba(30,77,94,0.03) 0%, rgba(196,138,44,0.04) 100%);
+      border: 1px solid var(--rh-line);
+      border-radius: 24px;
+      padding: 40px 24px;
+      margin-bottom: 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .phone-hero::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 80px;
+      background: radial-gradient(ellipse, rgba(30,77,94,0.06) 0%, transparent 70%);
+    }
+    .phone-frame {
+      max-width: 280px;
+      margin: 0 auto 28px;
+      background: #1d242c;
+      border-radius: 36px;
+      padding: 8px;
+      box-shadow:
+        0 30px 60px -20px rgba(29,36,44,0.35),
+        0 18px 36px -18px rgba(29,36,44,0.22);
+      position: relative;
+    }
+    .phone-frame::before {
+      content: '';
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70px;
+      height: 5px;
+      background: #2a323a;
+      border-radius: 999px;
+      z-index: 2;
+    }
+    .phone-screen {
+      background: #ebebeb;
+      border-radius: 28px;
+      overflow: hidden;
+      min-height: 420px;
+    }
+    .line-status-bar {
+      background: var(--rh-line-green);
+      color: white;
+      padding: 12px 16px 8px;
+      font-size: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    .line-status-bar .clock { font-family: 'Inter'; }
+    .line-header {
+      background: var(--rh-line-green);
+      color: white;
+      padding: 12px 16px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .line-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: white;
+      color: var(--rh-line-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .line-name {
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+    .line-name-sub {
+      font-size: 10px;
+      opacity: 0.85;
+    }
+    .line-chat {
+      padding: 16px 12px;
+      background: #f7f7f7;
+      min-height: 320px;
+    }
+    .line-time {
+      font-size: 9px;
+      color: #999;
+      text-align: center;
+      margin: 0 0 12px;
+    }
+    .line-bubble-wrap {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .line-bubble-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: white;
+      color: var(--rh-teal-deep);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 11px;
+      flex-shrink: 0;
+    }
+    .line-bubble {
+      background: white;
+      padding: 10px 12px;
+      border-radius: 4px 14px 14px 14px;
+      max-width: 200px;
+      font-size: 11px;
+      line-height: 1.5;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      text-align: left;
+    }
+    .line-bubble .review-meta {
+      font-weight: 600;
+      color: var(--rh-ink);
+      margin-bottom: 4px;
+    }
+    .line-bubble .review-stars { color: var(--rh-star); font-size: 10px; }
+    .line-bubble .review-quote {
+      font-size: 10.5px;
+      color: var(--rh-ink-soft);
+      font-style: italic;
+      margin: 4px 0 8px;
+      line-height: 1.4;
+    }
+    .line-bubble .draft-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8.5px;
+      color: var(--rh-teal-deep);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin: 6px 0 3px;
+      font-weight: 700;
+    }
+    .line-bubble .draft-text {
+      font-size: 10.5px;
+      color: var(--rh-ink);
+      line-height: 1.45;
+    }
+    .line-action-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .line-action {
+      background: var(--rh-teal-deep);
+      color: white;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 9.5px;
+      font-weight: 600;
+      flex: 1;
+      text-align: center;
+    }
+    .line-action.secondary {
+      background: white;
+      color: var(--rh-teal-deep);
+      border: 1px solid var(--rh-teal-deep);
+    }
+
+    .hero-headline {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-style: italic;
+      font-size: 28px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      margin: 0 0 12px;
+      color: var(--rh-ink);
+      line-height: 1.15;
+    }
+    @media (min-width: 768px) {
+      .hero-headline { font-size: 36px; }
+    }
+    .hero-sub {
+      font-size: 14px;
+      color: var(--rh-ink-soft);
+      max-width: 460px;
+      margin: 0 auto;
+      line-height: 1.55;
+    }
+
+    /* Section divider w/ eyebrow */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 0 0 24px;
+    }
+    .section-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--rh-line);
+    }
+    .section-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--rh-ink-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+
+    /* Review cards (carry-over from existing design with the visual lift) */
+    .review-card {
+      background: var(--rh-card-bg);
+      border: 1px solid var(--rh-line);
+      border-radius: 16px;
+      padding: 20px 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(29,36,44,0.05), 0 1px 2px rgba(29,36,44,0.03);
+    }
+    @media (min-width: 768px) {
+      .review-card { padding: 24px 26px; }
+    }
+    .review-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .review-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--rh-ink);
+    }
+    .review-stars {
+      font-size: 16px;
+      color: var(--rh-star);
+    }
+    .review-stars .empty { color: var(--rh-star-empty); }
+    .review-text {
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--rh-ink-soft);
+      white-space: pre-wrap;
+    }
+    .card-divider {
+      height: 1px;
+      background: var(--rh-divider);
+      margin: 18px 0;
+    }
+    .draft-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--rh-teal-deep);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin: 0 0 8px;
+      font-weight: 700;
+    }
+    .draft-text {
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--rh-ink);
+      white-space: pre-wrap;
+      margin: 0;
+    }
+    .copy-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 18px;
+      background: var(--rh-teal-deep);
+      color: white;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid var(--rh-teal-deep);
+      cursor: pointer;
+      min-height: 44px;
+    }
+
+    /* CTA panel */
+    .cta {
+      background: var(--rh-teal-deep);
+      color: white;
+      border-radius: 24px;
+      padding: 32px 24px;
+      text-align: center;
+      margin-top: 40px;
+    }
+    .cta-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: #f5d8a7;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin: 0 0 8px;
+    }
+    .cta h2 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 26px;
+      font-weight: 400;
+      font-style: italic;
+      margin: 0 0 12px;
+      letter-spacing: -0.01em;
+    }
+    .cta-body {
+      font-size: 14px;
+      color: #fdf2dc;
+      max-width: 420px;
+      margin: 0 auto 20px;
+      line-height: 1.5;
+    }
+    .cta-button {
+      background: white;
+      color: var(--rh-teal-deep);
+      padding: 14px 24px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .cta-trust {
+      font-size: 12px;
+      color: #fdf2dc;
+      opacity: 0.85;
+      margin: 12px 0 0;
+    }
+
+    /* Sticky bottom CTA bar (carry-over from functional pass) */
+    .sticky {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--rh-teal-deep);
+      color: white;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 -2px 12px rgba(29,36,44,0.12);
+      z-index: 40;
+    }
+    .sticky-text { font-size: 13px; flex: 1; line-height: 1.3; }
+    .sticky-text strong { display: block; }
+    .sticky-button {
+      background: white;
+      color: var(--rh-teal-deep);
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .max-3xl { max-width: 768px; margin: 0 auto; display: flex; gap: 12px; align-items: center; width: 100%; }
+  </style>
+</head>
+<body>
+  <div class="mock-banner">DESIGN MOCK · DIRECTION B · PHONE HERO · NOT LIVE</div>
+
+  <div class="container">
+
+    <!-- Header -->
+    <p class="eyebrow">Reply suggestions for</p>
+    <h1>Chakrabongse Villas</h1>
+    <p class="header-sub">5 draft replies ready to copy &amp; paste — no account needed.</p>
+
+    <!-- NEW: Phone-mockup hero. This is the Direction B addition.
+         Sells the LINE notification feature in 2 seconds without
+         any copy. -->
+    <div class="phone-hero">
+      <div class="phone-frame">
+        <div class="phone-screen">
+          <div class="line-status-bar">
+            <span class="clock">9:41</span>
+            <span>5G &nbsp; 100%</span>
+          </div>
+          <div class="line-header">
+            <div class="line-avatar">RH</div>
+            <div>
+              <div class="line-name">ReviewHub OA</div>
+              <div class="line-name-sub">official account</div>
+            </div>
+          </div>
+          <div class="line-chat">
+            <p class="line-time">9:41 AM</p>
+            <div class="line-bubble-wrap">
+              <div class="line-bubble-avatar">RH</div>
+              <div class="line-bubble">
+                <div class="review-meta">New Google review</div>
+                <span class="review-stars">★★★★★</span> &nbsp;<strong style="font-size:10.5px">Sarah K.</strong>
+                <p class="review-quote">"Stayed for 4 nights and the canal view at sunrise was unreal. Owner came down to recommend a noodle place..."</p>
+                <p class="draft-label">Draft reply</p>
+                <p class="draft-text">Thank you so much Sarah — really happy you enjoyed the canal view at sunrise. That noodle place is one of our favourites too…</p>
+                <div class="line-action-row">
+                  <span class="line-action">Copy reply</span>
+                  <span class="line-action secondary">Edit</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="hero-headline">New reviews ping you on LINE.</h2>
+      <p class="hero-sub">With an AI-drafted reply in your voice, ready to send. Tap to copy, paste in Google. The reviews below are yours — drafts already written.</p>
+    </div>
+
+    <!-- Existing review cards (with visual-lift shadow already shipped) -->
+    <div class="section-divider">
+      <span class="section-eyebrow">Your reviews · 5</span>
+    </div>
+
+    <article class="review-card">
+      <div class="review-head">
+        <span class="review-name">Sarah K.</span>
+        <span class="review-stars">★★★★★</span>
+      </div>
+      <p class="review-text">Stayed for 4 nights and the canal view from my room at sunrise was unreal. Owner came down to recommend a noodle place around the corner — best laksa I had in Bangkok. Tiny place, big heart.</p>
+      <div class="card-divider"></div>
+      <p class="draft-eyebrow">Suggested reply</p>
+      <p class="draft-text">Thank you so much Sarah — really happy you enjoyed the canal view at sunrise. That noodle place is one of our favourites too; glad it lived up to it. Hope to host you again next time you're in Bangkok. — Chakrabongse Villas</p>
+      <button class="copy-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+        Copy reply
+      </button>
+    </article>
+
+    <article class="review-card">
+      <div class="review-head">
+        <span class="review-name">Marco P.</span>
+        <span class="review-stars">★★★★<span class="empty">★</span></span>
+      </div>
+      <p class="review-text">Lovely property, very atmospheric. Wifi was a bit spotty in the back rooms but the staff fixed it within an hour when I asked. Good location for Old Town walks.</p>
+      <div class="card-divider"></div>
+      <p class="draft-eyebrow">Suggested reply</p>
+      <p class="draft-text">Thank you Marco — really glad to hear the team fixed the wifi quickly. We've since added a second access point in the back wing so newer guests don't hit the same dead-spot. Hope to see you back when you're next in town! — Chakrabongse Villas</p>
+      <button class="copy-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+        Copy reply
+      </button>
+    </article>
+
+    <article class="review-card">
+      <div class="review-head">
+        <span class="review-name">Anonymous</span>
+        <span class="review-stars">★★<span class="empty">★★★</span></span>
+      </div>
+      <p class="review-text">รถติดมาก เดินทางลำบาก หาแท็กซี่ยากในเย็น</p>
+      <div class="card-divider"></div>
+      <p class="draft-eyebrow">Suggested reply</p>
+      <p class="draft-text">ขอบคุณมากครับสำหรับฟีดแบ็ค ในย่าน Old Town การจราจรเป็นความท้าทายจริงๆ — เราได้เริ่มจัดเตรียมรถส่ง-รับสนามบินไว้ให้ลูกค้าจองล่วงหน้าแล้ว และในช่วงเย็นเราช่วยโทรเรียก Grab ให้ได้เสมอครับ ขอให้มีโอกาสได้ดูแลใหม่ครับ — Chakrabongse Villas</p>
+      <button class="copy-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+        Copy reply
+      </button>
+    </article>
+
+    <!-- CTA -->
+    <section class="cta">
+      <p class="cta-eyebrow">Want this on autopilot?</p>
+      <h2>Set this up in 10 minutes</h2>
+      <p class="cta-body">Connect Google once. New reviews ping you on LINE — with an AI draft in your voice. Tap to copy, paste in Google. Replies that took 30 min each take 30 seconds. $14/mo (~฿490).</p>
+      <a href="#" class="cta-button">Yes, set this up for me →</a>
+      <p class="cta-trust">No credit card to start · 30-day refund · cancel anytime</p>
+    </section>
+
+  </div>
+
+  <!-- Sticky CTA bar -->
+  <div class="sticky">
+    <div class="max-3xl">
+      <p class="sticky-text">
+        <strong>Want this on autopilot?</strong>
+        <span style="opacity:.85">New reviews ping you on LINE. $14/mo (~฿490).</span>
+      </p>
+      <a href="#" class="sticky-button">Set this up — Free →</a>
+    </div>
+  </div>
+</body>
+</html>

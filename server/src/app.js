@@ -313,6 +313,10 @@ function createApp() {
   app.use('/api/apikeys', require('./routes/apiKeys'));
   app.use('/api/support', require('./routes/support'));
   app.use('/api/audit-previews', require('./routes/auditPreviews'));
+  // /api/line-oa — owner-side LINE OA link management (status, generate
+  // link-token, unlink). The webhook receiver lives separately at
+  // /api/webhooks/line and is mounted earlier with raw-body parsing.
+  app.use('/api/line-oa', require('./routes/lineOaLinks'));
   // business_share_tokens — owner-side endpoints mounted under
   // /api/businesses (matches the resource ownership), public read
   // endpoint exposed at /api/share/:token (single share-table read,
