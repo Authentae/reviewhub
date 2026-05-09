@@ -224,8 +224,15 @@ export default function Navbar() {
                       role="menuitem">
                       {t('nav.settings')}
                     </Link>
-                    <button type="button" onClick={handleLogout}
+                    {/* Help — surfaces /guide for users who didn't see it
+                        in onboarding emails or who want a refresher mid-use. */}
+                    <Link to="/guide" onClick={() => setUserMenuOpen(false)}
                       ref={el => { menuItemRefs.current[1] = el; }}
+                      role="menuitem">
+                      {t('nav.howItWorks', 'How it works')}
+                    </Link>
+                    <button type="button" onClick={handleLogout}
+                      ref={el => { menuItemRefs.current[2] = el; }}
                       role="menuitem"
                       className="danger">
                       {t('nav.logout')}
@@ -289,6 +296,7 @@ export default function Navbar() {
                 <MobileLink to="/review-requests" label={t('nav.reviewRequests')} active={isActive('/review-requests')} />
                 <MobileLink to="/owner" label={t('nav.owner', 'Owner')} active={isActive('/owner')} />
                 <MobileLink to="/settings" label={t('nav.settings')} active={isActive('/settings')} />
+                <MobileLink to="/guide" label={t('nav.howItWorks', 'How it works')} active={isActive('/guide')} />
                 <MobileLink to="/pricing" label={t('nav.pricing')} active={isActive('/pricing')} />
                 <div style={{ display: 'flex', gap: 8, padding: '8px 4px' }}>
                   <RhLangPicker />
