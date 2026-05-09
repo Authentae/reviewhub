@@ -1,5 +1,31 @@
 # ReviewHub — 90-Day Strategy (PLG, extension-led)
 
+> **⚠ DEPRECATED 2026-05-09** — this document describes a strategy
+> that was abandoned. The Chrome extension distribution play, the
+> "no customer contact" framing, and the "global English-speaking
+> solo operators" target were all replaced by the current
+> outbound-email-led, Bangkok-hospitality-focused, audit-funnel
+> approach in mid-late April / early May 2026.
+>
+> **Current sources of truth:**
+> - `docs/strategy-30day.md` — tactical 30-day plan (Wave 4 + scenarios)
+> - `docs/kill-switch.md` — 60-day decision deal locked 2026-05-09
+> - `docs/reviewhub-wiki.md` — non-code business state
+> - `docs/operating-queue.md` — cross-domain work list
+>
+> **Why this file still exists:** historical record. Useful for
+> understanding earlier strategic thinking + why the pivot happened
+> (founder preference for outbound + Bangkok-specific moat + Thai
+> language as competitive advantage). NOT a basis for any current
+> action. Future agent sessions: do not act on anything below
+> without cross-checking against the current sources above.
+>
+> A fresh 90-day strategy document aligned with the current direction
+> should be written ~Day 30 (2026-06-08) when there's enough Wave 4-7
+> data to make the longer-arc plan grounded rather than speculative.
+
+---
+
 **Locked:** 2026-04-24 (revised from sales-led version after founder
 confirmed preference for solo / no-customer-contact execution)
 **Review date:** 2026-07-23 (90 days)
