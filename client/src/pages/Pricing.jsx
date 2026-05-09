@@ -408,8 +408,8 @@ export default function Pricing() {
                   label: 'ReviewHub',
                   cost: lang === 'th' ? '$14/เดือน' : '$14/mo',
                   tradeoff: lang === 'th'
-                    ? 'ไม่มีสัญญา · ตอบใน 10 วินาที · เรียนรู้โทนคุณจากการแก้แต่ละครั้ง'
-                    : 'No contract · 10-second approve-and-post · learns your tone from your edits',
+                    ? 'ไม่มีสัญญา · ตอบใน 30 วินาทีผ่าน LINE · เรียนรู้โทนคุณจากการแก้แต่ละครั้ง'
+                    : 'No contract · 30-second tap-to-copy from LINE · learns your tone from your edits',
                   highlight: true,
                 },
               ].map((row, i) => (
