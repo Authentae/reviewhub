@@ -83,6 +83,36 @@ export default function AuditPreview() {
     return () => { cancelled = true; };
   }, [token]);
 
+  // Scroll-depth funnel signal. Fires Plausible events at 25 / 50 / 75 / 100%
+  // page-scrolled. Lets us tell "prospect bounced after 1 review card" from
+  // "prospect read everything and ignored CTA" — totally different problems.
+  // Only arms after data loads so the loading-spinner page doesn't pollute
+  // the funnel with bogus 0% events.
+  useEffect(() => {
+    if (state.status !== 'ok') return;
+    const fired = new Set();
+    function onScroll() {
+      const scrolled = window.scrollY + window.innerHeight;
+      const total = document.documentElement.scrollHeight;
+      if (total <= 0) return;
+      const pct = (scrolled / total) * 100;
+      const milestones = [25, 50, 75, 100];
+      for (const m of milestones) {
+        if (pct >= m && !fired.has(m)) {
+          fired.add(m);
+          if (typeof window.plausible === 'function') {
+            try {
+              window.plausible('AuditScrollDepth', { props: { depth: `${m}%` } });
+            } catch { /* analytics down, swallow */ }
+          }
+        }
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll(); // fire 25% immediately if the page is already short
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [state.status]);
+
   // Root style — applied to every state branch so loading/error/ok all
   // honour the light-mode lock. colorScheme:'light' tells the browser
   // not to auto-invert form controls, and the explicit background +
@@ -119,7 +149,12 @@ export default function AuditPreview() {
 
   return (
     <div style={rootStyle}>
-      <main className="max-w-3xl mx-auto px-5 py-8 md:py-16">
+      <StickyConversionBar
+        businessName={business_name}
+        token={token || ''}
+        show={totalDrafts > 0}
+      />
+      <main className="max-w-3xl mx-auto px-5 py-8 md:py-16 pb-28 md:pb-16">
         {/* Header — sets context immediately so the prospect doesn't
             wonder "wait, who is this and what am I looking at?" Tightened
             on mobile so the first review card peeks above the fold —
@@ -329,6 +364,93 @@ export default function AuditPreview() {
   );
 }
 
+// Sticky conversion bar — visible at the bottom of the viewport once the
+// prospect has scrolled past the header. Fixes the buried-CTA problem:
+// previously the only "Set this up" button lived below 5 review cards, so
+// a prospect who got value from the drafts and tab-closed never saw the
+// signup path. With the sticky bar, the CTA is always within tap reach.
+//
+// Behaviour:
+//  - Hidden on initial load (header still in view; no need to compete
+//    with the page header CTA energy).
+//  - Appears once the user has scrolled past ~250px (past the page
+//    header into the review cards).
+//  - Dismissible — a small × in the bar hides it for the rest of the
+//    page-view (sessionStorage flag, not localStorage; comes back on
+//    next visit).
+//  - Same plausible-event-name as the in-page CTA so we can tell which
+//    surface drove the click in funnel analysis (event-prop "source").
+function StickyConversionBar({ businessName, token, show }) {
+  const [visible, setVisible] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
+
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem('audit-sticky-dismissed') === '1') {
+        setDismissed(true);
+      }
+    } catch { /* sessionStorage blocked, no-op */ }
+  }, []);
+
+  useEffect(() => {
+    if (!show || dismissed) return;
+    function onScroll() {
+      // 250px threshold = past page header on mobile + desktop. Below
+      // that the prospect is reading the intro, not yet at decision time.
+      setVisible(window.scrollY > 250);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [show, dismissed]);
+
+  if (!show || dismissed || !visible) return null;
+
+  function handleDismiss() {
+    setDismissed(true);
+    try { sessionStorage.setItem('audit-sticky-dismissed', '1'); } catch { /* ok */ }
+  }
+
+  return (
+    <div
+      role="region"
+      aria-label="Sign-up call to action"
+      className="fixed bottom-0 left-0 right-0 z-40"
+      style={{
+        background: COLORS.tealDeep,
+        color: '#fff',
+        boxShadow: '0 -2px 12px rgba(29,36,44,0.12)',
+        paddingBottom: 'max(env(safe-area-inset-bottom), 0px)',
+      }}
+    >
+      <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3">
+        <p className="text-xs sm:text-sm flex-1 leading-snug">
+          <span className="font-semibold">Want this on autopilot?</span>{' '}
+          <span className="hidden sm:inline" style={{ color: '#fdf2dc' }}>
+            New reviews ping you on LINE. $14/mo (~฿490).
+          </span>
+        </p>
+        <a
+          href={`/register?from=audit&business=${encodeURIComponent(businessName || '')}&token=${encodeURIComponent(token || '')}&source=sticky`}
+          className="plausible-event-name=AuditRegisterClick plausible-event-source=sticky inline-block px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold whitespace-nowrap transition-transform hover:scale-105"
+          style={{ background: COLORS.cardBg, color: COLORS.tealDeep, minHeight: '40px', display: 'inline-flex', alignItems: 'center' }}
+        >
+          Set this up — Free →
+        </a>
+        <button
+          type="button"
+          onClick={handleDismiss}
+          aria-label="Dismiss sign-up bar"
+          className="opacity-70 hover:opacity-100 transition-opacity"
+          style={{ color: '#fdf2dc', minHeight: '32px', minWidth: '32px' }}
+        >
+          ✕
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // Per-card copy button. Lives at the value-delivery moment so it gets
 // dedicated styling: WCAG-passing 44px tap target, clipboard icon for
 // affordance, and a 1.6s "Copied ✓" state-swap so the prospect sees the
@@ -348,6 +470,13 @@ function CopyButton({ text }) {
       // Clipboard blocked (insecure context, permissions). Still show
       // "copied" so the user gets feedback; if it really didn't copy,
       // they'll notice when they paste and a re-click is one tap away.
+    }
+    // Funnel signal: lets us count, of N audit-page views, how many
+    // prospects actually copied at least one draft. Separates "looked
+    // and left" from "got value, didn't sign up." The two need
+    // different fixes.
+    if (typeof window.plausible === 'function') {
+      try { window.plausible('AuditCopyClick'); } catch { /* swallow */ }
     }
     setCopied(true);
     if (timerRef.current) clearTimeout(timerRef.current);
