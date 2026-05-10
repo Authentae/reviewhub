@@ -164,6 +164,48 @@ reviewhub.app) for outreach links. Not now.
 - Free tier intentionally has `email_alerts_new: false` — pushing free
   users toward Starter, the headline upgrade reason
 
+## Third-party API key rotation runbook
+
+**Anthropic (claude.ai) API key — env var `ANTHROPIC_API_KEY`**
+
+Symptom of expired/revoked key in prod:
+- Sentry issue type `APIError.generate` with body
+  `{"type":"error","error":{"type":"authentication_error","message":"invalid x-api-key"}}`
+- Customer-facing AI draft generation fails (Generate Reply button
+  shows error toast, audit-preview drafts marked `source:"fallback"`)
+
+Rotate (5-minute fire drill):
+1. https://console.anthropic.com/settings/keys → Create Key →
+   name it `reviewhub-prod` (delete the old one ONLY after step 4
+   succeeds — keep both alive briefly to avoid downtime gap)
+2. Copy the new `sk-ant-api03-...` value (108 chars usually)
+3. Test it works BEFORE deploying:
+   `curl -H "x-api-key: $NEW_KEY" -H "anthropic-version: 2023-06-01"
+    -H "content-type: application/json"
+    -d '{"model":"claude-haiku-4-5-20251001","max_tokens":10,"messages":[{"role":"user","content":"hi"}]}'
+    https://api.anthropic.com/v1/messages` — expect 200
+4. `railway variables --service reviewhub --set "ANTHROPIC_API_KEY=$NEW_KEY"`
+   triggers a redeploy
+5. Wait for fresh container (`uptime_seconds` < 60 on `/api/health`)
+6. Smoke test: `curl -X POST -H 'Content-Type: application/json' \
+    -d '{"review_text":"Great!","rating":5,"business_name":"Test"}' \
+    https://reviewhub.review/api/public/review-reply-generator`
+    — expect `"source":"ai"` in response (NOT `"source":"cached"` or `"source":"fallback"`)
+7. Now disable/delete the old key in console.anthropic.com
+8. In Sentry, bulk-resolve the historical 401 issues
+
+Probable revocation cause if it happens unexpectedly: Anthropic
+auto-revokes keys that get committed to public repos or appear in
+public scans. Run `git log -p -S "sk-ant-api03"` periodically to
+audit. (No leak found in this repo as of 2026-05-10 — but worth
+checking before assuming "key just expired.")
+
+**Other key locations on Railway** (run `railway variables --service reviewhub`
+to enumerate; rotate same way: validate-then-set-then-redeploy):
+GOOGLE_MAPS_API_KEY, RESEND_API_KEY, LEMONSQUEEZY_API_KEY,
+LEMONSQUEEZY_WEBHOOK_SECRET, LINE_CHANNEL_ACCESS_TOKEN, JWT_SECRET (extreme
+caution — rotating JWT_SECRET invalidates every active session).
+
 ## Lessons learned (the painful ones)
 
 - **2026-05-05** — Production OAuth callback used `writeSessionCookie`

@@ -118,6 +118,25 @@ list.
 - `[wait:signal]` Native iOS / Android app — out of scope without
   weeks of investment + App Store review pipeline. Defer until a
   paying customer specifically asks.
+- `[done] 2026-05-10` Admin gate fix — `server/src/routes/admin.js`
+  was silently 404'ing every admin endpoint to every caller (including
+  the legitimate admin) since the gate landed: JWT only carries
+  `{id, iat, exp}`, so `req.user.email` was always `undefined` →
+  empty string never matched `ADMIN_EMAIL`. Commit `8ce7e81` adds
+  DB email lookup when `req.user.email` is missing. Memory file:
+  `feedback_admin_gate_email_lookup.md`.
+- `[done] 2026-05-10` Anthropic API key rotation. Old prod key was
+  expired/revoked → all customer AI draft generation returned 401
+  for unknown duration. New key set on Railway, verified end-to-end
+  (`/api/public/review-reply-generator` returns `source:"ai"`).
+  Runbook added to `docs/reviewhub-wiki.md` § "Third-party API key
+  rotation runbook" so the next rotation is a 5-min checklist not
+  a 30-min fire drill.
+- `[done] 2026-05-10` CI green for the first time in 7+ days. Four
+  commits: env vars in test.yml (`c37045f`); lockfile esbuild 0.28.0
+  resolution (`c4723aa`); lockfile platform-binary optional flags
+  (`6fb99ce`); i18n hard-fail → warn-only (`c7bee28`). Runbook in
+  `reference_ci_debug_workflow.md` memory file.
 
 ## WEB — marketing, SEO, content, public surfaces
 
@@ -265,17 +284,25 @@ leverage when triggered.
   recommended A/B pair (Permission-asking variant E vs control). ~30
   min code ship when triggered. Don't ship until Tuesday's data
   confirms Scenario A.
-- `[wait:user]` **Wave 4 send (Tue 5/12 + Wed 5/13).** 12 candidates
-  fully researched in `docs/wave-postmortems/wave-4-candidates.md` (10/12
-  emails surfaced; #1 Methavalai blocked on TLS-cert mismatch, #10 IR-ON
-  surfaced 2026-05-08 evening as `info@ir-onhotel.com`). 12 fresh
-  per-prospect drafts written and saved to
-  `docs/wave-postmortems/wave-4-drafts.md` (9 TH + 3 EN, with EN
-  fallbacks where useful). Earth's remaining job per prospect (~3 min):
-  open Maps, count owner-reply ratio (DISQUALIFY if ≥4/10), confirm `{N}`
-  unanswered count, replace `{PAIN}` with one specific observation,
-  generate audit URL via dashboard, replace `{AUDIT_URL}`, schedule send
-  9-11am ICT Tue or Wed (split 6/6 to stay under Gmail's 10/day cap).
+- `[done] 2026-05-10` **Wave 4 send scheduled and verified in
+  Gmail.** 7 of 12 prospects qualified (others DQ'd: Methavalai
+  site offline, Baan 2459 / Bangkok Voyage / Baan Vajra <200
+  reviews, IR-ON 88% reply rate). All 7 fired via Gmail Schedule
+  Send through Chrome MCP: Tue 5/12 9:35-9:50 (Lilit, Raweekanlaya,
+  Lamphu Tree, Lamphu House) + Wed 5/13 9:30-9:40 (Nouvo, Public
+  House, Volve). Each filled draft in
+  `docs/wave-postmortems/wave-4-drafts-FILLED.md` with real audit
+  URL + per-prospect {PAIN} observation from Google reviews.
+- `[done] 2026-05-10` Wave 1+2 combined diagnostic post-mortem at
+  `docs/wave-postmortems/wave-1-2-3-combined-diagnostic.md`. First
+  reliable view-count data ever (admin gate fix unblocked the
+  diagnostic API). Headline: 12 cold sends → 4 opened (33%) → 0
+  replied. Hospitality 200+ vertical opens 100% (3/3) vs cooking
+  schools/B&Bs 11% (1/9) — audience-fit confirmed for Wave 4.
+  Conversion bottleneck is the audit-preview page, not deliverability
+  or list quality. Chakrabongse (14 views, no reply) is highest-info
+  prospect; Tue 5/12 follow-up is single highest-leverage email in
+  the queue.
 - `[done]` Volve Hotel ownership re-verified (was wrongly noted as
   Pitiphat Chongsomchit-owned in earlier wave-4-candidates.md;
   Pitiphat is the interior designer, owner is referenced in press as
