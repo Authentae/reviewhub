@@ -73,6 +73,29 @@ describe('admin routes', () => {
     delete process.env.ADMIN_EMAIL;
   });
 
+  test('admin gate works when JWT carries id only (no email) — regression for silent-404 bug', async () => {
+    // Magic-link sign-in and password-reset re-issue mint JWTs with only
+    // {id, iat, exp} — no email field — for minimal-payload reasons. Before
+    // commit 8ce7e81, the admin gate compared req.user.email (undefined →
+    // empty string) to ADMIN_EMAIL and silently 404'd to every caller,
+    // including the legitimate admin. This test pins down the contract:
+    // the admin gate MUST resolve email by user_id when req.user.email
+    // is missing.
+    const u = await makeUser();
+    process.env.ADMIN_EMAIL = u.email;
+
+    // Mint a JWT with id only — same shape as magic-link / pwd-reset issues.
+    const { signToken } = require('../src/middleware/auth');
+    const idOnlyToken = signToken({ id: u.userId });
+
+    const res = await request(app).get('/api/admin/stats')
+      .set('Authorization', `Bearer ${idOnlyToken}`);
+    assert.strictEqual(res.status, 200, 'admin gate must resolve email from DB when JWT lacks email field');
+    assert.ok(typeof res.body.stats.users === 'number');
+
+    delete process.env.ADMIN_EMAIL;
+  });
+
   test('admin outreach-stats: returns summary + audits, omits share_token', async () => {
     const u = await makeUser();
     process.env.ADMIN_EMAIL = u.email;
