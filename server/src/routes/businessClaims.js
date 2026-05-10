@@ -129,9 +129,17 @@ router.get('/:id/claim', claimReadLimiter, (req, res) => {
 const adminRouter = express.Router();
 adminRouter.use(authMiddleware);
 adminRouter.use((req, res, next) => {
+  // Same gate as /api/admin/*. JWT only carries {id, iat, exp} for
+  // magic-link / pwd-reset paths, so we look up email by user_id when
+  // req.user.email is missing. See server/src/routes/admin.js for the
+  // full bug history (silent-404 on every admin call before 2026-05-10).
   const admin = (process.env.ADMIN_EMAIL || '').trim().toLowerCase();
   if (!admin) return res.status(404).json({ error: 'Not found' });
-  const callerEmail = (req.user?.email || '').trim().toLowerCase();
+  let callerEmail = (req.user?.email || '').trim().toLowerCase();
+  if (!callerEmail && req.user?.id) {
+    const row = get('SELECT email FROM users WHERE id = ?', [req.user.id]);
+    callerEmail = (row?.email || '').trim().toLowerCase();
+  }
   if (callerEmail !== admin) return res.status(404).json({ error: 'Not found' });
   next();
 });

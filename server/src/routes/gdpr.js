@@ -162,7 +162,13 @@ router.post('/erasure-request', requireAuth, gdprRateLimit, async (req, res) => 
     // the failure-mode is privacy-safe (data simply isn't deleted) but we
     // still want operator visibility, so route the error through Sentry.
     const erasureLang = req.acceptsLanguages(['th', 'en']) || 'en';
-    sendErasureConfirmation(req.user.email, confirmUrl, erasureLang).catch((err) => {
+    // JWT only carries {id, iat, exp} for magic-link / pwd-reset paths
+    // (intentional: keeps tokens out of server logs and Referer headers).
+    // Resolve the email by user_id when missing so erasure confirmation
+    // doesn't get sent to undefined → bogus recipient.
+    const recipientEmail = req.user?.email
+      || (get('SELECT email FROM users WHERE id = ?', [req.user.id])?.email || '');
+    sendErasureConfirmation(recipientEmail, confirmUrl, erasureLang).catch((err) => {
       captureException(err, {
         route: 'gdpr', op: 'erasure-confirmation-send', userId: req.user.id,
         kind: 'email.send_failed',
