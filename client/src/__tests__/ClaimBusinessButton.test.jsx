@@ -188,6 +188,8 @@ describe('ClaimBusinessButton', () => {
     await screen.findByRole('dialog');
     expect(screen.getByText('0/500')).toBeInTheDocument();
     await user.type(screen.getByLabelText(/anything we should know/i), 'hello');
-    expect(screen.getByText('5/500')).toBeInTheDocument();
+    // findByText auto-waits for the next render — the synchronous getByText
+    // raced React's state-flush on CI ~5% of runs, breaking ci.yml's vitest job.
+    expect(await screen.findByText('5/500')).toBeInTheDocument();
   });
 });
