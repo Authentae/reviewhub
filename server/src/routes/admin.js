@@ -32,14 +32,20 @@ const adminLimiter = rateLimit({
 router.use(adminLimiter);
 
 // Gate: reject if ADMIN_EMAIL isn't set OR doesn't match the caller. The
-// check uses the email on the validated JWT (authMiddleware already ran),
-// not any request body field.
+// check resolves the caller's email from the DB by req.user.id — the JWT
+// only carries {id, iat, exp}, so req.user.email is undefined and a naive
+// JWT-claims check would always fail (silently blocked admin access for
+// the entire history of this gate; discovered 2026-05-10).
 router.use((req, res, next) => {
   // Trim + lowercase so accidental whitespace in the env var (common when
   // pasting into .env files) doesn't silently disable admin access.
   const admin = (process.env.ADMIN_EMAIL || '').trim().toLowerCase();
   if (!admin) return res.status(404).json({ error: 'Not found' });
-  const callerEmail = (req.user?.email || '').trim().toLowerCase();
+  let callerEmail = (req.user?.email || '').trim().toLowerCase();
+  if (!callerEmail && req.user?.id) {
+    const row = get('SELECT email FROM users WHERE id = ?', [req.user.id]);
+    callerEmail = (row?.email || '').trim().toLowerCase();
+  }
   if (callerEmail !== admin) {
     // Return 404 rather than 403 so non-admins can't enumerate the admin
     // surface via HTTP status codes.
