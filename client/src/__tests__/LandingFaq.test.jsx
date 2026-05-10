@@ -91,10 +91,10 @@ describe('Landing FAQ accordion', () => {
 describe('Landing How It Works section', () => {
   it('renders the three numbered steps', () => {
     renderLanding();
-    // v2 redesign: "Paste a link, we pull the reviews", "AI writes in your voice", "One tap. It's published."
+    // v2 redesign + LINE-pivot copy: step 3 was "One tap. It's published." → now "Tap to copy, paste in Google."
     expect(screen.getByRole('heading', { name: /paste a link.*pull the reviews/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /ai writes in.*your voice/i })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /one tap.*it's published/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /tap to copy.*paste in google/i })).toBeInTheDocument();
   });
 
   it('has a workflow section heading', () => {
