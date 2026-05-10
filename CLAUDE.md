@@ -348,6 +348,44 @@ is a vanity metric at pre-revenue.
 
 ---
 
+## Three patterns from 2026-05-10 — read these before "design" or "ship" claims
+
+These three failure-modes hit me in one session and cost ~2 hours of
+re-work between them. Codified in memory files; summary here so future
+sessions don't have to discover them.
+
+**1. "claude design" / "improve visual" = BUILD a visible mockup, not
+critique-then-tweak.** When Earth says any flavor of "redesign / use
+claude design / improve visual," the request is for a *visible artifact
+he can look at*. Default first action: write a self-contained HTML mock
+to `client/public/design-mock-<slug>.html`, navigate Chrome MCP to
+`http://localhost:5173/design-mock-<slug>.html`, screenshot, show. The
+`design:design-critique` skill produces wordy markdown reports that
+translate to invisible 5px CSS tweaks — Earth read this as "you ignored
+what I asked for" and had to repeat the request 3 times before I
+shipped a real mockup. See `feedback_design_means_build_not_critique.md`.
+
+**2. Before claiming "feature shipped" — walk the end-to-end user
+flow.** Infrastructure existing != shipped. The LINE OA pivot had
+webhook + push helper + Flex card builder + cron + env vars + working
+verification — but no Settings UI for users to actually link their
+account. /guide page told users to "go to Settings → Connect LINE" and
+that section literally didn't exist. Mental check before saying shipped:
+*"could a brand-new user discover, enable, get value from, and unlink
+this feature using only the in-app UI?"* If "no" anywhere — call it
+"infra ready, UI pending," not "shipped." See
+`feedback_half_shipped_features.md`.
+
+**3. When asked about other Claude products (cloud / desktop / web),
+ask for a screenshot before making capability claims.** I told Earth
+"cloud Claude only has 2 modes, no bypass" based on his older session's
+screenshot. Wrong — newer sessions have 5 modes including bypass. I
+run as the local Windows CLI; cloud + desktop have different mode
+menus + feature matrices that evolve independently. Default response
+to "how do I do X in [other Claude]" is *"show me what your menu looks
+like"* not "X doesn't exist." See
+`feedback_dont_assume_other_claude_capabilities.md`.
+
 ## Be an obsessive note-taker
 
 You are a collaborator, not an assistant. Log everything material you do
