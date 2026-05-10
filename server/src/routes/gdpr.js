@@ -18,7 +18,10 @@ const dataRights = new DataSubjectRights();
 const gdprRateLimit = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 5, // limit each IP to 5 requests per windowMs
-  message: { error: 'Too many GDPR requests. Please try again later.' }
+  message: { error: 'Too many GDPR requests. Please try again later.' },
+  // Tests share the supertest IP across the suite; the limiter would
+  // otherwise spuriously 429 the later cases. Same pattern as businessClaims.
+  skip: () => process.env.NODE_ENV === 'test',
 });
 
 // GET /api/gdpr/privacy-policy - Current privacy policy

@@ -113,6 +113,23 @@ describe('business claims — admin routes', () => {
     assert.strictEqual(res.status, 404);
   });
 
+  test('GET /admin/claims gate works when JWT carries id only (no email) — regression for silent-404 bug', async () => {
+    // Same regression class as in admin.test.js: magic-link / pwd-reset paths
+    // mint id-only JWTs. The businessClaims admin gate had the same bug
+    // before commit 5b31a32 — silently 404'd to admin callers.
+    const admin = await makeUser();
+    const restore = makeAdminEnv(admin.email);
+
+    const { signToken } = require('../src/middleware/auth');
+    const idOnlyToken = signToken({ id: admin.userId });
+
+    const res = await request(app).get('/api/admin/claims')
+      .set('Authorization', `Bearer ${idOnlyToken}`);
+    restore();
+    assert.strictEqual(res.status, 200, 'businessClaims admin gate must resolve email from DB when JWT lacks email field');
+    assert.ok(Array.isArray(res.body.rows));
+  });
+
   test('GET /admin/claims lists pending claims for admin', async () => {
     const admin = await makeUser();
     const restore = makeAdminEnv(admin.email);

@@ -94,6 +94,31 @@ test('gdpr routes', async (t) => {
     assert.match(row.erasure_token_hash, /^[a-f0-9]{64}$/);
   });
 
+  await t.test('POST /erasure-request resolves recipient email from DB when JWT lacks email — regression', async () => {
+    // Magic-link / pwd-reset paths mint id-only JWTs (no email field).
+    // Before commit 5b31a32, the erasure handler called sendErasureConfirmation
+    // with req.user.email = undefined → confirmation email never reached the
+    // user, and the Article 17 erasure silently never completed.
+    // This test pins down that the erasure-request handler still succeeds
+    // and persists the hashed token even when the JWT carries id only.
+    const u = await makeUser();
+    const { signToken } = require('../src/middleware/auth');
+    const idOnlyToken = signToken({ id: u.userId });
+
+    const res = await request(app)
+      .post('/api/gdpr/erasure-request')
+      .set('Authorization', `Bearer ${idOnlyToken}`)
+      .set('X-Requested-With', 'XMLHttpRequest')
+      .send({});
+    assert.strictEqual(res.status, 200, 'erasure-request must succeed for id-only JWT callers (magic-link users)');
+    assert.strictEqual(res.body.success, true);
+    // Hash should still get persisted (the email send is fire-and-forget; we
+    // can't assert it from a unit test without spying on transporter, but the
+    // pre-fix bug would have crashed earlier or sent to undefined silently).
+    const row = get('SELECT erasure_token_hash FROM users WHERE id = ?', [u.userId]);
+    assert.ok(row?.erasure_token_hash, 'erasure_token_hash must be persisted');
+  });
+
   await t.test('POST /confirm-erasure rejects an obviously bad token', async () => {
     const res = await request(app)
       .post('/api/gdpr/confirm-erasure')
