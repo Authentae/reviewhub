@@ -22,6 +22,11 @@ jobs:
         run: npm ci
       - name: Run server tests
         working-directory: server
+        env:
+          NODE_ENV: test
+          DATABASE_PATH: ':memory:'
+          JWT_SECRET: 'ci-testing-secret-must-be-at-least-32-chars-long-xxxxxxxxx'
+          CLIENT_URL: 'http://test.local'
         run: npm test
 
   client:
