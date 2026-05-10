@@ -270,7 +270,11 @@ export default function AuditPreview() {
             </p>
             <p className="text-xs mt-2 max-w-md mx-auto font-mono uppercase tracking-widest" style={{ color: '#f5d8a7', opacity: 0.85 }}>
               LINE notifications live now —{' '}
-              <a href="/line" style={{ color: '#f5d8a7', textDecoration: 'underline' }}>
+              <a
+                href="/line"
+                className="plausible-event-name=AuditLineHelpClick"
+                style={{ color: '#f5d8a7', textDecoration: 'underline' }}
+              >
                 see how it works →
               </a>
             </p>
@@ -317,6 +321,19 @@ export default function AuditPreview() {
                   key={i}
                   className="rounded-xl"
                   style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.line}` }}
+                  onToggle={(e) => {
+                    // Funnel signal: which FAQ items get expanded most often =
+                    // which objections are top-of-mind. Lets us reorder /
+                    // rewrite the page based on what readers actually care
+                    // about, vs guessing. Only fire on open, not close, and
+                    // pass the question as a prop for per-question breakdown.
+                    if (!e.target.open) return;
+                    if (typeof window.plausible === 'function') {
+                      try {
+                        window.plausible('AuditFAQOpen', { props: { q: item.q.slice(0, 60) } });
+                      } catch { /* swallow */ }
+                    }
+                  }}
                 >
                   <summary
                     className="px-4 py-3 cursor-pointer text-sm font-semibold list-none"
