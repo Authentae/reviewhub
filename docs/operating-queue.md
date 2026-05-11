@@ -137,6 +137,28 @@ list.
   resolution (`c4723aa`); lockfile platform-binary optional flags
   (`6fb99ce`); i18n hard-fail → warn-only (`c7bee28`). Runbook in
   `reference_ci_debug_workflow.md` memory file.
+- `[done] 2026-05-11` **Claude Design batch — 3 visual assets shipped to
+  prod in one afternoon, 2 more generated and queued for port.** Audit-
+  preview UX teardown identified 7 interventions; this batch closed 3 of
+  them. Shipped:
+  - **Interactive LINE Flex Card mockup** (`daa757a`) — embeds in
+    `/audit-preview/<token>` below the CTA. 16.3KB lazy chunk. Closes
+    teardown intervention #5 ("show, don't tell, the LINE flow").
+  - **15-second 4-scene animated demo** (`d1ad3cd`) — at `/#demo` between
+    Marquee and HowItWorks on landing. RAF loop respects prefers-reduced-
+    motion. 22KB lazy chunk. Triple-use: landing + audit + X post #1.
+  - **Founder About page** (`1908e1a`) — at `/about`. Personal letter,
+    portrait placeholder (teal-circle "E" — swap to real photo by
+    uploading `client/public/founder.jpg` and changing
+    `PortraitPlaceholder` to `<img>`). Closes teardown interventions #2
+    (honest pre-revenue framing) + #4 (founder voice forward). Linked
+    from audit-preview footer.
+  - Generated, **port deferred**: ReviewHub Founder Daily Brief
+    dashboard (port tomorrow with Wave 4 live data) + ReviewHub
+    One-Star Playbook lead magnet (port when /tools/one-star-playbook
+    is needed; design uses Wave 4 quota efficiently).
+  - Workflow notes for future sessions in
+    `reference_claude_design_workflow.md` memory file.
 
 ## WEB — marketing, SEO, content, public surfaces
 

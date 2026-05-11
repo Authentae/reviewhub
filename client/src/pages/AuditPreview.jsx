@@ -392,8 +392,15 @@ export default function AuditPreview() {
           <p className="mb-3">
             <strong style={{ color: COLORS.ink }}>Not ready to sign up?</strong>{' '}
             Just reply to my email — I'm Earth, the solo founder building this
-            in Bangkok, and a one-line "tell me more" or "not for me, here's why"
-            is genuinely useful either way. Or keep using these drafts — the link
+            in Bangkok (
+            <a
+              href="/about"
+              style={{ color: COLORS.tealDeep, textDecoration: 'underline' }}
+            >
+              more about me →
+            </a>
+            ), and a one-line "tell me more" or "not for me, here's why" is
+            genuinely useful either way. Or keep using these drafts — the link
             above stays live for 30 days.
           </p>
           <p className="text-xs" style={{ color: COLORS.inkDim }}>
