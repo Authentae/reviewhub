@@ -1074,12 +1074,18 @@ export default function Landing() {
         <Faq t={t} />
         <BigCta />
       </main>
-      {/* Landing uses its own richer 4-col Footer (industry / resources /
-          company columns). MarketingFooter was being rendered above it
-          for a while which stacked two footers visually — removed
-          2026-05-12 after Earth caught it. Other marketing pages still
-          use MarketingFooter as before. */}
-      <Footer />
+      {/* MarketingFooter is the canonical site-wide footer: 4 columns
+          (Product, Industry, Resources, Company) covering verticals + all
+          blog posts + legal + support. Previously Landing had its own
+          inline Footer that ONLY had Product/Support/Legal — missing
+          industry verticals and the blog index. Earth caught this
+          2026-05-12: a visitor on /audit or /pricing could reach the
+          verticals from MarketingFooter, but on Landing the inline
+          Footer hid those links entirely. Now Landing uses the same
+          MarketingFooter as every other marketing page. The inline
+          Footer component is kept in this file but unreferenced — could
+          be deleted later. */}
+      <MarketingFooter />
       <GimmickLayer />
     </div>
   );
