@@ -1,9 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../lib/api';
 import usePageTitle from '../hooks/usePageTitle';
 import useNoIndex from '../hooks/useNoIndex';
 import useSocialMeta from '../hooks/useSocialMeta';
+
+// Lazy-loaded: the LINE mockup is ~5KB of decorative SVG + animations,
+// and only renders below the CTA fold. No reason to ship it in the
+// initial bundle for prospects who close the tab after the first card.
+const LineFlexCardMockup = lazy(() => import('../components/LineFlexCardMockup'));
 
 // /audit-preview/<share_token> — public, no auth.
 //
@@ -277,6 +282,30 @@ export default function AuditPreview() {
               >
                 see how it works →
               </a>
+            </p>
+          </section>
+        )}
+
+        {/* LINE notification mockup — shows the prospect what the actual
+            in-product experience looks like on their phone. Addresses
+            intervention #5 from the audit-preview friction teardown
+            (2026-05-11): the page mentions LINE 2× but doesn't SHOW the
+            flow. Static screenshot would be cheaper; an interactive mockup
+            lets the prospect tap Copy and feel the haptic feedback for
+            themselves before signing up. */}
+        {totalDrafts > 0 && (
+          <section className="mt-10">
+            <p
+              className="text-xs font-mono uppercase tracking-widest mb-3 text-center"
+              style={{ color: COLORS.ochre }}
+            >
+              What this looks like on your phone
+            </p>
+            <Suspense fallback={<div style={{ height: 320 }} aria-hidden="true" />}>
+              <LineFlexCardMockup />
+            </Suspense>
+            <p className="text-xs text-center mt-2" style={{ color: COLORS.inkDim }}>
+              Tap <strong>Copy</strong> to feel the flow yourself.
             </p>
           </section>
         )}
