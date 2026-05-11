@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import MarketingFooter from '../components/MarketingFooter';
 import usePageTitle from '../hooks/usePageTitle';
 import { useI18n } from '../context/I18nContext';
 
@@ -65,6 +66,7 @@ export default function Privacy() {
           <Link to="/refund-policy" className="text-blue-600 hover:underline">{t('legal.refundTitle')}</Link>
         </p>
       </main>
+      <MarketingFooter />
     </div>
   );
 }

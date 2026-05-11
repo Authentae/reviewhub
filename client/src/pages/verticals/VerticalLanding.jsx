@@ -222,8 +222,12 @@ export default function VerticalLanding({ vertical }) {
           >
             {v.eyebrow}
           </p>
+          {/* Single H1 — line 2 gets italic teal via a span, NOT a second
+              h1. Splitting across two h1s (the previous shape) was an
+              SEO + accessibility violation (every page has one main
+              heading, period). Same visual, valid semantics. */}
           <h1
-            className="text-5xl font-bold mb-2"
+            className="text-5xl font-bold mb-6"
             style={{
               fontFamily: 'Instrument Serif, Georgia, serif',
               fontWeight: 600,
@@ -232,20 +236,10 @@ export default function VerticalLanding({ vertical }) {
               color: 'var(--rh-ink, #1d242c)',
             }}
           >
-            {v.heroLine1}
-          </h1>
-          <h1
-            className="text-5xl font-bold mb-6"
-            style={{
-              fontFamily: 'Instrument Serif, Georgia, serif',
-              fontWeight: 600,
-              letterSpacing: '-0.02em',
-              lineHeight: 1.05,
-              fontStyle: 'italic',
-              color: 'var(--rh-teal, #1e4d5e)',
-            }}
-          >
-            {v.heroLine2}
+            {v.heroLine1}{' '}
+            <span style={{ fontStyle: 'italic', color: 'var(--rh-teal, #1e4d5e)', display: 'block' }}>
+              {v.heroLine2}
+            </span>
           </h1>
           <p className="text-lg leading-relaxed" style={{ color: 'var(--rh-ink-2, #4a525a)' }}>
             {v.sub}
