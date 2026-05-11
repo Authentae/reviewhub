@@ -1074,7 +1074,11 @@ export default function Landing() {
         <Faq t={t} />
         <BigCta />
       </main>
-      <MarketingFooter />
+      {/* Landing uses its own richer 4-col Footer (industry / resources /
+          company columns). MarketingFooter was being rendered above it
+          for a while which stacked two footers visually — removed
+          2026-05-12 after Earth caught it. Other marketing pages still
+          use MarketingFooter as before. */}
       <Footer />
       <GimmickLayer />
     </div>
