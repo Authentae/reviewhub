@@ -256,7 +256,7 @@ export default function AuditPreview() {
             <p className="text-sm leading-relaxed mb-5 max-w-md mx-auto" style={{ color: '#fdf2dc' }}>
               Connect Google once. New reviews ping you on LINE — with an AI-drafted
               reply in your voice. Tap to copy, paste in Google. Replies that took
-              30 min each take 30 seconds. $14/mo (~฿490).
+              30 min each take 30 seconds. $14/mo (~฿499).
             </p>
             {/* Plausible tagged-events: clicking this fires "AuditRegisterClick"
                 in Plausible (when prod analytics is active). Lets us measure
@@ -468,7 +468,7 @@ function StickyConversionBar({ businessName, token, show }) {
         <p className="text-xs sm:text-sm flex-1 leading-snug">
           <span className="font-semibold">Want this on autopilot?</span>{' '}
           <span className="hidden sm:inline" style={{ color: '#fdf2dc' }}>
-            New reviews ping you on LINE. $14/mo (~฿490).
+            New reviews ping you on LINE. $14/mo (~฿499).
           </span>
         </p>
         <a

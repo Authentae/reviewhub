@@ -128,8 +128,8 @@ export default function LinePivot() {
 
           <p className="text-xs mt-4" style={{ color: 'var(--rh-ink-soft)', opacity: 0.7 }}>
             {isThai
-              ? 'ฟรี 3 ร่าง/เดือน · ไม่ต้องใส่บัตรเครดิต · เริ่มต้น ฿490/เดือน'
-              : '3 free drafts/month · No credit card · From ฿490 / $14 a month'}
+              ? 'ฟรี 3 ร่าง/เดือน · ไม่ต้องใส่บัตรเครดิต · เริ่มต้น ฿499/เดือน'
+              : '3 free drafts/month · No credit card · From ฿499 / $14 a month'}
           </p>
         </div>
       </section>

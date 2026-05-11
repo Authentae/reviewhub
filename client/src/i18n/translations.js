@@ -30,7 +30,7 @@ const en = {
 
   // Landing page
   'landing.pageTitle': 'AI Review Replies in 10 Languages.',
-  'landing.heroBadge': 'Built for Bangkok · Free forever · From ฿490 / $14 a month',
+  'landing.heroBadge': 'Built for Bangkok · Free forever · From ฿499 / $14 a month',
   'landing.heroTitle': 'Reply to Google reviews in 10 seconds — from LINE.',
   'landing.heroSubtitle': 'New Google reviews ping you on LINE — with an AI-drafted reply in your voice ready to send. Tap to copy, paste in Google. (One-tap auto-post launches Q3 2026 when Google\'s API approval lands.) Built in Bangkok for hospitality, restaurants, clinics, and salons — owners who live in LINE, not Slack.',
   'landing.heroCtaPrimary': 'Start Free',
@@ -81,7 +81,7 @@ const en = {
   'landing.faqEyebrow': 'Questions?',
   'landing.faqTitle': 'Frequently asked',
   'landing.faq1Q': 'Is there a free plan?',
-  'landing.faq1A': 'Yes — our Free plan is permanent, with no credit card required. It supports one business, connects to Google with a one-click secure sign-in (or any other platform via CSV import), and includes 3 AI-drafted responses per month. You can respond manually without limits. Paid plans start at $14/month (or ฿490 if you choose the Thai-baht price) for unlimited AI drafts, multiple platforms, and advanced features.',
+  'landing.faq1A': 'Yes — our Free plan is permanent, with no credit card required. It supports one business, connects to Google with a one-click secure sign-in (or any other platform via CSV import), and includes 3 AI-drafted responses per month. You can respond manually without limits. Paid plans start at $14/month (or ฿499 if you choose the Thai-baht price) for unlimited AI drafts, multiple platforms, and advanced features.',
   'landing.faq2Q': 'Which review platforms do you support?',
   'landing.faq2A': 'Google is fully supported — reviews sync automatically after a one-click secure sign-in with the Google account that owns your business. We also support manual entry and CSV import for 60+ other platforms including Yelp, Facebook, TripAdvisor, Trustpilot, Wongnai (Thailand), Tabelog (Japan), Naver Place (Korea), Dianping (China), TheFork (France/Spain/Italy), HolidayCheck (Germany), Reclame Aqui (Brazil). The Business plan unlocks outbound webhooks (Zapier-compatible) and our REST API.',
   'landing.faq3Q': 'How does AI drafting work?',
@@ -6800,7 +6800,7 @@ const th = {
 
   // Landing page
   'landing.pageTitle': 'รวมรีวิวทั้งหมด ในแดชบอร์ดเดียว',
-  'landing.heroBadge': 'ทำในกรุงเทพ · ฟรีตลอดไป · เริ่มต้น ฿490/เดือน',
+  'landing.heroBadge': 'ทำในกรุงเทพ · ฟรีตลอดไป · เริ่มต้น ฿499/เดือน',
   'landing.heroTitle': 'ตอบรีวิว Google ใน 10 วินาที — ผ่าน LINE',
   'landing.heroSubtitle': 'รีวิว Google ใหม่เด้งเข้า LINE คุณ พร้อมข้อความตอบกลับที่ AI ร่างให้ในโทนของร้านแล้ว แตะเพื่อก็อปแล้ววางใน Google (โพสต์อัตโนมัติแบบคลิกเดียว เปิดตัวไตรมาส 3 ปี 2026 เมื่อ Google อนุมัติ API) ทำในกรุงเทพสำหรับเจ้าของโรงแรม ร้านอาหาร คลินิก และร้านเสริมสวย',
   'landing.heroCta': 'เริ่มต้นฟรี — แพ็กเกจเริ่มต้น $14/เดือน',

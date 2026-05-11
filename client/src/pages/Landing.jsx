@@ -687,13 +687,16 @@ function FeatureGrid() {
 // ── Pricing — cream panel, dark featured plan ─────────────────────────────
 //
 // Source of truth for prices + features lives in
-// server/src/lib/billing/plans.js. The landing surface intentionally collapses
-// the 4-tier catalogue down to 3 cards (Free / Pro popular / Business) so the
-// editorial 3-column grid stays balanced. The Starter tier ($14) is surfaced
-// as a one-liner callout beneath the grid + linked through to /pricing where
-// all four are shown side-by-side. Keeping prices and feature deltas in sync
-// with plans.js manually is fragile — when these diverge again, prefer to
-// import the plan data and render from it instead of hard-coding here.
+// server/src/lib/billing/plans.js. The landing surface shows all 4 tiers
+// side-by-side: Free / Starter (featured) / Pro / Business.
+//
+// Changed 2026-05-12 from 3-card-grid + Starter-as-footnote to 4-card grid:
+// cold-outreach surfaces (Wave 4 emails, audit-preview CTA, LINE mockup)
+// all advertise $14 Starter as the price point. When prospects clicked
+// through to landing they previously saw Pro $29 as "Most popular," which
+// read as bait-and-switch. Now the landing matches the outreach promise:
+// Starter is the featured tier, $14, with Pro available as a step-up for
+// shops that need 6 platforms instead of 2.
 function Pricing() {
   const { t } = useI18n();
   return (
@@ -703,7 +706,7 @@ function Pricing() {
           <div className="kicker"><div className="num">04</div><div className="cat">§ {t('landing.pricingEyebrow', 'Pricing')}</div></div>
           <h2 className="rh-reveal">{t('landing.pricingTitle', 'Clear pricing. No surprises.')}</h2>
         </div>
-        <div className="rh-price-grid rh-reveal">
+        <div className="rh-price-grid rh-price-grid-4 rh-reveal">
           <div className="plan">
             <div className="plan-name">Free</div>
             <h3>{t('landing.plan.freeHeadline', 'Try it out.')}</h3>
@@ -719,23 +722,35 @@ function Pricing() {
           </div>
           <div className="plan featured">
             <div className="badge">{t('landing.plan.popular', 'Most popular')}</div>
+            <div className="plan-name">Starter</div>
+            <h3>{t('landing.plan.starterHeadline', 'For a single shop with real review volume.')}</h3>
+            <div className="plan-price">$14<small>/mo</small></div>
+            <div className="plan-sub">{t('landing.plan.starterSub', 'Everything a single shop needs to respond quickly.')}</div>
+            <div className="plan-sub" style={{ fontSize: 11, opacity: 0.7, marginTop: -8 }}>
+              {t('landing.plan.starterHint', 'Most independent owners pick this — covers Google + one other platform.')}
+            </div>
+            <ul>
+              <li><Check />{t('landing.plan.starter1', 'Unlimited AI drafts')}</li>
+              <li><Check />{t('landing.plan.starter2', '2 platforms (e.g. Google + Wongnai)')}</li>
+              <li><Check />{t('landing.plan.starter3', 'AI drafts in 10 languages')}</li>
+              <li><Check />{t('landing.plan.starter4', 'Email alerts on new reviews')}</li>
+              <li><Check />{t('landing.plan.starter5', 'Templates + CSV export')}</li>
+            </ul>
+            <Link to="/register" className="rh-btn rh-btn-amber">{t('landing.plan.chooseStarter', 'Choose Starter · $14/mo')}</Link>
+          </div>
+          <div className="plan">
             <div className="plan-name">Pro</div>
             <h3>{t('landing.plan.proHeadline', 'For shops with real review volume.')}</h3>
             <div className="plan-price">$29<small>/mo</small></div>
             <div className="plan-sub">{t('landing.plan.proSub', 'Unlimited AI drafts and the analytics that actually matter.')}</div>
-            <div className="plan-sub" style={{ fontSize: 11, opacity: 0.7, marginTop: -8 }}>
-              {t('landing.plan.proPopularHint', 'Most popular if you get 5+ new reviews a month. If you have a smaller cafe or just opened, Free or Starter is fine.')}
-            </div>
             <ul>
               <li><Check />{t('landing.plan.pro1', 'Unlimited AI drafts')}</li>
               <li><Check />{t('landing.plan.pro2', '6 platforms (Google, Wongnai, Yelp…)')}</li>
-              <li><Check />{t('landing.plan.pro3', 'AI drafts in 10 languages')}</li>
               <li><Check />{t('landing.plan.pro4', 'Sentiment + trends + weekly digest')}</li>
-              <li><Check />{t('landing.plan.pro5', 'Templates + CSV export')}</li>
               <li><Check />{t('landing.plan.pro6', 'Email alerts on new + negative reviews')}</li>
-              <li><Check />{t('landing.plan.pro7', 'Bulk-reply to your unresponded backlog (one-by-one or batched)')}</li>
+              <li><Check />{t('landing.plan.pro7', 'Bulk-reply to your unresponded backlog')}</li>
             </ul>
-            <Link to="/register" className="rh-btn rh-btn-amber">{t('landing.plan.choosePro', 'Choose Pro · $29/mo')}</Link>
+            <Link to="/register" className="rh-btn rh-btn-ghost">{t('landing.plan.choosePro', 'Choose Pro · $29/mo')}</Link>
           </div>
           <div className="plan">
             <div className="plan-name">Business</div>
@@ -756,12 +771,9 @@ function Pricing() {
             <Link to="/register" className="rh-btn rh-btn-ghost">{t('landing.plan.chooseBusiness', 'Choose Business · $59/mo')}</Link>
           </div>
         </div>
-        {/* Starter callout — the missing $14 tier. Surfaced as a thin row so
-            the 3-card grid stays clean while the price catalog stays honest. */}
         <p className="rh-pricing-callout rh-reveal" style={{ textAlign: 'center', marginTop: 24, fontSize: 14, color: 'var(--rh-ink-3)' }}>
-          {t('landing.plan.starterCallout', 'Just need the basics with email alerts? ')}
           <Link to="/pricing" style={{ fontWeight: 600, color: 'var(--rh-ink)' }}>
-            {t('landing.plan.starterCalloutLink', 'Starter is $14/mo — see all plans →')}
+            {t('landing.plan.allPlansLink', 'See full feature comparison →')}
           </Link>
         </p>
       </div>

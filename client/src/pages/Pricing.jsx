@@ -270,7 +270,11 @@ export default function Pricing() {
                   const price = cycle === 'annual' ? priceAnnual : priceMonthly;
                   const perUnit = cycle === 'annual' ? t('billing.perYear') : t('billing.perMonth');
                   const isFree = plan.id === 'free';
-                  const highlighted = plan.id === 'pro';
+                  // Starter is the featured tier (changed 2026-05-12). Cold
+                  // outreach surfaces all advertise $14 Starter; landing +
+                  // pricing now match to avoid bait-and-switch when a
+                  // prospect clicks through.
+                  const highlighted = plan.id === 'starter';
                   const activeFeatures = Object.entries(plan.features).filter(([, v]) => v);
                   return (
                     <div key={plan.id} className={'rh-pricing-card' + (highlighted ? ' featured' : '')}>
