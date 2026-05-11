@@ -325,6 +325,14 @@ function DemoSection() {
             maxWidth: 1200,
             margin: '0 auto',
             aspectRatio: '16 / 9',
+            // FIX 2026-05-12: previous version had `width: 1200` on the
+            // inner absolute element + transform: scale(). transform: scale
+            // is visual-only — the browser still treats the element as
+            // 1200×675 wide, which pushed document.scrollWidth past the
+            // viewport on viewports < 1200px and caused horizontal scroll.
+            // Clipping overflow here contains it; the visual scale stays
+            // identical.
+            overflow: 'hidden',
           }}
         >
           <Suspense fallback={<div style={{ position: 'absolute', inset: 0, background: 'var(--rh-paper)' }} aria-hidden="true" />}>
@@ -335,7 +343,12 @@ function DemoSection() {
                 left: '50%',
                 width: 1200,
                 height: 675,
-                transform: 'translate(-50%, -50%) scale(min(1, calc(100vw / 1200 * 0.92)))',
+                // calc(100vw / 1200px) yields a unitless ratio because
+                // length/length cancels. Without the `px` on 1200 the
+                // result kept its vw unit, making `min(1, vw-length)`
+                // invalid → browser fell back to scale(1) → no scaling
+                // → 1200px overflow on viewports < 1200. Lesson banked.
+                transform: 'translate(-50%, -50%) scale(min(1, calc(100vw / 1200px * 0.92)))',
                 transformOrigin: 'center center',
               }}
             >
