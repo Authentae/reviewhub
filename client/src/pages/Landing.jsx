@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../lib/api';
 import usePageTitle from '../hooks/usePageTitle';
@@ -8,6 +8,12 @@ import MarketingFooter from '../components/MarketingFooter';
 import Navbar from '../components/Navbar';
 import Logo from '../components/Logo';
 import { isLoggedIn } from '../lib/auth';
+
+// Lazy: the hero animation has its own RAF loop + ~20KB of scene logic.
+// Visitors who bounce above the fold shouldn't pay the bytes; it only
+// renders when the prospect scrolls down to the #demo section anchored
+// from the hero's "See a live draft" link.
+const HeroAnimation = lazy(() => import('../components/HeroAnimation'));
 
 // Editorial-magazine landing page (v2 redesign per Claude Design bundle).
 // Uses an inline <style> block because the design relies on OKLCH custom
@@ -277,6 +283,70 @@ function Marquee() {
   return (
     <section className="rh-marquee" aria-label="Platforms we connect to">
       <div className="rh-marquee-row"><Row /><Row /><Row /></div>
+    </section>
+  );
+}
+
+// ── Demo section — 15-second auto-loop hero animation generated via Claude
+//    Design 2026-05-11. Anchor target for the hero's "See a live draft" link.
+//    Scales down responsively while preserving the 16:9 aspect.
+function DemoSection() {
+  const { t } = useI18n();
+  return (
+    <section
+      id="demo"
+      style={{
+        padding: '64px 24px',
+        background: 'var(--rh-paper)',
+        position: 'relative',
+      }}
+      aria-labelledby="demo-heading"
+    >
+      <div style={{ maxWidth: 1200, margin: '0 auto', textAlign: 'center' }}>
+        <p className="rh-eyebrow rh-mono" style={{ justifyContent: 'center', marginBottom: 12 }}>
+          <span className="dot" />
+          <span>{t('landing.demoEyebrow', 'A 15-second walkthrough')}</span>
+        </p>
+        <h2
+          id="demo-heading"
+          className="rh-display"
+          style={{ fontSize: 'clamp(28px, 5vw, 48px)', lineHeight: 1.05, marginBottom: 36 }}
+        >
+          {t('landing.demoHeading', "Watch one review become a posted reply.")}
+        </h2>
+        {/* The animation is 1200×675 native. On viewports < 1200px we scale
+            it down via CSS transform so the 16:9 aspect is preserved and no
+            content reflows internally. Wrapping div uses padding-bottom
+            56.25% to hold the slot. */}
+        <div
+          style={{
+            position: 'relative',
+            width: '100%',
+            maxWidth: 1200,
+            margin: '0 auto',
+            aspectRatio: '16 / 9',
+          }}
+        >
+          <Suspense fallback={<div style={{ position: 'absolute', inset: 0, background: 'var(--rh-paper)' }} aria-hidden="true" />}>
+            <div
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                width: 1200,
+                height: 675,
+                transform: 'translate(-50%, -50%) scale(min(1, calc(100vw / 1200 * 0.92)))',
+                transformOrigin: 'center center',
+              }}
+            >
+              <HeroAnimation />
+            </div>
+          </Suspense>
+        </div>
+        <p style={{ marginTop: 28, fontSize: 14, color: 'var(--rh-ink-2, #4a525a)' }}>
+          {t('landing.demoCaption', 'Real product, real Thai reply. Loops every 15 seconds.')}
+        </p>
+      </div>
     </section>
   );
 }
@@ -970,6 +1040,7 @@ export default function Landing() {
       <main id="main-content">
         <Hero />
         <Marquee />
+        <DemoSection />
         <HowItWorks />
         <AiDemo />
         <PullQuote />

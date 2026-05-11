@@ -1,0 +1,783 @@
+import { useEffect, useRef, useState } from 'react';
+
+// ── timeline constants (seconds) ───────────────────────────
+const DUR = 15;          // total runtime before fade
+const FADE = 0.5;        // fade-to-paper between loops
+const LOOP = DUR + FADE; // 15.5
+const T = {
+  s1: [0,    4],
+  s2: [4,    8],
+  s3: [8,    11],
+  s4: [11,   15],
+};
+
+// ── easing & helpers ───────────────────────────────────────
+const easeOut = t => 1 - Math.pow(1 - t, 3);
+const easeInOut = t => t<0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3)/2;
+const clamp01 = v => v<0?0:v>1?1:v;
+// Returns 0→1 over [start,end], clamped, optionally eased.
+const range = (t, start, end, ease = easeOut) => ease(clamp01((t - start) / (end - start)));
+// Returns 1 between [a,b], 0 outside, with fade-in over fIn and fade-out over fOut.
+const window2 = (t, a, b, fIn = 0.4, fOut = 0.4) => {
+  if (t < a - fIn) return 0;
+  if (t > b + fOut) return 0;
+  if (t < a) return easeOut((t - (a - fIn)) / fIn);
+  if (t > b) return 1 - easeOut((t - b) / fOut);
+  return 1;
+};
+const lerp = (a,b,t) => a + (b-a)*t;
+
+// ── brand colors ───────────────────────────────────────────
+const C = {
+  paper:'#fbf8f1', ink:'#1d242c',
+  teal:'#1e4d5e', tealDeep:'#163d4a',
+  ochre:'#c08a3e', sage:'#6b8e7a',
+  lineGreen:'#06C755', chatBg:'#F1F2F6',
+  draft:'#fdf8ec',
+};
+
+// ── time hook (RAF loop, respects prefers-reduced-motion) ──
+function useLoopTime() {
+  const [t, setT] = useState(0);
+  useEffect(() => {
+    const mq = matchMedia('(prefers-reduced-motion: reduce)');
+    if (mq.matches) { setT(1.2); return; } // freeze on scene 1 (after review arrives)
+    let raf, start;
+    const tick = (now) => {
+      if (start == null) start = now;
+      const elapsed = ((now - start) / 1000) % LOOP;
+      setT(elapsed);
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+  return t;
+}
+
+// ── primitive bits ─────────────────────────────────────────
+function Stars({ filled = 4, total = 5, size = 14, gold = '#e7a23a', dim = '#d8d4c9' }) {
+  return (
+    <span style={{display:'inline-flex',gap:1.5}}>
+      {Array.from({length:total}).map((_,i)=>(
+        <svg key={i} width={size} height={size} viewBox="0 0 24 24">
+          <path d="M12 2.5l2.85 6.1 6.65.8-4.9 4.55 1.3 6.55L12 17.25l-5.9 3.25 1.3-6.55L2.5 9.4l6.65-.8L12 2.5Z"
+                fill={i<filled?gold:dim}
+                stroke={i<filled?'#c98a1d':'#c8c4b9'} strokeWidth=".7" strokeLinejoin="round"/>
+        </svg>
+      ))}
+    </span>
+  );
+}
+
+function GoogleG({ size = 18 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 48 48" aria-hidden>
+      <path fill="#4285F4" d="M44 24c0-1.6-.1-3.1-.4-4.5H24v8.5h11.3c-.5 2.6-2 4.8-4.2 6.2v5.1h6.7c3.9-3.6 6.2-9 6.2-15.3Z"/>
+      <path fill="#34A853" d="M24 44c5.6 0 10.3-1.9 13.8-5.1l-6.7-5.1c-1.9 1.3-4.3 2-7.1 2-5.4 0-10-3.7-11.7-8.6H5.4v5.4C8.9 39.7 16 44 24 44Z"/>
+      <path fill="#FBBC04" d="M12.3 27.2c-.4-1.2-.6-2.5-.6-3.8s.2-2.6.6-3.8v-5.4H5.4A20 20 0 0 0 4 23.4c0 3.2.8 6.3 2.4 9l5.9-5.2Z"/>
+      <path fill="#EA4335" d="M24 11.6c3.1 0 5.8 1.1 7.9 3l5.9-5.9C34.3 5.1 29.6 3 24 3 16 3 8.9 7.3 5.4 14l6.9 5.4c1.7-4.9 6.3-7.8 11.7-7.8Z"/>
+    </svg>
+  );
+}
+
+// ── Scenes 1 & 4: Google Business Profile card ────────────
+function GoogleCard({ t, expanded = false, mode = 'arrive' }) {
+  // mode = 'arrive' (Scene 1, review slides up) | 'reply' (Scene 4, owner reply visible)
+  // review reveal animation (Scene 1)
+  const reviewProgress = mode === 'arrive'
+    ? range(t, T.s1[0] + 1.0, T.s1[0] + 1.7)
+    : 1;
+  const replyProgress = mode === 'reply'
+    ? range(t, T.s4[0] + 0.5, T.s4[0] + 1.3)
+    : 0;
+
+  // notification pulse (scene 1 only)
+  const pulse = mode === 'arrive'
+    ? (Math.sin((t - T.s1[0]) * Math.PI * 2.2) * 0.5 + 0.5)
+    : 0;
+
+  return (
+    <div style={{
+      width: 540,
+      background: '#fff',
+      borderRadius: 22,
+      border: '1px solid rgba(29,36,44,0.08)',
+      boxShadow:
+        '0 1px 0 rgba(29,36,44,0.04),' +
+        '0 2px 4px rgba(29,36,44,0.05),' +
+        '0 24px 60px -28px rgba(29,36,44,0.30)',
+      overflow:'hidden',
+      position:'relative',
+    }}>
+      {/* top: brand row */}
+      <div style={{padding:'18px 22px 8px',display:'flex',alignItems:'center',gap:10,position:'relative'}}>
+        <GoogleG size={20}/>
+        <span style={{
+          fontFamily:'Inter,sans-serif',fontWeight:600,fontSize:13,
+          color:'#5f6368',letterSpacing:.2,
+        }}>Google · Business Profile</span>
+        <div style={{flex:1}}/>
+        {/* notification dot */}
+        <div style={{position:'relative',width:14,height:14}}>
+          <div style={{
+            position:'absolute',inset:0,borderRadius:'50%',
+            background:'#e7563b',
+            opacity: mode === 'arrive' ? 1 : 0.0,
+          }}/>
+          <div style={{
+            position:'absolute',inset:-6,borderRadius:'50%',
+            border:'2px solid #e7563b',
+            opacity: mode === 'arrive' ? (1 - pulse) * 0.5 : 0,
+            transform:`scale(${1 + pulse * 0.8})`,
+          }}/>
+        </div>
+      </div>
+
+      {/* hero: name + rating */}
+      <div style={{padding:'4px 22px 18px',borderBottom:'1px solid rgba(29,36,44,0.06)'}}>
+        <div className="serif" style={{fontSize:30, lineHeight:1.05, color:C.ink, marginTop:2}}>
+          Lilit Bang Lamphu Hotel
+        </div>
+        <div style={{display:'flex',alignItems:'center',gap:10,marginTop:10}}>
+          <span style={{fontFamily:'Inter,sans-serif',fontWeight:700,fontSize:18,color:C.ink}}>4.6</span>
+          <Stars filled={4} total={5} size={16}/>
+          <span style={{fontFamily:'Inter,sans-serif',fontSize:13,color:'#6b6f76'}}>127 reviews</span>
+          <span style={{flex:1}}/>
+          <span className="mono" style={{fontSize:10,color:C.sage,fontWeight:600}}>OPEN · BANGKOK</span>
+        </div>
+      </div>
+
+      {/* reviews section */}
+      <div style={{padding:'14px 22px 18px',position:'relative'}}>
+        <div className="mono" style={{fontSize:10,color:C.ochre,fontWeight:600,marginBottom:10}}>
+          RECENT REVIEW
+        </div>
+
+        {/* new review (animated entry in arrive mode) */}
+        <div style={{
+          opacity: reviewProgress,
+          transform: `translateY(${(1 - reviewProgress) * 24}px)`,
+          transition: 'none',
+        }}>
+          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:8}}>
+            <div style={{
+              width:32,height:32,borderRadius:'50%',
+              background:'linear-gradient(135deg,#c8d5db,#1e4d5e)',
+              color:'#fff',display:'grid',placeItems:'center',
+              fontFamily:'Inter',fontWeight:700,fontSize:13,
+            }}>O</div>
+            <div style={{flex:1}}>
+              <div style={{fontFamily:'Inter,sans-serif',fontWeight:600,fontSize:14,color:C.ink}}>Olga K.</div>
+              <div style={{display:'flex',alignItems:'center',gap:8,marginTop:2}}>
+                <Stars filled={4} total={5} size={11}/>
+                <span style={{fontFamily:'Inter,sans-serif',fontSize:11,color:'#8a929c'}}>2 hours ago</span>
+              </div>
+            </div>
+          </div>
+          <p style={{
+            margin:0,fontFamily:'Inter,sans-serif',fontStyle:'italic',
+            fontSize:13.5,lineHeight:1.55,color:'#3b434c',textWrap:'pretty',
+          }}>
+            "Lovely small hotel, location perfect for Old Town. Only minor issues
+            — luggage hallway has no lock, floor 1 keycard needed at odd hours."
+          </p>
+        </div>
+
+        {/* owner reply (only in 'reply' mode) */}
+        {mode === 'reply' && (
+          <div style={{
+            marginTop: 14,
+            opacity: replyProgress,
+            transform: `translateY(${(1 - replyProgress) * 14}px)`,
+            background: C.draft,
+            border:'1px solid rgba(192,138,62,0.20)',
+            borderRadius: 12,
+            padding:'12px 14px',
+            position:'relative',
+          }}>
+            <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:6}}>
+              <div style={{
+                width:22,height:22,borderRadius:6,background:C.teal,
+                color:'#fbf8f1',display:'grid',placeItems:'center',
+                fontFamily:'JetBrains Mono',fontSize:9,fontWeight:600,letterSpacing:0.5,
+              }}>RH</div>
+              <span style={{fontFamily:'Inter,sans-serif',fontWeight:600,fontSize:12.5,color:C.ink}}>
+                Response from the owner
+              </span>
+              <span style={{flex:1}}/>
+              <span className="mono" style={{fontSize:9,color:C.sage,fontWeight:600}}>JUST NOW</span>
+            </div>
+            <p className="thai" style={{
+              margin:0,fontSize:13,lineHeight:1.65,color:C.ink,textWrap:'pretty',
+            }}>
+              ขอบคุณ Olga ที่แบ่งปันค่ะ ดีใจที่ทำเลถูกใจ — เราจะติดล็อคที่ luggage hallway
+              ในเดือนนี้ และจะดู keycard system ใหม่ค่ะ
+            </p>
+
+            {/* particle pulse around reply */}
+            <Particles t={t} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function Particles({ t }) {
+  // 8 dots, brand teal, emit OUTWARD from the reply box edges so they don't overlap the Thai text
+  const start = T.s4[0] + 1.2;
+  const dur = 1.4;
+  const p = clamp01((t - start) / dur);
+  if (p <= 0 || p >= 1) return null;
+  const dots = Array.from({length:8});
+  return (
+    <div style={{position:'absolute',inset:-30,pointerEvents:'none',overflow:'visible'}}>
+      {dots.map((_,i) => {
+        const angle = (i / 8) * Math.PI * 2 - Math.PI / 2;
+        // start just outside the box edge, push further out
+        const r0 = 110;
+        const r = r0 + p * 90;
+        const x = Math.cos(angle) * r;
+        const y = Math.sin(angle) * r * 0.45;
+        const size = 7 - p * 4;
+        return (
+          <span key={i} style={{
+            position:'absolute',
+            left:'50%',top:'50%',
+            width:size,height:size,borderRadius:'50%',
+            background: i % 3 === 0 ? C.ochre : C.teal,
+            transform:`translate(${x - size/2}px, ${y - size/2}px)`,
+            opacity:(1 - p) * 0.85,
+          }}/>
+        );
+      })}
+    </div>
+  );
+}
+
+// ── Scene 2 & 3: Phone with LINE chat + Flex Card ─────────
+function Phone({ t, scene, scale = 1 }) {
+  // scene: 2 or 3
+  // banner appears 4.3 → 4.9, slides up away 5.6 → 6.0
+  const banner = window2(t, T.s2[0] + 0.3, T.s2[0] + 1.6, 0.35, 0.4);
+  // flex card slides in 5.0 → 5.9
+  const cardP = range(t, T.s2[0] + 1.0, T.s2[0] + 1.9);
+
+  // Scene-3 tap timing
+  const tapStart = T.s3[0] + 0.8;
+  const tapImpact = T.s3[0] + 1.4;
+  const tapApproach = range(t, tapStart, tapImpact, easeInOut);  // 0→1 finger approaches
+  const tapPress = window2(t, tapImpact, tapImpact + 0.25, 0.05, 0.25); // button press
+  const toastP = window2(t, tapImpact + 0.15, T.s3[1] - 0.4, 0.3, 0.4); // toast visible
+
+  return (
+    <div style={{
+      width: 320, height: 600,
+      borderRadius: 44,
+      background:'linear-gradient(160deg,#1a1a1c,#0c0c0d)',
+      padding: 8,
+      boxShadow:
+        '0 1px 0 rgba(255,255,255,0.4) inset,' +
+        '0 0 0 1.2px rgba(255,255,255,0.06),' +
+        '0 30px 60px -20px rgba(20,30,40,0.35),' +
+        '0 60px 120px -40px rgba(20,30,40,0.28)',
+      transform: `scale(${scale})`,
+      transformOrigin: 'center center',
+      position:'relative',
+    }}>
+      <div style={{
+        width:'100%',height:'100%',borderRadius:36,overflow:'hidden',position:'relative',background:'#fff',
+      }}>
+        {/* notch */}
+        <div style={{
+          position:'absolute',top:0,left:'50%',transform:'translateX(-50%)',
+          width:120,height:24,background:'#0c0c0d',
+          borderBottomLeftRadius:16,borderBottomRightRadius:16,zIndex:50,
+        }}/>
+
+        {/* status bar */}
+        <div style={{
+          height:36,padding:'10px 22px 0',display:'flex',alignItems:'flex-start',justifyContent:'space-between',
+          color:'#8a8a8e',fontFamily:'-apple-system,system-ui',fontSize:12,fontWeight:600,
+          background:'#fff',
+        }}>
+          <span>9:41</span>
+          <span style={{display:'inline-flex',gap:4,alignItems:'center'}}>
+            <svg width="14" height="9" viewBox="0 0 14 9">
+              <rect x="0" y="6" width="2.4" height="3" rx=".5" fill="#8a8a8e"/>
+              <rect x="3.7" y="4" width="2.4" height="5" rx=".5" fill="#8a8a8e"/>
+              <rect x="7.4" y="2" width="2.4" height="7" rx=".5" fill="#8a8a8e"/>
+              <rect x="11.1" y="0" width="2.4" height="9" rx=".5" fill="#8a8a8e"/>
+            </svg>
+            <svg width="20" height="10" viewBox="0 0 20 10">
+              <rect x="0.4" y="0.4" width="17" height="9" rx="2.4" stroke="#8a8a8e" fill="none"/>
+              <rect x="1.7" y="1.7" width="14.5" height="6.6" rx="1.4" fill="#8a8a8e"/>
+              <rect x="18" y="3.2" width="1.4" height="3.6" rx=".7" fill="#8a8a8e"/>
+            </svg>
+          </span>
+        </div>
+
+        {/* LINE title bar */}
+        <div style={{
+          background:C.lineGreen,height:42,
+          display:'flex',alignItems:'center',padding:'0 12px',gap:8,
+          position:'relative',zIndex:9,
+        }}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M15 5l-7 7 7 7" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          <div style={{
+            width:24,height:24,borderRadius:'50%',background:'#fff',
+            display:'grid',placeItems:'center',
+            fontFamily:'Inter',fontWeight:700,fontSize:11,color:C.teal,
+          }}>R</div>
+          <div style={{display:'flex',alignItems:'center',gap:4,flex:1}}>
+            <span style={{fontFamily:'Inter',fontWeight:600,fontSize:14,color:'#fff'}}>ReviewHub</span>
+            <svg width="11" height="11" viewBox="0 0 24 24">
+              <path d="M12 1.5l2.2 1.7 2.8-.2.9 2.6 2.4 1.4-.6 2.8 1 2.6-2 2-.5 2.8-2.7.6L13 21.4 12 22.5l-1-1.1-2.5-1.6-2.7-.6-.5-2.8-2-2 1-2.6-.6-2.8 2.4-1.4.9-2.6 2.8.2L12 1.5Z" fill="#fff"/>
+              <path d="M8.4 12.3l2.4 2.4 4.8-5" stroke={C.lineGreen} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+            </svg>
+          </div>
+          <div style={{display:'flex',gap:10,opacity:.55,color:'#fff'}}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <rect x="2.5" y="6.5" width="13" height="11" rx="2.2" stroke="#fff" strokeWidth="1.9"/>
+              <path d="M16 10.5l5-2.5v8l-5-2.5v-3Z" fill="#fff"/>
+            </svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+              <path d="M5 4.5h3.2l1.6 4-2 1.2a11 11 0 0 0 6.5 6.5l1.2-2 4 1.6V19a1.5 1.5 0 0 1-1.6 1.5A15 15 0 0 1 3.5 6.1 1.5 1.5 0 0 1 5 4.5Z" stroke="#fff" strokeWidth="1.9" strokeLinejoin="round"/>
+            </svg>
+          </div>
+        </div>
+
+        {/* chat */}
+        <div style={{background:C.chatBg,height:600 - 16 - 36 - 42,position:'relative',padding:'14px 0 0'}}>
+          {/* date pill */}
+          <div style={{display:'flex',justifyContent:'center',marginBottom:10}}>
+            <div style={{
+              background:'rgba(29,36,44,0.32)',color:'#fff',fontSize:10,
+              fontFamily:'Inter',fontWeight:500,padding:'3px 10px',borderRadius:999,
+            }}>Today</div>
+          </div>
+
+          {/* incoming flex card */}
+          <div style={{
+            padding:'0 12px',display:'flex',alignItems:'flex-start',gap:6,
+            opacity: cardP,
+            transform: `translateY(${(1 - cardP) * 24}px)`,
+          }}>
+            <ChatAvatar/>
+            <div style={{flex:1}}>
+              <div style={{fontFamily:'Inter',fontSize:10,fontWeight:500,color:'#5a626c',marginBottom:4,marginLeft:2}}>ReviewHub</div>
+              <FlexCard t={t} scene={scene} tapPress={tapPress}/>
+              <div style={{fontFamily:'Inter',fontSize:9.5,color:'#8a929c',marginTop:4,marginLeft:2}}>09:42</div>
+            </div>
+          </div>
+
+          {/* LINE banner (scene 2 only) */}
+          {scene === 2 && banner > 0 && (
+            <LineBanner progress={banner}/>
+          )}
+
+          {/* toast (scene 3 only) */}
+          {scene === 3 && toastP > 0 && (
+            <div style={{
+              position:'absolute',top:8,left:0,right:0,
+              display:'flex',justifyContent:'center',
+              opacity:toastP,
+              transform:`translateY(${(1 - toastP) * -10}px)`,
+              pointerEvents:'none',zIndex:30,
+            }}>
+              <div style={{
+                background:'rgba(29,36,44,0.95)',color:'#fbf8f1',
+                fontFamily:'Inter',fontSize:11,fontWeight:600,
+                padding:'7px 12px 7px 10px',borderRadius:999,
+                display:'inline-flex',alignItems:'center',gap:6,
+                boxShadow:'0 8px 24px -8px rgba(29,36,44,0.5)',
+              }}>
+                <svg width="12" height="12" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10" fill={C.lineGreen}/>
+                  <path d="M7.5 12.5l3 3 6-6.5" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                </svg>
+                Copied to clipboard
+              </div>
+            </div>
+          )}
+
+          {/* finger tap pointer (scene 3) */}
+          {scene === 3 && <FingerTap approach={tapApproach} press={tapPress}/>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ChatAvatar() {
+  return (
+    <div style={{
+      width:30,height:30,borderRadius:9,background:C.teal,position:'relative',overflow:'hidden',
+      display:'grid',placeItems:'center',flexShrink:0,
+    }}>
+      <div style={{position:'absolute',top:0,left:0,right:0,height:3,background:C.ochre}}/>
+      <span style={{fontFamily:'JetBrains Mono',fontSize:10,fontWeight:600,color:'#fbf8f1',marginTop:3,letterSpacing:.5}}>RH</span>
+    </div>
+  );
+}
+
+function LineBanner({ progress }) {
+  return (
+    <div style={{
+      position:'absolute',top:0,left:6,right:6,
+      transform:`translateY(${(1 - progress) * -60}px)`,
+      opacity:progress,
+      zIndex:40,
+    }}>
+      <div style={{
+        background:'rgba(255,255,255,0.95)',
+        backdropFilter:'blur(8px)',
+        borderRadius:14,
+        boxShadow:'0 10px 30px -8px rgba(20,30,40,0.35), 0 0 0 1px rgba(29,36,44,0.05)',
+        padding:'9px 11px',
+        display:'flex',alignItems:'center',gap:9,
+        marginTop:6,
+      }}>
+        <div style={{
+          width:26,height:26,borderRadius:7,background:C.lineGreen,
+          display:'grid',placeItems:'center',
+        }}>
+          <span style={{fontFamily:'Inter',fontWeight:800,fontSize:13,color:'#fff'}}>L</span>
+        </div>
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{display:'flex',gap:6,alignItems:'center'}}>
+            <span style={{fontFamily:'Inter',fontWeight:600,fontSize:10.5,color:C.ink}}>ReviewHub</span>
+            <span style={{fontFamily:'Inter',fontSize:9.5,color:'#8a929c'}}>now</span>
+          </div>
+          <div style={{fontFamily:'Inter',fontSize:11,color:'#3b434c',marginTop:1,lineHeight:1.25,whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>
+            New review from Olga K. · draft ready
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FingerTap({ approach, press }) {
+  // Lands on Copy button which is at the bottom-left of the flex card
+  // Card starts at x:38 from phone left edge, Copy ~ at x: 56, y from top of chat ~ 268
+  const startX = 220, startY = 320;
+  const endX = 90, endY = 296;
+  const x = lerp(startX, endX, approach);
+  const y = lerp(startY, endY, approach);
+  return (
+    <div style={{
+      position:'absolute',left:0,top:0,zIndex:60,pointerEvents:'none',
+      transform:`translate(${x}px, ${y}px)`,
+    }}>
+      {/* pulse ring on impact */}
+      <div style={{
+        position:'absolute',left:-18,top:-18,width:36,height:36,borderRadius:'50%',
+        border:`2px solid ${C.teal}`,
+        opacity:(approach >= 1 ? 1 : 0) * (1 - press),
+        transform:`scale(${1 + press * 1.4})`,
+      }}/>
+      {/* finger circle */}
+      <div style={{
+        width:24,height:24,borderRadius:'50%',
+        background:'rgba(29,36,44,0.28)',
+        boxShadow:'0 4px 10px rgba(20,30,40,0.25), inset 0 0 0 1.5px rgba(255,255,255,0.6)',
+        transform:`scale(${1 - press * 0.15})`,
+      }}/>
+    </div>
+  );
+}
+
+function FlexCard({ t, scene, tapPress = 0 }) {
+  const copyPressed = scene === 3 && tapPress > 0.1;
+  return (
+    <div style={{
+      width:248,
+      background:'#fff',borderRadius:12,
+      border:'1px solid rgba(29,36,44,0.08)',
+      boxShadow:'0 1px 0 rgba(29,36,44,0.04), 0 6px 18px -10px rgba(29,36,44,0.25)',
+      overflow:'hidden',
+    }}>
+      <div style={{height:3,background:C.ochre}}/>
+
+      <div style={{padding:'10px 12px 8px'}}>
+        <div className="mono" style={{fontSize:8.5,color:C.ochre,fontWeight:600,lineHeight:1.2}}>
+          NEW REVIEW · LILIT BANG LAMPHU
+        </div>
+        <div style={{height:4}}/>
+        <Stars filled={4} total={5} size={10}/>
+        <div style={{marginTop:4,fontFamily:'Inter',fontWeight:600,fontSize:12,color:C.ink}}>Olga K.</div>
+      </div>
+
+      <div style={{padding:'8px 12px 10px',borderTop:'1px solid #f3eedd'}}>
+        <div style={{fontFamily:'Inter',fontStyle:'italic',fontSize:10.5,lineHeight:1.45,color:'#3b434c'}}>
+          “Lovely small hotel, location perfect for Old Town. Only minor issues — luggage hallway has no lock…”
+        </div>
+      </div>
+
+      <div style={{padding:'10px 12px 10px',background:C.draft,borderTop:'1px solid rgba(192,138,62,0.18)'}}>
+        <div className="mono" style={{fontSize:8.5,color:C.ochre,fontWeight:600}}>AI DRAFT · TH</div>
+        <div style={{height:5}}/>
+        <div className="thai" style={{fontSize:11,lineHeight:1.55,color:C.ink}}>
+          ขอบคุณ Olga ที่แบ่งปันค่ะ ดีใจที่ทำเลถูกใจ — เราจะติดล็อคที่ luggage hallway ในเดือนนี้ค่ะ
+        </div>
+      </div>
+
+      <div style={{display:'flex',gap:5,padding:8,borderTop:'1px solid rgba(29,36,44,0.08)'}}>
+        <button style={{
+          flex:1,height:26,borderRadius:7,border:'none',
+          background: copyPressed ? C.tealDeep : C.teal,
+          color:'#fbf8f1',fontFamily:'Inter',fontSize:10.5,fontWeight:600,
+          display:'flex',alignItems:'center',justifyContent:'center',gap:4,
+          transform: `scale(${1 - tapPress * 0.04})`,
+          transition:'background 120ms ease',
+        }}>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
+            <rect x="8" y="3" width="13" height="15" rx="2.4" stroke="#fbf8f1" strokeWidth="2"/>
+            <path d="M5 7v12.5A2.5 2.5 0 0 0 7.5 22H16" stroke="#fbf8f1" strokeWidth="2" strokeLinecap="round"/>
+          </svg>
+          Copy
+        </button>
+        <button style={btnGhost}>
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none">
+            <path d="M14 5h5v5M19 5l-9 9" stroke={C.teal} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M19 13v5.5A1.5 1.5 0 0 1 17.5 20h-12A1.5 1.5 0 0 1 4 18.5v-12A1.5 1.5 0 0 1 5.5 5H11" stroke={C.teal} strokeWidth="2.2" strokeLinecap="round"/>
+          </svg>
+          Google
+        </button>
+        <button style={{...btnGhost, flex:'0 0 56px'}}>
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none">
+            <path d="M4 20h4l10-10-4-4L4 16v4Z" stroke={C.teal} strokeWidth="2.2" strokeLinejoin="round"/>
+            <path d="M14 6l4 4" stroke={C.teal} strokeWidth="2.2" strokeLinecap="round"/>
+          </svg>
+          Edit
+        </button>
+      </div>
+    </div>
+  );
+}
+const btnGhost = {
+  flex:1,height:26,borderRadius:7,border:`1px solid rgba(30,77,94,0.45)`,
+  background:'transparent',color:C.teal,
+  fontFamily:'Inter',fontSize:10.5,fontWeight:600,
+  display:'flex',alignItems:'center',justifyContent:'center',gap:4,
+};
+
+// ── Final wordmark slate (last second of Scene 4) ──────────
+function FinalSlate({ t }) {
+  const start = T.s4[1] - 1.0;
+  const p = range(t, start, start + 0.6);
+  if (p <= 0) return null;
+  return (
+    <div style={{
+      position:'absolute',inset:0,
+      display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'flex-end',
+      pointerEvents:'none',padding:'0 0 80px',zIndex:30,
+      opacity:p,
+      transform:`translateY(${(1 - p) * 8}px)`,
+    }}>
+      <div style={{display:'flex',alignItems:'baseline',gap:8}}>
+        <span style={{
+          display:'inline-block',width:10,height:10,borderRadius:'50%',background:C.ochre,
+          transform:'translateY(-2px)',
+        }}/>
+        <span className="serif" style={{fontSize:34,color:C.ink}}>ReviewHub</span>
+      </div>
+      <div className="mono" style={{marginTop:6,fontSize:11,color:C.sage,fontWeight:600}}>
+        30 SECONDS, NOT 30 MINUTES &nbsp;·&nbsp; REVIEWHUB.REVIEW
+      </div>
+    </div>
+  );
+}
+
+// ── Caption (mono, bottom centered) ────────────────────────
+function Caption({ t }) {
+  const captions = [
+    { id:1, text:'01 · A REAL REVIEW LANDS',                 a:T.s1[0]+0.2, b:T.s1[1]-0.15 },
+    { id:2, text:'02 · DRAFT ARRIVES ON LINE — IN YOUR VOICE', a:T.s2[0]+0.3, b:T.s2[1]-0.15 },
+    { id:3, text:'03 · ONE TAP',                             a:T.s3[0]+0.2, b:T.s3[1]-0.15 },
+    { id:4, text:'04 · POSTED. LIVE ON GOOGLE.',             a:T.s4[0]+0.3, b:T.s4[1] - 1.0 },
+  ];
+  return (
+    <div style={{
+      position:'absolute',left:0,right:0,bottom:32,
+      display:'flex',justifyContent:'center',pointerEvents:'none',zIndex:25,
+    }}>
+      <div style={{position:'relative',height:18}}>
+        {captions.map(c => {
+          const a = window2(t, c.a, c.b, 0.3, 0.35);
+          if (a <= 0) return null;
+          return (
+            <div key={c.id} className="mono" style={{
+              position:'absolute',left:'50%',top:0,
+              transform:`translateX(-50%) translateY(${(1 - a) * 4}px)`,
+              opacity:a,
+              fontSize:11,fontWeight:600,color:C.ochre,whiteSpace:'nowrap',
+            }}>
+              {c.text}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ── Stage layout: scenes positioned + animated ────────────
+// Internal — wrapped by HeroAnimation default export below.
+function Stage() {
+  const t = useLoopTime();
+
+  // global fade-to-paper around the loop boundary
+  // visible curtain fades in 15.0 → 15.5, out at loop start 0 → 0.3
+  let curtain = 0;
+  if (t > DUR) curtain = (t - DUR) / FADE;
+  else if (t < 0.3) curtain = 1 - (t / 0.3);
+  curtain = clamp01(curtain);
+
+  // Scene 1: Google card visible 0 → 4.4, slides out left between 3.6 → 4.4
+  const s1Out = range(t, T.s1[1] - 0.4, T.s2[0] + 0.4);
+  const s1X = -s1Out * 800;
+  const s1Op = 1 - s1Out;
+
+  // Scene 2: phone slides in from right at 3.8 → 4.6, holds, scales up in scene 3, slides out 10.8 → 11.6
+  const phoneIn = range(t, T.s2[0] - 0.2, T.s2[0] + 0.6);
+  const phoneOut = range(t, T.s4[0] - 0.2, T.s4[0] + 0.6);
+  const phoneX = lerp(600, 0, phoneIn) + lerp(0, -700, phoneOut);
+  const phoneOp = (phoneIn) * (1 - phoneOut);
+  // scale up subtly in scene 3
+  const zoom = range(t, T.s3[0] - 0.2, T.s3[0] + 0.4);
+  const phoneScale = lerp(0.85, 0.95, zoom);
+  // current scene for phone (2 or 3)
+  const phoneScene = t < T.s3[0] ? 2 : 3;
+
+  // Scene 4: expanded google card slides in from right 10.8 → 11.6
+  const s4In = range(t, T.s4[0] - 0.2, T.s4[0] + 0.6);
+  // and stays until loop fade
+  const s4X = lerp(700, 0, s4In);
+  const s4Op = s4In;
+
+  return (
+    <div style={{position:'absolute',inset:0,overflow:'hidden'}}>
+      {/* Scene 1 — Google card (arrive mode) */}
+      {s1Op > 0.001 && (
+        <div style={{
+          position:'absolute',left:'50%',top:'50%',
+          transform:`translate(calc(-50% + ${s1X}px), -50%)`,
+          opacity: s1Op,
+        }}>
+          <GoogleCard t={t} mode="arrive"/>
+        </div>
+      )}
+
+      {/* Scene 2 & 3 — phone (offset up to clear caption lane) */}
+      {phoneOp > 0.001 && (
+        <div style={{
+          position:'absolute',left:'50%',top:'50%',
+          transform:`translate(calc(-50% + ${phoneX}px), calc(-50% - 20px))`,
+          opacity: phoneOp,
+        }}>
+          <Phone t={t} scene={phoneScene} scale={phoneScale}/>
+        </div>
+      )}
+
+      {/* Scene 4 — Google card with owner reply */}
+      {s4Op > 0.001 && (
+        <div style={{
+          position:'absolute',left:'50%',top:'50%',
+          transform:`translate(calc(-50% + ${s4X}px), -50%)`,
+          opacity: s4Op,
+        }}>
+          <GoogleCard t={t} mode="reply"/>
+        </div>
+      )}
+
+      {/* ambient decoration — top-left product mark */}
+      <div style={{
+        position:'absolute',top:24,left:32,
+        display:'flex',alignItems:'center',gap:8,zIndex:20,
+      }}>
+        <span style={{width:8,height:8,borderRadius:'50%',background:C.ochre,display:'inline-block'}}/>
+        <span className="serif" style={{fontSize:18,color:C.ink}}>ReviewHub</span>
+      </div>
+      <div className="mono" style={{
+        position:'absolute',top:30,right:32,
+        fontSize:10,color:C.sage,fontWeight:600,zIndex:20,
+      }}>
+        BANGKOK HOSPITALITY · LIVE DEMO
+      </div>
+
+      {/* captions */}
+      <Caption t={t}/>
+
+      {/* final wordmark slate */}
+      <FinalSlate t={t}/>
+
+      {/* loop curtain (fades whole stage to paper) */}
+      <div style={{
+        position:'absolute',inset:0,background:C.paper,
+        opacity:curtain,pointerEvents:'none',zIndex:100,
+      }}/>
+    </div>
+  );
+}
+
+// Public export — wraps Stage in a fixed-size 1200x675 container with the
+// brand classes (.mono / .serif / .thai) the inner scenes reference. The
+// originally-generated HTML put these on the document body; here we scope
+// them to a CSS class chain so they don't leak globally.
+//
+// Use:
+//   <HeroAnimation /> — renders at native 1200x675. Wrap in a max-width
+//   container if embedding in a responsive layout (it scales down via CSS
+//   `transform: scale()` if you set --hero-scale on the wrapper).
+export default function HeroAnimation() {
+  return (
+    <div
+      className="rh-hero-stage"
+      style={{
+        width: 1200,
+        height: 675,
+        borderRadius: 18,
+        overflow: 'hidden',
+        background: C.paper,
+        boxShadow:
+          '0 1px 0 rgba(255,255,255,0.6) inset,' +
+          '0 20px 60px -20px rgba(20,30,40,0.22),' +
+          '0 40px 100px -40px rgba(20,30,40,0.16)',
+        position: 'relative',
+      }}
+      aria-label="ReviewHub product demo — review lands, LINE notification, AI draft, copy, posted on Google"
+    >
+      <style>{`
+        .rh-hero-stage .mono {
+          font-family: 'JetBrains Mono', ui-monospace, monospace;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+        }
+        .rh-hero-stage .serif {
+          font-family: 'Instrument Serif', serif;
+          font-weight: 400;
+          letter-spacing: -0.01em;
+        }
+        .rh-hero-stage .thai {
+          font-family: 'Noto Sans Thai', 'Sarabun', system-ui, sans-serif;
+        }
+        .rh-hero-stage::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background-image: radial-gradient(rgba(29,36,44,0.04) 1px, transparent 1px);
+          background-size: 3px 3px;
+          opacity: 0.4;
+          mix-blend-mode: multiply;
+        }
+      `}</style>
+      <Stage />
+    </div>
+  );
+}
