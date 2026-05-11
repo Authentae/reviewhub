@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>ReviewHub · /admin · Daily Brief</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --paper:#fbf8f1; --ink:#1d242c; --ink-soft:#4a525a; --ink-mute:#7a818a;
+  --teal:#1e4d5e; --teal-deep:#163d4a;
+  --ochre:#c08a3e; --ochre-tint:#fdf6e7;
+  --sage:#6b8e7a; --sage-tint:#e9efea;
+  --rose:#c2566c; --rose-tint:#fbe9ec;
+  --hair:rgba(29,36,44,0.10);
+  --hair-soft:rgba(29,36,44,0.06);
+  --hair-strong:rgba(29,36,44,0.18);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#e8e3d3;font-family:'Inter',system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+.canvas{display:flex;gap:64px;padding:56px 48px;align-items:flex-start;justify-content:center;min-height:100vh}
+.frame{background:var(--paper);border-radius:14px;overflow:hidden;box-shadow:0 1px 0 rgba(255,255,255,0.6) inset,0 20px 60px -20px rgba(20,30,40,.22),0 40px 100px -40px rgba(20,30,40,.16);position:relative}
+.frame-label{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,36,44,.55);margin-bottom:14px;padding-left:6px;display:flex;align-items:center;gap:8px}
+.frame-label .pip{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--ochre)}
+.scroll{overflow-y:auto;overflow-x:hidden;scrollbar-width:thin}
+.scroll::-webkit-scrollbar{width:6px}
+.scroll::-webkit-scrollbar-thumb{background:rgba(29,36,44,.18);border-radius:3px}
+
+/* primitives */
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-feature-settings:"tnum" 1,"zero" 1}
+.serif{font-family:'Instrument Serif',serif;font-weight:400;letter-spacing:-.01em}
+.eye{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ochre)}
+.eye-mute{color:var(--ink-mute)}
+.eye-sage{color:var(--sage)}
+.hair{border-top:1px solid var(--hair)}
+.hair-strong{border-top:1px solid var(--hair-strong)}
+
+/* header strip */
+.head{display:flex;align-items:flex-end;justify-content:space-between;padding:32px 40px 22px;gap:24px}
+.head-mob{padding:22px 22px 16px;flex-direction:column;align-items:flex-start;gap:14px}
+.head h1{font-family:'Instrument Serif',serif;font-size:46px;line-height:1;margin:0;letter-spacing:-.01em}
+.head h1 .gloss{color:var(--ochre);font-style:italic}
+.head .date{margin-top:8px;font-size:13.5px;color:var(--ink-soft)}
+.pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.pill{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10.5px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);background:#fff;border:1px solid var(--hair);padding:6px 10px;border-radius:999px;display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.pill .dot{width:6px;height:6px;border-radius:50%;background:var(--sage);box-shadow:0 0 0 2px rgba(107,142,122,.18)}
+.pill.warn .dot{background:#d4a93b;box-shadow:0 0 0 2px rgba(212,169,59,.18)}
+.pill.alert .dot{background:var(--rose);box-shadow:0 0 0 2px rgba(194,86,108,.18)}
+.pill.ink{background:transparent;border-color:var(--hair-strong);color:var(--ink-soft)}
+
+/* section header (eyebrow + title row used throughout) */
+.section{padding:0 40px}
+.section-mob{padding:0 22px}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:26px 0 16px}
+.sec-head h2{font-family:'Instrument Serif',serif;font-weight:400;font-size:28px;margin:0;letter-spacing:-.01em}
+.sec-meta{font-size:12.5px;color:var(--ink-mute)}
+
+/* deltas */
+.deltas{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.delta{padding:22px 24px 24px;border-right:1px solid var(--hair);position:relative}
+.delta:last-child{border-right:0}
+.delta .num{font-family:'Instrument Serif',serif;font-size:64px;line-height:1;color:var(--ink);letter-spacing:-.02em;margin-top:14px}
+.delta .row{display:flex;align-items:baseline;gap:10px;margin-top:10px}
+.delta .chg{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11.5px;font-weight:600;letter-spacing:.05em;padding:3px 7px;border-radius:4px}
+.chg.up{color:#3c6a52;background:var(--sage-tint)}
+.chg.flat{color:var(--ink-mute);background:rgba(29,36,44,.05)}
+.chg.dn{color:#8a3344;background:var(--rose-tint)}
+.delta .ctx{font-size:13.5px;color:var(--ink-soft)}
+.delta.zero .num{color:var(--rose)}
+.delta .changed{position:absolute;top:0;left:0;bottom:0;width:2px;background:var(--ochre)}
+
+/* table */
+.tbl{width:100%;border-collapse:collapse}
+.tbl thead th{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute);padding:10px 14px 8px 0;border-bottom:1px solid var(--hair-strong);text-align:right;white-space:nowrap}
+.tbl thead th.l{text-align:left;padding-left:14px}
+.tbl thead th:last-child{padding-right:0}
+.tbl tbody td{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:13.5px;font-feature-settings:"tnum" 1;padding:14px 14px 14px 0;border-bottom:1px solid var(--hair);text-align:right;color:var(--ink);white-space:nowrap}
+.tbl tbody td.l{text-align:left;font-weight:500;padding-left:14px;padding-right:14px}
+.tbl tbody td:last-child{padding-right:0}
+.tbl tbody tr.summary td{border-bottom:0;border-top:1px solid var(--hair-strong);padding-top:14px;font-weight:600}
+.tbl tbody tr.summary td.l{letter-spacing:.14em;text-transform:uppercase;font-size:11px;color:var(--ink)}
+.tbl tbody tr.future td{color:var(--ink-mute)}
+.cell-pct{padding:3px 8px;border-radius:4px;display:inline-block;min-width:48px;text-align:right}
+.cell-pct.lo{background:var(--rose-tint);color:#8a3344}
+.cell-pct.mid{background:transparent;color:var(--ink)}
+.cell-pct.hi{background:var(--sage-tint);color:#3c6a52}
+.cell-pct.na{color:var(--ink-mute);background:transparent}
+.activity{color:var(--ink-soft);font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12.5px;letter-spacing:.02em}
+.activity .acc{color:var(--ochre);font-weight:600}
+.tbl-note{margin-top:14px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-mute)}
+.tbl-note b{color:var(--ink);font-weight:600}
+
+/* warm prospects */
+.warm{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--hair-strong)}
+.warm-row{display:grid;grid-template-columns:1.5fr 1.6fr 1fr;align-items:center;padding:16px 0;border-bottom:1px solid var(--hair);gap:18px;position:relative}
+.warm-row.hot{background:linear-gradient(90deg,rgba(192,138,62,.05),transparent 30%)}
+.warm-row.hot::before{content:"";position:absolute;left:-40px;top:0;bottom:0;width:2px;background:var(--ochre)}
+.warm-rank{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;font-weight:600;letter-spacing:.14em;color:var(--ink-mute);width:22px;display:inline-block}
+.warm-name{font-family:'Instrument Serif',serif;font-size:20px;color:var(--ink);letter-spacing:-.005em;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.wave-badge{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:9.5px;font-weight:600;letter-spacing:.14em;color:var(--teal);background:transparent;border:1px solid var(--hair-strong);padding:2px 6px;border-radius:3px}
+.warm-stats{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;color:var(--ink-soft);letter-spacing:.04em}
+.warm-stats .views{color:var(--ink);font-weight:600}
+.warm-stats .high{color:var(--ochre)}
+.warm-stats .sep{color:var(--hair-strong);margin:0 6px}
+.warm-status{justify-self:end}
+.status-pill{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:6px 10px;border-radius:4px;border:1px solid var(--hair-strong);color:var(--ink-soft);white-space:nowrap}
+.status-pill.now{color:var(--rose);border-color:rgba(194,86,108,.4);background:var(--rose-tint)}
+.status-pill.sched{color:var(--ink-soft);background:transparent}
+.warm-note{padding:14px 0 0;font-family:'Instrument Serif',serif;font-style:italic;font-size:15.5px;color:var(--ink-soft);line-height:1.5;border-top:1px solid var(--hair-strong);margin-top:0}
+
+/* reviews block */
+.reviews{display:grid;grid-template-columns:140px 1fr;gap:32px;align-items:start;padding:8px 0 0}
+.reviews-big{font-family:'Instrument Serif',serif;font-size:72px;line-height:.95;color:var(--ink);letter-spacing:-.02em}
+.reviews-eye{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute);margin-top:10px}
+.review-list{display:flex;flex-direction:column}
+.review-row{display:grid;grid-template-columns:1.4fr 90px 90px 80px;gap:18px;padding:12px 0;border-bottom:1px solid var(--hair);align-items:center;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:13px}
+.review-row:last-child{border-bottom:0}
+.review-name{color:var(--ink);font-weight:500;font-family:'Inter',sans-serif;font-size:14px}
+.stars{color:var(--ochre);letter-spacing:.08em}
+.review-time{color:var(--ink-mute);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.review-state{font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);text-align:right}
+
+/* system strip */
+.sys{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;padding:18px 40px;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);background:transparent}
+.sys-mob{padding:18px 22px;flex-direction:column;align-items:flex-start;gap:10px}
+.sys-stat{display:flex;align-items:center;gap:9px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11.5px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+.sys-stat .label{color:var(--ink-mute)}
+.sys-stat .dot{width:6px;height:6px;border-radius:50%;background:var(--sage);box-shadow:0 0 0 2px rgba(107,142,122,.18)}
+.sys-stat.warn .dot{background:#d4a93b;box-shadow:0 0 0 2px rgba(212,169,59,.18)}
+
+/* footer */
+.foot{padding:18px 40px 26px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.foot-mob{padding:18px 22px 26px}
+.foot a{color:var(--ink-soft);border-bottom:1px dotted var(--hair-strong);text-decoration:none;padding-bottom:1px}
+.foot a:hover{color:var(--ink);border-color:var(--ink-soft)}
+.foot .sep{color:var(--hair-strong)}
+
+/* mobile waves cards */
+.wave-card{padding:16px 0;border-bottom:1px solid var(--hair)}
+.wave-card .top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.wave-card .w-title{font-family:'Instrument Serif',serif;font-size:22px;color:var(--ink)}
+.wave-card .w-meta{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute)}
+.wave-card .row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12.5px}
+.wave-card .stat{display:flex;flex-direction:column;gap:2px}
+.wave-card .stat .k{font-size:9.5px;letter-spacing:.14em;color:var(--ink-mute);text-transform:uppercase}
+.wave-card .stat .v{font-weight:600;color:var(--ink);font-size:15px}
+.wave-card .activity-line{margin-top:10px}
+
+/* mobile warm row */
+.warm-row-mob{display:flex;flex-direction:column;gap:8px;align-items:flex-start;padding:16px 0;border-bottom:1px solid var(--hair);position:relative}
+.warm-row-mob.hot::before{content:"";position:absolute;left:-22px;top:0;bottom:0;width:2px;background:var(--ochre)}
+</style>
+</head>
+<body>
+<div class="canvas">
+
+<!-- ───────────── DESKTOP 1440 ───────────── -->
+<div>
+  <div class="frame-label"><span class="pip"></span>DESKTOP · 1440 × VIEWPORT 900</div>
+  <div class="frame scroll" style="width:1440px;height:900px">
+
+    <!-- 1. HEADER STRIP -->
+    <header class="head">
+      <div>
+        <h1>Daily <span class="gloss">Brief</span></h1>
+        <div class="date">Tuesday, May 12, 2026 · 07:00 ICT · Bangkok</div>
+      </div>
+      <div class="pills">
+        <span class="pill"><span class="dot"></span>PROD · OK · UPTIME 4D 17H</span>
+        <span class="pill ink">DEPLOYED 18 MIN AGO</span>
+        <span class="pill ink">AI · 2,847 DRAFTS THIS MONTH</span>
+      </div>
+    </header>
+
+    <!-- 2. TODAY'S DELTAS -->
+    <div class="section">
+      <div class="sec-head" style="padding-bottom:12px">
+        <h2>Today's deltas</h2>
+        <span class="sec-meta mono">VS MON 5/11 · 24H WINDOW</span>
+      </div>
+    </div>
+    <div class="deltas">
+      <div class="delta">
+        <span class="changed"></span>
+        <div class="eye">NEW SIGNUPS</div>
+        <div class="num">3</div>
+        <div class="row"><span class="chg up">+2</span><span class="ctx">all free tier</span></div>
+      </div>
+      <div class="delta">
+        <span class="changed"></span>
+        <div class="eye">AUDIT VIEWS</div>
+        <div class="num">27</div>
+        <div class="row"><span class="chg up">+14</span><span class="ctx">Wave 4 fired 09:30 ICT</span></div>
+      </div>
+      <div class="delta zero">
+        <div class="eye">REPLIES (REAL)</div>
+        <div class="num">0</div>
+        <div class="row"><span class="chg flat">= 0</span><span class="ctx">Chakrabongse 14 views, no reply</span></div>
+      </div>
+    </div>
+
+    <!-- 3. WAVE FUNNEL TABLE -->
+    <div class="section">
+      <div class="sec-head">
+        <h2>Wave funnel</h2>
+        <span class="sec-meta mono">SENT → OPENED → REPLIED → PAID</span>
+      </div>
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th class="l" style="width:8%">WAVE</th>
+            <th style="width:8%">SENT</th>
+            <th style="width:10%">OPENED</th>
+            <th style="width:12%">OPEN%</th>
+            <th style="width:10%">REPLIED</th>
+            <th style="width:10%">CONV</th>
+            <th style="width:8%">PAID</th>
+            <th style="width:34%">LATEST ACTIVITY</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="l">01</td>
+            <td>9</td><td>1</td>
+            <td><span class="cell-pct lo">11%</span></td>
+            <td>0</td><td>0</td><td>0</td>
+            <td class="activity l">Pink Chili <span class="acc">+0</span> · sent 5d ago</td>
+          </tr>
+          <tr>
+            <td class="l">02</td>
+            <td>3</td><td>3</td>
+            <td><span class="cell-pct hi">100%</span></td>
+            <td>0</td><td>0</td><td>0</td>
+            <td class="activity l">Chakrabongse <span class="acc">+14</span> · sent 5d ago</td>
+          </tr>
+          <tr class="future">
+            <td class="l">03</td>
+            <td>—</td><td>—</td>
+            <td><span class="cell-pct na">—</span></td>
+            <td>—</td><td>—</td><td>—</td>
+            <td class="activity l">follow-ups scheduled Tue 10:00</td>
+          </tr>
+          <tr>
+            <td class="l">04</td>
+            <td>7</td><td>0</td>
+            <td><span class="cell-pct lo">0%</span></td>
+            <td>0</td><td>0</td><td>0</td>
+            <td class="activity l">sends today 09:30+</td>
+          </tr>
+          <tr class="summary">
+            <td class="l">ALL</td>
+            <td>19</td><td>4</td>
+            <td><span class="cell-pct mid">21%</span></td>
+            <td>0</td><td>0</td><td>0</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="tbl-note">TOTAL VIEWS: <b>22</b> · <b>0 OF 19</b> PROSPECTS REPLIED (0%)</div>
+    </div>
+
+    <!-- 4. WARM PROSPECTS -->
+    <div class="section">
+      <div class="sec-head">
+        <h2>Warm prospects</h2>
+        <span class="sec-meta">OPENED, NOT REPLIED · highest leverage for follow-up</span>
+      </div>
+      <div class="warm">
+        <div class="warm-row hot">
+          <div class="warm-name"><span class="warm-rank mono">01</span>Chakrabongse Villas <span class="wave-badge">WAVE 2</span></div>
+          <div class="warm-stats"><span class="views high">14 views</span><span class="sep">·</span>last view 4h ago<span class="sep">·</span>sent 5d ago</div>
+          <div class="warm-status"><span class="status-pill sched">FOLLOW-UP SENT TUE 10:00</span></div>
+        </div>
+        <div class="warm-row">
+          <div class="warm-name"><span class="warm-rank mono">02</span>Pink Chili Thai Cooking School <span class="wave-badge">WAVE 1</span></div>
+          <div class="warm-stats"><span class="views">4 views</span><span class="sep">·</span>last view 2d ago<span class="sep">·</span>sent 5d ago</div>
+          <div class="warm-status"><span class="status-pill sched">FOLLOW-UP SENT TUE 10:00</span></div>
+        </div>
+        <div class="warm-row">
+          <div class="warm-name"><span class="warm-rank mono">03</span>Loftel 22 Hostel <span class="wave-badge">WAVE 2</span></div>
+          <div class="warm-stats"><span class="views">2 views</span><span class="sep">·</span>last view 5d ago<span class="sep">·</span>sent 5d ago</div>
+          <div class="warm-status"><span class="status-pill sched">FOLLOW-UP SENT TUE 10:00</span></div>
+        </div>
+        <div class="warm-row">
+          <div class="warm-name"><span class="warm-rank mono">04</span>Old Capital Bike Inn <span class="wave-badge">WAVE 2</span></div>
+          <div class="warm-stats"><span class="views">1 view</span><span class="sep">·</span>last view 5d ago<span class="sep">·</span>sent 5d ago</div>
+          <div class="warm-status"><span class="status-pill sched">FOLLOW-UP SENT TUE 10:00</span></div>
+        </div>
+      </div>
+      <p class="warm-note">Highest-info prospect: Chakrabongse — opened 14× without replying. If she replies tomorrow, we learn the blocker.</p>
+    </div>
+
+    <!-- 5. REVIEWS INGESTED -->
+    <div class="section" style="padding-top:8px">
+      <div class="sec-head">
+        <h2>Reviews ingested</h2>
+        <span class="sec-meta mono">LAST 24H · ALL DRAFTED, AWAITING OWNER APPROVAL</span>
+      </div>
+      <div class="reviews">
+        <div>
+          <div class="reviews-big">12</div>
+          <div class="reviews-eye">REVIEWS · 24H</div>
+        </div>
+        <div class="review-list">
+          <div class="review-row">
+            <span class="review-name">Methavalai</span>
+            <span class="stars">★★★★★</span>
+            <span class="review-time">2h ago</span>
+            <span class="review-state">DRAFTED</span>
+          </div>
+          <div class="review-row">
+            <span class="review-name">Lilit Bang Lamphu</span>
+            <span class="stars">★★★★<span style="color:var(--hair-strong)">★</span></span>
+            <span class="review-time">6h ago</span>
+            <span class="review-state">DRAFTED</span>
+          </div>
+          <div class="review-row">
+            <span class="review-name">Volve Hotel</span>
+            <span class="stars">★★★<span style="color:var(--hair-strong)">★★</span></span>
+            <span class="review-time">11h ago</span>
+            <span class="review-state">DRAFTED</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:30px"></div>
+
+    <!-- 6. SYSTEM HEALTH -->
+    <div class="sys">
+      <div class="sys-stat"><span class="dot"></span><span class="label">API LATENCY ·</span><span>p95 89ms</span></div>
+      <div class="sys-stat"><span class="dot"></span><span class="label">ERROR RATE ·</span><span>0.02%</span></div>
+      <div class="sys-stat"><span class="dot"></span><span class="label">DB ·</span><span>142MB · BACKUPS OK</span></div>
+      <div class="sys-stat warn"><span class="dot"></span><span class="label">SENTRY ·</span><span>0 new · 2 open</span></div>
+    </div>
+
+    <!-- 7. FOOTER -->
+    <div class="foot">
+      <div>FULL STATS · <a href="#">/admin/__whoami</a> <span class="sep">·</span> <a href="#">railway logs</a> <span class="sep">·</span> <a href="#">sentry</a></div>
+      <div>REVIEWHUB · /admin · v0.4.7</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ───────────── MOBILE 390 ───────────── -->
+<div>
+  <div class="frame-label"><span class="pip"></span>MOBILE · 390 × VIEWPORT 844</div>
+  <div class="frame scroll" style="width:390px;height:844px;border-radius:46px;border:8px solid #15171b;box-shadow:0 0 0 1.4px #d6d2c8,0 30px 60px -20px rgba(20,30,40,.28),0 60px 120px -40px rgba(20,30,40,.22)">
+
+    <!-- HEADER -->
+    <header class="head head-mob">
+      <div>
+        <h1 style="font-size:34px">Daily <span class="gloss">Brief</span></h1>
+        <div class="date" style="font-size:12.5px;margin-top:6px">Tuesday, May 12, 2026 · 07:00 ICT</div>
+      </div>
+      <div class="pills" style="justify-content:flex-start">
+        <span class="pill"><span class="dot"></span>PROD · OK · 4D 17H</span>
+        <span class="pill ink">DEPLOYED 18 MIN AGO</span>
+        <span class="pill ink">AI · 2,847 DRAFTS / MO</span>
+      </div>
+    </header>
+
+    <!-- DELTAS -->
+    <div class="section section-mob">
+      <div class="sec-head" style="padding-bottom:10px">
+        <h2 style="font-size:24px">Today's deltas</h2>
+      </div>
+      <div class="sec-meta mono" style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:10px">VS MON 5/11 · 24H WINDOW</div>
+    </div>
+    <div class="deltas" style="grid-template-columns:1fr">
+      <div class="delta" style="border-right:0;border-bottom:1px solid var(--hair);padding:18px 22px">
+        <span class="changed"></span>
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <div class="eye">NEW SIGNUPS</div>
+          <span class="chg up">+2</span>
+        </div>
+        <div class="num" style="font-size:54px">3</div>
+        <div class="ctx" style="font-size:13px;margin-top:8px">all free tier</div>
+      </div>
+      <div class="delta" style="border-right:0;border-bottom:1px solid var(--hair);padding:18px 22px">
+        <span class="changed"></span>
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <div class="eye">AUDIT VIEWS</div>
+          <span class="chg up">+14</span>
+        </div>
+        <div class="num" style="font-size:54px">27</div>
+        <div class="ctx" style="font-size:13px;margin-top:8px">Wave 4 fired 09:30 ICT</div>
+      </div>
+      <div class="delta zero" style="border-right:0;padding:18px 22px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <div class="eye">REPLIES (REAL)</div>
+          <span class="chg flat">= 0</span>
+        </div>
+        <div class="num" style="font-size:54px">0</div>
+        <div class="ctx" style="font-size:13px;margin-top:8px">Chakrabongse 14 views, no reply</div>
+      </div>
+    </div>
+
+    <!-- WAVE FUNNEL — stacked -->
+    <div class="section section-mob">
+      <div class="sec-head">
+        <h2 style="font-size:24px">Wave funnel</h2>
+      </div>
+      <div class="wave-card">
+        <div class="top"><span class="w-title">Wave 01</span><span class="w-meta">SENT 5D AGO</span></div>
+        <div class="row">
+          <div class="stat"><span class="k">SENT</span><span class="v">9</span></div>
+          <div class="stat"><span class="k">OPENED</span><span class="v">1</span></div>
+          <div class="stat"><span class="k">OPEN%</span><span class="v"><span class="cell-pct lo">11%</span></span></div>
+          <div class="stat"><span class="k">REPLIED</span><span class="v">0</span></div>
+          <div class="stat"><span class="k">CONV</span><span class="v">0</span></div>
+          <div class="stat"><span class="k">PAID</span><span class="v">0</span></div>
+        </div>
+        <div class="activity activity-line">Pink Chili <span class="acc">+0</span></div>
+      </div>
+      <div class="wave-card">
+        <div class="top"><span class="w-title">Wave 02</span><span class="w-meta">SENT 5D AGO</span></div>
+        <div class="row">
+          <div class="stat"><span class="k">SENT</span><span class="v">3</span></div>
+          <div class="stat"><span class="k">OPENED</span><span class="v">3</span></div>
+          <div class="stat"><span class="k">OPEN%</span><span class="v"><span class="cell-pct hi">100%</span></span></div>
+          <div class="stat"><span class="k">REPLIED</span><span class="v">0</span></div>
+          <div class="stat"><span class="k">CONV</span><span class="v">0</span></div>
+          <div class="stat"><span class="k">PAID</span><span class="v">0</span></div>
+        </div>
+        <div class="activity activity-line">Chakrabongse <span class="acc">+14</span></div>
+      </div>
+      <div class="wave-card">
+        <div class="top"><span class="w-title" style="color:var(--ink-mute)">Wave 03</span><span class="w-meta">FOLLOW-UPS · TUE 10:00</span></div>
+        <div class="row">
+          <div class="stat"><span class="k">SENT</span><span class="v" style="color:var(--ink-mute)">—</span></div>
+          <div class="stat"><span class="k">OPENED</span><span class="v" style="color:var(--ink-mute)">—</span></div>
+          <div class="stat"><span class="k">OPEN%</span><span class="v" style="color:var(--ink-mute)">—</span></div>
+          <div class="stat"><span class="k">REPLIED</span><span class="v" style="color:var(--ink-mute)">—</span></div>
+          <div class="stat"><span class="k">CONV</span><span class="v" style="color:var(--ink-mute)">—</span></div>
+          <div class="stat"><span class="k">PAID</span><span class="v" style="color:var(--ink-mute)">—</span></div>
+        </div>
+      </div>
+      <div class="wave-card">
+        <div class="top"><span class="w-title">Wave 04</span><span class="w-meta">SENDS TODAY 09:30+</span></div>
+        <div class="row">
+          <div class="stat"><span class="k">SENT</span><span class="v">7</span></div>
+          <div class="stat"><span class="k">OPENED</span><span class="v">0</span></div>
+          <div class="stat"><span class="k">OPEN%</span><span class="v"><span class="cell-pct lo">0%</span></span></div>
+          <div class="stat"><span class="k">REPLIED</span><span class="v">0</span></div>
+          <div class="stat"><span class="k">CONV</span><span class="v">0</span></div>
+          <div class="stat"><span class="k">PAID</span><span class="v">0</span></div>
+        </div>
+      </div>
+      <div class="wave-card" style="border-bottom:0;background:transparent">
+        <div class="top"><span class="w-title" style="font-size:18px;letter-spacing:.14em;text-transform:uppercase;font-family:'JetBrains Mono',monospace;font-weight:600">ALL WAVES</span><span class="w-meta"></span></div>
+        <div class="row">
+          <div class="stat"><span class="k">SENT</span><span class="v">19</span></div>
+          <div class="stat"><span class="k">OPENED</span><span class="v">4</span></div>
+          <div class="stat"><span class="k">OPEN%</span><span class="v"><span class="cell-pct mid">21%</span></span></div>
+          <div class="stat"><span class="k">REPLIED</span><span class="v">0</span></div>
+          <div class="stat"><span class="k">CONV</span><span class="v">0</span></div>
+          <div class="stat"><span class="k">PAID</span><span class="v">0</span></div>
+        </div>
+      </div>
+      <div class="tbl-note">TOTAL VIEWS: <b>22</b> · <b>0 OF 19</b> PROSPECTS REPLIED (0%)</div>
+    </div>
+
+    <!-- WARM PROSPECTS -->
+    <div class="section section-mob">
+      <div class="sec-head" style="flex-direction:column;align-items:flex-start;gap:4px">
+        <h2 style="font-size:24px">Warm prospects</h2>
+        <span class="sec-meta" style="font-size:12px">OPENED, NOT REPLIED · highest leverage</span>
+      </div>
+      <div style="border-top:1px solid var(--hair-strong)">
+        <div class="warm-row-mob hot">
+          <div class="warm-name" style="font-size:18px"><span class="warm-rank mono">01</span>Chakrabongse Villas <span class="wave-badge">W2</span></div>
+          <div class="warm-stats" style="font-size:11.5px"><span class="views high">14 views</span><span class="sep">·</span>last 4h ago<span class="sep">·</span>sent 5d ago</div>
+          <span class="status-pill sched">FOLLOW-UP TUE 10:00</span>
+        </div>
+        <div class="warm-row-mob">
+          <div class="warm-name" style="font-size:18px"><span class="warm-rank mono">02</span>Pink Chili Thai Cooking School <span class="wave-badge">W1</span></div>
+          <div class="warm-stats" style="font-size:11.5px"><span class="views">4 views</span><span class="sep">·</span>last 2d ago<span class="sep">·</span>sent 5d ago</div>
+          <span class="status-pill sched">FOLLOW-UP TUE 10:00</span>
+        </div>
+        <div class="warm-row-mob">
+          <div class="warm-name" style="font-size:18px"><span class="warm-rank mono">03</span>Loftel 22 Hostel <span class="wave-badge">W2</span></div>
+          <div class="warm-stats" style="font-size:11.5px"><span class="views">2 views</span><span class="sep">·</span>last 5d ago<span class="sep">·</span>sent 5d ago</div>
+          <span class="status-pill sched">FOLLOW-UP TUE 10:00</span>
+        </div>
+        <div class="warm-row-mob">
+          <div class="warm-name" style="font-size:18px"><span class="warm-rank mono">04</span>Old Capital Bike Inn <span class="wave-badge">W2</span></div>
+          <div class="warm-stats" style="font-size:11.5px"><span class="views">1 view</span><span class="sep">·</span>last 5d ago<span class="sep">·</span>sent 5d ago</div>
+          <span class="status-pill sched">FOLLOW-UP TUE 10:00</span>
+        </div>
+      </div>
+      <p class="warm-note">Highest-info prospect: Chakrabongse — opened 14× without replying. If she replies tomorrow, we learn the blocker.</p>
+    </div>
+
+    <!-- REVIEWS -->
+    <div class="section section-mob" style="padding-top:8px">
+      <div class="sec-head" style="flex-direction:column;align-items:flex-start;gap:4px">
+        <h2 style="font-size:24px">Reviews ingested</h2>
+        <span class="sec-meta mono" style="font-size:10px;letter-spacing:.14em">LAST 24H · ALL DRAFTED</span>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:14px;padding:6px 0 14px;border-top:1px solid var(--hair)">
+        <span class="reviews-big" style="font-size:54px">12</span>
+        <span class="reviews-eye" style="margin-top:0">REVIEWS · 24H</span>
+      </div>
+      <div>
+        <div class="review-row" style="grid-template-columns:1fr 70px;gap:10px;padding:10px 0">
+          <div>
+            <div class="review-name" style="font-size:14px">Methavalai</div>
+            <div class="mono" style="font-size:11px;color:var(--ink-mute);margin-top:2px;letter-spacing:.06em;text-transform:uppercase">2h ago · drafted</div>
+          </div>
+          <div class="stars" style="text-align:right">★★★★★</div>
+        </div>
+        <div class="review-row" style="grid-template-columns:1fr 70px;gap:10px;padding:10px 0">
+          <div>
+            <div class="review-name" style="font-size:14px">Lilit Bang Lamphu</div>
+            <div class="mono" style="font-size:11px;color:var(--ink-mute);margin-top:2px;letter-spacing:.06em;text-transform:uppercase">6h ago · drafted</div>
+          </div>
+          <div class="stars" style="text-align:right">★★★★<span style="color:var(--hair-strong)">★</span></div>
+        </div>
+        <div class="review-row" style="grid-template-columns:1fr 70px;gap:10px;padding:10px 0;border-bottom:0">
+          <div>
+            <div class="review-name" style="font-size:14px">Volve Hotel</div>
+            <div class="mono" style="font-size:11px;color:var(--ink-mute);margin-top:2px;letter-spacing:.06em;text-transform:uppercase">11h ago · drafted</div>
+          </div>
+          <div class="stars" style="text-align:right">★★★<span style="color:var(--hair-strong)">★★</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:24px"></div>
+
+    <!-- SYSTEM -->
+    <div class="sys sys-mob">
+      <div class="sys-stat"><span class="dot"></span><span class="label">API LATENCY ·</span><span>p95 89ms</span></div>
+      <div class="sys-stat"><span class="dot"></span><span class="label">ERROR RATE ·</span><span>0.02%</span></div>
+      <div class="sys-stat"><span class="dot"></span><span class="label">DB ·</span><span>142MB · BACKUPS OK</span></div>
+      <div class="sys-stat warn"><span class="dot"></span><span class="label">SENTRY ·</span><span>0 new · 2 open</span></div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="foot foot-mob" style="flex-direction:column;align-items:flex-start;gap:6px">
+      <div>FULL STATS · <a href="#">/admin/__whoami</a></div>
+      <div><a href="#">railway logs</a> <span class="sep">·</span> <a href="#">sentry</a></div>
+      <div style="color:var(--hair-strong)">REVIEWHUB · /admin · v0.4.7</div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

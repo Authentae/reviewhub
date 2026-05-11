@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>ReviewHub · The 1-Star Playbook</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@500;600&family=Noto+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --paper:#fbf8f1; --ink:#1d242c; --ink-soft:#4a525a; --ink-mute:#7a818a;
+  --teal:#1e4d5e; --teal-deep:#163d4a; --teal-tint:#e3ecef;
+  --ochre:#c08a3e; --ochre-tint:#fdf6e7;
+  --sage:#6b8e7a; --sage-tint:#e9efea;
+  --rose:#c2566c; --rose-tint:#fbe9ec;
+  --hair:rgba(29,36,44,0.10);
+  --hair-strong:rgba(29,36,44,0.18);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#e8e3d3;font-family:'Inter',system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+.canvas{display:flex;gap:64px;padding:56px 48px;align-items:flex-start;justify-content:center;min-height:100vh}
+.frame{background:var(--paper);border-radius:14px;overflow:hidden;box-shadow:0 20px 60px -20px rgba(20,30,40,.22),0 40px 100px -40px rgba(20,30,40,.16);position:relative}
+.frame-label{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,36,44,.55);margin-bottom:14px;padding-left:6px;display:flex;align-items:center;gap:8px}
+.frame-label .pip{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--ochre)}
+.scroll{overflow-y:auto;overflow-x:hidden;scrollbar-width:thin}
+.scroll::-webkit-scrollbar{width:6px}
+.scroll::-webkit-scrollbar-thumb{background:rgba(29,36,44,.18);border-radius:3px}
+
+.mono{font-family:'JetBrains Mono',monospace;font-feature-settings:"tnum" 1}
+.serif{font-family:'Instrument Serif',serif;font-weight:400;letter-spacing:-.01em}
+.thai{font-family:'Noto Sans Thai','Sarabun',system-ui,sans-serif}
+.eye{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ochre)}
+.eye-sage{color:var(--sage)}
+.eye-rose{color:var(--rose)}
+.eye-mute{color:var(--ink-mute)}
+
+a{color:var(--teal);text-decoration:none;border-bottom:1px solid rgba(30,77,94,.3)}
+a:hover{color:var(--teal-deep);border-color:var(--teal)}
+
+/* hero */
+.hero{padding:80px 96px 48px}
+.hero-mob{padding:36px 24px 24px}
+.hero h1{font-family:'Instrument Serif',serif;font-weight:400;letter-spacing:-.015em;line-height:1.02;color:var(--ink);margin:24px 0 0}
+.hero .lede{font-size:19px;line-height:1.6;color:var(--ink-soft);max-width:640px;margin:28px 0 0;text-wrap:pretty}
+.hero .by{margin-top:32px;font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.14em;color:var(--ink-mute);text-transform:uppercase}
+
+/* tree */
+.tree{padding:32px 96px 64px;max-width:920px;margin:0 auto}
+.tree-mob{padding:18px 24px 40px}
+.q{padding:22px 0 0;opacity:1}
+.q.enter,.result.enter{animation:slideIn .35s ease}
+@keyframes slideIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.q-head{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+.q-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.14em;color:var(--ochre);text-transform:uppercase}
+.q-text{font-family:'Instrument Serif',serif;font-size:28px;line-height:1.25;color:var(--ink);letter-spacing:-.005em;margin:0;flex:1 1 100%}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.opts.three{grid-template-columns:repeat(3,1fr)}
+.opt{background:#fff;border:1px solid var(--hair);border-radius:12px;padding:18px 20px;text-align:left;cursor:pointer;font:inherit;color:var(--ink);font-size:15.5px;line-height:1.45;transition:border-color .15s,transform .15s,background .15s;display:flex;align-items:flex-start;gap:12px;min-height:74px}
+.opt:hover{border-color:var(--teal);transform:translateY(-1px)}
+.opt .key{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.14em;color:var(--ochre);flex-shrink:0;padding-top:3px;width:18px}
+.opt.dim{opacity:.38;cursor:default;pointer-events:none}
+.opt.chosen{border-color:var(--teal);background:var(--teal-tint)}
+.opt.chosen .key{color:var(--teal)}
+
+/* result */
+.result{margin-top:28px;background:#fff;border:1px solid var(--hair);border-radius:14px;overflow:hidden;opacity:1}
+.result .top{padding:18px 22px;border-bottom:1px solid var(--hair);display:flex;align-items:center;gap:14px;justify-content:space-between;flex-wrap:wrap}
+.result .top .lab{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.result .badge{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:4px 8px;border-radius:3px}
+.result .badge.specific{color:var(--sage);background:var(--sage-tint)}
+.result .badge.pattern{color:var(--ochre);background:var(--ochre-tint)}
+.result .badge.competitor{color:var(--rose);background:var(--rose-tint)}
+.result .badge.extortion{color:#8a3344;background:var(--rose-tint)}
+.result h3{font-family:'Instrument Serif',serif;font-weight:400;font-size:22px;letter-spacing:-.005em;margin:0;color:var(--ink)}
+.restart{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.12em;color:var(--ink-soft);background:transparent;border:0;cursor:pointer;text-transform:uppercase}
+.restart:hover{color:var(--teal)}
+.result .body{padding:22px}
+.r-block{margin-bottom:20px}
+.r-block:last-child{margin-bottom:0}
+.r-block .h{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
+.h.reply{color:var(--ochre)}
+.h.why{color:var(--sage)}
+.h.not{color:var(--rose)}
+.reply-card{background:var(--paper);border-left:3px solid var(--ochre);padding:14px 18px;border-radius:0 8px 8px 0}
+.thai-line{font-family:'Noto Sans Thai',system-ui,sans-serif;font-size:15.5px;line-height:1.7;color:var(--ink);text-wrap:pretty}
+.en-line{font-family:'Instrument Serif',serif;font-style:italic;font-size:14px;line-height:1.55;color:var(--ink-soft);margin-top:10px;padding-top:10px;border-top:1px dashed var(--hair)}
+.why-text{font-size:14.5px;line-height:1.55;color:var(--ink);max-width:620px}
+.dont-list{margin:0;padding:0;list-style:none}
+.dont-list li{padding:8px 0 8px 22px;font-size:14px;line-height:1.5;color:var(--ink);position:relative}
+.dont-list li::before{content:"✕";position:absolute;left:0;top:8px;color:var(--rose);font-size:13px;font-weight:600}
+
+/* extortion expandable */
+.expand{margin:36px 96px 0;border:1px solid var(--hair);border-radius:12px;background:#fff;overflow:hidden}
+.expand-mob{margin:24px 24px 0}
+.expand summary{cursor:pointer;padding:18px 22px;font-family:'Instrument Serif',serif;font-size:20px;letter-spacing:-.005em;color:var(--ink);list-style:none;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.expand summary::-webkit-details-marker{display:none}
+.expand summary .chev{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.14em;color:var(--ochre);transition:transform .2s}
+.expand[open] summary .chev{transform:rotate(90deg)}
+.expand .panel{padding:0 22px 22px;border-top:1px solid var(--hair);padding-top:18px}
+.expand .panel p{font-size:14.5px;line-height:1.6;color:var(--ink-soft);margin:0 0 12px}
+.expand .panel ul{padding:0;list-style:none;margin:14px 0}
+.expand .panel ul li{padding:7px 0 7px 22px;position:relative;font-size:14.5px;line-height:1.5;color:var(--ink)}
+.expand .panel ul li::before{content:"";position:absolute;left:0;top:14px;width:10px;height:1px;background:var(--rose)}
+
+/* reference grid */
+.refsec{padding:64px 96px 32px;max-width:1248px;margin:0 auto}
+.refsec-mob{padding:36px 24px 24px}
+.refsec h2{font-family:'Instrument Serif',serif;font-size:36px;font-weight:400;letter-spacing:-.01em;margin:14px 0 28px}
+.ref-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ref-grid.mob{grid-template-columns:1fr}
+.ref-card{background:#fff;border:1px solid var(--hair);border-radius:12px;padding:20px 22px}
+.ref-card .num{font-family:'Instrument Serif',serif;font-size:36px;color:var(--ochre);line-height:1;letter-spacing:-.01em;float:right}
+.ref-card .label{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.ref-card.specific .label{color:var(--sage)}
+.ref-card.pattern .label{color:var(--ochre)}
+.ref-card.competitor .label{color:var(--rose)}
+.ref-card.extortion .label{color:#8a3344}
+.ref-card h4{font-family:'Instrument Serif',serif;font-weight:400;font-size:22px;letter-spacing:-.005em;margin:0 0 10px;color:var(--ink)}
+.ref-card .approach{font-size:14.5px;line-height:1.55;color:var(--ink-soft);margin:0}
+
+/* CTA */
+.cta{margin:48px 96px 32px;background:var(--teal);color:#fbf8f1;border-radius:18px;padding:42px 48px;position:relative;overflow:hidden}
+.cta-mob{margin:32px 24px 24px;padding:28px 24px}
+.cta::after{content:"";position:absolute;right:-60px;top:-60px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(192,138,62,.25),transparent 65%);pointer-events:none}
+.cta .eye{color:#e7c992}
+.cta h2{font-family:'Instrument Serif',serif;font-weight:400;font-size:32px;letter-spacing:-.01em;margin:10px 0 6px;color:#fbf8f1}
+.cta-sub{font-size:14.5px;color:rgba(251,248,241,.75);line-height:1.55;max-width:520px;margin:0}
+.cta-grid{display:grid;grid-template-columns:240px 1fr;gap:32px;margin-top:28px;position:relative;z-index:2;align-items:stretch}
+.cta-grid.mob{grid-template-columns:1fr;gap:20px}
+.cta-card{background:rgba(251,248,241,0.06);border:1px solid rgba(251,248,241,0.16);border-radius:12px;padding:22px;display:flex;flex-direction:column;gap:14px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.cta-card .h{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#e7c992}
+.cta-card .title{font-family:'Instrument Serif',serif;font-size:21px;color:#fbf8f1;letter-spacing:-.005em;line-height:1.25}
+.qr{width:120px;height:120px;background:#fbf8f1;border-radius:8px;display:grid;place-items:center;margin:auto;position:relative}
+.qr-grid{width:88px;height:88px;background:
+  repeating-linear-gradient(90deg,var(--ink) 0 5%,transparent 5% 10%),
+  repeating-linear-gradient(0deg,var(--ink) 0 5%,transparent 5% 10%);
+  mix-blend-mode:multiply;border-radius:2px;position:relative}
+.qr-grid::before,.qr-grid::after,.qr-mid{position:absolute;background:#fbf8f1;border:6px solid var(--ink);border-radius:3px;content:""}
+.qr-grid::before{width:24px;height:24px;top:0;left:0}
+.qr-grid::after{width:24px;height:24px;top:0;right:0}
+.qr-grid .qr-mid{width:24px;height:24px;bottom:0;left:0}
+.qr-cap{font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.14em;color:rgba(251,248,241,.6);text-align:center;text-transform:uppercase;margin-top:6px}
+.cta-input{display:flex;gap:8px;margin-top:auto}
+.cta-input input{flex:1;background:rgba(251,248,241,0.08);border:1px solid rgba(251,248,241,0.22);border-radius:8px;padding:12px 14px;font:inherit;font-size:14px;color:#fbf8f1;font-family:'Inter',sans-serif}
+.cta-input input::placeholder{color:rgba(251,248,241,.5)}
+.cta-input input:focus{outline:none;border-color:#e7c992;background:rgba(251,248,241,.12)}
+.cta-btn{background:#e7c992;color:var(--teal-deep);border:0;border-radius:8px;padding:12px 18px;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;cursor:pointer;letter-spacing:-.005em;white-space:nowrap;transition:background .15s}
+.cta-btn:hover{background:#fbf8f1}
+.cta-foot{margin-top:24px;font-family:'Instrument Serif',serif;font-style:italic;font-size:15.5px;color:rgba(251,248,241,.7);position:relative;z-index:2}
+
+/* footer */
+.foot{padding:28px 96px 36px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.14em;color:var(--ink-mute);text-transform:uppercase;border-top:1px solid var(--hair)}
+.foot-mob{padding:22px 24px 30px;flex-direction:column;gap:6px}
+.foot a{color:var(--ink-soft);border:0}
+.foot a:hover{color:var(--ink)}
+.foot .sep{color:var(--hair-strong);margin:0 8px}
+</style>
+</head>
+<body>
+<div class="canvas">
+
+<!-- ──────── DESKTOP 1440 ──────── -->
+<div>
+  <div class="frame-label"><span class="pip"></span>DESKTOP · 1440 × VIEWPORT 900</div>
+  <div class="frame scroll" id="frameDesk" style="width:1440px;height:900px">
+
+    <section class="hero">
+      <div class="eye">FOR BANGKOK HOSPITALITY OWNERS</div>
+      <h1 style="font-size:72px">You just got a 1-star review.<br/><span style="font-style:italic;color:var(--teal)">Don't reply yet.</span></h1>
+      <p class="lede">First — figure out what KIND of 1-star this actually is. The reply that works for a legitimate complaint will make things worse on a competitor's drive-by. Two minutes here saves you from making a 1-star into a 1-star saga.</p>
+      <div class="by">BY EARTH · SOLO FOUNDER · BANGKOK</div>
+    </section>
+
+    <div class="tree" data-tree="desk"></div>
+
+    <details class="expand">
+      <summary>
+        <span>What if they're asking for a discount or free service to remove it?</span>
+        <span class="chev">EXPAND →</span>
+      </summary>
+      <div class="panel">
+        <p>This is extortion, and it's against Google's policies. Don't engage privately, don't pay. Build a paper trail and report.</p>
+        <div class="eye eye-rose" style="margin:8px 0 6px">RED FLAGS</div>
+        <ul>
+          <li>Vague review with no specific incident details</li>
+          <li>Private message offering to "remove the review" for a refund, free night, or comp</li>
+          <li>Reviewer has a thin profile with similar tactics on other businesses</li>
+          <li>The "stay" date doesn't match any booking in your PMS</li>
+        </ul>
+        <div class="eye" style="margin:14px 0 6px">WHAT TO DO</div>
+        <ul>
+          <li>Screenshot the review, the profile, and any private messages — timestamps matter</li>
+          <li>Report via Google Business Profile → Reviews → flag → "Conflict of interest / extortion"</li>
+          <li>In Thailand, you can also report via LINE Channel's official business support if the threat came through LINE</li>
+          <li>Reply publicly using the COMPETITOR/SERIAL template below — brief, factual, never engage the demand</li>
+        </ul>
+      </div>
+    </details>
+
+    <section class="refsec">
+      <div class="eye">QUICK REFERENCE</div>
+      <h2>The four 1-stars, at a glance.</h2>
+      <div class="ref-grid">
+        <div class="ref-card specific"><span class="num">01</span><div class="label">LEGITIMATE · SPECIFIC</div><h4>Specific acknowledgment + concrete action.</h4><p class="approach">Name the issue. Name the fix. Name the date. Don't apologize for things you didn't do.</p></div>
+        <div class="ref-card pattern"><span class="num">02</span><div class="label">LEGITIMATE · PATTERN</div><h4>Acknowledge the pattern, take it offline.</h4><p class="approach">Don't deny it in public. Don't promise a fix you can't ship. Invite a direct conversation.</p></div>
+        <div class="ref-card competitor"><span class="num">03</span><div class="label">COMPETITOR / SERIAL</div><h4>Brief, polite, factual. Then flag.</h4><p class="approach">One sentence, no engagement with the false claim. Then report it through Google's flow.</p></div>
+        <div class="ref-card extortion"><span class="num">04</span><div class="label">EXTORTION POSSIBLE</div><h4>Document everything. Then evaluate.</h4><p class="approach">Screenshot, save messages, report. Don't reply privately to demands. Reply publicly in template 03.</p></div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="eye">A SOFT ASK · NO SPAM</div>
+      <h2>This was a free playbook. Need it for THIS review?</h2>
+      <p class="cta-sub">Two ways to keep going. Both run by me, Earth. Both free to try.</p>
+      <div class="cta-grid">
+        <div class="cta-card" style="align-items:center">
+          <div class="h">LINE · GET THE PLAYBOOK</div>
+          <div class="title">Want this on LINE? Scan the QR.</div>
+          <div class="qr"><div class="qr-grid"><span class="qr-mid"></span></div></div>
+          <div class="qr-cap">@REVIEWHUB · OA</div>
+        </div>
+        <div class="cta-card">
+          <div class="h">DRAFT THIS ONE</div>
+          <div class="title">Want ReviewHub to draft YOUR specific reply right now?</div>
+          <p style="margin:0;color:rgba(251,248,241,.65);font-size:13.5px;line-height:1.5">Paste the review below. We'll pick the scenario, draft in Thai + your customer's language, and send it to your LINE in 30 seconds.</p>
+          <div class="cta-input"><input placeholder="Paste your Google review here…"/><button class="cta-btn">Draft my reply →</button></div>
+        </div>
+      </div>
+      <p class="cta-foot">I'm Earth — solo founder in Bangkok. I'll never spam your LINE.</p>
+    </section>
+
+    <footer class="foot">
+      <div><a href="#">/audit-preview</a><span class="sep">·</span><a href="#">/pricing</a><span class="sep">·</span><a href="#">/about</a></div>
+      <div>UPDATED 2026-05-11 · BANGKOK · LAST REVIEWED BY EARTH</div>
+    </footer>
+  </div>
+</div>
+
+<!-- ──────── MOBILE 390 ──────── -->
+<div>
+  <div class="frame-label"><span class="pip"></span>MOBILE · 390 × VIEWPORT 844</div>
+  <div class="frame scroll" id="frameMob" style="width:390px;height:844px;border-radius:46px;border:8px solid #15171b;box-shadow:0 0 0 1.4px #d6d2c8,0 30px 60px -20px rgba(20,30,40,.28),0 60px 120px -40px rgba(20,30,40,.22)">
+
+    <section class="hero hero-mob">
+      <div class="eye">FOR BANGKOK HOSPITALITY OWNERS</div>
+      <h1 style="font-size:38px">You just got a 1-star review. <span style="font-style:italic;color:var(--teal)">Don't reply yet.</span></h1>
+      <p class="lede" style="font-size:15.5px;margin-top:18px">First — figure out what KIND of 1-star this actually is. The reply that works for a legitimate complaint will make things worse on a competitor's drive-by. Two minutes here saves you from making a 1-star into a 1-star saga.</p>
+      <div class="by">BY EARTH · SOLO FOUNDER · BANGKOK</div>
+    </section>
+
+    <div class="tree tree-mob" data-tree="mob"></div>
+
+    <details class="expand expand-mob">
+      <summary>
+        <span style="font-size:17px">What if they're asking for a discount or free service to remove it?</span>
+        <span class="chev">→</span>
+      </summary>
+      <div class="panel">
+        <p>This is extortion, and it's against Google's policies. Don't engage privately, don't pay. Build a paper trail and report.</p>
+        <div class="eye eye-rose" style="margin:8px 0 6px">RED FLAGS</div>
+        <ul>
+          <li>Vague review with no specific incident details</li>
+          <li>Private message offering to "remove the review" for a refund or comp</li>
+          <li>Thin profile with similar tactics on other businesses</li>
+          <li>"Stay" date doesn't match any booking in your PMS</li>
+        </ul>
+        <div class="eye" style="margin:14px 0 6px">WHAT TO DO</div>
+        <ul>
+          <li>Screenshot the review, profile, and private messages</li>
+          <li>Report via Google Business Profile → Reviews → flag</li>
+          <li>In Thailand, also report via LINE Channel's business support</li>
+          <li>Reply publicly using template 03 — brief, factual, never engage the demand</li>
+        </ul>
+      </div>
+    </details>
+
+    <section class="refsec refsec-mob">
+      <div class="eye">QUICK REFERENCE</div>
+      <h2 style="font-size:26px;margin:10px 0 18px">The four 1-stars, at a glance.</h2>
+      <div class="ref-grid mob">
+        <div class="ref-card specific"><span class="num">01</span><div class="label">LEGITIMATE · SPECIFIC</div><h4>Specific acknowledgment + concrete action.</h4><p class="approach">Name the issue. Name the fix. Name the date.</p></div>
+        <div class="ref-card pattern"><span class="num">02</span><div class="label">LEGITIMATE · PATTERN</div><h4>Acknowledge the pattern, take it offline.</h4><p class="approach">Don't deny in public. Invite a direct conversation.</p></div>
+        <div class="ref-card competitor"><span class="num">03</span><div class="label">COMPETITOR / SERIAL</div><h4>Brief, polite, factual. Then flag.</h4><p class="approach">One sentence, no engagement. Then report.</p></div>
+        <div class="ref-card extortion"><span class="num">04</span><div class="label">EXTORTION POSSIBLE</div><h4>Document everything. Then evaluate.</h4><p class="approach">Screenshot. Don't reply to demands. Use template 03.</p></div>
+      </div>
+    </section>
+
+    <section class="cta cta-mob">
+      <div class="eye">A SOFT ASK · NO SPAM</div>
+      <h2 style="font-size:24px">This was a free playbook. Need it for THIS review?</h2>
+      <p class="cta-sub" style="font-size:13.5px">Two ways to keep going. Both run by me, Earth.</p>
+      <div class="cta-grid mob">
+        <div class="cta-card" style="align-items:center">
+          <div class="h">LINE · GET THE PLAYBOOK</div>
+          <div class="title">Want this on LINE? Scan the QR.</div>
+          <div class="qr"><div class="qr-grid"><span class="qr-mid"></span></div></div>
+          <div class="qr-cap">@REVIEWHUB · OA</div>
+        </div>
+        <div class="cta-card">
+          <div class="h">DRAFT THIS ONE</div>
+          <div class="title">Draft my reply right now.</div>
+          <p style="margin:0;color:rgba(251,248,241,.65);font-size:13px;line-height:1.5">Paste the review. Get a Thai + customer-language draft on your LINE in 30 seconds.</p>
+          <div class="cta-input" style="flex-direction:column"><input placeholder="Paste your Google review…"/><button class="cta-btn">Draft my reply →</button></div>
+        </div>
+      </div>
+      <p class="cta-foot" style="font-size:14px">I'm Earth — solo founder in Bangkok. I'll never spam your LINE.</p>
+    </section>
+
+    <footer class="foot foot-mob">
+      <div><a href="#">/audit-preview</a><span class="sep">·</span><a href="#">/pricing</a><span class="sep">·</span><a href="#">/about</a></div>
+      <div style="color:var(--hair-strong)">UPDATED 2026-05-11 · BANGKOK</div>
+    </footer>
+  </div>
+</div>
+
+</div>
+
+<script>
+// ──────── DECISION TREE ────────
+// Two independent trees (one per artboard), same logic.
+
+const RESULTS = {
+  specific: {
+    badgeClass: 'specific',
+    label: '01 · LEGITIMATE · SPECIFIC',
+    title: 'Specific acknowledgment + concrete action.',
+    thai: 'ขออภัยจริงๆ ค่ะ คุณ[name] เรื่อง[specific issue] เราได้เปลี่ยน[concrete fix]แล้วเมื่อ[date] หวังว่าจะมีโอกาสให้บริการอีกครั้งค่ะ — [your name], [hotel name]',
+    en: 'I\'m truly sorry, Khun [name], about [specific issue]. We changed [concrete fix] on [date]. I hope we get the chance to host you again. — [your name], [hotel name]',
+    why: 'Naming the issue and the fix shows future readers that you actually run the place. Generic apologies read as defensive. Specificity reads as accountability.',
+    dont: [
+      '"Sorry you feel that way" — this is a defensive phrase that signals you don\'t agree.',
+      'Promising a fix you can\'t actually ship by next week — future guests will check.'
+    ]
+  },
+  pattern: {
+    badgeClass: 'pattern',
+    label: '02 · LEGITIMATE · PATTERN',
+    title: 'Acknowledge the pattern, take it offline.',
+    thai: 'ขอบคุณที่แจ้งค่ะ คุณ[name] เป็นเรื่องที่เรากำลังทำงานเพื่อปรับปรุงอยู่ค่ะ รบกวนส่งรายละเอียดมาที่ [email] เพื่อให้เราดูแลคุณเป็นการส่วนตัว — [your name], [hotel name]',
+    en: 'Thank you for telling us, Khun [name]. This is something we\'re actively working on. Please email us at [email] so we can take care of you directly. — [your name], [hotel name]',
+    why: 'You\'re not denying the issue — denying a real pattern in public makes it worse. You\'re moving the detailed conversation off the public feed.',
+    dont: [
+      'Listing your own counter-evidence in the public reply — readers see "owner is fighting back."',
+      'Apologizing for a problem you haven\'t actually fixed yet — over-promising erodes trust.'
+    ]
+  },
+  competitor: {
+    badgeClass: 'competitor',
+    label: '03 · COMPETITOR / SERIAL',
+    title: 'Brief, polite, factual. Then flag.',
+    thai: 'ขอบคุณสำหรับความเห็นค่ะ เราตรวจสอบและไม่พบบันทึกการเข้าพักของคุณ หากเป็นความเข้าใจผิด กรุณาติดต่อเราที่ [email] โดยตรง ขอบคุณค่ะ',
+    en: 'Thank you for the feedback. We checked and could not find a stay record for you. If this is a misunderstanding, please contact us directly at [email]. Thank you.',
+    why: 'Future readers learn one thing: the owner couldn\'t verify the stay. You\'re not arguing — you\'re recording a fact. Then file a Google flag with your booking records as proof.',
+    dont: [
+      'Accusing them of being a competitor in public — even if true, you look paranoid.',
+      'A long reply matching their tone — gives the review more visual weight in search results.'
+    ]
+  },
+  extortion: {
+    badgeClass: 'extortion',
+    label: '04 · EXTORTION POSSIBLE',
+    title: 'Document everything. Then evaluate.',
+    thai: 'ขอบคุณสำหรับข้อความค่ะ เรากำลังตรวจสอบรายละเอียดของการเข้าพักนี้และจะติดต่อคุณผ่าน [email] โดยตรงเร็วๆ นี้ค่ะ — [your name]',
+    en: 'Thank you for your message. We are checking the details of this stay and will contact you directly at [email] shortly. — [your name]',
+    why: 'You\'ve created a paper trail showing you tried to handle it via legitimate channels. That matters when you file the Google report. Never reply to the demand privately.',
+    dont: [
+      'Sending the discount or comp they asked for — pays one, attracts ten more.',
+      'Replying angrily in public — gives them ammunition for the next review or screenshot.'
+    ]
+  }
+};
+
+const NODES = {
+  Q1: {
+    num: 'QUESTION 1 OF 4',
+    text: 'When you read the review, what\'s your gut reaction?',
+    opts: [
+      { key: 'A', text: 'Honestly — they have a point. Something went wrong.', next: 'Q2A' },
+      { key: 'B', text: 'This is unfair. I don\'t even remember this guest.', next: 'Q2B' }
+    ]
+  },
+  Q2A: {
+    num: 'QUESTION 2 OF 2',
+    text: 'Can you specifically address what went wrong?',
+    opts: [
+      { key: 'A', text: 'Yes — I know exactly what they\'re describing.', next: 'R:specific' },
+      { key: 'B', text: 'Sort of — we have a general issue here.', next: 'R:pattern' }
+    ]
+  },
+  Q2B: {
+    num: 'QUESTION 2 OF 2',
+    text: 'Look at the reviewer\'s profile. What do you see?',
+    opts: [
+      { key: 'A', text: 'Multiple negative reviews of similar businesses, no positive ones.', next: 'R:competitor' },
+      { key: 'B', text: 'Mostly positive reviews elsewhere — this is an outlier.', next: 'R:extortion' },
+      { key: 'C', text: 'Brand new account. This is their first review.', next: 'R:extortion' }
+    ]
+  }
+};
+
+function renderQuestion(container, nodeKey, depth, chosenKey) {
+  const node = NODES[nodeKey];
+  const q = document.createElement('div');
+  q.className = 'q';
+  q.dataset.depth = depth;
+  q.innerHTML = `
+    <div class="q-head">
+      <span class="q-num">${node.num}</span>
+    </div>
+    <h3 class="q-text">${node.text}</h3>
+    <div class="opts${node.opts.length === 3 ? ' three' : ''}"></div>
+  `;
+  const optsEl = q.querySelector('.opts');
+  node.opts.forEach(o => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    if (chosenKey) {
+      btn.classList.add(o.key === chosenKey ? 'chosen' : 'dim');
+    }
+    btn.innerHTML = `<span class="key">${o.key}</span><span>${o.text}</span>`;
+    btn.addEventListener('click', () => choose(container, depth, o.key, o.next));
+    optsEl.appendChild(btn);
+  });
+  container.appendChild(q);
+  requestAnimationFrame(() => q.classList.add('enter'));
+}
+
+function renderResult(container, key, depth) {
+  const r = RESULTS[key];
+  const box = document.createElement('div');
+  box.className = 'result';
+  box.dataset.depth = depth;
+  box.innerHTML = `
+    <div class="top">
+      <div class="lab">
+        <span class="badge ${r.badgeClass}">${r.label}</span>
+        <h3>${r.title}</h3>
+      </div>
+      <button class="restart">← START OVER</button>
+    </div>
+    <div class="body">
+      <div class="r-block">
+        <div class="h reply">WHAT TO REPLY</div>
+        <div class="reply-card">
+          <div class="thai-line">${r.thai}</div>
+          <div class="en-line">${r.en}</div>
+        </div>
+      </div>
+      <div class="r-block">
+        <div class="h why">WHY THIS WORKS</div>
+        <p class="why-text">${r.why}</p>
+      </div>
+      <div class="r-block">
+        <div class="h not">WHAT NOT TO SAY</div>
+        <ul class="dont-list">${r.dont.map(d => `<li>${d}</li>`).join('')}</ul>
+      </div>
+    </div>
+  `;
+  box.querySelector('.restart').addEventListener('click', () => init(container));
+  container.appendChild(box);
+  requestAnimationFrame(() => box.classList.add('enter'));
+}
+
+function choose(container, depth, chosenKey, next) {
+  // Replace current question with frozen version, then append the next
+  const current = container.querySelectorAll('.q, .result')[depth];
+  if (!current) return;
+  const nodeKey = current.dataset.node;
+  // Dim alternatives in place (don't re-render — keep the user's choice visible)
+  current.querySelectorAll('.opt').forEach(btn => {
+    btn.classList.add(btn.querySelector('.key').textContent === chosenKey ? 'chosen' : 'dim');
+  });
+  // Remove anything after current depth
+  Array.from(container.children).forEach((el, i) => { if (i > depth) el.remove(); });
+  // Add next
+  if (next.startsWith('R:')) {
+    renderResult(container, next.slice(2), depth + 1);
+  } else {
+    const q = NODES[next];
+    const wrap = document.createElement('div');
+    wrap.dataset.node = next;
+    container.appendChild(wrap);
+    // unwrap: render directly into container, but tag with node
+    container.removeChild(wrap);
+    renderQuestion(container, next, depth + 1);
+    container.lastElementChild.dataset.node = next;
+  }
+  // Scroll the new element into the viewport
+  setTimeout(() => {
+    const last = container.lastElementChild;
+    if (last && last.offsetTop) {
+      const frame = container.closest('.scroll');
+      if (frame) frame.scrollTo({ top: last.offsetTop - 80, behavior: 'smooth' });
+    }
+  }, 60);
+}
+
+function init(container) {
+  container.innerHTML = '';
+  renderQuestion(container, 'Q1', 0);
+  container.firstElementChild.dataset.node = 'Q1';
+}
+
+document.querySelectorAll('[data-tree]').forEach(c => init(c));
+</script>
+</body>
+</html>
