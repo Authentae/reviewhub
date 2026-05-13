@@ -1020,12 +1020,17 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
                     type="button"
                     onClick={async () => {
                       await handleCopy(optimisticResponse);
-                      // Google's owner-side reviews panel for this place.
-                      // Opens directly to the reviews UI when the owner is
-                      // signed into the Google account that manages the
-                      // listing. Falls back to public Maps for others.
-                      const placeId = business.google_place_id;
-                      const url = `https://search.google.com/local/reviews?placeid=${encodeURIComponent(placeId)}`;
+                      // Open Google Business Profile's owner-side reviews
+                      // dashboard. If the business has a managing-email set,
+                      // append &authuser=<email> so multi-account browsers
+                      // auto-switch to the account that actually has reply
+                      // permissions — otherwise users land on their default
+                      // Google account, which often has 0 managed listings
+                      // and shows no reply form. Falls back to no-authuser
+                      // (browser default) when the managing email is blank.
+                      const email = business?.google_managing_email;
+                      let url = 'https://business.google.com/reviews';
+                      if (email) url += `?authuser=${encodeURIComponent(email)}`;
                       window.open(url, '_blank', 'noopener,noreferrer');
                     }}
                     aria-label={t('review.replyOnGoogleAria', 'Copy reply and open Google to paste')}

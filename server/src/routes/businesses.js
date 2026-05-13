@@ -144,6 +144,22 @@ router.put('/:id', bizMutateLimiter, (req, res) => {
       fields.push('google_place_id = ?'); params.push(val);
       platformEdits.push({ provider: 'google', id: val });
     }
+    if (req.body.google_managing_email !== undefined) {
+      // The Google account that manages this business's GBP listing. Used to
+      // build a `business.google.com/reviews?authuser=<email>` deep-link for
+      // the "Reply on Google" button. Validate as a permissive email shape
+      // (anything@anything) — Google accepts a wide variety of address
+      // forms, and being too strict would block legitimate Google Workspace
+      // / custom-domain addresses.
+      const v = req.body.google_managing_email;
+      if (v === null || v === '') {
+        fields.push('google_managing_email = ?'); params.push(null);
+      } else if (typeof v === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) && v.length <= 254) {
+        fields.push('google_managing_email = ?'); params.push(v.trim().toLowerCase());
+      } else {
+        return res.status(400).json({ error: 'google_managing_email must be a valid email' });
+      }
+    }
     if (yelp_business_id !== undefined) {
       const r = asTrimmedString(yelp_business_id, 'yelp_business_id', { maxLen: 500, allowEmpty: true });
       if (!r.ok) return res.status(400).json({ error: r.error });

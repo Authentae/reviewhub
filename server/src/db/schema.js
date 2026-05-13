@@ -400,6 +400,18 @@ function initSchema() {
   // (ski lodges, beach resorts) but useful to anyone going on PTO.
   migrateAddColumn('businesses', 'vacation_until', 'TEXT DEFAULT NULL');
 
+  // businesses.google_managing_email — the specific Google account that
+  // owns/manages this business's Google Business Profile. Used to build
+  // a `business.google.com/reviews?authuser=<email>` deep-link on the
+  // "Reply on Google" button, so the owner is auto-switched to the
+  // managing account regardless of which Google account is currently
+  // default in their browser. Multi-account-Chrome users routinely have
+  // 2-5 Google accounts signed in; without this hint the GBP UI opens
+  // under the personal account that doesn't manage the listing → no
+  // reply form. NULL means "no hint set" — button falls back to the
+  // browser's default account.
+  migrateAddColumn('businesses', 'google_managing_email', 'TEXT DEFAULT NULL');
+
   // reviews.scheduled_post_at — ISO timestamp at which a queued reply
   // should be posted to the source platform. NULL means "post
   // immediately on save" (legacy default). When set, the /respond

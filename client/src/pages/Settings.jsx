@@ -36,7 +36,30 @@ function formatSyncAgo(isoLike, rtf, t) {
   return rtf.format(-Math.round(diffSec / 86400), 'day');
 }
 
-function ConnectCard({ platform, icon, color, connected, onConnect, syncStatus, businessId }) {
+function ConnectCard({ platform, icon, color, connected, onConnect, syncStatus, businessId, managingEmail = '' }) {
+  // Google-managing-email — the GBP-owning account this listing belongs to.
+  // Used by the "Reply on Google" button to deep-link via &authuser=<email>
+  // so the GBP UI auto-switches to the right account in multi-account browsers.
+  const [meEmail, setMeEmail] = useState(managingEmail || '');
+  const [meEditing, setMeEditing] = useState(false);
+  const [meSaving, setMeSaving] = useState(false);
+  useEffect(() => { setMeEmail(managingEmail || ''); }, [managingEmail]);
+
+  async function handleSaveManagingEmail(e) {
+    if (e?.preventDefault) e.preventDefault();
+    if (!businessId) return;
+    setMeSaving(true);
+    try {
+      const value = (meEmail || '').trim();
+      await api.put(`/businesses/${businessId}`, { google_managing_email: value || null });
+      setMeEditing(false);
+    } catch (err) {
+      // Keep editing open so the user can correct
+    } finally {
+      setMeSaving(false);
+    }
+  }
+
   const { t, lang } = useI18n();
   const toast = useToast();
   const [id, setId] = useState('');
@@ -387,6 +410,42 @@ function ConnectCard({ platform, icon, color, connected, onConnect, syncStatus, 
                 </div>
               )}
             </div>
+          )}
+
+          {/* Managing Google account (Google only). Used to build the
+              business.google.com/reviews?authuser=<email> deep-link on the
+              "Reply on Google" button so it auto-switches accounts in
+              multi-account browsers. Optional: if blank, button falls back
+              to the browser's default Google account. */}
+          {platform === 'google' && connected && (
+            <form onSubmit={handleSaveManagingEmail} className="mb-3 pt-3 border-t border-gray-100 dark:border-gray-700">
+              <label htmlFor={`managing-email-${platform}`} className="block text-xs font-medium text-gray-700 dark:text-gray-200 mb-1">
+                {t('settings.platform.managingEmailLabel', 'Google account managing this listing')}
+              </label>
+              <div className="flex gap-2">
+                <input
+                  id={`managing-email-${platform}`}
+                  type="email"
+                  value={meEmail}
+                  onChange={(e) => { setMeEmail(e.target.value); setMeEditing(true); }}
+                  placeholder="you@gmail.com"
+                  className="input text-sm flex-1"
+                  maxLength={254}
+                  autoComplete="off"
+                />
+                <button
+                  type="submit"
+                  disabled={meSaving || !meEditing}
+                  aria-busy={meSaving}
+                  className="btn-secondary text-xs py-2 px-3 disabled:opacity-50"
+                >
+                  {meSaving ? t('settings.saving2') : t('settings.save')}
+                </button>
+              </div>
+              <p className="text-xs text-gray-400 mt-1">
+                {t('settings.platform.managingEmailHelp', 'Used to deep-link the "Reply on Google" button to the right account. Leave blank to use your browser\'s default Google account.')}
+              </p>
+            </form>
           )}
 
           {/* Manual fallback — always available. Useful when OAuth isn't
@@ -2746,7 +2805,7 @@ export default function Settings() {
             )}
           </div>
           <div className="space-y-3">
-            <ConnectCard platform="google" icon={<span aria-hidden="true">🔵</span>} color="bg-blue-50" connected={business?.google_place_id} onConnect={handleConnect} syncStatus={connections.google} businessId={business?.id} />
+            <ConnectCard platform="google" icon={<span aria-hidden="true">🔵</span>} color="bg-blue-50" connected={business?.google_place_id} onConnect={handleConnect} syncStatus={connections.google} businessId={business?.id} managingEmail={business?.google_managing_email || ''} />
             <ConnectCard platform="yelp" icon={<span aria-hidden="true">🔴</span>} color="bg-red-50" connected={business?.yelp_business_id} onConnect={handleConnect} syncStatus={connections.yelp} />
             <ConnectCard platform="facebook" icon={<span aria-hidden="true">🟣</span>} color="bg-indigo-50" connected={business?.facebook_page_id} onConnect={handleConnect} syncStatus={connections.facebook} />
           </div>
