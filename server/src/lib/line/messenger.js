@@ -74,12 +74,34 @@ async function pushText(lineUserId, text) {
  * @param {object} flexContents - LINE Flex Message contents object
  * @returns {Promise<{ ok: boolean, skipped?: boolean, error?: string }>}
  */
-async function pushFlex(lineUserId, altText, flexContents) {
+async function pushFlex(lineUserId, altText, flexContents, options = {}) {
   if (!isEnabled()) {
     return { ok: true, skipped: true };
   }
   if (!lineUserId || !flexContents) {
     return { ok: false, error: 'lineUserId and flexContents required' };
+  }
+  // LINE Flex Messages render text as visual card elements — owners
+  // CANNOT long-press the text inside a Flex card to copy it (the
+  // copy-text gesture works on chat-bubble text messages but not on
+  // Flex contents). So when there's an AI-drafted reply, we send TWO
+  // messages in one push:
+  //   1. The Flex card (header + draft + action buttons) for visual
+  //      summary + tap targets
+  //   2. A plain-text message containing JUST the draft, so the owner
+  //      can long-press → Copy → paste in Google's review form
+  // LINE allows up to 5 messages per push call so this stays well
+  // within limits.
+  const messages = [{
+    type: 'flex',
+    altText: altText || 'New review on Google',
+    contents: flexContents,
+  }];
+  if (options.copyableText) {
+    const txt = String(options.copyableText).slice(0, 4500); // LINE text limit is 5000
+    if (txt.trim()) {
+      messages.push({ type: 'text', text: txt });
+    }
   }
   try {
     const res = await fetch(PUSH_URL, {
@@ -88,14 +110,7 @@ async function pushFlex(lineUserId, altText, flexContents) {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${process.env.LINE_CHANNEL_ACCESS_TOKEN}`,
       },
-      body: JSON.stringify({
-        to: lineUserId,
-        messages: [{
-          type: 'flex',
-          altText: altText || 'New review on Google',
-          contents: flexContents,
-        }],
-      }),
+      body: JSON.stringify({ to: lineUserId, messages }),
     });
     if (!res.ok) {
       const body = await res.text().catch(() => '(no body)');

@@ -140,7 +140,13 @@ async function pollOne(businessId) {
         await lineMessenger.pushFlex(
           biz.line_user_id,
           `New review for ${biz.business_name}`,
-          flex
+          flex,
+          {
+            // Plain-text follow-up so the owner can long-press → Copy →
+            // paste in Google. Flex Message internals don't support
+            // text-selection; a separate text bubble does.
+            copyableText: draftText || '',
+          }
         );
       } catch (err) {
         captureException(err, { job: 'placesPoller', op: 'pushFlex', businessId: biz.id });

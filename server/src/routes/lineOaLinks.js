@@ -166,7 +166,12 @@ router.post('/test-push', writeLimiter, async (req, res) => {
       editUrl: 'https://reviewhub.review/dashboard',
     });
     try {
-      await lineMessenger.pushFlex(link.line_user_id, `Test push for ${businessName}`, flex);
+      await lineMessenger.pushFlex(
+        link.line_user_id,
+        `Test push for ${businessName}`,
+        flex,
+        { copyableText: 'Thank you so much for the test! 🎉 — This is a sample AI-drafted reply.' }
+      );
     } catch (err) {
       captureException(err, { route: 'line-oa.test-push', op: 'pushFlex' });
       return res.status(502).json({ error: `LINE push failed: ${err.message || 'unknown'}` });
