@@ -100,6 +100,7 @@ check "og-image.png accessible"      "$BASE/og-image.png"      "200"
 check "tools index"                  "$BASE/tools"             "200"
 check "tools: reply-roaster"         "$BASE/tools/reply-roaster"  "200"
 check "tools: review-impact"         "$BASE/tools/review-impact"  "200"
+check "tools: one-star-playbook"     "$BASE/tools/one-star-playbook"  "200"
 
 # Server health (if exposed)
 check "API up (any non-5xx on /api/health)" "$BASE/api/health" "200"
