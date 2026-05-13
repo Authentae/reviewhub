@@ -1010,6 +1010,31 @@ function ReviewCard({ review, highlight, onResponseSaved, business = null }) {
                 >
                   {t('review.copy')}
                 </button>
+                {/* "Reply on Google" — single click bridges the gap until GBP
+                    API approval lands. Copies the reply to clipboard AND
+                    opens the platform's place page in a new tab, so the
+                    owner only has to find the review + paste. Google-only
+                    for now; other platforms can follow the same pattern. */}
+                {review.platform === 'google' && business?.google_place_id && (
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      await handleCopy(optimisticResponse);
+                      // Google's owner-side reviews panel for this place.
+                      // Opens directly to the reviews UI when the owner is
+                      // signed into the Google account that manages the
+                      // listing. Falls back to public Maps for others.
+                      const placeId = business.google_place_id;
+                      const url = `https://search.google.com/local/reviews?placeid=${encodeURIComponent(placeId)}`;
+                      window.open(url, '_blank', 'noopener,noreferrer');
+                    }}
+                    aria-label={t('review.replyOnGoogleAria', 'Copy reply and open Google to paste')}
+                    className="text-xs hover:underline"
+                    style={{ color: 'var(--rh-teal)' }}
+                  >
+                    {t('review.replyOnGoogle', 'Reply on Google →')}
+                  </button>
+                )}
               </div>
               <p className="text-sm whitespace-pre-wrap" style={{ color: 'var(--rh-ink)' }}>{optimisticResponse}</p>
             </div>

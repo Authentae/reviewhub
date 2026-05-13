@@ -145,12 +145,25 @@ async function fetchReviews(placeId) {
 function mapReview(r) {
   const author = r.authorAttribution?.displayName || 'Anonymous';
   const publishTime = r.publishTime || '';
-  const text = (r.text?.text || r.originalText?.text || '').trim();
+  // PREFER originalText over text. Places API returns BOTH:
+  //   originalText.text — what the reviewer actually wrote (e.g. Thai)
+  //   text.text         — Google's auto-translation to the request's locale
+  // Without language preferences in our request, Google defaults to
+  // translating reviews to English, which broke the dashboard for Thai
+  // reviewers (their words came out as English on screen). Preferring
+  // originalText keeps each review in its native language. The AI-draft
+  // step downstream language-detects the original and replies in-kind.
+  const originalText = (r.originalText?.text || '').trim();
+  const translatedText = (r.text?.text || '').trim();
+  const text = originalText || translatedText;
+  // Capture the language code so the dashboard / drafts can route on it.
+  const languageCode = r.originalText?.languageCode || r.text?.languageCode || '';
   return {
     external_id: dedupHash(author, publishTime, text),
     reviewer_name: author,
     rating: typeof r.rating === 'number' ? r.rating : 3,
     review_text: text,
+    review_language: languageCode,
     created_at: publishTime || new Date().toISOString(),
   };
 }
