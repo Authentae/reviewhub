@@ -217,19 +217,38 @@ async function resolveShareUrl(rawUrl) {
   if (!ALLOWED_HOSTS.has(parsed.hostname)) return null;
 
   // Step 1: if it's a short-link host, follow the redirect to get the full
-  // Maps URL. Cap chain at 3 hops; abort fetches taking >4s.
+  // Maps URL. Cap chain at 3 hops; abort fetches taking >5s.
+  //
+  // GET (not HEAD) — Google's share.google endpoint responds with an HTML
+  // interstitial page on HEAD requests instead of a redirect Location
+  // header. GET returns the same body but ALSO returns the 30x with the
+  // Location header we need. We send a real User-Agent because some
+  // Google endpoints respond differently (or block) when the UA looks
+  // like a bot — we want the same redirect a real browser would follow.
+  //
+  // We don't actually read the response body — only the headers — so the
+  // bandwidth cost of GET vs HEAD is bounded by Google's response size
+  // before redirect (typically <1KB).
   let finalUrl = parsed.toString();
   const isShortLink = ['share.google', 'maps.app.goo.gl', 'goo.gl'].includes(parsed.hostname);
   if (isShortLink) {
     let next = finalUrl;
     for (let hop = 0; hop < 3; hop++) {
       const ctl = new AbortController();
-      const timer = setTimeout(() => ctl.abort(), 4000);
+      const timer = setTimeout(() => ctl.abort(), 5000);
       let res;
       try {
-        // `redirect: 'manual'` lets us inspect each Location header so we
-        // can re-validate the hostname before following.
-        res = await module.exports._fetch(next, { method: 'HEAD', redirect: 'manual', signal: ctl.signal });
+        res = await module.exports._fetch(next, {
+          method: 'GET',
+          redirect: 'manual',
+          signal: ctl.signal,
+          headers: {
+            // Real-browser UA — some Google endpoints block requests
+            // without one or return a different (non-redirecting) body.
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept-Language': 'en-US,en;q=0.9',
+          },
+        });
       } catch (err) {
         clearTimeout(timer);
         return null; // network or timeout
@@ -245,8 +264,31 @@ async function resolveShareUrl(rawUrl) {
         finalUrl = next;
         // If we've landed on a non-short host, stop chasing.
         if (!['share.google', 'maps.app.goo.gl', 'goo.gl'].includes(nextParsed.hostname)) break;
+      } else if (res.status === 200 && isShortLink) {
+        // share.google sometimes returns a 200 HTML interstitial with
+        // the real URL embedded in a meta refresh or canonical link. Read
+        // a bounded slice of the body and look for it.
+        let body = '';
+        try { body = await res.text(); } catch { body = ''; }
+        body = body.slice(0, 50000); // cap
+        // Look for canonical / og:url / meta refresh pointing at maps URL
+        const metaUrl = body.match(/<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)["']/i)?.[1]
+          || body.match(/<meta[^>]+property=["']og:url["'][^>]+content=["']([^"']+)["']/i)?.[1]
+          || body.match(/<meta[^>]+http-equiv=["']refresh["'][^>]+content=["'][^;]*;\s*url=([^"']+)["']/i)?.[1]
+          || body.match(/(https:\/\/[^"'<>\s]*google\.com\/maps\/place\/[^"'<>\s]+)/i)?.[1];
+        if (metaUrl) {
+          try {
+            const np = new URL(metaUrl, next);
+            if (ALLOWED_HOSTS.has(np.hostname)) {
+              finalUrl = np.toString();
+              break;
+            }
+          } catch { /* fallthrough */ }
+        }
+        // No usable redirect target in the body — use whatever URL we have.
+        break;
       } else {
-        // 200 or terminal error with no redirect — use the URL we have.
+        // Terminal error with no redirect — use the URL we have.
         break;
       }
     }
@@ -264,21 +306,39 @@ async function resolveShareUrl(rawUrl) {
     };
   }
 
-  // Step 3: pull the place-name slug from the path
-  //   /maps/place/<slug>/...                 — full desktop URL
-  //   /maps/place/<slug>/@lat,lng,17z/data=  — even more detailed
-  // The slug is URL-encoded with + for spaces in the legacy form.
-  let slug = null;
-  const m = finalUrl.match(/\/maps\/place\/([^/?#]+)/i);
-  if (m) {
-    try { slug = decodeURIComponent(m[1].replace(/\+/g, ' ')); } catch { slug = m[1]; }
-  }
-  if (!slug || slug.length < 2) return null;
+  // Step 3: pull a business name out of the resolved URL, trying each
+  // known shape in priority order. We need a name to feed Places Text
+  // Search — that's how we convert any of these URL shapes into a real
+  // ChIJ Place ID.
+  //
+  // Three shapes we handle:
+  //   /maps/place/<slug>/...                        — full desktop URL
+  //   /search?q=<name>&kgmid=/g/...                 — share.google redirect (most common)
+  //   /maps?...&query=<name>...                     — legacy maps query
+  //
+  // The `kgmid=/g/<...>` value is Google's Knowledge Graph machine ID,
+  // not a Place ID — so we extract the `q` (business name) and look it
+  // up. Worst case: ambiguous name returns the wrong location; the
+  // search-by-name UI gives the user a chance to disambiguate.
+  let nameQuery = null;
+  let urlObj;
+  try { urlObj = new URL(finalUrl); } catch { urlObj = null; }
 
-  // Step 4: call lookupByName with the slug. Same plumbing as the manual
-  // search-by-name path, so failures behave the same way and the caller
-  // can treat this as drop-in equivalent.
-  return lookupByName(slug, '');
+  const pathMatch = finalUrl.match(/\/maps\/place\/([^/?#]+)/i);
+  if (pathMatch) {
+    try { nameQuery = decodeURIComponent(pathMatch[1].replace(/\+/g, ' ')); } catch { nameQuery = pathMatch[1]; }
+  } else if (urlObj) {
+    const q = urlObj.searchParams.get('q') || urlObj.searchParams.get('query');
+    if (q && q.length >= 2) nameQuery = q;
+  }
+
+  if (!nameQuery || nameQuery.length < 2) return null;
+
+  // Step 4: call lookupByName with the extracted name. Use the empty
+  // string as the locality hint — for arbitrary share links we don't
+  // know the city, and biasing toward Bangkok would push results away
+  // from places like Kamphaeng Saen, Phuket, Chiang Mai, etc.
+  return lookupByName(nameQuery, '');
 }
 
 module.exports = {
