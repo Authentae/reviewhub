@@ -216,80 +216,65 @@ async function resolveShareUrl(rawUrl) {
   if (!/^https?:$/.test(parsed.protocol)) return null;
   if (!ALLOWED_HOSTS.has(parsed.hostname)) return null;
 
-  // Step 1: if it's a short-link host, follow the redirect to get the full
-  // Maps URL. Cap chain at 3 hops; abort fetches taking >5s.
+  // Step 1: resolve the short link. Use Node's native redirect-follow
+  // (`redirect: 'follow'`) and validate the FINAL URL's hostname against
+  // ALLOWED_HOSTS — Node's fetch refuses to follow cross-protocol or
+  // malformed redirects, so for the all-Google case the simpler default
+  // beats hand-rolling redirect chain handling.
   //
-  // GET (not HEAD) — Google's share.google endpoint responds with an HTML
-  // interstitial page on HEAD requests instead of a redirect Location
-  // header. GET returns the same body but ALSO returns the 30x with the
-  // Location header we need. We send a real User-Agent because some
-  // Google endpoints respond differently (or block) when the UA looks
-  // like a bot — we want the same redirect a real browser would follow.
+  // We send a real Chrome User-Agent. share.google in particular
+  // appears to serve a different (non-redirecting HTML interstitial)
+  // response to clients with no UA, defaulting Node-fetch UAs, or
+  // bot-shaped UAs.
   //
-  // We don't actually read the response body — only the headers — so the
-  // bandwidth cost of GET vs HEAD is bounded by Google's response size
-  // before redirect (typically <1KB).
+  // GET (not HEAD) — Google's share endpoint responds to HEAD with the
+  // interstitial too. GET follows the chain to the final search URL.
   let finalUrl = parsed.toString();
+  let body200 = '';
   const isShortLink = ['share.google', 'maps.app.goo.gl', 'goo.gl'].includes(parsed.hostname);
   if (isShortLink) {
-    let next = finalUrl;
-    for (let hop = 0; hop < 3; hop++) {
-      const ctl = new AbortController();
-      const timer = setTimeout(() => ctl.abort(), 5000);
-      let res;
-      try {
-        res = await module.exports._fetch(next, {
-          method: 'GET',
-          redirect: 'manual',
-          signal: ctl.signal,
-          headers: {
-            // Real-browser UA — some Google endpoints block requests
-            // without one or return a different (non-redirecting) body.
-            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Accept-Language': 'en-US,en;q=0.9',
-          },
-        });
-      } catch (err) {
-        clearTimeout(timer);
-        return null; // network or timeout
-      }
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), 8000);
+    let res;
+    try {
+      res = await module.exports._fetch(finalUrl, {
+        method: 'GET',
+        redirect: 'follow',
+        signal: ctl.signal,
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+          'Accept-Language': 'en-US,en;q=0.9',
+        },
+      });
+    } catch (err) {
       clearTimeout(timer);
-      if (res.status >= 300 && res.status < 400) {
-        const loc = res.headers.get('location');
-        if (!loc) return null;
-        let nextParsed;
-        try { nextParsed = new URL(loc, next); } catch { return null; }
-        if (!ALLOWED_HOSTS.has(nextParsed.hostname)) return null; // off-domain redirect — bail
-        next = nextParsed.toString();
-        finalUrl = next;
-        // If we've landed on a non-short host, stop chasing.
-        if (!['share.google', 'maps.app.goo.gl', 'goo.gl'].includes(nextParsed.hostname)) break;
-      } else if (res.status === 200 && isShortLink) {
-        // share.google sometimes returns a 200 HTML interstitial with
-        // the real URL embedded in a meta refresh or canonical link. Read
-        // a bounded slice of the body and look for it.
-        let body = '';
-        try { body = await res.text(); } catch { body = ''; }
-        body = body.slice(0, 50000); // cap
-        // Look for canonical / og:url / meta refresh pointing at maps URL
-        const metaUrl = body.match(/<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)["']/i)?.[1]
-          || body.match(/<meta[^>]+property=["']og:url["'][^>]+content=["']([^"']+)["']/i)?.[1]
-          || body.match(/<meta[^>]+http-equiv=["']refresh["'][^>]+content=["'][^;]*;\s*url=([^"']+)["']/i)?.[1]
-          || body.match(/(https:\/\/[^"'<>\s]*google\.com\/maps\/place\/[^"'<>\s]+)/i)?.[1];
-        if (metaUrl) {
-          try {
-            const np = new URL(metaUrl, next);
-            if (ALLOWED_HOSTS.has(np.hostname)) {
-              finalUrl = np.toString();
-              break;
-            }
-          } catch { /* fallthrough */ }
-        }
-        // No usable redirect target in the body — use whatever URL we have.
-        break;
-      } else {
-        // Terminal error with no redirect — use the URL we have.
-        break;
+      return null; // network or timeout
+    }
+    clearTimeout(timer);
+
+    // Validate the FINAL URL after Node's auto-redirect chain. This is
+    // the SSRF guard — we don't trust where Google redirected to.
+    let finalParsed;
+    try { finalParsed = new URL(res.url || finalUrl); } catch { return null; }
+    if (!ALLOWED_HOSTS.has(finalParsed.hostname)) return null;
+    finalUrl = finalParsed.toString();
+
+    // If we still ended up on a short-link host, the body likely
+    // contains a meta-refresh or canonical link to the real URL.
+    if (['share.google', 'maps.app.goo.gl', 'goo.gl'].includes(finalParsed.hostname)) {
+      try {
+        body200 = (await res.text()).slice(0, 80000);
+      } catch { body200 = ''; }
+      const metaUrl = body200.match(/<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)["']/i)?.[1]
+        || body200.match(/<meta[^>]+property=["']og:url["'][^>]+content=["']([^"']+)["']/i)?.[1]
+        || body200.match(/<meta[^>]+http-equiv=["']refresh["'][^>]+content=["'][^;]*;\s*url=([^"']+)["']/i)?.[1]
+        || body200.match(/(https?:\/\/[^"'<>\s]*google\.com\/[^"'<>\s]+)/i)?.[1];
+      if (metaUrl) {
+        try {
+          const np = new URL(metaUrl, finalUrl);
+          if (ALLOWED_HOSTS.has(np.hostname)) finalUrl = np.toString();
+        } catch { /* fallthrough */ }
       }
     }
   }
