@@ -809,40 +809,75 @@ function LineConnectSection() {
                     in the same flow.
                     Bot IDs from /api/line-oa/status are stored with the @
                     prefix; strip it for the URL path. */}
+                {/* Two QRs side-by-side: one to add the OA as friend,
+                    one with the /link <token> as plain text for iPhone
+                    Camera's auto-copy. The earlier oaMessage deep-link
+                    didn't work — iPhone Camera doesn't honor LINE's
+                    universal-link mapping consistently and opened the
+                    URL in Safari instead. Splitting the actions makes
+                    each step's intent clear and reliable. */}
                 {(() => {
-                  const botIdRaw = (data.bot_id || '').replace(/^@/, '');
-                  const oaMessageUrl = `https://line.me/R/oaMessage/${botIdRaw}/?${encodeURIComponent(command)}`;
+                  const addFriendUrl = `https://line.me/R/ti/p/${encodeURIComponent(data.bot_id)}`;
                   return (
-                    <div className="flex items-start gap-4 flex-wrap">
-                      <div className="flex-1 min-w-[160px]">
-                        <a
-                          href={oaMessageUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-block text-xs font-semibold underline"
-                          style={{ color: 'var(--rh-teal-deep, #1e4d5e)' }}
+                    <div className="space-y-3">
+                      <p className="text-sm font-semibold" style={{ color: 'var(--rh-ink, #1d242c)' }}>
+                        {isThai ? 'มีมือถือ?  สแกน 2 ครั้ง:' : 'On your phone? Scan twice:'}
+                      </p>
+                      <div className="flex items-stretch gap-3 flex-wrap">
+                        <div
+                          className="flex-1 min-w-[200px] flex items-start gap-3 rounded-lg p-3"
+                          style={{ background: 'var(--rh-paper, #fbf8f1)', border: '1px solid var(--rh-line, #e6dfce)' }}
                         >
-                          {isThai
-                            ? `เปิด LINE บนเครื่องนี้พร้อมข้อความ →`
-                            : `Open LINE on this device with message →`}
-                        </a>
-                        <p className="text-xs mt-2 leading-relaxed" style={{ color: 'var(--rh-ink-3, #888)' }}>
-                          {isThai
-                            ? 'หรือใช้มือถือสแกน QR → LINE จะเปิดพร้อมข้อความให้แล้ว แค่กด ส่ง'
-                            : 'Or scan the QR with your phone — LINE opens with the message ready, just tap Send.'}
-                        </p>
-                      </div>
-                      <div
-                        className="rounded-lg p-2"
-                        style={{ background: '#fff', border: '1px solid var(--rh-line, #e6dfce)' }}
-                      >
-                        <img
-                          src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=0&data=${encodeURIComponent(oaMessageUrl)}`}
-                          alt={isThai ? `QR เชื่อม LINE` : `Link LINE QR`}
-                          width={160}
-                          height={160}
-                          loading="lazy"
-                        />
+                          <div
+                            className="rounded-md p-1.5 flex-shrink-0"
+                            style={{ background: '#fff', border: '1px solid var(--rh-line, #e6dfce)' }}
+                          >
+                            <img
+                              src={`https://api.qrserver.com/v1/create-qr-code/?size=110x110&margin=0&data=${encodeURIComponent(addFriendUrl)}`}
+                              alt={isThai ? `QR เพิ่มเพื่อน ${data.bot_id}` : `Add ${data.bot_id} on LINE QR`}
+                              width={110}
+                              height={110}
+                              loading="lazy"
+                            />
+                          </div>
+                          <div className="text-xs leading-relaxed" style={{ color: 'var(--rh-ink-soft, #4a525a)' }}>
+                            <p className="font-semibold mb-1" style={{ color: 'var(--rh-ink, #1d242c)' }}>
+                              {isThai ? '1. เพิ่มเพื่อน' : '1. Add friend'}
+                            </p>
+                            <p>
+                              {isThai
+                                ? `เปิด ${data.bot_id} ใน LINE แล้วกด เพิ่มเพื่อน`
+                                : `Opens ${data.bot_id} in LINE → tap Add as friend.`}
+                            </p>
+                          </div>
+                        </div>
+                        <div
+                          className="flex-1 min-w-[200px] flex items-start gap-3 rounded-lg p-3"
+                          style={{ background: 'var(--rh-paper, #fbf8f1)', border: '1px solid var(--rh-line, #e6dfce)' }}
+                        >
+                          <div
+                            className="rounded-md p-1.5 flex-shrink-0"
+                            style={{ background: '#fff', border: '1px solid var(--rh-line, #e6dfce)' }}
+                          >
+                            <img
+                              src={`https://api.qrserver.com/v1/create-qr-code/?size=110x110&margin=0&data=${encodeURIComponent(command)}`}
+                              alt={isThai ? `QR สำหรับคัดลอกโค้ดเชื่อม` : `Link code QR`}
+                              width={110}
+                              height={110}
+                              loading="lazy"
+                            />
+                          </div>
+                          <div className="text-xs leading-relaxed" style={{ color: 'var(--rh-ink-soft, #4a525a)' }}>
+                            <p className="font-semibold mb-1" style={{ color: 'var(--rh-ink, #1d242c)' }}>
+                              {isThai ? '2. คัดลอกโค้ด' : '2. Copy code'}
+                            </p>
+                            <p>
+                              {isThai
+                                ? 'กล้องจะแสดง /link โค้ด → กด คัดลอก → กลับไปที่แชต LINE → วาง → กด ส่ง'
+                                : 'Camera shows the /link code → tap Copy → switch to LINE chat → paste → Send.'}
+                            </p>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   );
