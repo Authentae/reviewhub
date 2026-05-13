@@ -176,9 +176,115 @@ async function safeText(res) {
   try { return await res.text(); } catch { return ''; }
 }
 
+/**
+ * Resolve a Google share/short link or Maps URL into a Place ID.
+ *
+ * Why this exists: users routinely paste links like
+ *   https://share.google/hMJZnDaUsyRTW6MPz       (new share-link format)
+ *   https://maps.app.goo.gl/<short>              (mobile-share format)
+ *   https://www.google.com/maps/place/<slug>/... (desktop maps URL)
+ * into the Place ID field. None of these are a ChIJ-prefixed Place ID;
+ * resolving requires (a) following the HTTP redirect for short links,
+ * then (b) extracting the place-name slug from the final URL path, then
+ * (c) using Places Text Search to convert the slug to a real Place ID.
+ *
+ * Returns the same shape as lookupByName so callers can use either path
+ * interchangeably. Returns null when nothing useful can be extracted.
+ *
+ * SSRF guards:
+ *  - Only fetch URLs whose hostname is in ALLOWED_HOSTS
+ *  - After redirect, the final URL must also be in ALLOWED_HOSTS
+ *  - 4-second timeout, redirect chain cap of 3
+ *
+ * @param {string} rawUrl
+ * @returns {Promise<null | { placeId, displayName, formattedAddress, suggestions }>}
+ */
+const ALLOWED_HOSTS = new Set([
+  'share.google',
+  'maps.app.goo.gl',
+  'goo.gl',
+  'www.google.com',
+  'google.com',
+  'maps.google.com',
+]);
+
+async function resolveShareUrl(rawUrl) {
+  if (typeof rawUrl !== 'string' || !rawUrl.trim()) return null;
+
+  let parsed;
+  try { parsed = new URL(rawUrl.trim()); } catch { return null; }
+  if (!/^https?:$/.test(parsed.protocol)) return null;
+  if (!ALLOWED_HOSTS.has(parsed.hostname)) return null;
+
+  // Step 1: if it's a short-link host, follow the redirect to get the full
+  // Maps URL. Cap chain at 3 hops; abort fetches taking >4s.
+  let finalUrl = parsed.toString();
+  const isShortLink = ['share.google', 'maps.app.goo.gl', 'goo.gl'].includes(parsed.hostname);
+  if (isShortLink) {
+    let next = finalUrl;
+    for (let hop = 0; hop < 3; hop++) {
+      const ctl = new AbortController();
+      const timer = setTimeout(() => ctl.abort(), 4000);
+      let res;
+      try {
+        // `redirect: 'manual'` lets us inspect each Location header so we
+        // can re-validate the hostname before following.
+        res = await module.exports._fetch(next, { method: 'HEAD', redirect: 'manual', signal: ctl.signal });
+      } catch (err) {
+        clearTimeout(timer);
+        return null; // network or timeout
+      }
+      clearTimeout(timer);
+      if (res.status >= 300 && res.status < 400) {
+        const loc = res.headers.get('location');
+        if (!loc) return null;
+        let nextParsed;
+        try { nextParsed = new URL(loc, next); } catch { return null; }
+        if (!ALLOWED_HOSTS.has(nextParsed.hostname)) return null; // off-domain redirect — bail
+        next = nextParsed.toString();
+        finalUrl = next;
+        // If we've landed on a non-short host, stop chasing.
+        if (!['share.google', 'maps.app.goo.gl', 'goo.gl'].includes(nextParsed.hostname)) break;
+      } else {
+        // 200 or terminal error with no redirect — use the URL we have.
+        break;
+      }
+    }
+  }
+
+  // Step 2: extract a ChIJ-prefix from the resolved URL if it's there
+  // (some Google Maps URLs include it in a query param or the data segment).
+  const chij = finalUrl.match(/ChIJ[A-Za-z0-9_-]{10,}/);
+  if (chij) {
+    return {
+      placeId: chij[0],
+      displayName: '',
+      formattedAddress: '',
+      suggestions: [{ placeId: chij[0], displayName: '', formattedAddress: '' }],
+    };
+  }
+
+  // Step 3: pull the place-name slug from the path
+  //   /maps/place/<slug>/...                 — full desktop URL
+  //   /maps/place/<slug>/@lat,lng,17z/data=  — even more detailed
+  // The slug is URL-encoded with + for spaces in the legacy form.
+  let slug = null;
+  const m = finalUrl.match(/\/maps\/place\/([^/?#]+)/i);
+  if (m) {
+    try { slug = decodeURIComponent(m[1].replace(/\+/g, ' ')); } catch { slug = m[1]; }
+  }
+  if (!slug || slug.length < 2) return null;
+
+  // Step 4: call lookupByName with the slug. Same plumbing as the manual
+  // search-by-name path, so failures behave the same way and the caller
+  // can treat this as drop-in equivalent.
+  return lookupByName(slug, '');
+}
+
 module.exports = {
   isConfigured,
   lookupByName,
+  resolveShareUrl,
   fetchReviews,
   // exported for tests
   _fetch: (url, opts) => fetch(url, opts),

@@ -341,4 +341,61 @@ router.post('/:id/lookup-place-id', bizMutateLimiter, async (req, res) => {
   }
 });
 
+// POST /api/businesses/:id/resolve-place-url
+//
+// Auth-required helper that accepts a Google share/short link or full
+// Maps URL and returns the canonical Place ID. Solves the common UX trap
+// where owners paste `https://share.google/abc123` into the Place ID field
+// — that's a redirect link, not a Place ID. We follow it server-side
+// (browsers can't due to CORS), extract the place slug from the resolved
+// Maps URL, and run a Places Text Search to get the real ChIJ Place ID.
+//
+// 400 if `url` missing/malformed
+// 404 if business not owned by caller
+// 422 if URL is from an allowed Google domain but we can't extract a Place ID
+// 502 on upstream Places API errors
+// 503 if GOOGLE_MAPS_API_KEY not configured
+router.post('/:id/resolve-place-url', bizMutateLimiter, async (req, res) => {
+  try {
+    const id = parseId(req.params.id);
+    if (!id) return res.status(400).json({ error: 'Invalid business id' });
+    const biz = get('SELECT id FROM businesses WHERE id = ? AND user_id = ?', [id, req.user.id]);
+    if (!biz) return res.status(404).json({ error: 'Business not found' });
+
+    const urlField = asTrimmedString(req.body?.url, 'url', { maxLen: 2000 });
+    if (!urlField.ok) return res.status(400).json({ error: urlField.error });
+    if (!urlField.value) return res.status(400).json({ error: 'url is required' });
+
+    const googlePlaces = require('../lib/providers/googlePlaces');
+    if (!googlePlaces.isConfigured()) {
+      return res.status(503).json({ error: 'Place ID lookup unavailable (server not configured)' });
+    }
+
+    let result;
+    try {
+      result = await googlePlaces.resolveShareUrl(urlField.value);
+    } catch (err) {
+      const status = err.status && err.status >= 400 && err.status < 600 ? 502 : 500;
+      return res.status(status).json({ error: `Places API: ${err.message || 'resolve failed'}` });
+    }
+
+    if (!result || !result.placeId) {
+      // The URL was syntactically valid + allowed host, but the redirect
+      // chain didn't yield a usable Place ID. Common causes: the share
+      // link was already invalidated, or the URL points to a generic
+      // search result (no specific place).
+      return res.status(422).json({ error: 'Could not extract a Place ID from that link. Try the search-by-name field instead.' });
+    }
+
+    res.json({
+      placeId: result.placeId,
+      displayName: result.displayName || '',
+      formattedAddress: result.formattedAddress || '',
+    });
+  } catch (err) {
+    captureException(err, { route: 'businesses.resolve-place-url' });
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 module.exports = router;

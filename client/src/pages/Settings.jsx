@@ -139,8 +139,30 @@ function ConnectCard({ platform, icon, color, connected, onConnect, syncStatus, 
       // through and let the server-side validator surface the right error.
       if (/^https?:\/\//i.test(cleanId)) {
         if (platform === 'google') {
-          const m = cleanId.match(/ChIJ[A-Za-z0-9_-]{10,}/);
-          if (m) cleanId = m[0];
+          // Fast path: if the URL contains a ChIJ-prefixed Place ID
+          // inline (full desktop Maps URLs often do, via the !1s data
+          // segment or place_id query param), grab it without a server
+          // round-trip.
+          const inline = cleanId.match(/ChIJ[A-Za-z0-9_-]{10,}/);
+          if (inline) {
+            cleanId = inline[0];
+          } else if (/share\.google|maps\.app\.goo\.gl|google\.com\/maps/i.test(cleanId) && businessId) {
+            // Slow path: share.google/ and maps.app.goo.gl short links
+            // hide the Place ID behind a redirect. Ask the server to
+            // unwrap them (browsers can't due to CORS) and return the
+            // resolved Place ID.
+            try {
+              const { data } = await api.post(`/businesses/${businessId}/resolve-place-url`, { url: cleanId });
+              if (data?.placeId) {
+                cleanId = data.placeId;
+              }
+            } catch (err) {
+              const msg = err?.response?.data?.error || t('settings.platform.urlResolveFailed', 'Could not resolve that Google link. Try the search-by-name field above, or paste your business\'s Place ID directly.');
+              toast(msg, 'error');
+              setSaving(false);
+              return;
+            }
+          }
         } else if (platform === 'yelp') {
           // https://www.yelp.com/biz/<slug>?<query> → <slug>
           const m = cleanId.match(/yelp\.com\/biz\/([A-Za-z0-9_-]+)/i);
