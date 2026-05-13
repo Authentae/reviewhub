@@ -182,6 +182,21 @@ function buildReviewNotificationFlex({
   const TEAL = '#1e4d5e';
   const RULE = '#e6dfce';
 
+  // Star color by rating — when an owner gets several notifications in
+  // a day, color is what makes the bad-news cards pop instantly without
+  // having to read. 1-2 stars: rose (need immediate attention). 3 stars:
+  // ochre (neutral, look closer). 4-5 stars: gold (positive, easy reply).
+  // Matches the --rh-rose / --rh-ochre / star-gold tokens elsewhere.
+  let starColor = '#d4a857'; // default gold (4-5 stars)
+  let ratingTint = '#fdf8e8'; // soft gold tint for header backdrop
+  if (rating <= 2) {
+    starColor = '#c2566c'; // rose — 1-2 stars
+    ratingTint = '#fbe9ec'; // soft rose tint
+  } else if (rating === 3) {
+    starColor = '#c08a3e'; // ochre — 3 stars
+    ratingTint = '#fdf6e7'; // soft ochre tint
+  }
+
   const langTag = (draftLanguage || '').toUpperCase().slice(0, 4);
   const draftHeader = langTag ? `AI DRAFT · ${langTag}` : 'AI DRAFT';
 
@@ -222,7 +237,10 @@ function buildReviewNotificationFlex({
     type: 'bubble',
     size: 'mega',
     styles: {
-      header: { backgroundColor: PAPER },
+      // Header tints by rating — rose-cream for 1-2, ochre-cream for 3,
+      // gold-cream for 4-5. The whole top of the card carries the
+      // emotional signal at a glance.
+      header: { backgroundColor: ratingTint },
       body: { backgroundColor: '#ffffff' },
       footer: { backgroundColor: PAPER, separator: true, separatorColor: RULE },
     },
@@ -245,7 +263,7 @@ function buildReviewNotificationFlex({
           layout: 'baseline',
           margin: 'md',
           contents: [
-            { type: 'text', text: stars, color: '#d4a857', size: 'lg', flex: 0 },
+            { type: 'text', text: stars, color: starColor, size: 'lg', flex: 0 },
             {
               type: 'text',
               text: reviewerName || 'Anonymous',

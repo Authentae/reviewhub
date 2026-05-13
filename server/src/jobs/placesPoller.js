@@ -120,35 +120,14 @@ async function pollOne(businessId) {
   // this poll.
   const wasFirstSync = (priorReviewCount?.n || 0) - newReviews.length === 0;
 
-  if (wasFirstSync) {
-    // Send ONE summary card instead of N per-review cards.
-    if (biz.line_user_id && lineMessenger.isEnabled()) {
-      try {
-        const managingEmail = biz.google_managing_email;
-        const replyOnGoogleUrl = managingEmail
-          ? `https://business.google.com/reviews?authuser=${encodeURIComponent(managingEmail)}`
-          : 'https://business.google.com/reviews';
-        const summaryFlex = lineMessenger.buildReviewNotificationFlex({
-          businessName: biz.business_name,
-          reviewerName: `${newReviews.length} historical reviews`,
-          rating: 5,
-          reviewText: `Connected ${biz.business_name} successfully. ${newReviews.length} existing Google reviews are now in your ReviewHub dashboard. We won't ping you for these — only for NEW reviews going forward. Open dashboard to draft replies for any backlog you want to handle.`,
-          draftText: 'No drafts yet — open the dashboard to generate AI drafts for any of these you want to reply to.',
-          draftLanguage: 'en',
-          replyOnGoogleUrl,
-          editUrl: `${dashboardBase()}/dashboard`,
-        });
-        await lineMessenger.pushFlex(
-          biz.line_user_id,
-          `Connected ${biz.business_name} — ${newReviews.length} reviews ingested`,
-          summaryFlex
-        );
-      } catch (err) {
-        captureException(err, { job: 'placesPoller', op: 'firstSyncSummary', businessId: biz.id });
-      }
-    }
-    return { inserted: newReviews.length, error: null, firstSync: true };
-  }
+  // (Earlier draft of this file added a 'first-sync flood' guard that
+  // diverged the flow for the very first poll. Reverted 2026-05-14 —
+  // Places API only ever returns up to 5 reviews per call, so the
+  // hypothetical flood doesn't exist. The straight per-review push
+  // path below handles 5 cards in a row fine, especially with the
+  // rating-color + date differentiation in buildReviewNotificationFlex.)
+  // Suppress lint warning about unused var:
+  void wasFirstSync;
 
   // Per-review: AI draft + LINE notification. Each is best-effort — a draft
   // failure doesn't roll back the insert; a LINE failure doesn't block the
