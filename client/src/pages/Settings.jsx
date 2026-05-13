@@ -342,6 +342,46 @@ function ConnectCard({ platform, icon, color, connected, onConnect, syncStatus, 
             </details>
           )}
 
+          {/* Prerequisites notice (Google only). Owners frequently try to
+              connect a business they haven't claimed yet, or one they were
+              just added as manager to and Google hasn't propagated the
+              permission. This block surfaces both gates upfront so they
+              don't waste time pasting Place IDs that won't yield reply
+              rights. Sage-green tint (positive but informational, not an
+              error/warning state). Only renders BEFORE first connect — once
+              they're connected we trust they cleared these gates. */}
+          {platform === 'google' && !connected && (
+            <div
+              className="text-xs rounded-lg border p-3 mb-3"
+              style={{
+                background: 'rgba(107, 142, 122, 0.08)',
+                borderColor: 'rgba(107, 142, 122, 0.30)',
+                color: 'var(--rh-ink-soft, #4a525a)',
+              }}
+            >
+              <p className="font-semibold mb-1.5" style={{ color: 'var(--rh-ink, #1d242c)' }}>
+                {t('settings.platform.googlePrereqTitle', 'Before connecting Google')}
+              </p>
+              <ul className="space-y-1 list-disc list-inside leading-relaxed">
+                <li>{t('settings.platform.googlePrereq1', 'You need to be the verified owner OR a manager of the Google Business Profile.')}</li>
+                <li>{t('settings.platform.googlePrereq2', "If you were just added as manager, Google can take 24–72h to actually grant reply permissions.")}</li>
+                <li>{t('settings.platform.googlePrereq3', "You'll add the Google account that manages it below — after you connect.")}</li>
+              </ul>
+              <p className="mt-2 leading-relaxed">
+                {t('settings.platform.googlePrereqNoBusinessPrefix', "Don't have a Google Business Profile yet? ")}
+                <a
+                  href="https://www.google.com/business/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold underline"
+                  style={{ color: 'var(--rh-teal, #1e4d5e)' }}
+                >
+                  {t('settings.platform.googlePrereqClaimLink', 'Claim your business on Google first →')}
+                </a>
+              </p>
+            </div>
+          )}
+
           {/* Search-by-name (Google only) — the PRIMARY path. Owners type
               their business name; we hit Places API and surface up to 3
               matches with address. Click a match → Place ID auto-fills
