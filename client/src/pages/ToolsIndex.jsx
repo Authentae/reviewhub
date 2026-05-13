@@ -59,7 +59,7 @@ export default function ToolsIndex() {
   usePageTitle(isThai ? 'เครื่องมือฟรี — ReviewHub' : 'Free tools for Google review replies — ReviewHub');
   useSocialMeta({
     title: isThai ? 'เครื่องมือฟรีของ ReviewHub' : 'Free tools — Google review reply generator, critic, and impact scorer',
-    description: 'Three free tools for owners managing Google reviews. AI reply generator, draft-reply critic, and negative-review impact scorer. No signup, instant results.',
+    description: 'Four free tools for owners managing Google reviews. AI reply generator, draft-reply critic, negative-review impact scorer, and the 1-star playbook decision tree. No signup, instant results.',
   });
 
   return (
@@ -84,7 +84,7 @@ export default function ToolsIndex() {
               lineHeight: 1.05,
             }}
           >
-            {isThai ? 'สามเครื่องมือฟรี ไม่ต้องสมัคร' : 'Three free tools, no signup.'}
+            {isThai ? 'สี่เครื่องมือฟรี ไม่ต้องสมัคร' : 'Four free tools, no signup.'}
           </h1>
           <p className="text-lg leading-relaxed" style={{ color: 'var(--rh-ink-2, #4a525a)' }}>
             {isThai
@@ -99,7 +99,11 @@ export default function ToolsIndex() {
             <Link
               key={tool.href}
               to={tool.href}
-              className="block p-6 rounded-xl"
+              // Plausible tagged event — fires on click via script.tagged-events.js
+              // (already loaded in index.html). The plausible-event-tool prop
+              // surfaces which of the 4 tools gets clicked, so we can prioritize
+              // investment by traffic instead of guessing.
+              className={`block p-6 rounded-xl plausible-event-name=ToolCardClick plausible-event-tool=${tool.href.split('/').pop()}`}
               style={{
                 background: 'var(--rh-card)',
                 border: '1px solid var(--rh-rule, #e8e3d6)',
