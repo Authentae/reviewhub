@@ -795,44 +795,58 @@ function LineConnectSection() {
                     ? `โค้ดนี้หมดอายุภายใน 15 นาที · กำลังรอการเชื่อมจาก LINE…`
                     : `This code expires in 15 minutes · Waiting for confirmation from LINE…`}
                 </p>
-                {/* Two paths to reach the OA chat: desktop deep-link
-                    (opens LINE app/web on the same device) + QR code for
-                    cross-device — owner is on PC, needs to grab their
-                    phone, can scan camera → LINE app opens to add-friend
-                    screen. The QR encodes the LINE add-friend deep-link
-                    only; the owner still pastes the /link command after
-                    adding, because LINE deep-links don't support
-                    pre-filling chat messages. */}
-                <div className="flex items-start gap-4 flex-wrap">
-                  <div className="flex-1 min-w-[160px]">
-                    <a
-                      href={`https://line.me/R/ti/p/${encodeURIComponent(data.bot_id)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-block text-xs font-semibold underline"
-                      style={{ color: 'var(--rh-teal-deep, #1e4d5e)' }}
-                    >
-                      {isThai ? `เปิด ${data.bot_id} ใน LINE →` : `Open ${data.bot_id} in LINE →`}
-                    </a>
-                    <p className="text-xs mt-2" style={{ color: 'var(--rh-ink-3, #888)' }}>
-                      {isThai
-                        ? 'หรือสแกน QR ด้วยกล้องมือถือ →'
-                        : 'Or scan the QR with your phone camera →'}
-                    </p>
-                  </div>
-                  <div
-                    className="rounded-lg p-2"
-                    style={{ background: '#fff', border: '1px solid var(--rh-line, #e6dfce)' }}
-                  >
-                    <img
-                      src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=0&data=${encodeURIComponent(`https://line.me/R/ti/p/${data.bot_id}`)}`}
-                      alt={isThai ? `QR สำหรับเพิ่ม ${data.bot_id} ใน LINE` : `QR to add ${data.bot_id} on LINE`}
-                      width={160}
-                      height={160}
-                      loading="lazy"
-                    />
-                  </div>
-                </div>
+                {/* CROSS-DEVICE LINKING — the real "I generated the code on
+                    my PC but need to send the /link command from my phone
+                    LINE app" problem.
+                    LINE supports a deep-link format that pre-fills the
+                    chat message:
+                      https://line.me/R/oaMessage/<bot_id_no_@>/?<msg>
+                    Scanning this QR with the iPhone camera opens LINE
+                    directly to the OA chat with the /link command already
+                    typed — owner just taps Send. Two taps total, no copy/
+                    paste, no manual typing. If the owner isn't already
+                    friends with the OA, LINE prompts them to add as friend
+                    in the same flow.
+                    Bot IDs from /api/line-oa/status are stored with the @
+                    prefix; strip it for the URL path. */}
+                {(() => {
+                  const botIdRaw = (data.bot_id || '').replace(/^@/, '');
+                  const oaMessageUrl = `https://line.me/R/oaMessage/${botIdRaw}/?${encodeURIComponent(command)}`;
+                  return (
+                    <div className="flex items-start gap-4 flex-wrap">
+                      <div className="flex-1 min-w-[160px]">
+                        <a
+                          href={oaMessageUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-block text-xs font-semibold underline"
+                          style={{ color: 'var(--rh-teal-deep, #1e4d5e)' }}
+                        >
+                          {isThai
+                            ? `เปิด LINE บนเครื่องนี้พร้อมข้อความ →`
+                            : `Open LINE on this device with message →`}
+                        </a>
+                        <p className="text-xs mt-2 leading-relaxed" style={{ color: 'var(--rh-ink-3, #888)' }}>
+                          {isThai
+                            ? 'หรือใช้มือถือสแกน QR → LINE จะเปิดพร้อมข้อความให้แล้ว แค่กด ส่ง'
+                            : 'Or scan the QR with your phone — LINE opens with the message ready, just tap Send.'}
+                        </p>
+                      </div>
+                      <div
+                        className="rounded-lg p-2"
+                        style={{ background: '#fff', border: '1px solid var(--rh-line, #e6dfce)' }}
+                      >
+                        <img
+                          src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=0&data=${encodeURIComponent(oaMessageUrl)}`}
+                          alt={isThai ? `QR เชื่อม LINE` : `Link LINE QR`}
+                          width={160}
+                          height={160}
+                          loading="lazy"
+                        />
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
             );
           })()}
