@@ -42,6 +42,14 @@ const TOOLS = [
     descTh: 'รีวิว 1 ดาวเพิ่งเข้ามา วางมา รับคะแนนความเสียหาย 0-100, ประเภทผู้รีวิว, และการกระทำที่แนะนำ — ขอโทษ, ชี้แจง, แจ้ง Google, หรือ ignore',
     bestFor: 'When a 1-star just landed and you\'re panicking.',
   },
+  {
+    href: '/tools/one-star-playbook',
+    eyebrow: 'Decision tree · no AI',
+    title: 'The 1-Star Playbook',
+    descEn: 'A 2-minute decision tree that figures out what kind of 1-star you actually have (legitimate-specific, legitimate-pattern, competitor/serial, or extortion), then gives you the right reply template in Thai + English — plus what NOT to say.',
+    descTh: 'Decision tree 2 นาที จับว่ารีวิว 1 ดาวของคุณเป็นแบบไหน (ลูกค้าจริง-เฉพาะเรื่อง, ลูกค้าจริง-ปัญหาเรื้อรัง, คู่แข่ง/มือปั่น, หรือข่มขู่) แล้วให้ template ตอบที่ถูกต้องเป็น TH+EN พร้อมระบุสิ่งที่ห้ามพูด',
+    bestFor: 'When you got a 1-star and aren\'t sure if it\'s real.',
+  },
 ];
 
 export default function ToolsIndex() {
