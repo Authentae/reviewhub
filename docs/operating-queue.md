@@ -179,6 +179,16 @@ list.
     email body ("Source: one-star-playbook") + console.log. Two
     regression tests added.
   - `0aac501` — prod-smoke.sh includes the new page (25 checks total).
+- `[done] 2026-05-13` **H1 (deliverability) falsified for the
+  0-reply problem.** Mail-tester probe with real Wave-4-shaped TH
+  body from earth.reviewhub@gmail.com scored 8.2/10. SPF+DKIM+DMARC
+  all pass, on mailspike.net whitelist, zero blacklist hits. The 1.8
+  points lost are a non-actionable `HTML_MESSAGE -1.999` SpamAssassin
+  flag every Gmail send incurs. Full doc:
+  `docs/wave-postmortems/2026-05-13-deliverability-confirmed.md`.
+  This collapses the Wave 4 decision tree — when the reply window
+  closes Sat 5/16, the only legitimate inferences are about
+  pitch/audience/offer, not infrastructure.
 - `[done] 2026-05-13` Autopilot ScheduleWakeup-style cron registered
   (every 30 min at :17/:47) for queue-driven /ship ticks. Session-only
   (auto-expires after 7 days). Next high-leverage non-playbook surface:
