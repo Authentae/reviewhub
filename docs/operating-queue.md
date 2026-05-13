@@ -154,9 +154,13 @@ list.
     (honest pre-revenue framing) + #4 (founder voice forward). Linked
     from audit-preview footer.
   - Generated, **port deferred**: ReviewHub Founder Daily Brief
-    dashboard (port tomorrow with Wave 4 live data) + ReviewHub
-    One-Star Playbook lead magnet (port when /tools/one-star-playbook
-    is needed; design uses Wave 4 quota efficiently).
+    dashboard (port tomorrow with Wave 4 live data).
+- `[done] 2026-05-13` One-Star Playbook ported and surfaced
+  (`b686a26` + `145e6a3`). Decision tree at `/tools/one-star-playbook`
+  with Thai+EN reply templates for 4 scenarios (legitimate-specific,
+  pattern, competitor/serial, extortion). Wired into /tools index,
+  MarketingFooter, sitemap.xml. CTA → /audit?from=one-star-playbook
+  for funnel attribution.
   - Workflow notes for future sessions in
     `reference_claude_design_workflow.md` memory file.
 
