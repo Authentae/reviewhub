@@ -137,11 +137,33 @@ async function pushFlex(lineUserId, altText, flexContents, options = {}) {
  * @param {string} params.editUrl - URL to /dashboard/reviews/:id (deep link)
  * @returns {object} LINE Flex Message contents
  */
+// Human-readable review date for the Flex card — surfaces "2h ago" /
+// "Yesterday" / "Mon · Mar 12" depending on recency. When an owner gets
+// 5 notifications in a row, reviewer name + date are the two unique
+// anchors that distinguish one card from the next.
+function formatReviewDate(isoString) {
+  if (!isoString) return '';
+  const t = new Date(isoString);
+  if (isNaN(t.getTime())) return '';
+  const now = new Date();
+  const diffMs = now - t;
+  const diffMin = Math.floor(diffMs / 60000);
+  if (diffMin < 1) return 'Just now';
+  if (diffMin < 60) return `${diffMin}m ago`;
+  const diffHr = Math.floor(diffMin / 60);
+  if (diffHr < 24) return `${diffHr}h ago`;
+  const diffDay = Math.floor(diffHr / 24);
+  if (diffDay === 1) return 'Yesterday';
+  if (diffDay < 7) return `${diffDay} days ago`;
+  return t.toISOString().slice(0, 10);
+}
+
 function buildReviewNotificationFlex({
   businessName,
   reviewerName,
   rating,
   reviewText,
+  reviewDate,
   draftText,
   draftLanguage,
   approveUrl,
@@ -235,6 +257,17 @@ function buildReviewNotificationFlex({
             },
           ],
         },
+        // Date + business context line — when an owner gets several
+        // notifications in quick succession (5 reviews on a busy day, or
+        // backfill after vacation), this is what distinguishes them.
+        // Reviewer name + date are the two unique anchors.
+        ...(reviewDate ? [{
+          type: 'text',
+          text: formatReviewDate(reviewDate),
+          color: INK_SOFT,
+          size: 'xs',
+          margin: 'sm',
+        }] : []),
       ],
       paddingAll: 'lg',
     },

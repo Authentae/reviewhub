@@ -99,6 +99,57 @@ async function pollOne(businessId) {
 
   if (newReviews.length === 0) return { inserted: 0, error: null };
 
+  // FIRST-SYNC GUARD — when this is the very first poll for a business
+  // (no prior reviews ever existed), Google may return up to 5 historical
+  // reviews. Without this guard we'd push 5 LINE Flex cards on connect
+  // for a small business, or many more for a hotel with hundreds of
+  // reviews — owner gets a notification storm and unsubscribes.
+  //
+  // Detection: if before this poll there were ZERO reviews for the
+  // business, treat all of them as historical backfill — INSERT them
+  // (so they appear on the dashboard) but DON'T fire LINE pushes or
+  // generate AI drafts on any of them. Send ONE summary push instead.
+  //
+  // Subsequent polls will work normally — only truly new reviews push.
+  const priorReviewCount = get(
+    'SELECT COUNT(*) AS n FROM reviews WHERE business_id = ? AND platform = ?',
+    [biz.id, 'google']
+  );
+  // priorReviewCount.n is post-insert (we inserted above). Subtract the
+  // batch we just inserted to know whether the table was empty BEFORE
+  // this poll.
+  const wasFirstSync = (priorReviewCount?.n || 0) - newReviews.length === 0;
+
+  if (wasFirstSync) {
+    // Send ONE summary card instead of N per-review cards.
+    if (biz.line_user_id && lineMessenger.isEnabled()) {
+      try {
+        const managingEmail = biz.google_managing_email;
+        const replyOnGoogleUrl = managingEmail
+          ? `https://business.google.com/reviews?authuser=${encodeURIComponent(managingEmail)}`
+          : 'https://business.google.com/reviews';
+        const summaryFlex = lineMessenger.buildReviewNotificationFlex({
+          businessName: biz.business_name,
+          reviewerName: `${newReviews.length} historical reviews`,
+          rating: 5,
+          reviewText: `Connected ${biz.business_name} successfully. ${newReviews.length} existing Google reviews are now in your ReviewHub dashboard. We won't ping you for these — only for NEW reviews going forward. Open dashboard to draft replies for any backlog you want to handle.`,
+          draftText: 'No drafts yet — open the dashboard to generate AI drafts for any of these you want to reply to.',
+          draftLanguage: 'en',
+          replyOnGoogleUrl,
+          editUrl: `${dashboardBase()}/dashboard`,
+        });
+        await lineMessenger.pushFlex(
+          biz.line_user_id,
+          `Connected ${biz.business_name} — ${newReviews.length} reviews ingested`,
+          summaryFlex
+        );
+      } catch (err) {
+        captureException(err, { job: 'placesPoller', op: 'firstSyncSummary', businessId: biz.id });
+      }
+    }
+    return { inserted: newReviews.length, error: null, firstSync: true };
+  }
+
   // Per-review: AI draft + LINE notification. Each is best-effort — a draft
   // failure doesn't roll back the insert; a LINE failure doesn't block the
   // next review.
@@ -129,6 +180,7 @@ async function pollOne(businessId) {
           reviewerName: r.reviewer_name,
           rating: r.rating,
           reviewText: r.review_text || '',
+          reviewDate: r.created_at || '',
           draftText: draftText || '(draft unavailable — open dashboard)',
           draftLanguage: r.review_language || '',
           replyOnGoogleUrl,
