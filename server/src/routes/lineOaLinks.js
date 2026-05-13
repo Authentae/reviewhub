@@ -125,6 +125,54 @@ router.post('/generate-token', writeLimiter, (req, res) => {
   }
 });
 
+// POST /api/line-oa/test-push
+//
+// Sends a synthetic Flex-card notification to the caller's linked LINE
+// account. Used to verify the end-to-end push pipeline is working without
+// waiting for a real new review to come in via the Places poller.
+// Requires the user to have linked LINE first (line_user_id present).
+//
+// 400 if not linked
+// 502 on LINE API failure
+// 503 if LINE OA env vars not configured
+router.post('/test-push', writeLimiter, async (req, res) => {
+  try {
+    const lineMessenger = require('../lib/line/messenger');
+    if (!lineMessenger.isEnabled()) {
+      return res.status(503).json({ error: 'LINE OA not configured on this deployment' });
+    }
+    const link = get('SELECT line_user_id FROM line_oa_links WHERE user_id = ?', [req.user.id]);
+    if (!link || !link.line_user_id) {
+      return res.status(400).json({ error: 'No linked LINE account. Generate a code + link first.' });
+    }
+    // Fetch the user's business so the test card looks realistic.
+    const biz = get(
+      'SELECT business_name FROM businesses WHERE user_id = ? ORDER BY id ASC LIMIT 1',
+      [req.user.id]
+    );
+    const businessName = biz?.business_name || 'Your business';
+    const flex = lineMessenger.buildReviewNotificationFlex({
+      businessName,
+      reviewerName: 'ReviewHub Test',
+      rating: 5,
+      reviewText: 'Test notification — if you see this Flex card on LINE, the push pipeline is wired correctly end-to-end. Real reviews will arrive here within 30 min of being posted on Google.',
+      draftText: 'Thank you so much for the test! 🎉 — This is a sample AI-drafted reply.',
+      approveUrl: 'https://reviewhub.review/dashboard',
+      editUrl: 'https://reviewhub.review/dashboard',
+    });
+    try {
+      await lineMessenger.pushFlex(link.line_user_id, `Test push for ${businessName}`, flex);
+    } catch (err) {
+      captureException(err, { route: 'line-oa.test-push', op: 'pushFlex' });
+      return res.status(502).json({ error: `LINE push failed: ${err.message || 'unknown'}` });
+    }
+    res.json({ ok: true });
+  } catch (err) {
+    captureException(err, { route: 'line-oa.test-push' });
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 router.post('/unlink', writeLimiter, (req, res) => {
   try {
     const link = get('SELECT id FROM line_oa_links WHERE user_id = ?', [req.user.id]);

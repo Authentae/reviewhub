@@ -742,14 +742,39 @@ function LineConnectSection() {
               )}
             </div>
           </div>
-          <button
-            type="button"
-            onClick={handleUnlink}
-            disabled={busy}
-            className="btn-secondary text-xs py-2 px-3 disabled:opacity-50"
-          >
-            {isThai ? 'ปลดการเชื่อม' : 'Unlink'}
-          </button>
+          <div className="flex items-center gap-2 flex-wrap">
+            {/* Send test push — fires a synthetic Flex-card notification
+                to the linked LINE so the owner can verify the
+                end-to-end push pipeline without waiting for a real
+                new review (which can take up to 30 min for the next
+                Places poller tick). */}
+            <button
+              type="button"
+              onClick={async () => {
+                setBusy(true);
+                try {
+                  await api.post('/line-oa/test-push');
+                  toast(isThai ? 'ส่งทดสอบไปที่ LINE แล้ว — เช็คมือถือ' : 'Test push sent — check your LINE app', 'success');
+                } catch (err) {
+                  toast(err?.response?.data?.error || (isThai ? 'ส่งทดสอบไม่สำเร็จ' : 'Test push failed'), 'error');
+                } finally {
+                  setBusy(false);
+                }
+              }}
+              disabled={busy}
+              className="btn-primary text-xs py-2 px-3 disabled:opacity-50"
+            >
+              {isThai ? 'ส่งการแจ้งเตือนทดสอบ' : 'Send test notification'}
+            </button>
+            <button
+              type="button"
+              onClick={handleUnlink}
+              disabled={busy}
+              className="btn-secondary text-xs py-2 px-3 disabled:opacity-50"
+            >
+              {isThai ? 'ปลดการเชื่อม' : 'Unlink'}
+            </button>
+          </div>
         </div>
       ) : (
         <div className="space-y-3">
