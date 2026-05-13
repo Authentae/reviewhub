@@ -790,11 +790,31 @@ function LineConnectSection() {
                     {isThai ? 'คัดลอก' : 'Copy'}
                   </button>
                 </div>
-                <p className="text-xs" style={{ color: 'var(--rh-ink-3, #888)' }}>
-                  {isThai
-                    ? `โค้ดนี้หมดอายุภายใน 15 นาที · กำลังรอการเชื่อมจาก LINE…`
-                    : `This code expires in 15 minutes · Waiting for confirmation from LINE…`}
-                </p>
+                <div className="flex items-center justify-between gap-3 flex-wrap">
+                  <p className="text-xs" style={{ color: 'var(--rh-ink-3, #888)' }}>
+                    {isThai
+                      ? `โค้ดนี้หมดอายุภายใน 15 นาที · กำลังรอการเชื่อมจาก LINE…`
+                      : `This code expires in 15 minutes · Waiting for confirmation from LINE…`}
+                  </p>
+                  {/* Regenerate — single-click replacement for the
+                      expired/lost token. Calls handleGenerate which
+                      replaces tokenInfo with a fresh one + resets the
+                      waiting state. No confirm dialog because the cost
+                      of regenerating is zero (just invalidates the
+                      previous token, which would have expired in 15
+                      min anyway). */}
+                  <button
+                    type="button"
+                    onClick={handleGenerate}
+                    disabled={busy}
+                    className="text-xs underline hover:no-underline disabled:opacity-50"
+                    style={{ color: 'var(--rh-teal-deep, #1e4d5e)' }}
+                  >
+                    {busy
+                      ? (isThai ? 'กำลังสร้าง…' : 'Generating…')
+                      : (isThai ? 'สร้างโค้ดใหม่' : 'Regenerate code')}
+                  </button>
+                </div>
                 {/* CROSS-DEVICE LINKING — the real "I generated the code on
                     my PC but need to send the /link command from my phone
                     LINE app" problem.
