@@ -45,7 +45,13 @@ function ConnectCard({ platform, icon, color, connected, onConnect, syncStatus, 
   // Place ID lookup helper (Google-only). Lets users type their business
   // name and pick from up to 3 suggestions, instead of hunting the Place ID
   // string in Maps. Only meaningful for `platform === 'google'`.
-  const [lookupOpen, setLookupOpen] = useState(false);
+  //
+  // Default-open for Google so non-technical owners see a friendly
+  // "type your business name" box on first paint instead of a bare
+  // ChIJ-prefix field they don't know how to fill. The raw Place ID
+  // input stays visible as the advanced fallback for owners who already
+  // have it (or who paste a Google Maps URL).
+  const [lookupOpen, setLookupOpen] = useState(platform === 'google');
   const [lookupName, setLookupName] = useState('');
   const [lookupBusy, setLookupBusy] = useState(false);
   const [lookupSuggestions, setLookupSuggestions] = useState([]);
@@ -291,12 +297,87 @@ function ConnectCard({ platform, icon, color, connected, onConnect, syncStatus, 
             </details>
           )}
 
+          {/* Search-by-name (Google only) — the PRIMARY path. Owners type
+              their business name; we hit Places API and surface up to 3
+              matches with address. Click a match → Place ID auto-fills
+              the raw input below → Save. This replaces the previous default
+              of "show a bare ChIJ field and hope they know what to paste."
+              The raw input is kept below as the advanced fallback. */}
+          {platform === 'google' && (
+            <div className="mb-3">
+              <button
+                type="button"
+                onClick={() => setLookupOpen((v) => !v)}
+                className="text-xs font-medium text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-gray-100"
+                aria-expanded={lookupOpen}
+              >
+                {lookupOpen
+                  ? t('settings.platform.lookupHide', 'Search by business name')
+                  : t('settings.platform.lookupShow', 'Search by business name (recommended) →')}
+              </button>
+              {lookupOpen && (
+                <div className="mt-2 space-y-2">
+                  <form onSubmit={handleLookup} className="flex gap-2">
+                    <input
+                      type="text"
+                      value={lookupName}
+                      onChange={(e) => setLookupName(e.target.value)}
+                      placeholder={t('settings.platform.lookupNamePlaceholder', 'e.g. Mirth Sathorn Bangkok')}
+                      className="input text-sm flex-1"
+                      maxLength={200}
+                      autoFocus
+                    />
+                    <button
+                      type="submit"
+                      disabled={lookupBusy}
+                      aria-busy={lookupBusy}
+                      className="btn-secondary text-xs py-2 px-3 disabled:opacity-60"
+                    >
+                      {lookupBusy ? t('settings.platform.lookupSearching', 'Searching…') : t('settings.platform.lookupButton', 'Search')}
+                    </button>
+                  </form>
+                  {lookupError && (
+                    <p className="text-xs text-red-600 dark:text-red-400">{lookupError}</p>
+                  )}
+                  {lookupSuggestions.length > 0 && (
+                    <ul className="space-y-1.5">
+                      {lookupSuggestions.map((s) => (
+                        <li key={s.placeId}>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setId(s.placeId);
+                              setLookupSuggestions([]);
+                              toast(t('settings.platform.lookupFilled', 'Place ID filled — click Save below to confirm.'), 'success');
+                            }}
+                            className="w-full text-left text-xs px-3 py-2 rounded-md border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/40"
+                          >
+                            <div className="font-medium text-gray-900 dark:text-gray-100">{s.displayName}</div>
+                            {s.formattedAddress && (
+                              <div className="text-gray-500 dark:text-gray-400 mt-0.5">{s.formattedAddress}</div>
+                            )}
+                            <div className="text-gray-400 dark:text-gray-500 mt-0.5 font-mono text-[10px]">{s.placeId}</div>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Manual fallback — always available. Useful when OAuth isn't
               configured on this deployment, or for Yelp/Facebook which
-              don't have OAuth flows wired yet. */}
+              don't have OAuth flows wired yet. For Google, this stays
+              visible as the secondary path for owners who already have a
+              Place ID copied, or who paste a Google Maps URL the client
+              auto-extracts the ChIJ-prefix from. */}
           <form onSubmit={handleStartConnect} className="space-y-2">
             <label htmlFor={`platform-id-${platform}`} className="block text-xs font-medium text-gray-700 dark:text-gray-200">
-              {platform === 'google' ? t('settings.platform.googleLabel') : platform === 'yelp' ? t('settings.platform.yelpLabel') : t('settings.platform.facebookLabel')}
+              {platform === 'google'
+                ? t('settings.platform.googleLabelOrPaste', 'Or paste Place ID / Google Maps URL')
+                : platform === 'yelp' ? t('settings.platform.yelpLabel') : t('settings.platform.facebookLabel')}
             </label>
             <div className="flex gap-2">
               <input
@@ -322,73 +403,6 @@ function ConnectCard({ platform, icon, color, connected, onConnect, syncStatus, 
               {platform === 'facebook' && t('settings.platform.facebookHelp')}
             </p>
           </form>
-          {/* Place ID lookup helper (Google only). Surfaces a name input
-              and up to 3 suggestion buttons that auto-fill the Place ID
-              into the form above so the owner doesn't have to hunt for
-              the ChIJ-prefixed string in Google Maps. */}
-          {platform === 'google' && (
-            <div className="pt-3 border-t border-gray-100 dark:border-gray-700">
-              <button
-                type="button"
-                onClick={() => setLookupOpen((v) => !v)}
-                className="text-xs font-medium text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-gray-100"
-                aria-expanded={lookupOpen}
-              >
-                {lookupOpen
-                  ? t('settings.platform.lookupHide', 'Hide Place ID lookup')
-                  : t('settings.platform.lookupShow', 'Don\'t know your Place ID? Look it up by name →')}
-              </button>
-              {lookupOpen && (
-                <div className="mt-3 space-y-2">
-                  <form onSubmit={handleLookup} className="flex gap-2">
-                    <input
-                      type="text"
-                      value={lookupName}
-                      onChange={(e) => setLookupName(e.target.value)}
-                      placeholder={t('settings.platform.lookupNamePlaceholder', 'e.g. Mirth Sathorn Bangkok')}
-                      className="input text-sm flex-1"
-                      maxLength={200}
-                    />
-                    <button
-                      type="submit"
-                      disabled={lookupBusy}
-                      aria-busy={lookupBusy}
-                      className="btn-secondary text-xs py-2 px-3 disabled:opacity-60"
-                    >
-                      {lookupBusy ? t('settings.platform.lookupSearching', 'Searching…') : t('settings.platform.lookupButton', 'Look up')}
-                    </button>
-                  </form>
-                  {lookupError && (
-                    <p className="text-xs text-red-600 dark:text-red-400">{lookupError}</p>
-                  )}
-                  {lookupSuggestions.length > 0 && (
-                    <ul className="space-y-1.5">
-                      {lookupSuggestions.map((s) => (
-                        <li key={s.placeId}>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setId(s.placeId);
-                              setLookupSuggestions([]);
-                              setLookupOpen(false);
-                              toast(t('settings.platform.lookupFilled', 'Place ID filled — review and click Save.'), 'success');
-                            }}
-                            className="w-full text-left text-xs px-3 py-2 rounded-md border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/40"
-                          >
-                            <div className="font-medium text-gray-900 dark:text-gray-100">{s.displayName}</div>
-                            {s.formattedAddress && (
-                              <div className="text-gray-500 dark:text-gray-400 mt-0.5">{s.formattedAddress}</div>
-                            )}
-                            <div className="text-gray-400 dark:text-gray-500 mt-0.5 font-mono text-[10px]">{s.placeId}</div>
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
         </div>
       )}
 
