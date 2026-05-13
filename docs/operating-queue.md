@@ -155,12 +155,35 @@ list.
     from audit-preview footer.
   - Generated, **port deferred**: ReviewHub Founder Daily Brief
     dashboard (port tomorrow with Wave 4 live data).
-- `[done] 2026-05-13` One-Star Playbook ported and surfaced
-  (`b686a26` + `145e6a3`). Decision tree at `/tools/one-star-playbook`
-  with Thai+EN reply templates for 4 scenarios (legitimate-specific,
-  pattern, competitor/serial, extortion). Wired into /tools index,
-  MarketingFooter, sitemap.xml. CTA → /audit?from=one-star-playbook
-  for funnel attribution.
+- `[done] 2026-05-13` **One-Star Playbook turned into a measurable funnel
+  in one autopilot session** (commits b686a26 → 0aac501). What shipped:
+  - `b686a26` — Port from Claude Design handoff bundle. Decision tree at
+    `/tools/one-star-playbook` with Thai+EN reply templates for 4
+    scenarios (legitimate-specific, pattern, competitor/serial,
+    extortion). Inline state machine, no backend.
+  - `145e6a3` — Discoverability: /tools index, MarketingFooter, sitemap.
+  - `a8a0712` — Idempotent script `scripts/add-playbook-callout.js` +
+    callouts injected into 6 1-star-relevant blog posts (fake-extortion,
+    what-one-star-reviews-tell-you, bangkok-hospitality-mistakes ×
+    EN/TH). Drives existing blog traffic into the playbook.
+  - `dd524f4` — Inline "Want this drafted?" CTA inside each result card
+    + `PlaybookResultCtaClick` Plausible events (per-scenario attribution
+    via from=one-star-playbook-{badgeClass}).
+  - `38141ee` — HowTo JSON-LD schema (4 steps, en+th) for SERP rich
+    results eligibility.
+  - `9cbd6d9` — /tools index fixes: stale "Three" → "Four" count in H1
+    + meta description; per-tool Plausible click events.
+  - `8f53ba5` — `?from=` source attribution wired end-to-end on /audit.
+    AuditLanding reads URL param on mount, sends `source` to server.
+    Server header-strips + 80-char cap, surfaces in lead-notification
+    email body ("Source: one-star-playbook") + console.log. Two
+    regression tests added.
+  - `0aac501` — prod-smoke.sh includes the new page (25 checks total).
+- `[done] 2026-05-13` Autopilot ScheduleWakeup-style cron registered
+  (every 30 min at :17/:47) for queue-driven /ship ticks. Session-only
+  (auto-expires after 7 days). Next high-leverage non-playbook surface:
+  conversion-rate work on the audit-preview page once Wave 4 reply data
+  lands (likely 5/15-5/16).
   - Workflow notes for future sessions in
     `reference_claude_design_workflow.md` memory file.
 
