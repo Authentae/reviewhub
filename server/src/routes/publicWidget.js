@@ -710,7 +710,7 @@ const auditLimiter = rateLimit({
 
 router.post('/audit-request', auditLimiter, async (req, res) => {
   try {
-    const { businessName, businessUrl, email, notes, website } = req.body || {};
+    const { businessName, businessUrl, email, notes, website, source } = req.body || {};
 
     // Honeypot: bots that fill every form field land here. Return a fake-200
     // so they don't retry — we never email anyone, never log it as a real lead.
@@ -732,6 +732,12 @@ router.post('/audit-request', auditLimiter, async (req, res) => {
     const cleanBizName = stripHeaderChars(String(businessName || '').trim().slice(0, 200));
     const cleanBizUrl = stripHeaderChars(String(businessUrl || '').trim().slice(0, 1000));
     const cleanNotes = String(notes || '').trim().slice(0, 2000);
+    // Source attribution — the entry surface (`one-star-playbook`, `blog-post`,
+    // `line-pivot`, etc.) that drove this lead. Cap at 80 chars + strip header
+    // chars so it can safely appear in the lead-notification email subject if
+    // we ever surface it there. Empty string when the prospect arrived
+    // direct/organic (no `?from=` param on /audit).
+    const cleanSource = stripHeaderChars(String(source || '').trim().slice(0, 80));
 
     if (!cleanEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
       return res.status(400).json({ error: 'Please enter a valid email.' });
@@ -764,6 +770,7 @@ router.post('/audit-request', auditLimiter, async (req, res) => {
           `Email:    ${cleanEmail}`,
           `Business: ${cleanBizName}`,
           `URL:      ${cleanBizUrl}`,
+          `Source:   ${cleanSource || '(direct)'}`,
           `IP:       ${req.ip || 'unknown'}`,
           `UA:       ${(req.headers['user-agent'] || '').slice(0, 200)}`,
           ``,
@@ -782,10 +789,10 @@ router.post('/audit-request', auditLimiter, async (req, res) => {
           captureException(err, { route: 'public.audit-request', op: 'notify-founder' });
         });
       } else {
-        console.log(`[AUDIT-LEAD] ${cleanBizName} <${cleanEmail}> ${cleanBizUrl}`);
+        console.log(`[AUDIT-LEAD] ${cleanBizName} <${cleanEmail}> ${cleanBizUrl} source=${cleanSource || '(direct)'}`);
       }
     } else {
-      console.log(`[AUDIT-LEAD] ${cleanBizName} <${cleanEmail}> ${cleanBizUrl}`);
+      console.log(`[AUDIT-LEAD] ${cleanBizName} <${cleanEmail}> ${cleanBizUrl} source=${cleanSource || '(direct)'}`);
     }
 
     return res.json({ success: true });

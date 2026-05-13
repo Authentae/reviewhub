@@ -93,6 +93,36 @@ describe('POST /api/public/audit-request', () => {
     // email headers in this test setup.
   });
 
+  // Source attribution: `?from=one-star-playbook` (etc.) should be accepted
+  // through the form's `source` field. We can't intercept the email/log here,
+  // but the endpoint must return 200 — proving the new field is wired into
+  // the body parser without breaking validation. Header-strip is applied
+  // server-side so a malicious `source` can't inject headers.
+  test('accepts a source attribution string', async () => {
+    const r = await request(app)
+      .post('/api/public/audit-request')
+      .send({
+        email: 'prospect@example.com',
+        businessName: 'Corner Bistro',
+        businessUrl: 'https://maps.google.com/?cid=1',
+        source: 'one-star-playbook',
+      });
+    assert.strictEqual(r.status, 200);
+    assert.strictEqual(r.body.success, true);
+  });
+
+  test('CR/LF in source does not crash the endpoint', async () => {
+    const r = await request(app)
+      .post('/api/public/audit-request')
+      .send({
+        email: 'prospect@example.com',
+        businessName: 'Cafe',
+        businessUrl: 'https://maps.google.com/?cid=1',
+        source: 'evil\r\nBcc: attacker@evil.tld',
+      });
+    assert.strictEqual(r.status, 200);
+  });
+
   // Length caps: extreme inputs should be sliced down rather than rejected.
   // Keeps the lead form forgiving — a prospect pasting a paragraph into the
   // business-name field still gets logged, just truncated.

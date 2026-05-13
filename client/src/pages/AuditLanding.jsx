@@ -27,6 +27,18 @@ export default function AuditLanding() {
   const [honeypot, setHoneypot] = useState('');
   const [status, setStatus] = useState('idle'); // idle | submitting | success | error
   const [error, setError] = useState('');
+  // Source attribution — `?from=` on /audit captures which entry surface
+  // drove the prospect (one-star-playbook, blog-post, line-pivot, etc.).
+  // Captured at mount so a later navigation doesn't strip the marker before
+  // submit. Empty when the prospect arrived direct.
+  const [source, setSource] = useState('');
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const from = params.get('from');
+      if (from) setSource(String(from).slice(0, 80));
+    } catch (_e) { /* SSR / unusual envs — fine to no-op */ }
+  }, []);
 
   // Inject Service + FAQ structured data for SEO. The FAQPage block
   // makes /audit eligible for Google's FAQ rich-results carousel in
@@ -106,7 +118,7 @@ export default function AuditLanding() {
     }
     setStatus('submitting');
     try {
-      await api.post('/public/audit-request', { ...form, website: honeypot });
+      await api.post('/public/audit-request', { ...form, website: honeypot, source });
       setStatus('success');
     } catch (err) {
       const msg = err?.response?.data?.error || t('audit.errGeneric', 'Could not send. Please try again or email hello@reviewhub.review.');
