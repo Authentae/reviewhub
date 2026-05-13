@@ -166,6 +166,14 @@ function ResultCard({ result, onRestart }) {
             ))}
           </ul>
         </div>
+        <div className="osp-result-inline-cta">
+          <Link
+            to={`/audit?from=one-star-playbook-${result.badgeClass}`}
+            className="plausible-event-name=PlaybookResultCtaClick"
+          >
+            Want this drafted for YOUR review? →
+          </Link>
+        </div>
       </div>
     </div>
   );
@@ -286,7 +294,10 @@ export default function OneStarPlaybook() {
           <div className="osp-eye osp-eye-cta">A SOFT ASK · NO SPAM</div>
           <h2 className="osp-cta-h">This was a free playbook. Need it for THIS review?</h2>
           <p className="osp-cta-sub">Paste your review and we'll draft a reply in Thai + your customer's language, free.</p>
-          <Link to="/audit?from=one-star-playbook" className="osp-cta-btn">
+          <Link
+            to="/audit?from=one-star-playbook"
+            className="osp-cta-btn plausible-event-name=PlaybookToAuditClick"
+          >
             Draft my reply →
           </Link>
           <p className="osp-cta-foot">I'm Earth — solo founder in Bangkok. I'll never spam your inbox.</p>
@@ -470,6 +481,24 @@ export default function OneStarPlaybook() {
           position: absolute; left: 0; top: 8px;
           color: var(--rh-rose, #c2566c);
           font-size: 13px; font-weight: 600;
+        }
+        .osp-result-inline-cta {
+          margin-top: 22px;
+          padding-top: 16px;
+          border-top: 1px dashed rgba(29,36,44,.10);
+        }
+        .osp-result-inline-cta a {
+          font-family: 'Instrument Serif', Georgia, serif;
+          font-size: 17px;
+          font-style: italic;
+          color: var(--rh-teal, #1e4d5e);
+          text-decoration: none;
+          border-bottom: 1px solid rgba(30,77,94,.3);
+          letter-spacing: -.005em;
+        }
+        .osp-result-inline-cta a:hover {
+          color: var(--rh-teal-deep, #163d4a);
+          border-color: var(--rh-teal-deep, #163d4a);
         }
 
         .osp-expand {
