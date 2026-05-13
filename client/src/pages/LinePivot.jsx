@@ -44,10 +44,10 @@ const STEPS = [
   },
   {
     n: '3',
-    titleEn: 'Tap to copy, paste in Google',
-    titleTh: 'แตะก็อป แล้ววางใน Google',
-    descEn: 'Tap to copy the AI draft to your clipboard, then paste into Google. (One-tap auto-post launches Q3 2026 when Google approves our API access.)',
-    descTh: 'แตะเพื่อก็อปคำตอบที่ AI ร่างให้ แล้ววางใน Google (โพสต์อัตโนมัติแบบคลิกเดียว เปิดตัวไตรมาส 3 ปี 2026 เมื่อ Google อนุมัติ API)',
+    titleEn: 'Copy the draft, paste in Google',
+    titleTh: 'ก็อปคำตอบ แล้ววางใน Google',
+    descEn: 'The AI draft arrives as a follow-up text in your LINE chat — long-press to copy, tap Reply on Google, paste. 30 seconds total. (One-tap auto-post launches Q3 2026 when Google approves our API access.)',
+    descTh: 'คำตอบ AI มาเป็นข้อความตามมาในแชต LINE — กดค้างเพื่อก็อป แตะ ตอบที่ Google แล้ววาง 30 วินาทีจบ (โพสต์อัตโนมัติแบบคลิกเดียว เปิดตัวไตรมาส 3 ปี 2026 เมื่อ Google อนุมัติ API)',
   },
 ];
 
@@ -66,8 +66,8 @@ export default function LinePivot() {
       ? 'แจ้งเตือนรีวิว Google ผ่าน LINE — ตอบกลับใน 30 วินาที'
       : 'Google review notifications via LINE — reply in 30 seconds',
     description: isThai
-      ? 'รีวิวใหม่บน Google → LINE แจ้งทันทีพร้อมร่างคำตอบ AI → แตะก็อปแล้ววางใน Google ทำในกรุงเทพสำหรับเจ้าของโรงแรม ร้านอาหาร คลินิก'
-      : 'New Google review → LINE notification with AI-drafted reply → tap to copy → paste in Google. Built in Bangkok for hospitality, restaurants, clinics, salons.',
+      ? 'รีวิวใหม่บน Google → LINE แจ้งทันทีพร้อมร่างคำตอบ AI → ก็อปแล้ววางใน Google ทำในกรุงเทพสำหรับเจ้าของโรงแรม ร้านอาหาร คลินิก'
+      : 'New Google review → LINE notification with AI-drafted reply → copy & paste in Google. Built in Bangkok for hospitality, restaurants, clinics, salons.',
   });
 
   return (
@@ -100,8 +100,8 @@ export default function LinePivot() {
             style={{ color: 'var(--rh-ink-soft)' }}
           >
             {isThai
-              ? 'รีวิวใหม่เด้งเข้า LINE ของคุณภายในไม่กี่นาที พร้อมร่างคำตอบที่ AI เขียนไว้ แตะก็อปแล้ววางใน Google เครื่องมือต่างประเทศใช้ Slack/อีเมล ซึ่งเจ้าของร้านในกรุงเทพไม่ได้เปิดบ่อย ReviewHub สร้างมาเฉพาะสำหรับวิธีทำงานของคุณ'
-              : "New reviews ping your LINE Official Account within minutes, with an AI-drafted reply ready. Tap to copy, paste in Google. Foreign tools (Birdeye, Podium) notify via Slack and email — channels Bangkok owners don't actually check. ReviewHub fits how you actually work."}
+              ? 'รีวิวใหม่เด้งเข้า LINE ของคุณภายในไม่กี่นาที พร้อมร่างคำตอบที่ AI เขียนไว้ ก็อปแล้ววางใน Google เครื่องมือต่างประเทศใช้ Slack/อีเมล ซึ่งเจ้าของร้านในกรุงเทพไม่ได้เปิดบ่อย ReviewHub สร้างมาเฉพาะสำหรับวิธีทำงานของคุณ'
+              : "New reviews ping your LINE Official Account within minutes, with an AI-drafted reply ready. Copy from LINE, paste in Google. Foreign tools (Birdeye, Podium) notify via Slack and email — channels Bangkok owners don't actually check. ReviewHub fits how you actually work."}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">

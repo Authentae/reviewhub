@@ -276,15 +276,19 @@ function buildReviewNotificationFlex({
             },
           ],
         },
-        // Subtle tagline echoing the dashboard CTA — gives the owner a sense
-        // that this is the SAME tool they saw on the audit-preview page.
+        // Honest instructional hint — LINE Flex schema doesn't support
+        // text-selection on card internals, so the owner needs to copy
+        // from the plain-text bubble we send as a follow-up message,
+        // then tap Reply on Google here. Spell it out so the workflow
+        // is discoverable on first use.
         {
           type: 'text',
-          text: 'Tap to copy · paste on Google',
+          text: 'Long-press the message below to copy →',
           size: 'xs',
           color: INK_SOFT,
           margin: 'md',
           align: 'center',
+          wrap: true,
         },
       ],
       paddingAll: 'lg',

@@ -279,13 +279,13 @@ export default function AuditPreview() {
               {ctaVariant === 'E' ? (
                 <>
                   Connect Google once. Every new review pings you on LINE — with a
-                  draft reply in your voice. Tap to copy, paste in Google. $14/mo
+                  draft reply in your voice. Copy from LINE, paste in Google. $14/mo
                   (~฿499). <em>The drafts above stay yours regardless of what you decide.</em>
                 </>
               ) : (
                 <>
                   Connect Google once. New reviews ping you on LINE — with an AI-drafted
-                  reply in your voice. Tap to copy, paste in Google. Replies that took
+                  reply in your voice. Copy from LINE, paste in Google. Replies that took
                   30 min each take 30 seconds. $14/mo (~฿499).
                 </>
               )}

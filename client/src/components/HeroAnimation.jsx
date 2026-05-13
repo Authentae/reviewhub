@@ -598,7 +598,7 @@ function Caption({ t }) {
   const captions = [
     { id:1, text:'01 · A REAL REVIEW LANDS',                 a:T.s1[0]+0.2, b:T.s1[1]-0.15 },
     { id:2, text:'02 · DRAFT ARRIVES ON LINE — IN YOUR VOICE', a:T.s2[0]+0.3, b:T.s2[1]-0.15 },
-    { id:3, text:'03 · ONE TAP',                             a:T.s3[0]+0.2, b:T.s3[1]-0.15 },
+    { id:3, text:'03 · COPY · PASTE IN GOOGLE',             a:T.s3[0]+0.2, b:T.s3[1]-0.15 },
     { id:4, text:'04 · POSTED. LIVE ON GOOGLE.',             a:T.s4[0]+0.3, b:T.s4[1] - 1.0 },
   ];
   return (
