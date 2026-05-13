@@ -227,40 +227,32 @@ function FlexCard({ onCopy }) {
           fontSize: 13.5, lineHeight: 1.7, color: C.ink,
         }}>{thaiReply}</p>
       </div>
+      {/* Action buttons. Honest about LINE Flex schema limits — LINE
+          doesn't support clipboard actions in Flex cards (would require
+          LIFF webview). So the marketing mockup mirrors the REAL
+          production card: 'Reply on Google' (primary, opens GBP reviews
+          dashboard with the right authuser hint) + 'Edit' (deep-link to
+          ReviewHub dashboard for tweaking before paste). Two buttons,
+          not three. */}
       <div style={{
         borderTop: '1px solid rgba(0,0,0,0.06)',
         padding: 12,
-        display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8,
+        display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8,
       }}>
         <button
           type="button"
           onClick={handleCopy}
-          aria-label="Copy reply to clipboard"
+          aria-label="Open Google to reply"
           style={{
             ...flexBtn,
-            background: copied ? C.tealDeep : C.teal,
+            background: C.teal,
             color: '#fff',
-            border: `1px solid ${copied ? C.tealDeep : C.teal}`,
+            border: `1px solid ${C.teal}`,
             transform: pressed ? 'scale(0.96)' : 'scale(1)',
             transition: 'transform .15s ease, background .2s ease',
           }}
         >
-          {copied ? (
-            <>
-              <svg width="13" height="13" viewBox="0 0 16 16" style={{ marginRight: 5 }} aria-hidden="true">
-                <path d="M3.5 8.5l3 3 6-7" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-              </svg>
-              Copied
-            </>
-          ) : (
-            <>
-              <CopyIcon color="#fff" />
-              Copy
-            </>
-          )}
-        </button>
-        <button type="button" style={{ ...flexBtn, background: 'transparent', color: C.teal, border: `1px solid ${C.teal}` }}>
-          <OpenIcon color={C.teal} />Google
+          <OpenIcon color="#fff" />Reply on Google
         </button>
         <button type="button" style={{ ...flexBtn, background: 'transparent', color: C.teal, border: `1px solid ${C.teal}` }}>
           <EditIcon color={C.teal} />Edit
@@ -325,7 +317,7 @@ function Toast({ show }) {
           <circle cx="8" cy="8" r="7" fill="#06C755" />
           <path d="M4.5 8.2l2.3 2.3 4.7-5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
         </svg>
-        Copied to clipboard
+        Opens Google · paste reply
       </div>
     </div>
   );
