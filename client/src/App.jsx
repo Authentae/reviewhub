@@ -56,6 +56,9 @@ const ReplyRoasterTool = lazy(() => import('./pages/ReplyRoasterTool'));
 const ReviewImpactTool = lazy(() => import('./pages/ReviewImpactTool'));
 // /tools — index page tying together the three free tools as a related cluster
 const ToolsIndex = lazy(() => import('./pages/ToolsIndex'));
+// /tools/one-star-playbook — free decision-tree playbook for owners who just
+// got a 1-star Google review. Ported from claude.ai/design 2026-05-12.
+const OneStarPlaybook = lazy(() => import('./pages/OneStarPlaybook'));
 // Changelog — public, tech-savvy buyers ("where's the changelog?") asked
 // for this in persona testing. Curated highlights, no firehose.
 const Changelog = lazy(() => import('./pages/Changelog'));
@@ -179,6 +182,7 @@ export default function App() {
         <Route path="/tools" element={<ToolsIndex />} />
         <Route path="/tools/reply-roaster" element={<ReplyRoasterTool />} />
         <Route path="/tools/review-impact" element={<ReviewImpactTool />} />
+        <Route path="/tools/one-star-playbook" element={<OneStarPlaybook />} />
         {/* Cold-outreach lead-capture landing — see AuditLanding.jsx */}
         <Route path="/audit" element={<AuditLanding />} />
         {/* Per-vertical SEO pages */}
