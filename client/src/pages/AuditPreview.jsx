@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, lazy, Suspense } from 'react';
+import React, { useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../lib/api';
 import usePageTitle from '../hooks/usePageTitle';
@@ -45,8 +45,27 @@ const COLORS = {
                          // fought the warm paper background)
 };
 
+// CTA A/B split — Variant E (permission-asking) vs control. Per
+// docs/audit-preview-cta-variants.md. Tests the hypothesis that "Yes,
+// keep the drafts coming" reads as lower-commitment opt-in than "Yes,
+// set this up for me" (an imperative buy verb). Wave 4 (sent 5/12-5/13)
+// is the first cohort; reply window closes 5/16.
+//
+// Deterministic per-token assignment — each prospect always sees the
+// same variant across refreshes/devices. No DB change required; the
+// signal reads from Plausible event names (`AuditRegisterClick` for
+// control, `AuditRegisterClick_PermissionV` for variant). Sticky bar
+// matches the same variant assignment so we don't cross-pollinate.
+function assignCtaVariant(token) {
+  if (!token) return 'control';
+  let h = 0;
+  for (let i = 0; i < token.length; i++) h = (h * 31 + token.charCodeAt(i)) | 0;
+  return (Math.abs(h) % 2 === 0) ? 'control' : 'E';
+}
+
 export default function AuditPreview() {
   const { token } = useParams();
+  const ctaVariant = useMemo(() => assignCtaVariant(token), [token]);
   const [state, setState] = useState({ status: 'loading', data: null, error: '' });
   usePageTitle(state.data?.business_name
     ? `${state.data.business_name} — Reply suggestions`
@@ -158,6 +177,7 @@ export default function AuditPreview() {
         businessName={business_name}
         token={token || ''}
         show={totalDrafts > 0}
+        ctaVariant={ctaVariant}
       />
       <main className="max-w-3xl mx-auto px-5 py-8 md:py-16 pb-28 md:pb-16">
         {/* Header — sets context immediately so the prospect doesn't
@@ -248,27 +268,38 @@ export default function AuditPreview() {
               className="text-xs font-mono uppercase tracking-widest mb-2"
               style={{ color: '#f5d8a7', opacity: 0.9 }}
             >
-              Want this on autopilot?
+              {ctaVariant === 'E' ? 'This audit was free' : 'Want this on autopilot?'}
             </p>
             <h2 className="text-xl md:text-2xl font-bold mb-3" style={{ letterSpacing: '-0.01em' }}>
-              Set this up for {business_name} in 10 minutes
+              {ctaVariant === 'E'
+                ? `Want ReviewHub to keep drafting for ${business_name}?`
+                : `Set this up for ${business_name} in 10 minutes`}
             </h2>
             <p className="text-sm leading-relaxed mb-5 max-w-md mx-auto" style={{ color: '#fdf2dc' }}>
-              Connect Google once. New reviews ping you on LINE — with an AI-drafted
-              reply in your voice. Tap to copy, paste in Google. Replies that took
-              30 min each take 30 seconds. $14/mo (~฿499).
+              {ctaVariant === 'E' ? (
+                <>
+                  Connect Google once. Every new review pings you on LINE — with a
+                  draft reply in your voice. Tap to copy, paste in Google. $14/mo
+                  (~฿499). <em>The drafts above stay yours regardless of what you decide.</em>
+                </>
+              ) : (
+                <>
+                  Connect Google once. New reviews ping you on LINE — with an AI-drafted
+                  reply in your voice. Tap to copy, paste in Google. Replies that took
+                  30 min each take 30 seconds. $14/mo (~฿499).
+                </>
+              )}
             </p>
-            {/* Plausible tagged-events: clicking this fires "AuditRegisterClick"
-                in Plausible (when prod analytics is active). Lets us measure
-                audit-preview → register click rate for Wave 4 conversion
-                analysis. The class is parsed by script.tagged-events.js
-                loaded in client/index.html. */}
+            {/* Plausible tagged-events: clicking this fires either
+                "AuditRegisterClick" (control) or "AuditRegisterClick_PermissionV"
+                (Variant E) so we can read the A/B from Plausible without
+                a DB column. See docs/audit-preview-cta-variants.md. */}
             <a
-              href={`/register?from=audit&business=${encodeURIComponent(business_name)}&token=${encodeURIComponent(token || '')}`}
-              className="plausible-event-name=AuditRegisterClick inline-block px-6 py-3 rounded-lg text-sm font-semibold transition-transform hover:scale-105"
+              href={`/register?from=audit&business=${encodeURIComponent(business_name)}&token=${encodeURIComponent(token || '')}&v=${ctaVariant}`}
+              className={`${ctaVariant === 'E' ? 'plausible-event-name=AuditRegisterClick_PermissionV' : 'plausible-event-name=AuditRegisterClick'} inline-block px-6 py-3 rounded-lg text-sm font-semibold transition-transform hover:scale-105`}
               style={{ background: COLORS.cardBg, color: COLORS.tealDeep }}
             >
-              Yes, set this up for me →
+              {ctaVariant === 'E' ? 'Yes, keep the drafts coming →' : 'Yes, set this up for me →'}
             </a>
             <p className="text-xs mt-3" style={{ color: '#fdf2dc', opacity: 0.85 }}>
               No credit card to start · 30-day refund window · cancel anytime
@@ -433,7 +464,7 @@ export default function AuditPreview() {
 //    next visit).
 //  - Same plausible-event-name as the in-page CTA so we can tell which
 //    surface drove the click in funnel analysis (event-prop "source").
-function StickyConversionBar({ businessName, token, show }) {
+function StickyConversionBar({ businessName, token, show, ctaVariant = 'control' }) {
   const [dismissed, setDismissed] = useState(false);
 
   if (!show || dismissed) return null;
@@ -466,17 +497,19 @@ function StickyConversionBar({ businessName, token, show }) {
     >
       <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3">
         <p className="text-xs sm:text-sm flex-1 leading-snug">
-          <span className="font-semibold">Want this on autopilot?</span>{' '}
+          <span className="font-semibold">
+            {ctaVariant === 'E' ? 'Keep the drafts coming?' : 'Want this on autopilot?'}
+          </span>{' '}
           <span className="hidden sm:inline" style={{ color: '#fdf2dc' }}>
             New reviews ping you on LINE. $14/mo (~฿499).
           </span>
         </p>
         <a
-          href={`/register?from=audit&business=${encodeURIComponent(businessName || '')}&token=${encodeURIComponent(token || '')}&source=sticky`}
-          className="plausible-event-name=AuditRegisterClick plausible-event-source=sticky inline-block px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold whitespace-nowrap transition-transform hover:scale-105"
+          href={`/register?from=audit&business=${encodeURIComponent(businessName || '')}&token=${encodeURIComponent(token || '')}&source=sticky&v=${ctaVariant}`}
+          className={`${ctaVariant === 'E' ? 'plausible-event-name=AuditRegisterClick_PermissionV' : 'plausible-event-name=AuditRegisterClick'} plausible-event-source=sticky inline-block px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold whitespace-nowrap transition-transform hover:scale-105`}
           style={{ background: COLORS.cardBg, color: COLORS.tealDeep, minHeight: '40px', display: 'inline-flex', alignItems: 'center' }}
         >
-          Set this up — Free →
+          {ctaVariant === 'E' ? 'Keep the drafts →' : 'Set this up — Free →'}
         </a>
         <button
           type="button"
