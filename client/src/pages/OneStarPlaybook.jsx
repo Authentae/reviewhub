@@ -11,7 +11,7 @@
 // CTA at the bottom funnels to /audit (paste-a-review → free hand-crafted
 // audit) — the same conversion path as the other free tools.
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import MarketingNav from '../components/MarketingNav';
 import MarketingFooter from '../components/MarketingFooter';
@@ -188,6 +188,32 @@ export default function OneStarPlaybook() {
     title: isThai ? 'รับมือรีวิว 1 ดาวอย่างถูกต้อง' : "You just got a 1-star review. Don't reply yet.",
     description: 'Free decision tree for Bangkok hospitality owners. Figure out what kind of 1-star you have, then use the right reply template. Thai + English.',
   });
+
+  // HowTo JSON-LD — gives Google explicit step semantics for the
+  // decision tree. Eligible for HowTo rich-result rendering in some
+  // SERP layouts. Sibling pattern to the Article schema on blog posts.
+  useEffect(() => {
+    const schema = {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: 'How to respond to a 1-star Google review',
+      description: 'Classify the kind of 1-star review you received, then use the right reply template for that scenario.',
+      totalTime: 'PT2M',
+      inLanguage: ['en', 'th'],
+      step: [
+        { '@type': 'HowToStep', position: 1, name: 'Read the review and identify your gut reaction', text: 'Decide whether the review describes a real failure on your side or feels unfair / unfamiliar.' },
+        { '@type': 'HowToStep', position: 2, name: 'If legitimate, decide if it is a specific incident or a pattern', text: 'A specific incident gets a specific acknowledgment + concrete fix. A recurring pattern gets a brief public reply that moves the conversation offline.' },
+        { '@type': 'HowToStep', position: 3, name: 'If unfair, check the reviewer profile', text: 'Multiple negative reviews of similar businesses point to a competitor or serial reviewer. Thin or brand-new profiles point to possible extortion.' },
+        { '@type': 'HowToStep', position: 4, name: 'Use the matching reply template', text: 'Four templates: legitimate-specific, legitimate-pattern, competitor/serial (then flag), or extortion (document everything before replying).' },
+      ],
+      publisher: { '@type': 'Organization', name: 'ReviewHub', url: 'https://reviewhub.review' },
+    };
+    const el = document.createElement('script');
+    el.type = 'application/ld+json';
+    el.textContent = JSON.stringify(schema);
+    document.head.appendChild(el);
+    return () => { document.head.removeChild(el); };
+  }, []);
 
   // history: list of { nodeKey, chosenKey } turns + optional result key
   const [history, setHistory] = useState([{ nodeKey: 'Q1' }]);
