@@ -32,6 +32,29 @@ async function syncOne(connectionId) {
   const conn = get('SELECT * FROM platform_connections WHERE id = ?', [connectionId]);
   if (!conn) return { inserted: 0, error: 'Connection not found' };
 
+  // SHORT-CIRCUIT: when the connection is provider='google' AND the
+  // legacy OAuth credentials (GOOGLE_CLIENT_ID/SECRET) are not configured,
+  // skip the GoogleProvider entirely. The placesPoller job handles
+  // ingestion via Place ID + the Places API key — that's a separate code
+  // path that runs every 30 min. Without this short-circuit, every /sync
+  // call (manual or cron) re-stores 'Google provider not configured...'
+  // in last_sync_error and the UI shows a misleading red banner even
+  // though reviews ARE being ingested. Clear the stale error and treat
+  // as success no-op.
+  if (
+    conn.provider === 'google'
+    && !process.env.GOOGLE_CLIENT_ID
+    && process.env.GOOGLE_MAPS_API_KEY
+  ) {
+    run(
+      `UPDATE platform_connections
+       SET last_sync_error = NULL, last_synced_at = datetime('now')
+       WHERE id = ?`,
+      [conn.id]
+    );
+    return { inserted: 0, error: null };
+  }
+
   let provider;
   try {
     provider = getProvider(conn);

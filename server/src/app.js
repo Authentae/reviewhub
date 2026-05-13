@@ -99,7 +99,12 @@ function createApp() {
         // (Instrument Serif / Inter Tight / JetBrains Mono) silently falls
         // back to system sans-serif on every page — visible regression.
         styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-        imgSrc: ["'self'", 'data:', 'https://*.frill.co', 'https://*.frillcdn.com'],
+        // api.qrserver.com — free QR-code image API used on the
+        // LINE-OA link Settings UI to render a scannable QR that pre-fills
+        // the /link <token> command in LINE. Image-only, no data leakage
+        // (the URL we ask it to encode is the LINE deep-link, not anything
+        // sensitive). Stable since 2013; no API key required.
+        imgSrc: ["'self'", 'data:', 'https://*.frill.co', 'https://*.frillcdn.com', 'https://api.qrserver.com'],
         // connect-src additions:
         // - *.ingest.us.sentry.io / *.ingest.sentry.io: frontend Sentry SDK
         //   POST /envelope/ events from the browser. Without this the SDK
