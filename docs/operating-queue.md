@@ -179,6 +179,15 @@ list.
     email body ("Source: one-star-playbook") + console.log. Two
     regression tests added.
   - `0aac501` — prod-smoke.sh includes the new page (25 checks total).
+- `[done] 2026-05-14` **CTA variant E (permission-asking) shipped as
+  A/B vs control on /audit-preview** (`29b9780`). Deterministic
+  per-token 50/50 split — each prospect always sees the same variant.
+  Distinct Plausible events (`AuditRegisterClick` vs
+  `AuditRegisterClick_PermissionV`) read the A/B without a DB change.
+  StickyConversionBar matches the same variant assignment. Read-out
+  playbook: `docs/wave-postmortems/audit-preview-cta-ab-readout.md`.
+  Minimum N to read: 20 audits sent (Wave 5 brings cohort past that
+  by ~5/24).
 - `[done] 2026-05-13` **H1 (deliverability) falsified for the
   0-reply problem.** Mail-tester probe with real Wave-4-shaped TH
   body from earth.reviewhub@gmail.com scored 8.2/10. SPF+DKIM+DMARC
