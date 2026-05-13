@@ -128,31 +128,97 @@ function buildReviewNotificationFlex({
   rating,
   reviewText,
   draftText,
+  draftLanguage,
   approveUrl,
   editUrl,
+  replyOnGoogleUrl,
 }) {
   const stars = '★'.repeat(rating || 0) + '☆'.repeat(Math.max(0, 5 - (rating || 0)));
+  // Brand tokens — same hex values used across the landing/dashboard
+  // (--rh-paper, --rh-ink, --rh-ochre-deep, --rh-teal-deep, --rh-sage).
+  // Keeps the LINE Flex card visually adjacent to the landing-page
+  // mockup so owners who saw the marketing don't feel a downgrade.
+  const PAPER = '#fbf8f1';
+  const INK = '#1d242c';
+  const INK_SOFT = '#4a525a';
+  const OCHRE = '#a07d20';
+  const TEAL = '#1e4d5e';
+  const RULE = '#e6dfce';
+
+  const langTag = (draftLanguage || '').toUpperCase().slice(0, 4);
+  const draftHeader = langTag ? `AI DRAFT · ${langTag}` : 'AI DRAFT';
+
+  // Editorial eyebrow — caps + mono-feel via wide letter-spacing.
+  // LINE Flex has no font-family control; the closest we get to the
+  // mockup's JetBrains Mono eyebrow is uppercase + xs weight bold.
+  const eyebrow = `NEW REVIEW · ${(businessName || 'YOUR BUSINESS').toUpperCase().slice(0, 40)}`;
+
+  // Build the footer button array based on which URLs were provided.
+  // Reply-on-Google is preferred — it's the action that actually works
+  // today (until GBP API approval). Approve via dashboard is the v2.
+  const footerButtons = [];
+  if (replyOnGoogleUrl) {
+    footerButtons.push({
+      type: 'button',
+      style: 'primary',
+      action: { type: 'uri', label: 'Reply on Google', uri: replyOnGoogleUrl },
+      color: TEAL,
+    });
+  } else if (approveUrl) {
+    footerButtons.push({
+      type: 'button',
+      style: 'primary',
+      action: { type: 'uri', label: 'Approve & post', uri: approveUrl },
+      color: TEAL,
+    });
+  }
+  if (editUrl) {
+    footerButtons.push({
+      type: 'button',
+      style: 'link',
+      action: { type: 'uri', label: 'Edit in dashboard', uri: editUrl },
+      height: 'sm',
+    });
+  }
+
   return {
     type: 'bubble',
     size: 'mega',
+    styles: {
+      header: { backgroundColor: PAPER },
+      body: { backgroundColor: '#ffffff' },
+      footer: { backgroundColor: PAPER, separator: true, separatorColor: RULE },
+    },
     header: {
       type: 'box',
       layout: 'vertical',
       contents: [
+        // Editorial eyebrow
         {
           type: 'text',
-          text: 'New Google review',
-          size: 'sm',
-          color: '#666666',
+          text: eyebrow,
+          size: 'xs',
+          color: OCHRE,
           weight: 'bold',
-        },
-        {
-          type: 'text',
-          text: businessName || 'Your business',
-          size: 'lg',
-          weight: 'bold',
-          margin: 'sm',
           wrap: true,
+        },
+        // Stars + reviewer name on one baseline — more prominent than before
+        {
+          type: 'box',
+          layout: 'baseline',
+          margin: 'md',
+          contents: [
+            { type: 'text', text: stars, color: '#d4a857', size: 'lg', flex: 0 },
+            {
+              type: 'text',
+              text: reviewerName || 'Anonymous',
+              color: INK,
+              size: 'md',
+              weight: 'bold',
+              margin: 'md',
+              wrap: false,
+            },
+          ],
         },
       ],
       paddingAll: 'lg',
@@ -161,42 +227,49 @@ function buildReviewNotificationFlex({
       type: 'box',
       layout: 'vertical',
       contents: [
+        // Review text — first thing the owner reads
+        {
+          type: 'text',
+          text: (reviewText || '').slice(0, 400),
+          wrap: true,
+          size: 'sm',
+          color: INK,
+        },
+        // Draft section — visually offset with sage-tinted box
         {
           type: 'box',
-          layout: 'baseline',
+          layout: 'vertical',
+          margin: 'xl',
+          paddingAll: 'md',
+          backgroundColor: PAPER,
+          cornerRadius: 'sm',
           contents: [
-            { type: 'text', text: stars, color: '#d4a857', size: 'md', flex: 0 },
             {
               type: 'text',
-              text: reviewerName || 'Anonymous',
-              color: '#888888',
-              size: 'sm',
+              text: draftHeader,
+              size: 'xs',
+              color: OCHRE,
+              weight: 'bold',
+            },
+            {
+              type: 'text',
+              text: (draftText || '').slice(0, 500),
+              wrap: true,
               margin: 'md',
+              size: 'sm',
+              color: INK,
             },
           ],
         },
+        // Subtle tagline echoing the dashboard CTA — gives the owner a sense
+        // that this is the SAME tool they saw on the audit-preview page.
         {
           type: 'text',
-          text: (reviewText || '').slice(0, 300),
-          wrap: true,
-          margin: 'md',
-          size: 'sm',
-        },
-        { type: 'separator', margin: 'lg' },
-        {
-          type: 'text',
-          text: 'Draft reply',
+          text: 'Tap to copy · paste on Google',
           size: 'xs',
-          color: '#1e4d5e',
-          weight: 'bold',
-          margin: 'lg',
-        },
-        {
-          type: 'text',
-          text: (draftText || '').slice(0, 500),
-          wrap: true,
-          margin: 'sm',
-          size: 'sm',
+          color: INK_SOFT,
+          margin: 'md',
+          align: 'center',
         },
       ],
       paddingAll: 'lg',
@@ -205,28 +278,7 @@ function buildReviewNotificationFlex({
       type: 'box',
       layout: 'vertical',
       spacing: 'sm',
-      contents: [
-        {
-          type: 'button',
-          style: 'primary',
-          action: {
-            type: 'uri',
-            label: 'Approve & post',
-            uri: approveUrl,
-          },
-          color: '#1e4d5e',
-        },
-        {
-          type: 'button',
-          style: 'link',
-          action: {
-            type: 'uri',
-            label: 'Edit on dashboard',
-            uri: editUrl,
-          },
-          height: 'sm',
-        },
-      ],
+      contents: footerButtons,
       paddingAll: 'lg',
     },
   };

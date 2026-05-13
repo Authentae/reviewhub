@@ -147,17 +147,22 @@ router.post('/test-push', writeLimiter, async (req, res) => {
     }
     // Fetch the user's business so the test card looks realistic.
     const biz = get(
-      'SELECT business_name FROM businesses WHERE user_id = ? ORDER BY id ASC LIMIT 1',
+      'SELECT business_name, google_managing_email FROM businesses WHERE user_id = ? ORDER BY id ASC LIMIT 1',
       [req.user.id]
     );
     const businessName = biz?.business_name || 'Your business';
+    const managingEmail = biz?.google_managing_email;
+    const replyOnGoogleUrl = managingEmail
+      ? `https://business.google.com/reviews?authuser=${encodeURIComponent(managingEmail)}`
+      : 'https://business.google.com/reviews';
     const flex = lineMessenger.buildReviewNotificationFlex({
       businessName,
       reviewerName: 'ReviewHub Test',
       rating: 5,
       reviewText: 'Test notification — if you see this Flex card on LINE, the push pipeline is wired correctly end-to-end. Real reviews will arrive here within 30 min of being posted on Google.',
       draftText: 'Thank you so much for the test! 🎉 — This is a sample AI-drafted reply.',
-      approveUrl: 'https://reviewhub.review/dashboard',
+      draftLanguage: 'en',
+      replyOnGoogleUrl,
       editUrl: 'https://reviewhub.review/dashboard',
     });
     try {

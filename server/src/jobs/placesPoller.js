@@ -43,7 +43,7 @@ function dashboardBase() {
  */
 async function pollOne(businessId) {
   const biz = get(
-    `SELECT b.id, b.user_id, b.business_name, b.google_place_id,
+    `SELECT b.id, b.user_id, b.business_name, b.google_place_id, b.google_managing_email,
             (SELECT line_user_id FROM line_oa_links
               WHERE user_id = b.user_id AND line_user_id IS NOT NULL
               LIMIT 1) AS line_user_id
@@ -116,15 +116,25 @@ async function pollOne(businessId) {
 
     if (biz.line_user_id && lineMessenger.isEnabled()) {
       try {
+        // Reply-on-Google deep-link with authuser hint when the business
+        // has a managing-email set. Same URL pattern as the dashboard
+        // "Reply on Google" button so the LINE Flex card and the dashboard
+        // converge on a single action.
+        const managingEmail = biz.google_managing_email;
+        const replyOnGoogleUrl = managingEmail
+          ? `https://business.google.com/reviews?authuser=${encodeURIComponent(managingEmail)}`
+          : 'https://business.google.com/reviews';
         const flex = lineMessenger.buildReviewNotificationFlex({
           businessName: biz.business_name,
           reviewerName: r.reviewer_name,
           rating: r.rating,
           reviewText: r.review_text || '',
           draftText: draftText || '(draft unavailable — open dashboard)',
-          // v1: approveUrl deep-links to dashboard for manual copy-paste.
-          // v2 will hit /api/reviews/:id/approve-from-line for one-tap auto-post.
-          approveUrl: `${dashboardBase()}/dashboard/reviews/${r.dbId}`,
+          draftLanguage: r.review_language || '',
+          replyOnGoogleUrl,
+          // editUrl deep-links to dashboard for tweaking the draft before
+          // pasting on Google. The two buttons (Reply on Google / Edit)
+          // mirror the dashboard "Reply on Google" + Copy pair.
           editUrl: `${dashboardBase()}/dashboard/reviews/${r.dbId}`,
         });
         await lineMessenger.pushFlex(
