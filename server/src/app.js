@@ -325,8 +325,11 @@ function createApp() {
   // /api/telegram — owner-side Telegram bot link management + webhook
   // receiver. Mirror of /api/line-oa. Cheap to maintain; opens
   // Russia/CIS, parts of EU/India/SEA, and tech-savvy Bangkok owners.
-  app.use('/api/telegram', require('./routes/telegramLinks'));
+  // ORDER MATTERS: webhook router first so its /webhook + /webhook-debug
+  // routes don't get caught by telegramLinks' router-level authMiddleware
+  // (which would 401 Telegram's secret-token-authenticated POSTs).
   app.use('/api/telegram', require('./routes/telegramWebhook'));
+  app.use('/api/telegram', require('./routes/telegramLinks'));
   // business_share_tokens — owner-side endpoints mounted under
   // /api/businesses (matches the resource ownership), public read
   // endpoint exposed at /api/share/:token (single share-table read,
