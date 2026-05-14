@@ -586,6 +586,68 @@ const PRESET_COLORS = [
   { hex: '#6b7280', name: 'Gray' },
 ];
 
+// --- Channel branding helpers (LINE + Telegram Settings cards) ---
+//
+// Each notification channel gets a brand mark + colored top-stripe on
+// the card so an owner scanning a busy Settings page can locate the
+// right section by color/logo before reading. Inline SVGs (no external
+// asset deps) keep the bundle lean and avoid icon-font setup.
+const CHANNEL_BRAND = {
+  line: { color: '#06C755', tintBg: 'rgba(6,199,85,0.08)', tintBorder: 'rgba(6,199,85,0.25)' },
+  telegram: { color: '#229ED9', tintBg: 'rgba(34,158,217,0.08)', tintBorder: 'rgba(34,158,217,0.25)' },
+};
+
+function ChannelLogoLine({ size = 30 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 36 36" aria-hidden="true">
+      <rect width="36" height="36" rx="8" fill="#06C755" />
+      <text x="18" y="23" textAnchor="middle"
+        fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+        fontWeight="800" fontSize="11" fill="#fff" letterSpacing="0.5">LINE</text>
+    </svg>
+  );
+}
+
+function ChannelLogoTelegram({ size = 30 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 36 36" aria-hidden="true">
+      <circle cx="18" cy="18" r="18" fill="#229ED9" />
+      <path d="M8.2 17.5l17.9-6.9c.9-.3 1.7.2 1.4 1.4l-3 14c-.2.9-.8 1.1-1.6.7l-4.4-3.3-2.1 2.1c-.2.2-.4.4-.9.4l.3-4.7 8.6-7.8c.4-.3-.1-.5-.6-.2l-10.7 6.7-4.6-1.4c-1-.3-1-1 .4-1.5z" fill="#fff"/>
+    </svg>
+  );
+}
+
+function ChannelHeader({ brand, title, subtitle, connected, isThai }) {
+  const Logo = brand === 'line' ? ChannelLogoLine : ChannelLogoTelegram;
+  const b = CHANNEL_BRAND[brand];
+  return (
+    <div className="flex items-start gap-3 mb-3 flex-wrap">
+      <div
+        className="flex-shrink-0 rounded-xl p-2 inline-flex items-center justify-center"
+        style={{ background: b.tintBg, border: `1px solid ${b.tintBorder}` }}
+        aria-hidden="true"
+      >
+        <Logo size={30} />
+      </div>
+      <div className="flex-1 min-w-0">
+        <h2 className="text-lg font-semibold leading-tight" style={{ fontFamily: 'var(--rh-serif)' }}>
+          {title}
+        </h2>
+        {subtitle && (
+          <p className="text-xs mt-0.5" style={{ color: 'var(--rh-ink-3, #888)' }}>{subtitle}</p>
+        )}
+      </div>
+      {connected && (
+        <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full self-center"
+          style={{ background: 'rgba(107,142,122,0.15)', color: 'var(--rh-sage, #6b8e7a)' }}>
+          <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--rh-sage, #6b8e7a)' }} aria-hidden="true" />
+          {isThai ? 'เชื่อมแล้ว' : 'Connected'}
+        </span>
+      )}
+    </div>
+  );
+}
+
 // LineConnectSection — owner-side UI for binding the user's LINE
 // account to their ReviewHub user_id so new-review notifications can
 // be pushed via LINE OA. Talks to /api/line-oa/{status, generate-token,
@@ -694,10 +756,16 @@ function LineConnectSection() {
   // pretend the feature exists; tell ops to set the env vars.
   if (!data.enabled) {
     return (
-      <section aria-label="LINE OA connection" className="card p-5 mb-6">
-        <h2 className="text-lg font-semibold mb-1" style={{ fontFamily: 'var(--rh-serif)' }}>
-          {isThai ? 'เชื่อม LINE OA' : 'Connect LINE OA'}
-        </h2>
+      <section aria-label="LINE OA connection" className="card p-5 mb-6"
+        style={{ borderTop: `3px solid ${CHANNEL_BRAND.line.color}` }}>
+        <ChannelHeader
+          brand="line"
+          title={isThai ? 'เชื่อม LINE OA' : 'Connect LINE OA'}
+          subtitle={isThai
+            ? 'รีวิว Google ใหม่ → แจ้งเตือนเข้า LINE คุณทันที'
+            : 'New Google reviews → instant LINE ping with the AI draft'}
+          isThai={isThai}
+        />
         <p className="text-sm" style={{ color: 'var(--rh-ink-2, #4a525a)' }}>
           {isThai
             ? 'LINE OA ยังไม่ได้เปิดใช้งานบน deployment นี้ (ต้องตั้งค่า LINE_CHANNEL_SECRET + LINE_CHANNEL_ACCESS_TOKEN + LINE_OA_ENABLED=true ก่อน)'
@@ -708,24 +776,17 @@ function LineConnectSection() {
   }
 
   return (
-    <section aria-label="LINE OA connection" className="card p-5 mb-6">
-      <div className="flex items-start justify-between gap-3 mb-3 flex-wrap">
-        <div className="min-w-0">
-          <h2 className="text-lg font-semibold" style={{ fontFamily: 'var(--rh-serif)' }}>
-            {isThai ? 'เชื่อม LINE OA' : 'Connect LINE OA'}
-          </h2>
-          <p className="text-xs" style={{ color: 'var(--rh-ink-3, #888)' }}>
-            {isThai ? 'รีวิว Google ใหม่ → แจ้งเตือนเข้า LINE คุณทันที' : 'New Google reviews → instant LINE ping with the AI draft'}
-          </p>
-        </div>
-        {data.linked && (
-          <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full"
-            style={{ background: 'rgba(107,142,122,0.15)', color: 'var(--rh-sage, #6b8e7a)' }}>
-            <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--rh-sage, #6b8e7a)' }} aria-hidden="true" />
-            {isThai ? 'เชื่อมแล้ว' : 'Connected'}
-          </span>
-        )}
-      </div>
+    <section aria-label="LINE OA connection" className="card p-5 mb-6"
+      style={{ borderTop: `3px solid ${CHANNEL_BRAND.line.color}` }}>
+      <ChannelHeader
+        brand="line"
+        title={isThai ? 'เชื่อม LINE OA' : 'Connect LINE OA'}
+        subtitle={isThai
+          ? 'รีวิว Google ใหม่ → แจ้งเตือนเข้า LINE คุณทันที'
+          : 'New Google reviews → instant LINE ping with the AI draft'}
+        connected={data.linked}
+        isThai={isThai}
+      />
 
       {data.linked ? (
         <div className="space-y-3">
@@ -1022,10 +1083,16 @@ function TelegramConnectSection() {
 
   if (!data.enabled) {
     return (
-      <section aria-label="Telegram connection" className="card p-5 mb-6">
-        <h2 className="text-lg font-semibold mb-1" style={{ fontFamily: 'var(--rh-serif)' }}>
-          {isThai ? 'เชื่อม Telegram' : 'Connect Telegram'}
-        </h2>
+      <section aria-label="Telegram connection" className="card p-5 mb-6"
+        style={{ borderTop: `3px solid ${CHANNEL_BRAND.telegram.color}` }}>
+        <ChannelHeader
+          brand="telegram"
+          title={isThai ? 'เชื่อม Telegram' : 'Connect Telegram'}
+          subtitle={isThai
+            ? 'รีวิว Google ใหม่ → แจ้งเตือนเข้า Telegram ทันที'
+            : 'New Google reviews → instant Telegram ping with the AI draft'}
+          isThai={isThai}
+        />
         <p className="text-sm" style={{ color: 'var(--rh-ink-2, #4a525a)' }}>
           {isThai
             ? 'Telegram Bot ยังไม่ได้เปิดใช้งานบน deployment นี้'
@@ -1038,24 +1105,17 @@ function TelegramConnectSection() {
   const botHandle = data.bot_username ? `@${data.bot_username}` : '(bot)';
 
   return (
-    <section aria-label="Telegram connection" className="card p-5 mb-6">
-      <div className="flex items-start justify-between gap-3 mb-3 flex-wrap">
-        <div className="min-w-0">
-          <h2 className="text-lg font-semibold" style={{ fontFamily: 'var(--rh-serif)' }}>
-            {isThai ? 'เชื่อม Telegram' : 'Connect Telegram'}
-          </h2>
-          <p className="text-xs" style={{ color: 'var(--rh-ink-3, #888)' }}>
-            {isThai ? 'รีวิว Google ใหม่ → แจ้งเตือนเข้า Telegram ทันที' : 'New Google reviews → instant Telegram ping with the AI draft'}
-          </p>
-        </div>
-        {data.linked && (
-          <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full"
-            style={{ background: 'rgba(107,142,122,0.15)', color: 'var(--rh-sage, #6b8e7a)' }}>
-            <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--rh-sage, #6b8e7a)' }} aria-hidden="true" />
-            {isThai ? 'เชื่อมแล้ว' : 'Connected'}
-          </span>
-        )}
-      </div>
+    <section aria-label="Telegram connection" className="card p-5 mb-6"
+      style={{ borderTop: `3px solid ${CHANNEL_BRAND.telegram.color}` }}>
+      <ChannelHeader
+        brand="telegram"
+        title={isThai ? 'เชื่อม Telegram' : 'Connect Telegram'}
+        subtitle={isThai
+          ? 'รีวิว Google ใหม่ → แจ้งเตือนเข้า Telegram ทันที'
+          : 'New Google reviews → instant Telegram ping with the AI draft'}
+        connected={data.linked}
+        isThai={isThai}
+      />
 
       {data.linked ? (
         <div className="space-y-3">
