@@ -31,18 +31,6 @@ const webhookLimiter = rateLimit({
   skip: () => process.env.NODE_ENV === 'test',
 });
 
-// TEMP debug — remove after webhook 401 mystery solved
-router.get('/webhook-debug', (req, res) => {
-  const s = process.env.TELEGRAM_WEBHOOK_SECRET || '';
-  res.json({
-    enabled: process.env.TELEGRAM_BOT_ENABLED,
-    secret_len: s.length,
-    secret_first4: s.slice(0, 4),
-    secret_last4: s.slice(-4),
-    secret_sha8: require('crypto').createHash('sha256').update(s).digest('hex').slice(0, 8),
-  });
-});
-
 router.post('/webhook', webhookLimiter, async (req, res) => {
   // Always 200 OK to Telegram so it doesn't retry endlessly. Errors are
   // logged but not surfaced as 4xx/5xx.
