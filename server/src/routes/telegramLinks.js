@@ -112,7 +112,7 @@ router.post('/test-push', writeLimiter, async (req, res) => {
     const replyOnGoogleUrl = managingEmail
       ? `https://business.google.com/reviews?authuser=${encodeURIComponent(managingEmail)}`
       : 'https://business.google.com/reviews';
-    const { text, buttons } = tg.buildReviewNotification({
+    const { text, buttons, draftCopyMessage } = tg.buildReviewNotification({
       businessName,
       reviewerName: 'ReviewHub Test',
       rating: 5,
@@ -127,6 +127,10 @@ router.post('/test-push', writeLimiter, async (req, res) => {
     if (!r.ok) {
       captureException(new Error(`telegram test-push: ${r.error}`), { route: 'telegram.test-push' });
       return res.status(502).json({ error: `Telegram push failed: ${r.error || 'unknown'}` });
+    }
+    // Follow-up: draft-only message in <code> for one-tap copy on mobile.
+    if (draftCopyMessage) {
+      await tg.pushText(link.telegram_chat_id, draftCopyMessage);
     }
     res.json({ ok: true });
   } catch (err) {

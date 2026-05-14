@@ -129,6 +129,11 @@ function buildReviewNotification({
 
   // Message body — Telegram supports HTML but limits formatting. Use
   // bold for the headlines, italics for the date hint.
+  // NOTE: the AI draft is intentionally NOT inlined here. It ships as
+  // a follow-up `draftCopyMessage` wrapped in <code> so the Telegram
+  // mobile client's tap-and-hold "Copy" action captures exactly the
+  // draft text (no headers, no review quote). Pasting into Google's
+  // reply box then needs zero cleanup.
   const parts = [
     `<b>NEW REVIEW · ${esc((businessName || 'YOUR BUSINESS').toUpperCase().slice(0, 40))}</b>`,
     '',
@@ -138,8 +143,7 @@ function buildReviewNotification({
   ];
   if (draftText) {
     parts.push('');
-    parts.push(`<b>${esc(draftHeader)}</b>`);
-    parts.push(esc(draftText.slice(0, 600)));
+    parts.push(`<i>${esc(draftHeader)} — copy block below ↓</i>`);
   }
 
   const text = parts.join('\n');
@@ -154,7 +158,14 @@ function buildReviewNotification({
     buttons.push([{ text: '✎ Edit in dashboard', url: editUrl }]);
   }
 
-  return { text, buttons };
+  // Second message containing ONLY the draft, wrapped in <code> so the
+  // Telegram client renders a monospace block with tap-to-copy. Empty
+  // when there's no draft (poller still pushed the new-review alert).
+  const draftCopyMessage = draftText
+    ? `<code>${esc(draftText.slice(0, 3500))}</code>`
+    : null;
+
+  return { text, buttons, draftCopyMessage };
 }
 
 module.exports = {

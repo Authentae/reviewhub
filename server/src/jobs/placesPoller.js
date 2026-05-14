@@ -193,7 +193,7 @@ async function pollOne(businessId) {
           const replyOnGoogleUrl = managingEmail
             ? `https://business.google.com/reviews?authuser=${encodeURIComponent(managingEmail)}`
             : 'https://business.google.com/reviews';
-          const { text, buttons } = telegram.buildReviewNotification({
+          const { text, buttons, draftCopyMessage } = telegram.buildReviewNotification({
             businessName: biz.business_name,
             reviewerName: r.reviewer_name,
             rating: r.rating,
@@ -205,6 +205,12 @@ async function pollOne(businessId) {
             editUrl: `${dashboardBase()}/dashboard/reviews/${r.dbId}`,
           });
           await telegram.pushWithButtons(biz.telegram_chat_id, text, buttons);
+          // Follow-up draft-only message in <code> for one-tap copy on
+          // mobile Telegram. Send AFTER the card so the card scrolls
+          // up and the copy block sits at the bottom of the chat.
+          if (draftCopyMessage) {
+            await telegram.pushText(biz.telegram_chat_id, draftCopyMessage);
+          }
         }
       } catch (err) {
         captureException(err, { job: 'placesPoller', op: 'telegramPush', businessId: biz.id });
