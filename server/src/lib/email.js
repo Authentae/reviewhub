@@ -178,7 +178,22 @@ const NEW_REVIEW_STRINGS = {
   },
 };
 
-async function sendNewReviewNotification(userEmail, review, businessName, lang = 'en') {
+/**
+ * Send a new-review notification email with AI draft + Reply-on-Google link.
+ *
+ * Used as a notification channel alongside (or instead of) LINE OA. When
+ * an owner has no LINE link or has explicitly enabled email notifications,
+ * the placesPoller fires this on each new review.
+ *
+ * @param {string} userEmail
+ * @param {object} review — { rating, reviewer_name, review_text, sentiment, platform, review_language?, created_at? }
+ * @param {string} businessName
+ * @param {string} [lang='en']
+ * @param {object} [options]
+ * @param {string} [options.draftText] — AI-drafted reply to surface in the email
+ * @param {string} [options.replyOnGoogleUrl] — deep-link to business.google.com/reviews?authuser=...
+ */
+async function sendNewReviewNotification(userEmail, review, businessName, lang = 'en', options = {}) {
   const s = NEW_REVIEW_STRINGS[lang] || NEW_REVIEW_STRINGS.en;
   const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
 
@@ -193,22 +208,52 @@ async function sendNewReviewNotification(userEmail, review, businessName, lang =
   const safeSentiment = escapeHtml(review.sentiment);
   const safeBizName = escapeHtml(businessName);
   const safeClientUrl = escapeHtml(process.env.CLIENT_URL || 'http://localhost:5173');
+  const safeDraft = options.draftText ? escapeHtml(options.draftText) : '';
+  // Rating-tinted header — same color scheme as the LINE Flex card so
+  // owners scanning email get the same emotional signal at a glance.
+  // 1-2 stars rose, 3 ochre, 4-5 gold.
+  let ratingTint = '#fdf8e8';
+  let starColor = '#d4a857';
+  if (review.rating <= 2) { ratingTint = '#fbe9ec'; starColor = '#c2566c'; }
+  else if (review.rating === 3) { ratingTint = '#fdf6e7'; starColor = '#c08a3e'; }
 
   // Subject uses stripHeaderChars to prevent email header injection
   const subject = `${s.subjectPrefix} ${stripHeaderChars(platformLabel(review.platform))} ${s.subjectFor} ${stripHeaderChars(businessName)} — ${stars}`;
+
+  // Two primary actions: paste-on-Google + open dashboard. Same shape as
+  // the LINE Flex card so email and LINE notifications converge on one
+  // visual + workflow language.
+  const replyOnGoogle = options.replyOnGoogleUrl
+    || 'https://business.google.com/reviews';
+
   const html = `
-    <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-      <h2 style="color:#1e4d5e">${s.headlinePrefix} ${safePlatform}</h2>
-      <div style="background:#f9fafb;border-radius:8px;padding:16px;margin:16px 0">
-        <p><strong>${safeName}</strong> ${s.leftA} <strong>${review.rating} ${s.starReview}</strong> <strong>${safeBizName}</strong></p>
-        <p style="color:#374151">&ldquo;${safeText}&rdquo;</p>
-        <p style="font-size:12px;color:#6b7280">${s.sentiment}: ${safeSentiment} · ${new Date().toLocaleDateString()}</p>
+    <div style="font-family:sans-serif;max-width:600px;margin:0 auto;color:#1d242c">
+      <div style="background:${ratingTint};border-radius:8px 8px 0 0;padding:16px">
+        <p style="margin:0 0 6px;font-size:11px;font-weight:700;letter-spacing:.14em;color:#a07d20;text-transform:uppercase">NEW REVIEW · ${escapeHtml((businessName||'').toUpperCase())}</p>
+        <p style="margin:0;font-size:16px;color:${starColor}">${stars} <strong style="color:#1d242c">${safeName}</strong></p>
       </div>
-      <a href="${safeClientUrl}/dashboard"
-         style="background:#1e4d5e;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block">
-        ${escapeHtml(s.cta)}
-      </a>
-      <p style="font-size:11px;color:#9ca3af;margin-top:24px">${s.footer}</p>
+      <div style="background:#ffffff;border:1px solid #e6dfce;border-top:0;border-radius:0 0 8px 8px;padding:16px">
+        <p style="margin:0 0 14px;color:#374151">${safeText}</p>
+        ${safeDraft ? `
+        <div style="background:#fbf8f1;border-radius:6px;padding:12px 14px;margin:14px 0">
+          <p style="margin:0 0 6px;font-size:11px;font-weight:700;letter-spacing:.12em;color:#a07d20;text-transform:uppercase">AI DRAFT${review.review_language ? ` · ${escapeHtml(review.review_language.toUpperCase())}` : ''}</p>
+          <p style="margin:0;white-space:pre-wrap;color:#1d242c">${safeDraft}</p>
+        </div>
+        <p style="margin:14px 0 6px;font-size:12px;color:#6b7280">Copy the draft above, then:</p>
+        ` : ''}
+        <p style="margin:14px 0">
+          <a href="${escapeHtml(replyOnGoogle)}"
+             style="background:#1e4d5e;color:#fbf8f1;padding:10px 18px;border-radius:6px;text-decoration:none;display:inline-block;font-weight:600">
+            ${safeDraft ? 'Reply on Google →' : escapeHtml(s.cta)}
+          </a>
+          ${safeDraft ? `
+          <a href="${safeClientUrl}/dashboard"
+             style="margin-left:10px;color:#1e4d5e;text-decoration:underline">
+            ${escapeHtml(s.cta)}
+          </a>` : ''}
+        </p>
+        <p style="font-size:11px;color:#9ca3af;margin-top:24px">${s.footer}</p>
+      </div>
     </div>`;
 
   const transporter = getTransporter();
@@ -223,6 +268,8 @@ async function sendNewReviewNotification(userEmail, review, businessName, lang =
     `"${review.review_text || '(no text)'}"`,
     `${s.sentiment}: ${review.sentiment}`,
     ``,
+    ...(options.draftText ? [`AI draft:`, options.draftText, ``] : []),
+    `Reply on Google: ${replyOnGoogle}`,
     `${s.textViewAt} ${process.env.CLIENT_URL || 'http://localhost:5173'}/dashboard`,
     ``,
     s.footer,

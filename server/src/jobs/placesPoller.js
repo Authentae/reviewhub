@@ -44,10 +44,14 @@ function dashboardBase() {
 async function pollOne(businessId) {
   const biz = get(
     `SELECT b.id, b.user_id, b.business_name, b.google_place_id, b.google_managing_email,
+            u.email AS owner_email,
+            u.notif_new_review,
+            COALESCE(u.preferred_lang, 'en') AS owner_lang,
             (SELECT line_user_id FROM line_oa_links
               WHERE user_id = b.user_id AND line_user_id IS NOT NULL
               LIMIT 1) AS line_user_id
        FROM businesses b
+       LEFT JOIN users u ON u.id = b.user_id
       WHERE b.id = ?`,
     [businessId]
   );
@@ -142,6 +146,38 @@ async function pollOne(businessId) {
       draftText = result?.text || result?.draft || '';
     } catch (err) {
       captureException(err, { job: 'placesPoller', op: 'generateDraft', businessId: biz.id });
+    }
+
+    // EMAIL notification — universal fallback channel, fires for every
+    // user who has `notif_new_review` enabled (default ON at signup).
+    // Same content as the LINE Flex card (rating-tinted header, AI draft,
+    // Reply-on-Google link). Free per-send via Resend. Works for any user
+    // anywhere in the world — doesn't require LINE OA, WhatsApp, etc.
+    if (biz.owner_email && biz.notif_new_review) {
+      try {
+        const managingEmail = biz.google_managing_email;
+        const replyOnGoogleUrl = managingEmail
+          ? `https://business.google.com/reviews?authuser=${encodeURIComponent(managingEmail)}`
+          : 'https://business.google.com/reviews';
+        const { sendNewReviewNotification } = require('../lib/email');
+        await sendNewReviewNotification(
+          biz.owner_email,
+          {
+            rating: r.rating,
+            reviewer_name: r.reviewer_name,
+            review_text: r.review_text || '',
+            sentiment: r.sentiment || 'neutral',
+            platform: 'google',
+            review_language: r.review_language || '',
+            created_at: r.created_at || '',
+          },
+          biz.business_name,
+          biz.owner_lang || 'en',
+          { draftText: draftText || '', replyOnGoogleUrl }
+        );
+      } catch (err) {
+        captureException(err, { job: 'placesPoller', op: 'sendNewReviewEmail', businessId: biz.id });
+      }
     }
 
     if (biz.line_user_id && lineMessenger.isEnabled()) {
