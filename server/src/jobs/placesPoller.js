@@ -49,7 +49,10 @@ async function pollOne(businessId) {
             COALESCE(u.preferred_lang, 'en') AS owner_lang,
             (SELECT line_user_id FROM line_oa_links
               WHERE user_id = b.user_id AND line_user_id IS NOT NULL
-              LIMIT 1) AS line_user_id
+              LIMIT 1) AS line_user_id,
+            (SELECT telegram_chat_id FROM telegram_links
+              WHERE user_id = b.user_id AND telegram_chat_id IS NOT NULL
+              LIMIT 1) AS telegram_chat_id
        FROM businesses b
        LEFT JOIN users u ON u.id = b.user_id
       WHERE b.id = ?`,
@@ -177,6 +180,34 @@ async function pollOne(businessId) {
         );
       } catch (err) {
         captureException(err, { job: 'placesPoller', op: 'sendNewReviewEmail', businessId: biz.id });
+      }
+    }
+
+    // TELEGRAM notification — fires when the user has linked a Telegram
+    // chat AND the bot is enabled on this deployment.
+    if (biz.telegram_chat_id) {
+      try {
+        const telegram = require('../lib/telegram/messenger');
+        if (telegram.isEnabled()) {
+          const managingEmail = biz.google_managing_email;
+          const replyOnGoogleUrl = managingEmail
+            ? `https://business.google.com/reviews?authuser=${encodeURIComponent(managingEmail)}`
+            : 'https://business.google.com/reviews';
+          const { text, buttons } = telegram.buildReviewNotification({
+            businessName: biz.business_name,
+            reviewerName: r.reviewer_name,
+            rating: r.rating,
+            reviewText: r.review_text || '',
+            reviewDate: r.created_at || '',
+            draftText: draftText || '',
+            draftLanguage: r.review_language || '',
+            replyOnGoogleUrl,
+            editUrl: `${dashboardBase()}/dashboard/reviews/${r.dbId}`,
+          });
+          await telegram.pushWithButtons(biz.telegram_chat_id, text, buttons);
+        }
+      } catch (err) {
+        captureException(err, { job: 'placesPoller', op: 'telegramPush', businessId: biz.id });
       }
     }
 

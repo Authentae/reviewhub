@@ -1,0 +1,167 @@
+// Telegram Bot API client — owner-side notification channel.
+//
+// Parallels lib/line/messenger.js. The Telegram Bot API is simpler than
+// LINE Messaging API: HTTP POST with bot token + chat_id + text, no flex
+// schema, no webhook signing complexity (we validate via secret_token
+// header instead). Bot tokens are obtained from @BotFather in Telegram.
+//
+// Activation:
+//  - TELEGRAM_BOT_TOKEN env var must be set
+//  - TELEGRAM_BOT_ENABLED='true' (default false → all sends no-op)
+//
+// Why the bool flag separate from the token: some env presets carry the
+// token across deployments but we want explicit per-environment opt-in.
+// Same pattern as LINE_OA_ENABLED.
+
+const PUSH_URL = (token) => `https://api.telegram.org/bot${token}/sendMessage`;
+
+function isEnabled() {
+  return process.env.TELEGRAM_BOT_ENABLED === 'true' &&
+         !!process.env.TELEGRAM_BOT_TOKEN;
+}
+
+/**
+ * Send a plain-text message to a Telegram chat. Telegram chat_id is per
+ * bot, stable across the user's interactions with that specific bot.
+ *
+ * @param {string|number} chatId
+ * @param {string} text — message body (up to 4096 chars)
+ * @returns {Promise<{ ok: boolean, skipped?: boolean, error?: string }>}
+ */
+async function pushText(chatId, text) {
+  if (!isEnabled()) return { ok: true, skipped: true };
+  if (!chatId || !text) return { ok: false, error: 'chatId and text required' };
+  try {
+    const res = await module.exports._fetch(PUSH_URL(process.env.TELEGRAM_BOT_TOKEN), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: String(text).slice(0, 4096),
+        parse_mode: 'HTML',
+        disable_web_page_preview: false,
+      }),
+    });
+    if (!res.ok) {
+      const body = await res.text().catch(() => '(no body)');
+      return { ok: false, status: res.status, error: body.slice(0, 500) };
+    }
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: err.message || String(err) };
+  }
+}
+
+/**
+ * Send a message with an inline keyboard (buttons). Used for the
+ * "Reply on Google" / "Open dashboard" CTA pair on review notifications.
+ *
+ * @param {string|number} chatId
+ * @param {string} text
+ * @param {Array<Array<{ text: string, url: string }>>} buttons — rows of buttons
+ */
+async function pushWithButtons(chatId, text, buttons) {
+  if (!isEnabled()) return { ok: true, skipped: true };
+  if (!chatId || !text) return { ok: false, error: 'chatId and text required' };
+  try {
+    const res = await module.exports._fetch(PUSH_URL(process.env.TELEGRAM_BOT_TOKEN), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: String(text).slice(0, 4096),
+        parse_mode: 'HTML',
+        disable_web_page_preview: true,
+        reply_markup: { inline_keyboard: buttons || [] },
+      }),
+    });
+    if (!res.ok) {
+      const body = await res.text().catch(() => '(no body)');
+      return { ok: false, status: res.status, error: body.slice(0, 500) };
+    }
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: err.message || String(err) };
+  }
+}
+
+/**
+ * Build a notification message for a new review. Returns { text, buttons }
+ * ready to pass to pushWithButtons. HTML parse_mode supports basic <b>,
+ * <i>, <u>, <code>, <pre>, and emoji.
+ *
+ * Mirrors the LINE Flex card content shape so cross-channel notifications
+ * converge on one editorial voice.
+ */
+function buildReviewNotification({
+  businessName,
+  reviewerName,
+  rating,
+  reviewText,
+  reviewDate,
+  draftText,
+  draftLanguage,
+  replyOnGoogleUrl,
+  editUrl,
+}) {
+  // HTML escape for Telegram parse_mode=HTML
+  const esc = (s) => String(s || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  const stars = '⭐'.repeat(rating || 0);
+  const langTag = (draftLanguage || '').toUpperCase().slice(0, 4);
+  const draftHeader = langTag ? `AI DRAFT · ${langTag}` : 'AI DRAFT';
+
+  // Date hint — same recency labels as the LINE Flex card
+  let dateLabel = '';
+  if (reviewDate) {
+    const t = new Date(reviewDate);
+    if (!isNaN(t.getTime())) {
+      const diffMin = Math.floor((Date.now() - t) / 60000);
+      if (diffMin < 60) dateLabel = `${diffMin}m ago`;
+      else if (diffMin < 1440) dateLabel = `${Math.floor(diffMin / 60)}h ago`;
+      else if (diffMin < 1440 * 7) dateLabel = `${Math.floor(diffMin / 1440)}d ago`;
+      else dateLabel = t.toISOString().slice(0, 10);
+    }
+  }
+
+  // Message body — Telegram supports HTML but limits formatting. Use
+  // bold for the headlines, italics for the date hint.
+  const parts = [
+    `<b>NEW REVIEW · ${esc((businessName || 'YOUR BUSINESS').toUpperCase().slice(0, 40))}</b>`,
+    '',
+    `${stars} <b>${esc(reviewerName || 'Anonymous')}</b>${dateLabel ? ` <i>· ${esc(dateLabel)}</i>` : ''}`,
+    '',
+    esc((reviewText || '').slice(0, 600)),
+  ];
+  if (draftText) {
+    parts.push('');
+    parts.push(`<b>${esc(draftHeader)}</b>`);
+    parts.push(esc(draftText.slice(0, 600)));
+  }
+
+  const text = parts.join('\n');
+
+  // Inline keyboard — Telegram-equivalent of the LINE Flex card footer.
+  // Same two actions: Reply on Google (primary) + Open dashboard.
+  const buttons = [];
+  if (replyOnGoogleUrl) {
+    buttons.push([{ text: '↗ Reply on Google', url: replyOnGoogleUrl }]);
+  }
+  if (editUrl) {
+    buttons.push([{ text: '✎ Edit in dashboard', url: editUrl }]);
+  }
+
+  return { text, buttons };
+}
+
+module.exports = {
+  isEnabled,
+  pushText,
+  pushWithButtons,
+  buildReviewNotification,
+  // exported for tests
+  _fetch: (url, opts) => fetch(url, opts),
+};

@@ -932,6 +932,36 @@ function initSchema() {
     console.error('[DB] line_oa_links table creation:', err.message);
   }
 
+  // telegram_links — mirror of line_oa_links for Telegram Bot. Owner sends
+  // /link <token> to the ReviewHub Telegram bot; webhook matches token to
+  // user, stores telegram_chat_id (the bot's per-user identifier). Once
+  // linked, placesPoller fires a Telegram message on each new review.
+  try {
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS telegram_links (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        telegram_chat_id TEXT,
+        telegram_username TEXT,
+        first_name TEXT,
+        link_token TEXT,
+        link_token_expires_at TEXT,
+        linked_at TEXT,
+        last_message_sent_at TEXT,
+        created_at TEXT DEFAULT (datetime('now')),
+        updated_at TEXT DEFAULT (datetime('now')),
+        UNIQUE(user_id)
+      );
+      CREATE INDEX IF NOT EXISTS idx_telegram_links_user ON telegram_links(user_id);
+      CREATE INDEX IF NOT EXISTS idx_telegram_links_chat ON telegram_links(telegram_chat_id);
+      CREATE INDEX IF NOT EXISTS idx_telegram_links_token
+        ON telegram_links(link_token)
+        WHERE link_token IS NOT NULL;
+    `);
+  } catch (err) {
+    console.error('[DB] telegram_links table creation:', err.message);
+  }
+
   // Index token hashes so verify/reset lookups are O(log n) even at scale.
   // Partial indexes (WHERE … IS NOT NULL) keep them tiny — only rows with active tokens.
   try {

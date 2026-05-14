@@ -322,6 +322,11 @@ function createApp() {
   // link-token, unlink). The webhook receiver lives separately at
   // /api/webhooks/line and is mounted earlier with raw-body parsing.
   app.use('/api/line-oa', require('./routes/lineOaLinks'));
+  // /api/telegram — owner-side Telegram bot link management + webhook
+  // receiver. Mirror of /api/line-oa. Cheap to maintain; opens
+  // Russia/CIS, parts of EU/India/SEA, and tech-savvy Bangkok owners.
+  app.use('/api/telegram', require('./routes/telegramLinks'));
+  app.use('/api/telegram', require('./routes/telegramWebhook'));
   // business_share_tokens — owner-side endpoints mounted under
   // /api/businesses (matches the resource ownership), public read
   // endpoint exposed at /api/share/:token (single share-table read,
@@ -427,6 +432,12 @@ function createApp() {
 
     // LINE Messaging — owner push notifications. Both env vars required.
     components.line = (process.env.LINE_CHANNEL_ACCESS_TOKEN && process.env.LINE_OWNER_USER_ID)
+      ? 'configured'
+      : 'not-configured';
+
+    // Telegram Bot — alternate owner notification channel (for non-LINE
+    // markets). Both token and enable flag required.
+    components.telegram = (process.env.TELEGRAM_BOT_ENABLED === 'true' && process.env.TELEGRAM_BOT_TOKEN)
       ? 'configured'
       : 'not-configured';
 
