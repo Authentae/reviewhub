@@ -91,10 +91,13 @@ describe('Landing FAQ accordion', () => {
 describe('Landing How It Works section', () => {
   it('renders the three numbered steps', () => {
     renderLanding();
-    // v2 redesign + LINE-pivot copy: step 3 was "One tap. It's published." → now "Tap to copy, paste in Google."
+    // Step-3 copy evolved: 'One tap, it's published' → 'Tap to copy, paste in
+    // Google' (LINE pivot) → 'Copy the draft. Paste in Google.' (honest fix
+    // 2026-05-14 — LINE Flex has no clipboard button, so the marketing
+    // shouldn't claim a tap-copy action). Test matches the current honest copy.
     expect(screen.getByRole('heading', { name: /paste a link.*pull the reviews/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /ai writes in.*your voice/i })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /tap to copy.*paste in google/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /copy the draft.*paste in google/i })).toBeInTheDocument();
   });
 
   it('has a workflow section heading', () => {
