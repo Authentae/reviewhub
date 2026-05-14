@@ -60,12 +60,16 @@ router.post('/webhook', webhookLimiter, async (req, res) => {
     const fromUsername = msg.from?.username || null;
     const firstName = msg.from?.first_name || null;
 
+    // TEMP debug logging — remove once Telegram replies confirmed working
+    console.log('[telegram.webhook] received', { chatId, text: text.slice(0, 80), from: fromUsername });
+
     // /start — greet the user. /link <token> — bind chat to user.
     if (/^\/start\b/i.test(text)) {
-      await telegram.pushText(chatId,
+      const r = await telegram.pushText(chatId,
         'Hi! 👋 I\'m the ReviewHub bot. To receive new-review notifications here, '
         + 'go to your ReviewHub Settings → Connect Telegram → generate a code → send '
         + '<code>/link &lt;your-code&gt;</code> here.');
+      console.log('[telegram.webhook] /start pushText result', r);
       return res.json({ ok: true });
     }
 
