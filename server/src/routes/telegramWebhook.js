@@ -60,20 +60,25 @@ router.post('/webhook', webhookLimiter, async (req, res) => {
     const fromUsername = msg.from?.username || null;
     const firstName = msg.from?.first_name || null;
 
-    // TEMP debug logging — remove once Telegram replies confirmed working
-    console.log('[telegram.webhook] received', { chatId, text: text.slice(0, 80), from: fromUsername });
+    // Telegram deep-link pattern: t.me/<bot>?start=<payload> opens a chat
+    // pre-filled with "/start <payload>" — the user just taps Send. Treat
+    // the payload as a link token so cross-device linking is one tap.
+    const startMatch = text.match(/^\/start\s+([A-Za-z0-9_-]+)\s*$/i);
+    if (startMatch) {
+      // Fall through to the same logic as /link by rewriting text.
+      // (Avoids duplicating the DB lookup + bind block.)
+    }
 
-    // /start — greet the user. /link <token> — bind chat to user.
-    if (/^\/start\b/i.test(text)) {
-      const r = await telegram.pushText(chatId,
+    // /start (no payload) — greet the user. /link <token> — bind chat.
+    if (/^\/start\s*$/i.test(text)) {
+      await telegram.pushText(chatId,
         'Hi! 👋 I\'m the ReviewHub bot. To receive new-review notifications here, '
         + 'go to your ReviewHub Settings → Connect Telegram → generate a code → send '
         + '<code>/link &lt;your-code&gt;</code> here.');
-      console.log('[telegram.webhook] /start pushText result', r);
       return res.json({ ok: true });
     }
 
-    const linkMatch = text.match(/^\/link\s+([A-Za-z0-9_-]+)\s*$/i);
+    const linkMatch = text.match(/^\/link\s+([A-Za-z0-9_-]+)\s*$/i) || startMatch;
     if (linkMatch) {
       const token = linkMatch[1];
       // Find an unexpired token. Length sanity check first (24-byte

@@ -936,6 +936,286 @@ function LineConnectSection() {
   );
 }
 
+// TelegramConnectSection — owner-side UI for binding the user's Telegram
+// account so new-review notifications can be pushed via the bot.
+// Mirror of LineConnectSection. Talks to /api/telegram/{status,
+// generate-token, test-push, unlink}.
+function TelegramConnectSection() {
+  const { lang } = useI18n();
+  const isThai = lang === 'th';
+  const toast = useToast();
+  const [state, setState] = useState({ status: 'loading' });
+  const [tokenInfo, setTokenInfo] = useState(null);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    let interval = null;
+    function load() {
+      api.get('/telegram/status').then(({ data }) => {
+        if (cancelled) return;
+        setState({ status: 'ok', data });
+        if (data.linked && interval) {
+          clearInterval(interval);
+          interval = null;
+          toast(isThai
+            ? 'เชื่อม Telegram เรียบร้อย — รีวิวใหม่จะแจ้งเตือนที่ Telegram'
+            : 'Telegram connected — new reviews will ping you on Telegram.', 'success');
+        }
+      }).catch(() => {
+        if (cancelled) return;
+        setState({ status: 'error' });
+      });
+    }
+    load();
+    if (tokenInfo) interval = setInterval(load, 8000);
+    return () => {
+      cancelled = true;
+      if (interval) clearInterval(interval);
+    };
+  }, [tokenInfo, isThai, toast]);
+
+  async function handleGenerate() {
+    setBusy(true);
+    try {
+      const { data } = await api.post('/telegram/generate-token');
+      setTokenInfo(data);
+      toast(isThai
+        ? 'สร้างโค้ดแล้ว — ส่งคำสั่งใน Telegram ภายใน 15 นาที'
+        : 'Token generated — send the command in Telegram within 15 minutes.', 'success');
+    } catch (err) {
+      toast(err?.response?.data?.error || (isThai ? 'สร้างโค้ดไม่สำเร็จ' : 'Could not generate token'), 'error');
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function handleUnlink() {
+    if (!confirm(isThai
+      ? 'ปลดการเชื่อม Telegram? คุณจะไม่ได้รับแจ้งเตือนผ่าน Telegram จนกว่าจะเชื่อมใหม่'
+      : 'Unlink your Telegram account? You won\'t receive Telegram notifications until you re-link.')) return;
+    setBusy(true);
+    try {
+      await api.post('/telegram/unlink');
+      setTokenInfo(null);
+      const { data } = await api.get('/telegram/status');
+      setState({ status: 'ok', data });
+      toast(isThai ? 'ปลดการเชื่อมเรียบร้อย' : 'Unlinked.', 'success');
+    } catch (err) {
+      toast(err?.response?.data?.error || (isThai ? 'ปลดการเชื่อมไม่สำเร็จ' : 'Could not unlink'), 'error');
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function copyToClipboard(text, msg) {
+    try { await navigator.clipboard.writeText(text); toast(msg, 'success'); }
+    catch { toast(isThai ? 'คัดลอกไม่ได้' : 'Could not copy', 'error'); }
+  }
+
+  if (state.status === 'loading') {
+    return <section aria-label="Telegram connection" className="card p-5 mb-6 animate-pulse h-32" />;
+  }
+  if (state.status === 'error') return null;
+
+  const data = state.data;
+
+  if (!data.enabled) {
+    return (
+      <section aria-label="Telegram connection" className="card p-5 mb-6">
+        <h2 className="text-lg font-semibold mb-1" style={{ fontFamily: 'var(--rh-serif)' }}>
+          {isThai ? 'เชื่อม Telegram' : 'Connect Telegram'}
+        </h2>
+        <p className="text-sm" style={{ color: 'var(--rh-ink-2, #4a525a)' }}>
+          {isThai
+            ? 'Telegram Bot ยังไม่ได้เปิดใช้งานบน deployment นี้'
+            : 'Telegram Bot is not enabled on this deployment.'}
+        </p>
+      </section>
+    );
+  }
+
+  const botHandle = data.bot_username ? `@${data.bot_username}` : '(bot)';
+
+  return (
+    <section aria-label="Telegram connection" className="card p-5 mb-6">
+      <div className="flex items-start justify-between gap-3 mb-3 flex-wrap">
+        <div className="min-w-0">
+          <h2 className="text-lg font-semibold" style={{ fontFamily: 'var(--rh-serif)' }}>
+            {isThai ? 'เชื่อม Telegram' : 'Connect Telegram'}
+          </h2>
+          <p className="text-xs" style={{ color: 'var(--rh-ink-3, #888)' }}>
+            {isThai ? 'รีวิว Google ใหม่ → แจ้งเตือนเข้า Telegram ทันที' : 'New Google reviews → instant Telegram ping with the AI draft'}
+          </p>
+        </div>
+        {data.linked && (
+          <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full"
+            style={{ background: 'rgba(107,142,122,0.15)', color: 'var(--rh-sage, #6b8e7a)' }}>
+            <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--rh-sage, #6b8e7a)' }} aria-hidden="true" />
+            {isThai ? 'เชื่อมแล้ว' : 'Connected'}
+          </span>
+        )}
+      </div>
+
+      {data.linked ? (
+        <div className="space-y-3">
+          <div className="flex items-center gap-3 p-3 rounded-lg" style={{ background: 'var(--rh-paper, #fbf8f1)', border: '1px solid var(--rh-line, #e6dfce)' }}>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium truncate">
+                {data.first_name || data.telegram_username || (isThai ? '(ไม่มีชื่อ)' : '(no name)')}
+                {data.telegram_username && data.first_name && (
+                  <span className="ml-2 text-xs" style={{ color: 'var(--rh-ink-3, #888)' }}>@{data.telegram_username}</span>
+                )}
+              </p>
+              {data.linked_at && (
+                <p className="text-xs" style={{ color: 'var(--rh-ink-3, #888)' }}>
+                  {isThai ? 'เชื่อมเมื่อ ' : 'Connected '}{new Date(data.linked_at).toLocaleDateString(isThai ? 'th-TH' : 'en-US', { dateStyle: 'medium' })}
+                </p>
+              )}
+            </div>
+          </div>
+          <div className="flex items-center gap-2 flex-wrap">
+            <button
+              type="button"
+              onClick={async () => {
+                setBusy(true);
+                try {
+                  await api.post('/telegram/test-push');
+                  toast(isThai ? 'ส่งทดสอบไปที่ Telegram แล้ว — เช็คมือถือ' : 'Test push sent — check your Telegram app', 'success');
+                } catch (err) {
+                  toast(err?.response?.data?.error || (isThai ? 'ส่งทดสอบไม่สำเร็จ' : 'Test push failed'), 'error');
+                } finally {
+                  setBusy(false);
+                }
+              }}
+              disabled={busy}
+              className="btn-primary text-xs py-2 px-3 disabled:opacity-50"
+            >
+              {isThai ? 'ส่งการแจ้งเตือนทดสอบ' : 'Send test notification'}
+            </button>
+            <button
+              type="button"
+              onClick={handleUnlink}
+              disabled={busy}
+              className="btn-secondary text-xs py-2 px-3 disabled:opacity-50"
+            >
+              {isThai ? 'ปลดการเชื่อม' : 'Unlink'}
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {!tokenInfo && (
+            <>
+              <ol className="text-sm space-y-2 list-decimal pl-5" style={{ color: 'var(--rh-ink-2, #4a525a)' }}>
+                <li>{isThai ? 'เปิดแชต Telegram กับบอท: ' : 'Open Telegram chat with the bot: '}<strong>{botHandle}</strong></li>
+                <li>{isThai ? 'กดปุ่มด้านล่างเพื่อสร้างโค้ดเชื่อมบัญชี' : 'Click the button below to generate a one-time link code'}</li>
+                <li>{isThai ? 'ส่งคำสั่งให้บอทใน Telegram' : 'Send the command to the bot in Telegram'}</li>
+              </ol>
+              <button
+                type="button"
+                onClick={handleGenerate}
+                disabled={busy}
+                className="btn-primary text-sm py-2.5 px-4 disabled:opacity-50"
+              >
+                {busy ? (isThai ? 'กำลังสร้าง…' : 'Generating…') : (isThai ? 'สร้างโค้ดเชื่อมบัญชี' : 'Generate link code')}
+              </button>
+            </>
+          )}
+          {tokenInfo && (() => {
+            const command = tokenInfo.command || `/link ${tokenInfo.token}`;
+            const deepLink = tokenInfo.deep_link;
+            return (
+              <div className="space-y-3">
+                <p className="text-sm" style={{ color: 'var(--rh-ink, #1d242c)' }}>
+                  {isThai
+                    ? <>เปิด Telegram → คุยกับ <strong>{botHandle}</strong> → ส่งข้อความนี้:</>
+                    : <>Open Telegram → chat with <strong>{botHandle}</strong> → send this message:</>}
+                </p>
+                <div className="flex gap-2 items-center p-3 rounded-lg font-mono text-sm" style={{ background: 'var(--rh-paper, #fbf8f1)', border: '1px solid var(--rh-line, #e6dfce)' }}>
+                  <code className="flex-1 break-all">{command}</code>
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard(command, isThai ? 'คัดลอกแล้ว' : 'Copied')}
+                    className="btn-secondary text-xs py-1.5 px-3 whitespace-nowrap"
+                  >
+                    {isThai ? 'คัดลอก' : 'Copy'}
+                  </button>
+                </div>
+                {deepLink && (
+                  <div className="flex items-center justify-between gap-3 flex-wrap">
+                    <a
+                      href={deepLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-primary text-xs py-2 px-3 inline-flex items-center gap-1.5"
+                    >
+                      {isThai ? `เปิด ${botHandle} ใน Telegram (เชื่อมในขั้นตอนเดียว)` : `Open ${botHandle} in Telegram (one-tap link)`}
+                    </a>
+                  </div>
+                )}
+                <div className="flex items-center justify-between gap-3 flex-wrap">
+                  <p className="text-xs" style={{ color: 'var(--rh-ink-3, #888)' }}>
+                    {isThai
+                      ? `โค้ดนี้หมดอายุภายใน 15 นาที · กำลังรอการเชื่อมจาก Telegram…`
+                      : `This code expires in 15 minutes · Waiting for confirmation from Telegram…`}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={handleGenerate}
+                    disabled={busy}
+                    className="text-xs underline hover:no-underline disabled:opacity-50"
+                    style={{ color: 'var(--rh-teal-deep, #1e4d5e)' }}
+                  >
+                    {busy
+                      ? (isThai ? 'กำลังสร้าง…' : 'Generating…')
+                      : (isThai ? 'สร้างโค้ดใหม่' : 'Regenerate code')}
+                  </button>
+                </div>
+                {/* Phone-scan QR for cross-device linking. The deep link
+                    triggers Telegram's start-payload flow when scanned with
+                    the iPhone Camera, so a desktop user can link by
+                    pointing their phone at the screen. */}
+                {deepLink && (
+                  <div className="space-y-2">
+                    <p className="text-sm font-semibold" style={{ color: 'var(--rh-ink, #1d242c)' }}>
+                      {isThai ? 'มีมือถือ?  สแกน QR:' : 'On your phone? Scan this QR:'}
+                    </p>
+                    <div
+                      className="flex items-start gap-3 rounded-lg p-3"
+                      style={{ background: 'var(--rh-paper, #fbf8f1)', border: '1px solid var(--rh-line, #e6dfce)' }}
+                    >
+                      <div
+                        className="rounded-md p-1.5 flex-shrink-0"
+                        style={{ background: '#fff', border: '1px solid var(--rh-line, #e6dfce)' }}
+                      >
+                        <img
+                          src={`https://api.qrserver.com/v1/create-qr-code/?size=110x110&margin=0&data=${encodeURIComponent(deepLink)}`}
+                          alt={isThai ? `QR สำหรับเปิด ${botHandle}` : `Telegram link QR for ${botHandle}`}
+                          width={110}
+                          height={110}
+                          loading="lazy"
+                        />
+                      </div>
+                      <div className="text-xs leading-relaxed" style={{ color: 'var(--rh-ink-soft, #4a525a)' }}>
+                        <p>
+                          {isThai
+                            ? `สแกนแล้วเปิด Telegram → กด เริ่ม / Start — บัญชีของคุณจะเชื่อมโดยอัตโนมัติ`
+                            : `Scan → opens Telegram → tap Start. Your account links automatically.`}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })()}
+        </div>
+      )}
+    </section>
+  );
+}
+
 function TagManager() {
   const { t } = useI18n();
   const toast = useToast();
@@ -2983,6 +3263,9 @@ export default function Settings() {
             so new-review notifications can ping them. The headline
             differentiator vs Birdeye/Podium for the LINE-pivot v1. */}
         <LineConnectSection />
+
+        {/* Telegram bot — international counterpart to LINE OA */}
+        <TelegramConnectSection />
 
         {/* Review Tags */}
         <TagManager />

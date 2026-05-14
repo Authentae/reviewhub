@@ -74,9 +74,63 @@ router.post('/generate-token', writeLimiter, (req, res) => {
         [req.user.id, token, expiresAt]
       );
     }
-    res.json({ token, expires_at: expiresAt, bot_username: process.env.TELEGRAM_BOT_USERNAME || '' });
+    const botUsername = process.env.TELEGRAM_BOT_USERNAME || '';
+    res.json({
+      token,
+      expires_at: expiresAt,
+      bot_username: botUsername,
+      // Pre-formatted command to paste into Telegram chat.
+      command: `/link ${token}`,
+      // Telegram deep link with start payload — opens the bot chat
+      // pre-filled with /start <token>. One tap on mobile = linked.
+      deep_link: botUsername ? `https://t.me/${botUsername}?start=${token}` : null,
+    });
   } catch (err) {
     captureException(err, { route: 'telegram.generate-token' });
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// POST /api/telegram/test-push — fire a synthetic notification to verify
+// the push pipeline end-to-end without waiting for a real Google review.
+router.post('/test-push', writeLimiter, async (req, res) => {
+  try {
+    const tg = require('../lib/telegram/messenger');
+    if (!tg.isEnabled()) {
+      return res.status(503).json({ error: 'Telegram Bot not configured on this deployment' });
+    }
+    const link = get('SELECT telegram_chat_id FROM telegram_links WHERE user_id = ?', [req.user.id]);
+    if (!link || !link.telegram_chat_id) {
+      return res.status(400).json({ error: 'No linked Telegram chat. Generate a code + link first.' });
+    }
+    const biz = get(
+      'SELECT business_name, google_managing_email FROM businesses WHERE user_id = ? ORDER BY id ASC LIMIT 1',
+      [req.user.id]
+    );
+    const businessName = biz?.business_name || 'Your business';
+    const managingEmail = biz?.google_managing_email;
+    const replyOnGoogleUrl = managingEmail
+      ? `https://business.google.com/reviews?authuser=${encodeURIComponent(managingEmail)}`
+      : 'https://business.google.com/reviews';
+    const { text, buttons } = tg.buildReviewNotification({
+      businessName,
+      reviewerName: 'ReviewHub Test',
+      rating: 5,
+      reviewText: 'Test notification — if you see this on Telegram, the push pipeline is wired correctly end-to-end. Real reviews arrive here within 30 min of being posted on Google.',
+      reviewDate: new Date().toISOString(),
+      draftText: 'Thank you so much for the test! 🎉 — Sample AI-drafted reply.',
+      draftLanguage: 'en',
+      replyOnGoogleUrl,
+      editUrl: 'https://reviewhub.review/dashboard',
+    });
+    const r = await tg.pushWithButtons(link.telegram_chat_id, text, buttons);
+    if (!r.ok) {
+      captureException(new Error(`telegram test-push: ${r.error}`), { route: 'telegram.test-push' });
+      return res.status(502).json({ error: `Telegram push failed: ${r.error || 'unknown'}` });
+    }
+    res.json({ ok: true });
+  } catch (err) {
+    captureException(err, { route: 'telegram.test-push' });
     res.status(500).json({ error: 'Server error' });
   }
 });
