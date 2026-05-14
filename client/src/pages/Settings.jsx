@@ -3354,9 +3354,13 @@ export default function Settings() {
           </div>
         </section>
 
-        {/* Platform connections */}
+        {/* Connected review platforms — where reviews are PULLED FROM.
+            Visually + semantically separated from notification channels
+            below (where alerts are PUSHED TO). Two distinct concepts;
+            previous flat list confused owners on whether LINE was a
+            review source. */}
         <section className="mb-6" aria-labelledby="settings-platforms">
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center justify-between mb-1">
             <h2 id="settings-platforms" className="text-base font-semibold text-gray-700 dark:text-gray-300">{t('settings.connectedPlatforms')}</h2>
             {Object.keys(connections).length > 0 && (
               <button
@@ -3370,6 +3374,11 @@ export default function Settings() {
               </button>
             )}
           </div>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
+            {lang === 'th'
+              ? 'แหล่งที่มาของรีวิว — เราจะดึงรีวิวใหม่จากแพลตฟอร์มที่เชื่อมต่อมาให้คุณตอบ'
+              : 'Where reviews come from. We pull new reviews from each connected platform so you can reply faster.'}
+          </p>
           <div className="space-y-3">
             <ConnectCard platform="google" icon={<span aria-hidden="true">🔵</span>} color="bg-blue-50" connected={business?.google_place_id} onConnect={handleConnect} syncStatus={connections.google} businessId={business?.id} managingEmail={business?.google_managing_email || ''} />
             <ConnectCard platform="yelp" icon={<span aria-hidden="true">🔴</span>} color="bg-red-50" connected={business?.yelp_business_id} onConnect={handleConnect} syncStatus={connections.yelp} />
@@ -3382,13 +3391,25 @@ export default function Settings() {
           <CsvOnlyPlatforms lang={lang} />
         </section>
 
-        {/* LINE OA connection — owner-side flow to bind their LINE userId
-            so new-review notifications can ping them. The headline
-            differentiator vs Birdeye/Podium for the LINE-pivot v1. */}
-        <LineConnectSection />
-
-        {/* Telegram bot — international counterpart to LINE OA */}
-        <TelegramConnectSection />
+        {/* Notification channels — where review alerts are PUSHED TO.
+            LINE is the Thai-market headline channel; Telegram is the
+            international fallback. Both share the brand-stripe + logo
+            visual pattern from ChannelHeader so they read as a coherent
+            "pick how I want to be notified" group. */}
+        <section className="mb-6" aria-labelledby="settings-notifications">
+          <div className="mb-3">
+            <h2 id="settings-notifications" className="text-base font-semibold text-gray-700 dark:text-gray-300">
+              {lang === 'th' ? 'ช่องทางการแจ้งเตือน' : 'Notification channels'}
+            </h2>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+              {lang === 'th'
+                ? 'รีวิวใหม่จะส่งมาที่ช่องทางที่คุณเชื่อมต่อ พร้อมข้อความตอบกลับที่ AI ร่างให้แล้ว — กดคัดลอกแล้ววางใน Google ได้เลย'
+                : 'New reviews ping you on the channels you connect, with an AI-drafted reply ready to copy and paste into Google.'}
+            </p>
+          </div>
+          <LineConnectSection />
+          <TelegramConnectSection />
+        </section>
 
         {/* Review Tags */}
         <TagManager />
