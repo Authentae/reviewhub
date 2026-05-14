@@ -104,25 +104,64 @@ Three things to watch when Wave 4's reply window closes Sat 5/16:
    don't reply to the follow-up either, the audit-preview page conversion
    is the real bottleneck, not the cold email.
 
+## Framing correction (added 2026-05-14)
+
+Earlier sections of this doc referred to "Bangkok hospitality SMB
+owners" as the target. That was a framing error — *the segment we
+tested* (hospitality, Waves 1-4) ≠ *the product's target* (8
+verticals: restaurants, dentists, hotels, spas, cafes, bars, fitness,
+pharmacies; each has a vertical landing page). The fork tree below is
+rewritten to reflect the broader product target. Whichever path Wave
+4 data points to, "should we be testing 1 vertical or several in
+parallel?" is now an explicit question, not an assumed default.
+
 ## Fork decisions (frozen until Sat 5/16 data lands)
 
-If Wave 4 yields ≥1 reply: copy/segment is working. Refine and scale.
+If Wave 4 yields ≥1 reply from hospitality: hospitality pitch + audience
+works. Refine, scale within hospitality, AND start parallel test on at
+least 1 other vertical to know if it's the only category that converts
+or just the first one we tested.
 
-If Wave 4 yields 0 replies: serious decision. Three branches:
+If Wave 4 yields 0 replies: serious decision. Four branches (was three):
+
 - **Branch A (copy):** Rewrite the cold-email body. Test "specific
   observation" hook ("I noticed Chakrabongse hasn't replied to its last
   3 reviews — here's a draft for the most recent") vs current "I made
   you 10 drafts" framing. Slower, more personalized; harder to scale.
-- **Branch B (audience):** Pivot to a different vertical. Bangkok
-  cafe owners + Bangkok dentists are the two next-likely candidates
-  (both have category names already in vertical landing pages). Drop
-  hospitality.
-- **Branch C (offer):** Shift the asks. Instead of "free audit", offer
-  "let me draft your hardest 1-star reply this week" — micro-favor at the
-  edge of their actual workflow.
+  Hyper-specific positioning (per the EEC framework's step 1) feeds in
+  here — sharper pitch, same vertical.
 
-The branch we pick should be informed by *which* 0-reply pattern we see
-on Wave 4, not by gut feel.
+- **Branch B (single-vertical pivot):** Drop hospitality entirely.
+  Pivot to ONE other vertical for Wave 5 — most-likely candidates are
+  Bangkok dentists (higher WTP, owner-operated, less foreign-tool
+  competition) or Bangkok cafes (high review volume, lower WTP).
+  Concentrated single-vertical test.
+
+- **Branch C (offer shift):** Stop pitching the SaaS subscription.
+  Pitch a one-off micro-favor: "I'll draft your hardest 1-star reply
+  this week — free." Get prospects to interact, convert to paid later.
+
+- **Branch D (parallel multi-vertical test) — NEW:** Send Wave 5 across
+  4 verticals in parallel (~3 prospects each: hospitality, dentists,
+  cafes, spas). Same pitch, same shape. Reply-rate differential
+  per-vertical is the signal. This branch trades scale-per-cohort for
+  faster vertical-fit learning. Strongest signal in least time IF the
+  hospitality result alone is ambiguous (e.g., 1/7 replies could be
+  "hospitality works" or "any vertical with 200+ reviews works").
+
+Which branch we pick depends on the SHAPE of Wave 4's 0:
+
+- Open-no-reply pattern across all 7 → Branch A or C (pitch/offer
+  problem, not audience)
+- 0 opens → already falsified per deliverability-pass; not possible
+- Mix of opens and silence → Branch D (test what differentiates the
+  responders' segment)
+- Single reply but from a quirky outlier → Branch A (refine for that
+  shape)
+
+The default if data is unclear: **Branch D (parallel multi-vertical)**.
+The product targets 8 verticals; we've only tested 1. The cheapest
+test is to fan out, not to dig deeper in the same hole.
 
 ## Action items now
 
