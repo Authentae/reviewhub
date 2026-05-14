@@ -36,6 +36,56 @@ function formatSyncAgo(isoLike, rtf, t) {
   return rtf.format(-Math.round(diffSec / 86400), 'day');
 }
 
+// Platform brand marks for the "Connected platforms" cards. Same visual
+// pattern as the LINE/Telegram ChannelHeader below: colored top-stripe
+// on the card + tinted-background SVG mark on the left. Owner scanning
+// a busy Settings page locates the right card by color/logo before
+// reading text.
+const PLATFORM_BRAND = {
+  google:   { color: '#4285F4', tintBg: 'rgba(66,133,244,0.08)',  tintBorder: 'rgba(66,133,244,0.25)' },
+  yelp:     { color: '#D32323', tintBg: 'rgba(211,35,35,0.08)',   tintBorder: 'rgba(211,35,35,0.25)' },
+  facebook: { color: '#1877F2', tintBg: 'rgba(24,119,242,0.08)',  tintBorder: 'rgba(24,119,242,0.25)' },
+  tripadvisor: { color: '#00AA6C', tintBg: 'rgba(0,170,108,0.08)', tintBorder: 'rgba(0,170,108,0.25)' },
+};
+
+function PlatformLogo({ platform, size = 36 }) {
+  if (platform === 'google') {
+    return (
+      <svg width={size} height={size} viewBox="0 0 48 48" aria-hidden="true">
+        <path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/>
+        <path fill="#34A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/>
+        <path fill="#FBBC04" d="M11.69 28.18c-.44-1.32-.69-2.73-.69-4.18s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24s.85 6.91 2.34 9.88l7.35-5.7z"/>
+        <path fill="#EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/>
+      </svg>
+    );
+  }
+  if (platform === 'yelp') {
+    return (
+      <svg width={size} height={size} viewBox="0 0 36 36" aria-hidden="true">
+        <rect width="36" height="36" rx="8" fill="#D32323"/>
+        <path fill="#fff" d="M17.6 19.9l-3.5 6c-.3.5-.9.6-1.4.3-1-.6-1.9-1.4-2.6-2.4-.3-.4-.2-1 .2-1.3l6-3.7c.4-.3.9 0 1.1.4.1.2.2.5.2.7zM18.8 17.4l6.7-1.5c.6-.1 1.1.3 1.1.9.1 1.1-.1 2.3-.5 3.3-.2.5-.7.7-1.2.5l-6.4-2.4c-.5-.2-.6-.7-.4-1.1.2-.2.4-.5.7-.5v.8zM18.4 14.9l-1.7-6.6c-.1-.6.3-1.1.9-1.1 1.2-.1 2.4.1 3.5.6.5.2.7.7.5 1.2l-2.5 6.3c-.2.5-.7.6-1.1.4-.2-.2-.4-.5-.4-.8h.8zM15.9 16.9l-6-3.3c-.5-.3-.6-.9-.3-1.4.6-.9 1.4-1.7 2.4-2.3.4-.3 1-.2 1.3.2l3.9 5.7c.3.4.1.9-.3 1.1-.3.2-.7.2-1 0zM17.2 22.6l-1.1 4.6c-.1.6-.7.9-1.3.7-1-.4-1.9-1-2.6-1.8-.3-.4-.2-1 .2-1.3l3.7-2.9c.4-.3.9-.2 1.1.2.1.1.1.3.1.5h-.1z"/>
+      </svg>
+    );
+  }
+  if (platform === 'facebook') {
+    return (
+      <svg width={size} height={size} viewBox="0 0 36 36" aria-hidden="true">
+        <rect width="36" height="36" rx="8" fill="#1877F2"/>
+        <path fill="#fff" d="M22.6 19l.6-3.9h-3.7v-2.5c0-1.1.5-2.1 2.2-2.1h1.7V7.1s-1.5-.3-3-.3c-3 0-5 1.8-5 5.2v3h-3.4V19h3.4v9.5h4.2V19h3z"/>
+      </svg>
+    );
+  }
+  if (platform === 'tripadvisor') {
+    return (
+      <svg width={size} height={size} viewBox="0 0 36 36" aria-hidden="true">
+        <rect width="36" height="36" rx="8" fill="#00AA6C"/>
+        <text x="18" y="22" textAnchor="middle" fontFamily="-apple-system, sans-serif" fontWeight="800" fontSize="13" fill="#fff">TA</text>
+      </svg>
+    );
+  }
+  return null;
+}
+
 function ConnectCard({ platform, icon, color, connected, onConnect, syncStatus, businessId, managingEmail = '' }) {
   // Google-managing-email — the GBP-owning account this listing belongs to.
   // Used by the "Reply on Google" button to deep-link via &authuser=<email>
@@ -210,12 +260,25 @@ function ConnectCard({ platform, icon, color, connected, onConnect, syncStatus, 
     }
   }
 
+  const brand = PLATFORM_BRAND[platform];
   return (
-    <div className="card p-5">
+    <div
+      className="card p-5"
+      style={brand ? { borderTop: `3px solid ${brand.color}` } : undefined}
+    >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-xl ${color}`}>
-            {icon}
+          <div
+            className="w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0"
+            style={brand
+              ? { background: brand.tintBg, border: `1px solid ${brand.tintBorder}` }
+              : undefined}
+          >
+            {/* Brand SVG mark — falls back to the legacy emoji icon prop
+                for any platform we haven't added to PLATFORM_BRAND yet. */}
+            {brand ? <PlatformLogo platform={platform} size={26} /> : (
+              <span className={`text-xl ${color || ''}`}>{icon}</span>
+            )}
           </div>
           <div>
             <p className="font-semibold text-sm text-gray-900 dark:text-gray-100 capitalize">{platform}</p>
