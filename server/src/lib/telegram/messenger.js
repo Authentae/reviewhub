@@ -110,9 +110,20 @@ function buildReviewNotification({
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
 
-  const stars = '⭐'.repeat(rating || 0);
+  const r = Math.max(0, Math.min(5, rating || 0));
+  const stars = '⭐'.repeat(r);
   const langTag = (draftLanguage || '').toUpperCase().slice(0, 4);
   const draftHeader = langTag ? `AI DRAFT · ${langTag}` : 'AI DRAFT';
+
+  // Rating-tier badge — instant visual signal at the top of the message.
+  // 1-2★ = red/urgent (owner must reply same day), 3★ = yellow/neutral
+  // (read carefully, often the most actionable feedback), 4-5★ = green/
+  // positive (easy thank-you). Mirrors the LINE Flex card's rating-tint
+  // header so cross-channel notifications feel like the same product.
+  let tierBadge = '🟢';
+  let tierLabel = 'POSITIVE';
+  if (r <= 2) { tierBadge = '🔴'; tierLabel = 'ATTENTION'; }
+  else if (r === 3) { tierBadge = '🟡'; tierLabel = 'NEUTRAL'; }
 
   // Date hint — same recency labels as the LINE Flex card
   let dateLabel = '';
@@ -120,42 +131,56 @@ function buildReviewNotification({
     const t = new Date(reviewDate);
     if (!isNaN(t.getTime())) {
       const diffMin = Math.floor((Date.now() - t) / 60000);
-      if (diffMin < 60) dateLabel = `${diffMin}m ago`;
+      if (diffMin < 1) dateLabel = 'just now';
+      else if (diffMin < 60) dateLabel = `${diffMin}m ago`;
       else if (diffMin < 1440) dateLabel = `${Math.floor(diffMin / 60)}h ago`;
       else if (diffMin < 1440 * 7) dateLabel = `${Math.floor(diffMin / 1440)}d ago`;
       else dateLabel = t.toISOString().slice(0, 10);
     }
   }
 
-  // Message body — Telegram supports HTML but limits formatting. Use
-  // bold for the headlines, italics for the date hint.
-  // NOTE: the AI draft is intentionally NOT inlined here. It ships as
-  // a follow-up `draftCopyMessage` wrapped in <code> so the Telegram
-  // mobile client's tap-and-hold "Copy" action captures exactly the
-  // draft text (no headers, no review quote). Pasting into Google's
-  // reply box then needs zero cleanup.
+  // Message body — Telegram HTML mode supports <b>, <i>, <code>,
+  // <pre>, <blockquote>, <a>, emoji. Use blockquote for the review
+  // text so it visually separates from the meta line, and emoji
+  // section markers (📍 location, 🕐 time, 💬 review) so a glancing
+  // owner can pick out the structure even without reading.
+  //
+  // The AI draft is intentionally NOT inlined here — it ships as a
+  // follow-up `draftCopyMessage` wrapped in <code> so the Telegram
+  // mobile tap-and-hold "Copy" captures exactly the draft, no
+  // header noise. Pasting in Google's reply box needs zero cleanup.
+  const businessLine = businessName ? `📍 <b>${esc(String(businessName).slice(0, 60))}</b>` : '';
+  const metaLine = dateLabel ? `🕐 <i>${esc(dateLabel)}</i>` : '';
+  const reviewBody = (reviewText || '').slice(0, 700).trim();
+
   const parts = [
-    `<b>NEW REVIEW · ${esc((businessName || 'YOUR BUSINESS').toUpperCase().slice(0, 40))}</b>`,
-    '',
-    `${stars} <b>${esc(reviewerName || 'Anonymous')}</b>${dateLabel ? ` <i>· ${esc(dateLabel)}</i>` : ''}`,
-    '',
-    esc((reviewText || '').slice(0, 600)),
+    `${tierBadge} <b>${tierLabel}</b> · ${stars}  <code>${r}/5</code>`,
   ];
+  if (businessLine || metaLine) {
+    parts.push([businessLine, metaLine].filter(Boolean).join('   '));
+  }
+  parts.push('');
+  parts.push(`💬 <b>${esc(reviewerName || 'Anonymous')}</b>`);
+  if (reviewBody) {
+    parts.push(`<blockquote>${esc(reviewBody)}</blockquote>`);
+  }
   if (draftText) {
     parts.push('');
-    parts.push(`<i>${esc(draftHeader)} — copy block below ↓</i>`);
+    parts.push(`✨ <i>${esc(draftHeader)} — copy the block below ↓</i>`);
   }
 
   const text = parts.join('\n');
 
   // Inline keyboard — Telegram-equivalent of the LINE Flex card footer.
-  // Same two actions: Reply on Google (primary) + Open dashboard.
+  // Two actions: Reply on Google (primary, takes user straight to the
+  // Google review box) + Edit in dashboard (for richer edit + post via
+  // ReviewHub). Emoji prefix gives each button instant glanceable intent.
   const buttons = [];
   if (replyOnGoogleUrl) {
-    buttons.push([{ text: '↗ Reply on Google', url: replyOnGoogleUrl }]);
+    buttons.push([{ text: '💬 Reply on Google', url: replyOnGoogleUrl }]);
   }
   if (editUrl) {
-    buttons.push([{ text: '✎ Edit in dashboard', url: editUrl }]);
+    buttons.push([{ text: '✏️ Edit in dashboard', url: editUrl }]);
   }
 
   // Second message containing ONLY the draft, wrapped in <code> so the

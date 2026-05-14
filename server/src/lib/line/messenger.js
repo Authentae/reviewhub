@@ -198,12 +198,21 @@ function buildReviewNotificationFlex({
   }
 
   const langTag = (draftLanguage || '').toUpperCase().slice(0, 4);
-  const draftHeader = langTag ? `AI DRAFT · ${langTag}` : 'AI DRAFT';
+  const draftHeader = langTag ? `✨ AI DRAFT · ${langTag}` : '✨ AI DRAFT';
+
+  // Rating-tier emoji prefix on the eyebrow — instant visual signal
+  // matching the Telegram message badge. 1-2★ = red urgent, 3★ = yellow
+  // neutral, 4-5★ = green positive. Cross-channel parity so an owner
+  // who notifies via both LINE + Telegram reads the same emotional cue.
+  let tierEmoji = '🟢';
+  let tierLabel = 'POSITIVE';
+  if (rating <= 2) { tierEmoji = '🔴'; tierLabel = 'ATTENTION'; }
+  else if (rating === 3) { tierEmoji = '🟡'; tierLabel = 'NEUTRAL'; }
 
   // Editorial eyebrow — caps + mono-feel via wide letter-spacing.
   // LINE Flex has no font-family control; the closest we get to the
   // mockup's JetBrains Mono eyebrow is uppercase + xs weight bold.
-  const eyebrow = `NEW REVIEW · ${(businessName || 'YOUR BUSINESS').toUpperCase().slice(0, 40)}`;
+  const eyebrow = `${tierEmoji} ${tierLabel} · ${(businessName || 'YOUR BUSINESS').toUpperCase().slice(0, 36)}`;
 
   // Build the footer button array based on which URLs were provided.
   // Reply-on-Google is preferred — it's the action that actually works
@@ -213,14 +222,14 @@ function buildReviewNotificationFlex({
     footerButtons.push({
       type: 'button',
       style: 'primary',
-      action: { type: 'uri', label: 'Reply on Google', uri: replyOnGoogleUrl },
+      action: { type: 'uri', label: '💬 Reply on Google', uri: replyOnGoogleUrl },
       color: TEAL,
     });
   } else if (approveUrl) {
     footerButtons.push({
       type: 'button',
       style: 'primary',
-      action: { type: 'uri', label: 'Approve & post', uri: approveUrl },
+      action: { type: 'uri', label: '✓ Approve & post', uri: approveUrl },
       color: TEAL,
     });
   }
@@ -228,7 +237,7 @@ function buildReviewNotificationFlex({
     footerButtons.push({
       type: 'button',
       style: 'link',
-      action: { type: 'uri', label: 'Edit in dashboard', uri: editUrl },
+      action: { type: 'uri', label: '✏️ Edit in dashboard', uri: editUrl },
       height: 'sm',
     });
   }
@@ -291,55 +300,88 @@ function buildReviewNotificationFlex({
     },
     body: {
       type: 'box',
-      layout: 'vertical',
+      layout: 'horizontal',
       contents: [
-        // Review text — first thing the owner reads
-        {
-          type: 'text',
-          text: (reviewText || '').slice(0, 400),
-          wrap: true,
-          size: 'sm',
-          color: INK,
-        },
-        // Draft section — visually offset with sage-tinted box
+        // Left rating-color accent bar — narrow vertical stripe whose
+        // color matches the star color above. Carries the rating
+        // signal into the body so it's still visible after the owner
+        // scrolls the header out of view.
         {
           type: 'box',
           layout: 'vertical',
-          margin: 'xl',
-          paddingAll: 'md',
-          backgroundColor: PAPER,
+          width: '4px',
+          backgroundColor: starColor,
           cornerRadius: 'sm',
+          contents: [{ type: 'filler' }],
+        },
+        // Main body column
+        {
+          type: 'box',
+          layout: 'vertical',
+          flex: 1,
+          paddingStart: 'md',
           contents: [
+            // Section label for the review quote
             {
               type: 'text',
-              text: draftHeader,
-              size: 'xs',
-              color: OCHRE,
+              text: '💬 REVIEW',
+              size: 'xxs',
+              color: INK_SOFT,
               weight: 'bold',
             },
+            // Review text — first thing the owner reads
             {
               type: 'text',
-              text: (draftText || '').slice(0, 500),
+              text: (reviewText || '').slice(0, 400),
               wrap: true,
-              margin: 'md',
               size: 'sm',
               color: INK,
+              margin: 'sm',
+            },
+            // Draft section — sage-paper background with a top accent
+            // bar in the same rating color, draft header in starColor
+            // (not generic OCHRE) for visual continuity with the rating.
+            {
+              type: 'box',
+              layout: 'vertical',
+              margin: 'xl',
+              paddingAll: 'md',
+              backgroundColor: PAPER,
+              cornerRadius: 'md',
+              borderColor: RULE,
+              borderWidth: '1px',
+              contents: [
+                {
+                  type: 'text',
+                  text: draftHeader,
+                  size: 'xs',
+                  color: starColor,
+                  weight: 'bold',
+                },
+                {
+                  type: 'text',
+                  text: (draftText || '').slice(0, 500),
+                  wrap: true,
+                  margin: 'md',
+                  size: 'sm',
+                  color: INK,
+                },
+              ],
+            },
+            // Honest instructional hint — LINE Flex schema doesn't
+            // support text-selection on card internals, so the owner
+            // needs to copy from the plain-text bubble we send as a
+            // follow-up message, then tap Reply on Google here.
+            {
+              type: 'text',
+              text: '↓ Long-press the message below to copy the draft',
+              size: 'xxs',
+              color: INK_SOFT,
+              margin: 'md',
+              align: 'center',
+              wrap: true,
             },
           ],
-        },
-        // Honest instructional hint — LINE Flex schema doesn't support
-        // text-selection on card internals, so the owner needs to copy
-        // from the plain-text bubble we send as a follow-up message,
-        // then tap Reply on Google here. Spell it out so the workflow
-        // is discoverable on first use.
-        {
-          type: 'text',
-          text: 'Long-press the message below to copy →',
-          size: 'xs',
-          color: INK_SOFT,
-          margin: 'md',
-          align: 'center',
-          wrap: true,
         },
       ],
       paddingAll: 'lg',
