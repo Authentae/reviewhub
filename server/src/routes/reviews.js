@@ -1231,7 +1231,18 @@ router.post('/:id/respond', respondLimiter, async (req, res) => {
           `SELECT * FROM platform_connections WHERE business_id = ? AND provider = ?`,
           [business.id, review.platform]
         );
-        if (conn) {
+        // SHORT-CIRCUIT: same pattern as syncReviews — when the connection
+        // is provider='google' but the legacy OAuth credentials are not
+        // configured, skip the platform-post attempt instead of letting
+        // GoogleProvider.replyToReview throw 'Google provider not
+        // configured'. In Places-API-only mode (GOOGLE_MAPS_API_KEY set,
+        // GOOGLE_CLIENT_ID unset) auto-post isn't supported anyway — the
+        // user posts manually via the 'Reply on Google' button. Don't log
+        // an error for an expected pre-GBP-approval state.
+        const isGooglePlacesOnly = conn && conn.provider === 'google'
+          && !process.env.GOOGLE_CLIENT_ID
+          && process.env.GOOGLE_MAPS_API_KEY;
+        if (conn && !isGooglePlacesOnly) {
           const { getProvider } = require('../lib/providers');
           const provider = getProvider(conn);
           if (provider && typeof provider.replyToReview === 'function') {

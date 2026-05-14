@@ -82,6 +82,21 @@ async function runScheduledReplyPoster() {
         continue;
       }
 
+      // Same short-circuit as syncReviews + the immediate-post path in
+      // routes/reviews.js: when the connection is provider='google' but
+      // we're in Places-API-only mode (no GOOGLE_CLIENT_ID), auto-post
+      // isn't supported. Clear the schedule so we don't loop on this row,
+      // leave the response saved (user can paste manually via dashboard's
+      // 'Reply on Google' button). No error logged — this is an expected
+      // state pre-GBP-approval.
+      const isGooglePlacesOnly = conn.provider === 'google'
+        && !process.env.GOOGLE_CLIENT_ID
+        && process.env.GOOGLE_MAPS_API_KEY;
+      if (isGooglePlacesOnly) {
+        run(`UPDATE reviews SET scheduled_post_at = NULL WHERE id = ?`, [row.id]);
+        continue;
+      }
+
       const { getProvider } = require('../lib/providers');
       const provider = getProvider(conn);
       if (!provider || typeof provider.replyToReview !== 'function') {
