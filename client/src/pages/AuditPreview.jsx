@@ -304,6 +304,27 @@ export default function AuditPreview() {
             <p className="text-xs mt-3" style={{ color: '#fdf2dc', opacity: 0.85 }}>
               No credit card to start · 30-day refund window · cancel anytime
             </p>
+            {/* Parallel low-friction CTA — Wave 1-4 diagnostic (2026-05-15)
+                showed 35% audit-open rate but 0 replies across 22 sends.
+                The signup CTA above is a high-friction ask for a stranger;
+                some prospects will want to reply with a question first.
+                Surface that path RIGHT HERE, not buried in the footer
+                below the FAQ where the existing soft-CTA lived. mailto:
+                pre-fills subject + first-line so the reply is one tap. */}
+            <p className="text-sm mt-5 pt-5 border-t" style={{ color: '#fdf2dc', borderColor: 'rgba(253,242,220,0.18)' }}>
+              <span style={{ color: '#f5d8a7', opacity: 0.95 }}>Or — </span>
+              <a
+                href={`mailto:earth.reviewhub@gmail.com?subject=${encodeURIComponent(`Re: ${business_name} reply drafts`)}&body=${encodeURIComponent(`Hi Earth,\n\nQuestion about the drafts for ${business_name}: `)}`}
+                className="plausible-event-name=AuditFounderReplyClick underline hover:no-underline"
+                style={{ color: '#fff', fontWeight: 600 }}
+              >
+                reply with a question
+              </a>
+              <span style={{ color: '#f5d8a7', opacity: 0.85 }}>
+                {' '}— I'm Earth, the solo founder. A one-line "tell me more" or
+                "not for me" is genuinely useful either way.
+              </span>
+            </p>
             <p className="text-xs mt-2 max-w-md mx-auto font-mono uppercase tracking-widest" style={{ color: '#f5d8a7', opacity: 0.85 }}>
               LINE notifications live now —{' '}
               <a
@@ -510,6 +531,19 @@ function StickyConversionBar({ businessName, token, show, ctaVariant = 'control'
           style={{ background: COLORS.cardBg, color: COLORS.tealDeep, minHeight: '40px', display: 'inline-flex', alignItems: 'center' }}
         >
           {ctaVariant === 'E' ? 'Keep the drafts →' : 'Set this up — Free →'}
+        </a>
+        {/* Parallel low-friction CTA on the sticky bar — Wave 4 diagnostic
+            showed audit views convert to interest but never to reply
+            because the only visible action was signup. Pre-filled mailto
+            to founder gives a softer path. Hidden on xs to keep the bar
+            tappable on phone (where the primary signup button needs the
+            full width). */}
+        <a
+          href={`mailto:earth.reviewhub@gmail.com?subject=${encodeURIComponent(`Re: ${businessName || 'reply drafts'}`)}&body=${encodeURIComponent(`Hi Earth,\n\nQuestion about the drafts: `)}`}
+          className="plausible-event-name=AuditFounderReplyClick plausible-event-source=sticky hidden md:inline-flex items-center px-3 py-2 text-xs sm:text-sm whitespace-nowrap underline hover:no-underline"
+          style={{ color: '#fdf2dc', minHeight: '40px' }}
+        >
+          or reply →
         </a>
         <button
           type="button"
