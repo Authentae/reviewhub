@@ -520,15 +520,28 @@ export default function Pricing() {
           </div>
         </section>
 
-        {/* FAQ — same accordion semantics as the Landing FAQ */}
+        {/* FAQ — same accordion semantics as the Landing FAQ.
+            Section-head styling mirrors section 04 explicitly so the
+            kicker + heading typography stays consistent down the page.
+            Default .rh-section-head h2 styling was much larger and broke
+            the editorial rhythm next to section 04. */}
         <section className="rh-section rh-faq-section" aria-label="Pricing FAQ">
           <div className="rh-shell">
-            <div className="rh-section-head">
+            <div className="rh-section-head" style={{ marginBottom: 24 }}>
               <div className="kicker">
                 <div className="num">05</div>
-                <div className="cat">§ Common questions</div>
+                <div className="cat">§ {lang === 'th' ? 'คำถามที่เจอบ่อย' : 'Common questions'}</div>
               </div>
-              <h2>{t('pricing.faqTitle')}</h2>
+              <h2
+                lang={lang === 'th' ? 'th' : 'en'}
+                style={{
+                  fontFamily: 'var(--rh-serif)', fontWeight: 400,
+                  fontSize: 'clamp(28px, 3.4vw, 40px)', lineHeight: 1.1,
+                  letterSpacing: '-0.02em', margin: 0, maxWidth: '24ch',
+                }}
+              >
+                {t('pricing.faqTitle')}
+              </h2>
             </div>
             <div className="rh-faq">
               {faqs.map((faq, i) => (
