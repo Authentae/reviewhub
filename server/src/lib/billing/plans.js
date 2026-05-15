@@ -91,7 +91,7 @@ const PLANS = {
     priceAnnualUsd: 278, // ~$23.17/mo, 20% off
     priceMonthlyThb: 999,
     priceAnnualThb: 9590,
-    description: 'For busy businesses across every major platform',
+    description: 'For busy businesses with multi-platform review monitoring',
     maxPlatforms: 6,
     maxReviewsPerMonth: null,
     maxAiDraftsPerMonth: null,

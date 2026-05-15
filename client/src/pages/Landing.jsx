@@ -761,7 +761,7 @@ function Pricing() {
             <div className="plan-sub">{t('landing.plan.proSub', 'Unlimited AI drafts and the analytics that actually matter.')}</div>
             <ul>
               <li><Check />{t('landing.plan.pro1', 'Unlimited AI drafts')}</li>
-              <li><Check />{t('landing.plan.pro2', '6 platforms (Google, Wongnai, Yelp…)')}</li>
+              <li><Check />{t('landing.plan.pro2', 'Multi-platform monitoring (Yelp, Wongnai, TripAdvisor)')}</li>
               <li><Check />{t('landing.plan.pro4', 'Sentiment + trends + weekly digest')}</li>
               <li><Check />{t('landing.plan.pro6', 'Email alerts on new + negative reviews')}</li>
               <li><Check />{t('landing.plan.pro7', 'Bulk-reply to your unresponded backlog')}</li>

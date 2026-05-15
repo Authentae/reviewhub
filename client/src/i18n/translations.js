@@ -1207,7 +1207,7 @@ const en = {
   'pricing.feature.api_access': 'API access',
   'pricing.comparisonNote': 'Save hours every week vs. checking each platform manually.',
   'pricing.faqTitle': 'Frequently asked questions',
-  'pricing.feat1': 'Unlimited Google reviews + 60+ platforms via CSV',
+  'pricing.feat1': 'Unlimited Google reviews · CSV import for other platforms',
   'pricing.feat2': 'AI-powered response drafting',
   'pricing.feat3': 'Sentiment analysis on every review',
   'pricing.feat4': 'Email alerts for new & negative reviews',

@@ -1,7 +1,7 @@
 {
   "name": "ReviewHub — Reply to every Google review in 10 seconds",
   "short_name": "ReviewHub",
-  "description": "All your reviews in one dashboard. AI drafts replies in 10 languages including Thai, Japanese, Korean, Chinese. Import from 60+ platforms (Google, Wongnai, Tabelog, Naver, Dianping, TripAdvisor…). Free plan, no card.",
+  "description": "Google reviews ping you on LINE or Telegram with an AI-drafted reply in your voice. Copy, paste in Google. 10 languages including Thai, Japanese, Korean, Chinese. CSV import for non-Google review platforms. Free plan, no card.",
   "start_url": "/dashboard",
   "scope": "/",
   "display": "standalone",

@@ -285,8 +285,8 @@ export default function AuditPreview() {
                 </>
               ) : (
                 <>
-                  Connect Google once. New reviews ping you on LINE — with an AI-drafted
-                  reply in your voice. Copy from LINE, paste in Google. Replies that took
+                  Connect Google once. New reviews ping you on LINE or Telegram — with an
+                  AI-drafted reply in your voice. Copy, paste in Google. Replies that took
                   30 min each take 30 seconds. $14/mo (~฿499).
                 </>
               )}
@@ -531,7 +531,7 @@ function StickyConversionBar({ businessName, token, show, ctaVariant = 'control'
             {ctaVariant === 'E' ? 'Keep the drafts coming?' : 'Want this on autopilot?'}
           </span>{' '}
           <span className="hidden sm:inline" style={{ color: '#fdf2dc' }}>
-            New reviews ping you on LINE. $14/mo (~฿499).
+            New reviews ping you on LINE or Telegram. $14/mo (~฿499).
           </span>
         </p>
         <a

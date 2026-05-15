@@ -67,4 +67,18 @@ if echo "$CHANGED" | grep -qE '^client/'; then
   echo "✅ Client build OK"
 fi
 
+# Honesty-lint: blocks stale marketing copy (e.g. "from LINE." after we
+# shipped Telegram, "60+ platforms" when only Google polls, fake
+# testimonials, HIPAA-compliance claims). The banlist lives in
+# scripts/check-banned-phrases.sh — update there when a feature ships
+# (remove the phrase) or gets gated (add it). Why this exists:
+# memory/feedback_audit_visual_first.md.
+echo "🔍 Honesty-lint (banned marketing phrases)…"
+if ! ./scripts/check-banned-phrases.sh > /tmp/rh-banned-lint.log 2>&1; then
+  cat /tmp/rh-banned-lint.log
+  echo "Full log: /tmp/rh-banned-lint.log"
+  exit 1
+fi
+echo "✅ Honesty-lint passed"
+
 echo "✅ Pre-commit checks passed"
