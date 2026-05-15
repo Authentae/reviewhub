@@ -162,7 +162,13 @@ function Hero() {
             </div>
             <div className="rh-hero-proof">
               <div className="metric"><div className="n">10<small> {t('landing.heroMetricLangsUnit', 'langs')}</small></div><div className="l">{t('landing.heroMetricLangs', 'Including Thai natively')}</div></div>
-              <div className="metric"><div className="n">60+</div><div className="l">{t('landing.heroMetricPlatform', 'Platforms tracked')}</div></div>
+              {/* Audit 2026-05-16: previous metric "60+ platforms tracked"
+                  overpromised — only Google polls automatically today. The
+                  "60+" figure was an aggregate of CSV-import targets that
+                  doesn't reflect live coverage. Replaced with the honest
+                  channel-count: where reviews actually surface (Google)
+                  and where alerts actually fire (LINE + Telegram). */}
+              <div className="metric"><div className="n">3<small> {t('landing.heroMetricChannelUnit', 'channels')}</small></div><div className="l">{t('landing.heroMetricChannels', 'LINE · Telegram · Email')}</div></div>
               <div className="metric"><div className="n">10<small>s</small></div><div className="l">{t('landing.heroMetricSpeed', 'From review to drafted reply')}</div></div>
             </div>
           </div>
@@ -738,7 +744,17 @@ function Pricing() {
             </ul>
             <Link to="/register" className="rh-btn rh-btn-amber">{t('landing.plan.chooseStarter', 'Choose Starter · $14/mo')}</Link>
           </div>
-          <div className="plan">
+          {/* Pro + Business gated as coming-soon 2026-05-16 (mirrors
+              server/src/lib/billing/plans.js coming_soon flag). Cards
+              stay visible for price-anchoring — Starter looks right
+              next to greyed $29/$59 — but features advertised here
+              (multi-platform pulls, multi-location, API) aren't
+              deliverable today. CTAs disabled to prevent /register
+              signups expecting features they won't get. */}
+          <div className="plan" style={{ opacity: 0.55, filter: 'saturate(0.5)', position: 'relative' }}>
+            <div style={{ position: 'absolute', top: 12, right: 12, fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 8px', borderRadius: 999, background: 'rgba(160,125,32,0.15)', color: 'var(--rh-ochre-deep, #a07d20)', border: '1px solid rgba(160,125,32,0.30)' }}>
+              {t('landing.plan.comingSoon', 'Coming soon')}
+            </div>
             <div className="plan-name">Pro</div>
             <h3>{t('landing.plan.proHeadline', 'For shops with real review volume.')}</h3>
             <div className="plan-price">$29<small>/mo</small></div>
@@ -750,9 +766,14 @@ function Pricing() {
               <li><Check />{t('landing.plan.pro6', 'Email alerts on new + negative reviews')}</li>
               <li><Check />{t('landing.plan.pro7', 'Bulk-reply to your unresponded backlog')}</li>
             </ul>
-            <Link to="/register" className="rh-btn rh-btn-ghost">{t('landing.plan.choosePro', 'Choose Pro · $29/mo')}</Link>
+            <button type="button" disabled className="rh-btn rh-btn-ghost" style={{ cursor: 'not-allowed', opacity: 0.7, width: '100%' }}>
+              {t('landing.plan.comingSoonCta', 'Coming soon')}
+            </button>
           </div>
-          <div className="plan">
+          <div className="plan" style={{ opacity: 0.55, filter: 'saturate(0.5)', position: 'relative' }}>
+            <div style={{ position: 'absolute', top: 12, right: 12, fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 8px', borderRadius: 999, background: 'rgba(160,125,32,0.15)', color: 'var(--rh-ochre-deep, #a07d20)', border: '1px solid rgba(160,125,32,0.30)' }}>
+              {t('landing.plan.comingSoon', 'Coming soon')}
+            </div>
             <div className="plan-name">Business</div>
             <h3>{t('landing.plan.businessHeadline', 'Multi-location.')}</h3>
             <div className="plan-price">$59<small>/mo</small></div>
@@ -768,7 +789,9 @@ function Pricing() {
               </li>
               <li><Check />{t('landing.plan.business4', 'Priority support')}</li>
             </ul>
-            <Link to="/register" className="rh-btn rh-btn-ghost">{t('landing.plan.chooseBusiness', 'Choose Business · $59/mo')}</Link>
+            <button type="button" disabled className="rh-btn rh-btn-ghost" style={{ cursor: 'not-allowed', opacity: 0.7, width: '100%' }}>
+              {t('landing.plan.comingSoonCta', 'Coming soon')}
+            </button>
           </div>
         </div>
         <p className="rh-pricing-callout rh-reveal" style={{ textAlign: 'center', marginTop: 24, fontSize: 14, color: 'var(--rh-ink-3)' }}>

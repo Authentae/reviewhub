@@ -35,6 +35,32 @@ export default function Roadmap() {
       blurbLinkTo: '/changelog',
       blurbAfter: isThai ? ' สำหรับรายละเอียดเต็ม' : ' for the full list.',
       items: [
+        // Audit 2026-05-16: moved up from Considering — these have been
+        // live for weeks but the roadmap stayed stale.
+        {
+          en: 'Telegram bot integration — webhook receiver, /link <token> chat command, link-token flow, secret-token verification, push helper, HTML message with monospace AI-draft block for one-tap mobile copy. International counterpart to LINE OA. Built end-to-end 2026-05-15.',
+          th: 'เชื่อม Telegram Bot — รับ webhook, คำสั่ง /link <โค้ด> ในแชท, ระบบเชื่อมบัญชีด้วย token, ตรวจ secret-token, ช่วย push, ข้อความ HTML พร้อมบล็อกร่างแบบ monospace สำหรับก๊อปด้วยปุ่มเดียวบนมือถือ',
+        },
+        {
+          en: 'Magic-link sign-in — typed email, click the link in your inbox, signed in. 15-min TTL, single-use, MFA-respecting. The passwordless path for older or less tech-comfortable owners.',
+          th: 'เข้าระบบด้วย magic link — พิมพ์อีเมล กดลิงก์จากอีเมล เข้าระบบทันที (TTL 15 นาที, ใช้ครั้งเดียว, ผ่าน MFA ถ้าตั้งไว้)',
+        },
+        {
+          en: 'Google OAuth sign-in — one-click login with your existing Google account. Pairs with the existing email/password + magic-link paths.',
+          th: 'เข้าระบบด้วย Google ปุ่มเดียว — ใช้บัญชี Google เดิมของคุณ',
+        },
+        {
+          en: 'Scheduled reply send — `scheduledReplyPoster.js` cron + `reviews.scheduled_post_at` column. Queue an AI-drafted reply to post at 9am instead of 2am.',
+          th: 'ตั้งเวลาส่งคำตอบ — ปล่อยคำตอบเช้า 9 โมงแทนตี 2',
+        },
+        {
+          en: 'Year-in-review recap page (/year-review/:year) — printable summary of your year in reviews: total responded, response rate, average rating, top reviewers. Aggregates from existing data, no schema changes.',
+          th: 'หน้าสรุปประจำปี (/year-review/:year) — สรุปรีวิวทั้งปี: ตอบไปกี่อัน, อัตราการตอบ, ดาวเฉลี่ย, ลูกค้าที่รีวิวบ่อยที่สุด',
+        },
+        {
+          en: 'Read-only share links for accountants / agency staff — owner mints links from Settings → "Read-only share links"; recipient opens /shared/<token> for a read-only dashboard mirror. No password share required.',
+          th: 'ลิงก์อ่านอย่างเดียว สำหรับนักบัญชี / agency — เจ้าของสร้างลิงก์ใน Settings, ผู้รับเปิดดูได้แต่แก้ไม่ได้',
+        },
         {
           en: 'Vacation / closed-period mode — pause new-review email and LINE notifications until a future date. Reviews still ingest in the background so nothing is lost. Set it from Settings → Vacation.',
           th: 'โหมดหยุดยาว / ปิดร้านชั่วคราว — หยุดการแจ้งเตือนอีเมลและ LINE ถึงวันที่กำหนด รีวิวยังถูกเก็บอยู่เบื้องหลัง ตั้งค่าได้ที่ Settings → Vacation',
@@ -118,29 +144,28 @@ export default function Roadmap() {
       blurbLinkTo: '/support?type=feature',
       blurbAfter: isThai ? ' เลย' : ' is the path.',
       items: [
-        {
-          en: 'Magic-link / Google sign-in. Older or less tech-comfortable owners struggle with passwords; passwordless login is the obvious fix.',
-          th: 'เข้าระบบด้วย magic link / Google — คนที่ไม่ถนัดเทคโนโลยีจะเข้าง่ายขึ้น',
-        },
-        {
-          en: 'Scheduled reply send (queue replies for business hours instead of posting at 2am).',
-          th: 'ตั้งเวลาส่งคำตอบ (ปล่อยตามเวลาทำการแทนตี 2)',
-        },
-        {
-          en: 'Year-in-review email + dashboard recap (your 2026 in reviews).',
-          th: 'อีเมลและหน้าสรุปประจำปี — รีวิวที่คุณตอบในปีนี้, เทรนด์, ดาวเฉลี่ย',
-        },
+        // Items moved to Shipped 2026-05-16:
+        // - Magic-link / Google sign-in / MFA — all live per CLAUDE.md
+        // - Scheduled reply send — `scheduledReplyPoster.js` cron live
+        // - Year-in-review — /year-review/:year route shipped
+        // - Public uptime / status page — /status route shipped
+        // - Read-only role — share-token (/shared/:token) live
+        // Roadmap should reflect actual delivered state, not stale plans.
         {
           en: 'Native iOS / Android app. The current PWA installs and works, but it\'s not on the App Store.',
           th: 'แอป iOS / Android แท้ — ตอนนี้ PWA ติดตั้งบนมือถือได้แต่ยังไม่อยู่ใน App Store',
         },
         {
-          en: 'Public uptime / status page.',
-          th: 'หน้า status / uptime สาธารณะ',
+          en: 'Unified multi-location portfolio dashboard — see all your hotels / clinics / cafés on one screen instead of switching active business one at a time.',
+          th: 'แดชบอร์ดรวมหลายสาขา — เห็นรีวิวทุกสาขาในหน้าเดียว ไม่ต้องสลับ',
         },
         {
-          en: 'Read-only role for accountants / agency staff (share dashboard view without giving full edit access).',
-          th: 'สิทธิ์อ่านอย่างเดียว สำหรับนักบัญชี / agency — ดูแดชบอร์ดได้แต่แก้ไม่ได้',
+          en: 'Public REST API + webhooks for the Business plan (Zapier, n8n, custom integrations). Docs preview at /api-docs.',
+          th: 'REST API + webhooks สำหรับ Business plan (Zapier, n8n, ที่ทำเอง)',
+        },
+        {
+          en: 'TripAdvisor / Wongnai / Booking.com / Yelp / Facebook integrations. Each waits on the provider\'s API gate — TripAdvisor and Booking are partner-only, Yelp needs Knowledge Program, Facebook needs Meta App Review.',
+          th: 'เชื่อม TripAdvisor / Wongnai / Booking.com / Yelp / Facebook — รอ API ของแต่ละเจ้าอนุมัติ',
         },
       ],
     },

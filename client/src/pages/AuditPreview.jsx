@@ -400,7 +400,7 @@ export default function AuditPreview() {
                 },
                 {
                   q: 'Is my Google account / data safe?',
-                  a: 'ReviewHub reads reviews and posts replies via Google\'s official Business Profile API — same connection a Google-Workspace admin would use. We don\'t store your password (OAuth only), don\'t see your other Google data, and you can revoke access anytime from your Google account settings.',
+                  a: 'ReviewHub reads reviews via Google\'s official Places API (read-only) — no password stored, no other Google data accessed. Posting replies is currently tap-to-copy: we draft on LINE / Telegram, you paste in Google\'s reply box. Auto-post via Google\'s Business Profile API launches once our access is approved (case 8-9395000041442, submitted 2026-05-09). You can revoke access anytime from your Google account settings.',
                 },
                 {
                   q: 'What if I cancel mid-month?',

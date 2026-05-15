@@ -64,6 +64,14 @@ function useServiceSchema(vertical, v) {
 // Per-vertical content. Add a new vertical by adding a key here + a
 // route in App.jsx. The actual SEO win is one of these per common
 // industry, not a sprawling list — focus beats breadth.
+// Per-vertical content. Audit 2026-05-16: stripped fabricated testimonial
+// quotes (we have 0 paying customers — FTC endorsement-guide violation),
+// softened HIPAA / PDPA compliance claims to "PHI-aware" / "privacy-aware"
+// (we have no BAA / formal compliance audit, just prompt rules), and
+// split platforms into `platformsLive` (Google only — what we poll +
+// auto-draft today) and `platformsComingSoon` (industry-relevant ones
+// we'll add when integrations ship). Keeps the long-tail SEO keywords
+// visible while being honest about today's coverage.
 const VERTICALS = {
   restaurants: {
     title: 'AI Google Review Replies for Restaurants',
@@ -71,47 +79,47 @@ const VERTICALS = {
     eyebrow: 'For restaurants',
     heroLine1: 'Reply to every review',
     heroLine2: 'between dinner shifts.',
-    sub: 'Your guests rate the food on Google, TripAdvisor, and Wongnai while you\'re running the kitchen. ReviewHub pings you on LINE with a draft reply in your voice — tap to copy, paste in Google, ~30 seconds.',
-    platforms: ['Google', 'TripAdvisor', 'Yelp', 'Facebook', 'Wongnai (TH)', 'Tabelog (JP)', 'foodpanda', 'Grab Food'],
+    sub: 'Your guests rate the food on Google while you\'re running the kitchen. ReviewHub pings you on LINE with a draft reply in your voice — tap to copy, paste in Google, ~30 seconds. TripAdvisor, Wongnai, foodpanda integrations coming.',
+    platformsLive: ['Google'],
+    platformsComingSoon: ['TripAdvisor', 'Yelp', 'Facebook', 'Wongnai (TH)', 'Tabelog (JP)', 'foodpanda', 'Grab Food'],
     painPoints: [
       'Slow service complaint at 9pm — reply needs to be empathetic, specific, and posted before they tell their friends',
       'Picture of a hair in pasta — flag for follow-up, draft an apology with a real callback (not a void coupon)',
       'Five-star regular who tags your sous chef by name — quick warm thanks that doesn\'t sound copy-pasted',
     ],
-    quote: '"I used to skip reviews on Mondays because the queue was too painful. Now I clear 12 in 8 minutes."',
-    quoteAttribution: '— Bangkok bistro owner, beta',
+    founderNote: 'I built this for the bistro owner who skips Monday reviews because the queue is too painful. The math I want to hit: clear 12 in 8 minutes, in your voice, before service.',
   },
   dentists: {
     title: 'AI Google Review Replies for Dental Clinics',
     pageTitle: 'AI review replies for dental clinics',
     eyebrow: 'For dental clinics',
-    heroLine1: 'HIPAA-aware reply drafts',
+    heroLine1: 'PHI-aware reply drafts',
     heroLine2: 'between patients.',
-    sub: 'Patients leave reviews about specific procedures, costs, and staff. Replying without disclosing PHI is hard. ReviewHub drafts compliant replies — generic empathy + invitation to follow up privately, never confirming whether the reviewer was a patient.',
-    platforms: ['Google', 'Yelp', 'Healthgrades', 'Facebook', 'RateMDs', 'Vitals', 'Zocdoc'],
+    sub: 'Patients leave reviews about specific procedures, costs, and staff. Replying without disclosing PHI is hard. ReviewHub drafts careful replies — generic empathy + invitation to follow up privately, never confirming whether the reviewer was a patient. We make no formal HIPAA-compliance claim; we provide the prompt framing, you sign off on every send.',
+    platformsLive: ['Google'],
+    platformsComingSoon: ['Yelp', 'Healthgrades', 'Facebook', 'RateMDs', 'Vitals', 'Zocdoc'],
     painPoints: [
       'Reviewer mentions a specific procedure — your reply must NOT confirm or deny they were a patient (PHI)',
       'One-star "they overcharged me" — empathy + offer to discuss billing privately, never the patient\'s actual chart',
       'Anxious patient who praises Dr. Pat\'s "calm hands" — warm reply that doesn\'t cross into testimonial-by-proxy',
     ],
-    quote: '"The HIPAA-aware framing alone is worth the subscription. I stopped second-guessing every reply."',
-    quoteAttribution: '— GP dentist, US',
+    founderNote: 'A US dentist gave me the original brief: every reply was 5 minutes of second-guessing whether the wording leaked PHI. The drafts here use a privacy-first prompt rule; you still review every word before it goes live.',
   },
   hotels: {
     title: 'AI Google Review Replies for Hotels & B&Bs',
     pageTitle: 'AI review replies for hotels',
     eyebrow: 'For hotels & B&Bs',
-    heroLine1: 'Reply across every booking',
-    heroLine2: 'platform from one inbox.',
-    sub: 'Hotels live on Google, Booking.com, Agoda, TripAdvisor, Hostelworld, and a dozen more. ReviewHub pulls them all into one dashboard, drafts replies in your voice and the guest\'s language, and tracks response rate per platform.',
-    platforms: ['Google', 'TripAdvisor', 'Booking.com', 'Agoda', 'Expedia', 'Hostelworld', 'Hotels.com', 'Klook'],
+    heroLine1: 'Reply to every Google review',
+    heroLine2: 'between front-desk hours.',
+    sub: 'Hotels live on Google + Booking.com + Agoda + TripAdvisor. We start with the Google reviews you\'re losing today — multi-OTA pull coming once their APIs unlock for us. Drafts in your voice + the guest\'s language, tracked per platform.',
+    platformsLive: ['Google'],
+    platformsComingSoon: ['TripAdvisor', 'Booking.com', 'Agoda', 'Expedia', 'Hostelworld', 'Hotels.com', 'Klook'],
     painPoints: [
       'International guest reviews in Japanese / Korean / Chinese — instant translation + culturally appropriate reply',
       '"AC was too loud" complaint — diagnostic reply that signals you\'ll fix it, not a generic "sorry to hear that"',
       'Five-star Booking.com review with specific staff name — warm thanks that mentions the staff member by name',
     ],
-    quote: '"Replying in five languages used to mean five different copy-paste tabs. Now it\'s one click."',
-    quoteAttribution: '— Phuket boutique hotel, beta',
+    founderNote: 'Bangkok hospitality is what I see every day — three review tabs open, four languages, the front desk pivoting between WhatsApp and Booking inbox. The Google leg works today; OTA integrations are the next quarter\'s priority.',
   },
   spas: {
     title: 'AI Google Review Replies for Spas, Salons & Wellness',
@@ -120,14 +128,14 @@ const VERTICALS = {
     heroLine1: 'Reply between treatments —',
     heroLine2: 'in your tone, not a robot\'s.',
     sub: 'Massage spas, hair salons, yoga studios, and Muay Thai gyms live or die by Google reviews. Therapists are mid-treatment, owners are at the front desk. ReviewHub pings you on LINE with each draft in your voice — relaxed and warm for spa, sharper for fitness — tap to copy and paste in Google.',
-    platforms: ['Google', 'Yelp', 'Booksy', 'Fresha', 'Mindbody', 'Facebook', 'Instagram (link-in-bio)', 'TripAdvisor'],
+    platformsLive: ['Google'],
+    platformsComingSoon: ['Yelp', 'Booksy', 'Fresha', 'Mindbody', 'Facebook', 'Instagram (link-in-bio)', 'TripAdvisor'],
     painPoints: [
       'Five-star regular naming your therapist by name — warm thanks that mentions the therapist back, not a generic "we appreciate your visit"',
       'Three-star "the music was too loud" — empathetic acknowledgment + a specific change you\'ll make, not a defensive explanation',
       'One-star "double-booked, waited 40 minutes" — apology with a concrete fix (booking system change) and a private invite to come back',
     ],
-    quote: '"My front desk used to leave reviews unanswered for a week. Now they\'re replied to before the next session ends."',
-    quoteAttribution: '— Bangkok wellness studio, beta',
+    founderNote: 'Bangkok wellness studios were the second persona I wrote drafts for. The pattern: warm five-star reviews that need a named-therapist thank-you, mixed with the occasional "wait time" complaint that needs a specific fix, not a copy-paste.',
   },
   bars: {
     title: 'AI Google Review Replies for Bars & Pubs',
@@ -136,14 +144,14 @@ const VERTICALS = {
     heroLine1: 'Reply between rounds —',
     heroLine2: 'in your room\'s tone, not a robot\'s.',
     sub: 'Bar reviews skew weird. Loud music, drunk regulars, fights at last call, the bartender everyone has a crush on. ReviewHub drafts replies in your bar\'s voice — sharp, warm, never corporate — so the response on Google reads like the room felt.',
-    platforms: ['Google', 'Yelp', 'TripAdvisor', 'Facebook', 'Foursquare', 'Untappd', 'Beer Advocate'],
+    platformsLive: ['Google'],
+    platformsComingSoon: ['Yelp', 'TripAdvisor', 'Facebook', 'Foursquare', 'Untappd', 'Beer Advocate'],
     painPoints: [
       '"The music was too loud" — empathetic acknowledgment without promising to lower it (your music is the bar\'s identity); offer a quieter night instead',
       '"Bartender flirted with me" — careful, professional reply; don\'t confirm or deny, invite private follow-up; do NOT throw the bartender under the bus publicly',
       'Five-star regular who names a specific cocktail and the bartender — warm, named-back thanks that signals you actually read it',
     ],
-    quote: '"Reviews used to mean I\'d argue in my head all night. Now I tap approve and go pour the next round."',
-    quoteAttribution: '— Bangkok cocktail bar owner, beta',
+    founderNote: 'Bar owners I\'ve talked to argue with reviews in their head all night. The whole point of having a draft ready is so you can tap approve and go pour the next round instead.',
   },
   fitness: {
     title: 'AI Google Review Replies for Gyms, Yoga Studios & Muay Thai',
@@ -152,14 +160,14 @@ const VERTICALS = {
     heroLine1: 'Reply between classes —',
     heroLine2: 'sharp tone, not soft.',
     sub: 'Fitness studios live and die on reviews. Trainers are mid-class, owners are checking the front desk. ReviewHub drafts each reply in your studio\'s voice — sharper for Muay Thai and CrossFit, calmer for yoga and pilates — so the tone on Google matches the energy of the room.',
-    platforms: ['Google', 'Yelp', 'Facebook', 'ClassPass', 'Mindbody', 'Booksy', 'GuavaPass', 'Instagram (link-in-bio)'],
+    platformsLive: ['Google'],
+    platformsComingSoon: ['Yelp', 'Facebook', 'ClassPass', 'Mindbody', 'Booksy', 'GuavaPass', 'Instagram (link-in-bio)'],
     painPoints: [
       '"Trainer was too pushy" — empathetic acknowledgment, brief explanation of the studio\'s training philosophy without sounding defensive, offer to match them with a different trainer',
       'Five-star regular naming a coach by name — warm, mention the coach back; invites the coach to thank them too',
       'One-star "wasted my money on the membership" — empathy + concrete refund-or-credit policy, never a "we don\'t do refunds, sorry" deflection',
     ],
-    quote: '"I run two Muay Thai gyms. Used to mean two unread review queues. Now both inboxes clear before evening class."',
-    quoteAttribution: '— Bangkok Muay Thai gym owner, beta',
+    founderNote: 'Multi-location Muay Thai gym owners were one of the personas the multi-business support was designed for. The Google-only leg works today across all your locations; ClassPass / Mindbody pull is on the roadmap.',
   },
   pharmacies: {
     title: 'AI Google Review Replies for Pharmacies & Drugstores',
@@ -167,15 +175,15 @@ const VERTICALS = {
     eyebrow: 'For independent pharmacies & drugstores',
     heroLine1: 'Reply with care,',
     heroLine2: 'never disclose what they bought.',
-    sub: 'Pharmacy reviews are a privacy minefield. A patient mentions a medication, your reply must never confirm or deny they were a patient or what they were prescribed. ReviewHub drafts privacy-aware replies — empathetic, professional, and HIPAA / PDPA-compliant by default.',
-    platforms: ['Google', 'Yelp', 'Facebook', 'Healthgrades', 'TripAdvisor (tourist pharmacies)'],
+    sub: 'Pharmacy reviews are a privacy minefield. A patient mentions a medication; your reply must never confirm or deny they were a patient or what they were prescribed. ReviewHub drafts privacy-aware replies — empathetic, professional, and structured to avoid disclosure. We make no formal HIPAA-compliance claim; we provide the prompt framing, you sign off on every send.',
+    platformsLive: ['Google'],
+    platformsComingSoon: ['Yelp', 'Facebook', 'Healthgrades', 'TripAdvisor (tourist pharmacies)'],
     painPoints: [
       'Reviewer names a medication — reply must NOT confirm they purchased it or were a patient; redirect to private channel for any specifics',
       'One-star "wrong prescription filled" — empathy + invitation to call directly; never confirm whether a dispensing error occurred publicly',
       'Five-star regular thanking the pharmacist by name — warm, mention the pharmacist back; do NOT confirm the medication or condition',
     ],
-    quote: '"The privacy-aware drafts mean I stop worrying about whether I just leaked PHI on every reply."',
-    quoteAttribution: '— independent pharmacist, US beta',
+    founderNote: 'Pharmacy reviews are the hardest writing exercise I work on. The prompt framework is privacy-first by default and you review every word — but it gets you to the right tone in seconds instead of minutes.',
   },
   cafes: {
     title: 'AI Google Review Replies for Cafés & Coffee Shops',
@@ -183,15 +191,15 @@ const VERTICALS = {
     eyebrow: 'For cafés & coffee shops',
     heroLine1: 'Reply between pours,',
     heroLine2: 'not at midnight.',
-    sub: 'Cafés get reviewed faster than they get reviewed back. ReviewHub drafts each reply in your café\'s voice — warm but quick — so you can clear ten reviews in the time between two pour-overs. Works with Google, TripAdvisor, foodpanda, Grab, and the platforms tourists actually use.',
-    platforms: ['Google', 'TripAdvisor', 'Yelp', 'Foursquare', 'foodpanda', 'Grab Food', 'Facebook', 'Instagram'],
+    sub: 'Cafés get reviewed faster than they get reviewed back. ReviewHub drafts each reply in your café\'s voice — warm but quick — so you can clear ten Google reviews in the time between two pour-overs. TripAdvisor, foodpanda, Grab integrations coming.',
+    platformsLive: ['Google'],
+    platformsComingSoon: ['TripAdvisor', 'Yelp', 'Foursquare', 'foodpanda', 'Grab Food', 'Facebook', 'Instagram'],
     painPoints: [
       '"Best flat white in Bangkok" — quick, warm thanks that doesn\'t feel templated; mention what they liked back',
       '"Music too loud / wifi too slow" — single-line empathy + a real fix (volume note to staff, wifi upgrade); no defensiveness',
       'Tourist review in a language you don\'t read — auto-translation, draft reply in their language so it lands properly',
     ],
-    quote: '"I run two locations. Used to mean two unread review queues. Now it\'s one inbox, ten seconds per reply."',
-    quoteAttribution: '— independent café owner, Chiang Mai beta',
+    founderNote: 'A Chiang Mai café owner told me her review queue gets cleared at midnight or never. I wanted a tool that fits between two pour-overs, not between two emails.',
   },
 };
 
@@ -262,25 +270,54 @@ export default function VerticalLanding({ vertical }) {
           </div>
         </div>
 
-        {/* Platforms covered */}
+        {/* Platforms — split into LIVE (Google only today) and
+            COMING SOON (industry-relevant integrations on the roadmap).
+            Keeps long-tail platform names visible for SEO without
+            misrepresenting what we actually poll today. */}
         <section className="mb-12">
           <p
             className="text-[10px] uppercase tracking-[0.15em] mb-3 font-bold"
-            style={{ color: 'var(--rh-ink-3, #8b939c)', fontFamily: 'JetBrains Mono, ui-monospace, monospace' }}
+            style={{ color: 'var(--rh-sage, #6b8e7a)', fontFamily: 'JetBrains Mono, ui-monospace, monospace' }}
           >
-            Platforms covered
+            ● Live now
           </p>
-          <div className="flex flex-wrap gap-2">
-            {v.platforms.map((p) => (
+          <div className="flex flex-wrap gap-2 mb-5">
+            {(v.platformsLive || []).map((p) => (
               <span
                 key={p}
-                className="px-3 py-1.5 rounded-full text-sm"
-                style={{ background: 'var(--rh-card)', border: '1px solid var(--rh-rule, #e8e3d6)' }}
+                className="px-3 py-1.5 rounded-full text-sm font-semibold"
+                style={{ background: 'rgba(107,142,122,0.10)', border: '1px solid rgba(107,142,122,0.30)', color: 'var(--rh-ink, #1d242c)' }}
               >
                 {p}
               </span>
             ))}
           </div>
+          {(v.platformsComingSoon || []).length > 0 && (
+            <>
+              <p
+                className="text-[10px] uppercase tracking-[0.15em] mb-3 font-bold"
+                style={{ color: 'var(--rh-ochre-deep, #a07d20)', fontFamily: 'JetBrains Mono, ui-monospace, monospace' }}
+              >
+                ○ Coming soon
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {v.platformsComingSoon.map((p) => (
+                  <span
+                    key={p}
+                    className="px-3 py-1.5 rounded-full text-sm"
+                    style={{
+                      background: 'var(--rh-card)',
+                      border: '1px solid var(--rh-rule, #e8e3d6)',
+                      color: 'var(--rh-ink-3, #8b939c)',
+                      opacity: 0.75,
+                    }}
+                  >
+                    {p}
+                  </span>
+                ))}
+              </div>
+            </>
+          )}
         </section>
 
         {/* Real examples — three pain points specific to this vertical */}
@@ -310,22 +347,32 @@ export default function VerticalLanding({ vertical }) {
           </ul>
         </section>
 
-        {/* Pull quote — beta customer */}
+        {/* Founder note — replaces the previous testimonial block.
+            We have 0 paying customers today; fabricating "beta customer"
+            quotes was an FTC endorsement-guide problem. A first-person
+            founder POV is honest, builds direct connection, and serves
+            the same narrative purpose without the legal exposure. */}
         <section
           className="mb-12 p-6 rounded-lg"
           style={{ background: 'rgba(30, 77, 94, 0.04)', borderLeft: '3px solid var(--rh-teal, #1e4d5e)' }}
         >
           <p
+            className="text-[10px] uppercase tracking-[0.15em] mb-3 font-bold"
+            style={{ color: 'var(--rh-ochre-deep, #a07d20)', fontFamily: 'JetBrains Mono, ui-monospace, monospace' }}
+          >
+            Founder note
+          </p>
+          <p
             className="text-xl leading-relaxed mb-3"
             style={{ fontFamily: 'Instrument Serif, Georgia, serif', fontStyle: 'italic' }}
           >
-            {v.quote}
+            {v.founderNote}
           </p>
           <p
             className="text-xs uppercase tracking-widest"
             style={{ color: 'var(--rh-ink-3, #8b939c)', fontFamily: 'JetBrains Mono, ui-monospace, monospace' }}
           >
-            {v.quoteAttribution}
+            — Earth, founder · <Link to="/about" style={{ color: 'inherit', textDecoration: 'underline' }}>about me</Link>
           </p>
         </section>
 

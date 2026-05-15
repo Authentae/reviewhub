@@ -23,6 +23,31 @@ export default function ApiDocs() {
     <div className="rh-design rh-app min-h-screen" style={{ background: 'var(--rh-paper)' }}>
       <MarketingNav />
       <main className="max-w-3xl mx-auto px-6 py-16">
+        {/* Coming-soon banner — API access ships with the Business plan
+            (currently gated as `coming_soon` in plans.js). Documentation
+            stays public for developer-evaluation purposes but the actual
+            API-key creation path won't be available in Settings until
+            the Business plan is enabled. Audit 2026-05-16. */}
+        <div
+          role="note"
+          style={{
+            background: 'rgba(160,125,32,0.10)',
+            border: '1px solid rgba(160,125,32,0.30)',
+            borderRadius: 12,
+            padding: '14px 18px',
+            marginBottom: 28,
+            fontSize: 14,
+            color: 'var(--rh-ink, #1d242c)',
+            lineHeight: 1.55,
+          }}
+        >
+          <strong style={{ color: 'var(--rh-ochre-deep, #a07d20)', fontFamily: 'JetBrains Mono, monospace', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', display: 'block', marginBottom: 6 }}>
+            {isThai ? 'เร็วๆ นี้' : 'Coming soon'}
+          </strong>
+          {isThai
+            ? 'API ใช้งานได้กับแพ็คเกจ Business ซึ่งกำลังพัฒนาอยู่ — เอกสารนี้คือพรีวิวสำหรับนักพัฒนา ติดต่อ api@reviewhub.review เพื่อขอเข้าใช้งานล่วงหน้า'
+            : 'API access ships with the Business plan, currently in development. These docs are a developer preview — endpoints, response shapes, and rate limits may change before launch. Email api@reviewhub.review for early-access interest.'}
+        </div>
         <h1 className="text-4xl font-bold mb-3" style={{ color: 'var(--rh-ink)', letterSpacing: '-0.02em' }}>
           {isThai ? 'API อ้างอิง' : 'API Reference'}
         </h1>
