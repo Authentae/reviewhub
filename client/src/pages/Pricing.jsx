@@ -55,8 +55,12 @@ export default function Pricing() {
   // bottom-of-funnel "reviewhub price" / "reviewhub starter cost" queries.
   useEffect(() => {
     if (!plans || !plans.length) return;
+    // Exclude coming_soon plans from structured data — Google rich
+    // results would otherwise advertise them as 'InStock' offers that
+    // we cannot fulfil, which is misleading at best and a search-policy
+    // violation at worst (false advertising of availability).
     const offers = plans
-      .filter(p => p.id !== 'free')
+      .filter(p => p.id !== 'free' && !p.coming_soon)
       .map(p => ({
         '@type': 'Offer',
         'name': p.name,
@@ -307,7 +311,16 @@ export default function Pricing() {
                   // shows a 'Coming soon' chip. Flip back by removing the
                   // coming_soon field from plans.js once features ship.
                   const isComingSoon = !!plan.coming_soon;
-                  const isMuted = isDowngradeFromPaid || isComingSoon;
+                  // Don't mute the user's actually-active plan even if
+                  // it's coming-soon (grandfathered Pro user scenario —
+                  // they'd see their active subscription greyed out).
+                  // Same logic for downgrade — though Free can never be
+                  // both 'current' and 'downgrade'.
+                  const isCurrentForMuteCheck = loggedIn
+                    && hasActivePlan
+                    && currentPlanId === plan.id;
+                  const isMuted = (isDowngradeFromPaid || isComingSoon)
+                    && !isCurrentForMuteCheck;
                   return (
                     <div
                       key={plan.id}
@@ -316,7 +329,7 @@ export default function Pricing() {
                         ? { opacity: 0.55, filter: 'saturate(0.5)' }
                         : undefined}
                     >
-                      {isComingSoon && (
+                      {isComingSoon && !isCurrentForMuteCheck && (
                         <span
                           style={{
                             position: 'absolute', top: 12, right: 12,

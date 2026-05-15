@@ -39,6 +39,19 @@ router.post('/checkout', checkoutLimiter, authMiddleware, async (req, res) => {
     if (plan === 'free') {
       return res.status(400).json({ error: 'Free plan does not require checkout' });
     }
+    // Server-side enforcement of the `coming_soon` flag on plans. The
+    // Pricing page already disables these tiers client-side, but the
+    // /api/billing/checkout endpoint is reachable from any caller (Settings
+    // BillingSection, a forged request, a stale browser tab). Reject here
+    // so the LS hosted checkout never gets opened for a tier we cannot
+    // currently deliver. Flip back automatically when plans.js removes
+    // the `coming_soon` field.
+    if (PLANS[plan].coming_soon) {
+      return res.status(400).json({
+        error: 'This plan is not available yet. Try a different plan.',
+        code: 'plan_coming_soon',
+      });
+    }
     if (!['monthly', 'annual'].includes(cycle)) {
       return res.status(400).json({ error: 'Invalid cycle. Must be monthly or annual.' });
     }

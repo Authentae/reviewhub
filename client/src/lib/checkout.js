@@ -21,12 +21,23 @@ const STRIPE_PAYMENT_LINKS = {
   business: 'https://buy.stripe.com/aFa7sL1IC7eu3Mw78S1ZS00',
 };
 
+// Plan IDs gated as coming-soon on the server (plans.js `coming_soon`
+// field). Mirroring the gate client-side prevents accidental Stripe
+// checkout for these tiers from cached URLs, stale tabs, or any UI
+// surface that calls getStripeCheckoutUrl() without first reading
+// plan.coming_soon. Keep this list in sync with plans.js — when a plan
+// flips back to live, delete it from here.
+const COMING_SOON_PLAN_IDS = new Set(['pro', 'business']);
+
 /**
  * Resolve a plan id ('starter'|'pro'|'business') to its Stripe Payment
- * Link URL. Returns null for unknown plan ids (caller should fall back
- * to the legacy /register path).
+ * Link URL. Returns null for unknown plan ids OR plans gated as
+ * coming-soon (caller should fall back to the legacy /register path
+ * or show a disabled CTA — never offer Stripe checkout for a tier we
+ * cannot currently fulfil).
  */
 export function getStripeCheckoutUrl(planId) {
+  if (COMING_SOON_PLAN_IDS.has(planId)) return null;
   return STRIPE_PAYMENT_LINKS[planId] || null;
 }
 

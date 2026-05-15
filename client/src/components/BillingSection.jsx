@@ -204,10 +204,14 @@ export default function BillingSection({ subscription, onRefresh }) {
                   >{t('billing.annual')} <span className="text-green-600 ml-1">-20%</span></button>
                 </div>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <PlanCard id="starter" cycle={cycle} onUpgrade={handleUpgrade} busy={busy} t={t} />
-                <PlanCard id="pro" cycle={cycle} onUpgrade={handleUpgrade} busy={busy} t={t} highlighted />
-                <PlanCard id="business" cycle={cycle} onUpgrade={handleUpgrade} busy={busy} t={t} />
+              {/* Pro + Business gated as coming-soon 2026-05-16 (see
+                  server/src/lib/billing/plans.js). Only Starter is offered
+                  here. The server's /api/billing/checkout endpoint also
+                  rejects coming-soon plans as a safety net, but hiding
+                  the cards here means a user never even gets the chance
+                  to click. Restore both cards when the gate is lifted. */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <PlanCard id="starter" cycle={cycle} onUpgrade={handleUpgrade} busy={busy} t={t} highlighted />
               </div>
             </div>
             <p className="text-xs text-gray-400 dark:text-gray-500">

@@ -66,12 +66,27 @@ describe('billing — checkout', () => {
        billing_subscription_id = 'sub_test_123' WHERE user_id = ?`,
       [u.userId]
     );
+    // Target plan must NOT be `coming_soon` (Pro+Business currently
+    // are — see plans.js). Using a coming-soon target would hit the
+    // stricter 400 plan_coming_soon gate first, masking the 409 we
+    // want to cover here. starter→starter still triggers the
+    // already-paid guard because the user holds an active sub.
+    const res = await request(app)
+      .post('/api/billing/checkout')
+      .set('Authorization', `Bearer ${u.token}`)
+      .send({ plan: 'starter', cycle: 'monthly' });
+    assert.strictEqual(res.status, 409);
+    assert.strictEqual(res.body.code, 'already_subscribed');
+  });
+
+  test('POST /billing/checkout rejects coming-soon plan with 400', async () => {
+    const u = await makeUserWithBusiness();
     const res = await request(app)
       .post('/api/billing/checkout')
       .set('Authorization', `Bearer ${u.token}`)
       .send({ plan: 'pro', cycle: 'monthly' });
-    assert.strictEqual(res.status, 409);
-    assert.strictEqual(res.body.code, 'already_subscribed');
+    assert.strictEqual(res.status, 400);
+    assert.strictEqual(res.body.code, 'plan_coming_soon');
   });
 
   test('POST /billing/checkout returns 503 when billing provider not configured', async () => {
