@@ -301,14 +301,36 @@ export default function Pricing() {
                   // and thinking they're recovering value.
                   const isDowngradeFromPaid = isFree && loggedIn
                     && currentPlanId && currentPlanId !== 'free';
+                  // Server-flagged coming-soon plan (Pro / Business as of
+                  // 2026-05-16). Card stays visible for price-anchoring
+                  // but loses Stripe CTA + gets the muted treatment +
+                  // shows a 'Coming soon' chip. Flip back by removing the
+                  // coming_soon field from plans.js once features ship.
+                  const isComingSoon = !!plan.coming_soon;
+                  const isMuted = isDowngradeFromPaid || isComingSoon;
                   return (
                     <div
                       key={plan.id}
-                      className={'rh-pricing-card' + (highlighted ? ' featured' : '') + (isDowngradeFromPaid ? ' rh-pricing-card--muted' : '')}
-                      style={isDowngradeFromPaid
+                      className={'rh-pricing-card' + (highlighted && !isComingSoon ? ' featured' : '') + (isMuted ? ' rh-pricing-card--muted' : '')}
+                      style={isMuted
                         ? { opacity: 0.55, filter: 'saturate(0.5)' }
                         : undefined}
                     >
+                      {isComingSoon && (
+                        <span
+                          style={{
+                            position: 'absolute', top: 12, right: 12,
+                            fontSize: 10, fontWeight: 700,
+                            letterSpacing: '0.08em', textTransform: 'uppercase',
+                            padding: '2px 8px', borderRadius: 999,
+                            background: 'rgba(160,125,32,0.15)',
+                            color: 'var(--rh-ochre-deep, #a07d20)',
+                            border: '1px solid rgba(160,125,32,0.30)',
+                          }}
+                        >
+                          {lang === 'th' ? 'เร็วๆ นี้' : 'Coming soon'}
+                        </span>
+                      )}
                       {highlighted && <span className="badge">{t('pricing.badge')}</span>}
                       <h2 className="plan-name">{plan.name}</h2>
                       <p className="plan-sub">{t(`pricing.${plan.id}Desc`, plan.description)}</p>
@@ -360,6 +382,22 @@ export default function Pricing() {
                             >
                               {t('pricing.ctaCurrentPlan', 'Current plan ✓')}
                             </Link>
+                          );
+                        }
+                        // Coming-soon plans render a disabled badge in
+                        // place of any clickable CTA — early-return so we
+                        // never offer a Stripe checkout for them.
+                        if (isComingSoon) {
+                          return (
+                            <button
+                              type="button"
+                              disabled
+                              className={'rh-btn rh-btn-ghost'}
+                              style={{ justifyContent: 'center', width: '100%', cursor: 'not-allowed', opacity: 0.7 }}
+                              aria-label={t('pricing.ctaComingSoon', 'Coming soon — not available yet')}
+                            >
+                              {lang === 'th' ? 'เร็วๆ นี้' : 'Coming soon'}
+                            </button>
                           );
                         }
                         // Any non-current paid tier → Stripe Payment Link.

@@ -80,6 +80,13 @@ const PLANS = {
   pro: {
     id: 'pro',
     name: 'Pro',
+    // GATED 2026-05-16: marked coming-soon because Pro promises multi-
+    // platform monitoring (Yelp / Facebook) and trend analytics that
+    // aren't deliverable today. Visible on /pricing for price-anchoring
+    // (Starter looks cheap next to $29) but the card is grayed out and
+    // the CTA replaced with 'Coming soon'. Flip back by removing this
+    // field once Yelp+Facebook integrations + real trend analytics ship.
+    coming_soon: true,
     priceMonthlyUsd: 29,
     priceAnnualUsd: 278, // ~$23.17/mo, 20% off
     priceMonthlyThb: 999,
@@ -105,6 +112,13 @@ const PLANS = {
   business: {
     id: 'business',
     name: 'Business',
+    // GATED 2026-05-16: marked coming-soon because Business promises
+    // multi-location, API access, and "6 platforms" — none of which
+    // are reliably deliverable today (multi-location works in code but
+    // has no unified-portfolio UI; API auth exists but docs and
+    // endpoint coverage are incomplete; Yelp/FB integrations pending).
+    // Same flip-back path as Pro: delete this field once features ship.
+    coming_soon: true,
     priceMonthlyUsd: 59,
     priceAnnualUsd: 567, // 20% off
     priceMonthlyThb: 1990,
