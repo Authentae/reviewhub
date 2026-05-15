@@ -31,8 +31,8 @@ const en = {
   // Landing page
   'landing.pageTitle': 'AI Review Replies in 10 Languages.',
   'landing.heroBadge': 'Built for Bangkok · Free forever · From ฿499 / $14 a month',
-  'landing.heroTitle': 'Reply to Google reviews in 10 seconds — from LINE.',
-  'landing.heroSubtitle': 'New Google reviews ping you on LINE — with an AI-drafted reply in your voice ready to send. Copy from LINE, paste in Google. (One-tap auto-post launches Q3 2026 when Google\'s API approval lands.) Built in Bangkok for hospitality, restaurants, clinics, and salons — owners who live in LINE, not Slack.',
+  'landing.heroTitle': 'Reply to Google reviews in 10 seconds — from your phone.',
+  'landing.heroSubtitle': 'New Google reviews ping you on LINE or Telegram — with an AI-drafted reply in your voice, ready to copy and paste in Google. (One-tap auto-post launches Q3 2026 when Google\'s API approval lands.) Built in Bangkok for hospitality, restaurants, clinics, and salons — owners who live in chat, not Slack.',
   'landing.heroCtaPrimary': 'Start Free',
   'landing.heroCtaSecondary': 'Try free — no signup',
   'landing.heroCtaPrimaryNewTab': '(opens in a new tab)',
@@ -6812,8 +6812,8 @@ const th = {
   // Landing page
   'landing.pageTitle': 'รวมรีวิวทั้งหมด ในแดชบอร์ดเดียว',
   'landing.heroBadge': 'ทำในกรุงเทพ · ฟรีตลอดไป · เริ่มต้น ฿499/เดือน',
-  'landing.heroTitle': 'ตอบรีวิว Google ใน 10 วินาที — ผ่าน LINE',
-  'landing.heroSubtitle': 'รีวิว Google ใหม่เด้งเข้า LINE คุณ พร้อมข้อความตอบกลับที่ AI ร่างให้ในโทนของร้านแล้ว ก็อปจาก LINE วางใน Google (โพสต์อัตโนมัติแบบคลิกเดียว เปิดตัวไตรมาส 3 ปี 2026 เมื่อ Google อนุมัติ API) ทำในกรุงเทพสำหรับเจ้าของโรงแรม ร้านอาหาร คลินิก และร้านเสริมสวย',
+  'landing.heroTitle': 'ตอบรีวิว Google ใน 10 วินาที — จากมือถือ',
+  'landing.heroSubtitle': 'รีวิว Google ใหม่เด้งเข้า LINE หรือ Telegram ของคุณ พร้อมข้อความตอบกลับที่ AI ร่างให้ในโทนของร้าน ก็อปแล้ววางใน Google (โพสต์อัตโนมัติแบบคลิกเดียว เปิดตัวไตรมาส 3 ปี 2026 เมื่อ Google อนุมัติ API) ทำในกรุงเทพสำหรับเจ้าของโรงแรม ร้านอาหาร คลินิก และร้านเสริมสวย',
   'landing.heroCta': 'เริ่มต้นฟรี — แพ็กเกจเริ่มต้น $14/เดือน',
   'landing.heroNote': 'แพ็กเกจฟรี · ไม่ต้องใช้บัตร · 10 ภาษา',
   'landing.featuresTitle': 'ทุกอย่างที่ต้องใช้กับรีวิว มีให้ครบ',

@@ -392,8 +392,8 @@ function HowItWorks() {
         </div>
       ),
     },
-    { n: 'III', cat: t('landing.step3Cat', 'LINE → Copy → Paste'), h: t('landing.step3H', "Copy the draft. Paste in Google."),
-      p: t('landing.step3P', "New reviews ping you on LINE with the AI draft as a follow-up text message. Long-press to copy, tap Reply on Google, paste. 30 seconds instead of 30 minutes. (One-tap auto-post launches Q3 2026 when Google's Business Profile API approval lands — case 8-9395000041442.)"),
+    { n: 'III', cat: t('landing.step3Cat', 'Chat → Copy → Paste'), h: t('landing.step3H', "Copy the draft. Paste in Google."),
+      p: t('landing.step3P', "New reviews ping you on LINE or Telegram with the AI draft as a follow-up text message. Long-press to copy, tap Reply on Google, paste. 30 seconds instead of 30 minutes. (One-tap auto-post launches Q3 2026 when Google's Business Profile API approval lands — case 8-9395000041442.)"),
       illo: (
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontFamily: 'var(--rh-mono)', fontSize: 10, color: 'var(--rh-ink-3)', letterSpacing: '0.08em', marginBottom: 8 }}>TIME PER REPLY</div>
