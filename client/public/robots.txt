@@ -44,3 +44,4 @@ Allow: /refund-policy
 Allow: /legal/
 
 Sitemap: https://reviewhub.review/sitemap.xml
+Sitemap: https://reviewhub.review/sitemap-v2.xml
