@@ -4,6 +4,7 @@ import api from '../lib/api';
 import usePageTitle from '../hooks/usePageTitle';
 import useNoIndex from '../hooks/useNoIndex';
 import useSocialMeta from '../hooks/useSocialMeta';
+import { getStripeCheckoutUrl } from '../lib/checkout';
 
 // Lazy-loaded: the LINE mockup is ~5KB of decorative SVG + animations,
 // and only renders below the CTA fold. No reason to ship it in the
@@ -294,9 +295,17 @@ export default function AuditPreview() {
                 "AuditRegisterClick" (control) or "AuditRegisterClick_PermissionV"
                 (Variant E) so we can read the A/B from Plausible without
                 a DB column. See docs/audit-preview-cta-variants.md. */}
+            {/* Primary CTA — was /register, now goes straight to Stripe
+                Payment Link for the Starter tier. Cuts the prospect
+                directly to checkout instead of a signup interstitial.
+                Stripe redirects post-pay to /register?from=stripe&plan=starter
+                so the customer creates their ReviewHub account after
+                their card has been charged. Plausible event names
+                preserved so funnel analysis still partitions control vs
+                variant (V) CTA copy. */}
             <a
-              href={`/register?from=audit&business=${encodeURIComponent(business_name)}&token=${encodeURIComponent(token || '')}&v=${ctaVariant}`}
-              className={`${ctaVariant === 'E' ? 'plausible-event-name=AuditRegisterClick_PermissionV' : 'plausible-event-name=AuditRegisterClick'} inline-block px-6 py-3 rounded-lg text-sm font-semibold transition-transform hover:scale-105`}
+              href={getStripeCheckoutUrl('starter') || `/register?from=audit&business=${encodeURIComponent(business_name)}&token=${encodeURIComponent(token || '')}&v=${ctaVariant}`}
+              className={`${ctaVariant === 'E' ? 'plausible-event-name=AuditRegisterClick_PermissionV' : 'plausible-event-name=AuditRegisterClick'} plausible-event-source=audit-cta plausible-event-plan=starter inline-block px-6 py-3 rounded-lg text-sm font-semibold transition-transform hover:scale-105`}
               style={{ background: COLORS.cardBg, color: COLORS.tealDeep }}
             >
               {ctaVariant === 'E' ? 'Yes, keep the drafts coming →' : 'Yes, set this up for me →'}
@@ -526,11 +535,11 @@ function StickyConversionBar({ businessName, token, show, ctaVariant = 'control'
           </span>
         </p>
         <a
-          href={`/register?from=audit&business=${encodeURIComponent(businessName || '')}&token=${encodeURIComponent(token || '')}&source=sticky&v=${ctaVariant}`}
-          className={`${ctaVariant === 'E' ? 'plausible-event-name=AuditRegisterClick_PermissionV' : 'plausible-event-name=AuditRegisterClick'} plausible-event-source=sticky inline-block px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold whitespace-nowrap transition-transform hover:scale-105`}
+          href={getStripeCheckoutUrl('starter') || `/register?from=audit&business=${encodeURIComponent(businessName || '')}&token=${encodeURIComponent(token || '')}&source=sticky&v=${ctaVariant}`}
+          className={`${ctaVariant === 'E' ? 'plausible-event-name=AuditRegisterClick_PermissionV' : 'plausible-event-name=AuditRegisterClick'} plausible-event-source=sticky plausible-event-plan=starter inline-block px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold whitespace-nowrap transition-transform hover:scale-105`}
           style={{ background: COLORS.cardBg, color: COLORS.tealDeep, minHeight: '40px', display: 'inline-flex', alignItems: 'center' }}
         >
-          {ctaVariant === 'E' ? 'Keep the drafts →' : 'Set this up — Free →'}
+          {ctaVariant === 'E' ? 'Keep the drafts — $14/mo →' : 'Set this up — $14/mo →'}
         </a>
         {/* Parallel low-friction CTA on the sticky bar — Wave 4 diagnostic
             showed audit views convert to interest but never to reply

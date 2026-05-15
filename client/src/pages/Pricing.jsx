@@ -8,6 +8,7 @@ import { isLoggedIn } from '../lib/auth';
 import usePageTitle from '../hooks/usePageTitle';
 import { useI18n } from '../context/I18nContext';
 import api from '../lib/api';
+import { getStripeCheckoutUrl } from '../lib/checkout';
 
 // Pricing page — renders tier cards from /api/plans so the server is the
 // source of truth. Adding a tier or changing a price is a server-only change.
@@ -325,15 +326,45 @@ export default function Pricing() {
                             </Link>
                           );
                         }
+                        // For non-logged-in users on paid tiers, route
+                        // straight to the Stripe Payment Link instead of
+                        // /register. Real money in via Stripe checkout;
+                        // Stripe redirects post-pay to /register?from=stripe&...
+                        // so the customer creates their ReviewHub account.
+                        // Falls back to /register for the free tier (no
+                        // payment needed) and for any plan id we haven't
+                        // mapped to a Stripe URL.
+                        const stripeUrl = !loggedIn && !isFree
+                          ? getStripeCheckoutUrl(plan.id)
+                          : null;
+                        const ctaLabel = isFree
+                          ? (loggedIn ? t('pricing.ctaCurrentPlan') : t('pricing.ctaFree'))
+                          : (loggedIn ? t('pricing.ctaUpgrade') : t('pricing.ctaStart'));
+                        const ctaClassName = 'rh-btn ' + (highlighted ? 'rh-btn-amber' : 'rh-btn-ghost');
+                        const ctaStyle = { justifyContent: 'center', width: '100%' };
+                        if (stripeUrl) {
+                          // Plain <a> (not React Router Link) because the
+                          // destination is an external Stripe-hosted URL.
+                          // Plausible custom-event lets us measure which
+                          // tier the prospect clicked from pricing vs the
+                          // audit page CTA in funnel analysis.
+                          return (
+                            <a
+                              href={stripeUrl}
+                              className={ctaClassName + ` plausible-event-name=PricingCheckoutClick plausible-event-plan=${plan.id}`}
+                              style={ctaStyle}
+                            >
+                              {ctaLabel}
+                            </a>
+                          );
+                        }
                         return (
                           <Link
                             to={loggedIn ? '/settings' : '/register'}
-                            className={'rh-btn ' + (highlighted ? 'rh-btn-amber' : 'rh-btn-ghost')}
-                            style={{ justifyContent: 'center', width: '100%' }}
+                            className={ctaClassName}
+                            style={ctaStyle}
                           >
-                            {isFree
-                              ? (loggedIn ? t('pricing.ctaCurrentPlan') : t('pricing.ctaFree'))
-                              : (loggedIn ? t('pricing.ctaUpgrade') : t('pricing.ctaStart'))}
+                            {ctaLabel}
                           </Link>
                         );
                       })()}

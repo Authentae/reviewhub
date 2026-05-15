@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>ReviewHub — Product Card</title>
+<meta name="robots" content="noindex,nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #fbf8f1;
+    --ink: #1d242c;
+    --ink-soft: #4a525a;
+    --ink-dim: #888;
+    --teal-deep: #1e4d5e;
+    --teal: #2a6a7f;
+    --ochre: #c48a2c;
+    --ochre-deep: #a07d20;
+    --sage: #6b8e7a;
+    --rose: #c2566c;
+    --gold: #d4a857;
+    --line: #e6dfce;
+    --tint-positive: #eef5ef;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100vh; overflow: hidden; background: var(--paper); }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
+    padding: 64px 64px 56px;
+    /* subtle radial highlight to add depth like the OG image */
+    background:
+      radial-gradient(120% 80% at 80% -10%, rgba(30,77,94,0.10), transparent 60%),
+      radial-gradient(80% 60% at 0% 100%, rgba(196,138,44,0.08), transparent 60%),
+      var(--paper);
+  }
+  .brandbar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+  .brandbar .mark {
+    width: 56px; height: 56px; border-radius: 14px;
+    background: linear-gradient(135deg, var(--teal-deep) 0%, var(--teal) 100%);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 14px rgba(30,77,94,0.18);
+  }
+  .brandbar .wordmark {
+    font-family: 'Instrument Serif', serif;
+    font-size: 44px;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .brandbar .wordmark em { font-style: italic; color: var(--teal-deep); }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: var(--ochre-deep);
+    text-transform: uppercase;
+  }
+
+  .phone-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 8px 0 0;
+  }
+  .phone {
+    width: 480px;
+    background: #0e1620;
+    border-radius: 38px;
+    padding: 14px;
+    box-shadow:
+      0 24px 60px rgba(29,36,44,0.25),
+      0 6px 16px rgba(29,36,44,0.12);
+    position: relative;
+    transform: rotate(-2deg);
+  }
+  .phone::before {
+    content: "";
+    position: absolute;
+    top: 18px; left: 50%; transform: translateX(-50%);
+    width: 110px; height: 24px;
+    background: #0e1620;
+    border-radius: 0 0 16px 16px;
+    z-index: 2;
+  }
+  .phone-inner {
+    background: #1a2330;
+    border-radius: 26px;
+    padding: 44px 14px 22px;
+    color: #e8eef2;
+  }
+
+  /* Telegram-style notification card */
+  .card {
+    background: #1f2a37;
+    border-radius: 14px;
+    padding: 16px 16px 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+  }
+  .card .head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .card .tier-badge { font-size: 16px; }
+  .card .tier-label { color: var(--sage); letter-spacing: 0.06em; font-size: 13px; }
+  .card .stars { color: var(--gold); letter-spacing: 1px; font-size: 13px; }
+  .card .chip {
+    font-family: 'JetBrains Mono', monospace;
+    background: #2a3441;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #cdd6df;
+  }
+  .card .meta {
+    display: flex;
+    gap: 16px;
+    font-size: 13px;
+    color: #aab6c2;
+    margin-bottom: 12px;
+  }
+  .card .meta strong { color: #e8eef2; font-weight: 600; }
+  .card .meta em { color: #8d99a5; font-style: italic; }
+  .card .reviewer {
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #e8eef2;
+  }
+  .card .reviewer strong { font-weight: 700; }
+  .card .review {
+    border-left: 3px solid #3a4554;
+    padding: 4px 0 4px 12px;
+    margin-bottom: 12px;
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: #cdd6df;
+    font-style: normal;
+  }
+  .card .draft-eyebrow {
+    font-size: 12px;
+    color: #8d99a5;
+    font-style: italic;
+    margin-top: 12px;
+  }
+  .card .draft-block {
+    margin-top: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    background: #0f1620;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #cdd6df;
+    border: 1px solid #2a3441;
+  }
+  .card .buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .card .btn {
+    flex: 1;
+    text-align: center;
+    background: #2a3441;
+    color: #e8eef2;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 8px 0;
+    border-radius: 8px;
+    border: 1px solid #3a4554;
+  }
+  .card .btn.primary {
+    background: var(--teal-deep);
+    color: #fff;
+    border-color: var(--teal-deep);
+  }
+
+  .footer {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-top: 1px solid var(--line);
+    padding-top: 22px;
+    margin-top: 12px;
+  }
+  .footer .tagline {
+    font-family: 'Instrument Serif', serif;
+    font-size: 36px;
+    line-height: 1.1;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    max-width: 580px;
+  }
+  .footer .tagline em { font-style: italic; color: var(--teal-deep); }
+  .footer .url {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--teal-deep);
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+  <div class="brandbar">
+    <div class="mark" aria-hidden="true">
+      <!-- 4-point sparkle, same brand as x-avatar.png -->
+      <svg width="34" height="34" viewBox="0 0 32 32" fill="none">
+        <path d="M16 2 L18.5 13.5 L30 16 L18.5 18.5 L16 30 L13.5 18.5 L2 16 L13.5 13.5 Z" fill="#fbf8f1"/>
+        <path d="M24 21 L24.8 24.2 L28 25 L24.8 25.8 L24 29 L23.2 25.8 L20 25 L23.2 24.2 Z" fill="#fbf8f1" opacity="0.85"/>
+      </svg>
+    </div>
+    <div class="wordmark">Review<em>Hub</em></div>
+  </div>
+  <div class="eyebrow">A new Google review · ping, draft, paste.</div>
+
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="card">
+          <div class="head">
+            <span class="tier-badge">🟢</span>
+            <span class="tier-label">POSITIVE</span>
+            <span style="color:#5a6573;font-weight:400;">·</span>
+            <span class="stars">★★★★★</span>
+            <span class="chip">5/5</span>
+          </div>
+          <div class="meta">
+            <span>📍 <strong>Riva Surya Bangkok</strong></span>
+            <span>🕐 <em>just now</em></span>
+          </div>
+          <div class="reviewer">💬 <strong>Sarah K.</strong></div>
+          <div class="review">
+            The riverside view from our suite was unreal. Staff went out of their way to arrange a late checkout for our flight…
+          </div>
+          <div class="draft-eyebrow">✨ AI DRAFT · EN — copy the block below ↓</div>
+          <div class="draft-block">
+            Sarah, thank you so much! We're so glad the riverside view delivered — and that our team could make the late checkout work for you. We'd love to host you again next time the river calls.
+          </div>
+          <div class="buttons">
+            <div class="btn primary">💬 Reply on Google</div>
+            <div class="btn">✏️ Edit</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="tagline">
+      Every Google review.<br/>
+      <em>One ping, one draft, one paste.</em>
+    </div>
+    <div class="url">reviewhub.review</div>
+  </div>
+</body>
+</html>
