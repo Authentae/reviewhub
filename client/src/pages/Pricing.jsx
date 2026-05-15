@@ -326,20 +326,35 @@ export default function Pricing() {
                             </Link>
                           );
                         }
-                        // For non-logged-in users on paid tiers, route
-                        // straight to the Stripe Payment Link instead of
-                        // /register. Real money in via Stripe checkout;
-                        // Stripe redirects post-pay to /register?from=stripe&...
-                        // so the customer creates their ReviewHub account.
-                        // Falls back to /register for the free tier (no
-                        // payment needed) and for any plan id we haven't
-                        // mapped to a Stripe URL.
-                        const stripeUrl = !loggedIn && !isFree
+                        // Any non-current paid tier → Stripe Payment Link.
+                        // Works for logged-out prospects AND logged-in
+                        // users (existing customers can upgrade/downgrade
+                        // or resubscribe after a cancellation). Falls back
+                        // to /register for the free tier and for any plan
+                        // id we haven't mapped to a Stripe URL. Manual
+                        // provisioning era — Stripe webhook isn't wired,
+                        // so double-subscribes can theoretically happen
+                        // (we'll refund + reconcile manually if so).
+                        const stripeUrl = !isFree
                           ? getStripeCheckoutUrl(plan.id)
                           : null;
-                        const ctaLabel = isFree
-                          ? (loggedIn ? t('pricing.ctaCurrentPlan') : t('pricing.ctaFree'))
-                          : (loggedIn ? t('pricing.ctaUpgrade') : t('pricing.ctaStart'));
+                        // CTA copy: 'Current plan' only when actually
+                        // current. For logged-in users on a paid plan
+                        // viewing the Free card, show 'Downgrade to free'.
+                        // For logged-in users with cancelled subs, show
+                        // 'Resubscribe' so the action reads right.
+                        let ctaLabel;
+                        if (isFree) {
+                          ctaLabel = loggedIn
+                            ? t('pricing.ctaDowngradeFree', 'Downgrade to free')
+                            : t('pricing.ctaFree');
+                        } else if (loggedIn && currentPlanId === 'cancelled') {
+                          ctaLabel = t('pricing.ctaResubscribe', 'Resubscribe');
+                        } else {
+                          ctaLabel = loggedIn
+                            ? t('pricing.ctaUpgrade')
+                            : t('pricing.ctaStart');
+                        }
                         const ctaClassName = 'rh-btn ' + (highlighted ? 'rh-btn-amber' : 'rh-btn-ghost');
                         const ctaStyle = { justifyContent: 'center', width: '100%' };
                         if (stripeUrl) {
