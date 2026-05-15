@@ -86,7 +86,77 @@ function PlatformLogo({ platform, size = 36 }) {
   return null;
 }
 
-function ConnectCard({ platform, icon, color, connected, onConnect, syncStatus, businessId, managingEmail = '' }) {
+// ComingSoonCard — visible-but-disabled state for platforms we
+// haven't shipped a working integration for yet (Yelp, Facebook).
+// Records demand via a Plausible event so we know when to pay the
+// integration tax. Showing a fake-functional Connect button would be
+// dishonest UX — owners would paste IDs that go nowhere.
+function ComingSoonCard({ platform, brand, icon, lang, toast }) {
+  const voteKey = `rh_platform_vote_${platform}`;
+  const [voted, setVoted] = useState(() => {
+    try { return window.localStorage?.getItem(voteKey) === '1'; }
+    catch { return false; }
+  });
+  function handleVote() {
+    try {
+      window.localStorage?.setItem(voteKey, '1');
+      if (typeof window.plausible === 'function') {
+        window.plausible('PlatformVote', { props: { platform } });
+      }
+      setVoted(true);
+      toast(lang === 'th'
+        ? 'รับโหวตแล้ว — เราจะแจ้งคุณเมื่อพร้อมใช้งาน'
+        : 'Got it — we\'ll let you know when this ships', 'success');
+    } catch {}
+  }
+  return (
+    <div
+      className="card p-5"
+      style={brand
+        ? { borderTop: `3px solid ${brand.color}`, opacity: 0.85 }
+        : { opacity: 0.85 }}
+    >
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <div className="flex items-center gap-3 min-w-0">
+          <div
+            className="w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0"
+            style={brand
+              ? { background: brand.tintBg, border: `1px solid ${brand.tintBorder}`, filter: 'grayscale(0.4)' }
+              : undefined}
+          >
+            {brand ? <PlatformLogo platform={platform} size={26} /> : <span className="text-xl">{icon}</span>}
+          </div>
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <p className="font-semibold text-sm text-gray-900 dark:text-gray-100 capitalize">{platform}</p>
+              <span className="text-[10px] font-bold tracking-wide uppercase px-2 py-0.5 rounded-full"
+                style={{ background: 'rgba(160,125,32,0.12)', color: 'var(--rh-ochre-deep, #a07d20)', border: '1px solid rgba(160,125,32,0.30)' }}>
+                {lang === 'th' ? 'เร็วๆ นี้' : 'Coming soon'}
+              </span>
+            </div>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+              {lang === 'th'
+                ? 'ยังเชื่อมต่อไม่ได้ตอนนี้ — โหวตเพื่อให้เราเร่งทำ'
+                : 'Not connectable yet — vote to bump our priority'}
+            </p>
+          </div>
+        </div>
+        <button
+          type="button"
+          disabled={voted}
+          onClick={handleVote}
+          className="btn-secondary text-xs py-1.5 px-3 disabled:opacity-60 whitespace-nowrap"
+        >
+          {voted
+            ? (lang === 'th' ? '✓ โหวตแล้ว' : '✓ Voted')
+            : (lang === 'th' ? '👍 โหวต' : '👍 Vote for this')}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function ConnectCard({ platform, icon, color, connected, onConnect, syncStatus, businessId, managingEmail = '', comingSoon = false }) {
   // Google-managing-email — the GBP-owning account this listing belongs to.
   // Used by the "Reply on Google" button to deep-link via &authuser=<email>
   // so the GBP UI auto-switches to the right account in multi-account browsers.
@@ -261,6 +331,17 @@ function ConnectCard({ platform, icon, color, connected, onConnect, syncStatus, 
   }
 
   const brand = PLATFORM_BRAND[platform];
+
+  // Coming-soon mode: platform UI is visible (so owners know it's on
+  // the roadmap) but the connect flow is replaced with a "vote for
+  // this" button. Records demand via Plausible so we know when to
+  // pay the multi-week App Review tax for FB / pursue Yelp Knowledge
+  // Program access. Shipping a fake-functional Connect button here
+  // would be misleading: the server has no Yelp/FB poller wired.
+  if (comingSoon) {
+    return <ComingSoonCard platform={platform} brand={brand} icon={icon} lang={lang} toast={toast} />;
+  }
+
   return (
     <div
       className="card p-5"
@@ -3381,8 +3462,14 @@ export default function Settings() {
           </p>
           <div className="space-y-3">
             <ConnectCard platform="google" icon={<span aria-hidden="true">🔵</span>} color="bg-blue-50" connected={business?.google_place_id} onConnect={handleConnect} syncStatus={connections.google} businessId={business?.id} managingEmail={business?.google_managing_email || ''} />
-            <ConnectCard platform="yelp" icon={<span aria-hidden="true">🔴</span>} color="bg-red-50" connected={business?.yelp_business_id} onConnect={handleConnect} syncStatus={connections.yelp} />
-            <ConnectCard platform="facebook" icon={<span aria-hidden="true">🟣</span>} color="bg-indigo-50" connected={business?.facebook_page_id} onConnect={handleConnect} syncStatus={connections.facebook} />
+            {/* Yelp + Facebook are intentionally coming-soon. Yelp's full-
+                review/reply API is gated to enterprise partners (Knowledge
+                Program, invite-only). Facebook needs a 2-6 week Meta App
+                Review with business verification + screencasts; not worth
+                paying that tax until paying customers actually demand it.
+                Voting via Plausible gives us the demand signal. */}
+            <ConnectCard platform="yelp" icon={<span aria-hidden="true">🔴</span>} color="bg-red-50" comingSoon />
+            <ConnectCard platform="facebook" icon={<span aria-hidden="true">🟣</span>} color="bg-indigo-50" comingSoon />
           </div>
           {/* CSV-imported platforms — shown so users see the full registry
               and don't think we only support 3 platforms. The "Connected"
