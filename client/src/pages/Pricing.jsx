@@ -112,15 +112,29 @@ export default function Pricing() {
   // Fetch the user's current plan (logged-in only) so we can mark the
   // matching card as "Current plan" instead of showing a misleading
   // "Upgrade" CTA on the plan they're already on.
+  // Track BOTH plan + status. A cancelled subscription still has
+  // subscription.plan === 'pro' (or whatever), but the user no longer
+  // has access — they should be able to RE-subscribe to that plan via
+  // a fresh Stripe checkout. So 'current' means active, not historical.
   const [currentPlanId, setCurrentPlanId] = useState(null);
+  const [currentPlanStatus, setCurrentPlanStatus] = useState(null);
   useEffect(() => {
     if (!loggedIn) return;
     let cancelled = false;
     api.get('/auth/me')
-      .then(({ data }) => { if (!cancelled) setCurrentPlanId(data.subscription?.plan || 'free'); })
+      .then(({ data }) => {
+        if (cancelled) return;
+        setCurrentPlanId(data.subscription?.plan || 'free');
+        setCurrentPlanStatus(data.subscription?.status || null);
+      })
       .catch(() => { /* silent — fall back to default copy */ });
     return () => { cancelled = true; };
   }, [loggedIn]);
+  // Effective plan for "Current plan ✓" badging. Cancelled/past_due/
+  // unpaid subscriptions are treated as 'free' so the user can click
+  // their old tier and resubscribe via Stripe.
+  const hasActivePlan = currentPlanStatus === 'active';
+  const effectiveCurrentPlanId = hasActivePlan ? currentPlanId : 'free';
 
   const faqs = [
     { q: t('pricing.faq1q'), a: t('pricing.faq1a') },
@@ -308,7 +322,13 @@ export default function Pricing() {
                       </ul>
 
                       {(() => {
-                        const isCurrent = loggedIn && currentPlanId === plan.id;
+                        const isCurrent = loggedIn && effectiveCurrentPlanId === plan.id;
+                        // 'Resubscribe' instead of 'Get started' when the
+                        // user previously subscribed to this exact plan
+                        // and then cancelled. Reads more accurately for
+                        // them ("oh right, I had this before") and
+                        // separates the funnel signal: resub vs first-buy.
+                        const wasPreviousPlan = loggedIn && !hasActivePlan && currentPlanId === plan.id;
                         // Current plan → disabled "Current plan ✓" button that
                         // routes to Settings (where they can manage billing /
                         // change plan via the LS portal). Other plans → upgrade/
@@ -348,7 +368,7 @@ export default function Pricing() {
                           ctaLabel = loggedIn
                             ? t('pricing.ctaDowngradeFree', 'Downgrade to free')
                             : t('pricing.ctaFree');
-                        } else if (loggedIn && currentPlanId === 'cancelled') {
+                        } else if (wasPreviousPlan) {
                           ctaLabel = t('pricing.ctaResubscribe', 'Resubscribe');
                         } else {
                           ctaLabel = loggedIn

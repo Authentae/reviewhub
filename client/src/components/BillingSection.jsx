@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import api from '../lib/api';
 import { useI18n } from '../context/I18nContext';
 import { useToast } from './Toast';
+import { getStripeCheckoutUrl } from '../lib/checkout';
 
 // Billing section for Settings.
 //
@@ -99,15 +100,34 @@ export default function BillingSection({ subscription, onRefresh }) {
           </div>
           {!isFree && (
             <div className="flex flex-col items-end gap-1">
-              <button
-                type="button"
-                onClick={handleManage}
-                disabled={busy}
-                aria-busy={busy}
-                className="btn-secondary text-sm disabled:opacity-60"
-              >
-                {busy ? t('billing.loading') : t('billing.manageBilling')}
-              </button>
+              {/* Cancelled / past_due / unpaid subscription → the
+                  LemonSqueezy portal route /api/billing/portal is
+                  currently dead because LS store activation is still
+                  in review. Surface a Stripe-Payment-Link
+                  "Resubscribe" button instead so the user has a real
+                  path to re-pay. Falls back to the legacy
+                  manageBilling button when status is active (where
+                  the LS portal would actually work — once LS is
+                  activated). */}
+              {status !== 'active' && getStripeCheckoutUrl(plan) ? (
+                <a
+                  href={getStripeCheckoutUrl(plan)}
+                  className="btn-primary text-sm plausible-event-name=SettingsResubscribeClick"
+                  data-plan={plan}
+                >
+                  {t('billing.resubscribe', 'Resubscribe')}
+                </a>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleManage}
+                  disabled={busy}
+                  aria-busy={busy}
+                  className="btn-secondary text-sm disabled:opacity-60"
+                >
+                  {busy ? t('billing.loading') : t('billing.manageBilling')}
+                </button>
+              )}
               {/* Set expectations BEFORE the user clicks through to LS's
                   hosted portal — the portal itself is bare-bones and won't
                   reassure them about post-cancel data retention or the
