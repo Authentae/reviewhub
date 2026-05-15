@@ -128,13 +128,14 @@ export default function BillingSection({ subscription, onRefresh }) {
                   {busy ? t('billing.loading') : t('billing.manageBilling')}
                 </button>
               )}
-              {/* Set expectations BEFORE the user clicks through to LS's
-                  hosted portal — the portal itself is bare-bones and won't
-                  reassure them about post-cancel data retention or the
-                  refund window. Persona testers consistently asked these
-                  two questions before touching the cancel button. */}
+              {/* Hint copy switches with the button. Active sub → describe
+                  what the LS portal does (cancel / downgrade / card).
+                  Cancelled/past_due → describe what Resubscribe does
+                  (secure Stripe checkout, your data is still there). */}
               <p className="text-[11px] text-gray-400 dark:text-gray-500 max-w-[200px] text-right leading-tight">
-                {t('billing.manageHint', 'Cancel, downgrade, or update card. Your data stays accessible after cancellation; export anytime.')}
+                {status !== 'active' && getStripeCheckoutUrl(plan)
+                  ? t('billing.resubscribeHint', 'Resume your plan in seconds via secure Stripe checkout. Your data is still here.')
+                  : t('billing.manageHint', 'Cancel, downgrade, or update card. Your data stays accessible after cancellation; export anytime.')}
               </p>
             </div>
           )}
