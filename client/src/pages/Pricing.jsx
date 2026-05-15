@@ -291,8 +291,24 @@ export default function Pricing() {
                   // prospect clicks through.
                   const highlighted = plan.id === 'starter';
                   const activeFeatures = Object.entries(plan.features).filter(([, v]) => v);
+                  // Visually de-emphasise the Free card when the user is
+                  // on a paid plan. Treating Free as a peer of Starter/
+                  // Pro/Business creates a false-equivalence — Free is an
+                  // EXIT not a lateral choice. Greyed-out card + muted CTA
+                  // signals "this is an off-ramp, not a tier you upgrade
+                  // toward." Active OR cancelled paid history both count
+                  // — we don't want a cancelled-Pro user clicking Free
+                  // and thinking they're recovering value.
+                  const isDowngradeFromPaid = isFree && loggedIn
+                    && currentPlanId && currentPlanId !== 'free';
                   return (
-                    <div key={plan.id} className={'rh-pricing-card' + (highlighted ? ' featured' : '')}>
+                    <div
+                      key={plan.id}
+                      className={'rh-pricing-card' + (highlighted ? ' featured' : '') + (isDowngradeFromPaid ? ' rh-pricing-card--muted' : '')}
+                      style={isDowngradeFromPaid
+                        ? { opacity: 0.55, filter: 'saturate(0.5)' }
+                        : undefined}
+                    >
                       {highlighted && <span className="badge">{t('pricing.badge')}</span>}
                       <h2 className="plan-name">{plan.name}</h2>
                       <p className="plan-sub">{t(`pricing.${plan.id}Desc`, plan.description)}</p>
@@ -365,9 +381,16 @@ export default function Pricing() {
                         // 'Resubscribe' so the action reads right.
                         let ctaLabel;
                         if (isFree) {
-                          ctaLabel = loggedIn
-                            ? t('pricing.ctaDowngradeFree', 'Downgrade to free')
-                            : t('pricing.ctaFree');
+                          // For paying users, "Downgrade to free" reads as
+                          // an exit ramp, not a feature. Route to /settings
+                          // (where the cancel/downgrade flow lives) rather
+                          // than /register, and use lighter copy that
+                          // matches the subordinate visual treatment.
+                          ctaLabel = isDowngradeFromPaid
+                            ? t('pricing.ctaManagePlan', 'Manage plan in settings →')
+                            : (loggedIn
+                                ? t('pricing.ctaDowngradeFree', 'Downgrade to free')
+                                : t('pricing.ctaFree'));
                         } else if (wasPreviousPlan) {
                           ctaLabel = t('pricing.ctaResubscribe', 'Resubscribe');
                         } else {
