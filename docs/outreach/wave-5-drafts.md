@@ -1,16 +1,17 @@
 # Wave 5 — ready-to-send drafts (14 prospects)
 
-**Status:** drafts written 2026-05-17. Review counts filled in where I
-could verify; the rest just say "saw X on Maps" without a number.
+**Status:** drafts written + all 14 audit URLs generated 2026-05-17.
+All drafts are 100% paste-ready. No prep work needed.
 
-## Before you send — ONE prep step (~40 min)
+## How to send
 
-**Audit URLs** — open https://reviewhub.review/outbound-audits, click
-"+ New audit" for each of the 14 prospects (name + Place ID), copy
-the share URL, paste it into the `[AUDIT URL]` slot below. ~3 min × 14.
+1. Open Gmail in `earth.reviewhub@gmail.com` (NOT theearth1659)
+2. For each draft below: copy subject + body → New message → paste
+3. Click the dropdown arrow next to "Send" → Schedule send → pick the
+   time in the table below
 
-That's the only thing left. After that, paste each draft into Gmail
-compose and Schedule send for the time in the table.
+All 14 audits are visible in https://reviewhub.review/outbound-audits
+if you want to preview what each prospect will see when they click.
 
 ## Send schedule (Tue/Wed 9-11 AM Bangkok)
 
@@ -67,7 +68,7 @@ in Google, ~30 seconds.
 I drafted reply suggestions for your 10 most recent reviews — no signup,
 just a preview:
 
-→ [AUDIT URL]
+→ https://reviewhub.review/audit-preview/07d2ff7b5f00cd3dbfac842c71b9621f608f96017696c6a3
 
 If it's not the right fit, a one-line "not for us" reply is genuinely
 useful — helps me understand what works for independent gyms. No
@@ -102,7 +103,7 @@ in Google, ~30 seconds.
 I drafted reply suggestions for your 10 most recent reviews — no signup,
 just a preview:
 
-→ [AUDIT URL]
+→ https://reviewhub.review/audit-preview/0344be0447e171dc992c1aa90010b3ac6646fb80f05432a3
 
 If it's not the right fit, a one-line "not for us" reply is genuinely
 useful — helps me understand what works for independent gyms. No
@@ -137,7 +138,7 @@ draft ready, tap to copy, paste in Google, ~30 seconds.
 I drafted reply suggestions for your 10 most recent reviews — no signup,
 just a preview:
 
-→ [AUDIT URL]
+→ https://reviewhub.review/audit-preview/f018125d7c45fb03bcfffa84ee5fadde3f6e1aad2dc27587
 
 If it's not the right fit, a one-line "not for us" reply is genuinely
 useful — helps me understand what works for independent Muay Thai gyms
@@ -172,7 +173,7 @@ Telegram with the draft ready, tap to copy, paste in Google, ~30 seconds.
 I drafted reply suggestions for your 10 most recent reviews — no signup,
 just a preview:
 
-→ [AUDIT URL]
+→ https://reviewhub.review/audit-preview/4abff82500a8e08e1ea6ca5edcb4eaf1cdfa0d8ab1b87129
 
 If it's not the right fit, a one-line "not for us" reply is genuinely
 useful — helps me understand what works for founder-led gyms. No
@@ -207,7 +208,7 @@ Telegram with the draft ready, tap to copy, paste in Google, ~30 seconds.
 I drafted reply suggestions for your 10 most recent reviews — no signup,
 just a preview:
 
-→ [AUDIT URL]
+→ https://reviewhub.review/audit-preview/035800e0a504f6317f0768af2682a3f5ffb3b430192ca881
 
 If it's not the right fit, a one-line "not for us" reply is genuinely
 useful — helps me understand what works for English-language Muay Thai
@@ -242,7 +243,7 @@ LINE or Telegram with the draft ready, tap to copy, paste in Google.
 I drafted reply suggestions for your 10 most recent reviews — no signup,
 just a preview:
 
-→ [AUDIT URL]
+→ https://reviewhub.review/audit-preview/bbf549e16e063df2694beaf134788cfb2a63d4795923b0e3
 
 If this isn't a fit right now, a one-line "not for us, here's why" is
 genuinely useful — helps me understand what tools actually serve
@@ -277,7 +278,7 @@ tap to copy, paste in Google.
 I drafted reply suggestions for your 10 most recent reviews — no signup,
 just a preview:
 
-→ [AUDIT URL]
+→ https://reviewhub.review/audit-preview/8caf3141e8d9a2ab8b91ff34024a512335bd7b8bfd126bad
 
 If this isn't a fit right now, a one-line "not for us, here's why" is
 genuinely useful — helps me understand what tools actually serve
@@ -313,7 +314,7 @@ distinct. Pings your LINE or Telegram with the draft ready.
 I drafted reply suggestions for your 10 most recent reviews — no signup,
 just a preview:
 
-→ [AUDIT URL]
+→ https://reviewhub.review/audit-preview/e7923beb389e6e39c34cd66538d72e4af2f19ede141e9705
 
 If this isn't a fit right now, a one-line "not for us, here's why" is
 genuinely useful — helps me understand what tools actually serve
@@ -348,7 +349,7 @@ the draft ready, tap to copy, paste in Google.
 I drafted reply suggestions for your 10 most recent reviews — no signup,
 just a preview:
 
-→ [AUDIT URL]
+→ https://reviewhub.review/audit-preview/a8c462d93c09024683519ec197332c3da619623c74a5f3ac
 
 If this isn't a fit right now, a one-line "not for us, here's why" is
 genuinely useful — helps me understand what tools actually serve
@@ -384,7 +385,7 @@ the draft ready, tap to copy, paste in Google.
 I drafted reply suggestions for your 10 most recent reviews — no signup,
 just a preview:
 
-→ [AUDIT URL]
+→ https://reviewhub.review/audit-preview/5550ddb1ca20b8316c3cf0db272615e7e22d595e7545e5fd
 
 If this isn't a fit right now, a one-line "not for us, here's why" is
 genuinely useful — helps me understand what tools actually serve
@@ -420,7 +421,7 @@ guessing the wording.
 I drafted reply suggestions for your 10 most recent reviews — no signup,
 just a preview:
 
-→ [AUDIT URL]
+→ https://reviewhub.review/audit-preview/76456317d98b80a7b06b3803cdf50d4080e3ff2e9a336099
 
 If this isn't the right fit for IDENT right now, a one-line "not for us,
 here's why" is genuinely useful — saves us both time and helps me
@@ -458,7 +459,7 @@ wording.
 I drafted reply suggestions for your 10 most recent reviews — no signup,
 just a preview:
 
-→ [AUDIT URL]
+→ https://reviewhub.review/audit-preview/494f64b5aca5ddd7b97a80f9e362df7c030496c7f7e01ee1
 
 If this isn't the right fit right now, a one-line "not for us, here's
 why" is genuinely useful — saves us both time and helps me understand
@@ -494,7 +495,7 @@ AI draft ready; tap to copy, paste in Google, ~30 seconds.
 I drafted reply suggestions for your 10 most recent reviews — no signup,
 just a preview:
 
-→ [AUDIT URL]
+→ https://reviewhub.review/audit-preview/ebd280f47a26cc27e9ef7b1b1a5320353675fda3bdb60e6f
 
 If this isn't the right fit right now, a one-line "not for us" is
 genuinely useful — saves us both time and helps me understand what
@@ -529,7 +530,7 @@ draft ready; tap to copy, paste in Google, ~30 seconds.
 I drafted reply suggestions for your 10 most recent reviews — no signup,
 just a preview:
 
-→ [AUDIT URL]
+→ https://reviewhub.review/audit-preview/d224ca62f097f9a5fcd693e37cb2f005c72b6cc361c6a5cc
 
 If this isn't the right fit right now, a one-line "not for us" is
 genuinely useful — saves us both time and helps me understand what
