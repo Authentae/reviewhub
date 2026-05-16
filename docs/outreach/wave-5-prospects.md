@@ -1,12 +1,17 @@
 # Wave 5 prospect list — researched 2026-05-17
 
-Source list compiled via public web research. Email column populated
-where the prospect publicly lists one; **HUNTER** marker means email
-should be resolved by running the domain through hunter.io free tier
-(see wave-5-prep.md step 2).
+Source list compiled via public web research (contact pages, expatden
+directory, TripAdvisor, GoWabi, Sorted Bangkok). **14 of 18 prospects
+have verified emails ready to send.** No paid tools used.
 
-Send order: do Muay Thai first (highest confidence emails), then
-spas (mostly resolved), then coffee + dental via Hunter.io fill-in.
+**Verified breakdown:**
+- Muay Thai: 5/5 ✅
+- Spa: 5/5 ✅
+- Coffee: 2/5 (3 cafes list only IG/FB — DM is the channel they prefer)
+- Dental: 2/4 (1 phone-only, 1 deferred — no Bangkok domain confirmed)
+
+Send order: Muay Thai → Spa → verified Dental → verified Coffee. For the
+3 IG-only coffee shops, DM via Instagram instead of trying to force email.
 
 ---
 
@@ -29,15 +34,15 @@ spas (mostly resolved), then coffee + dental via Hunter.io fill-in.
 
 ---
 
-## 🟡 SPA — 2 verified + 3 leads needing Hunter.io
+## ✅ SPA — 5 prospects, all emails verified
 
 | # | Spa | Email | Phone | Website | Notes |
 |---|-----|-------|-------|---------|-------|
 | 1 | **CORAN Boutique Spa** | `coranspabangkok@gmail.com` | +66-62-587-5366 | coranbangkok.com | Sukhumvit Soi 15, Klongtoey-nua. LINE + WhatsApp same number. |
 | 2 | **Dahra Spa** | `info@dahra-spa.com` | (on site) | dahra-spa.com | Silom Road; named-therapist review pattern |
-| 3 | **Infinity Wellbeing** | **HUNTER** (likely `info@infinitywellbeing.com`) | +66 2 026 3950 | infinitywellbeing.com | Sukhumvit Soi 20, next to Rembrandt; LINE @infinitybkk |
-| 4 | **Preme Spa** | **HUNTER** (likely `contact@premespa.com` or LINE @premespa) | +66 63-905-9928 | premespa.com | Sukhumvit 36, BTS Thong Lo; 4.8 ⭐ Google |
-| 5 | **Treasure Spa Thonglor** | **HUNTER** (try `info@treasurespa.com`) | (on site) | treasurespa.com | TripAdvisor Travelers' Choice 2025 |
+| 3 | **Infinity Wellbeing** | `info@infinityspa.com` | +66 2 026 3950 | infinitywellbeing.com | Sukhumvit Soi 20, next to Rembrandt; LINE @infinitybkk. Shared email with Silom sister-property Infinity Spa. |
+| 4 | **Preme Spa** | `premespa@gmail.com` | +66 63-905-9928 | premespa.com | Sukhumvit 36, BTS Thong Lo; 4.8 ⭐ Google; LINE @premespa |
+| 5 | **Treasure Spa Thonglor** | `thonglor@treasurespa.com` | +66 87 793 4360 | treasurespa.com | TripAdvisor Travelers' Choice 2025. Per-branch email (not generic info@). |
 
 **Hook ideas:**
 - CORAN → "the boutique-vibe reviews that mention specific therapists by name"
@@ -48,15 +53,15 @@ spas (mostly resolved), then coffee + dental via Hunter.io fill-in.
 
 ---
 
-## 🟡 SPECIALTY COFFEE — 5 leads, all need Hunter.io for email
+## 🟡 SPECIALTY COFFEE — 2 verified + 3 leads (Instagram DM as fallback)
 
 | # | Cafe | Email | Phone | Website | Notes |
 |---|------|-------|-------|---------|-------|
-| 1 | **Hands & Hearts Coffee** | **HUNTER** (try `info@handsandheart.com`) | +66 81 553 3585 | (Sukhumvit 38, FB handsandheartcoffee) | Owner Thanapong, hand-grinds single origin; decade-old independent |
-| 2 | **ROOTS** | **HUNTER** (try `hello@rootsbkk.com`) | (on site) | rootsbkk.com | Multi-location specialty roaster (Ari, Ratchathewi, Thonglor, Sathorn, Lasalle); IG @rootsbkk |
-| 3 | **Ink and Lion Cafe** | **HUNTER** (try `inkandlioncafe@gmail.com`) | +66 2 002 6874 | (Soi Ekamai 2, FB inkandlioncafe) | Independent Ekamai cafe |
-| 4 | **Ceresia Coffee Roasters** | **HUNTER** (try `info@ceresiacoffeeroasters.com`) | +66 9 8251 4327 | ceresiacoffeeroasters.com | Sukhumvit Soi 33/1, independent roastery |
-| 5 | **Kaizen Coffee Co.** | **HUNTER** (try `hello@kaizencoffeeco.com`) | +66 88 316 009 | kaizencoffeeco.com | Tai Ping Tower, Ekkamai Rd; independent |
+| 1 | **Ink and Lion Cafe** | `inkandlioncafe@gmail.com` | +66 95 881 1084 | inkandlion.business.site (FB inkandlioncafe) | Independent Ekamai cafe; couple-owned, gallery + specialty coffee |
+| 2 | **Ceresia Coffee Roasters** | `ceresiacoffee@gmail.com` | +66 9 8251 4327 | ceresiacoffeeroasters.com | Sukhumvit Soi 41, independent roastery (corrected from Soi 33/1) |
+| 3 | **Hands & Hearts Coffee** | **NO EMAIL ON SITE — try IG DM `@handsandheart_coffeeroasters`** | +66 2 074 2014 / +66 81 442 7977 | facebook.com/handsandheartcoffeeroasters | Owner Thanapong, Sukhumvit 38. Send via IG/FB Messenger or call. |
+| 4 | **ROOTS** | **NO EMAIL ON SITE — try IG DM `@rootsbkk`** | (newsletter form only) | rootsbkk.com | Multi-location specialty roaster (Ari, Ratchathewi, Thonglor, Sathorn, Lasalle). They explicitly route contact through socials. |
+| 5 | **Kaizen Coffee Co.** | **NO EMAIL ON SITE — try IG DM `@kaizencoffeeco`** | +66 82 551 4680 | kaizencoffee.com | Ekkamai Rd; independent. Try DM or website contact form. |
 
 **Hook ideas:**
 - Hands & Hearts → "the long-term-regular reviews tagging Khun Thanapong by name"
@@ -67,23 +72,16 @@ spas (mostly resolved), then coffee + dental via Hunter.io fill-in.
 
 ---
 
-## 🔴 DENTAL — 5 candidate names, ALL need Hunter.io for email
+## 🟡 DENTAL — 2 verified + 1 phone-only + Dentalista deferred
 
-From Sorted Bangkok directory (sortedbangkok.com/dentists) — these are
-independent practices (not BIDC, not Bangkok Smile chain):
+From Sorted Bangkok directory — independent practices (not BIDC, not Bangkok Smile chain):
 
-| # | Clinic | Email | Website | Notes |
-|---|--------|-------|---------|-------|
-| 1 | **Dentalista (Thanon Chan branch)** | **HUNTER** (try domain dentalista.com or similar) | search "Dentalista Bangkok" | 4.8 ⭐, specialist clinic |
-| 2 | **Dentalista (Phrompong branch)** | **HUNTER** (same domain as #1) | search same | 4.8 ⭐, sister branch |
-| 3 | **IDENT Dental Clinic** | **HUNTER** (try identdentalclinic.com) | search "IDENT Dental Bangkok" | 5.0 ⭐, specialist |
-| 4 | **Asok Montri Dental Clinic** | **HUNTER** | search "Asok Montri Dental" | 4.5 ⭐ |
-| 5 | **My Dentist Dental Clinic** | **HUNTER** | search "My Dentist Bangkok" | 4.8 ⭐ |
-
-**You'll need to do a 30-second Google for each clinic name to grab their
-real website domain**, then paste each domain into Hunter.io for the
-email. Most independent dental clinics in Bangkok use either their own
-domain (`@clinicname.com`) OR a gmail.com format.
+| # | Clinic | Email | Phone | Website | Notes |
+|---|--------|-------|-------|---------|-------|
+| 1 | **IDENT Dental Clinic** | `identdentalbkk@gmail.com` | +66 85 123 3359 | identdentalbkk.com | 5.0 ⭐, specialist. Chidlom; LINE @identdental |
+| 2 | **Asok Montri Dental Clinic** | `asokmontridental@gmail.com` | +66 2 640 8188 | asokmontridental.com | 4.5 ⭐, Sukhumvit 21 |
+| 3 | **My Dentist Dental Clinic** | **NO EMAIL — call only** | +66 81 981 5411 | mydentistbkk.com | 4.8 ⭐, Trendy Building Sukhumvit 13. Skip or use website contact form. |
+| 4 | **Dentalista (deferred)** | — | — | — | Sorted Bangkok lists them but no clear Bangkok website surfaced (dentalista.com is a Spanish dental directory, not this clinic). **Skip for Wave 5** unless you can confirm domain. |
 
 **Hook ideas (generic — fill in after seeing real review patterns):**
 - "noticed several reviews where patients mentioned specific procedures
