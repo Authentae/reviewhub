@@ -46,6 +46,55 @@ moves the needle the most goes top, regardless of effort.
 The app side. Roadmap.jsx is the public face; this is the working
 list.
 
+- `[done] 2026-05-16` Stripe Payment Links wired end-to-end. ReviewHub
+  Stripe account created (Authentae org → ReviewHub account, KYC review
+  in progress, payments accepted during review window). 3 products
+  (Starter $14 / Pro $29 / Business $59) + 3 Payment Links live in
+  `client/src/lib/checkout.js`. `/pricing` + `/audit-preview` CTAs
+  route to Stripe; logged-in cancelled-sub users get a Resubscribe
+  button. Pro+Business gated server-side (`coming_soon: true` in
+  plans.js) + client-side (`getStripeCheckoutUrl` refuses gated
+  plans). Server `/api/billing/checkout` returns 400 plan_coming_soon
+  for them. JSON-LD schema filters coming-soon plans from Google
+  rich results. Manual provisioning until webhook wired — Stripe
+  emails Earth on each new sub.
+- `[done] 2026-05-16` Post-Stripe-payment landing UX. Customers
+  arriving at `/register?from=stripe&plan=X&checkout_success=1` now
+  see a sage-tinted "Payment received — welcome to ReviewHub · <Plan>"
+  banner + a 'One last step: create your account' H1 + 'use the same
+  email you paid with' subhead, instead of the generic signup form.
+  Stash sessionStorage attribution for downstream onboarding to
+  detect already-paid users.
+- `[done] 2026-05-16` Public-page honesty audit. Stripped fake
+  testimonial quotes across 8 vertical pages (FTC endorsement risk);
+  softened HIPAA-compliant claims to PHI-aware on /for-dentists +
+  /for-pharmacies; split vertical platforms into Live (Google) +
+  Coming soon (rest); Landing hero copy LINE-only → 'from your phone'
+  with LINE+Telegram subhead; Landing hero metric '60+ platforms'
+  → '3 channels'; Landing Pro+Business cards gated coming-soon to
+  match /pricing; Audit FAQ honest about Places API vs BPA; ApiDocs
+  coming-soon banner; Roadmap moved shipped items out of Considering.
+- `[done] 2026-05-16` Banned-phrases lint + pre-commit hook. New
+  `scripts/check-banned-phrases.sh` blocks commits that re-introduce
+  'from LINE.', '60+ platforms', 'HIPAA-compliant', fabricated
+  testimonial author strings, live CTAs for gated tiers, killed-trial
+  wording. Banlist is the canonical 'what we cannot claim today'
+  registry — update when features ship (remove) or get gated (add).
+  Lint immediately caught 6 lies the per-page audit missed. New
+  memory file `feedback_audit_visual_first.md` auto-loads next
+  session telling future-Claude to render-first before code-audit.
+- `[done] 2026-05-15` Telegram bot integration end-to-end. Webhook
+  receiver (`server/src/routes/telegramWebhook.js`) handles
+  `/start`, `/start <token>` (deep-link payload), `/link <token>`,
+  `/unlink` commands. Link-token flow at `/api/telegram/{status,
+  generate-token, unlink, test-push}`. Settings UI mirror of
+  LineConnectSection with branded blue paper-plane logo + top-stripe
+  + t.me deep-link + QR for cross-device. `placesPoller` pushes
+  notifications via both LINE and Telegram when bound. Notification
+  card sends as 2 messages: card + monospace draft block for one-tap
+  mobile copy. Cross-channel parity with LINE rating-tier visual
+  (red/yellow/green emoji badge).
+
 - `[done] 2026-05-09` LINE pivot v1: Places API integration shipped.
   `googlePlaces.js` + `placesPoller.js` (30-min cron) + Settings UI
   Place ID lookup + honest landing copy ("Tap to copy, paste in
