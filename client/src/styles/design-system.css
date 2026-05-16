@@ -752,6 +752,13 @@
 
 /* ── Pricing page surface ──────────────────────────────────────────────── */
 .rh-pricing-page main { min-height: 60vh; }
+/* Mobile sweep 2026-05-17: belt-and-braces overflow guard. Any
+   intrinsic-width descendant on the pricing page that exceeds the
+   viewport (an over-long unbroken token, a fixed-width image, an
+   absolute-positioned badge that didn't get its max-width applied)
+   gets clipped here instead of horizontally scrolling the whole page. */
+.rh-pricing-page { overflow-x: hidden; }
+.rh-pricing-page .rh-pricing-card { word-break: break-word; }
 .rh-pricing-hero {
   position: relative; overflow: hidden;
   background: var(--rh-cream);
@@ -812,7 +819,7 @@
 .rh-pricing-card ul { list-style: none; padding: 0; margin: 0 0 22px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
 .rh-pricing-card li { font-size: 13.5px; color: var(--rh-ink-2); display: flex; gap: 10px; align-items: flex-start; line-height: 1.4; }
 .rh-pricing-card li svg { flex: none; color: var(--rh-sage); margin-top: 3px; }
-.rh-pricing-card .badge { position: absolute; top: 24px; right: 24px; background: var(--rh-ochre); color: var(--rh-ink); font-family: var(--rh-mono); font-size: 10px; padding: 4px 10px; border-radius: 999px; letter-spacing: 0.08em; font-weight: 600; text-transform: uppercase; }
+.rh-pricing-card .badge { position: absolute; top: 16px; right: 12px; background: var(--rh-ochre); color: var(--rh-ink); font-family: var(--rh-mono); font-size: 10px; padding: 4px 10px; border-radius: 999px; letter-spacing: 0.08em; font-weight: 600; text-transform: uppercase; max-width: calc(100% - 24px); white-space: nowrap; }
 
 /* Skeleton */
 .rh-pricing-card.skeleton .sk-line { height: 10px; background: color-mix(in oklab, var(--rh-ink) 8%, var(--rh-paper)); border-radius: 4px; margin-bottom: 12px; animation: rh-skel 1.4s ease-in-out infinite; }

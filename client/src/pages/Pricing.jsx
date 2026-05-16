@@ -343,6 +343,12 @@ export default function Pricing() {
                             background: 'rgba(160,125,32,0.15)',
                             color: 'var(--rh-ochre-deep, #a07d20)',
                             border: '1px solid rgba(160,125,32,0.30)',
+                            // Mobile sweep safety: prevent chip from
+                            // overflowing card edge at narrow widths.
+                            maxWidth: 'calc(100% - 24px)',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
                           }}
                         >
                           {lang === 'th' ? 'เร็วๆ นี้' : 'Coming soon'}
