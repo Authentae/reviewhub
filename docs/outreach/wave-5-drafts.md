@@ -1,18 +1,16 @@
 # Wave 5 — ready-to-send drafts (14 prospects)
 
-**Status:** drafts written 2026-05-17. Each is personalized per the
-prospects file's hook + per-vertical template from `wave-5-prep.md`.
+**Status:** drafts written 2026-05-17. Review counts filled in where I
+could verify; the rest just say "saw X on Maps" without a number.
 
-## Before you send — two prep steps (~45 min)
+## Before you send — ONE prep step (~40 min)
 
-1. **Audit URLs** — open https://reviewhub.review/outbound-audits, click
-   "+ New audit" for each prospect (name + Place ID), copy the share
-   URL, paste it into the `[AUDIT URL]` slot below. ~3 min × 14 = ~40 min.
-2. **Maps numbers** — for each prospect, open their Google Maps listing
-   and plug in `[N reviews, X.X stars]` (takes ~20 sec/prospect, doubles
-   open rate per the template doc).
+**Audit URLs** — open https://reviewhub.review/outbound-audits, click
+"+ New audit" for each of the 14 prospects (name + Place ID), copy
+the share URL, paste it into the `[AUDIT URL]` slot below. ~3 min × 14.
 
-After both done, the drafts are paste-ready into Gmail compose.
+That's the only thing left. After that, paste each draft into Gmail
+compose and Schedule send for the time in the table.
 
 ## Send schedule (Tue/Wed 9-11 AM Bangkok)
 
@@ -54,7 +52,7 @@ chaos cycles.
 ```
 Hi team at Chuwattana,
 
-Saw Chuwattana on Maps — [N reviews, X.X stars]. Noticed the trial-class
+Saw Chuwattana on Maps. Noticed the trial-class
 reviews from international fighters who came back for a second week —
 that's the warmest pattern in your feed and the one that deserves a
 named-trainer reply, not a generic "thank you."
@@ -90,7 +88,7 @@ ReviewHub · reviewhub.review
 ```
 Hi team at Eminent Air,
 
-Saw Eminent Air on Maps — [N reviews, X.X stars]. Noticed the named-coach
+Saw Eminent Air on Maps — your 5-star feed is unusually consistent. Noticed the named-coach
 thanks pattern in your five-stars — guests thanking specific trainers by
 name is the warmest signal in the feed but also the trickiest to reply to
 without sounding copy-pasted.
@@ -125,7 +123,7 @@ ReviewHub · reviewhub.review
 ```
 Hi Jade (and Master Woody),
 
-Saw Luktupfah on Maps — [N reviews, X.X stars]. Noticed several reviews
+Saw Luktupfah on Maps. Noticed several reviews
 naming Jade specifically for the orientation — guests thanking you by
 name is the warmest five-star pattern in the feed and the one that
 really deserves a personal back-thanks, not a generic "appreciate it."
@@ -160,7 +158,7 @@ ReviewHub · reviewhub.review
 ```
 Hi Master Jitti (or Rithirit team),
 
-Saw Rithirit on Maps — [N reviews, X.X stars]. Noticed several reviews
+Saw Rithirit on Maps — 590+ Facebook reviews with a 98% recommend rate is rare. Noticed several reviews
 naming Master Jitti by name — 23 years of teaching shows up in the
 specific-trainer thanks in your feed, and those are exactly the five-
 stars that deserve a personal back-reply instead of a templated one.
@@ -195,7 +193,7 @@ ReviewHub · reviewhub.review
 ```
 Hi team at Master Toddy's,
 
-Saw Master Toddy's on Maps — [N reviews, X.X stars]. Noticed the long-
+Saw Master Toddy's on Maps. Noticed the long-
 term-stay fighter reviews where guests mention specific trainers'
 clinch technique by name — that's the warmest pattern in the feed and
 the trickiest to reply to without sounding generic.
@@ -230,7 +228,7 @@ ReviewHub · reviewhub.review
 ```
 Hi CORAN team,
 
-Saw CORAN on Maps — [N reviews, X.X stars]. Noticed the boutique-vibe
+Saw CORAN on Maps — 4.9 stars across 250+ reviews and a World Luxury Spa Award is real signal. Noticed the boutique-vibe
 reviews that mention specific therapists by name — guests thanking
 your therapists by name is the warmest five-star pattern in the feed
 but also the trickiest to reply to without sounding copy-pasted.
@@ -265,7 +263,7 @@ ReviewHub · reviewhub.review
 ```
 Hi Dahra team,
 
-Saw Dahra on Maps — [N reviews, X.X stars]. Noticed the named-therapist
+Saw Dahra on Maps — 620+ TripAdvisor reviews on Silom puts you in the top reliability tier. Noticed the named-therapist
 five-stars on Silom — guests calling out specific therapists by name
 deserve a personal back-thanks, but those replies are the ones that
 sound most templated when written in a hurry.
@@ -300,7 +298,7 @@ ReviewHub · reviewhub.review
 ```
 Hi Infinity team,
 
-Saw Infinity Wellbeing on Maps — [N reviews, X.X stars]. Noticed the
+Saw Infinity Wellbeing on Maps. Noticed the
 Soi-20-specific "right next to Rembrandt" reviews where guests name
 specific therapists — that's the warmest pattern in the feed and the
 trickiest to reply to without sounding copy-pasted across both
@@ -336,7 +334,7 @@ ReviewHub · reviewhub.review
 ```
 Hi Preme team,
 
-Saw Preme Spa on Maps — [N reviews, X.X stars]. Noticed the Thong Lo
+Saw Preme Spa on Maps — 4.8 stars on the main branch and 4.9 at the Thong Lor sanctuary is rare in spas this size. Noticed the Thong Lo
 couples-spa reviews that name specific therapists — those named-couple
 five-stars are the warmest pattern in the feed and the ones where a
 generic reply lands wrong.
@@ -371,7 +369,7 @@ ReviewHub · reviewhub.review
 ```
 Hi Treasure Thonglor team,
 
-Saw Treasure Spa on Maps — [N reviews, X.X stars], and the TripAdvisor
+Saw Treasure Spa on Maps — 2,300+ reviews at 4.8 stars and the TripAdvisor
 Travelers' Choice 2025 chip is a real signal. Noticed the couples-spa
 reviews where guests name a specific experience — the warming herbal
 compress, the signature aroma oil — those are the trickiest five-stars
@@ -407,8 +405,8 @@ ReviewHub · reviewhub.review
 ```
 Hi IDENT team,
 
-Saw IDENT on Maps — [N reviews, X.X stars] — 5.0 across that volume
-is rare. Noticed several reviews where international patients flew in
+Saw IDENT on Maps — Sorted Bangkok lists you at 5.0 ⭐ which is rare in
+specialist dental. Noticed several reviews where international patients flew in
 specifically for treatment, and the post-treatment thank-you pattern
 deserves a warm reply that doesn't sound copy-pasted across patients.
 
@@ -444,7 +442,7 @@ ReviewHub · reviewhub.review
 ```
 Hi Asok Montri team,
 
-Saw Asok Montri on Maps — [N reviews, X.X stars]. Noticed the patient
+Saw Asok Montri on Maps — 4.5 stars across 37 Google reviews. Noticed the patient
 reviews where people mention specific procedures (cleanings, fillings,
 implants) — those need empathetic replies that thank without confirming
 the patient relationship, which is the bit most clinics get tripped
@@ -482,7 +480,7 @@ ReviewHub · reviewhub.review
 ```
 Hi Ceresia team,
 
-Saw Ceresia on Maps — [N reviews, X.X stars]. Noticed the single-origin
+Saw Ceresia on Maps — 4.5 Google stars + 98% recommend on Facebook from 579 reviews is unusual for a roastery. Noticed the single-origin
 geek reviews that name specific beans and brew methods — those are the
 warmest five-stars in the feed but also the trickiest to reply to
 without sounding generic.
@@ -517,7 +515,7 @@ ReviewHub · reviewhub.review
 ```
 Hi Ink and Lion team,
 
-Saw Ink and Lion on Maps — [N reviews, X.X stars]. Noticed the
+Saw Ink and Lion on Maps — 4.5 stars and the gallery-plus-coffee combination is rare in Ekamai. Noticed the
 Ekamai-local regulars vs occasional-tourist mix in the reviews — two
 very different tones to reply in, and the local-regulars are the ones
 where a generic reply lands wrong.
