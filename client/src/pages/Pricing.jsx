@@ -197,8 +197,12 @@ export default function Pricing() {
                 color: 'var(--rh-ink)',
                 fontFamily: 'var(--rh-serif)',
                 fontWeight: 400,
-                fontSize: 'clamp(40px, 5.2vw, 72px)',
-                lineHeight: 1.0,
+                // Mobile floor lowered from 40px -> 28px (2026-05-17 mobile
+                // sweep). At 375px viewport "Simple, honest pricing" rendered
+                // at 40px overflowed the 335px content width by ~140px and
+                // got clipped at the right edge. 28px fits cleanly.
+                fontSize: 'clamp(28px, 7vw, 72px)',
+                lineHeight: 1.05,
                 letterSpacing: '-0.025em',
                 margin: 0,
                 maxWidth: '22ch',

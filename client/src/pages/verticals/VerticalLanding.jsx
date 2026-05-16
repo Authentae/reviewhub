@@ -235,13 +235,18 @@ export default function VerticalLanding({ vertical }) {
               SEO + accessibility violation (every page has one main
               heading, period). Same visual, valid semantics. */}
           <h1
-            className="text-5xl font-bold mb-6"
+            className="font-bold mb-6"
             style={{
               fontFamily: 'Instrument Serif, Georgia, serif',
               fontWeight: 600,
               letterSpacing: '-0.02em',
               lineHeight: 1.05,
               color: 'var(--rh-ink, #1d242c)',
+              // Mobile sweep 2026-05-17: was Tailwind text-5xl (48px hard);
+              // long vertical hero lines like "Reply across every booking
+              // platform from one inbox." overflowed the 375px viewport's
+              // 335px content area. clamp scales down to 32px on phones.
+              fontSize: 'clamp(32px, 7.5vw, 48px)',
             }}
           >
             {v.heroLine1}{' '}
