@@ -39,6 +39,14 @@ date, and any pre-purchase friction worth remembering.
 
 ## Outreach waves
 
+- **Wave 5 — DRAFTED 2026-05-17, scheduled to send Tue 5/19 + Wed 5/20.**
+  14 prospects across 4 verticals (5 Muay Thai, 5 spa, 2 dental, 2
+  coffee — 1 dental deferred for no website, 3 coffee IG-only).
+  All 14 audit URLs verified HTTP 200. Drafts paste-ready in
+  [docs/outreach/wave-5-drafts.md](docs/outreach/wave-5-drafts.md).
+  Morning brief: [docs/MORNING-BRIEF-2026-05-18.md](docs/MORNING-BRIEF-2026-05-18.md).
+  KNOWN ISSUE: dental drafts (IDENT, Asok Montri) implicitly confirm
+  patient relationship — see brief for edit options before Wed send.
 - **Wave 1 — 2026-05-04:** 9 emails sent. No replies as of 2026-05-06.
   Mix of cooking schools + B&Bs. Verticals targeted: Pink Chili,
   House of Taste, Sweets Cottage, Tingly Thai, May Kaidee, Better
