@@ -23,6 +23,19 @@ export default function Register() {
   //      (which one converted) without leaking the data into the URL
   //      that gets logged in analytics tools.
   const [searchParams] = useSearchParams();
+  // Post-Stripe-payment landing detection. The Stripe Payment Links
+  // we use for paid tiers redirect to:
+  //   /register?from=stripe&plan=<starter|pro|business>&checkout_success=1
+  // The customer has ALREADY paid by the time they hit this page — we
+  // need to (a) acknowledge their subscription is active so they don't
+  // think they need to pay again, (b) walk them through creating their
+  // ReviewHub account so we can match their Stripe email to a DB user
+  // and grant access. Provisioning is still manual (Stripe webhook not
+  // wired for the new ReviewHub account); Earth gets a Stripe email,
+  // looks up the user by email, runs a 1-line SQL to mark them paid.
+  const fromStripe = searchParams.get('from') === 'stripe'
+    && searchParams.get('checkout_success') === '1';
+  const stripePlan = fromStripe ? (searchParams.get('plan') || 'starter') : null;
   useEffect(() => {
     const from = searchParams.get('from');
     if (from === 'audit') {
@@ -36,6 +49,18 @@ export default function Register() {
           at: Date.now(),
         }));
       } catch { /* sessionStorage disabled in private mode — non-fatal */ }
+    } else if (from === 'stripe') {
+      // Record Stripe attribution too — useful for funnel analysis
+      // ("how many Stripe-redirected customers completed signup?")
+      // and as a hint to the dashboard onboarding to skip the
+      // "start your trial" upsell since they already paid.
+      try {
+        sessionStorage.setItem('rh_signup_attribution', JSON.stringify({
+          from: 'stripe',
+          plan: searchParams.get('plan') || '',
+          at: Date.now(),
+        }));
+      } catch { /* non-fatal */ }
     }
     // Run once on mount; we don't want to re-stash if the user edits the URL.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -118,9 +143,52 @@ export default function Register() {
           </div>
 
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">{t('auth.createAccount')}</h1>
-            <p className="text-gray-500 dark:text-gray-400 mt-1.5 text-sm">{t('auth.trialNote')}</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
+              {fromStripe
+                ? t('auth.createAccountAfterPay', 'One last step: create your account')
+                : t('auth.createAccount')}
+            </h1>
+            <p className="text-gray-500 dark:text-gray-400 mt-1.5 text-sm">
+              {fromStripe
+                ? t('auth.createAccountAfterPaySub', "Use the same email you paid with so we can match your subscription to your account.")
+                : t('auth.trialNote')}
+            </p>
           </div>
+
+          {/* Post-Stripe-payment confirmation. Customer arrives here
+              immediately after Stripe charges their card. The banner is
+              the FIRST thing they should see — without it, they hit a
+              generic signup form and reasonably wonder whether they
+              just got double-charged or scammed. Provisioning is manual
+              until we wire a Stripe webhook for this account, so the
+              copy is honest about the small handoff window: Earth
+              matches the email to the account and grants access. */}
+          {fromStripe && (
+            <div
+              role="status"
+              className="flex items-start gap-3 rounded-xl mb-5 p-4"
+              style={{
+                background: 'rgba(107,142,122,0.10)',
+                border: '1px solid rgba(107,142,122,0.30)',
+                color: 'var(--rh-ink, #1d242c)',
+              }}
+            >
+              <svg className="w-5 h-5 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ color: 'var(--rh-sage, #6b8e7a)' }}>
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+              <div className="flex-1 text-sm leading-relaxed">
+                <p className="font-semibold mb-1">
+                  {t('auth.stripePaidTitle', 'Payment received — welcome to ReviewHub')} {stripePlan ? `· ${stripePlan.charAt(0).toUpperCase() + stripePlan.slice(1)}` : ''}
+                </p>
+                <p className="text-[13px]" style={{ color: 'var(--rh-ink-2, #4a525a)' }}>
+                  {t(
+                    'auth.stripePaidBody',
+                    'Your subscription is active. Create your account below using the email you used at checkout. Account access is granted within a few minutes (manual review while we finish onboarding our payment processor).'
+                  )}
+                </p>
+              </div>
+            </div>
+          )}
 
           {error && (
             <div id="reg-error" role="alert" className="flex items-start gap-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/70 text-red-700 dark:text-red-300 text-sm px-4 py-3 rounded-xl mb-5">
