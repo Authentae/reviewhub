@@ -313,27 +313,50 @@ export default function AuditPreview() {
             <p className="text-xs mt-3" style={{ color: '#fdf2dc', opacity: 0.85 }}>
               No credit card to start · 30-day refund window · cancel anytime
             </p>
-            {/* Parallel low-friction CTA — Wave 1-4 diagnostic (2026-05-15)
-                showed 35% audit-open rate but 0 replies across 22 sends.
-                The signup CTA above is a high-friction ask for a stranger;
-                some prospects will want to reply with a question first.
-                Surface that path RIGHT HERE, not buried in the footer
-                below the FAQ where the existing soft-CTA lived. mailto:
-                pre-fills subject + first-line so the reply is one tap. */}
-            <p className="text-sm mt-5 pt-5 border-t" style={{ color: '#fdf2dc', borderColor: 'rgba(253,242,220,0.18)' }}>
-              <span style={{ color: '#f5d8a7', opacity: 0.95 }}>Or — </span>
-              <a
-                href={`mailto:earth.reviewhub@gmail.com?subject=${encodeURIComponent(`Re: ${business_name} reply drafts`)}&body=${encodeURIComponent(`Hi Earth,\n\nQuestion about the drafts for ${business_name}: `)}`}
-                className="plausible-event-name=AuditFounderReplyClick underline hover:no-underline"
-                style={{ color: '#fff', fontWeight: 600 }}
-              >
-                reply with a question
-              </a>
-              <span style={{ color: '#f5d8a7', opacity: 0.85 }}>
-                {' '}— I'm Earth, the solo founder. A one-line "tell me more" or
-                "not for me" is genuinely useful either way.
-              </span>
-            </p>
+            {/* Async CTAs — Wave 1-4 diagnostic (2026-05-15) showed 35%
+                audit-open rate but 0 replies across 22 sends; Chakrabongse
+                viewed 14× with no reply. The Stripe CTA above is high-
+                friction (pay before they trust). Some prospects will want
+                to ask a question first, but won't take a sales call (and
+                the founder doesn't take them anyway — written-only per
+                about_me_observed.md). Two async options surfaced here,
+                not buried in the footer: LINE chat for Thai/SE Asia
+                prospects (their daily app), email for everyone else.
+                Both lead to the same human (Earth). */}
+            <div className="mt-5 pt-5 border-t" style={{ borderColor: 'rgba(253,242,220,0.18)' }}>
+              <p className="text-sm" style={{ color: '#f5d8a7', opacity: 0.95 }}>
+                Or — ask first, no signup:
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-3 mt-3">
+                {/* LINE OA Basic ID @024hjpcv is the production ReviewHub
+                    bot. The line.me/R/ti/p/<id> deep link opens LINE app
+                    on mobile (best path for Thai prospects) and falls back
+                    to LINE's web add-friend page on desktop. */}
+                <a
+                  href="https://line.me/R/ti/p/@024hjpcv"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="plausible-event-name=AuditLineChatClick inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-transform hover:scale-105"
+                  style={{ background: '#06c755', color: '#fff' }}
+                >
+                  <span aria-hidden="true" style={{ fontSize: '16px' }}>💬</span>
+                  Chat on LINE
+                </a>
+                <a
+                  href={`mailto:earth.reviewhub@gmail.com?subject=${encodeURIComponent(`Re: ${business_name} reply drafts`)}&body=${encodeURIComponent(`Hi Earth,\n\nQuestion about the drafts for ${business_name}: `)}`}
+                  className="plausible-event-name=AuditFounderReplyClick inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-transform hover:scale-105"
+                  style={{ background: 'rgba(255,255,255,0.12)', color: '#fff', border: '1px solid rgba(255,255,255,0.25)' }}
+                >
+                  <span aria-hidden="true" style={{ fontSize: '16px' }}>✉</span>
+                  Email me
+                </a>
+              </div>
+              <p className="text-xs mt-3" style={{ color: '#f5d8a7', opacity: 0.85 }}>
+                I'm Earth, the solo founder. A one-line "tell me more" or
+                "not for me" is genuinely useful either way — I reply within
+                a day, async, no calls.
+              </p>
+            </div>
             <p className="text-xs mt-2 max-w-md mx-auto font-mono uppercase tracking-widest" style={{ color: '#f5d8a7', opacity: 0.85 }}>
               LINE notifications live now —{' '}
               <a

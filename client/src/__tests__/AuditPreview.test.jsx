@@ -94,15 +94,21 @@ describe('AuditPreview', () => {
     const copyButtons = screen.getAllByRole('button', { name: /Copy reply/i });
     expect(copyButtons.length).toBe(2);
 
-    // Wave 2 founder-transparency line — pin it down so a future
-    // copy edit doesn't silently delete the alt-CTA path.
-    expect(screen.getByText(/Not ready to sign up/i)).toBeTruthy();
+    // Async alt-CTA path (LINE + email) — pin it down so a future copy
+    // edit doesn't silently delete the founder-async-reply path. The
+    // founder is written-only (no calls per about_me_observed.md), so
+    // BOTH the LINE chat button and the email mailto must remain present.
+    expect(screen.getByText(/Chat on LINE/i)).toBeTruthy();
+    expect(screen.getByText(/Email me/i)).toBeTruthy();
+    // The async-first reassurance line is specific to the new LINE/email
+    // CTA block (the existing footer also mentions "I'm Earth" so a
+    // less-specific regex would match twice and throw).
     expect(
-      screen.getByText(/I'm Earth, the solo founder/i)
+      screen.getByText(/async, no calls/i)
     ).toBeTruthy();
   });
 
-  it('register CTA href carries audit attribution params (from + business + token)', async () => {
+  it('primary CTA goes to Stripe Payment Link for Starter, with fallback /register if Stripe is null', async () => {
     apiGet.mockResolvedValue({ data: SAMPLE });
     renderAt('/audit-preview/sharetoken123');
 
@@ -113,10 +119,15 @@ describe('AuditPreview', () => {
     const cta = screen.getByText(/set this up for me/i).closest('a');
     expect(cta).toBeTruthy();
     const href = cta.getAttribute('href');
-    expect(href).toContain('/register');
-    expect(href).toContain('from=audit');
-    expect(href).toContain('business=Old%20Capital%20Bike%20Inn');
-    expect(href).toContain('token=sharetoken123');
+    // Post-Stripe-pivot (2026-05-15): primary CTA routes directly to
+    // the Starter Stripe Payment Link. The /register fallback only
+    // fires if getStripeCheckoutUrl returns null (e.g. plan gated).
+    // Either path is acceptable; both bypass the old register-first
+    // interstitial. Audit attribution lives in plausible-tagged-events
+    // classes now, not URL params (Stripe strips them).
+    expect(
+      href.includes('buy.stripe.com') || href.includes('/register')
+    ).toBe(true);
   });
 
   it('register CTA carries the Plausible tagged-events class so clicks are tracked', async () => {
