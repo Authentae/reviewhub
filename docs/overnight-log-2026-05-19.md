@@ -203,3 +203,22 @@ on every future session.
 
 **Commit:** `docs(memory): record static-asset drift pattern from cycle 7`
 
+## Cycle 11 — 2026-05-19 ~06:10 ICT — visual
+
+**Shipped:** PNG favicon fallbacks at 32 / 180 / 192 / 512 pixels,
+generated from `favicon.svg` via the sharp pipeline. Wired up in
+`client/index.html` (added `<link rel="icon" type="image/png" 32x32>`
++ `<link rel="apple-touch-icon" 180x180>`) and `manifest.webmanifest`
+(added 192px + 512px PNG icons alongside the existing SVG entry).
+Total added ~13 KB.
+
+**Why:** Drift-sweep applied (per cycle 10's new rule). Found
+favicon.svg was the ONLY favicon — Safari, iOS Add-to-Home-Screen,
+older Android, and apple-touch-icon were all falling back to a
+generic globe. PWA install on iOS in particular needs a 180px PNG
+or it shows the page-screenshot fallback. Compounding fix: every
+home-screen install + browser tab from now on shows the actual RH
+sparkle.
+
+**Commit:** `visual(favicon): add PNG fallbacks at 32/180/192/512`
+
