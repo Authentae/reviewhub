@@ -1,27 +1,22 @@
 # Morning brief — 2026-05-18 (written overnight by agent)
 
-> **UPDATE 2026-05-18 ~07:00 ICT** — Three new things shipped while
-> Earth was away:
-> 1. ✅ **Weekly impact email** (commit `be7f04c`) — deployed live.
->    New "Your week with ReviewHub" block in the Monday digest tells
->    customers what they accomplished ("you replied to N reviews,
->    ~M min saved"). Quiet until first customer signs up.
+> **UPDATE 2026-05-18 ~09:40 ICT** — Six total ships now live:
+> 1. ✅ **Weekly impact email** (commit `be7f04c`)
 > 2. ✅ **LINE chat button + Email me on audit-preview** (commit
->    `1cdcebb`) — deployed live. Prospects can ask a question
->    without facing the signup form. Async-only per Earth's
->    written-only preference. Verify `@024hjpcv` is the correct LINE
->    OA basic ID (set `LINE_OA_BASIC_ID` env on Railway if not).
-> 3. ⚠ **Dental AI prompt fix** (commit `cf09966`) — committed +
->    pushed to GitHub but **Railway paused deploys** at ~07:00 ICT
->    with the message "Deploys have been paused temporarily." This
->    blocks two things:
->    - The healthcare-vertical guardrails won't go live until you
->      retry: `railway up --detach`
->    - Re-generating IDENT + Asok Montri audits (drafts #11, #12) must
->      wait for the new prompt to be live. **Don't send Wed dental
->      batch until both deploy AND audits regenerate.** Either edit
->      the dental email copy per option (B) below, or pull #11/#12
->      from the schedule entirely.
+>    `1cdcebb`) — verify `@024hjpcv` is the right LINE OA basic ID
+> 3. ✅ **Dental AI guardrails — PHI-aware** (commit `cf09966`) — was
+>    Railway-paused for ~3hr, now deployed
+> 4. ✅ **Stripe-paid welcome email + founder alert** (commit `20abb5f`) —
+>    paying customers get acknowledgement; founder gets SQL-ready alert
+> 5. ✅ **Thai/JP/ES dental prompt examples** (commit `262772f`) — fixed
+>    Asok Montri Thai drift in first regeneration
+> 6. ✅ **IDENT + Asok Montri audits regenerated** (commit `f3700fb`) —
+>    IDENT now clean; Asok Montri Thai improved but still drifts
+>    slightly ("thanks for trusting us"). Documented in wave-5-drafts.md.
+>
+> **Bonus quality finding:** Treasure Spa draft #1 has a one-off bug
+> (echoed reviewer text). Documented in wave-5-drafts.md. Decide before
+> Wed send whether to send anyway or pull.
 
 ---
 
