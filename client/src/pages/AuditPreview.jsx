@@ -68,6 +68,13 @@ export default function AuditPreview() {
   const { token } = useParams();
   const ctaVariant = useMemo(() => assignCtaVariant(token), [token]);
   const [state, setState] = useState({ status: 'loading', data: null, error: '' });
+  // Collapse the review wall — show first 2 above the fold, expander for
+  // the rest. Conversion ship from 2026-05-18: previously 5 review
+  // cards stacked before the CTA, prospects scrolled past CTA visibility
+  // before getting to it. Showing 2 keeps the "wait this is REAL" moment
+  // (their own review + AI draft) while letting the CTA breathe higher
+  // up the page.
+  const [showAllDrafts, setShowAllDrafts] = useState(false);
   usePageTitle(state.data?.business_name
     ? `${state.data.business_name} — Reply suggestions`
     : 'Audit preview · ReviewHub');
@@ -197,9 +204,41 @@ export default function AuditPreview() {
           </p>
         </header>
 
-        {/* Reviews + drafts — one card per review */}
+        {/* Above-fold conversion banner — slim row between header and reviews.
+            Wave 1-4 data (Chakrabongse 14 views, 0 replies) showed prospects
+            were reading drafts and never hitting the CTA. Now there's a
+            visible "this becomes ongoing" pitch the moment they understand
+            the page is real. No-pressure: small text + chevron, not a
+            wall-of-color interrupt. */}
+        {totalDrafts > 0 && (
+          <a
+            href="#audit-cta"
+            className="plausible-event-name=AuditAboveFoldCtaClick block mb-8 rounded-xl px-4 py-3 transition-colors hover:opacity-90"
+            style={{
+              background: COLORS.cardBg,
+              border: `1px solid ${COLORS.tealDeep}`,
+              boxShadow: COLORS.cardShadow,
+            }}
+          >
+            <div className="flex items-center justify-between gap-3 flex-wrap">
+              <span className="text-sm" style={{ color: COLORS.ink }}>
+                <strong style={{ color: COLORS.tealDeep }}>Want this on autopilot for new reviews?</strong>
+                <span style={{ color: COLORS.inkSoft }}> · LINE or Telegram alert · tap to copy</span>
+              </span>
+              <span className="text-sm font-semibold" style={{ color: COLORS.tealDeep }}>
+                See plan →
+              </span>
+            </div>
+          </a>
+        )}
+
+        {/* Reviews + drafts — one card per review. Showing first 2 by
+            default; rest hidden behind an expander (set in showAllDrafts
+            state above). Keeps the page short enough that the CTA below
+            fits above mobile fold while still giving the prospect 2 real
+            examples + the "and there's more" tease. */}
         <div className="space-y-6">
-          {reviews.map((r, i) => (
+          {(showAllDrafts ? reviews : reviews.slice(0, 2)).map((r, i) => (
             <article
               key={i}
               className="rounded-2xl p-5 md:p-6"
@@ -255,6 +294,27 @@ export default function AuditPreview() {
           ))}
         </div>
 
+        {/* Expander — only shown when we collapsed reviews above. Clear
+            count so the prospect knows there's more (curiosity hook). */}
+        {!showAllDrafts && reviews.length > 2 && (
+          <div className="mt-6 text-center">
+            <button
+              type="button"
+              onClick={() => setShowAllDrafts(true)}
+              className="plausible-event-name=AuditExpandDrafts inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-lg transition-all"
+              style={{
+                background: COLORS.cardBg,
+                color: COLORS.tealDeep,
+                border: `1px solid ${COLORS.line}`,
+                minHeight: '44px',
+              }}
+              aria-expanded="false"
+            >
+              See {reviews.length - 2} more {reviews.length - 2 === 1 ? 'draft' : 'drafts'} ↓
+            </button>
+          </div>
+        )}
+
         {/* Primary CTA — placed at peak-interest moment, right after the
             drafts and BEFORE the educational footer. Footer-only pitch
             buries the conversion path; a real button here at the moment
@@ -262,6 +322,7 @@ export default function AuditPreview() {
             intent that prose loses. */}
         {totalDrafts > 0 && (
           <section
+            id="audit-cta"
             className="mt-10 rounded-2xl p-6 md:p-8 text-center"
             style={{ background: COLORS.tealDeep, color: '#fff' }}
           >
@@ -313,6 +374,38 @@ export default function AuditPreview() {
             <p className="text-xs mt-3" style={{ color: '#fdf2dc', opacity: 0.85 }}>
               No credit card to start · 30-day refund window · cancel anytime
             </p>
+            {/* Founder mini-card — humanizes the otherwise-feature-led
+                CTA. Thai SMB owners (the Wave 5 ICP) react to humans, not
+                products. Avatar uses initials in a circle as a placeholder
+                until we have a real photo asset committed; same pattern
+                as a Slack/Gmail default avatar so it doesn't read as
+                broken. Sage tint stays inside the brand palette. */}
+            <div
+              className="mt-6 pt-5 flex items-center justify-center gap-3 max-w-md mx-auto"
+              style={{ borderTop: '1px solid rgba(253,242,220,0.18)' }}
+            >
+              <div
+                className="grid place-items-center rounded-full flex-shrink-0"
+                style={{
+                  width: 36,
+                  height: 36,
+                  background: '#f5d8a7',
+                  color: COLORS.tealDeep,
+                  fontWeight: 700,
+                  fontSize: '14px',
+                  letterSpacing: '0.02em',
+                }}
+                aria-hidden="true"
+              >
+                E
+              </div>
+              <p className="text-xs leading-relaxed text-left" style={{ color: '#fdf2dc', maxWidth: '300px' }}>
+                <strong style={{ color: '#fff' }}>I'm Earth</strong> — solo founder, Bangkok.
+                Built this because watching small business owners ignore reviews they
+                <em> care about</em> was painful. You're one of the first 30 prospects.
+                Reply to me directly if anything's off.
+              </p>
+            </div>
             {/* Async CTAs — Wave 1-4 diagnostic (2026-05-15) showed 35%
                 audit-open rate but 0 replies across 22 sends; Chakrabongse
                 viewed 14× with no reply. The Stripe CTA above is high-

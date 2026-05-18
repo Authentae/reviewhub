@@ -559,6 +559,19 @@ export default function Pricing() {
                     : 'At $30/hr = ~$360/mo of your time · the work you can\'t skip but can\'t delegate',
                 },
                 {
+                  // ChatGPT-clipboard is the real silent competitor — most
+                  // owners considering AI drafting would default to this.
+                  // Naming it explicitly + showing the friction (manual
+                  // copy-paste each time, no ambient trigger, no voice
+                  // memory across sessions) is the honest answer to
+                  // "why pay $14 when ChatGPT is $20 and does the same."
+                  label: lang === 'th' ? 'ChatGPT + clipboard ด้วยตัวเอง' : 'ChatGPT + clipboard yourself',
+                  cost: lang === 'th' ? '$20/เดือน + เวลา' : '$20/mo + your time',
+                  tradeoff: lang === 'th'
+                    ? 'ต้องเปิด ChatGPT ทุกครั้ง · เริ่ม prompt ใหม่ทุกที · ไม่จำโทนคุณ · ไม่รู้ว่ามีรีวิวใหม่จนเปิด Maps'
+                    : 'Open ChatGPT each time · re-prompt every reply · doesn\'t remember your tone · doesn\'t know when a new review lands',
+                },
+                {
                   label: 'ReviewHub',
                   cost: lang === 'th' ? '$14/เดือน' : '$14/mo',
                   tradeoff: lang === 'th'
