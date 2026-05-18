@@ -222,3 +222,24 @@ sparkle.
 
 **Commit:** `visual(favicon): add PNG fallbacks at 32/180/192/512`
 
+## Cycle 12 — 2026-05-19 ~06:25 ICT — content
+
+**Shipped:** Fixed `client/public/feed.xml` drift. Added 5 missing
+`<item>` entries that had accumulated since 2026-05-07: the ChatGPT
+post pair (cycle 3), the how-fast post pair (cycle 8), and one
+older post (`reply-english-reviews-thai-owners`) that was never
+added to the RSS feed when it shipped. Bumped `<lastBuildDate>`
+from 07 May → 19 May. Validated as well-formed XML (33 items match
+33 blog HTML files).
+
+**Why:** Direct application of cycle 10's drift-sweep rule —
+feed.xml is exactly the kind of static asset that goes stale
+silently. RSS subscribers (Feedly, NetNewsWire, Inoreader users)
+had been seeing "no new ReviewHub posts since 2026-05-07" for 11
+days while the site shipped 5 new posts. Google's news/feed
+crawlers also use this signal; out-of-date feed reads as "blog is
+abandoned." Compounding fix — every future feed-fetch from now on
+sees fresh content.
+
+**Commit:** `content(feed): add 5 missing posts + bump lastBuildDate to 05-19`
+

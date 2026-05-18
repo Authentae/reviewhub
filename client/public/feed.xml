@@ -5,13 +5,58 @@
     <link>https://reviewhub.review</link>
     <description>Practical writing for small business owners on managing Google reviews, replying to feedback, and handling fake or extortion reviews. Maintained by ReviewHub.</description>
     <language>en</language>
-    <lastBuildDate>Thu, 07 May 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 19 May 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://reviewhub.review/feed.xml" rel="self" type="application/rss+xml" />
     <image>
       <url>https://reviewhub.review/og-image.png</url>
       <title>ReviewHub Blog</title>
       <link>https://reviewhub.review</link>
     </image>
+
+    <item>
+      <title>How fast should you reply to Google reviews? (and what slow replies signal)</title>
+      <link>https://reviewhub.review/blog/how-fast-should-you-reply-to-google-reviews</link>
+      <guid isPermaLink="true">https://reviewhub.review/blog/how-fast-should-you-reply-to-google-reviews</guid>
+      <description>The honest answer on response speed for Google reviews — what fast looks like, why same-day matters more for 1-stars than 5-stars, and how to stop using slow as a default.</description>
+      <pubDate>Tue, 19 May 2026 00:00:00 GMT</pubDate>
+      <category>Operations</category>
+    </item>
+
+    <item>
+      <title>ตอบรีวิว Google เร็วแค่ไหนถึงจะดี? (และคำตอบช้าบอกอะไรลูกค้า)</title>
+      <link>https://reviewhub.review/blog/how-fast-should-you-reply-to-google-reviews-th</link>
+      <guid isPermaLink="true">https://reviewhub.review/blog/how-fast-should-you-reply-to-google-reviews-th</guid>
+      <description>คำตอบตรง ๆ เรื่องความเร็วในการตอบรีวิว Google — เร็วแค่ไหนถึงเรียกว่าเร็ว ทำไมรีวิว 1 ดาวต่างจาก 5 ดาว และวิธีไม่ทำให้ช้าเป็นเรื่องปกติ</description>
+      <pubDate>Tue, 19 May 2026 00:00:00 GMT</pubDate>
+      <category>Operations</category>
+    </item>
+
+    <item>
+      <title>ChatGPT for Google review replies — what works, what breaks</title>
+      <link>https://reviewhub.review/blog/chatgpt-for-google-review-replies</link>
+      <guid isPermaLink="true">https://reviewhub.review/blog/chatgpt-for-google-review-replies</guid>
+      <description>An honest look at using ChatGPT to draft Google review replies. Where it works fine, where it falls apart, and what to do when you have more than a handful of reviews to reply to each week.</description>
+      <pubDate>Tue, 19 May 2026 00:00:00 GMT</pubDate>
+      <category>Tools comparison</category>
+    </item>
+
+    <item>
+      <title>ใช้ ChatGPT ตอบรีวิว Google — ใช้ได้แค่ไหน เริ่มพังตรงไหน</title>
+      <link>https://reviewhub.review/blog/chatgpt-for-google-review-replies-th</link>
+      <guid isPermaLink="true">https://reviewhub.review/blog/chatgpt-for-google-review-replies-th</guid>
+      <description>มองตรง ๆ ว่าใช้ ChatGPT ร่างคำตอบรีวิว Google ทำงานได้แค่ไหน ตรงไหนยังโอเค ตรงไหนเริ่มพัง และจะทำยังไงเมื่อมีรีวิวมากกว่าสองสามอันต่อสัปดาห์</description>
+      <pubDate>Tue, 19 May 2026 00:00:00 GMT</pubDate>
+      <category>Tools comparison</category>
+    </item>
+
+    <item>
+      <title>Replying to English Google reviews professionally — a guide for Thai hotel and café owners</title>
+      <link>https://reviewhub.review/blog/reply-english-reviews-thai-owners</link>
+      <guid isPermaLink="true">https://reviewhub.review/blog/reply-english-reviews-thai-owners</guid>
+      <description>A guide for Thai owners on replying to tourist reviews in English without sounding stiff or machine-translated. Six principles + five copy-pasteable scenarios.</description>
+      <pubDate>Thu, 08 May 2026 00:00:00 GMT</pubDate>
+      <category>Writing tips</category>
+    </item>
 
     <item>
       <title>เมื่อไหร่ที่ไม่ควรตอบรีวิว Google (5 กรณีที่เงียบเป็นคำตอบที่ถูก)</title>
