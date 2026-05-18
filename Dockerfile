@@ -18,7 +18,11 @@
 # ─── Stage 1: build the client SPA ────────────────────────────────────
 FROM node:20-bookworm-slim AS client-builder
 WORKDIR /build
-COPY client/package.json client/package-lock.json* ./
+# .npmrc must be copied alongside package files so the legacy-peer-deps=true
+# setting takes effect during install (see client/.npmrc rationale —
+# vitest 4.x embeds vite 8 with conflicting esbuild peer-dep against our
+# vite 5; strict peer-dep enforcement breaks install otherwise).
+COPY client/package.json client/package-lock.json* client/.npmrc* ./
 # Using npm install (not ci) because the lockfile has cross-platform optional
 # binary metadata that strict ci doesn't tolerate. install handles it cleanly.
 RUN npm install --no-audit --no-fund

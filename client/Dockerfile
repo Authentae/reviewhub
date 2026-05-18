@@ -11,7 +11,11 @@
 
 FROM node:20-bookworm-slim AS build
 WORKDIR /app
-COPY package.json package-lock.json* ./
+# .npmrc must be copied BEFORE npm ci — it carries legacy-peer-deps=true
+# which is required to install the dep tree without strict peer-dep
+# errors (vitest 4.x embeds vite 8 with conflicting esbuild peer-dep
+# against our vite 5; see client/.npmrc for full rationale).
+COPY package.json package-lock.json* .npmrc* ./
 RUN npm ci
 COPY . .
 # Remove dev-only files that npm ci may have pulled in via scripts
