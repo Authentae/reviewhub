@@ -154,7 +154,7 @@ function Hero() {
               {t('landing.heroSubtitle')}
             </p>
             <div className="rh-hero-cta">
-              <Link to="/register" className="rh-btn rh-btn-amber rh-btn-lg">{t('landing.heroCta')} <Arrow /></Link>
+              <Link to="/register" className="rh-btn rh-btn-amber rh-btn-lg plausible-event-name=LandingHeroCtaClick">{t('landing.heroCta')} <Arrow /></Link>
               <a href="#demo" className="rh-btn rh-btn-ghost rh-btn-lg">{t('landing.ctaSecondary', 'See a live draft')}</a>
               <Link to="/tools/review-reply-generator" className="rh-hero-tool-link">
                 {t('landing.heroTryFreeTool', 'Or try the free tool first — no signup')} <Arrow />
@@ -742,7 +742,7 @@ function Pricing() {
               <li><Check />{t('landing.plan.starter4', 'Email alerts on new reviews')}</li>
               <li><Check />{t('landing.plan.starter5', 'Templates + CSV export')}</li>
             </ul>
-            <Link to="/register" className="rh-btn rh-btn-amber">{t('landing.plan.chooseStarter', 'Choose Starter · $14/mo')}</Link>
+            <Link to="/register" className="rh-btn rh-btn-amber plausible-event-name=LandingPlanCtaClick">{t('landing.plan.chooseStarter', 'Choose Starter · $14/mo')}</Link>
           </div>
           {/* Pro + Business gated as coming-soon 2026-05-16 (mirrors
               server/src/lib/billing/plans.js coming_soon flag). Cards
@@ -867,7 +867,7 @@ function BigCta() {
         <h2>{t('landing.ctaTitle')}</h2>
         <p>{t('landing.ctaSubtitle')}</p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-          <Link to="/register" className="rh-btn rh-btn-primary rh-btn-lg">{t('landing.ctaButton')} <Arrow /></Link>
+          <Link to="/register" className="rh-btn rh-btn-primary rh-btn-lg plausible-event-name=LandingFooterCtaClick">{t('landing.ctaButton')} <Arrow /></Link>
           <a href="#demo" className="rh-btn rh-btn-ghost rh-btn-lg">{t('landing.ctaSecondary', 'See a live draft')}</a>
         </div>
       </div>

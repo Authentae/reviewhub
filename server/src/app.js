@@ -510,9 +510,29 @@ function createApp() {
       }));
       // SPA fallback: anything not matching /api/* or a static asset gets
       // index.html so client-side routing handles /dashboard, /settings, etc.
+      //
+      // Caching strategy for the SPA HTML:
+      //   - Browser: max-age=0 → always revalidate (gets new JS hash refs)
+      //   - Cloudflare edge: s-maxage=600 → cache for 10 min, slashes the
+      //     16% cache hit rate Cloudflare shows because previously this
+      //     route was `no-cache, no-store, must-revalidate` for EVERY
+      //     marketing page (1.5k visitors/month all hitting Railway origin).
+      //   - stale-while-revalidate=86400 → if origin slow, serve stale up
+      //     to 24h while refreshing in background.
+      //
+      // Safe because the SPA index.html references content-hashed asset
+      // bundles in /assets/* — when a new build ships, the asset paths
+      // inside index.html change, so even cached HTML pulls fresh JS.
+      // For instant cache purge after deploy, Cloudflare API "purge by
+      // URL" works; not wired yet but documented for future.
+      //
+      // AUTHENTICATED routes (/dashboard, /settings) also get this HTML
+      // and that's fine: the HTML is identical for all users, all
+      // personalization happens via /api/* fetches which are no-store.
       app.get('*', (req, res, next) => {
         if (req.path.startsWith('/api/')) return next();
-        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=600, stale-while-revalidate=86400');
+        res.setHeader('Vary', 'Accept-Encoding');
         res.sendFile(path.join(clientDist, 'index.html'));
       });
       console.log(`[APP] Serving client SPA from ${clientDist}`);

@@ -121,6 +121,21 @@ export default function Register() {
         signupPlan: fromStripe ? stripePlan : null,
       });
       setToken(data.token);
+      // Plausible funnel event — fires only on SUCCESSFUL registration
+      // (after the API 200) so we can compute /pricing → /register →
+      // submit conversion rates in Plausible's funnel report. Source
+      // prop differentiates stripe-paid signups from organic/audit
+      // signups, since their post-signup retention curves differ.
+      if (typeof window.plausible === 'function') {
+        try {
+          window.plausible('RegisterSubmit', {
+            props: {
+              source: fromStripe ? 'stripe' : (fromAudit ? 'audit' : 'organic'),
+              plan: fromStripe ? (stripePlan || 'starter') : 'free',
+            },
+          });
+        } catch { /* swallow */ }
+      }
       // replace: true so clicking back doesn't return to /register
       // (PublicOnlyRoute would bounce them anyway, but adding the flag
       // matches Login's pattern and avoids the redirect flash).
