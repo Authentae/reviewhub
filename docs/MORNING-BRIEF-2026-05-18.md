@@ -1,5 +1,31 @@
 # Morning brief — 2026-05-18 (written overnight by agent)
 
+> **UPDATE 2026-05-18 ~07:00 ICT** — Three new things shipped while
+> Earth was away:
+> 1. ✅ **Weekly impact email** (commit `be7f04c`) — deployed live.
+>    New "Your week with ReviewHub" block in the Monday digest tells
+>    customers what they accomplished ("you replied to N reviews,
+>    ~M min saved"). Quiet until first customer signs up.
+> 2. ✅ **LINE chat button + Email me on audit-preview** (commit
+>    `1cdcebb`) — deployed live. Prospects can ask a question
+>    without facing the signup form. Async-only per Earth's
+>    written-only preference. Verify `@024hjpcv` is the correct LINE
+>    OA basic ID (set `LINE_OA_BASIC_ID` env on Railway if not).
+> 3. ⚠ **Dental AI prompt fix** (commit `cf09966`) — committed +
+>    pushed to GitHub but **Railway paused deploys** at ~07:00 ICT
+>    with the message "Deploys have been paused temporarily." This
+>    blocks two things:
+>    - The healthcare-vertical guardrails won't go live until you
+>      retry: `railway up --detach`
+>    - Re-generating IDENT + Asok Montri audits (drafts #11, #12) must
+>      wait for the new prompt to be live. **Don't send Wed dental
+>      batch until both deploy AND audits regenerate.** Either edit
+>      the dental email copy per option (B) below, or pull #11/#12
+>      from the schedule entirely.
+
+---
+
+
 **TL;DR:** Wave 5 is 100% ready to send. All 14 audit URLs verified live.
 **BUT:** found a quality issue with the dental audits you should decide on before sending Wed batch. Plus a hot-lead diagnostic that suggests you've been leaving money on the table for 11 days.
 
