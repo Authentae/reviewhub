@@ -163,3 +163,22 @@ question is a warm lead.
 
 **Commit:** `content(blog): how-fast-should-you-reply EN+TH`
 
+## Cycle 9 — 2026-05-19 ~05:40 ICT — code
+
+**Shipped:** Server tests for POST /api/support + GET /api/support/me
+(13 new tests). Coverage: valid anon + authed submissions, honeypot
+fake-200-no-row, category allowlist + all 5 valid values, missing
+email, invalid email, empty subject, short message, 500-char subject
+truncation, CR/LF stripping (header-injection defense), authed /me
+returns only the caller's tickets (no cross-user leakage), /me
+requires auth.
+
+**Why:** /api/support is a public no-auth endpoint that fires founder
+emails on every submission — exactly the attack surface that
+silently degrades without tests. CR/LF stripping in particular is
+the kind of regression a future "small refactor" could re-introduce
+without anyone noticing until an attacker sends a Bcc-injected
+ticket. Coverage matches the pattern set by waitlist tests yesterday.
+
+**Commit:** `test(support): cover validation + honeypot + header-injection + /me`
+
