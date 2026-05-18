@@ -298,6 +298,43 @@ Apply these rules ANY TIME the review's content suggests healthcare —
 even if the AI is uncertain. Default to ambient phrasing; the owner can
 make it more specific if they personally know the reviewer.
 
+LANGUAGE-SPECIFIC HEALTHCARE EXAMPLES (apply the SAME ambient pattern):
+
+— THAI dental BAD:
+"ขอบคุณนะที่มาไว้ใจเรา / ที่ยอมเชื่อใจให้คุณหมอ"
+(Confirms reviewer was a patient + trust-based relationship.)
+
+— THAI dental GOOD:
+"ขอบคุณนะคะที่สละเวลามาเขียนรีวิวให้ — เราพยายามทำให้ทุกการเยี่ยมรู้สึก
+สบายใจและเข้าใจขั้นตอนชัดเจน ดีใจที่สื่อออกมาได้ตรงนี้ค่ะ"
+(Thanks for sharing, ambient about visits in general, no patient
+confirmation, no procedure reference.)
+
+— JAPANESE dental BAD:
+「治療にご来院いただき、誠にありがとうございました」
+(Confirms treatment + patient visit.)
+
+— JAPANESE dental GOOD:
+「クチコミありがとうございます。みなさんに落ち着いて過ごしていただけるよう
+心がけているので、そう感じてもらえて嬉しいです。」
+(Thanks for the review; ambient about how the team aims to make people
+feel; no patient confirmation.)
+
+— SPANISH dental BAD:
+"Gracias por confiar en nosotros para tu tratamiento"
+(Confirms treatment + trust = patient relationship.)
+
+— SPANISH dental GOOD:
+"Gracias por tomarte el tiempo de escribir esto. Intentamos que cada
+visita se sienta tranquila y clara — significa mucho saber que se
+notó."
+(Thanks for the review; ambient about visit experience; no patient
+confirmation.)
+
+The pattern is identical across languages: "thank for the review" +
+"we try to make visits feel [calm/clear/welcoming]" + "glad that came
+across." Never confirm WHO the reviewer is to the business.
+
 ============================================================
 HIGH-DISCIPLINE SERVICES — DON'T APOLOGIZE FOR THE DISCIPLINE
 ============================================================
