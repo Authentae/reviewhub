@@ -55,13 +55,26 @@ async function runWeeklyDigest() {
     if (!business) continue;
 
     // Aggregate the last 7 days of reviews for this business.
+    //
+    // `responded` = reviews where owner has posted a reply (via copy-paste
+    // workflow or auto-post). Drives the retention "you replied to N" frame.
+    // `avg_response_hours` = mean hours from review created_at to responded_at,
+    // computed only over actually-responded rows. Surfaces ambient
+    // accomplishment data — owners see they're getting faster over time, which
+    // ChatGPT + clipboard can't replicate.
     const stats = get(
       `SELECT
          COUNT(*) AS total,
          ROUND(AVG(rating), 1) AS avg_rating,
          SUM(CASE WHEN sentiment = 'positive' THEN 1 ELSE 0 END) AS positive,
          SUM(CASE WHEN sentiment = 'negative' THEN 1 ELSE 0 END) AS negative,
-         SUM(CASE WHEN response_text IS NULL OR response_text = '' THEN 1 ELSE 0 END) AS unresponded
+         SUM(CASE WHEN response_text IS NULL OR response_text = '' THEN 1 ELSE 0 END) AS unresponded,
+         SUM(CASE WHEN response_text IS NOT NULL AND response_text != '' THEN 1 ELSE 0 END) AS responded,
+         ROUND(AVG(CASE
+           WHEN response_text IS NOT NULL AND response_text != '' AND responded_at IS NOT NULL
+           THEN (julianday(responded_at) - julianday(created_at)) * 24
+           ELSE NULL
+         END), 1) AS avg_response_hours
        FROM reviews
        WHERE business_id = ?
          AND created_at >= datetime('now', '-7 days')`,
@@ -69,6 +82,14 @@ async function runWeeklyDigest() {
     );
 
     if (!stats || !stats.total) continue; // no activity → no email (see note above)
+
+    // Time saved estimate: each AI-drafted reply takes ~30 sec to paste vs
+    // ~5 min to write from scratch — so ~4.5 min saved per reply. This is an
+    // approximation (we don't track which replies actually used AI drafts;
+    // some owners type from scratch even with a draft visible), but it's
+    // honest within an order of magnitude and the retention frame "AI saved
+    // you ~X min" is more compelling than no number at all.
+    const timeSavedMinutes = Math.round((stats.responded || 0) * 4.5);
 
     // Fetch up to 3 review excerpts for the week: most negative first (most
     // actionable), then most recent. Unresponded ones float to the top within
@@ -96,6 +117,9 @@ async function runWeeklyDigest() {
         positive: stats.positive || 0,
         negative: stats.negative || 0,
         unresponded: stats.unresponded || 0,
+        responded: stats.responded || 0,
+        avg_response_hours: stats.avg_response_hours,
+        time_saved_minutes: timeSavedMinutes,
         recentReviews,
         lang: userLang,
       });

@@ -526,6 +526,12 @@ const DIGEST_STRINGS = {
     needsReplyEyebrow: '⚠ Needs a reply',
     draftReplyBtn: '✨ Draft reply',
     highlightEyebrow: '✨ Highlight of the week',
+    impactEyebrow: '✨ Your week with ReviewHub',
+    impactRepliedLabel: 'you replied to',
+    impactRepliedUnit: (n) => `review${n === 1 ? '' : 's'}`,
+    impactTimeSavedLabel: (mins) => `~${mins} min saved with AI drafts`,
+    impactResponseTime: (h) => `avg response time: ${h < 1 ? '<1' : Math.round(h)}h`,
+    impactZeroNudge: 'No replies yet this week — your drafts are waiting.',
     openDashboard: 'Open dashboard →',
     footer: 'You get this every Monday.',
     changeFrequency: 'Change frequency',
@@ -538,6 +544,8 @@ const DIGEST_STRINGS = {
     textPositive: 'Positive',
     textNegative: 'Negative',
     textAwaiting: 'Awaiting response',
+    textReplied: 'You replied to',
+    textTimeSaved: 'Time saved with AI drafts (est.)',
     textRecentReviews: 'Recent reviews:',
     textNoResponseYet: '[no response yet]',
     textNoText: '(no text)',
@@ -554,6 +562,12 @@ const DIGEST_STRINGS = {
     needsReplyEyebrow: '⚠ รอคุณตอบ',
     draftReplyBtn: '✨ ร่างคำตอบ',
     highlightEyebrow: '✨ รีวิวเด่นประจำสัปดาห์',
+    impactEyebrow: '✨ สัปดาห์นี้กับ ReviewHub',
+    impactRepliedLabel: 'คุณตอบไป',
+    impactRepliedUnit: () => 'รีวิว',
+    impactTimeSavedLabel: (mins) => `ประหยัดเวลาได้ราว ${mins} นาที`,
+    impactResponseTime: (h) => `ตอบเฉลี่ย ${h < 1 ? 'ภายใน 1' : Math.round(h)} ชม.`,
+    impactZeroNudge: 'สัปดาห์นี้ยังไม่ได้ตอบรีวิว — ดราฟต์รอคุณอยู่',
     openDashboard: 'เปิดแดชบอร์ด →',
     footer: 'อีเมลนี้ส่งให้ทุกวันจันทร์',
     changeFrequency: 'เปลี่ยนความถี่',
@@ -566,6 +580,8 @@ const DIGEST_STRINGS = {
     textPositive: 'ชม',
     textNegative: 'แย่',
     textAwaiting: 'รอตอบ',
+    textReplied: 'คุณตอบไปแล้ว',
+    textTimeSaved: 'เวลาที่ประหยัดได้ (โดยประมาณ)',
     textRecentReviews: 'รีวิวล่าสุด:',
     textNoResponseYet: '[ยังไม่ได้ตอบ]',
     textNoText: '(ไม่มีข้อความ)',
@@ -582,6 +598,12 @@ const DIGEST_STRINGS = {
     needsReplyEyebrow: '⚠ Esperando respuesta',
     draftReplyBtn: '✨ Redactar respuesta',
     highlightEyebrow: '✨ Reseña destacada de la semana',
+    impactEyebrow: '✨ Tu semana con ReviewHub',
+    impactRepliedLabel: 'respondiste a',
+    impactRepliedUnit: (n) => `reseña${n === 1 ? '' : 's'}`,
+    impactTimeSavedLabel: (mins) => `~${mins} min ahorrados con borradores IA`,
+    impactResponseTime: (h) => `tiempo medio de respuesta: ${h < 1 ? '<1' : Math.round(h)}h`,
+    impactZeroNudge: 'Sin respuestas esta semana — tus borradores te esperan.',
     openDashboard: 'Abrir panel →',
     footer: 'Recibes esto cada lunes.',
     changeFrequency: 'Cambiar frecuencia',
@@ -594,6 +616,8 @@ const DIGEST_STRINGS = {
     textPositive: 'Positivas',
     textNegative: 'Críticas',
     textAwaiting: 'Esperando respuesta',
+    textReplied: 'Respondiste a',
+    textTimeSaved: 'Tiempo ahorrado con borradores IA (est.)',
     textRecentReviews: 'Reseñas recientes:',
     textNoResponseYet: '[sin respuesta aún]',
     textNoText: '(sin texto)',
@@ -610,6 +634,12 @@ const DIGEST_STRINGS = {
     needsReplyEyebrow: '⚠ 返信が必要',
     draftReplyBtn: '✨ 返信を作成',
     highlightEyebrow: '✨ 今週のハイライト',
+    impactEyebrow: '✨ 今週のReviewHubでの活動',
+    impactRepliedLabel: '返信した口コミ',
+    impactRepliedUnit: () => '件',
+    impactTimeSavedLabel: (mins) => `AIドラフトで約${mins}分節約`,
+    impactResponseTime: (h) => `平均返信時間: ${h < 1 ? '1時間未満' : Math.round(h) + '時間'}`,
+    impactZeroNudge: '今週はまだ返信していません — ドラフトが待っています。',
     openDashboard: 'ダッシュボードを開く →',
     footer: '毎週月曜日にお届けしています。',
     changeFrequency: '頻度を変更',
@@ -622,6 +652,8 @@ const DIGEST_STRINGS = {
     textPositive: '好評',
     textNegative: '不満',
     textAwaiting: '返信待ち',
+    textReplied: '返信した口コミ',
+    textTimeSaved: 'AIドラフトによる節約時間（推定）',
     textRecentReviews: '最近の口コミ：',
     textNoResponseYet: '[未返信]',
     textNoText: '(テキストなし)',
@@ -636,6 +668,7 @@ async function sendWeeklyDigest(userEmail, stats) {
     userId,
     business_name, total, avg_rating = null,
     positive = 0, negative = 0, unresponded = 0,
+    responded = 0, avg_response_hours = null, time_saved_minutes = 0,
     recentReviews = [],
     lang = 'en',
   } = stats;
@@ -695,6 +728,43 @@ async function sendWeeklyDigest(userEmail, stats) {
       </table>
     </td></tr>` : '';
 
+  // Impact block — frames the week as the OWNER's accomplishment, not just
+  // "what happened to your business." Retention reframe per strategic-audit:
+  // ChatGPT + clipboard delivers a draft; ReviewHub delivers ambient
+  // accountability + measurable saved time the customer can see week after
+  // week. Two states:
+  //   - responded > 0 → show the win (replies + minutes saved + avg time)
+  //   - responded = 0 → gentle nudge so the email isn't silent on the most
+  //     churn-critical week (user is paying but not using)
+  const impactBlock = (() => {
+    if (responded > 0) {
+      const responseTimeLine = avg_response_hours != null
+        ? `<div style="font-size:11px;color:#7a8189;margin-top:4px;">${s.impactResponseTime(avg_response_hours)}</div>`
+        : '';
+      return `
+    <tr><td style="padding:0 28px 16px;">
+      <div style="font-size:11px;font-weight:700;color:#7a8189;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">${s.impactEyebrow}</div>
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;">
+        <tr><td style="padding:16px 18px;">
+          <div style="font-size:22px;font-weight:800;color:#166534;letter-spacing:-0.01em;">${s.impactRepliedLabel} ${responded} ${s.impactRepliedUnit(responded)}</div>
+          <div style="font-size:13px;color:#15803d;margin-top:4px;">${s.impactTimeSavedLabel(time_saved_minutes)}</div>
+          ${responseTimeLine}
+        </td></tr>
+      </table>
+    </td></tr>`;
+    }
+    if (unresponded > 0) {
+      return `
+    <tr><td style="padding:0 28px 16px;">
+      <div style="font-size:11px;font-weight:700;color:#7a8189;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">${s.impactEyebrow}</div>
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fef3c7;border:1px solid #fde68a;border-radius:10px;">
+        <tr><td style="padding:14px 16px;font-size:13px;color:#92400e;line-height:1.5;">${s.impactZeroNudge}</td></tr>
+      </table>
+    </td></tr>`;
+    }
+    return '';
+  })();
+
   // Highlight callout — best positive review of the week, if any.
   const highlightReview = recentReviews.find(r => r.rating >= 5);
   const highlightBlock = highlightReview ? `
@@ -736,6 +806,7 @@ async function sendWeeklyDigest(userEmail, stats) {
         </table>
       </td></tr>
       <tr><td style="padding:8px 28px 24px;">${sentimentBar}</td></tr>
+      ${impactBlock}
       ${criticalBlock}
       ${highlightBlock}
       <tr><td align="center" style="padding:0 28px 32px;">
@@ -767,6 +838,8 @@ async function sendWeeklyDigest(userEmail, stats) {
     `${s.textPositive}: ${positive}`,
     `${s.textNegative}: ${negative}`,
     `${s.textAwaiting}: ${unresponded}`,
+    responded > 0 ? `${s.textReplied}: ${responded}` : null,
+    responded > 0 && time_saved_minutes > 0 ? `${s.textTimeSaved}: ~${time_saved_minutes} min` : null,
     ...reviewsText,
     '',
     `${s.textOpenDashboard} ${process.env.CLIENT_URL || 'http://localhost:5173'}/dashboard`,
