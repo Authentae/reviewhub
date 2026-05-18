@@ -104,3 +104,23 @@ audits.
 
 **Commit:** `chore(client): delete 5 orphan files + 3 dead tests`
 
+## Cycle 6 — 2026-05-19 ~04:55 ICT — doc
+
+**Shipped:** Doc accuracy sweep for overnight cycles 1-5:
+- `docs/reviewhub-wiki.md` Content surface section: blog count
+  29→31 (added the ChatGPT pair); noted the NEW badge UI; new
+  "Code surface trim 2026-05-19" bullet under killed-pages
+  documenting the 5 orphan + 3 dead-test deletion.
+- `docs/MORNING-BRIEF-2026-05-19.md`: appended an "Overnight loop
+  addendum" table summarising cycles 1-5 by type/ship/why so the
+  first thing Earth reads when he wakes reflects what shipped
+  while he was asleep, not just the pre-sleep state.
+
+**Why:** Wiki + morning brief are the two docs Earth (and future
+Claude sessions) read first. The overnight loop was producing ships
+into a private log file with no visibility from the canonical
+read-first docs — exactly the drift pattern cycle 1 was meant to
+fix. Doc-as-canonical only works if it stays canonical.
+
+**Commit:** `docs: sync wiki + morning brief with overnight cycles 1-5`
+

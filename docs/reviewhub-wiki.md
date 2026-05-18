@@ -280,10 +280,13 @@ Narrowed dramatically on 2026-05-19 — strategic audit identified that
 total 41. Two probation watches: verticals + comparison pages will
 be deleted again if no Wave-5 signal materialises within 30 days.
 
-- **Blog**: 29 posts (14 EN + 14 TH paired + 1 unpaired). Inline mid-
-  post CTA widget added to all 29 on 2026-05-19 ("Try this with your
-  own reviews → See a sample audit"). 3 posts had dead `/for-restaurants
-  /for-hotels /for-cafes` references — patched to surviving verticals.
+- **Blog**: 31 posts (15 EN + 15 TH paired + 1 unpaired). Inline mid-
+  post CTA widget on all 29 pre-existing posts on 2026-05-19 ("Try
+  this with your own reviews → See a sample audit"). 3 posts had dead
+  `/for-restaurants /for-hotels /for-cafes` references — patched to
+  surviving verticals. Overnight cycle 3 (2026-05-19): added
+  `chatgpt-for-google-review-replies` EN+TH pair. /blog index shows
+  an auto-expiring "NEW" badge on posts <7 days old (cycle 4).
 - **Free tools**: 4 (review-reply-generator, reply-roaster,
   review-impact, one-star-playbook). Plausible event tracking on
   every CTA so we can measure tool→product conversion.
@@ -302,6 +305,12 @@ be deleted again if no Wave-5 signal materialises within 30 days.
 - **Killed pages 2026-05-19**: /api-docs (vaporware API), /status
   (vanity), /roadmap (signal-of-incompleteness), /year-review/:year
   (premature), /line (pivot announcement rolled into /).
+- **Code surface trim 2026-05-19 (overnight cycle 5)**: deleted 5
+  orphaned client source files (ClaimBusinessButton, ReviewResponse,
+  ReviewResponseForm, useFocusTrap, accessibilityTester) + 3 tests
+  — ~1,700 lines, ~36 KB. Identified via `scripts/find-orphans.js`.
+  Tests 170/170 green. i18n keys for the public owner-response flow
+  left in `translations.js` as templates if we ever re-add it.
 - **SEO infrastructure**: PNG og:image + Twitter Card + BreadcrumbList
   + Article schema + hreflang on every paired blog post. Pre-commit
   hook blocks regressions via `npm run check:seo` and

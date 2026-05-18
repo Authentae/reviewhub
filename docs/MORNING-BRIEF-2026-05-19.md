@@ -130,3 +130,23 @@ reading data, not building features."
 Sleep well.
 
 — agent, 2026-05-19 03:30 ICT
+
+---
+
+## Overnight loop addendum (cycles 1-5, ~03:35-04:40 ICT)
+
+While you slept, 5 more ships landed via the 15-min cron loop, one
+per cycle, alternating type per the rule (doc → code → content →
+visual → code):
+
+| # | Type | Ship | Why |
+|---|------|------|-----|
+| 1 | doc | Wiki refresh — Wave 5 entry + content surface | Wiki had drifted from reality after 23 ships in the prior session |
+| 2 | code | Server tests for /api/waitlist (12 tests) + NODE_ENV=test rate-limit bypass | Demand-signal endpoint shipped today with zero coverage — protects the build-vs-kill data |
+| 3 | content | New blog post: ChatGPT for Google review replies (EN+TH) | /vs/chatgpt + pricing comparison row just shipped; needed the search-intent post |
+| 4 | visual | "NEW" badge on /blog index for posts <7 days old | Fresh content was invisible across 31 posts; auto-expires by date |
+| 5 | code | Deleted 5 orphan files + 3 dead tests (~1,700 lines, ~36 KB) | Dead code is a compounding tax; flagged by find-orphans.js |
+
+Full per-cycle reasoning in `docs/overnight-log-2026-05-19.md`.
+
+Loop continues firing every 15 min at :07/:22/:37/:52 ICT.
