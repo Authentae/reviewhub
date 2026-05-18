@@ -1,7 +1,25 @@
 # Wave 5 — ready-to-send drafts (14 prospects)
 
 **Status:** drafts written + all 14 audit URLs generated 2026-05-17.
-All drafts are 100% paste-ready. No prep work needed.
+Updated 2026-05-18 — dental audits regenerated with PHI-aware prompt,
+all URLs verified HTTP 200. Send-ready.
+
+## ⚠ Known quality issues (2026-05-18 spot-check)
+
+- **Treasure Spa, draft #1** — AI echoed reviewer's text instead of
+  writing an owner reply. The other 4 Treasure drafts are clean.
+  Treasure prospect (Wed 09:30) may notice. Decide before send:
+  (a) send anyway — owner can ignore that one draft when reviewing,
+  (b) skip Treasure entirely (it's the 4th of 7 Wed prospects, low
+  blast-radius to pull).
+- **Asok Montri Dental, Thai drafts** — IMPROVED from "your trust made
+  our job easier" → "thanks for trusting us" (softer but still
+  patient-adjacent). English drafts are clean. Most owners would read
+  this as warm-but-imperfect, not PHI-violating. Lower risk than
+  before but worth knowing about.
+- **IDENT Dental** — fully clean after regeneration ✓
+- **All Muay Thai (5), Spa (CORAN/Dahra/Infinity/Preme), Coffee
+  (Ceresia/Ink and Lion)** — clean per spot-check ✓
 
 ## How to send
 
@@ -421,7 +439,7 @@ guessing the wording.
 I drafted reply suggestions for your 10 most recent reviews — no signup,
 just a preview:
 
-→ https://reviewhub.review/audit-preview/76456317d98b80a7b06b3803cdf50d4080e3ff2e9a336099
+→ https://reviewhub.review/audit-preview/171008505877e3ff77414d83792525070e970d87685f1155
 
 If this isn't the right fit for IDENT right now, a one-line "not for us,
 here's why" is genuinely useful — saves us both time and helps me
@@ -459,7 +477,7 @@ wording.
 I drafted reply suggestions for your 10 most recent reviews — no signup,
 just a preview:
 
-→ https://reviewhub.review/audit-preview/494f64b5aca5ddd7b97a80f9e362df7c030496c7f7e01ee1
+→ https://reviewhub.review/audit-preview/5edf0073ba7c568bffc7a6e4d700acc4143256d2327bcf2d
 
 If this isn't the right fit right now, a one-line "not for us, here's
 why" is genuinely useful — saves us both time and helps me understand
