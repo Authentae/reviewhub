@@ -28,6 +28,11 @@ const limiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: 'Too many requests, try again in a few minutes' },
+  // Bypass in test runs — supertest reuses 127.0.0.1 across cases so the
+  // 5/15min cap fires after the 5th case in waitlist.test.js, masking
+  // real validation regressions behind a 429. Production behaviour is
+  // unchanged; only NODE_ENV=test skips.
+  skip: () => process.env.NODE_ENV === 'test',
 });
 
 // Allowlist of plan IDs we accept. Prevents arbitrary strings filling
