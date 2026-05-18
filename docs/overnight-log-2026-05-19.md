@@ -265,3 +265,23 @@ Same shape as the existing blog-SEO + stale-positioning checks.
 
 **Commit:** `feat(hooks): pre-commit check that blog HTML matches sitemap/feed/index`
 
+## Cycle 14 — 2026-05-19 ~06:55 ICT — doc
+
+**Shipped:** New `docs/autopilot-loop-playbook.md` — distilled the
+patterns from the 13 cycles before it: when to use the loop, the
+alternation rule + type definitions, STOP triggers, compounding vs
+polish bias, end-of-session sweep checklist, patterns to repeat,
+anti-patterns to avoid, and honest cost accounting. Future-improvements
+section lists ideas (auto-detect cycle type, og-image-drift script,
+nightly drift sweeper) deliberately deferred from THIS session.
+
+**Why:** The loop produced sustained shipping for ~3.5 hours but the
+"how to run a productive overnight loop" knowledge was implicit in
+the cycle logs and would have to be re-derived by the next session.
+Codifying it once + adding to `docs/` makes the next overnight loop
+faster from cycle 1, not from cycle 5 after the agent rediscovers
+the alternation rule. Same compounding rationale as cycle 10's
+memory file.
+
+**Commit:** `docs: autopilot loop playbook from overnight session`
+
