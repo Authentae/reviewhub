@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ChatGPT for Google review replies — what works, what breaks — ReviewHub</title>
+<meta name="description" content="An honest look at using ChatGPT to draft Google review replies. Where it works fine, where it falls apart, and what to do when you have more than a handful of reviews to reply to each week.">
+<link rel="canonical" href="https://reviewhub.review/blog/chatgpt-for-google-review-replies">
+<link rel="alternate" hreflang="en" href="https://reviewhub.review/blog/chatgpt-for-google-review-replies" />
+<link rel="alternate" hreflang="th" href="https://reviewhub.review/blog/chatgpt-for-google-review-replies-th" />
+<link rel="alternate" hreflang="x-default" href="https://reviewhub.review/blog/chatgpt-for-google-review-replies" />
+
+<meta property="og:title" content="ChatGPT for Google review replies — what works, what breaks">
+<meta property="og:description" content="Where ChatGPT works fine for review replies, and where it falls apart once you have more than a handful per week.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://reviewhub.review/blog/chatgpt-for-google-review-replies">
+<meta property="og:image" content="https://reviewhub.review/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://reviewhub.review/og-image.png">
+<meta property="og:locale" content="en_US">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "ChatGPT for Google review replies — what works, what breaks",
+  "inLanguage": "en",
+  "author": {"@type": "Organization", "name": "ReviewHub", "url": "https://reviewhub.review/"},
+  "publisher": {"@type": "Organization", "name": "ReviewHub", "logo": {"@type": "ImageObject", "url": "https://reviewhub.review/logo.svg"}},
+  "datePublished": "2026-05-19",
+  "image": "https://reviewhub.review/og-image.png",
+  "mainEntityOfPage": "https://reviewhub.review/blog/chatgpt-for-google-review-replies"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://reviewhub.review/"},
+    {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://reviewhub.review/blog"},
+    {"@type": "ListItem", "position": 3, "name": "ChatGPT for Google review replies"}
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{--paper:#fbf8f1;--cream:#f3ecdb;--ink:#1d242c;--ink-2:#4b5560;--rule:#e8dec7;--teal:#2c7889;--teal-deep:#1e4d5e;--teal-soft:#d6e7eb;--ochre:#c48a2c;--rose:#b54a4a;--sage:#5d7a52}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter Tight',sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:0 24px}
+  .topnav{padding:24px 0;border-bottom:1px solid var(--rule)}
+  .topnav .row{display:flex;justify-content:space-between;align-items:center}
+  .brand{font-family:'Instrument Serif',Georgia,serif;font-size:22px;text-decoration:none;color:var(--ink)}
+  .brand em{color:var(--teal-deep);font-style:italic}
+  .topnav nav a{margin-left:18px;color:var(--ink-2);text-decoration:none;font-size:14px;font-weight:500}
+  article{padding:48px 0 32px}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ochre);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:14px}
+  h1{font-family:'Instrument Serif',Georgia,serif;font-size:clamp(28px,4.5vw,40px);line-height:1.18;margin-bottom:18px;font-weight:400}
+  h1 em{color:var(--teal-deep);font-style:italic}
+  .meta{display:flex;gap:18px;color:var(--ink-2);font-size:13px;margin-bottom:32px;padding-bottom:20px;border-bottom:1px solid var(--rule)}
+  .meta span:before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--teal);margin-right:8px;vertical-align:middle}
+  .lede{font-size:19px;line-height:1.6;color:var(--ink-2);margin-bottom:36px;font-family:'Instrument Serif',Georgia,serif}
+  h2{font-family:'Instrument Serif',Georgia,serif;font-size:28px;line-height:1.2;margin:48px 0 14px;font-weight:500}
+  h2 .num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--ochre);display:block;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;font-weight:500}
+  h3{font-size:17px;margin:24px 0 8px;font-weight:700;color:var(--teal-deep)}
+  p{margin-bottom:16px}
+  article a{color:var(--teal-deep);text-decoration:underline;text-underline-offset:3px}
+  ul,ol{margin:0 0 18px 22px}
+  li{margin-bottom:8px}
+  .card{background:white;border:1px solid var(--rule);border-radius:10px;padding:18px 22px;margin:14px 0}
+  .card h3{margin-top:0}
+  .callout{background:linear-gradient(135deg,var(--teal-deep) 0%,var(--teal) 100%);color:var(--paper);border-radius:14px;padding:28px;margin:48px 0 32px;text-align:center}
+  .callout h3{font-family:'Instrument Serif',Georgia,serif;font-size:24px;font-weight:400;margin:0 0 8px;color:var(--paper)}
+  .callout p{color:var(--paper);opacity:0.92;margin-bottom:18px;font-size:15px}
+  .callout a.cta{display:inline-block;background:var(--paper);color:var(--teal-deep);padding:12px 24px;border-radius:8px;font-weight:600;font-size:15px;text-decoration:none}
+  footer{padding:40px 0 60px;color:var(--ink-2);font-size:13px;border-top:1px solid var(--rule);margin-top:60px;text-align:center}
+  footer a{color:var(--teal-deep);text-decoration:underline}
+  mark{background:var(--teal-soft);color:var(--teal-deep);padding:1px 4px;border-radius:3px}
+  .verdict{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;padding:3px 8px;border-radius:4px;margin-right:8px;vertical-align:middle}
+  .verdict.ok{background:#e3efde;color:var(--sage)}
+  .verdict.bad{background:#f6e0e0;color:var(--rose)}
+</style>
+</head>
+<body>
+
+<header class="topnav">
+  <div class="wrap row">
+    <a href="/" class="brand">Review<em>Hub</em></a>
+    <nav>
+      <a href="/blog">Blog</a>
+      <a href="/audit">Free audit</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+<article>
+  <p class="eyebrow">Tools comparison · 2026-05-19</p>
+  <h1>ChatGPT for Google review replies — <em>what works, what breaks</em></h1>
+
+  <div class="meta">
+    <span>5 min read</span>
+    <span>English</span>
+    <span>Published May 19, 2026</span>
+  </div>
+
+  <p class="lede">
+    ChatGPT can absolutely draft a Google review reply. The question
+    isn't whether it can — it's whether the workflow holds up once you
+    have <mark>more than a handful of reviews per week</mark> and want
+    them to sound like the same person every time.
+  </p>
+
+  <h2><span class="num">01</span>Where ChatGPT works fine</h2>
+
+  <div class="inline-cta" style="margin:32px 0;padding:18px 20px;background:#f5f0e0;border-left:3px solid #1e4d5e;border-radius:6px;">
+    <p style="margin:0;font-size:15px;line-height:1.5;color:#1d242c;"><strong>See the difference live →</strong> <a href="/audit-demo" style="color:#1e4d5e;font-weight:600;text-decoration:underline;">Sample audit with a tone switcher</a> (no signup). Toggle warm / concise / formal on the same review.</p>
+  </div>
+
+  <div class="card">
+    <h3><span class="verdict ok">Works</span>One-off replies, occasional use</h3>
+    <p>
+      If you get one review a week, paste it into ChatGPT, give it
+      three sentences about your business, ask for a polite reply —
+      done. It's free, it's fast, the output is usually good enough
+      for a paragraph that nobody will read carefully.
+    </p>
+    <p>
+      This is the honest baseline. We're not going to pretend
+      otherwise. For a side-project café with one review every ten
+      days, building any kind of workflow on top is overkill.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3><span class="verdict ok">Works</span>Drafting in a language you don't write well</h3>
+    <p>
+      A Thai owner replying to an English review — or the reverse —
+      ChatGPT removes the translation tax. The grammar will be
+      correct. The register will be roughly right. You'll still
+      want to read it before sending, but it beats Google Translate
+      and it beats not replying.
+    </p>
+  </div>
+
+  <h2><span class="num">02</span>Where it falls apart</h2>
+
+  <div class="card">
+    <h3><span class="verdict bad">Breaks</span>Voice consistency across sessions</h3>
+    <p>
+      Every new ChatGPT chat starts cold. The model has no memory
+      of how you replied last week. So your café — which started
+      out warm and personal in January — slowly drifts into
+      generic corporate-speak by April, because each reply was
+      drafted from scratch with slightly different prompting.
+    </p>
+    <p>
+      Readers scanning your reviews see this. They notice when
+      reply #14 and reply #15 sound like different businesses.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3><span class="verdict bad">Breaks</span>The "I have 12 reviews waiting" problem</h3>
+    <p>
+      The unit cost per ChatGPT reply is roughly: open Google,
+      copy review, switch to ChatGPT, paste, type prompt with
+      business context, read draft, copy, switch back to Google,
+      paste, click reply. Two minutes, sometimes three.
+    </p>
+    <p>
+      Twelve reviews waiting = thirty minutes of context-switching.
+      It's the kind of task that always gets pushed to "tomorrow"
+      and then becomes a sixty-review backlog.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3><span class="verdict bad">Breaks</span>No ambient trigger</h3>
+    <p>
+      ChatGPT doesn't know a review came in. You have to remember
+      to check Google Business Profile, notice the new one, then
+      decide to draft a reply. Most small owners we've talked to
+      check once a week. So a 2-star review can sit there public
+      for six days before anyone responds.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3><span class="verdict bad">Breaks</span>Industry-specific guardrails</h3>
+    <p>
+      Dental and medical replies have a hard rule: never confirm
+      that a specific person was treated, or what they were
+      treated for. That's patient privacy. Generic ChatGPT will
+      cheerfully write "thanks for trusting us with your root
+      canal" because the reviewer mentioned it — and now the
+      practice has a public privacy slip.
+    </p>
+    <p>
+      The fix isn't "better prompting." It's a workflow that
+      enforces these rules every time, not when the human
+      remembers.
+    </p>
+  </div>
+
+  <h2><span class="num">03</span>The honest scorecard</h2>
+
+  <p>
+    Here's the heuristic we'd use if we were the customer:
+  </p>
+
+  <ul>
+    <li><strong>0–2 reviews per week:</strong> ChatGPT is fine. Don't build a workflow.</li>
+    <li><strong>3–10 reviews per week:</strong> ChatGPT works but feels like a chore. Most owners stop replying after the third backlog.</li>
+    <li><strong>10+ reviews per week, or regulated industry (medical, dental, legal):</strong> A purpose-built tool stops being optional. The cost is the time you stop spending, not the dollars per month.</li>
+  </ul>
+
+  <p>
+    That's the honest read. ChatGPT is a fine general-purpose tool.
+    What it isn't is a system. If replies are part of your
+    operating routine, you eventually want something that remembers
+    your voice, fires when a review lands, and refuses to write
+    things that get you in trouble.
+  </p>
+
+  <h2><span class="num">04</span>What we built instead</h2>
+
+  <p>
+    <a href="/">ReviewHub</a> is the tool we wished existed when
+    we were doing this with ChatGPT-and-copy-paste. It connects
+    to your Google Business Profile, drafts each reply in your
+    voice (the system remembers across reviews), gives you a
+    one-click warm / concise / formal switcher, and never sends
+    without your approval.
+  </p>
+
+  <p>
+    The honest pitch: if you reply to your own reviews twice a
+    week and it takes you ten minutes, you don't need us yet.
+    If it takes you an hour, or if you've stopped replying
+    because it's too much, that's the cost we're solving.
+  </p>
+
+  <div class="callout">
+    <h3>See your own reviews with the tone switcher</h3>
+    <p>Drop your Google Business name → get a sample audit with three tone variants. No signup, no card.</p>
+    <a href="/audit" class="cta">Get my free audit →</a>
+  </div>
+
+  <p data-related-posts="injected" style="color:#4b5560;font-size:15px;border-top:1px solid #e8dec7;padding-top:20px;margin-top:40px">
+    Related posts:
+    <a href="/blog/words-to-avoid-in-review-replies">5 words to never use in a reply</a> ·
+    <a href="/blog/why-respond-to-google-reviews">Why your Google reviews need owner replies</a> ·
+    <a href="/vs/chatgpt">ReviewHub vs ChatGPT — full comparison</a>
+  </p>
+</article>
+</div>
+
+<footer>
+  <p>© 2026 ReviewHub · <a href="/blog">All posts</a> · <a href="/">Home</a></p>
+</footer>
+
+</body>
+</html>

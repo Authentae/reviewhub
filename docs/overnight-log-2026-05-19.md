@@ -40,3 +40,28 @@ refactor could silently start accepting garbage plans (corrupting the
 signal) or breaking idempotency (double-counting one prospect).
 
 **Commit:** `test(waitlist): cover validation + idempotency + case dedup (12 tests)`
+
+## Cycle 3 — 2026-05-19 ~04:05 ICT — content
+
+**Shipped:** New blog post `chatgpt-for-google-review-replies` (EN + TH
+pair). 4 sections: where ChatGPT works fine (one-offs, translation
+help), where it falls apart (voice drift across sessions, 12-review
+backlog tax, no ambient trigger, no industry guardrails), an honest
+volume-based scorecard (0-2/wk = use ChatGPT; 10+/wk or regulated =
+need a system), and what we built instead. Links to /audit-demo (tone
+switcher) inline and /vs/chatgpt in related posts. Added both slugs
+to BlogIndex.jsx POSTS array and to sitemap.xml with 2026-05-19
+lastmod.
+
+**Why:** /vs/chatgpt survived the page-flow audit and the ChatGPT
+comparison row just shipped on /pricing — but the blog had no
+ChatGPT-specific post for the "ChatGPT for Google reviews" search
+intent. This is a real query (people considering ChatGPT vs a
+purpose-built tool). Honest acknowledgement that ChatGPT works fine
+at low volume builds trust; specific failure modes (voice drift,
+PHI slip-up in dental) name the cost so the read price is "switch
+to ReviewHub" not "shrug." Cycle 2 was code → cycle 3 is content
+per the alternation rule.
+
+**Commit:** `content(blog): chatgpt-for-google-review-replies EN+TH`
+

@@ -23,6 +23,22 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'chatgpt-for-google-review-replies',
+    title: 'ChatGPT for Google review replies — what works, what breaks',
+    description: 'An honest look at using ChatGPT to draft Google review replies. Where it works fine, where it falls apart, and what to do when you have more than a handful of reviews to reply to each week.',
+    date: '2026-05-19',
+    readingMins: 5,
+    lang: 'en',
+  },
+  {
+    slug: 'chatgpt-for-google-review-replies-th',
+    title: 'ใช้ ChatGPT ตอบรีวิว Google — ใช้ได้แค่ไหน เริ่มพังตรงไหน',
+    description: 'มองตรง ๆ ว่าใช้ ChatGPT ร่างคำตอบรีวิว Google ทำงานได้แค่ไหน ตรงไหนยังโอเค ตรงไหนเริ่มพัง และจะทำยังไงเมื่อมีรีวิวมากกว่าสองสามอันต่อสัปดาห์',
+    date: '2026-05-19',
+    readingMins: 5,
+    lang: 'th',
+  },
+  {
     slug: 'words-to-avoid-in-review-replies',
     title: '5 words to never use in a Google review reply (and what to say instead)',
     description: 'Common words that make your reply sound defensive, dismissive, or insincere — even when you mean well — and the alternatives that read as a real person responding.',
