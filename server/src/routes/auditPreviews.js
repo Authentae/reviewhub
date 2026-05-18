@@ -141,16 +141,65 @@ router.post('/', createLimiter, authMiddleware, async (req, res) => {
 
         let draft = '';
         let source = 'template';
+        // Tone variants — page-flow audit v2 #2 (2026-05-19). Prospect-
+        // facing tone switcher (warm/concise/formal) on /audit-preview
+        // needs all 3 variants pre-generated at audit creation so
+        // toggling is instant (no loading spinner). Cost: 3× one
+        // Anthropic Haiku call per review = ~$0.015 vs $0.005 for the
+        // single-tone path. Acceptable given the conversion-leverage of
+        // letting the prospect feel the tone agency they'd have as a
+        // customer.
+        const tones = { warm: '', concise: '', formal: '' };
         try {
-          const result = await generateDraft({
+          // 'warm' is the default — the existing single-draft call
+          // already produces warm. Run it first; if it returns a template
+          // fallback (Anthropic unavailable), skip the alternate tones
+          // so we don't waste quota on more template fallbacks.
+          const warmResult = await generateDraft({
             review: fakeReview,
             businessName,
-            // No preferredLang — let the prompt auto-detect from review text
+            replyTone: 'warm',
           });
-          draft = result.draft || '';
-          source = result.source || 'template';
+          draft = warmResult.draft || '';
+          source = warmResult.source || 'template';
+          tones.warm = draft;
+
+          if (source === 'ai') {
+            // Only run concise + formal if warm succeeded with AI.
+            // Anthropic failure is rare but real (rate limits, model
+            // errors) — when it happens, we'd rather show 1 good draft
+            // than 3 template-fallback drafts.
+            for (const tone of ['concise', 'formal']) {
+              const altReservation = reserveAiDraft(req.user.id);
+              if (!altReservation.allowed) {
+                // Out of quota for tone variants — keep the warm draft,
+                // skip the others. Tones missing => the client will
+                // hide the tone switcher (graceful degradation).
+                break;
+              }
+              reservations.push(true);
+              try {
+                const altResult = await generateDraft({
+                  review: fakeReview,
+                  businessName,
+                  replyTone: tone,
+                });
+                if (altResult.source === 'ai' && altResult.draft) {
+                  tones[tone] = altResult.draft;
+                } else {
+                  // Refund the alt slot if it template-fallback'd
+                  refundAiDraft(req.user.id);
+                  reservations.pop();
+                }
+              } catch (toneErr) {
+                refundAiDraft(req.user.id);
+                reservations.pop();
+                captureException(toneErr, { route: 'audit-previews', op: 'draft-tone', tone, reviewerName: r.reviewer_name });
+              }
+            }
+          }
         } catch (err) {
-          // If a single draft fails (rate limit, network), keep going —
+          // If the warm draft fails (rate limit, network), keep going —
           // the audit is more useful with 9 drafts than 0. Refund this
           // slot so the founder isn't charged for a failed draft.
           refundAiDraft(req.user.id);
@@ -169,6 +218,10 @@ router.post('/', createLimiter, authMiddleware, async (req, res) => {
           rating: r.rating,
           text: r.text,
           draft,
+          // Only include tones if at least one alternate was generated.
+          // Saves bytes on the wire + client-side check is simpler
+          // (presence of .tones with concise/formal means show switcher).
+          ...(tones.concise || tones.formal ? { tones } : {}),
         });
       }
     } catch (err) {

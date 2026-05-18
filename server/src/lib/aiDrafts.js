@@ -1362,6 +1362,11 @@ function isJunkReviewerName(raw) {
 const TONE_LINES = {
   casual: 'Tone: extra casual — short fragments, contractions, no honorifics, allow light slang. Like texting a friend who came in.',
   warm: null, // default — no extra instruction needed
+  // Concise added 2026-05-19 for the audit-preview tone switcher (page-flow
+  // audit v2 #2). The prospect-facing UX is: prove the AI can shift register
+  // without losing the owner-voice quality. 'concise' = fewer words, same
+  // care. Goal: 50-60% of warm's character count, no fluff phrases.
+  concise: 'Tone: keep it tight. Cut every word that is not load-bearing. Aim for 30-60 characters where the language allows. Skip throat-clearing ("Thanks so much for taking the time…"). Open with the specific acknowledgment, end with one concrete next-step or sign-off. Still warm and human — concise is not curt.',
   formal: 'Tone: formal register — full sentences, no contractions, address the reviewer by Mr./Ms./san/Mrs. or culturally-equivalent honorific where natural. No slang. Suitable for fine-dining, notaries, healthcare, professional services.',
 };
 

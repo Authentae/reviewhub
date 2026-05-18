@@ -121,18 +121,33 @@ export default function AuditPreview() {
               rating: 5,
               text: "Walked in on a Sunday afternoon looking for a quiet place to read. Found exactly that — the cold brew was excellent, the seating tucked into corners felt private, and the barista remembered I'd asked for less ice the second time I went up. Small touches. Will be back.",
               draft: "Alex — thanks for noticing the small things. The 'remembered the less-ice' move was Beam's; she'll be glad to hear it landed. Sunday afternoons are when we deliberately keep the playlist quiet so the corner seats feel like they're meant for what you used them for. See you next visit.",
+              tones: {
+                warm: "Alex — thanks for noticing the small things. The 'remembered the less-ice' move was Beam's; she'll be glad to hear it landed. Sunday afternoons are when we deliberately keep the playlist quiet so the corner seats feel like they're meant for what you used them for. See you next visit.",
+                concise: "Thanks Alex — that was Beam on bar. Quiet-Sundays is on purpose. See you next visit.",
+                formal: "Mr. Tan, thank you for taking the time to share this. The barista you mentioned (Beam) will be pleased to hear her attention to detail was noticed. Our Sunday afternoon atmosphere is curated with reading guests in mind; we are glad the corner seating served you well. We look forward to your return.",
+              },
             },
             {
               reviewer_name: 'Wassana K.',
               rating: 3,
               text: "Coffee is good but the wait on Saturday morning was 25 minutes. I get it, you're popular, but maybe an 'order ahead via LINE' option? Otherwise solid spot. Pastries were fresh.",
               draft: "Wassana — 25 minutes on a Saturday is too long, you're right. The LINE order-ahead idea is genuinely good and we've been talking about it; if you wouldn't mind dropping me a DM @commongroundsbkk I'd love to ask you what the ideal version of that would look like before we build it. Glad the pastries held up.",
+              tones: {
+                warm: "Wassana — 25 minutes on a Saturday is too long, you're right. The LINE order-ahead idea is genuinely good and we've been talking about it; if you wouldn't mind dropping me a DM @commongroundsbkk I'd love to ask you what the ideal version of that would look like before we build it. Glad the pastries held up.",
+                concise: "25 min on Saturday is too long, agreed. LINE order-ahead is on our list — DM @commongroundsbkk if you want to weigh in on how it should work.",
+                formal: "Khun Wassana, thank you for the honest feedback. A 25-minute wait is not the standard we want to deliver. The LINE pre-order suggestion has been raised internally; should you wish to share more on what would work best for you, please contact us at @commongroundsbkk. We appreciate your continued patience.",
+              },
             },
             {
               reviewer_name: 'James Reeves',
               rating: 1,
               text: "Asked for oat milk and was given soy. When I pointed it out the staff member rolled his eyes and made a comment in Thai I couldn't understand but the tone was clear. Walked out without drinking the coffee. Won't return.",
               draft: "James — I'm sorry. The wrong-milk part happens; the eye-roll and the comment shouldn't, ever. I'd like to understand what actually happened from our side before I say anything else — could you email me directly at owner@commongroundsbkk.com with the day and rough time? I want to talk to whoever was on bar. And whether you come back or not, the coffee that day was on us.",
+              tones: {
+                warm: "James — I'm sorry. The wrong-milk part happens; the eye-roll and the comment shouldn't, ever. I'd like to understand what actually happened from our side before I say anything else — could you email me directly at owner@commongroundsbkk.com with the day and rough time? I want to talk to whoever was on bar. And whether you come back or not, the coffee that day was on us.",
+                concise: "James — sorry. The milk mix-up happens; the eye-roll and the comment do not. Email owner@commongroundsbkk.com with day + time so I can talk to whoever was on bar. Coffee was on us regardless.",
+                formal: "Mr. Reeves, please accept our apology. While a milk substitution can happen, the behaviour you describe from our staff is not acceptable under any circumstance. We would like to understand the events directly; please write to owner@commongroundsbkk.com with the date and approximate time of your visit. The cost of that visit is, of course, refunded. Whether you return or not, we are grateful for the feedback.",
+              },
             },
           ],
         },
@@ -308,23 +323,17 @@ export default function AuditPreview() {
                   separator doesn't visually merge with the outside-card border. */}
               <div className="h-px my-4" style={{ background: COLORS.divider }} />
 
-              {/* The drafted reply */}
+              {/* The drafted reply — with optional tone switcher.
+                  Built 2026-05-19 per page-flow audit v2 #2: addresses
+                  the unspoken "will the AI embarrass me when I paste
+                  this?" objection by letting the prospect feel the
+                  tone agency they'd have as a customer. Tones are
+                  pre-generated at audit creation (warm/concise/formal),
+                  so toggling is instant. If only warm exists (legacy
+                  audits or quota-limited creation), the switcher is
+                  hidden — just shows the single draft as before. */}
               {r.draft ? (
-                <div>
-                  <p
-                    className="text-xs font-mono uppercase tracking-widest mb-2"
-                    style={{ color: COLORS.tealDeep }}
-                  >
-                    Suggested reply
-                  </p>
-                  <p
-                    className="leading-relaxed whitespace-pre-wrap"
-                    style={{ color: COLORS.ink, fontSize: '15px' }}
-                  >
-                    {r.draft}
-                  </p>
-                  <CopyButton text={r.draft} />
-                </div>
+                <DraftWithToneSwitcher review={r} />
               ) : (
                 <p className="text-xs italic" style={{ color: COLORS.inkDim }}>
                   Couldn't generate a draft for this one — usually means the review text was too short or in an unsupported language.
@@ -729,6 +738,89 @@ function StickyConversionBar({ businessName, token, show, ctaVariant = 'control'
 // affordance, and a 1.6s "Copied ✓" state-swap so the prospect sees the
 // click landed (the previous silent version triggered repeat-click
 // frustration in critique).
+// DraftWithToneSwitcher — renders the suggested reply with an optional
+// 3-tab tone switcher (Warm / Concise / Formal). The switcher only shows
+// when the audit's reviews include pre-generated tone variants — i.e.
+// `review.tones` exists with concise or formal entries. For legacy audits
+// (created before 2026-05-19), or quota-limited creations where only the
+// warm variant was generated, the component degrades to the single-tone
+// rendering it always did. Toggle is instant (no API call) because all
+// tones are inline in the data already.
+function DraftWithToneSwitcher({ review }) {
+  const tones = review.tones || null;
+  const hasTones = !!tones && (tones.concise || tones.formal);
+  const [selected, setSelected] = useState('warm');
+  // Current draft text — defaults to warm (always present). Switch flips
+  // to concise/formal tone variants from the inline data.
+  const currentDraft = hasTones
+    ? (tones[selected] || tones.warm || review.draft)
+    : review.draft;
+
+  return (
+    <div>
+      <div className="flex items-center justify-between gap-3 mb-2 flex-wrap">
+        <p
+          className="text-xs font-mono uppercase tracking-widest"
+          style={{ color: COLORS.tealDeep }}
+        >
+          Suggested reply
+        </p>
+        {hasTones && (
+          <div
+            role="tablist"
+            aria-label="Reply tone"
+            className="inline-flex rounded-lg overflow-hidden"
+            style={{
+              border: `1px solid ${COLORS.line}`,
+              background: COLORS.paper,
+              fontSize: '12px',
+            }}
+          >
+            {['warm', 'concise', 'formal'].map((tone) => {
+              const available = tone === 'warm' || !!tones[tone];
+              const isActive = selected === tone;
+              return (
+                <button
+                  key={tone}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  disabled={!available}
+                  onClick={() => {
+                    setSelected(tone);
+                    if (typeof window.plausible === 'function') {
+                      try { window.plausible('AuditToneSwitch', { props: { tone } }); } catch { /* swallow */ }
+                    }
+                  }}
+                  className="plausible-event-name=AuditToneSwitchClick px-3 py-1.5 font-semibold transition-colors"
+                  style={{
+                    background: isActive ? COLORS.tealDeep : 'transparent',
+                    color: isActive ? '#fff' : (available ? COLORS.ink : COLORS.inkDim),
+                    cursor: available ? 'pointer' : 'not-allowed',
+                    opacity: available ? 1 : 0.5,
+                    textTransform: 'capitalize',
+                    minHeight: '32px',
+                    minWidth: '64px',
+                  }}
+                >
+                  {tone}
+                </button>
+              );
+            })}
+          </div>
+        )}
+      </div>
+      <p
+        className="leading-relaxed whitespace-pre-wrap"
+        style={{ color: COLORS.ink, fontSize: '15px' }}
+      >
+        {currentDraft}
+      </p>
+      <CopyButton text={currentDraft} />
+    </div>
+  );
+}
+
 function CopyButton({ text }) {
   const [copied, setCopied] = useState(false);
   const timerRef = useRef(null);
