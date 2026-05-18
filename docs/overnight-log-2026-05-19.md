@@ -124,3 +124,22 @@ fix. Doc-as-canonical only works if it stays canonical.
 
 **Commit:** `docs: sync wiki + morning brief with overnight cycles 1-5`
 
+## Cycle 7 — 2026-05-19 ~05:10 ICT — visual
+
+**Shipped:** Regenerated `og-image.svg` + `og-image.png` to match the
+real landing hero. Old text: "All your reviews, one editorial
+dashboard." New text matches `landing.heroTitle`: "Reply to Google
+reviews in 10 seconds — from your phone." Sub-line also refreshed
+("AI drafts in your voice · LINE & Telegram alerts · Built in
+Bangkok"). PNG re-rendered via the documented sharp pipeline
+(density:300, 1200×630, quality:90) — 51 KB.
+
+**Why:** og:image is the single most-shared visual asset; every X,
+LinkedIn, iMessage, Slack, and Line preview of reviewhub.review uses
+it. Carrying a tagline ("editorial dashboard") that no longer appears
+anywhere on the actual site is a credibility risk — a prospect lands
+on the page, sees a different promise, and pattern-matches "stale
+marketing." Free-cost compounding fix.
+
+**Commit:** `visual(og): sync og-image with current landing hero copy`
+
