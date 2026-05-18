@@ -39,14 +39,20 @@ date, and any pre-purchase friction worth remembering.
 
 ## Outreach waves
 
-- **Wave 5 — DRAFTED 2026-05-17, scheduled to send Tue 5/19 + Wed 5/20.**
-  14 prospects across 4 verticals (5 Muay Thai, 5 spa, 2 dental, 2
-  coffee — 1 dental deferred for no website, 3 coffee IG-only).
-  All 14 audit URLs verified HTTP 200. Drafts paste-ready in
-  [docs/outreach/wave-5-drafts.md](docs/outreach/wave-5-drafts.md).
-  Morning brief: [docs/MORNING-BRIEF-2026-05-18.md](docs/MORNING-BRIEF-2026-05-18.md).
-  KNOWN ISSUE: dental drafts (IDENT, Asok Montri) implicitly confirm
-  patient relationship — see brief for edit options before Wed send.
+- **Wave 5 — SCHEDULED 2026-05-18, fires Tue 5/19 + Wed 5/20.**
+  14 prospects queued in `earth.reviewhub@gmail.com` Scheduled folder
+  (7 Tue + 7 Wed, 15-min spacing 09:00-10:30 ICT). Drafts paste-ready
+  in [docs/outreach/wave-5-drafts.md](docs/outreach/wave-5-drafts.md).
+  Two morning briefs: [05-18](docs/MORNING-BRIEF-2026-05-18.md)
+  pre-schedule + [05-19](docs/MORNING-BRIEF-2026-05-19.md) post-ship.
+  Dental drafts regenerated 2026-05-18 with PHI-aware AI prompts
+  (IDENT clean; Asok Montri Thai still slight drift, see drafts file).
+  Treasure Spa draft #1 has a known echo-bug (model echoed reviewer's
+  text). Both cancellable from Gmail Scheduled folder pre-send.
+  Conversion experience prospects will land in (live as of 2026-05-19):
+  above-fold CTA, founder card, 2-review fold + expander, tone
+  switcher (warm/concise/formal), LINE+Email async CTAs, Stripe
+  Payment Link for Starter.
 - **Wave 1 — 2026-05-04:** 9 emails sent. No replies as of 2026-05-06.
   Mix of cooking schools + B&Bs. Verticals targeted: Pink Chili,
   House of Taste, Sweets Cottage, Tingly Thai, May Kaidee, Better
@@ -267,20 +273,39 @@ _(nothing yet — pre-revenue)_
 When MRR > $0, log monthly: total MRR, by plan, churn, top acquisition
 channel, biggest single-customer concentration risk.
 
-## Content surface (as of 2026-05-08)
+## Content surface (as of 2026-05-19)
 
-- **Blog**: 26 posts (13 EN, 13 TH, 11 paired with hreflang). Total
-  ~22k words. Run `npm run stats:content` for live count.
-- **Free tools**: 3 (review-reply-generator, reply-roaster,
-  review-impact). Each indexed individually in /tools.
-- **Vertical landing pages**: 8 (/for-restaurants, /for-cafes,
-  /for-bars, /for-hotels, /for-spas, /for-dentists, /for-fitness,
-  /for-pharmacies).
-- **Comparison pages**: 3 (/vs/birdeye, /vs/podium, /vs/reviewtrackers).
+Narrowed dramatically on 2026-05-19 — strategic audit identified that
+50 routes was ~3× what a pre-revenue solo SaaS warrants. Routes now
+total 41. Two probation watches: verticals + comparison pages will
+be deleted again if no Wave-5 signal materialises within 30 days.
+
+- **Blog**: 29 posts (14 EN + 14 TH paired + 1 unpaired). Inline mid-
+  post CTA widget added to all 29 on 2026-05-19 ("Try this with your
+  own reviews → See a sample audit"). 3 posts had dead `/for-restaurants
+  /for-hotels /for-cafes` references — patched to surviving verticals.
+- **Free tools**: 4 (review-reply-generator, reply-roaster,
+  review-impact, one-star-playbook). Plausible event tracking on
+  every CTA so we can measure tool→product conversion.
+- **Vertical landing pages**: 2 surviving (/for-spas, /for-dentists)
+  — the 2 Wave-5 segments with most prospects. Restaurants, hotels,
+  cafes, bars, fitness, pharmacies deleted 2026-05-19.
+- **Comparison pages**: 2 surviving (/vs/chatgpt, /vs/birdeye) — kept
+  because chatgpt is the real silent competitor and birdeye is the
+  funded incumbent prospects mention. /vs/podium, /vs/reviewtrackers,
+  /vs/agency deleted 2026-05-19 as pure SEO inventory plays without
+  conversion evidence.
+- **Public demo audit**: NEW 2026-05-19. /audit-demo route renders a
+  hardcoded sample audit (Common Grounds cafe with 5⭐/3⭐/1⭐ reviews
+  + warm/concise/formal tone variants). For /pricing visitors landing
+  without an outreach link.
+- **Killed pages 2026-05-19**: /api-docs (vaporware API), /status
+  (vanity), /roadmap (signal-of-incompleteness), /year-review/:year
+  (premature), /line (pivot announcement rolled into /).
 - **SEO infrastructure**: PNG og:image + Twitter Card + BreadcrumbList
   + Article schema + hreflang on every paired blog post. Pre-commit
   hook blocks regressions via `npm run check:seo` and
-  `npm run check:positioning`.
+  `npm run check:positioning`. Sitemap.xml trimmed of 12 dead URLs.
 
 ## What's not working
 
