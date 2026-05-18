@@ -161,6 +161,14 @@ export default function App() {
         <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         <Route path="/outbound-audits" element={<PrivateRoute><OutboundAudits /></PrivateRoute>} />
         <Route path="/audit-preview/:token" element={<AuditPreview />} />
+        {/* Public demo audit — short vanity URL that redirects to the
+            existing /audit-preview/demo route. The 'demo' token is
+            special-cased inside pages/AuditPreview.jsx to short-circuit
+            the API call and render a hardcoded sample audit. Built
+            2026-05-19 per page-flow audit v2 build-first #1: prospects
+            landing on /pricing without an outreach link had no way to
+            see what an audit looks like before paying. */}
+        <Route path="/audit-demo" element={<Navigate to="/audit-preview/demo" replace />} />
         <Route path="/analytics" element={<PrivateRoute><Analytics /></PrivateRoute>} />
         <Route path="/review-requests" element={<PrivateRoute><ReviewRequests /></PrivateRoute>} />
         <Route path="/owner" element={<PrivateRoute><OwnerDashboard /></PrivateRoute>} />

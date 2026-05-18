@@ -100,6 +100,46 @@ export default function AuditPreview() {
       setState({ status: 'error', data: null, error: 'No token' });
       return;
     }
+    // Public demo audit — `token === 'demo'` short-circuits the API call
+    // and serves a hardcoded sample audit. Built 2026-05-19 per page-flow
+    // audit v2 build-first #1: prospects landing on /pricing without an
+    // outreach link previously had no way to see what an audit looks like.
+    // Hardcoded > seeded-via-API because (a) can't be accidentally
+    // deleted, (b) zero API roundtrip, (c) we control exactly what the
+    // demo shows. The reviews + drafts below were curated to cover the
+    // 3-tone range a real prospect would care about: a warm 5-star, a
+    // mixed 3-star with actionable feedback, and a critical 1-star
+    // that demonstrates careful empathy-without-admission-of-fault.
+    if (token === 'demo') {
+      setState({
+        status: 'ok',
+        data: {
+          business_name: 'Common Grounds (sample cafe)',
+          reviews: [
+            {
+              reviewer_name: 'Alex Tan',
+              rating: 5,
+              text: "Walked in on a Sunday afternoon looking for a quiet place to read. Found exactly that — the cold brew was excellent, the seating tucked into corners felt private, and the barista remembered I'd asked for less ice the second time I went up. Small touches. Will be back.",
+              draft: "Alex — thanks for noticing the small things. The 'remembered the less-ice' move was Beam's; she'll be glad to hear it landed. Sunday afternoons are when we deliberately keep the playlist quiet so the corner seats feel like they're meant for what you used them for. See you next visit.",
+            },
+            {
+              reviewer_name: 'Wassana K.',
+              rating: 3,
+              text: "Coffee is good but the wait on Saturday morning was 25 minutes. I get it, you're popular, but maybe an 'order ahead via LINE' option? Otherwise solid spot. Pastries were fresh.",
+              draft: "Wassana — 25 minutes on a Saturday is too long, you're right. The LINE order-ahead idea is genuinely good and we've been talking about it; if you wouldn't mind dropping me a DM @commongroundsbkk I'd love to ask you what the ideal version of that would look like before we build it. Glad the pastries held up.",
+            },
+            {
+              reviewer_name: 'James Reeves',
+              rating: 1,
+              text: "Asked for oat milk and was given soy. When I pointed it out the staff member rolled his eyes and made a comment in Thai I couldn't understand but the tone was clear. Walked out without drinking the coffee. Won't return.",
+              draft: "James — I'm sorry. The wrong-milk part happens; the eye-roll and the comment shouldn't, ever. I'd like to understand what actually happened from our side before I say anything else — could you email me directly at owner@commongroundsbkk.com with the day and rough time? I want to talk to whoever was on bar. And whether you come back or not, the coffee that day was on us.",
+            },
+          ],
+        },
+        error: '',
+      });
+      return;
+    }
     let cancelled = false;
     api.get(`/audit-previews/share/${encodeURIComponent(token)}`)
       .then(({ data }) => {

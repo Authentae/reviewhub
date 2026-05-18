@@ -861,36 +861,82 @@ export default function Dashboard() {
             <p className="font-semibold text-gray-700 dark:text-gray-300">{t('dashboard.loading')}</p>
           </div>
         ) : !data?.reviews?.length ? (
-          <div className="card p-12 text-center">
-            <p className="text-4xl mb-3" aria-hidden="true">{responded === 'no' ? '🎉' : '📭'}</p>
-            <p className="font-semibold text-gray-700 dark:text-gray-300 mb-1">
-              {responded === 'no'
-                ? t('dashboard.allCaughtUp')
-                : hasFilters ? t('dashboard.noReviewsMatch') : t('dashboard.noReviewsYet')}
-            </p>
-            {responded === 'no'
-              ? <button type="button" onClick={clearFilters} className="btn-secondary text-sm mt-3">{t('dashboard.viewAll')}</button>
-              : hasFilters
-              ? <button type="button" onClick={clearFilters} className="btn-secondary text-sm mt-3">{t('dashboard.clearFilters')}</button>
-              : (
-                // Fresh-account path — guide the user to connect their first
-                // platform in Settings rather than push them to load fake data.
-                // Test-data button stays in the header; this is the primary CTA.
-                <div className="mt-4 flex flex-col items-center gap-2">
-                  <p className="text-sm text-gray-500 dark:text-gray-400 max-w-md">
-                    {t('dashboard.noReviewsOnboardHint')}
-                  </p>
-                  {/* SPA nav — a raw <a href> would full-page-reload */}
-                  <Link
-                    to="/settings"
-                    className="btn-primary text-sm inline-block mt-1"
-                  >
-                    {t('dashboard.connectAPlatform')}
-                  </Link>
-                </div>
-              )
+          (() => {
+            // 3-way split for the empty state, depending on the underlying
+            // cause. Per page-flow audit v2 build-first #5 (2026-05-19): the
+            // silent window between "I connected Google in Settings" and
+            // "first reviews appear in the dashboard" was previously
+            // collapsed into a single 'connect a platform' CTA — even when
+            // the user HAD connected. New customer waiting for the first
+            // poll thought the product was broken.
+            //
+            // Branch 1: responded='no' filter active → "all caught up" 🎉
+            // Branch 2: any filter active (search, etc.) → "no match" 🔍
+            // Branch 3 (new): Google connected, no reviews yet → "first
+            //   reviews appearing in ~2 min" ⏳ (the post-connect pre-poll
+            //   transition state)
+            // Branch 4: not connected at all → "connect a platform" 📭
+            const isFilterEmptyResponded = responded === 'no';
+            const isFilterEmptyOther = hasFilters && !isFilterEmptyResponded;
+            const isPostConnectWaiting = !hasFilters && !!data?.business?.google_place_id;
+            const isFreshAccount = !hasFilters && !data?.business?.google_place_id;
+
+            let emoji, headline, body;
+            if (isFilterEmptyResponded) {
+              emoji = '🎉';
+              headline = t('dashboard.allCaughtUp');
+              body = null;
+            } else if (isFilterEmptyOther) {
+              emoji = '🔍';
+              headline = t('dashboard.noReviewsMatch');
+              body = null;
+            } else if (isPostConnectWaiting) {
+              emoji = '⏳';
+              headline = t('dashboard.firstPollWaiting', 'Connected — first reviews coming in');
+              body = t('dashboard.firstPollWaitingBody', "We're polling Google now. New reviews usually appear within a couple of minutes, and historical ones backfill over the next hour. You can leave this tab; we'll ping your chat when the first one lands.");
+            } else {
+              emoji = '📭';
+              headline = t('dashboard.noReviewsYet');
+              body = null;
             }
-          </div>
+            return (
+              <div className="card p-12 text-center">
+                <p className="text-4xl mb-3" aria-hidden="true">{emoji}</p>
+                <p className="font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  {headline}
+                </p>
+                {body && (
+                  <p className="text-sm text-gray-500 dark:text-gray-400 max-w-md mx-auto mt-2">
+                    {body}
+                  </p>
+                )}
+                {isFilterEmptyResponded
+                  ? <button type="button" onClick={clearFilters} className="btn-secondary text-sm mt-3">{t('dashboard.viewAll')}</button>
+                  : isFilterEmptyOther
+                  ? <button type="button" onClick={clearFilters} className="btn-secondary text-sm mt-3">{t('dashboard.clearFilters')}</button>
+                  : isPostConnectWaiting
+                  ? <Link to="/settings" className="btn-secondary text-sm inline-block mt-4">{t('dashboard.checkConnection', 'Check connection status')}</Link>
+                  : (
+                    // Fresh-account path — guide the user to connect their
+                    // first platform in Settings rather than push them to
+                    // load fake data. The OnboardingChecklist on /settings
+                    // will take them through the steps.
+                    <div className="mt-4 flex flex-col items-center gap-2">
+                      <p className="text-sm text-gray-500 dark:text-gray-400 max-w-md">
+                        {t('dashboard.noReviewsOnboardHint')}
+                      </p>
+                      <Link
+                        to="/settings"
+                        className="btn-primary text-sm inline-block mt-1"
+                      >
+                        {t('dashboard.connectAPlatform')}
+                      </Link>
+                    </div>
+                  )
+                }
+              </div>
+            );
+          })()
         ) : (
           <>
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">

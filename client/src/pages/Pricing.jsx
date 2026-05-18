@@ -316,6 +316,29 @@ export default function Pricing() {
             </div>
             <p className="rh-lede" style={{ maxWidth: '60ch' }}>{t('pricing.subheadline')}</p>
 
+            {/* Demo audit CTA — for prospects who landed on /pricing without
+                an outreach link, gives them a way to see what an actual audit
+                looks like before committing to a plan. Built 2026-05-19 per
+                page-flow audit v2: closing the "if you didn't come from an
+                outreach email you can't see a sample" gap. Routes to
+                /audit-demo → /audit-preview/demo (hardcoded sample). */}
+            <p style={{ marginTop: 12, fontSize: 14 }}>
+              <Link
+                to="/audit-demo"
+                className="plausible-event-name=PricingDemoAuditClick"
+                style={{
+                  color: 'var(--rh-teal-deep, #1e4d5e)',
+                  fontWeight: 600,
+                  textDecoration: 'underline',
+                  textUnderlineOffset: 3,
+                }}
+              >
+                {lang === 'th'
+                  ? 'หรือดูตัวอย่าง audit ก่อน — ไม่ต้องสมัคร →'
+                  : 'Or see a sample audit first — no signup →'}
+              </Link>
+            </p>
+
             {/* Monthly / annual + currency toggles, restyled */}
             <div className="rh-pricing-controls">
               <div role="radiogroup" aria-label={t('billing.cycle')} className="rh-seg">
