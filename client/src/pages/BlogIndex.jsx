@@ -294,6 +294,16 @@ export default function BlogIndex() {
   };
   const visiblePosts = filter === 'all' ? POSTS : POSTS.filter((p) => p.lang === filter);
 
+  // "NEW" badge on posts published in the last 7 days. Draws the eye
+  // to fresh content (Reader sees what changed since their last visit
+  // without parsing dates). Auto-expires — no manual badge maintenance.
+  const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+  const isFresh = (dateStr) => {
+    const t = Date.parse(dateStr);
+    if (Number.isNaN(t)) return false;
+    return (Date.now() - t) < SEVEN_DAYS_MS;
+  };
+
   usePageTitle(isThai ? 'บล็อก — เคล็ดลับการตอบรีวิว Google' : 'Blog — Google review-reply playbooks & templates');
   useSocialMeta({
     title: isThai ? 'บล็อก ReviewHub' : 'ReviewHub Blog',
@@ -392,6 +402,28 @@ export default function BlogIndex() {
                     color: 'var(--rh-ink, #1d242c)',
                   }}
                 >
+                  {isFresh(p.date) && (
+                    <span
+                      aria-label={isThai ? 'โพสต์ใหม่' : 'New post'}
+                      style={{
+                        display: 'inline-block',
+                        verticalAlign: 'middle',
+                        background: 'var(--rh-ochre-deep, #a07d20)',
+                        color: '#fff',
+                        fontFamily: 'JetBrains Mono, ui-monospace, monospace',
+                        fontSize: '10px',
+                        fontWeight: 600,
+                        letterSpacing: '0.1em',
+                        padding: '2px 7px',
+                        borderRadius: '3px',
+                        marginRight: '10px',
+                        position: 'relative',
+                        top: '-3px',
+                      }}
+                    >
+                      {isThai ? 'ใหม่' : 'NEW'}
+                    </span>
+                  )}
                   {p.title}
                 </h2>
                 <p className="text-base leading-relaxed" style={{ color: 'var(--rh-ink-2, #4a525a)' }}>

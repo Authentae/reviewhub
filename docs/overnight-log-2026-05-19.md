@@ -65,3 +65,20 @@ per the alternation rule.
 
 **Commit:** `content(blog): chatgpt-for-google-review-replies EN+TH`
 
+## Cycle 4 — 2026-05-19 ~04:25 ICT — visual
+
+**Shipped:** "NEW" badge on /blog index for posts <7 days old. Ochre
+pill (`#a07d20`) on JetBrains Mono, sits inline next to the h2 title.
+Auto-expires by date — no manual badge maintenance. Currently lights
+up on all posts dated 2026-05-12 → 2026-05-19 (ChatGPT post, etc.);
+will quietly age out as posts roll past the window. TH variant reads
+"ใหม่" via the existing `isThai` flag.
+
+**Why:** With 30+ posts in the index, fresh content was invisible —
+a returning reader couldn't see what changed since last visit without
+parsing the small mono date line. A 30px badge moves "what's new"
+from "scan all 30 dates" to "look for the orange." Visual ship,
+compounds on every future post for free.
+
+**Commit:** `feat(blog): NEW badge on posts under 7 days old`
+
