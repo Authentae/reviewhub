@@ -2692,6 +2692,88 @@ async function sendOnboardingEmail(userEmail, dayNumber, lang = 'en', unsubUrl =
   });
 }
 
+// Paid-checkout welcome email — fires immediately at /register submission
+// when signupSource === 'stripe'. Bridges the gap between Stripe charging
+// the card and Earth manually flipping plan='starter' (per the
+// first-stripe-customer-provisioning.md runbook).
+//
+// Sets honest expectations: payment landed, account on free tier RIGHT
+// NOW while Earth manually upgrades within 24h. We deliberately do NOT
+// claim "Starter is active" because until Earth runs the SQL, it isn't —
+// and getting caught in a lie on the first email to the first paying
+// customer ever would be a credibility disaster. Honest-with-action beats
+// optimistic-with-lag.
+const PAID_WELCOME_STRINGS = {
+  en: {
+    subject: (plan) => `Payment received — welcome to ReviewHub ${plan}`,
+    body: (clientUrl, plan, supportEmail) => `Hi there,
+
+Your payment for ReviewHub ${plan} just landed — thank you. That's real.
+
+What happens next:
+
+1. Your account is created on the free tier right now. I'm Earth (solo founder), and I personally upgrade each paying customer's plan flag within 24 hours. You'll get a one-line "you're on ${plan}" email from me once that's done — usually within a few hours of payment.
+
+2. Meanwhile you can start using everything: ${clientUrl}/settings — connect Google (1 min), connect LINE or Telegram (1 min), and the first new review on your business will ping your chat with an AI-drafted reply ready to copy.
+
+3. If anything looks off — wrong plan name, billing email mismatch, you wanted Pro/Business — just reply to this email. I read every one.
+
+A heads up: this is honest about being early. You're one of the first 10 paying customers. Things won't be polished; I'll be more responsive than a normal SaaS as a result. If you spot something that should work better, telling me directly is the fastest way it gets fixed.
+
+Thanks for trusting us with this.
+
+— Earth
+ReviewHub · Bangkok
+${supportEmail}`,
+  },
+  th: {
+    subject: (plan) => `รับการชำระเงินแล้ว — ยินดีต้อนรับสู่ ReviewHub ${plan}`,
+    body: (clientUrl, plan, supportEmail) => `สวัสดีครับ
+
+ได้รับการชำระเงินสำหรับ ReviewHub ${plan} แล้วครับ — ขอบคุณจริงๆ
+
+ขั้นตอนต่อไป:
+
+1. บัญชีของคุณถูกสร้างในแพ็กเกจฟรีก่อน ผมชื่อ Earth (founder คนเดียว) จะอัพเกรดให้เป็น ${plan} ด้วยตัวเองภายใน 24 ชั่วโมง (โดยปกติเร็วกว่านั้น) เมื่ออัพเกรดแล้วผมจะส่งอีเมลยืนยันสั้นๆ ให้
+
+2. ระหว่างนี้ใช้งานได้เลย: ${clientUrl}/settings — เชื่อม Google (1 นาที) แล้วเชื่อม LINE หรือ Telegram (1 นาที) รีวิวใหม่จะส่งเข้ามาในแชทพร้อมคำตอบที่ AI ร่างไว้ให้ก๊อปวางได้เลย
+
+3. ถ้ามีอะไรผิด — ชื่อแพ็กเกจไม่ตรง อีเมลเก็บเงินผิด หรือต้องการ Pro/Business — ตอบกลับอีเมลนี้ได้เลย ผมอ่านทุกฉบับ
+
+อยากบอกตรงๆ ว่าเรายังเป็นช่วงเริ่มต้น คุณเป็นหนึ่งใน 10 ลูกค้าแรก สิ่งต่างๆ ยังไม่ขัดเรียบเท่า SaaS ใหญ่ๆ แต่ผมจะตอบกลับเร็วกว่ามากเพราะเหตุนี้แหละ ถ้าเจออะไรที่น่าจะทำได้ดีกว่านี้ บอกผมตรงๆ คือทางที่เร็วที่สุดที่จะแก้
+
+ขอบคุณที่ไว้วางใจครับ
+
+— Earth
+ReviewHub · กรุงเทพฯ
+${supportEmail}`,
+  },
+};
+
+async function sendPaidCheckoutWelcome(userEmail, plan = 'Starter', lang = 'en') {
+  const ls = PAID_WELCOME_STRINGS[lang] || PAID_WELCOME_STRINGS.en;
+  const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+  const supportEmail = 'earth@reviewhub.review';
+  // Title-case plan name for the subject line ("starter" → "Starter").
+  const planLabel = plan.charAt(0).toUpperCase() + plan.slice(1).toLowerCase();
+  const subject = ls.subject(planLabel);
+  const text = ls.body(clientUrl, planLabel, supportEmail);
+  const html = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:15px;color:#1d242c;line-height:1.6;max-width:560px;margin:0 auto;padding:24px 16px;">${escapeHtml(text).replace(/\n/g, '<br>')}</div>`;
+  const transporter = getTransporter();
+  if (!transporter) {
+    console.log(`[EMAIL] Paid checkout welcome (${plan}, ${lang}) → ${userEmail}: ${subject}`);
+    return;
+  }
+  await transporter.sendMail({
+    from: process.env.SMTP_FROM || 'ReviewHub <hello@reviewhub.review>',
+    to: userEmail,
+    replyTo: 'earth@reviewhub.review',
+    subject,
+    html,
+    text,
+  });
+}
+
 // Outbound-audit view notifications — fired when a prospect opens a
 // share URL the founder DM'd them. The signal is "this lead just
 // engaged" — most valuable response window is the next ~30 minutes,
@@ -3053,11 +3135,13 @@ module.exports = {
   sendReviewRequest,
   sendErasureConfirmation,
   sendOnboardingEmail,
+  sendPaidCheckoutWelcome,
   sendAuditViewNotification,
   sendAuditFollowupReminder,
   sendMagicLinkEmail,
   verifySmtp,
   portBlockHint,
+  getTransporter,
 };
 
 // Magic-link sign-in email. Single button + paste-fallback URL.

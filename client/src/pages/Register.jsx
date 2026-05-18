@@ -35,6 +35,7 @@ export default function Register() {
   // looks up the user by email, runs a 1-line SQL to mark them paid.
   const fromStripe = searchParams.get('from') === 'stripe'
     && searchParams.get('checkout_success') === '1';
+  const fromAudit = searchParams.get('from') === 'audit';
   const stripePlan = fromStripe ? (searchParams.get('plan') || 'starter') : null;
   useEffect(() => {
     const from = searchParams.get('from');
@@ -109,6 +110,15 @@ export default function Register() {
         // booleans are more than UI state — they're the contractual assent.
         acceptedTerms: true,
         ageConfirmed: true,
+        // Signup attribution — tells server whether to send the regular
+        // free-tier welcome path or the paid-checkout acknowledgement
+        // email path (which sets a different expectation: "we got your
+        // payment, you'll be fully activated within 24h" vs "you're in,
+        // start using the free tier"). The audit-page funnel adds
+        // 'audit' so we can split signup-from-cold-outreach from
+        // organic signup in retention cohort analysis later.
+        signupSource: fromStripe ? 'stripe' : (fromAudit ? 'audit' : 'organic'),
+        signupPlan: fromStripe ? stripePlan : null,
       });
       setToken(data.token);
       // replace: true so clicking back doesn't return to /register

@@ -40,7 +40,7 @@ function isValidEmail(s) {
   return typeof s === 'string' && s.length <= EMAIL_MAX_LEN && EMAIL_RE.test(s);
 }
 const { generateToken, hashToken, verifyUnsubToken } = require('../lib/tokens');
-const { sendVerificationEmail, sendPasswordResetEmail, sendMfaCode, sendEmailChangeAlert, sendEmailChangeConfirmation, portBlockHint } = require('../lib/email');
+const { sendVerificationEmail, sendPasswordResetEmail, sendMfaCode, sendEmailChangeAlert, sendEmailChangeConfirmation, sendPaidCheckoutWelcome, portBlockHint } = require('../lib/email');
 const { logAudit } = require('../lib/audit');
 const { captureException } = require('../lib/errorReporter');
 const {
@@ -204,6 +204,54 @@ router.post('/register', authAttemptLimiter, require('../middleware/honeypot').h
       sendVerificationEmail(email, clientUrl(`/verify-email?token=${verify.plaintext}`), preferredLang),
       'verification'
     );
+
+    // Stripe-paid signup path. The client passes signupSource='stripe' when
+    // the user came in via /register?from=stripe&checkout_success=1 (which
+    // means they JUST paid via Stripe Payment Link). Send a dedicated
+    // payment-received welcome so the user isn't confused by the regular
+    // free-tier "you're in" tone — they paid $14, they need acknowledgement.
+    // The subscription plan flag stays 'free' until Earth manually flips
+    // it per docs/runbooks/first-stripe-customer-provisioning.md; the
+    // welcome email is honest about that gap ("upgraded within 24h").
+    // Also fires a founder alert so Earth gets pinged the moment a Stripe
+    // signup completes registration (separate signal from the Stripe email
+    // receipt, which can be missed).
+    const rawSource = (req.body.signupSource || 'organic').toString().toLowerCase();
+    const signupSource = ['stripe', 'audit', 'organic'].includes(rawSource) ? rawSource : 'organic';
+    const signupPlan = (req.body.signupPlan || 'starter').toString().toLowerCase().slice(0, 32);
+    if (signupSource === 'stripe') {
+      sendEmailInBackground(
+        sendPaidCheckoutWelcome(email, signupPlan, preferredLang),
+        'paid-checkout-welcome'
+      );
+      // Alert founder for manual provisioning — separate signal from
+      // Stripe's own email receipt (which can land in spam). Uses the
+      // nodemailer transporter directly since this is a one-off
+      // founder-facing notification that doesn't need full template
+      // i18n / HTML / unsubscribe headers.
+      const founderAlert = process.env.FOUNDER_ALERT_EMAIL || 'earth.reviewhub@gmail.com';
+      sendEmailInBackground(
+        (async () => {
+          const { getTransporter } = require('../lib/email');
+          const transporter = typeof getTransporter === 'function' ? getTransporter() : null;
+          if (!transporter) {
+            console.log(`[EMAIL] Founder alert (no SMTP) — Stripe signup: ${email} plan=${signupPlan} user=${userId}`);
+            return;
+          }
+          await transporter.sendMail({
+            from: process.env.SMTP_FROM || 'ReviewHub <hello@reviewhub.review>',
+            to: founderAlert,
+            subject: `🎉 New Stripe signup — ${email} (${signupPlan})`,
+            text:
+              `New paying customer just completed /register after Stripe checkout.\n\n` +
+              `Email: ${email}\nPlan: ${signupPlan}\nUser ID: ${userId}\nLang: ${preferredLang}\n\n` +
+              `Manual provisioning runbook: docs/runbooks/first-stripe-customer-provisioning.md\n` +
+              `Provisioning SQL:\n  UPDATE subscriptions SET plan='${signupPlan}', status='active' WHERE user_id=${userId};\n`,
+          });
+        })(),
+        'founder-stripe-alert'
+      );
+    }
 
     // Still issue a JWT so the user can start using the app immediately.
     // Verification is not required to log in; it's a soft prompt shown in the UI.
