@@ -188,8 +188,12 @@ describe('ClaimBusinessButton', () => {
     await screen.findByRole('dialog');
     expect(screen.getByText('0/500')).toBeInTheDocument();
     await user.type(screen.getByLabelText(/anything we should know/i), 'hello');
-    // findByText auto-waits for the next render — the synchronous getByText
-    // raced React's state-flush on CI ~5% of runs, breaking ci.yml's vitest job.
-    expect(await screen.findByText('5/500')).toBeInTheDocument();
+    // findByText auto-waits for the next render. CI runners are slower than
+    // local dev — default timeout (1000ms) is enough locally but flakes
+    // intermittently in GitHub Actions (the React state flush after userEvent
+    // type is sometimes >1s on a small runner). Explicit 4000ms timeout gives
+    // safety margin without hiding a real regression (regression would still
+    // never resolve to '5/500'). Confirmed flake on commit baef4fb 2026-05-19.
+    expect(await screen.findByText('5/500', undefined, { timeout: 4000 })).toBeInTheDocument();
   });
 });
