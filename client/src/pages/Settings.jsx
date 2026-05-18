@@ -804,6 +804,148 @@ function ChannelHeader({ brand, title, subtitle, connected, isThai }) {
 // 3. `linked: false` → render the link flow: Generate token → show
 //    the `/link <token>` command + a copy button + the "Open
 //    @bot_id in LINE" deep link.
+// OnboardingChecklist — shown at the top of Settings ONLY while a step is
+// incomplete. Disappears entirely once the customer has connected Google +
+// at least one chat channel (LINE or Telegram). Built 2026-05-19 per the
+// page-flow audit's #1 build-first item: "biggest single risk for first
+// paying customer is post-Stripe onboarding handoff to a flat Settings page
+// with no first-step guidance."
+//
+// Fetches both LINE and Telegram statuses on mount so it can show accurate
+// check states without requiring parent refactor. Polls every 8s for the
+// first 60s after mount so the checklist updates promptly when the customer
+// finishes a connect in another tab (e.g. just scanned the LINE QR).
+function OnboardingChecklist({ business, lang }) {
+  const [lineLinked, setLineLinked] = useState(null); // null = loading
+  const [tgLinked, setTgLinked] = useState(null);
+  const isThai = lang === 'th';
+
+  useEffect(() => {
+    let cancelled = false;
+    let pollCount = 0;
+    function load() {
+      Promise.all([
+        api.get('/line-oa/status').then(({ data }) => data?.linked).catch(() => false),
+        api.get('/telegram/status').then(({ data }) => data?.linked).catch(() => false),
+      ]).then(([line, tg]) => {
+        if (cancelled) return;
+        setLineLinked(line);
+        setTgLinked(tg);
+      });
+    }
+    load();
+    // Poll every 8s for first 60s so the checklist refreshes promptly
+    // when the customer completes a LINE/Telegram link in another tab.
+    const id = setInterval(() => {
+      if (cancelled || pollCount >= 7) { clearInterval(id); return; }
+      pollCount++;
+      load();
+    }, 8000);
+    return () => { cancelled = true; clearInterval(id); };
+  }, []);
+
+  const googleDone = !!business?.google_place_id;
+  const chatDone = lineLinked === true || tgLinked === true;
+
+  // Hide the entire checklist once the customer is set up. Avoids
+  // permanent visual noise for established customers — they don't need
+  // to see a checklist they've already cleared.
+  if (googleDone && chatDone) return null;
+
+  // Don't render while we still don't know LINE/TG state. Avoids a
+  // flash-of-incomplete-checklist that then resolves into "actually
+  // you're done" 200ms later.
+  if (lineLinked === null || tgLinked === null) return null;
+
+  const stepsDone = (googleDone ? 1 : 0) + (chatDone ? 1 : 0);
+  const totalSteps = 2;
+
+  const Step = ({ done, num, label, helper, anchor }) => (
+    <li className="flex items-start gap-3 py-2">
+      <span
+        aria-hidden="true"
+        className="grid place-items-center rounded-full flex-shrink-0"
+        style={{
+          width: 24, height: 24, marginTop: 2,
+          background: done ? 'var(--rh-sage, #6b8e7a)' : 'var(--rh-paper, #fbf8f1)',
+          color: done ? '#fff' : 'var(--rh-ink, #1d242c)',
+          border: done ? 'none' : '1px solid var(--rh-rule, #e6dfce)',
+          fontSize: 12, fontWeight: 700,
+        }}
+      >
+        {done ? '✓' : num}
+      </span>
+      <div className="flex-1">
+        <a
+          href={`#${anchor}`}
+          className="text-sm font-semibold"
+          style={{
+            color: done ? 'var(--rh-ink-3, #7a8189)' : 'var(--rh-ink, #1d242c)',
+            textDecoration: done ? 'line-through' : 'none',
+            opacity: done ? 0.7 : 1,
+          }}
+        >
+          {label}
+        </a>
+        {!done && helper && (
+          <div className="text-xs mt-0.5" style={{ color: 'var(--rh-ink-2, #4a525a)' }}>
+            {helper}
+          </div>
+        )}
+      </div>
+    </li>
+  );
+
+  return (
+    <section
+      aria-labelledby="onboarding-checklist-heading"
+      className="card p-5 mb-6"
+      style={{
+        background: 'color-mix(in oklab, var(--rh-teal, #1e4d5e) 6%, var(--rh-paper, #fbf8f1))',
+        border: '1px solid color-mix(in oklab, var(--rh-teal, #1e4d5e) 30%, var(--rh-rule, #e6dfce))',
+      }}
+    >
+      <div className="flex items-center justify-between gap-3 flex-wrap mb-3">
+        <h2
+          id="onboarding-checklist-heading"
+          className="text-base font-semibold"
+          style={{ color: 'var(--rh-ink, #1d242c)', margin: 0 }}
+        >
+          {isThai ? `เริ่มต้นใช้งาน — เหลืออีก ${totalSteps - stepsDone} ขั้นตอน` : `Get started — ${totalSteps - stepsDone} step${totalSteps - stepsDone === 1 ? '' : 's'} left`}
+        </h2>
+        <span className="text-xs font-mono" style={{ color: 'var(--rh-ink-3, #7a8189)', letterSpacing: '0.06em' }}>
+          {stepsDone}/{totalSteps}
+        </span>
+      </div>
+      <p className="text-xs mb-2" style={{ color: 'var(--rh-ink-2, #4a525a)' }}>
+        {isThai
+          ? 'ตั้งค่าเสร็จใน 2 นาที — รีวิวใหม่จะเด้งเข้าแชทพร้อมร่างคำตอบของคุณ'
+          : 'Two minutes of setup — new reviews then ping your chat with an AI-drafted reply.'}
+      </p>
+      <ul className="list-none p-0 m-0">
+        <Step
+          done={googleDone}
+          num="1"
+          label={isThai ? 'เชื่อม Google location' : 'Connect Google location'}
+          helper={isThai
+            ? 'เพื่อให้เราดึงรีวิวใหม่ของคุณมาได้'
+            : "So we can poll your business's new reviews."}
+          anchor="settings-platforms"
+        />
+        <Step
+          done={chatDone}
+          num="2"
+          label={isThai ? 'เชื่อม LINE หรือ Telegram' : 'Connect LINE or Telegram'}
+          helper={isThai
+            ? 'เพื่อให้เราส่งดราฟต์ตอบรีวิวเข้าแชทคุณ'
+            : 'So we can ping you with drafts in chat — your daily app, not another tab.'}
+          anchor="settings-notifications"
+        />
+      </ul>
+    </section>
+  );
+}
+
 function LineConnectSection() {
   const { lang } = useI18n();
   const isThai = lang === 'th';
@@ -3397,6 +3539,12 @@ export default function Settings() {
           />
         )}
 
+        {/* Onboarding checklist — only renders for new customers who
+            haven't completed setup. Hides itself once Google + chat
+            channel are connected. See OnboardingChecklist component
+            (above) for the full rationale. */}
+        <OnboardingChecklist business={business} lang={lang} />
+
         {/* Business profile */}
         <section className="mb-6" aria-labelledby="settings-biz-profile">
           <h2 id="settings-biz-profile" className="text-base font-semibold text-gray-700 dark:text-gray-300 mb-3">{t('settings.businessProfile')}</h2>
@@ -3440,7 +3588,7 @@ export default function Settings() {
             below (where alerts are PUSHED TO). Two distinct concepts;
             previous flat list confused owners on whether LINE was a
             review source. */}
-        <section className="mb-6" aria-labelledby="settings-platforms">
+        <section id="settings-platforms" className="mb-6" aria-labelledby="settings-platforms-heading">
           <div className="flex items-center justify-between mb-1">
             <h2 id="settings-platforms" className="text-base font-semibold text-gray-700 dark:text-gray-300">{t('settings.connectedPlatforms')}</h2>
             {Object.keys(connections).length > 0 && (
@@ -3483,7 +3631,7 @@ export default function Settings() {
             international fallback. Both share the brand-stripe + logo
             visual pattern from ChannelHeader so they read as a coherent
             "pick how I want to be notified" group. */}
-        <section className="mb-6" aria-labelledby="settings-notifications">
+        <section id="settings-notifications" className="mb-6" aria-labelledby="settings-notifications-heading">
           <div className="mb-3">
             <h2 id="settings-notifications" className="text-base font-semibold text-gray-700 dark:text-gray-300">
               {lang === 'th' ? 'ช่องทางการแจ้งเตือน' : 'Notification channels'}

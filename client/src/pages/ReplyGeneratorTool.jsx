@@ -462,10 +462,10 @@ export default function ReplyGeneratorTool() {
             other platforms.
           </p>
           <div className="flex items-center gap-3 flex-wrap">
-            <Link to="/register" className="btn-primary text-sm">
+            <Link to="/register" className="plausible-event-name=GeneratorRegisterClick btn-primary text-sm">
               Sign up free (no card needed)
             </Link>
-            <Link to="/pricing" className="btn-secondary text-sm">
+            <Link to="/pricing" className="plausible-event-name=GeneratorPricingClick btn-secondary text-sm">
               See pricing
             </Link>
           </div>

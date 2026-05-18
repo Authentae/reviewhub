@@ -359,13 +359,22 @@ export default function ReviewImpactTool() {
               <p className="text-sm mb-3" style={{ color: 'var(--rh-ink-2, #4a525a)' }}>
                 <strong style={{ color: 'var(--rh-ink, #1d242c)' }}>Want help drafting the actual reply?</strong> ReviewHub generates owner-tone replies in your voice — paste this review (or all your unanswered ones) into a free audit.
               </p>
-              <Link
-                to="/audit"
-                className="inline-block px-5 py-2.5 rounded-lg font-semibold text-sm"
-                style={{ background: 'var(--rh-teal, #1e4d5e)', color: '#fff', textDecoration: 'none' }}
-              >
-                Get a free audit →
-              </Link>
+              <div className="flex gap-3 flex-wrap">
+                <Link
+                  to="/audit"
+                  className="plausible-event-name=ImpactAuditClick inline-block px-5 py-2.5 rounded-lg font-semibold text-sm"
+                  style={{ background: 'var(--rh-teal, #1e4d5e)', color: '#fff', textDecoration: 'none' }}
+                >
+                  Get a free audit →
+                </Link>
+                <Link
+                  to="/pricing"
+                  className="plausible-event-name=ImpactPricingClick inline-block px-5 py-2.5 rounded-lg font-semibold text-sm"
+                  style={{ border: '1px solid var(--rh-rule, #e8e3d6)', background: 'var(--rh-card)', color: 'var(--rh-ink, #1d242c)', textDecoration: 'none' }}
+                >
+                  See pricing
+                </Link>
+              </div>
             </div>
           </section>
         )}

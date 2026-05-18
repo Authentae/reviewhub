@@ -325,17 +325,17 @@ export default function ReplyRoasterTool() {
               <div className="flex gap-3 flex-wrap">
                 <Link
                   to="/audit"
-                  className="px-4 py-2 rounded-lg text-sm font-semibold"
+                  className="plausible-event-name=RoasterAuditClick px-4 py-2 rounded-lg text-sm font-semibold"
                   style={{ background: 'var(--rh-teal, #1e4d5e)', color: '#fff', textDecoration: 'none' }}
                 >
                   Get a free audit →
                 </Link>
                 <Link
-                  to="/tools/review-reply-generator"
-                  className="px-4 py-2 rounded-lg text-sm font-semibold"
+                  to="/pricing"
+                  className="plausible-event-name=RoasterPricingClick px-4 py-2 rounded-lg text-sm font-semibold"
                   style={{ border: '1px solid var(--rh-rule, #e8e3d6)', background: 'var(--rh-card)', color: 'var(--rh-ink, #1d242c)', textDecoration: 'none' }}
                 >
-                  Or try the Reply Generator
+                  See pricing
                 </Link>
               </div>
             </div>

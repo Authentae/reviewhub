@@ -171,12 +171,16 @@ export default function Register() {
             <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
               {fromStripe
                 ? t('auth.createAccountAfterPay', 'One last step: create your account')
-                : t('auth.createAccount')}
+                : fromAudit
+                  ? t('auth.createAccountFromAudit', 'Save these drafts to your dashboard')
+                  : t('auth.createAccount')}
             </h1>
             <p className="text-gray-500 dark:text-gray-400 mt-1.5 text-sm">
               {fromStripe
                 ? t('auth.createAccountAfterPaySub', "Use the same email you paid with so we can match your subscription to your account.")
-                : t('auth.trialNote')}
+                : fromAudit
+                  ? t('auth.createAccountFromAuditSub', "Sign up free to keep the audit drafts you saw — plus get new ones drafted automatically for every new review.")
+                  : t('auth.trialNote')}
             </p>
           </div>
 

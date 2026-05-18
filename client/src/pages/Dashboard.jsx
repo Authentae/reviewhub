@@ -918,6 +918,26 @@ export default function Dashboard() {
                       // Refresh the navbar unresponded-count badge immediately
                       // (skip the 60s polling delay).
                       window.dispatchEvent(new CustomEvent('reviewhub:reviews-mutated'));
+                      // First-reply celebration — fires exactly once per
+                      // user, on the very first response they save. Marks
+                      // the user-locked "I've crossed the threshold" moment.
+                      // Strategic-audit ship 2026-05-19: previously this
+                      // moment was silent; first-time users have no signal
+                      // they did the right thing. localStorage flag survives
+                      // across sessions so we don't celebrate twice if a
+                      // tab gets restored. Plausible event lets us read
+                      // activation in funnel: how many signups reach the
+                      // "first reply" milestone?
+                      try {
+                        const KEY = 'rh_first_reply_celebrated';
+                        if (!localStorage.getItem(KEY)) {
+                          localStorage.setItem(KEY, new Date().toISOString());
+                          toast(t('dashboard.firstReplyCelebration', '🎉 First reply sent — this is the loop. New reviews will keep pinging you with drafts ready.'), 'success');
+                          if (typeof window.plausible === 'function') {
+                            try { window.plausible('FirstReplySent'); } catch { /* swallow */ }
+                          }
+                        }
+                      } catch { /* localStorage may be blocked in incognito; not critical */ }
                       // If the current page is now empty but reviews remain elsewhere, go back a page
                       if (res && res.reviews?.length === 0 && res.total > 0 && page > 1) {
                         const prev = page - 1;
