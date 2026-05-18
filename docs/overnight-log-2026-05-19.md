@@ -82,3 +82,25 @@ compounds on every future post for free.
 
 **Commit:** `feat(blog): NEW badge on posts under 7 days old`
 
+## Cycle 5 — 2026-05-19 ~04:40 ICT — code
+
+**Shipped:** Deleted 5 orphaned source files (~36 KB) + 3 associated
+tests. `scripts/find-orphans.js` flagged: `ClaimBusinessButton.jsx`,
+`ReviewResponse.jsx`, `ReviewResponseForm.jsx` (transitively dead —
+only used by ReviewResponse), `hooks/useFocusTrap.js`,
+`utils/accessibilityTester.js`. Cross-checked with `grep -rn` to
+confirm no remaining importers outside `__tests__/` and a stale
+comment in ReviewResponseForm. i18n keys left in `translations.js`
+(low cost, useful templates if we re-add public owner responses).
+Build clean, 170/170 client tests green.
+
+**Why:** Dead code is a compounding tax — every `grep`, every "find
+this symbol" search, every refactor pays it. ClaimBusinessButton in
+particular has been carrying a flaky test (#780, the "5/500" timeout
+we bumped 1s→4s earlier today) for a component nothing imports. The
+test was costing CI minutes for code on no production path. Removing
+the cluster shrinks the audit surface for future visual + code
+audits.
+
+**Commit:** `chore(client): delete 5 orphan files + 3 dead tests`
+
