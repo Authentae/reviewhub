@@ -21,6 +21,109 @@ const CURRENCY_META = {
   USD: { symbol: '$', position: 'prefix' },
   THB: { symbol: '฿', position: 'prefix' },
 };
+// Waitlist email-capture for gated tiers (Pro / Business). Replaces the
+// dead 'Coming soon' button with a real demand-signal instrument.
+// Submits to POST /api/waitlist; shows inline success state on 200.
+// Plausible event `WaitlistSignup` fires with the plan slug so we can
+// see in funnel analysis: pricing pageviews -> Pro waitlist signups vs
+// Business waitlist signups vs Stripe checkout clicks.
+function WaitlistInput({ plan, lang }) {
+  const [email, setEmail] = useState('');
+  const [state, setState] = useState('idle'); // 'idle' | 'loading' | 'ok' | 'error'
+  const [error, setError] = useState('');
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (state === 'loading' || state === 'ok') return;
+    setState('loading');
+    setError('');
+    try {
+      // Use raw fetch (not the auth-aware api client) — this is a
+      // public endpoint and the prospect is not logged in. The auth
+      // client would attach a session cookie that's harmless but adds
+      // a needless preflight on some browsers.
+      const res = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+        body: JSON.stringify({ email: email.trim(), plan, source: 'pricing' }),
+      });
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}));
+        setError(j.error || (lang === 'th' ? 'มีบางอย่างผิดพลาด ลองอีกครั้ง' : 'Something went wrong'));
+        setState('error');
+        return;
+      }
+      setState('ok');
+      if (typeof window.plausible === 'function') {
+        try { window.plausible('WaitlistSignup', { props: { plan } }); } catch { /* swallow */ }
+      }
+    } catch {
+      setError(lang === 'th' ? 'เครือข่ายมีปัญหา ลองอีกครั้ง' : 'Network error');
+      setState('error');
+    }
+  }
+
+  if (state === 'ok') {
+    return (
+      <div
+        className="rh-btn rh-btn-ghost"
+        style={{
+          justifyContent: 'center', width: '100%', cursor: 'default',
+          background: 'color-mix(in oklab, var(--rh-sage) 12%, var(--rh-paper))',
+          borderColor: 'color-mix(in oklab, var(--rh-sage) 35%, var(--rh-rule))',
+          color: 'var(--rh-ink)',
+          fontWeight: 600,
+        }}
+        role="status"
+        aria-live="polite"
+      >
+        ✓ {lang === 'th' ? 'รออีเมลจากเรานะคะ' : "We'll email you when it launches"}
+      </div>
+    );
+  }
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      style={{ display: 'flex', flexDirection: 'column', gap: 8, width: '100%' }}
+    >
+      <input
+        type="email"
+        required
+        value={email}
+        onChange={(e) => { setEmail(e.target.value); if (state === 'error') setState('idle'); }}
+        placeholder={lang === 'th' ? 'อีเมล' : 'your@email.com'}
+        aria-label={lang === 'th' ? 'อีเมลสำหรับรอแพ็กเกจ' : 'Email for waitlist'}
+        disabled={state === 'loading'}
+        style={{
+          padding: '10px 12px',
+          borderRadius: 8,
+          border: '1px solid var(--rh-rule)',
+          fontSize: 14,
+          background: 'var(--rh-paper, #fbf8f1)',
+          color: 'var(--rh-ink)',
+          minHeight: 42,
+        }}
+      />
+      <button
+        type="submit"
+        disabled={state === 'loading'}
+        className="rh-btn rh-btn-ghost"
+        style={{ justifyContent: 'center', width: '100%', cursor: state === 'loading' ? 'wait' : 'pointer', minHeight: 42 }}
+      >
+        {state === 'loading'
+          ? (lang === 'th' ? 'กำลังบันทึก…' : 'Saving…')
+          : (lang === 'th' ? 'แจ้งให้ทราบเมื่อเปิดใช้' : 'Notify me when it launches')}
+      </button>
+      {state === 'error' && error && (
+        <div style={{ fontSize: 12, color: 'var(--rh-rose, #c2566c)' }} role="alert">
+          {error}
+        </div>
+      )}
+    </form>
+  );
+}
+
 function formatPrice(n, currency, lang) {
   const m = CURRENCY_META[currency] || CURRENCY_META.USD;
   // Thai baht prices are whole numbers; USD might be whole. Use the user's
@@ -407,21 +510,16 @@ export default function Pricing() {
                             </Link>
                           );
                         }
-                        // Coming-soon plans render a disabled badge in
-                        // place of any clickable CTA — early-return so we
-                        // never offer a Stripe checkout for them.
+                        // Coming-soon plans render a real email-capture
+                        // waitlist instead of a dead 'Coming soon' button.
+                        // Strategic audit ship 2026-05-19 (option 2b):
+                        // converts dead pricing real-estate into a
+                        // demand-signal research instrument. If 5+ people
+                        // sign up for a tier over 30 days, that's the
+                        // validation needed to build it. 0 signups = kill
+                        // the tier with confidence.
                         if (isComingSoon) {
-                          return (
-                            <button
-                              type="button"
-                              disabled
-                              className={'rh-btn rh-btn-ghost'}
-                              style={{ justifyContent: 'center', width: '100%', cursor: 'not-allowed', opacity: 0.7 }}
-                              aria-label={t('pricing.ctaComingSoon', 'Coming soon — not available yet')}
-                            >
-                              {lang === 'th' ? 'เร็วๆ นี้' : 'Coming soon'}
-                            </button>
-                          );
+                          return <WaitlistInput plan={plan.id} lang={lang} />;
                         }
                         // Any non-current paid tier → Stripe Payment Link.
                         // Works for logged-out prospects AND logged-in

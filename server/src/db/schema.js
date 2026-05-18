@@ -962,6 +962,33 @@ function initSchema() {
     console.error('[DB] telegram_links table creation:', err.message);
   }
 
+  // waitlist_signups — captures email + which gated plan the prospect
+  // wants notified about (pro / business). Converts the previously-dead
+  // 'Coming soon' button on /pricing into a real demand signal. Ship
+  // 2026-05-19 per strategic-audit-2026-05-18.md option 2b.
+  //
+  // UNIQUE(email, plan) so re-submitting the same email/plan combo is a
+  // no-op (idempotent — no spam-fanout if a prospect double-clicks).
+  // Different email + same plan = separate row; different plan + same
+  // email = separate row (signals interest in both tiers).
+  try {
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS waitlist_signups (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        email TEXT NOT NULL,
+        plan TEXT NOT NULL,
+        source TEXT,
+        notified_at TEXT,
+        created_at TEXT DEFAULT (datetime('now')),
+        UNIQUE(email, plan)
+      );
+      CREATE INDEX IF NOT EXISTS idx_waitlist_signups_plan ON waitlist_signups(plan);
+      CREATE INDEX IF NOT EXISTS idx_waitlist_signups_created ON waitlist_signups(created_at);
+    `);
+  } catch (err) {
+    console.error('[DB] waitlist_signups table creation:', err.message);
+  }
+
   // Index token hashes so verify/reset lookups are O(log n) even at scale.
   // Partial indexes (WHERE … IS NOT NULL) keep them tiny — only rows with active tokens.
   try {
