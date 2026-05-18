@@ -143,3 +143,23 @@ marketing." Free-cost compounding fix.
 
 **Commit:** `visual(og): sync og-image with current landing hero copy`
 
+## Cycle 8 — 2026-05-19 ~05:25 ICT — content
+
+**Shipped:** New blog post `how-fast-should-you-reply-to-google-reviews`
+(EN + TH pair). Speed-target card per star rating (1★ = 4h same-day,
+2★ = same/next-day, 3★ = 48h, 4★ = week, 5★ = 2 weeks or weekly
+batch). Section on what slow replies signal (the day-8 reply being
+the worst-of-all). Closes with the friction analysis (no ambient
+trigger, clunky mobile UI, blank-page anxiety) and our fix. Sitemap
+and BlogIndex updated; post count 31→33.
+
+**Why:** Direct alignment with the new og-image / landing hero
+("Reply to Google reviews in 10 seconds — from your phone"). The
+search query "how fast should you reply to google reviews" has
+intent and no existing post covered it. Differentiated angle
+(asymmetric by star rating) keeps the post from being commodity
+SEO content. Compounds — every Wave-5 prospect Googling this
+question is a warm lead.
+
+**Commit:** `content(blog): how-fast-should-you-reply EN+TH`
+

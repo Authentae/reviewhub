@@ -23,6 +23,22 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'how-fast-should-you-reply-to-google-reviews',
+    title: 'How fast should you reply to Google reviews? (and what slow replies signal)',
+    description: 'The honest answer on response speed for Google reviews — what fast looks like, why same-day matters more for 1-stars than 5-stars, and how to stop using slow as a default.',
+    date: '2026-05-19',
+    readingMins: 4,
+    lang: 'en',
+  },
+  {
+    slug: 'how-fast-should-you-reply-to-google-reviews-th',
+    title: 'ตอบรีวิว Google เร็วแค่ไหนถึงจะดี? (และคำตอบช้าบอกอะไรลูกค้า)',
+    description: 'คำตอบตรง ๆ เรื่องความเร็วในการตอบรีวิว Google — เร็วแค่ไหนถึงเรียกว่าเร็ว ทำไมรีวิว 1 ดาวต่างจาก 5 ดาว และวิธีไม่ทำให้ช้าเป็นเรื่องปกติ',
+    date: '2026-05-19',
+    readingMins: 4,
+    lang: 'th',
+  },
+  {
     slug: 'chatgpt-for-google-review-replies',
     title: 'ChatGPT for Google review replies — what works, what breaks',
     description: 'An honest look at using ChatGPT to draft Google review replies. Where it works fine, where it falls apart, and what to do when you have more than a handful of reviews to reply to each week.',
