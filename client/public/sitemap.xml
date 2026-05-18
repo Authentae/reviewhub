@@ -21,15 +21,7 @@
     <lastmod>2026-05-02</lastmod>
   </url>
   <url>
-    <loc>https://reviewhub.review/api-docs</loc>
-    <lastmod>2026-05-02</lastmod>
-  </url>
-  <url>
     <loc>https://reviewhub.review/audit</loc>
-    <lastmod>2026-05-05</lastmod>
-  </url>
-  <url>
-    <loc>https://reviewhub.review/for-restaurants</loc>
     <lastmod>2026-05-05</lastmod>
   </url>
   <url>
@@ -37,28 +29,8 @@
     <lastmod>2026-05-05</lastmod>
   </url>
   <url>
-    <loc>https://reviewhub.review/for-hotels</loc>
-    <lastmod>2026-05-05</lastmod>
-  </url>
-  <url>
     <loc>https://reviewhub.review/for-spas</loc>
     <lastmod>2026-05-05</lastmod>
-  </url>
-  <url>
-    <loc>https://reviewhub.review/for-cafes</loc>
-    <lastmod>2026-05-05</lastmod>
-  </url>
-  <url>
-    <loc>https://reviewhub.review/for-bars</loc>
-    <lastmod>2026-05-06</lastmod>
-  </url>
-  <url>
-    <loc>https://reviewhub.review/for-fitness</loc>
-    <lastmod>2026-05-06</lastmod>
-  </url>
-  <url>
-    <loc>https://reviewhub.review/for-pharmacies</loc>
-    <lastmod>2026-05-06</lastmod>
   </url>
   <url>
     <loc>https://reviewhub.review/blog/</loc>
@@ -67,14 +39,6 @@
   <url>
     <loc>https://reviewhub.review/changelog</loc>
     <lastmod>2026-05-05</lastmod>
-  </url>
-  <url>
-    <loc>https://reviewhub.review/roadmap</loc>
-    <lastmod>2026-05-04</lastmod>
-  </url>
-  <url>
-    <loc>https://reviewhub.review/status</loc>
-    <lastmod>2026-05-04</lastmod>
   </url>
   <url>
     <loc>https://reviewhub.review/support</loc>
@@ -233,19 +197,7 @@
     <lastmod>2026-05-06</lastmod>
   </url>
   <url>
-    <loc>https://reviewhub.review/vs/podium</loc>
-    <lastmod>2026-05-06</lastmod>
-  </url>
-  <url>
-    <loc>https://reviewhub.review/vs/reviewtrackers</loc>
-    <lastmod>2026-05-06</lastmod>
-  </url>
-  <url>
     <loc>https://reviewhub.review/vs/chatgpt</loc>
-    <lastmod>2026-05-08</lastmod>
-  </url>
-  <url>
-    <loc>https://reviewhub.review/vs/agency</loc>
     <lastmod>2026-05-08</lastmod>
   </url>
 </urlset>

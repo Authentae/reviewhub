@@ -65,23 +65,23 @@ const Changelog = lazy(() => import('./pages/Changelog'));
 // Roadmap — public, names what's shipped / building / considering / NOT
 // building. The "decided not to build" column lets prospects self-qualify
 // out before signing up. No Q-dated promises (they always slip).
-const Roadmap = lazy(() => import('./pages/Roadmap'));
+// Roadmap deleted 2026-05-19 — signal-of-incompleteness for pre-revenue product.
 // Status — public live snapshot of /api/health. Lets prospects checking
 // "is this thing actually working?" before signup get a green/red answer
 // in 1 second instead of inferring from anecdotes. Auto-refreshes 30s.
-const Status = lazy(() => import('./pages/Status'));
+// Status deleted 2026-05-19 — vanity uptime page for pre-revenue solo product.
 // /line — LINE-native positioning landing page. Built 2026-05-09 as
 // part of the LINE-pivot strategy. Frames ReviewHub as the
 // Bangkok-native review tool that fits how Thai SMBs actually work
 // (LINE OA, not Slack). CTA → /audit?from=line for attribution.
-const LinePivot = lazy(() => import('./pages/LinePivot'));
+// LinePivot deleted 2026-05-19 — pivot announcement page; content rolled into Landing.
 // /guide — central "How ReviewHub works" + getting-started walkthrough.
 // Closes the 17-signups → 1-activated gap by giving new users a clear
 // 4-step path. Linked from footer + onboarding emails + audit-preview FAQs.
 const Guide = lazy(() => import('./pages/Guide'));
 // /year-review/:year — auth-required printable recap of the year's
 // reviews. Aggregations only (no AI calls); cheap to render.
-const YearReview = lazy(() => import('./pages/YearReview'));
+// YearReview deleted 2026-05-19 — premature feature; no customer has a year of data.
 // /shared/:token — public read-only dashboard for accountants /
 // agency staff. No auth; share-token gates access.
 const Shared = lazy(() => import('./pages/Shared'));
@@ -95,7 +95,7 @@ const GoogleSignInDone = lazy(() => import('./pages/GoogleSignInDone'));
 const Support = lazy(() => import('./pages/Support'));
 // API docs — public TL;DR + cURL examples for the Business-plan API.
 // Marketing-page "API access" was reading as fluff; this page makes it real.
-const ApiDocs = lazy(() => import('./pages/ApiDocs'));
+// ApiDocs deleted 2026-05-19 — documented non-existent API; credibility risk.
 const OwnerDashboard = lazy(() => import('./pages/OwnerDashboard'));
 // Landing page after one-click unsubscribe (RFC 8058). Public — the server
 // applies the unsub, then redirects browser-clicks here as a confirmation.
@@ -187,30 +187,28 @@ export default function App() {
         <Route path="/audit" element={<AuditLanding />} />
         {/* Per-vertical SEO pages */}
         <Route path="/blog" element={<BlogIndex />} />
-        <Route path="/for-restaurants" element={<VerticalLanding vertical="restaurants" />} />
+        {/* Vertical-specific landings — Wave 5 (2026-05-19) narrowed
+            from 8 verticals to the 2 strongest segments from outreach
+            data (spas: 5/14 Wave 5 prospects; dentists: 2/14). Per
+            page-flow-audit-2026-05-19.md: pre-revenue solo SaaS should
+            not maintain 8 vertical surfaces before any vertical has
+            validated. Killed: restaurants, hotels, cafes, bars,
+            fitness, pharmacies. Re-add when a vertical earns a
+            paying customer. */}
         <Route path="/for-dentists" element={<VerticalLanding vertical="dentists" />} />
-        <Route path="/for-hotels" element={<VerticalLanding vertical="hotels" />} />
         <Route path="/for-spas" element={<VerticalLanding vertical="spas" />} />
-        <Route path="/for-cafes" element={<VerticalLanding vertical="cafes" />} />
-        <Route path="/for-bars" element={<VerticalLanding vertical="bars" />} />
-        <Route path="/for-fitness" element={<VerticalLanding vertical="fitness" />} />
-        <Route path="/for-pharmacies" element={<VerticalLanding vertical="pharmacies" />} />
+        {/* Competitor comparisons — narrowed to ChatGPT (the real
+            silent competitor) + Birdeye (the funded incumbent
+            prospects most often mention). reviewtrackers / agency /
+            podium killed as SEO inventory plays without conversion
+            evidence. */}
         <Route path="/vs/birdeye" element={<ComparisonLanding competitor="birdeye" />} />
-        <Route path="/vs/podium" element={<ComparisonLanding competitor="podium" />} />
-        <Route path="/vs/reviewtrackers" element={<ComparisonLanding competitor="reviewtrackers" />} />
         <Route path="/vs/chatgpt" element={<ComparisonLanding competitor="chatgpt" />} />
-        <Route path="/vs/agency" element={<ComparisonLanding competitor="agency" />} />
         <Route path="/changelog" element={<Changelog />} />
-        <Route path="/roadmap" element={<Roadmap />} />
-        <Route path="/line" element={<LinePivot />} />
         <Route path="/guide" element={<Guide />} />
-        <Route path="/status" element={<Status />} />
-        <Route path="/year-review/:year" element={<PrivateRoute><YearReview /></PrivateRoute>} />
-        <Route path="/shared/:token" element={<Shared />} />
         <Route path="/magic-login" element={<MagicLogin />} />
         <Route path="/auth/google/done" element={<GoogleSignInDone />} />
         <Route path="/support" element={<Support />} />
-        <Route path="/api-docs" element={<ApiDocs />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>

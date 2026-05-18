@@ -781,12 +781,7 @@ function Pricing() {
             <ul>
               <li><Check />{t('landing.plan.business1', 'Everything in Pro')}</li>
               <li><Check />{t('landing.plan.business2', 'Up to 5 businesses')}</li>
-              <li>
-                <Check />
-                <Link to="/api-docs" style={{ textDecoration: 'underline', textUnderlineOffset: 2 }}>
-                  {t('landing.plan.business3', 'API + webhooks (Zapier, n8n, custom)')}
-                </Link>
-              </li>
+              <li><Check />{t('landing.plan.business3', 'API + webhooks (Zapier, n8n, custom)')}</li>
               <li><Check />{t('landing.plan.business4', 'Priority support')}</li>
             </ul>
             <button type="button" disabled className="rh-btn rh-btn-ghost" style={{ cursor: 'not-allowed', opacity: 0.7, width: '100%' }}>
@@ -897,7 +892,6 @@ function Footer() {
                 <li><Link to="/login">{t('landing.footerDashboard', 'Dashboard')}</Link></li>
                 <li><Link to="/pricing">{t('landing.footerPricing', 'Pricing')}</Link></li>
                 <li><Link to="/changelog">{t('landing.footerChangelog', 'Changelog')}</Link></li>
-                <li><Link to="/roadmap">{t('landing.footerRoadmap', 'Roadmap')}</Link></li>
               </ul>
             </div>
             <div>
