@@ -182,3 +182,24 @@ ticket. Coverage matches the pattern set by waitlist tests yesterday.
 
 **Commit:** `test(support): cover validation + honeypot + header-injection + /me`
 
+## Cycle 10 — 2026-05-19 ~05:55 ICT — doc
+
+**Shipped:** New memory file
+`feedback_static_assets_drift_silently.md` — codifies the pattern
+behind cycle 7's og-image fix. Lists the class of static files that
+duplicate live-site copy (og-image.* / og-image-audit.* /
+x-header.* / manifest.webmanifest / feed.xml / blog quotes / index
+.html social-meta) and an end-of-session grep sweep to catch drift
+before another social-share preview goes stale. Added to MEMORY.md
+under a new section "When ending an autopilot / overnight session —
+run a drift sweep" so it gets auto-loaded.
+
+**Why:** Cycle 7 found a 6+ week drift (og-image still said
+"editorial dashboard"; the live hero says something different) that
+no test caught. Codifying the lesson is the only way to stop the
+same class of drift from re-accumulating between autopilot
+sessions. Memory file > inline TODO because memory is auto-loaded
+on every future session.
+
+**Commit:** `docs(memory): record static-asset drift pattern from cycle 7`
+
