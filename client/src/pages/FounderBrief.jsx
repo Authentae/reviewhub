@@ -216,6 +216,7 @@ export default function FounderBrief() {
   usePageTitle('Daily Brief — ReviewHub');
   useNoIndex();
   const [data, setData] = useState(null);
+  const [waitlist, setWaitlist] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [now, setNow] = useState(new Date());
@@ -224,11 +225,26 @@ export default function FounderBrief() {
     let cancelled = false;
     async function load() {
       try {
-        const res = await api.get('/admin/outreach-stats');
-        if (!cancelled) {
-          setData(res.data);
-          setLoading(false);
+        // Fetch both endpoints in parallel — the brief now surfaces
+        // Pro/Business waitlist signups alongside outreach views.
+        // Per page-flow audit v2 #4 (2026-05-19): glanceable demand
+        // signals without bouncing between dashboards.
+        // waitlist-stats failure is non-fatal — the brief still
+        // renders the outreach data if waitlist endpoint 500s.
+        const [outreachRes, waitlistRes] = await Promise.allSettled([
+          api.get('/admin/outreach-stats'),
+          api.get('/admin/waitlist-stats'),
+        ]);
+        if (cancelled) return;
+        if (outreachRes.status === 'fulfilled') {
+          setData(outreachRes.value.data);
+        } else {
+          throw outreachRes.reason;
         }
+        if (waitlistRes.status === 'fulfilled') {
+          setWaitlist(waitlistRes.value.data);
+        }
+        setLoading(false);
       } catch (err) {
         if (cancelled) return;
         const status = err?.response?.status;
@@ -441,6 +457,71 @@ export default function FounderBrief() {
             </p>
           )}
         </section>
+
+        {/* WAITLIST DEMAND SIGNAL — Pro/Business signups via /pricing.
+            Built 2026-05-19 per page-flow audit v2 #4. Glanceable so
+            we can read tier-level demand without bouncing dashboards.
+            Decision thresholds documented in waitlist.js: 5+ in 30d =
+            consider building; 0 in 30d = kill the tier with confidence.
+            Render only if the waitlist endpoint returned data. */}
+        {waitlist && waitlist.by_plan && (
+          <section style={{
+            padding: '24px 0', marginTop: 8,
+            borderTop: `1px solid ${C.hairline}`,
+          }}>
+            <Eyebrow color={C.ochre}>GATED-TIER DEMAND · LAST 30D</Eyebrow>
+            <div style={{
+              marginTop: 10,
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+              gap: 12,
+            }}>
+              {['pro', 'business'].map((p) => {
+                const row = waitlist.by_plan.find(r => r.plan === p);
+                const last30 = row?.last_30d || 0;
+                const total = row?.total || 0;
+                const decision = last30 >= 5 ? 'BUILD CANDIDATE' : last30 === 0 ? 'NO SIGNAL YET' : 'COLLECTING';
+                const decisionColor = last30 >= 5 ? C.sage : last30 === 0 ? C.inkDim : C.ochre;
+                return (
+                  <div key={p} style={{
+                    padding: '14px 16px',
+                    background: C.paper,
+                    border: `1px solid ${C.hairline}`,
+                    borderRadius: 8,
+                  }}>
+                    <div style={{ fontFamily: mono, fontSize: 11, color: C.inkDim, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                      {p.toUpperCase()} WAITLIST
+                    </div>
+                    <div style={{
+                      fontFamily: serif, fontSize: 28, fontWeight: 500,
+                      color: C.ink, lineHeight: 1.1, marginTop: 6,
+                    }}>
+                      {last30}
+                      <span style={{ fontSize: 14, color: C.inkDim, marginLeft: 6 }}>
+                        last 30d
+                      </span>
+                    </div>
+                    <div style={{ fontSize: 12, color: C.inkSoft, marginTop: 4 }}>
+                      {total} total · latest {row?.latest_at ? new Date(row.latest_at).toLocaleDateString() : 'never'}
+                    </div>
+                    <div style={{
+                      marginTop: 8, fontFamily: mono, fontSize: 10,
+                      letterSpacing: '0.08em', color: decisionColor,
+                    }}>
+                      → {decision}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <p style={{
+              margin: '12px 0 0', fontStyle: 'italic',
+              fontSize: 12, color: C.inkSoft,
+            }}>
+              Threshold: 5+ signups in 30d = real demand. 0 in 30d = kill the tier with confidence.
+            </p>
+          </section>
+        )}
 
         {/* SYSTEM HEALTH STRIP */}
         <section style={{

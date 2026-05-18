@@ -143,6 +143,51 @@ router.get('/outreach-stats', (req, res) => {
   }
 });
 
+// GET /api/admin/waitlist-stats — Pro/Business demand signal.
+//
+// The /pricing page replaces the dead 'Coming soon' buttons for gated
+// tiers with email-capture (see routes/waitlist.js). This endpoint
+// surfaces the resulting demand signal to the founder daily brief so
+// it's glanceable without bouncing between dashboards.
+//
+// Decision thresholds documented in waitlist.js + first-stripe-customer-
+// provisioning.md: 5+ signups for a plan over 30 days = real demand,
+// consider building. 0 signups in 30 days = kill the tier with confidence.
+router.get('/waitlist-stats', (req, res) => {
+  try {
+    const summary = all(
+      `SELECT plan,
+              COUNT(*) AS total,
+              COALESCE(SUM(CASE WHEN created_at >= datetime('now', '-30 days') THEN 1 ELSE 0 END), 0) AS last_30d,
+              COALESCE(SUM(CASE WHEN created_at >= datetime('now', '-7 days') THEN 1 ELSE 0 END), 0) AS last_7d,
+              MAX(created_at) AS latest_at
+         FROM waitlist_signups
+        GROUP BY plan
+        ORDER BY plan`
+    );
+    // Most recent 10 signups across all plans — useful for spotting
+    // the names. Excludes the email column from the response because
+    // (a) it's PII and (b) the brief page doesn't render it; the
+    // founder can query the DB directly if they want the full list.
+    const recent = all(
+      `SELECT plan, source, created_at
+         FROM waitlist_signups
+        ORDER BY created_at DESC
+        LIMIT 10`
+    );
+    res.setHeader('Cache-Control', 'no-store, private');
+    res.json({
+      ok: true,
+      by_plan: summary,
+      recent,
+      ts: new Date().toISOString(),
+    });
+  } catch (err) {
+    captureException(err, { route: 'admin.waitlist-stats' });
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // GET /api/admin/__whoami — diagnostic. Returns whether ADMIN_EMAIL is set
 // in the running process and whether the caller's email matches. No data
 // returned. Lets us debug "why is /api/admin/* returning 404" without
