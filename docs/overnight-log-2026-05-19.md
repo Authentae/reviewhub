@@ -243,3 +243,25 @@ sees fresh content.
 
 **Commit:** `content(feed): add 5 missing posts + bump lastBuildDate to 05-19`
 
+## Cycle 13 — 2026-05-19 ~06:40 ICT — code
+
+**Shipped:** New `scripts/check-blog-sync.js` script + pre-commit
+hook wiring. Cross-checks that every blog HTML in
+`client/public/blog/` has matching entries in:
+- `client/public/sitemap.xml`
+- `client/public/feed.xml`
+- `client/src/pages/BlogIndex.jsx` POSTS array
+
+Wired into `scripts/hooks/pre-commit` to fire whenever any of those
+four files change. Installs via `scripts/install-hooks.sh` (already
+ran locally). Validates 33 posts in sync today.
+
+**Why:** Cycle 12 fixed an 11-day drift in feed.xml. The right
+fix is structural — catch it at commit time so the next agent (or
+human) can't merge a new blog HTML without also updating all three
+indexes. Compounding: every future blog ship is guarded; we'll
+never accumulate another 5-post backlog of stale feed entries.
+Same shape as the existing blog-SEO + stale-positioning checks.
+
+**Commit:** `feat(hooks): pre-commit check that blog HTML matches sitemap/feed/index`
+

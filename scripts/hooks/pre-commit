@@ -28,6 +28,21 @@ if echo "$CHANGED" | grep -qE '^client/public/blog/.*\.html$'; then
   echo "✅ Blog SEO OK"
 fi
 
+# Blog-sync checker — runs whenever a blog HTML is added/removed or any of
+# the three indexes (sitemap.xml / feed.xml / BlogIndex.jsx) changes. Catches
+# the class of drift that hit us in cycle 12 (feed.xml stale by 11 days /
+# 5 posts) at commit time instead of "noticed later when nothing in Feedly
+# updated."
+if echo "$CHANGED" | grep -qE '^client/public/blog/.*\.html$|^client/public/sitemap\.xml$|^client/public/feed\.xml$|^client/src/pages/BlogIndex\.jsx$'; then
+  echo "🔍 Checking blog sync (sitemap / feed / BlogIndex)…"
+  node scripts/check-blog-sync.js > /tmp/rh-blog-sync.log 2>&1 || {
+    echo "❌ Blog sync check failed:"
+    cat /tmp/rh-blog-sync.log
+    exit 1
+  }
+  echo "✅ Blog sync OK"
+fi
+
 # Stale-positioning checker — runs when client source / i18n changes.
 # Catches Chrome extension / iOS app references that snuck back in.
 if echo "$CHANGED" | grep -qE '^client/src/(pages|components|i18n)/'; then
