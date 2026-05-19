@@ -847,3 +847,36 @@ No more "go open the original Sketch/Figma file" tax.
 
 **Commit:** `visual(x-avatar): add SVG source + regen entry (closes asset pipeline)`
 
+## Cycle 40 — 2026-05-19 ~13:25 ICT — content
+
+**Shipped:** Refreshed `README.md` — the public-facing GitHub repo
+landing page. Four targeted fixes (not a full rewrite — kept what
+was still accurate):
+- **Opening paragraph**: now mentions LINE/Telegram push + the
+  "real Google API + Places API fallback + CSV for 55+ others"
+  structure. Was misleadingly saying "Google-only until further
+  notice" + "scaffolded but not yet shipping" for Yelp/Facebook
+  etc — both ~6 months stale.
+- **Stack section**: added LINE Messaging API + Telegram Bot API
+  + sharp pipeline for brand assets.
+- **Providers section in Architecture**: documented the two
+  Google paths (BP API v4 vs Places API NEW) and clarified
+  CSV-import as the production path for non-Google platforms.
+  Added a Notifications subsection covering LINE/Telegram.
+- **Design system**: replaced the stale "slate-900 / blue-900 /
+  indigo-900 gradient" reference with the actual editorial palette
+  (rh-paper / rh-ink / rh-teal / rh-rose / rh-sage / rh-ochre)
+  + typography stack.
+- **New Pre-commit hooks section**: inventories the 4 guards a new
+  contributor needs to know about.
+
+**Why:** README is the GitHub landing page. Earth's outreach links,
+code reviews, future-hire onboarding — all start here. ~6 months of
+drift made the file confidently wrong about basics (the brand
+gradient was 2 brand systems old; the providers claim was
+contradicted by the live `/pricing` page Earth points prospects
+at). Public-facing doc accuracy is the single highest-leverage
+content fix at this point in the loop.
+
+**Commit:** `content(README): refresh openining + stack + providers + design system + hooks`
+

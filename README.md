@@ -1,21 +1,27 @@
 # ReviewHub
 
 The review dashboard for local businesses. Pull Google reviews into one
-feed; reply with AI-drafted responses (Thai or English); track sentiment
-and ratings over time. Yelp, Facebook, TripAdvisor, Trustpilot, and
-Wongnai integrations are scaffolded but not yet shipping reviews —
-treat the live product as **Google-only** until further notice.
+feed (real Business Profile API + Places API fallback); reply with
+AI-drafted responses in 10 languages; track sentiment and ratings over
+time. New reviews ping you on **LINE** or **Telegram** with an AI draft
+ready to copy-paste in Google. For Yelp, Facebook, TripAdvisor,
+Trustpilot, Wongnai, and 55+ other platforms, use CSV import — works
+on every plan.
 
 ## Stack
 
 - **Server** — Node.js (CommonJS) · Express · better-sqlite3 · bcryptjs ·
   jsonwebtoken · nodemailer · LemonSqueezy billing · Anthropic SDK for AI
-  drafts · helmet · express-rate-limit
+  drafts · helmet · express-rate-limit · LINE Messaging API + Telegram
+  Bot API for push notifications
 - **Client** — React 18 · Vite · Tailwind CSS · react-router-dom · axios · vitest
-- **Tests** — 557+ server (`node:test` + supertest) + 169+ client
-  (vitest + Testing Library) — green on every push via GitHub Actions.
-  Counts grow with new features; run `npm test` (server) and
-  `npx vitest run` (client) for the current totals.
+- **Brand assets** — All social-share PNGs (og-image, og-image-audit,
+  x-header, x-avatar, 7 favicon sizes) render from SVG sources via
+  `node scripts/regen-og-images.js` (sharp pipeline)
+- **Tests** — server (`node:test` + supertest) + client (vitest +
+  Testing Library) — green on every push via GitHub Actions. Counts
+  grow with new features; run `npm test` (server) and `npx vitest run`
+  (client) for the current totals.
 
 ## Running locally
 
@@ -114,11 +120,18 @@ use SQL directly against the DB file.
   `/api/billing/webhook` uses raw body + HMAC-SHA256 verification. Rate-limited
   60/min/IP. Plan catalogue lives in `server/src/lib/billing/plans.js` — edit
   there to change pricing/features; the client renders from `/api/plans`.
-- **Providers** — `server/src/lib/providers/`. Google is real (with
-  refresh-token rotation + Business Profile API v4 for reviews, requires
-  Google allowlist for the reviews endpoint). Yelp/Facebook/TripAdvisor/
-  Trustpilot/Wongnai are stubs — structure is in place, operator needs to
-  fill in the API calls when credentials are available.
+- **Providers** — `server/src/lib/providers/`. Google has two paths:
+  Business Profile API v4 (requires Google allowlist, used when the
+  operator has been approved) and Places API NEW v1 (read-only, works
+  without allowlist — activates when `GOOGLE_MAPS_API_KEY` is set).
+  Yelp/Facebook/TripAdvisor/Trustpilot/Wongnai have stub adapters;
+  the production import path for these platforms is **CSV import**
+  (`/api/imports`) — works on every plan.
+- **Notifications** — `server/src/lib/line/`, `server/src/lib/telegram/`.
+  Customers connect LINE OA or Telegram in Settings; the
+  `scheduledReplyPoster` job pings them on every new review with the
+  AI draft ready to copy-paste in Google. Webhook handlers verify
+  signature (HMAC-SHA256 for LINE, Bot API for Telegram).
 - **Rate limiting** — per-route limits on mutations (see individual route
   files). `/api/billing/webhook` and `/api/admin/*` are also limited.
   `trust proxy` is set in production so real client IPs flow through the
@@ -160,14 +173,33 @@ use SQL directly against the DB file.
 
 ## Design system
 
-- Brand gradient: `bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900`
-  with a radial overlay for depth (Landing hero + `AuthSideArt` share this).
+- **Editorial palette** (rebrand 2026-04-23, see
+  `client/src/styles/dashboard-system.css`): `--rh-paper` `#fbf8f1`
+  (warm cream), `--rh-ink` `#1d242c`, `--rh-teal` `#1e4d5e` primary,
+  `--rh-rose` `#c2566c` alerts, `--rh-sage` `#6b8e7a` positive,
+  `--rh-ochre` `#c48a2c` accents.
+- **Typography** — Instrument Serif (headings), Inter (body), JetBrains
+  Mono (eyebrows / status pills / data labels).
 - Icons are inline SVGs (`currentColor` strokes) — not emoji — for cross-OS
   consistency.
 - Tailwind tokens: `.card`, `.input`, `.btn-primary`, `.btn-secondary` in
   `client/src/index.css`.
 - `prefers-reduced-motion: reduce` kills all transitions. Also ships an inline
   theme-flash-prevention script in `index.html` (allowlisted in CSP).
+
+## Pre-commit hooks
+
+`scripts/install-hooks.sh` copies the 4 active guards from
+`scripts/hooks/` into `.git/hooks/`:
+
+- `validate-blog-seo.js` — blog OG metadata + Article schema
+- `check-blog-sync.js` — every blog HTML has matching entries in
+  sitemap.xml, feed.xml, and BlogIndex.jsx
+- `check-stale-positioning.js` — catches stale Chrome extension /
+  iOS app references
+- `check-banned-phrases.sh` — honesty-lint (no marketing fluff)
+
+Plus build + test on touched packages, and a docs-only fast-path.
 
 ## License
 
