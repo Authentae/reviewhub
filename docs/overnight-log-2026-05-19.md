@@ -907,3 +907,28 @@ cycle 29.
 
 **Commit:** `test(check-stale-positioning): cover the pre-commit positioning guard`
 
+## Cycle 42 — 2026-05-19 ~13:55 ICT — doc
+
+**Shipped:** New `memory/daily_logs/2026-05-19.md` — the
+cross-session pointer for this overnight loop. Last daily log
+was 2026-05-08. Intentionally **short** — just breadcrumbs to
+the in-repo full records:
+- Per-cycle log + morning brief + playbook locations
+- Auto-loaded memory file added (drift sweep)
+- Deferred-upgrades doc location
+- "What didn't happen" — explicit list of locked surfaces
+  the autopilot held
+- Session shape summary
+
+**Why:** The memory folder auto-loads every session. Without
+a daily-log entry for 2026-05-19, the NEXT Claude session
+opening this project would see daily_logs/ trailing off at
+2026-05-08 — and would start re-discovering the overnight
+patterns from scratch instead of following the breadcrumbs to
+`docs/autopilot-loop-playbook.md` etc. Kept deliberately
+short (no duplication of the per-cycle log) so it doesn't
+drift — same anti-pattern lesson cycle 10's memory file
+captured for static assets.
+
+**Commit:** `docs(memory): cross-session daily log for 2026-05-19 overnight`
+
