@@ -1022,3 +1022,21 @@ across every future blog post + every future Claude session.
 
 **Commit:** `docs(CLAUDE.md): per-surface og-image convention + blog template rule + pre-commit guidance`
 
+## Cycle 47 — 2026-05-19 ~15:10 ICT — visual
+
+**Shipped:** Added `og:image:alt` to all 33 blog posts in one sed
+pass. Previously 0 of 33 had alt text — screen readers and
+accessibility tooling (e.g. Twitter card preview readers, browser
+extensions for blind users) had nothing to announce when the card
+rendered. Alt text: "ReviewHub Blog — Practical writing for owners
+on Google reviews." Same alt across all 33 because they all share
+the same `og-image-blog.png` visual; per-post variation already
+lives in `og:title` / `og:description`.
+
+**Why:** A11y compounds — every social-share preview from now on
+includes the alt text. Cost was ~10 seconds of sed; benefit is
+real for the small but non-zero fraction of visitors using
+assistive tech. Validator still passes; blog-sync still passes.
+
+**Commit:** `visual(a11y): add og:image:alt to all 33 blog posts`
+
