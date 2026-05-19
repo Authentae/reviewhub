@@ -778,3 +778,30 @@ shows the actual pitch.
 
 **Commit:** `content(x-header): sync banner copy with current landing hero`
 
+## Cycle 37 — 2026-05-19 ~12:40 ICT — code
+
+**Shipped:** Extended `server/tests/tokens.test.js` from 7 tests
+(generateToken / hashToken / safeEqual) to 16 — added 9 tests for
+the previously-uncovered `makeUnsubToken` + `verifyUnsubToken`
+helpers used by RFC 8058 List-Unsubscribe one-click links:
+
+- Roundtrip preserves userId / listType / issuedAt
+- Different users produce non-colliding tokens
+- Different list types produce non-colliding tokens
+- Tampered sig → reason:sig (last-char flip)
+- Forged body (claim user 999, keep user-42's sig) → reason:sig
+- Malformed input (no dot) → reason:malformed
+- Non-string input → reason:malformed (no throw)
+- Short sig length → rejected without crash
+- Payload missing required `l` field → reason:payload
+
+**Why:** Unsub tokens are emitted in every digest, marketing,
+and notification email — so a verify-bug means either:
+(a) legit unsubscribes silently fail (compliance risk), or
+(b) attacker can flip someone else's notification prefs by
+guessing/forging tokens. The HMAC sig + payload-shape checks
+existed but had zero direct coverage. Compounds: every future
+edit to the unsub flow now hits these guards before deploy.
+
+**Commit:** `test(tokens): cover makeUnsubToken + verifyUnsubToken (9 new tests)`
+
