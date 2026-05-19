@@ -49,11 +49,14 @@ export default function MarketingFooter() {
       heading: isThai ? 'ทรัพยากร' : 'Resources',
       links: [
         { href: '/blog',                                                       label: isThai ? 'บล็อก' : 'Blog' },
+        // Top two slots: the two newest, highest-search-intent posts. Internal-
+        // link signal compounds toward what we want indexed. Order = newest first.
+        { href: isThai ? '/blog/how-fast-should-you-reply-to-google-reviews-th' : '/blog/how-fast-should-you-reply-to-google-reviews', label: isThai ? 'ตอบเร็วแค่ไหนถึงจะดี?' : 'How fast to reply?' },
+        { href: isThai ? '/blog/chatgpt-for-google-review-replies-th' : '/blog/chatgpt-for-google-review-replies', label: isThai ? 'ChatGPT vs ReviewHub' : 'ChatGPT vs ReviewHub' },
         { href: isThai ? '/blog/why-respond-to-google-reviews-th' : '/blog/why-respond-to-google-reviews', label: isThai ? 'ทำไมต้องตอบรีวิว' : 'Why respond to reviews' },
         { href: isThai ? '/blog/how-to-ask-for-google-reviews-th' : '/blog/how-to-ask-for-google-reviews', label: isThai ? 'วิธีขอรีวิวจากลูกค้า' : 'How to ask for reviews' },
         { href: isThai ? '/blog/fake-extortion-google-reviews-th' : '/blog/fake-extortion-google-reviews', label: isThai ? 'รีวิวปลอม / รีดไถ' : 'Fake & extortion reviews' },
         { href: isThai ? '/blog/bangkok-hospitality-review-mistakes-th' : '/blog/bangkok-hospitality-review-mistakes', label: isThai ? '5 ข้อผิดพลาดของเจ้าของในกรุงเทพฯ' : '5 Bangkok hospitality mistakes' },
-        { href: isThai ? '/blog/track-google-review-reply-rate-th' : '/blog/track-google-review-reply-rate', label: isThai ? 'Track อัตราการตอบรีวิว' : 'Track your reply rate' },
         { href: '/changelog',                           label: isThai ? 'มีอะไรใหม่' : 'Changelog' },
         { href: '/feed.xml', external: true,            label: 'RSS' },
       ],

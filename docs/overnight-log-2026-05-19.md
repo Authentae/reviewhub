@@ -473,3 +473,26 @@ from earlier today) has brand identity.
 
 **Commit:** `visual(404): editorial redesign — sparkle + ochre eyebrow + serif`
 
+## Cycle 24 — 2026-05-19 ~09:25 ICT — content
+
+**Shipped:** Added the two newest blog posts to `MarketingFooter`
+Resources section in the top two slots after the /blog index:
+- "How fast to reply?" (cycle 8)
+- "ChatGPT vs ReviewHub" (cycle 3)
+
+Replaced the "Track reply rate" entry to keep the section at 6
+post-links (preserves the existing visual rhythm). Both EN and TH
+variants wired up. Internal-link signal compounds across every
+marketing page (Landing, Pricing, Blog index, vertical pages,
+tools, comparison pages, audit-related pages).
+
+**Why:** Internal linking is the easiest SEO compounding move:
+Google reads the footer on every page render, sees these posts
+linked from 30+ surfaces, weights them as canonically valuable.
+The previous footer linked posts dated 2026-04-27 → 2026-05-08; the
+two new ones (2026-05-19) had ZERO internal-link weight outside the
+/blog index itself. Aligns the footer's "what we want indexed first"
+signal with what the blog index already says is newest.
+
+**Commit:** `content(footer): surface the 2 newest blog posts in Resources`
+
