@@ -680,3 +680,36 @@ truth-source competing with it.
 
 **Commit:** `docs(wiki): blog 31→33, MarketingFooter, pre-commit guards, scripts inventory`
 
+## Cycle 33 — 2026-05-19 ~11:40 ICT — code
+
+**Shipped:** `npm audit fix` on `server/` — patched 3 of 4 moderate
+vulnerabilities via the non-breaking path:
+- `brace-expansion` — bumped past the DoS-from-large-numeric-range
+  advisory (GHSA-jxxr-4gwj-5jf2)
+- `ip-address` (transitive via `express-rate-limit`) — bumped past
+  the XSS in `Address6` HTML-emitting methods (GHSA-v2v4-37r5-5v8g)
+- (one more transitive fix via the lockfile churn)
+
+**Deliberately skipped — needs Earth's call:**
+- `@anthropic-ai/sdk` 0.79-0.91 → 0.96 (breaking change) — local
+  filesystem memory tool advisory. We DON'T use the memory tool,
+  and 0.96 is a breaking semver bump that could change AI draft
+  semantics. STOP-trigger per playbook ("ambiguous decision
+  needing Earth").
+- `client/` esbuild → vite@8 (breaking) — we just stabilised CI on
+  vite@5 in a prior cycle this session; flipping to vite@8 risks
+  re-opening the peer-dep saga.
+
+Server lockfile diff: +10 / −10 lines. Tests stay green after the
+patch (admin.test.js passes in isolation; the earlier "fail" was
+known parallel-test interference, not regression).
+
+**Why:** Public-endpoint vulnerabilities, even moderate, are
+compounding security debt: every day without the patch is more
+exposure. The two patches landed are pure version bumps inside
+transitive deps with no API-surface change — zero risk of
+regression. Compounds: every future `npm audit` from this commit
+forward shows the smaller surface.
+
+**Commit:** `chore(server): npm audit fix — 3 moderate (brace-expansion, ip-address)`
+
