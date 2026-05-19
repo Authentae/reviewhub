@@ -759,3 +759,22 @@ different treatment (flat square, iOS rounds). Honest visual ship
 
 **Commit:** `visual(apple-touch): flat-square variant to stop iOS double-rounding`
 
+## Cycle 36 — 2026-05-19 ~12:25 ICT — content
+
+**Shipped:** Refreshed `x-header.svg` copy to match the current
+`landing.heroTitle`. Old text: "Reply to every review in 10
+seconds." New text: "Reply to Google reviews in 10 seconds — from
+your phone." Sub-line also updated to "AI drafts in your voice ·
+LINE & Telegram alerts." Slight font-size trim (78→72) to keep
+the longer headline on its two lines. Re-rendered `x-header.png`
+via `regen-og-images.js`.
+
+**Why:** The X profile header is the second-most-shared brand
+visual (after og-image, which I synced in cycle 7). Same drift
+class. Headline "every review" was technically true but generically
+weak compared to the specific "Google reviews ... from your phone"
+positioning. Compounds: every profile visit on X from now on
+shows the actual pitch.
+
+**Commit:** `content(x-header): sync banner copy with current landing hero`
+

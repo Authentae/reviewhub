@@ -28,11 +28,11 @@
   <!-- Eyebrow -->
   <text x="100" y="160" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="22" fill="#c48a2c" letter-spacing="3">REVIEWHUB · BANGKOK</text>
 
-  <!-- Headline (Instrument Serif) -->
-  <text x="100" y="250" font-family="'Instrument Serif', Georgia, serif" font-size="78" fill="#1d242c">Reply to every review</text>
-  <text x="100" y="332" font-family="'Instrument Serif', Georgia, serif" font-size="78" font-style="italic" fill="#1e4d5e">in 10 seconds.</text>
+  <!-- Headline (Instrument Serif). Synced with landing.heroTitle 2026-05-19. -->
+  <text x="100" y="250" font-family="'Instrument Serif', Georgia, serif" font-size="72" fill="#1d242c">Reply to Google reviews</text>
+  <text x="100" y="330" font-family="'Instrument Serif', Georgia, serif" font-size="72" font-style="italic" fill="#1e4d5e">in 10 seconds — from your phone.</text>
 
   <!-- Sub-line -->
-  <text x="100" y="400" font-family="'Inter Tight', -apple-system, system-ui, sans-serif" font-size="26" fill="#1d242c" opacity="0.7">AI-drafted Google review replies in your voice.</text>
-  <text x="100" y="438" font-family="'Inter Tight', -apple-system, system-ui, sans-serif" font-size="26" fill="#1d242c" opacity="0.7">Free plan · $14/mo · reviewhub.review</text>
+  <text x="100" y="398" font-family="'Inter Tight', -apple-system, system-ui, sans-serif" font-size="26" fill="#1d242c" opacity="0.7">AI drafts in your voice · LINE &amp; Telegram alerts.</text>
+  <text x="100" y="436" font-family="'Inter Tight', -apple-system, system-ui, sans-serif" font-size="26" fill="#1d242c" opacity="0.7">Free plan · $14/mo · reviewhub.review</text>
 </svg>
