@@ -1116,3 +1116,28 @@ real ship; cycle 51 (visual) picks up the loop.
 
 **Commit:** _none_ — blocker entry only, no code/asset changes.
 
+## Cycle 51 — 2026-05-19 ~16:10 ICT — visual
+
+**Status of Lemon Squeezy reply:** still blocked. Earth said "you do
+it" but Chrome MCP's paired window is in a suspended/throttled state
+(viewport `0×0`, screenshot + page-text timing out at 45s) because
+the window is minimized/backgrounded. Told Earth to bring the
+window forward; no response — autopilot proceeds on non-Gmail
+surfaces per the playbook STOP rule.
+
+**Shipped (autopilot):** Replaced the generic spinning loader in
+`App.jsx PageLoader` with a pulsing brand sparkle SVG. Same shape
++ teal gradient as `favicon.svg` and the cycle 23 NotFound
+sparkle, so loading / error / favicon surfaces are visually
+consistent. 1.4s ease-in-out opacity + scale pulse. Respects
+`prefers-reduced-motion: reduce` — kills the animation and pins
+the sparkle at 0.8 opacity.
+
+**Why:** Every chunk-load between lazy routes flashes `PageLoader`
+for a brief moment. The previous generic CSS spinner gave no
+brand signal; the sparkle ties the load state to the rest of the
+visual system. Pattern-completion of the editorial-404 + favicon
+suite from earlier cycles. Compounds across every route nav.
+
+**Commit:** `visual(loader): replace generic spinner with brand sparkle + reduced-motion fallback`
+

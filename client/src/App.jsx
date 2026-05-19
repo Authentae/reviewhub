@@ -119,9 +119,11 @@ function PublicOnlyRoute({ children }) {
   return isLoggedIn() ? <Navigate to="/dashboard" replace /> : children;
 }
 
-// Minimal skeleton while lazy chunks load. Uses editorial palette
-// (rh-paper bg, rh-teal-deep spinner) so the very first paint after a
-// route transition stays on-brand instead of flashing blue.
+// Loading skeleton while lazy chunks load. Uses the editorial palette
+// (rh-paper bg) + a brand sparkle that gently pulses, so the first
+// paint between routes stays on-brand instead of flashing a generic
+// spinner. Sparkle reuses the same path as favicon.svg / NotFound.jsx
+// for visual consistency across loading + error + favicon surfaces.
 function PageLoader() {
   return (
     <div
@@ -130,11 +132,36 @@ function PageLoader() {
       role="status"
       aria-label="Loading page"
     >
-      <div
-        className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin"
-        style={{ borderColor: 'var(--rh-teal-deep, #1e4d5e)', borderTopColor: 'transparent' }}
+      <svg
+        width="56"
+        height="56"
+        viewBox="0 0 64 64"
         aria-hidden="true"
-      />
+        style={{
+          animation: 'rh-loader-pulse 1.4s ease-in-out infinite',
+        }}
+      >
+        <defs>
+          <linearGradient id="rh-loader-grad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#1e4d5e" />
+            <stop offset="1" stopColor="#2c7889" />
+          </linearGradient>
+        </defs>
+        <rect width="64" height="64" rx="14" fill="url(#rh-loader-grad)" />
+        <path
+          d="M32 10c1.5 10 4 12.5 14 14-10 1.5-12.5 4-14 14-1.5-10-4-12.5-14-14 10-1.5 12.5-4 14-14z"
+          fill="#fbf8f1"
+        />
+      </svg>
+      <style>{`
+        @keyframes rh-loader-pulse {
+          0%, 100% { opacity: 0.55; transform: scale(0.94); }
+          50%      { opacity: 1;    transform: scale(1.06); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          [role="status"] svg { animation: none !important; opacity: 0.8 !important; }
+        }
+      `}</style>
     </div>
   );
 }
