@@ -24,6 +24,9 @@ const REQUIRED_META = [
   // at commit time.
   { regex: /<meta property="og:image" content="https:\/\/reviewhub\.review\/og-image-blog\.png"/, msg: 'og:image must be /og-image-blog.png (cycle 43+44 standard)' },
   { regex: /<meta name="twitter:image" content="https:\/\/reviewhub\.review\/og-image-blog\.png"/, msg: 'twitter:image must be /og-image-blog.png (cycle 43+44 standard)' },
+  // a11y — every blog post must have og:image:alt for screen readers + a11y
+  // tooling rendering the social card preview. Added 2026-05-19 cycles 47-48.
+  { regex: /<meta property="og:image:alt" content="[^"]+"/, msg: 'og:image:alt missing (a11y — cycle 47+48 standard)' },
 ];
 
 const REQUIRED_SCHEMA = [
@@ -82,6 +85,15 @@ for (const file of fs.readdirSync(BLOG_DIR)) {
     if (!/hreflang="en"/.test(html)) fileErrors.push('HREFLANG  hreflang="en" missing (paired post)');
     if (!/hreflang="th"/.test(html)) fileErrors.push('HREFLANG  hreflang="th" missing (paired post)');
     if (!/hreflang="x-default"/.test(html)) fileErrors.push('HREFLANG  hreflang="x-default" missing (paired post)');
+  }
+
+  // Language-matched og:image:alt — TH posts must carry the Thai alt
+  // (cycle 48). Without this, a TH post share announces English to a
+  // Thai screen-reader user, which is exactly the half-shipped a11y the
+  // cycle aimed to fix.
+  const isThaiPost = /<html lang="th"/.test(html);
+  if (isThaiPost && /og:image:alt" content="ReviewHub Blog/.test(html)) {
+    fileErrors.push('A11Y  TH post carries EN og:image:alt — should be Thai (cycle 48 standard)');
   }
 
   if (fileErrors.length > 0) {

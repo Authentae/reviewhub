@@ -1059,3 +1059,25 @@ post share from now on speaks Thai to assistive tech.
 
 **Commit:** `content(a11y): localize og:image:alt to Thai on 17 TH blog posts`
 
+## Cycle 49 — 2026-05-19 ~15:40 ICT — code
+
+**Shipped:** Two new validator checks in `scripts/validate-blog-seo.js`:
+1. **Required**: every post must carry `og:image:alt` with non-empty
+   content (locks cycle 47's a11y addition)
+2. **Language-match**: a `<html lang="th">` post that carries an EN
+   alt ("ReviewHub Blog") fails with `A11Y  TH post carries EN
+   og:image:alt — should be Thai (cycle 48 standard)`. Catches the
+   exact half-shipped a11y state the loop's first sed produced.
+
+All 33 posts still pass. Future drift (a TH post copy-pasted from
+an EN template) will now fail at commit time with a clear message.
+
+**Why:** Pattern parallel to cycle 45 — turn the manual
+standardisation into a pre-commit guard. Cycle 47+48 added alts;
+cycle 49 makes them mandatory. The TH/EN language-match check is
+particularly valuable: without it, a future template-copy by a
+future Claude would silently regress Thai a11y back to English
+without anyone noticing for months.
+
+**Commit:** `feat(validator): require og:image:alt + language-match on TH posts (locks cycle 47+48)`
+
