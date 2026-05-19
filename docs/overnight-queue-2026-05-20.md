@@ -29,7 +29,7 @@ Earth is asleep. Cron fires every 20 min and executes the next `[ ]` item.
 
 - [done] **6. Wiki update** — shipped (commit ceab803). New "Strategic decisions 2026-05-20" section at top of wiki (right after Canonical handles): global scope vs Bangkok outreach segment, 3-file memory chain enforcing active-wave-vs-product-scope, $0 phased plan with triggers, deferred dependency upgrades, pointers to new docs + site pages. Future sessions read this before anything else.
 
-- [ ] **7. `/why-us` page** — new React page at `client/src/pages/WhyUs.jsx` + route. Short, philosophical: "ChatGPT-paste doesn't scale," "Voice consistency matters," "Privacy is a feature," "Built by a solo founder who reads every support ticket." Different audience than Landing (which is "sell"); this is "I believe X about reviews."
+- [done] **7. `/why-us` page** — shipped (commit ccdafed). 5 beliefs: ChatGPT-paste doesn't scale, voice consistency matters, privacy is a feature, ambient triggers beat dashboards, small is right for this. First-person plural — no founder names per Earth's preference. Linked from footer Company section (top of group, next to /support). Build green.
 
 - [ ] **8. Newsletter signup widget** — small component on Landing (above footer) + on blog index + at end of every blog post via the inline-cta template. Backend: POST `/api/newsletter` route that inserts into a new `newsletter_signups` table (email, source, created_at). No third-party integration yet — local SQLite collection that we can export and import into ConvertKit/Loops when we're ready. Includes server test + honeypot + rate limit.
 
