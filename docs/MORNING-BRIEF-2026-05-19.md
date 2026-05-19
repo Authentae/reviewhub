@@ -170,27 +170,38 @@ visual → code):
 | 27 | visual | Maskable favicon variant for iOS adaptive icon crop | Original favicon's larger sparkle was being cropped on iOS Home Screen |
 | 28 | content | `CLAUDE.md` "what's shipped" refresh — waitlist gate + killed routes + new categories | Future Claude reading "Pro is shipped" would have built features for a demand-signal tier |
 | 29 | code | Tests for `scripts/check-blog-sync.js` (3 tests, in/out-of-sync + path resolution) | Meta-test: protects the cycle-13 protector against silent regex regressions |
+| 30 | doc | Morning brief table extended to cycles 1-29 + Summary panel | Earth's read-first doc mirrors the cycle log |
+| 31 | visual | `/admin/brief` SYSTEM pills now read real `/api/health` | Hardcoded "OK" pills would lie during an actual outage |
+| 32 | content | Wiki refresh round 2 — blog 31→33, MarketingFooter, pre-commit guards, scripts | Wiki was last touched in cycle 6 — drifted again |
+| 33 | code | `npm audit fix` on server — 3 moderate vulns patched non-breaking | Public-endpoint security debt; SDK + vite breaking upgrades deferred to Earth |
+| 34 | doc | `docs/deferred-dependency-upgrades.md` | Captures the risk/path analysis cycle 33 deferred so Earth has context loaded |
+| 35 | visual | Apple Touch Icon flat-square variant — no more double-rounding on iOS | Cycle 27's maskable fix was Android-only; iOS Home Screen needs flat-square |
+| 36 | content | `x-header.svg` synced with current landing hero | Last social-brand-asset drift from the hero copy change |
+| 37 | code | tokens.test.js: +9 tests for `makeUnsubToken` / `verifyUnsubToken` | RFC 8058 unsub-token HMAC verify had zero direct coverage — compliance + anti-forgery surface |
 
 Full per-cycle reasoning in `docs/overnight-log-2026-05-19.md`.
 
 Loop continues firing every 15 min at :07/:22/:37/:52 ICT.
 
-### Summary so far (cycles 1-29)
+### Summary so far (cycles 1-37)
 
-- **29 cycles** shipped in ~7.5 hours
-- **29 commits** to `main` (one per cycle; CI green throughout)
+- **37 cycles** shipped in ~9 hours, average ~14.5 min/cycle (with the
+  15-min cron tick — i.e. the loop is genuinely keeping pace)
+- **37 commits** to `main`, one per cycle; CI green throughout
 - **+5 blog posts** (ChatGPT + how-fast pairs, EN+TH each) → 33 total
-- **+96 new tests** — server: waitlist 12, support 13, plans 16, botDetection 40,
-  audit 12; scripts: check-blog-sync 3
-- **+2 pre-commit guards** (blog-sync, plus existing honesty-lint / blog-SEO / stale-positioning)
-- **+2 scripts** (`regen-og-images.js`, `check-blog-sync.js`) + tests for one of them
-- **+5 PNG assets** generated from SVG via sharp (favicon 32/180/192/512 + 2 maskable)
-- **+1 memory file** (`feedback_static_assets_drift_silently.md`) — auto-loaded next session
-- **+1 playbook** (`docs/autopilot-loop-playbook.md`) — runbook for the next overnight
-- **+5 public `/changelog` entries** + `CLAUDE.md` refresh + wiki refresh
+- **+105 new tests** — server: waitlist 12, support 13, plans 16,
+  botDetection 40, audit 12, tokens (unsub) 9; scripts: check-blog-sync 3
+- **+2 pre-commit guards** (blog-sync new + the 3 pre-existing all still active)
+- **+2 utility scripts** (`regen-og-images.js`, `check-blog-sync.js`)
+- **+7 PNG assets** from SVG via sharp (favicon 32/180/192/512 + 2 maskable
+  + 1 apple-touch flat-square)
+- **+1 memory file** + **+1 playbook** + **+1 deferred-upgrades doc**
+- **+5 public `/changelog` entries** + 2 `CLAUDE.md` refreshes + 2 wiki refreshes
 - **−5 dead source files + 3 dead tests** (~1,700 lines / ~36 KB removed in cycle 5)
-- **0 STOP triggers fired** — CI green throughout, no Wave 5 lockdown breaches, no
-  ambiguous decisions punted to Earth
+- **3 moderate vulns patched** via `npm audit fix` (cycle 33); 2 breaking
+  upgrades deferred to Earth (see `docs/deferred-dependency-upgrades.md`)
+- **0 STOP triggers fired** — CI green throughout, no Wave 5 lockdown
+  breaches, no ambiguous decisions punted to Earth
 
 If the loop is still running when you wake, the cron job ID is `b7c3edfe`. Cancel
 with `claude` → "cancel cron b7c3edfe" or via the CronDelete tool.

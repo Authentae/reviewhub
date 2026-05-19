@@ -805,3 +805,22 @@ edit to the unsub flow now hits these guards before deploy.
 
 **Commit:** `test(tokens): cover makeUnsubToken + verifyUnsubToken (9 new tests)`
 
+## Cycle 38 — 2026-05-19 ~12:55 ICT — doc
+
+**Shipped:** Morning brief refresh round 3 — extended cycle table
+from 1-29 → 1-37 (8 new rows) + updated "Summary so far":
+- 37 cycles in ~9 hours, ~14.5 min/cycle pace
+- +105 new tests (added 9 from cycle 37 unsub-token tests)
+- +7 PNG assets (added the cycle 35 apple-touch flat-square)
+- New row: 3 moderate vulns patched + 2 breaking upgrades deferred
+  with pointer to `docs/deferred-dependency-upgrades.md`
+
+**Why:** Earth's read-first doc needs to stay current as the loop
+continues. Each refresh costs ~5 minutes of focused work and saves
+Earth from having to read 38 cycle entries in the log file to
+understand what shipped. Same compounding rationale as cycles 6 /
+18 / 30 — doc drift between brief and log is the exact thing the
+brief exists to prevent.
+
+**Commit:** `docs: extend morning brief overnight table to cycles 1-37`
+
