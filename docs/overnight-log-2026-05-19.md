@@ -496,3 +496,24 @@ signal with what the blog index already says is newest.
 
 **Commit:** `content(footer): surface the 2 newest blog posts in Resources`
 
+## Cycle 25 — 2026-05-19 ~09:40 ICT — code
+
+**Shipped:** New `server/tests/audit.test.js` (12 tests) covering
+`lib/audit.logAudit`. Coverage: row insertion with all fields,
+null user_id for pre-auth events, IP fallback chain (`req.ip` →
+`socket.remoteAddress` → null), UA-missing case, UA truncation
+to 500, IP truncation to 64, metadata-JSON truncation to 4000,
+null-req tolerance, the **best-effort guarantee** (circular-ref
+metadata must NOT throw — just warn + swallow), nested-object
+metadata serialisation, and metadata=NULL when omitted. Uses
+`makeUser()` for a real FK-valid user.
+
+**Why:** `logAudit` is called from every auth-sensitive route
+(login, password reset, MFA, JWT rotation, billing webhook). The
+best-effort contract — "audit failures NEVER bubble" — was
+unprotected; a regression that turned a swallow into a re-throw
+would silently 500 logins. 12 tests now guard that contract,
+plus the truncation defenses against log-bloat.
+
+**Commit:** `test(audit): cover logAudit best-effort + truncation + IP fallback`
+
