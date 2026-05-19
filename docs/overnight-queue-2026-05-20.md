@@ -33,7 +33,7 @@ Earth is asleep. Cron fires every 20 min and executes the next `[ ]` item.
 
 - [done] **8. Newsletter signup widget** — shipped (commit db46f7d). new newsletter_signups table (UNIQUE on email), POST /api/newsletter with honeypot + rate-limit + 9 server tests (all green), NewsletterSignup component in panel + inline variants, wired into Landing (panel above footer) + BlogIndex (inline above footer). Static blog HTML pages NOT updated this cycle — that requires per-file HTML edits across 33 posts which would compete with other queue items; revisit later via a script.
 
-- [ ] **9. MarketingFooter refresh** — surface `/trust`, `/integrations`, `/why-us` in the appropriate sections. Move `/about` to where it makes sense alongside `/why-us`. Keep total links per group <8 to avoid bloat.
+- [done] **9. MarketingFooter refresh** — shipped (commit 0df41df). All 4 groups now at exactly 8 links. Product: dropped redundant Home (wordmark links it), added /audit-demo (highest-leverage conversion surface, previously buried), dropped one tool to fit cap. Resources: dropped Bangkok-hospitality featured-link (segment-narrowing per tonight's strategic doc; post still at /blog). Company: added /about alongside /why-us, dropped /legal/th-summary (linked from /terms anyway). Comment header updated to reflect new structure + cap rule.
 
 - [ ] **10. Schema.org Organization + WebSite + SearchAction markup** in `client/index.html`. `Organization` with our name, URL, logo, sameAs links to X handles. `WebSite` with potentialAction `SearchAction` so Google can show a sitelinks searchbox for "reviewhub" queries. Validate with Google Rich Results Test before committing.
 
