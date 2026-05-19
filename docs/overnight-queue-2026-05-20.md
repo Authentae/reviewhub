@@ -21,7 +21,7 @@ Earth is asleep. Cron fires every 20 min and executes the next `[ ]` item.
 
 - [done] **2. `/integrations` page** — shipped (commit 9e591e1). Lists Google BP API + Places fallback, CSV import (~20 confirmed, honest about Google-only auto-polling per honesty-lint rule), email-forward, LINE OA, Telegram, WhatsApp roadmap, email digest, Anthropic Claude drafts in 10 languages. Footer link under Product. Pre-commit caught "60+ platforms" as banned phrase on first push — rephrased to be honest about auto-polling vs CSV path.
 
-- [ ] **3. `llm.txt`** at `client/public/llm.txt`. Emerging standard for AI crawlers (Anthropic, OpenAI, Perplexity). Format per the current spec proposal: brief description of the site, key sections, links to canonical sources. Should make our content easy for ChatGPT/Claude/Perplexity to cite. Also add a brief reference in `robots.txt` if appropriate.
+- [done] **3. `llm.txt`** — shipped (commit 356f222). Markdown site summary at /llm.txt per llmstxt.org convention. Lists key pages, comparison pages, vertical pages, free tools, blog highlights, sub-processors, contact. Also added `LLM-content:` pointer in robots.txt so crawlers can discover it. 12-month early-mover edge for AI-search citations (ChatGPT/Claude/Perplexity/Gemini).
 
 - [ ] **4. Pillar + cluster content map** — proposal doc at `docs/seo-pillar-cluster-map.md`. Survey existing 33 blog posts; propose 5 pillar topics; map each post to a pillar; propose 2-3 cluster posts per pillar that we don't have yet (don't write the new posts, just propose them); recommend internal-linking changes. Earth approves pillar choice tomorrow before any restructure happens.
 
