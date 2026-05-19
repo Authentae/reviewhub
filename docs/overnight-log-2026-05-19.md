@@ -1081,3 +1081,38 @@ without anyone noticing for months.
 
 **Commit:** `feat(validator): require og:image:alt + language-match on TH posts (locks cycle 47+48)`
 
+## Cycle 50 — 2026-05-19 ~15:55 ICT — doc (blocker logged)
+
+**Blocker (not a ship):** Earth interrupted the autopilot ~15:45
+ICT with two Lemon Squeezy screenshots — they replied to the
+merchant-onboarding application asking for 3 things: website URL,
+demo video / product in action, social profiles for verification.
+
+**Status of the request:**
+- Website URL: ready (`https://reviewhub.review`)
+- "Product in action": ready (live interactive demo at
+  `https://reviewhub.review/audit-demo` — has the tone switcher
+  shipped in cycle 37 of pre-sleep session, no signup, no card)
+- Social profiles: X `https://x.com/authentae` ready;
+  Earth confirmed "no LinkedIn — X only" via AskUserQuestion
+- Clean paste-ready reply text drafted in chat
+
+**Why STOP-trigger fired:** Earth chose "Drive Chrome MCP" but
+the only browser paired to Chrome MCP isn't signed into Gmail
+(`mail.google.com` redirects to the Workspace marketing page).
+Earth then asked "what gmail we used to apply?" — he doesn't
+remember whether the application went out from
+`earth.reviewhub@gmail.com` (brand) or `theearth1659@gmail.com`
+(personal). Per CLAUDE.md identity-check rule, sending from the
+wrong account would burn the application. Cycle paused awaiting
+his answer.
+
+**Reply text saved** in this same chat above — Earth can paste-
+and-send manually from whichever account received the email.
+
+**What the cron should do meanwhile:** continue alternation on
+NON-Gmail / NON-billing surfaces. This entry doesn't replace a
+real ship; cycle 51 (visual) picks up the loop.
+
+**Commit:** _none_ — blocker entry only, no code/asset changes.
+
