@@ -285,3 +285,30 @@ memory file.
 
 **Commit:** `docs: autopilot loop playbook from overnight session`
 
+## Cycle 15 — 2026-05-19 ~07:10 ICT — visual
+
+**Shipped:** Second pass of the drift sweep from cycle 10's rule.
+Two finds:
+- `client/index.html` `og:image:alt` still said "All your reviews,
+  one editorial dashboard." Updated to match the new hero ("Reply
+  to Google reviews in 10 seconds, from your phone."). This is the
+  ALT text screen-readers + accessibility tooling read for every
+  social share preview.
+- `client/public/og-image-audit.svg` had a stale code comment
+  contrasting against "one editorial dashboard" — refreshed to
+  match the new landing-page pitch. Comment-only, no rendered
+  output change, but stops future agents pattern-matching on old
+  copy.
+
+Cross-checked `editorial palette` references — those are the brand
+color system (App.jsx, Logo.jsx, dashboard-system.css), not the
+marketing tagline. Left intact.
+
+**Why:** Direct application of cycle 10's drift-sweep rule + cycle
+14's end-of-session checklist. og:image:alt being stale was the
+exact class of bug the rule predicts: a string that lives in two
+places (index.html alt + og-image text) drifts at the first edit
+to either side.
+
+**Commit:** `visual(og): sync og:image:alt + audit-svg comment with new hero`
+

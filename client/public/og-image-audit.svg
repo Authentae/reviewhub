@@ -2,8 +2,8 @@
 <!--
   Open Graph card for /audit-preview/<token> URLs.
   Same brand chrome as og-image.svg but different headline + sub-line —
-  audit recipients see "Free Google reviews audit" framing, not the
-  generic "all your reviews, one dashboard" landing-page pitch.
+  audit recipients see "Free audit · No signup required" framing, not
+  the landing-page "Reply to Google reviews in 10 seconds" pitch.
   Static (per-prospect personalisation lives in the og:title/description
   meta tags via useSocialMeta — generating per-prospect images would
   need a server-side image renderer we don't have yet).
