@@ -569,3 +569,28 @@ clipped.
 
 **Commit:** `visual(favicon): add maskable variant for iOS adaptive icon crop`
 
+## Cycle 28 — 2026-05-19 ~10:25 ICT — content
+
+**Shipped:** Refreshed the "What's already shipped (don't rebuild)"
+section of `CLAUDE.md`. Old version (1) still listed Pro/Business
+as sellable tiers (they're waitlist-only since this morning),
+(2) still listed /roadmap, /status, /api-docs as marketing surfaces
+(killed yesterday), (3) missing whole feature categories that
+shipped this session: LINE OA + Telegram push, tone switcher,
+audit-demo, /admin/brief, the four pre-commit guards.
+
+New version is structured by category — Auth / Reviews /
+Notifications / Billing / Audit funnel / Ops / Marketing — with
+honest annotations (Starter is the only sellable tier; waitlist
+gates Pro/Business; killed-routes list explicit).
+
+**Why:** `CLAUDE.md` is auto-loaded into every session's context.
+Future Claude reading "Pro is shipped" + a prompt "ship Pro
+features" would happily go build features for a tier we
+deliberately gated as a demand-signal instrument. The bigger
+the cost of the misread, the higher the value of an accurate
+doc. Compounding correction — every future session sees the
+honest picture.
+
+**Commit:** `content(CLAUDE.md): refresh "what's shipped" — waitlist gate, killed routes, new features`
+

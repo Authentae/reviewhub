@@ -108,11 +108,25 @@ until every section is `[wait:*]`.
 ## What's already shipped (don't rebuild)
 
 - Auth: email/password, Google OAuth, magic link, MFA, password reset
-- Reviews: ingestion (Google real provider + 30 mocks), reply drafting (Anthropic Haiku),
-  bulk actions, tags, pinning, flagging, presets, share tokens
-- Billing: LemonSqueezy webhook + checkout for Starter/Pro/Business × monthly/annual
-- Ops: backups (24h), Sentry forwarder, audit log retention, /api/health, /admin
-- Marketing: Landing, Pricing, Roadmap, Status, Blog, Audit landing, API docs, Support
+- Reviews: ingestion (Google real provider + Places API poller + 30 mocks), reply
+  drafting (Anthropic Haiku, EN + TH + 8 more locales), bulk actions, tags,
+  pinning, flagging, presets, share tokens
+- Notifications: LINE OA + Telegram push (every new review pings with an AI-drafted
+  reply), weekly impact email, Stripe-paid welcome email, founder alerts on signup
+- Billing: LemonSqueezy webhook + checkout for Starter ($14/mo) **only**.
+  Pro and Business surface waitlist email-capture forms on /pricing — gated tiers
+  not yet sellable until demand justifies building features.
+- Audit funnel: /audit landing, /audit-preview/:token (tone switcher: warm /
+  concise / formal), /audit-demo (public sample, no signup), outbound audits
+  with bot-filtered view notifications
+- Ops: backups (24h), Sentry forwarder, audit log retention, /api/health,
+  /admin, /admin/brief (waitlist + outreach view stats), pre-commit guards
+  (blog SEO, blog sync, stale positioning, honesty lint)
+- Marketing surfaces (post 2026-05-19 trim): Landing, Pricing, Blog (33 posts,
+  EN+TH paired), 4 free tools, 2 vertical pages (/for-spas, /for-dentists),
+  2 comparison pages (/vs/chatgpt, /vs/birdeye), /audit, /audit-demo, /guide,
+  /changelog, /support. Killed in cycle 28 of 2026-05-18 session: /roadmap,
+  /status, /api-docs, /year-review, /line, 3 vs/* pages, 6 verticals.
 
 ## Things that will trip you up
 
