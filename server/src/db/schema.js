@@ -989,6 +989,32 @@ function initSchema() {
     console.error('[DB] waitlist_signups table creation:', err.message);
   }
 
+  // newsletter_signups — generic blog/Landing newsletter capture, no plan
+  // attached (different intent than waitlist_signups which gates a tier).
+  // SQLite-only collection today; export-and-import to ConvertKit/Loops/
+  // Mailchimp when the list crosses ~50 signups. Ship 2026-05-20 per
+  // overnight queue item 8.
+  //
+  // UNIQUE(email) — one email = one subscription, regardless of which
+  // surface they signed up from. `source` records where they came in
+  // ('landing', 'blog-index', 'blog-post:<slug>') so we can attribute
+  // which surfaces convert.
+  try {
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS newsletter_signups (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        email TEXT NOT NULL UNIQUE,
+        source TEXT,
+        unsubscribed_at TEXT,
+        created_at TEXT DEFAULT (datetime('now'))
+      );
+      CREATE INDEX IF NOT EXISTS idx_newsletter_signups_created ON newsletter_signups(created_at);
+      CREATE INDEX IF NOT EXISTS idx_newsletter_signups_source ON newsletter_signups(source);
+    `);
+  } catch (err) {
+    console.error('[DB] newsletter_signups table creation:', err.message);
+  }
+
   // Index token hashes so verify/reset lookups are O(log n) even at scale.
   // Partial indexes (WHERE … IS NOT NULL) keep them tiny — only rows with active tokens.
   try {

@@ -5,6 +5,7 @@ import usePageTitle from '../hooks/usePageTitle';
 import { useI18n } from '../context/I18nContext';
 import MarketingNav from '../components/MarketingNav';
 import MarketingFooter from '../components/MarketingFooter';
+import NewsletterSignup from '../components/NewsletterSignup';
 import Navbar from '../components/Navbar';
 import Logo from '../components/Logo';
 import { isLoggedIn } from '../lib/auth';
@@ -1090,6 +1091,14 @@ export default function Landing() {
         <Pricing />
         <Faq t={t} />
         <BigCta />
+        {/* Newsletter signup — built 2026-05-20 per overnight queue 8.
+            Lead capture: every Landing visitor who scrolled this far has
+            non-zero interest; previously had no way to subscribe and was
+            lost to bounce. SQLite-backed via /api/newsletter, export to
+            ConvertKit/Loops/Mailchimp when list grows. */}
+        <section style={{ padding: '40px 24px 24px', maxWidth: 720, margin: '0 auto' }}>
+          <NewsletterSignup source="landing" />
+        </section>
       </main>
       {/* MarketingFooter is the canonical site-wide footer: 4 columns
           (Product, Industry, Resources, Company) covering verticals + all

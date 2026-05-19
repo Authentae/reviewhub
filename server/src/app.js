@@ -291,6 +291,7 @@ function createApp() {
   // Public widget endpoint — no auth needed, registered before auth routes
   app.use('/api/public', require('./routes/publicWidget'));
   app.use('/api/waitlist', require('./routes/waitlist'));
+  app.use('/api/newsletter', require('./routes/newsletter'));
 
   app.use('/api/auth', authLimiter, require('./routes/auth'));
   app.use('/api/admin', require('./routes/admin'));

@@ -15,6 +15,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import MarketingNav from '../components/MarketingNav';
 import MarketingFooter from '../components/MarketingFooter';
+import NewsletterSignup from '../components/NewsletterSignup';
 import usePageTitle from '../hooks/usePageTitle';
 import useSocialMeta from '../hooks/useSocialMeta';
 import { useI18n } from '../context/I18nContext';
@@ -473,6 +474,14 @@ export default function BlogIndex() {
             {' · '}
             <Link to="/" style={{ color: 'var(--rh-ink-3, #8b939c)' }}>← {isThai ? 'หน้าหลัก' : 'Home'}</Link>
           </p>
+        </section>
+
+        {/* Newsletter signup — built 2026-05-20 per overnight queue 8.
+            Blog visitors are higher-intent than Landing visitors but were
+            leaving without a subscription path. Inline variant slots
+            cleanly above the footer. */}
+        <section style={{ marginTop: 32, marginBottom: 8 }}>
+          <NewsletterSignup source="blog-index" variant="inline" />
         </section>
       </main>
       <MarketingFooter />
