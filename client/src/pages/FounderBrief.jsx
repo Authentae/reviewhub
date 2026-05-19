@@ -217,6 +217,7 @@ export default function FounderBrief() {
   useNoIndex();
   const [data, setData] = useState(null);
   const [waitlist, setWaitlist] = useState(null);
+  const [health, setHealth] = useState(null); // { components: { api, db, smtp, backups }, ok: bool }
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [now, setNow] = useState(new Date());
@@ -231,9 +232,12 @@ export default function FounderBrief() {
         // signals without bouncing between dashboards.
         // waitlist-stats failure is non-fatal — the brief still
         // renders the outreach data if waitlist endpoint 500s.
-        const [outreachRes, waitlistRes] = await Promise.allSettled([
+        const [outreachRes, waitlistRes, healthRes] = await Promise.allSettled([
           api.get('/admin/outreach-stats'),
           api.get('/admin/waitlist-stats'),
+          // /api/health is public — surfaces real status of api/db/smtp/backups
+          // so the SYSTEM strip below stops lying with hard-coded "OK" pills.
+          api.get('/health'),
         ]);
         if (cancelled) return;
         if (outreachRes.status === 'fulfilled') {
@@ -243,6 +247,9 @@ export default function FounderBrief() {
         }
         if (waitlistRes.status === 'fulfilled') {
           setWaitlist(waitlistRes.value.data);
+        }
+        if (healthRes.status === 'fulfilled') {
+          setHealth(healthRes.value.data);
         }
         setLoading(false);
       } catch (err) {
@@ -523,16 +530,38 @@ export default function FounderBrief() {
           </section>
         )}
 
-        {/* SYSTEM HEALTH STRIP */}
+        {/* SYSTEM HEALTH STRIP — now reads from /api/health instead of
+            hard-coded green. health.components is a small bag of
+            { api: 'ok', db: 'ok'|'down', smtp: 'configured'|'console-fallback',
+              backups: 'fresh'|'stale'|'never' }. A `down` or `never` flips
+            the dot to rose so Earth sees the alert without opening
+            /api/health manually. */}
         <section style={{
           padding: '20px 0', marginTop: 16,
           borderTop: `1px solid ${C.hairline}`,
           display: 'flex', gap: 14, flexWrap: 'wrap', alignItems: 'center',
         }}>
           <Eyebrow color={C.inkDim}>SYSTEM</Eyebrow>
-          <StatusPill dot="sage">API · OK</StatusPill>
-          <StatusPill dot="sage">DB · OK</StatusPill>
-          <StatusPill dot="sage">BACKUPS · OK</StatusPill>
+          {(() => {
+            // Map each component's actual value to a pill color + label.
+            // Unknown → ochre (questionable), bad → rose, good → sage.
+            const c = health?.components || {};
+            // API: 'ok' | unknown. Assume sage when the health endpoint
+            // itself responded (we got a body back at all).
+            const apiState = health ? 'sage' : 'ochre';
+            const dbState = c.db === 'ok' ? 'sage' : c.db ? 'rose' : 'ochre';
+            const smtpState = c.smtp === 'configured' ? 'sage' : c.smtp === 'console-fallback' ? 'ochre' : 'rose';
+            const backupState = c.backups === 'fresh' ? 'sage' : c.backups === 'stale' || c.backups === 'never' ? 'rose' : 'ochre';
+            const label = (key, val) => `${key} · ${val ? val.toUpperCase() : 'UNKNOWN'}`;
+            return (
+              <>
+                <StatusPill dot={apiState}>{label('API', health ? 'ok' : null)}</StatusPill>
+                <StatusPill dot={dbState}>{label('DB', c.db)}</StatusPill>
+                <StatusPill dot={smtpState}>{label('SMTP', c.smtp)}</StatusPill>
+                <StatusPill dot={backupState}>{label('BACKUPS', c.backups)}</StatusPill>
+              </>
+            );
+          })()}
         </section>
 
         {/* FOOTER LINK STRIP */}

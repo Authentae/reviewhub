@@ -637,3 +637,25 @@ as cycles 1-17 (number / type / one-line ship / one-line why).
 
 **Commit:** `docs: extend morning brief overnight table to cycles 1-29`
 
+## Cycle 31 — 2026-05-19 ~11:10 ICT — visual
+
+**Shipped:** `/admin/brief` SYSTEM strip now reads `/api/health`
+instead of hard-coded "OK" pills. Added a third `Promise.allSettled`
+fetch for `/health` alongside outreach + waitlist. Each pill (API,
+DB, SMTP, BACKUPS) now reflects the real component state:
+- sage (green): ok / configured / fresh
+- ochre (warning): unknown / console-fallback (SMTP)
+- rose (alert): db down / smtp missing / backups stale or never
+
+`/api/health` failure is non-fatal — the rest of the brief renders
+fine. Health-endpoint contract: `{ components: { db, smtp, backups } }`.
+
+**Why:** The old strip showed "API · OK / DB · OK / BACKUPS · OK"
+unconditionally. That's worse than no signal — Earth could open
+the brief during an actual outage and see green checkmarks. The
+honest fix is to bind the pills to real data. Pattern matches
+cycle 23's editorial 404 ethos: surfaces should mean what they
+look like.
+
+**Commit:** `visual(brief): SYSTEM pills now reflect real /api/health components`
+
