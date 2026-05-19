@@ -331,3 +331,24 @@ objection answered inline.
 
 **Commit:** `content(pricing): add 5th FAQ — why pay vs ChatGPT?`
 
+## Cycle 17 — 2026-05-19 ~07:40 ICT — code
+
+**Shipped:** New `server/tests/plans.test.js` (16 tests) covering
+both `GET /api/plans` and the `lib/billing/plans.js` helpers
+(`getPlan`, `planAllows`, `planMax`, `wouldExceed`). Coverage:
+endpoint shape contract (Pricing page consumers), Cache-Control
+header, presence of free/starter/pro/business IDs, helper
+defensiveness on unknown plan IDs + unknown feature flags, the
+free→ai_drafts/weekly_digest gate logic, starter→email_alerts/
+priority_support, the wouldExceed boundary (3 caps to 3 returns
+true), and the null-means-unlimited semantics.
+
+**Why:** Plans module is the canonical source for "what does each
+plan get" — every quota gate, every pricing card, every billing
+gate calls into it. A regression that silently un-gates a paid
+feature for free users (or vice versa) would be invisible without
+tests. Compounds — every future PLANS edit is now guarded against
+breaking the contract `/api/plans` consumers depend on.
+
+**Commit:** `test(plans): cover /api/plans route + planAllows/planMax/wouldExceed`
+
