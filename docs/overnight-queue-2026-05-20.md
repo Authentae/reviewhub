@@ -27,7 +27,7 @@ Earth is asleep. Cron fires every 20 min and executes the next `[ ]` item.
 
 - [done] **5. Strategic conversation summary** — shipped (commit 6100bda). 5-min morning briefing: active-wave-vs-product-scope meta-rule, product's actual scope (global / 10 languages / multi-channel), $0 phased plan with triggers (Phase 0 free data → Phase 4 $5k MRR), 5-D segment grid, what we're NOT doing yet, 5 open decisions for Earth.
 
-- [ ] **6. Wiki update** — append a "Strategic decisions 2026-05-20" section to `docs/reviewhub-wiki.md` summarizing tonight's framing changes (product is geography- and vertical-agnostic; Wave 5 is one hypothesis test; the new feedback memory files exist).
+- [done] **6. Wiki update** — shipped (commit ceab803). New "Strategic decisions 2026-05-20" section at top of wiki (right after Canonical handles): global scope vs Bangkok outreach segment, 3-file memory chain enforcing active-wave-vs-product-scope, $0 phased plan with triggers, deferred dependency upgrades, pointers to new docs + site pages. Future sessions read this before anything else.
 
 - [ ] **7. `/why-us` page** — new React page at `client/src/pages/WhyUs.jsx` + route. Short, philosophical: "ChatGPT-paste doesn't scale," "Voice consistency matters," "Privacy is a feature," "Built by a solo founder who reads every support ticket." Different audience than Landing (which is "sell"); this is "I believe X about reviews."
 
