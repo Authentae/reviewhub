@@ -1141,6 +1141,42 @@ suite from earlier cycles. Compounds across every route nav.
 
 **Commit:** `visual(loader): replace generic spinner with brand sparkle + reduced-motion fallback`
 
+## Cycle 52 — 2026-05-20 ~01:30 ICT — Lemon Squeezy reply sent + housekeeping
+
+**Major:** The Lemon Squeezy merchant-onboarding reply is **sent**.
+Drove Earth's Chrome (theearth1659@gmail.com) via MCP — opened the
+Issac Abraham thread, clicked Reply, inserted the prepared body via
+`execCommand('insertText')` (bypasses Gmail's Trusted Types policy).
+Reply answered all 3 of Issac's asks: (1) live URL
+`https://reviewhub.review`, (2) interactive demo at
+`/audit-demo` + fulfillment-flow description, (3) business +
+personal X handles. Iterated 3x with Earth's input: removed his
+first name from signature, swapped contact email
+`earth@reviewhub.review` → `hello@reviewhub.review`, corrected
+business X from `@authentae` → `@reviewhubreview`, added personal
+X `@authentaessr`. Final draft was 1527 chars, identity-neutral
+(no first name anywhere), then Earth clicked Send himself.
+
+**Housekeeping shipped immediately after:**
+- `client/src/pages/About.jsx` — fixed the stale public X link
+  from `@authentae` → `@reviewhubreview`. Was contradicting the
+  email we just sent.
+- `docs/reviewhub-wiki.md` — new "Canonical handles" section at
+  the top, captures: brand domain, two contact emails (brand
+  vs owner), business + personal X, GitHub, the "no LinkedIn"
+  fact, and the `earth.reviewhub@gmail.com` (brand) vs
+  `theearth1659@gmail.com` (personal, holds LS thread)
+  distinction. Flags `@authentae` as drift to correct anywhere
+  else it surfaces.
+
+**Why this matters:** Next session (or next 3rd-party verification
+ask) needs the canonical handles in one place. Cycle 50 stalled
+specifically because we didn't know which Gmail received the LS
+application — the wiki addition closes that gap permanently.
+
+**Commits:** `fix(about): X handle authentae → reviewhubreview` +
+`docs(wiki): canonical handles section (brand email/X/Gmail)`
+
 ## Cycle 52 — 2026-05-19 ~16:25 ICT — content
 
 **Shipped:** New "TOP-OF-MIND for Earth on next desk session"

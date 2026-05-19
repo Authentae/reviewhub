@@ -353,8 +353,8 @@ export default function About() {
             />
             <ContactCard
               label="X (TWITTER)"
-              value="@authentae"
-              href="https://x.com/authentae"
+              value="@reviewhubreview"
+              href="https://x.com/reviewhubreview"
             />
             <ContactCard
               label="BUILD IN PUBLIC"

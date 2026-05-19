@@ -14,6 +14,23 @@ Sections grow over time. Don't archive — just date-stamp.
 
 ---
 
+## Canonical handles (confirmed 2026-05-20)
+
+For any outbound communication, support thread, or 3rd-party
+verification ask (Lemon Squeezy, Google Workspace, etc.), use these:
+
+- **Brand domain:** `reviewhub.review` (production)
+- **Brand email:** `hello@reviewhub.review` (anonymous), `earth@reviewhub.review` (owner — only when identity needs to be explicit)
+- **Business X / Twitter:** `https://x.com/reviewhubreview` ← **use this for business verification**
+- **Personal X / Twitter:** `https://x.com/authentaessr`
+- **GitHub org:** `github.com/Authentae`
+- **LinkedIn:** none yet — set one up if any 3rd-party requires it
+- **Outreach Gmail:** `earth.reviewhub@gmail.com` (brand) — distinct from `theearth1659@gmail.com` (personal, currently holds Lemon Squeezy application thread)
+
+⚠ The previous public X handle `@authentae` is **wrong** — it was on
+About.jsx until 2026-05-20 (fixed). If you see it referenced anywhere
+else, that's drift and needs correcting.
+
 ## Customers
 
 _(empty — pre-revenue as of 2026-05-05)_
