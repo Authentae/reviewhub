@@ -25,7 +25,7 @@ Earth is asleep. Cron fires every 20 min and executes the next `[ ]` item.
 
 - [done] **4. Pillar + cluster content map** — shipped (commit 85cbdc8). Proposes 5 segment-agnostic pillars (reply mechanics, negative reviews, acquisition+tracking, AI replies, multilingual+multi-platform), maps all 17 existing topics, lists 14 gap-cluster posts to write, sketches internal-linking + restructure plan. Caught a Bangkok-narrowing draft of Pillar 5 in re-read; reframed to "multilingual & multi-platform" before commit. Earth's approval needed on the pillar choices.
 
-- [ ] **5. Strategic conversation summary** at `docs/strategy-conversation-2026-05-20.md`. Capture: (a) the "active wave ≠ product scope" lesson, (b) the $0 phased plan (Phase 0 free data install → Phase 1 branch by Wave 5 result → Phase 2 first $100 MRR → Phase 3 $1k MRR → Phase 4 $5k MRR), (c) the 5-dimensional segment grid (geography × vertical × volume × channel × pricing), (d) what we deliberately are NOT doing at this stage. 5-min read.
+- [done] **5. Strategic conversation summary** — shipped (commit 6100bda). 5-min morning briefing: active-wave-vs-product-scope meta-rule, product's actual scope (global / 10 languages / multi-channel), $0 phased plan with triggers (Phase 0 free data → Phase 4 $5k MRR), 5-D segment grid, what we're NOT doing yet, 5 open decisions for Earth.
 
 - [ ] **6. Wiki update** — append a "Strategic decisions 2026-05-20" section to `docs/reviewhub-wiki.md` summarizing tonight's framing changes (product is geography- and vertical-agnostic; Wave 5 is one hypothesis test; the new feedback memory files exist).
 
