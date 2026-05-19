@@ -878,5 +878,32 @@ contradicted by the live `/pricing` page Earth points prospects
 at). Public-facing doc accuracy is the single highest-leverage
 content fix at this point in the loop.
 
-**Commit:** `content(README): refresh openining + stack + providers + design system + hooks`
+**Commit:** `content(README): refresh opening + stack + providers + design system + hooks`
+
+## Cycle 41 — 2026-05-19 ~13:40 ICT — code
+
+**Shipped:** New `scripts/__tests__/check-stale-positioning.test.js`
+(5 tests) — same meta-test pattern as cycle 29's check-blog-sync
+test. Covers the second of the three custom pre-commit guards
+shipped this session and earlier:
+1. Exits 0 on the committed client source (no current stale refs)
+2. Exits 1 when a fixture file injects a "Chrome extension" reference
+3. Exits 1 when a fixture file injects an "iOS app" reference
+4. Whitelist comments (`archived` / `HISTORICAL` / `dropped`) suppress
+   the warning — verifies historical references in comments still pass
+5. `Roadmap.jsx` / `Changelog.jsx` are file-whitelisted — historical
+   ships referenced in the changelog don't fail the scan
+
+Each fixture file is created in a tmp location, the script is spawned
+via `execFileSync`, and the file is cleaned up in a `finally` block
+even on test failure.
+
+**Why:** Both custom pre-commit guards (`check-blog-sync.js` from
+cycle 13, `check-stale-positioning.js` pre-existing) are now
+covered by their own meta-tests. Future regex tweaks to either
+script will fail loudly if they break the contract instead of
+silently letting drift accumulate. Same compounding rationale as
+cycle 29.
+
+**Commit:** `test(check-stale-positioning): cover the pre-commit positioning guard`
 
