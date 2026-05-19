@@ -19,7 +19,7 @@ Earth is asleep. Cron fires every 20 min and executes the next `[ ]` item.
 
 - [done] **1. `/trust` page** — shipped (commit eda4436). React page + route + footer link under Company. Two-things-we-access, four-things-we-don't, data policy, 6 sub-processors named, deletion path. Build green.
 
-- [ ] **2. `/integrations` page** — new React page at `client/src/pages/Integrations.jsx` + route + footer link. Lists: Google Business Profile (real API + Places API fallback), LINE OA, Telegram, WhatsApp (coming Q3 2026), CSV import (60+ platforms including Yelp/TripAdvisor/Trustpilot/Booking/Airbnb/Wongnai), email-forward (reviews+secret@reviewhub.review parses Booking.com / Airbnb / TripAdvisor notification forwards). Brief paragraph per integration explaining what it does.
+- [done] **2. `/integrations` page** — shipped (commit 9e591e1). Lists Google BP API + Places fallback, CSV import (~20 confirmed, honest about Google-only auto-polling per honesty-lint rule), email-forward, LINE OA, Telegram, WhatsApp roadmap, email digest, Anthropic Claude drafts in 10 languages. Footer link under Product. Pre-commit caught "60+ platforms" as banned phrase on first push — rephrased to be honest about auto-polling vs CSV path.
 
 - [ ] **3. `llm.txt`** at `client/public/llm.txt`. Emerging standard for AI crawlers (Anthropic, OpenAI, Perplexity). Format per the current spec proposal: brief description of the site, key sections, links to canonical sources. Should make our content easy for ChatGPT/Claude/Perplexity to cite. Also add a brief reference in `robots.txt` if appropriate.
 
