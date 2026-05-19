@@ -28,6 +28,10 @@ const Trust = lazy(() => import('./pages/Trust'));
 // overnight queue item 2. Answers "what does your product do" cleanly,
 // reduces Pricing FAQ load, satisfies enterprise/agency due-diligence.
 const Integrations = lazy(() => import('./pages/Integrations'));
+// /why-us — manifesto page. Different audience than Landing (which sells).
+// Five beliefs about review replies that shaped the tool. Built 2026-05-20
+// per overnight queue item 7.
+const WhyUs = lazy(() => import('./pages/WhyUs'));
 const FounderBrief = lazy(() => import('./pages/FounderBrief'));
 // Outbound audits — founder-only tool for the demo-first outreach loop.
 // Paste a prospect's reviews → AI drafts replies → shareable URL to DM.
@@ -195,6 +199,7 @@ export default function App() {
         <Route path="/about" element={<About />} />
         <Route path="/trust" element={<Trust />} />
         <Route path="/integrations" element={<Integrations />} />
+        <Route path="/why-us" element={<WhyUs />} />
         <Route path="/admin/brief" element={<PrivateRoute><FounderBrief /></PrivateRoute>} />
         <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         <Route path="/outbound-audits" element={<PrivateRoute><OutboundAudits /></PrivateRoute>} />

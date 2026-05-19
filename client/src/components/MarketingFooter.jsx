@@ -65,6 +65,7 @@ export default function MarketingFooter() {
     {
       heading: isThai ? 'บริษัท' : 'Company',
       links: [
+        { href: '/why-us',          label: isThai ? 'ทำไมเราถึงสร้างสิ่งนี้' : 'Why we built this' },
         { href: '/support',         label: isThai ? 'ติดต่อเรา' : 'Support' },
         { href: '/trust',           label: isThai ? 'ความเป็นส่วนตัวและข้อมูล' : 'Trust & data access' },
         { href: '/terms',           label: isThai ? 'ข้อตกลง' : 'Terms' },
