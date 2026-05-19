@@ -17,7 +17,7 @@ Earth is asleep. Cron fires every 20 min and executes the next `[ ]` item.
 
 ## Queue
 
-- [ ] **1. `/trust` page** — new React page at `client/src/pages/Trust.jsx` + route in `client/src/App.jsx` + link in `MarketingFooter`. Content: what we access via Google OAuth (read review list + post replies — that's it), what we DON'T access (Gmail, contacts, drive), data policy (no AI training on customer data), where data lives (Railway + SQLite), how to delete (Settings → Danger Zone). Use the editorial palette + Instrument Serif. Honest and conservative.
+- [done] **1. `/trust` page** — shipped (commit eda4436). React page + route + footer link under Company. Two-things-we-access, four-things-we-don't, data policy, 6 sub-processors named, deletion path. Build green.
 
 - [ ] **2. `/integrations` page** — new React page at `client/src/pages/Integrations.jsx` + route + footer link. Lists: Google Business Profile (real API + Places API fallback), LINE OA, Telegram, WhatsApp (coming Q3 2026), CSV import (60+ platforms including Yelp/TripAdvisor/Trustpilot/Booking/Airbnb/Wongnai), email-forward (reviews+secret@reviewhub.review parses Booking.com / Airbnb / TripAdvisor notification forwards). Brief paragraph per integration explaining what it does.
 
