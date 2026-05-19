@@ -1,9 +1,19 @@
 # Security reporting policy for ReviewHub
 # Served at /.well-known/security.txt per RFC 9116
+# Last updated: 2026-05-20 (overnight queue item 11)
 
 Contact: mailto:security@reviewhub.review
-Expires: 2027-01-01T00:00:00.000Z
-Preferred-Languages: en
+Expires: 2027-05-20T00:00:00.000Z
+Preferred-Languages: en, th
+Canonical: https://reviewhub.review/.well-known/security.txt
+Policy: https://reviewhub.review/trust
+
+# Encryption: an OpenPGP public key for sending us encrypted vulnerability
+# reports. Not yet published — we accept plaintext email for now. When a
+# real PGP key is generated, uncomment the line below and publish the key
+# at the referenced URL:
+#
+# Encryption: https://reviewhub.review/.well-known/pgp-key.txt
 
 # If you believe you've found a security vulnerability in ReviewHub, please
 # email security@reviewhub.review with the details. We ask that you:
@@ -17,3 +27,6 @@ Preferred-Languages: en
 # In return we'll acknowledge receipt within 2 business days, keep you
 # informed of the fix timeline, and credit you (with your permission) in
 # our security acknowledgments page.
+#
+# For more on what we access and how we handle data, see:
+# https://reviewhub.review/trust
