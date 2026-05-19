@@ -978,3 +978,23 @@ inconsistency.
 
 **Commit:** `content(blog): all 33 posts now use og-image-blog.png (retrofit cycle 43)`
 
+## Cycle 45 — 2026-05-19 ~14:40 ICT — code
+
+**Shipped:** Added 2 positive checks to `scripts/validate-blog-seo.js`:
+- `og:image` MUST be exactly `https://reviewhub.review/og-image-blog.png`
+- `twitter:image` MUST be exactly `https://reviewhub.review/og-image-blog.png`
+
+Previously the validator only checked "og:image is some .png" — that
+let cycles 43+44's standardisation drift back if anyone reverted a
+post to `/og-image.png`. Now any deviation fails at commit time.
+All 33 posts still pass; the check is forward-looking.
+
+**Why:** Cycles 43+44 invested in blog-specific social-card identity.
+Without enforcement, the next "I'll just copy this template from an
+older post" by a future Claude (or Earth) would silently undo it.
+Same compounding pattern as cycle 13's `check-blog-sync.js` —
+turn the standardisation into a guard so it survives the next
+session. Pre-commit fail-fast > caught-by-someone-noticing-on-X.
+
+**Commit:** `feat(validator): enforce /og-image-blog.png on every blog post (locks cycle 43+44)`
+

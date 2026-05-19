@@ -18,6 +18,12 @@ const REQUIRED_META = [
   { regex: /<meta name="twitter:card" content="summary_large_image"/, msg: 'twitter:card missing' },
   { regex: /<meta name="twitter:image" content="[^"]+\.png"/, msg: 'twitter:image missing or not PNG' },
   { regex: /<link rel="canonical" href="https:\/\/reviewhub\.review\/blog\//, msg: 'canonical URL missing or wrong' },
+  // Cycles 43+44 standardised blog posts on /og-image-blog.png (distinct
+  // from the homepage /og-image.png and the audit /og-image-audit.png).
+  // Enforce that here so future posts (and future drift back) get caught
+  // at commit time.
+  { regex: /<meta property="og:image" content="https:\/\/reviewhub\.review\/og-image-blog\.png"/, msg: 'og:image must be /og-image-blog.png (cycle 43+44 standard)' },
+  { regex: /<meta name="twitter:image" content="https:\/\/reviewhub\.review\/og-image-blog\.png"/, msg: 'twitter:image must be /og-image-blog.png (cycle 43+44 standard)' },
 ];
 
 const REQUIRED_SCHEMA = [
