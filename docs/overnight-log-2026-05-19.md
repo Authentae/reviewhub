@@ -1040,3 +1040,22 @@ assistive tech. Validator still passes; blog-sync still passes.
 
 **Commit:** `visual(a11y): add og:image:alt to all 33 blog posts`
 
+## Cycle 48 — 2026-05-19 ~15:25 ICT — content
+
+**Shipped:** Localized `og:image:alt` to Thai on the 17 TH blog
+posts. Cycle 47 added the same EN alt text ("ReviewHub Blog —
+Practical writing for owners on Google reviews") to all 33 posts.
+TH posts now have the Thai equivalent ("บล็อก ReviewHub —
+บทความเชิงปฏิบัติสำหรับเจ้าของร้านเรื่องรีวิว Google") so a
+Thai screen-reader user sharing a Thai post hears Thai, not
+English. A first sed attempt mangled the HTML (escape issue with
+`&mdash;`); reran via Python with explicit utf-8 to fix.
+
+**Why:** TH is the primary outreach market — the gap "EN alt
+text on a TH-language post" is exactly the kind of half-shipped
+a11y that telegraphs "we didn't think about the localised
+experience." Cost: 30 seconds of Python. Compounds: every TH
+post share from now on speaks Thai to assistive tech.
+
+**Commit:** `content(a11y): localize og:image:alt to Thai on 17 TH blog posts`
+
