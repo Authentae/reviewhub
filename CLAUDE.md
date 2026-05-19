@@ -85,6 +85,20 @@ Install/refresh the local git hooks: `bash scripts/install-hooks.sh`
 - **Don't add backwards-compat shims** when changing internal code — change the call site.
 - **Don't ask "which option" for low-risk reversible changes.** Pick and ship. Options
   are reserved for irreversible blast-radius (DB drops, force-pushes, billing changes).
+- **Social-share images by surface** (enforced by `scripts/validate-blog-seo.js`
+  + pre-commit hook):
+  - Homepage / marketing pages → `/og-image.png` (1200×630)
+  - Audit-preview pages → `/og-image-audit.png`
+  - Blog posts → `/og-image-blog.png` (standardised 2026-05-19 cycles 43-45)
+  - All three SVG sources live in `client/public/`; regenerate every PNG
+    with `node scripts/regen-og-images.js` after editing any SVG.
+- **New blog posts must use the cycle 43-45 template** — copy from a
+  recent post (e.g. `client/public/blog/how-fast-should-you-reply-to-google-reviews.html`)
+  rather than an older one to inherit the correct og-image, hreflang
+  pair, and inline-CTA widget.
+- **Pre-commit hooks are load-bearing.** Don't `--no-verify` unless you
+  understand exactly what would fire and why it shouldn't. Run
+  `bash scripts/install-hooks.sh` after a fresh clone to wire them in.
 
 ## Keywords that mean "keep going, don't summarize"
 

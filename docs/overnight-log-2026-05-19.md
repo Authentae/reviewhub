@@ -998,3 +998,27 @@ session. Pre-commit fail-fast > caught-by-someone-noticing-on-X.
 
 **Commit:** `feat(validator): enforce /og-image-blog.png on every blog post (locks cycle 43+44)`
 
+## Cycle 46 — 2026-05-19 ~14:55 ICT — doc
+
+**Shipped:** Added three new conventions to `CLAUDE.md` "Conventions
+you must follow" section:
+1. Social-share images by surface — homepage uses `/og-image.png`,
+   audit pages use `/og-image-audit.png`, blog posts use
+   `/og-image-blog.png` (with `regen-og-images.js` as the single
+   regen path)
+2. New blog posts must copy from a recent template, not an older
+   one, to inherit the cycle 43-45 og-image standard + hreflang +
+   inline-CTA widget
+3. Pre-commit hooks are load-bearing — don't `--no-verify` casually,
+   and refresh via `bash scripts/install-hooks.sh` after fresh clone
+
+**Why:** Cycle 45's validator catches drift at commit time, but a
+future Claude session sees the violation and might `--no-verify` if
+the message isn't clear. Documenting the convention up-front in the
+auto-loaded `CLAUDE.md` means future sessions know the **why**
+before they see the pre-commit warning — they skip the
+"copy-paste-from-an-old-post" anti-pattern entirely. Compounds
+across every future blog post + every future Claude session.
+
+**Commit:** `docs(CLAUDE.md): per-surface og-image convention + blog template rule + pre-commit guidance`
+
