@@ -392,3 +392,21 @@ easy thing.
 
 **Commit:** `visual(scripts): regen-og-images.js — one command for all SVG→PNG`
 
+## Cycle 20 — 2026-05-19 ~08:25 ICT — content
+
+**Shipped:** Localized the cycle-16 FAQ entry ("Why pay when ChatGPT
+exists?") to Thai. Added `pricing.faq5q/a` keys to the TH locale in
+`translations.js`. Reuses the same framing as the EN copy and the
+cycle-3 blog post: ChatGPT works at 1 review/week, ReviewHub solves
+the workflow tax at 5+/wk. Other 7 locales (es/fr/de/pt/it/ja/zh/ko)
+still fall back to EN via `translations.en[key]`.
+
+**Why:** TH is the primary outreach market — Wave 5 prospects are
+Bangkok-based, mostly Thai-speaking. A bottom-of-funnel objection
+answered in EN-only is a wall for the segment we're actively
+trying to convert. Quick, focused content fix per the playbook
+"prefer compounding over polish" — every TH /pricing visit now
+gets the answer in their language.
+
+**Commit:** `content(i18n): localize pricing.faq5 (vs ChatGPT) to Thai`
+

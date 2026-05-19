@@ -7438,6 +7438,11 @@ const th = {
   'pricing.faq3a': 'Google ดึงรีวิวเข้ามาเองอัตโนมัติ ส่วน Yelp, Facebook, TripAdvisor, Trustpilot, Wongnai, Tabelog, Naver, Dianping และอีก 55+ แพลตฟอร์ม นำเข้าผ่าน CSV ใช้ได้ทุกแพ็กเกจตั้งแต่วันนี้',
   'pricing.faq4q': 'มีค่าติดตั้งหรือต้องเซ็นสัญญาไหม?',
   'pricing.faq4a': 'ไม่มีค่าติดตั้ง ไม่มีสัญญา ไม่มีค่าซ่อน จ่ายรายเดือน ยกเลิกได้ตลอด',
+  // 5th FAQ added 2026-05-19 (overnight cycle 20) — localizes the
+  // ChatGPT objection answer for TH visitors (the primary outreach
+  // market). Other 7 locales still fall back to EN per cycle 16.
+  'pricing.faq5q': 'ใช้ ChatGPT ก็ได้ ทำไมต้องจ่ายให้ที่นี่?',
+  'pricing.faq5a': 'ChatGPT ร่างคำตอบได้ ถ้าคุณก๊อปรีวิวกับข้อมูลร้านไปแปะ — โอเคถ้ามีรีวิวสัปดาห์ละหนึ่ง ReviewHub เชื่อมกับ Google Business Profile ของคุณโดยตรง ส่งแจ้งเตือนผ่าน LINE หรือ Telegram ทันทีที่รีวิวเข้า และร่างคำตอบในโทนของคุณ (ระบบจำได้ข้ามรีวิว — ChatGPT เริ่มจากศูนย์ทุกครั้ง) เมื่อมี 5+ รีวิวต่อสัปดาห์ ภาษีเวลาในการก๊อปแปะระหว่างแท็บเริ่มสะสม นี่คือต้นทุนที่เราแก้',
   'pricing.perMonth': '/เดือน',
   'import.title': 'นำเข้ารีวิว',
   'import.subtitle': 'นำเข้ารีวิวในอดีตจากไฟล์ CSV สูงสุด 500 แถวต่อครั้ง',
