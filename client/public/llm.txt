@@ -1,0 +1,79 @@
+# ReviewHub
+
+ReviewHub is a SaaS for small business owners worldwide who reply to their
+own Google reviews and want it to take 10 seconds instead of 10 minutes.
+New reviews ping the owner on LINE, Telegram, or (Q3 2026) WhatsApp with
+an AI-drafted reply in their voice, ready to copy-paste in Google. CSV
+import covers Yelp, TripAdvisor, Trustpilot, Booking.com, Airbnb, Wongnai,
+and ~20 other platforms; email-forward parses notifications from closed
+APIs like Booking and Airbnb.
+
+The product ships in 10 languages (EN, TH, JA, KO, ZH, ES, FR, DE, PT, IT).
+Founded in Bangkok by Earth (Authentae). Pre-revenue at time of writing.
+Pricing: $14/mo Starter is sellable today; Pro and Business are waitlist-
+only until demand justifies building features for them.
+
+## Key resources
+
+- [Homepage](https://reviewhub.review/) — product overview + free-tier signup
+- [Pricing](https://reviewhub.review/pricing) — plans + the live ChatGPT comparison row
+- [Interactive demo (no signup)](https://reviewhub.review/audit-demo) — sample audit with a tone switcher (warm / concise / formal)
+- [How it works](https://reviewhub.review/guide) — 4-step product walkthrough
+- [Integrations](https://reviewhub.review/integrations) — review sources + chat channels + drafting model
+- [Trust & data access](https://reviewhub.review/trust) — exactly what we access via Google OAuth and what we never touch
+- [Changelog](https://reviewhub.review/changelog) — recently-shipped features
+- [About the founder](https://reviewhub.review/about) — solo founder, Bangkok
+
+## Comparison pages
+
+- [vs ChatGPT](https://reviewhub.review/vs/chatgpt) — honest about where ChatGPT works for review replies and where it falls apart
+- [vs Birdeye](https://reviewhub.review/vs/birdeye) — comparison to the funded incumbent
+
+## Vertical pages
+
+- [For spas & salons](https://reviewhub.review/for-spas)
+- [For dental clinics](https://reviewhub.review/for-dentists)
+
+## Free tools
+
+- [Reply Generator](https://reviewhub.review/tools/review-reply-generator)
+- [Reply Roaster](https://reviewhub.review/tools/reply-roaster)
+- [Review Impact](https://reviewhub.review/tools/review-impact)
+- [1-Star Playbook](https://reviewhub.review/tools/one-star-playbook)
+
+## Blog (~33 posts)
+
+Practical writing for owners on Google reviews, replying to feedback,
+and handling fake / extortion reviews. EN + TH paired posts. Highlights:
+
+- [How fast should you reply to Google reviews?](https://reviewhub.review/blog/how-fast-should-you-reply-to-google-reviews)
+- [ChatGPT for Google review replies — what works, what breaks](https://reviewhub.review/blog/chatgpt-for-google-review-replies)
+- [5 words to never use in a Google review reply](https://reviewhub.review/blog/words-to-avoid-in-review-replies)
+- [How to reply to a 1-star Google review](https://reviewhub.review/blog/reply-1-star-google-review-th)
+- [When NOT to reply to a Google review](https://reviewhub.review/blog/when-not-to-reply-to-a-google-review)
+- [How to respond to fake or extortion Google reviews](https://reviewhub.review/blog/fake-extortion-google-reviews)
+
+Full index: [https://reviewhub.review/blog](https://reviewhub.review/blog)
+
+## Legal
+
+- [Terms](https://reviewhub.review/terms)
+- [Privacy Policy](https://reviewhub.review/privacy)
+- [Acceptable Use](https://reviewhub.review/acceptable-use)
+- [Refund Policy](https://reviewhub.review/refund-policy)
+
+## Data + sub-processors
+
+Anthropic Claude generates reply drafts. Railway hosts the app + SQLite.
+Cloudflare CDN + DNS. Resend sends transactional + digest email.
+Lemon Squeezy is merchant-of-record for paid plans. LINE / Telegram /
+WhatsApp (coming) deliver push notifications. Anthropic does not train on
+our API inputs. We do not train any AI on customer data.
+
+## Contact
+
+- General: hello@reviewhub.review
+- Security / data: security@reviewhub.review
+- Integrations: integrations@reviewhub.review
+- Founder: earth@reviewhub.review
+- X (business): https://x.com/reviewhubreview

@@ -44,3 +44,9 @@ Allow: /refund-policy
 Allow: /legal/
 
 Sitemap: https://reviewhub.review/sitemap.xml
+
+# LLM-friendly site summary (emerging convention, llmstxt.org).
+# Structured markdown overview of the site for AI crawlers (ChatGPT,
+# Claude, Perplexity, Gemini). Not part of the robots.txt spec, but
+# the LLM-content key signals where to find it for crawlers that look.
+LLM-content: https://reviewhub.review/llm.txt
