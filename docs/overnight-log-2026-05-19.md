@@ -371,3 +371,24 @@ again 12 cycles later.
 
 **Commit:** `docs: extend morning brief overnight table to cycles 1-17`
 
+## Cycle 19 — 2026-05-19 ~08:10 ICT — visual
+
+**Shipped:** `scripts/regen-og-images.js` — single command that
+rasterises every SVG static asset (og-image, og-image-audit,
+x-header, favicon × 4 sizes) into its PNG companion at the right
+dimensions. Replaces the magic sharp incantation that was buried
+in an HTML comment in `client/index.html` (and which cycle 7 had
+to copy out + tweak by hand). Re-ran the script — refreshed
+og-image-audit.png + x-header.png as a side effect (tiny diffs
+from sharp version drift over weeks).
+
+**Why:** Cycle 7 surfaced a 6-week-old PNG drift; cycle 11 wrote
+new favicon PNGs by hand; this cycle eliminates the manual
+incantation entirely. Compounds: next time anyone edits any SVG,
+`node scripts/regen-og-images.js` is one keystroke, not "find the
+SHA-derived command in an HTML comment from 2024." Same pattern
+as cycle 13's `check-blog-sync.js` — make the right thing the
+easy thing.
+
+**Commit:** `visual(scripts): regen-og-images.js — one command for all SVG→PNG`
+
