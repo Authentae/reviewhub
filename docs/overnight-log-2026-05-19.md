@@ -659,3 +659,24 @@ look like.
 
 **Commit:** `visual(brief): SYSTEM pills now reflect real /api/health components`
 
+## Cycle 32 — 2026-05-19 ~11:25 ICT — content
+
+**Shipped:** Wiki refresh round 2. `docs/reviewhub-wiki.md` Content
+surface section updated:
+- Blog count 31 → 33 (added how-fast EN+TH from cycle 8)
+- Reference to MarketingFooter top-slot surfacing (cycle 24)
+- New "Pre-commit guards (2026-05-19)" subsection listing all 4
+  active hooks + their purposes + the install command
+- New "Utility scripts (2026-05-19)" subsection inventorying
+  regen-og-images.js (cycle 19) and find-orphans.js
+
+**Why:** Wiki is the canonical "what we know" doc — but it only
+captures the truth at the moment of last edit. After 30 cycles of
+overnight ships, the wiki was missing the second new blog pair,
+the cycle-24 footer change, and the entire pre-commit + scripts
+infrastructure we built. Cross-referencing cycle numbers makes
+the wiki an entry point INTO the overnight log, not a parallel
+truth-source competing with it.
+
+**Commit:** `docs(wiki): blog 31→33, MarketingFooter, pre-commit guards, scripts inventory`
+

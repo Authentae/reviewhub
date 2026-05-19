@@ -280,13 +280,16 @@ Narrowed dramatically on 2026-05-19 — strategic audit identified that
 total 41. Two probation watches: verticals + comparison pages will
 be deleted again if no Wave-5 signal materialises within 30 days.
 
-- **Blog**: 31 posts (15 EN + 15 TH paired + 1 unpaired). Inline mid-
+- **Blog**: 33 posts (16 EN + 16 TH paired + 1 unpaired). Inline mid-
   post CTA widget on all 29 pre-existing posts on 2026-05-19 ("Try
   this with your own reviews → See a sample audit"). 3 posts had dead
   `/for-restaurants /for-hotels /for-cafes` references — patched to
-  surviving verticals. Overnight cycle 3 (2026-05-19): added
-  `chatgpt-for-google-review-replies` EN+TH pair. /blog index shows
-  an auto-expiring "NEW" badge on posts <7 days old (cycle 4).
+  surviving verticals. Overnight 2026-05-19 cycles 3 + 8 added:
+  `chatgpt-for-google-review-replies` and
+  `how-fast-should-you-reply-to-google-reviews` (both EN+TH). /blog
+  index shows an auto-expiring "NEW" badge on posts <7 days old
+  (cycle 4). MarketingFooter Resources block now surfaces the 2
+  newest posts in the top slots (cycle 24).
 - **Free tools**: 4 (review-reply-generator, reply-roaster,
   review-impact, one-star-playbook). Plausible event tracking on
   every CTA so we can measure tool→product conversion.
@@ -311,6 +314,20 @@ be deleted again if no Wave-5 signal materialises within 30 days.
   — ~1,700 lines, ~36 KB. Identified via `scripts/find-orphans.js`.
   Tests 170/170 green. i18n keys for the public owner-response flow
   left in `translations.js` as templates if we ever re-add it.
+- **Pre-commit guards (2026-05-19)**: 4 active hooks via
+  `scripts/hooks/pre-commit`:
+  - `validate-blog-seo.js` — blog OG metadata + Article schema
+  - `check-blog-sync.js` (overnight cycle 13) — every blog HTML must
+    have matching entries in sitemap.xml, feed.xml, and BlogIndex.jsx
+  - `check-stale-positioning.js` — catches Chrome extension / iOS
+    app references that snuck back in
+  - `check-banned-phrases.sh` — honesty-lint
+  Refresh with `bash scripts/install-hooks.sh`.
+- **Utility scripts (2026-05-19)**:
+  - `regen-og-images.js` (cycle 19) — one-command SVG→PNG for every
+    social-share asset (og-image, og-image-audit, x-header, 4
+    favicons, 2 maskable variants)
+  - `find-orphans.js` — surfaces dead source files
 - **SEO infrastructure**: PNG og:image + Twitter Card + BreadcrumbList
   + Article schema + hreflang on every paired blog post. Pre-commit
   hook blocks regressions via `npm run check:seo` and
