@@ -31,7 +31,7 @@ Earth is asleep. Cron fires every 20 min and executes the next `[ ]` item.
 
 - [done] **7. `/why-us` page** — shipped (commit ccdafed). 5 beliefs: ChatGPT-paste doesn't scale, voice consistency matters, privacy is a feature, ambient triggers beat dashboards, small is right for this. First-person plural — no founder names per Earth's preference. Linked from footer Company section (top of group, next to /support). Build green.
 
-- [ ] **8. Newsletter signup widget** — small component on Landing (above footer) + on blog index + at end of every blog post via the inline-cta template. Backend: POST `/api/newsletter` route that inserts into a new `newsletter_signups` table (email, source, created_at). No third-party integration yet — local SQLite collection that we can export and import into ConvertKit/Loops when we're ready. Includes server test + honeypot + rate limit.
+- [done] **8. Newsletter signup widget** — shipped (commit db46f7d). new newsletter_signups table (UNIQUE on email), POST /api/newsletter with honeypot + rate-limit + 9 server tests (all green), NewsletterSignup component in panel + inline variants, wired into Landing (panel above footer) + BlogIndex (inline above footer). Static blog HTML pages NOT updated this cycle — that requires per-file HTML edits across 33 posts which would compete with other queue items; revisit later via a script.
 
 - [ ] **9. MarketingFooter refresh** — surface `/trust`, `/integrations`, `/why-us` in the appropriate sections. Move `/about` to where it makes sense alongside `/why-us`. Keep total links per group <8 to avoid bloat.
 
