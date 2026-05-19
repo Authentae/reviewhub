@@ -30,6 +30,31 @@ export default function Changelog() {
   // a paying user would notice.
   const highlights = [
     {
+      date: '2026-05-19',
+      en: 'Tone switcher on the audit preview — every reply draft now ships as three tone variants you can flip between with one tap (warm / concise / formal). Direct response to the "will the AI sound like a robot?" objection that surfaced in customer-dev. Pre-generated server-side at audit creation, so the toggle is instant.',
+      th: 'ปุ่มสลับโทนบน audit preview — ทุกร่างคำตอบมาเป็นสามโทน (อบอุ่น / กระชับ / ทางการ) สลับด้วยแตะเดียว ตอบโจทย์ "AI จะตอบเหมือนหุ่นไหม" สร้างไว้ล่วงหน้าฝั่งเซิร์ฟเวอร์ตอน audit สร้าง — สลับได้ทันที',
+    },
+    {
+      date: '2026-05-19',
+      en: 'Pro & Business waitlist on /pricing — replaced the dead "Coming soon" buttons with email-capture. Email + plan tagged with source. Founder gets an alert on every signup with the running count. Lets us measure real demand for the gated tiers before building features speculatively.',
+      th: 'รายชื่อรอ Pro และ Business บน /pricing — เปลี่ยนปุ่ม "Coming soon" ที่กดไม่ได้เป็นช่องเก็บอีเมล Founder ได้แจ้งทุกการสมัครพร้อมยอดรวม วัด demand จริงก่อนสร้างฟีเจอร์',
+    },
+    {
+      date: '2026-05-19',
+      en: 'Public demo audit at /audit-demo — pricing-page visitors who arrive without an outreach link can now see a sample audit (Common Grounds café, 5★/3★/1★ reviews + warm/concise/formal tone variants) without a signup.',
+      th: '/audit-demo เปิดให้ดูตัวอย่าง audit แบบสาธารณะ — คนเข้า /pricing โดยไม่มีลิงก์เชิญดู audit ตัวอย่างได้ (ร้านคาเฟ่ Common Grounds พร้อมรีวิว 5★/3★/1★ และตัวเลือกโทนทั้งสาม) ไม่ต้องสมัคร',
+    },
+    {
+      date: '2026-05-19',
+      en: 'New blog posts: "ChatGPT for Google review replies — what works, what breaks" and "How fast should you reply to Google reviews?" (both EN + TH). Plus an editorial 404 page, a "NEW" badge on the /blog index for posts <7 days old, and refreshed social-share image to match the current landing hero.',
+      th: 'บล็อกใหม่: "ใช้ ChatGPT ตอบรีวิว Google" และ "ตอบรีวิวเร็วแค่ไหนถึงจะดี?" (ทั้ง EN + TH) เพิ่ม 404 ใหม่ตามสไตล์แบรนด์ ป้าย "ใหม่" บน /blog สำหรับโพสต์อายุน้อยกว่า 7 วัน และอัพเดตภาพ social-share ให้ตรงกับ landing ปัจจุบัน',
+    },
+    {
+      date: '2026-05-19',
+      en: 'Onboarding checklist on Settings — first-time customers now see a 2-step "Connect Google" / "Connect LINE or Telegram" checklist at the top of Settings until both are done. Polls every 8 seconds for state changes so a customer who finishes a connect in another tab sees the checkmark within a few seconds.',
+      th: 'Checklist แนะนำเริ่มต้นบน Settings — ลูกค้าใหม่จะเห็น checklist 2 ขั้นตอน (เชื่อม Google / เชื่อม LINE หรือ Telegram) ที่ด้านบนของ Settings จนกว่าจะครบ ระบบเช็คทุก 8 วินาทีเพื่อให้ checkmark ขึ้นทันทีเมื่อเชื่อมเสร็จในอีกแท็บ',
+    },
+    {
       date: '2026-05-10',
       en: 'Settings → Connect LINE OA section shipped. The LINE-pivot headline feature was half-built — webhook + push existed but no UI for users to actually link their LINE account. Now there is: generate a one-time link code in Settings, send "/link <code>" to the ReviewHub LINE OA bot, the section flips to "Connected" within ~10s. After that, every new Google review pings your LINE chat with the AI-drafted reply. Privacy policy updated to disclose LINE Corp as a sub-processor.',
       th: 'เพิ่มส่วน "เชื่อม LINE OA" ที่ Settings — ฟีเจอร์หัวเรือของ LINE pivot ที่เคยทำได้ครึ่งหนึ่ง (มี webhook + push แต่ไม่มี UI ให้ผู้ใช้เชื่อม) ตอนนี้สร้างโค้ดเชื่อมที่ Settings ส่ง "/link <โค้ด>" ให้ LINE OA ของ ReviewHub แล้วเชื่อมเสร็จใน ~10 วินาที จากนั้นรีวิว Google ใหม่ทุกอันจะเด้งเข้า LINE คุณพร้อมร่างคำตอบ AI / อัปเดต privacy เพิ่ม LINE Corp เป็น sub-processor แล้ว',

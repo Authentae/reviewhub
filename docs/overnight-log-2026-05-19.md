@@ -517,3 +517,27 @@ plus the truncation defenses against log-bloat.
 
 **Commit:** `test(audit): cover logAudit best-effort + truncation + IP fallback`
 
+## Cycle 26 — 2026-05-19 ~09:55 ICT — doc
+
+**Shipped:** Five new entries on the public `/changelog`, all
+dated 2026-05-19 (EN + TH for each):
+- Tone switcher on audit-preview
+- Pro/Business waitlist on /pricing
+- Public demo audit at /audit-demo
+- New blog posts (ChatGPT + how-fast) + editorial 404 + NEW badge + refreshed og-image
+- Onboarding checklist on Settings
+
+Previous most-recent changelog entry was 2026-05-10 — 9 days of
+ships invisible to anyone who clicked /changelog. Now in sync.
+
+**Why:** /changelog is the page tech-savvy buyers go to ask "is
+this thing still being built?" Persona testing surfaced this
+specifically (the "developer hacker" persona). 9 days of silence
+on a public page reads as "abandoned project" — a credibility hit
+that costs us actual conversion. Public-facing doc accuracy is
+worth more than internal-doc accuracy. The previous changelog
+entries went into the same level of detail (paragraph per ship)
+so these 5 match the existing voice.
+
+**Commit:** `docs(changelog): 5 entries for 2026-05-19 (tone switcher, waitlist, demo, blogs, onboarding)`
+
