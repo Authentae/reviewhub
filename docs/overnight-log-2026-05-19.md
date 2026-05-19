@@ -541,3 +541,31 @@ so these 5 match the existing voice.
 
 **Commit:** `docs(changelog): 5 entries for 2026-05-19 (tone switcher, waitlist, demo, blogs, onboarding)`
 
+## Cycle 27 — 2026-05-19 ~10:10 ICT — visual
+
+**Shipped:** Maskable favicon variant — `favicon-maskable.svg` +
+two PNG renders (192/512). Distinct from `favicon.svg` because iOS
+adaptive icons and Android dynamic-color theming crop to an inner
+~80% safe zone (Web App Manifest spec for `purpose: "maskable"`).
+The original full-bleed favicon had the larger sparkle extending
+out to (53.5, 55.5) — well beyond 80% of 64px — so iOS Home Screen
+was cropping the edges. The new variant centres a single sparkle
+at 64% scale on a full-bleed teal background, then iOS crops the
+corners and leaves the brand mark untouched.
+
+Updated `manifest.webmanifest` to split icon entries by purpose:
+3 `"any"` entries (SVG + 192 PNG + 512 PNG) for tab favicons and
+launchers that don't crop, and 2 `"maskable"` entries (192 + 512
+PNG) for iOS/Android adaptive cropping. Added the maskable SVG to
+`scripts/regen-og-images.js` so future re-runs re-render both.
+
+**Why:** Cycle 11 added PNG favicon fallbacks. Cycle 23's drift
+sweep didn't catch this because the issue isn't drift — it's an
+iOS-specific spec we hadn't accounted for. Maskable matters
+specifically for the "saved to home screen" pathway, which is the
+exact UX customers hit when bookmarking the dashboard. Compounds
+— every iOS install from now on shows the sparkle centered, not
+clipped.
+
+**Commit:** `visual(favicon): add maskable variant for iOS adaptive icon crop`
+

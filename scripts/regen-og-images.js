@@ -64,6 +64,16 @@ const RENDERS = [
       ['favicon-512.png', 512, 512],
     ],
   },
+  {
+    // Maskable variant — single centred sparkle scaled to ~64% so iOS
+    // adaptive-icon cropping (~80% safe zone) doesn't clip the brand mark.
+    // Both sizes are referenced in manifest.webmanifest with purpose: "maskable".
+    svg: 'favicon-maskable.svg',
+    outputs: [
+      ['favicon-maskable-192.png', 192, 192],
+      ['favicon-maskable-512.png', 512, 512],
+    ],
+  },
 ];
 
 async function regenOne(svgFile, [outFile, width, height]) {
