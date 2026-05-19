@@ -410,3 +410,27 @@ gets the answer in their language.
 
 **Commit:** `content(i18n): localize pricing.faq5 (vs ChatGPT) to Thai`
 
+## Cycle 21 — 2026-05-19 ~08:40 ICT — code
+
+**Shipped:** New `server/tests/botDetection.test.js` (40 tests)
+covering `lib/botDetection.isLikelyBot`. Coverage: all 19 explicit
+KNOWN_PREVIEW_AGENTS with real production-observed UA strings
+(Slackbot, Twitterbot, facebookexternalhit, LinkedInBot, WhatsApp,
+TelegramBot, Discordbot, Applebot, Googlebot, bingbot, DuckDuckBot,
+YandexBot, Baiduspider, Pinterestbot, redditbot, embedly, iframely,
+Mastodon, SkypeUriPreview), 9 generic-pattern catches (bot / crawl
+/ spider / preview / fetch / scrape / monitoring / uptime /
+headless), case-insensitivity, 6 real browser UAs that MUST NOT
+flag (Chrome Win/Mac/Android, Safari iOS, Firefox Linux, Edge
+Win), and 5 missing/invalid-UA defenses (empty, null, undefined,
+number, object).
+
+**Why:** Bot detection sits on the founder's outbound-audit
+notification path. A regression here silently breaks the "prospect
+just opened your audit" signal — either spamming the founder with
+Slack-preview false-positives, or hiding real-human opens. Both
+degrade the warmest follow-up window. 0 prior coverage; now 40
+tests guard the contract.
+
+**Commit:** `test(botDetection): cover all 19 known UAs + patterns + browsers + edge cases`
+
