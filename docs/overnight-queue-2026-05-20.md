@@ -1,0 +1,56 @@
+# Overnight queue — 2026-05-20
+
+Earth is asleep. Cron fires every 20 min and executes the next `[ ]` item.
+
+**Rules:**
+- Execute items in order — do NOT skip or pick favorites
+- Do NOT invent new items beyond this list (lesson from 2026-05-19 polish-clustering)
+- Mark `[done]` immediately after commit + push succeeds
+- If an item fails twice, mark `[blocked: <reason>]` and continue to the next
+- STOP completely if CI goes red after a push
+- When all items are `[done]` OR `[blocked]`: write status to item 14, then exit (do not reschedule)
+- One commit per item, 2-line message ending with `Co-Authored-By: Claude Opus 4.7`
+- $0 budget. No directory submissions. No emails sent. No Gmail / billing / JWT_SECRET / DB migrations / audit-preview copy.
+- Apply the procedural check from `feedback_active_wave_is_not_product_scope.md` BEFORE writing any user-facing copy: is this segment-narrowing? If yes, fix the framing.
+
+---
+
+## Queue
+
+- [ ] **1. `/trust` page** — new React page at `client/src/pages/Trust.jsx` + route in `client/src/App.jsx` + link in `MarketingFooter`. Content: what we access via Google OAuth (read review list + post replies — that's it), what we DON'T access (Gmail, contacts, drive), data policy (no AI training on customer data), where data lives (Railway + SQLite), how to delete (Settings → Danger Zone). Use the editorial palette + Instrument Serif. Honest and conservative.
+
+- [ ] **2. `/integrations` page** — new React page at `client/src/pages/Integrations.jsx` + route + footer link. Lists: Google Business Profile (real API + Places API fallback), LINE OA, Telegram, WhatsApp (coming Q3 2026), CSV import (60+ platforms including Yelp/TripAdvisor/Trustpilot/Booking/Airbnb/Wongnai), email-forward (reviews+secret@reviewhub.review parses Booking.com / Airbnb / TripAdvisor notification forwards). Brief paragraph per integration explaining what it does.
+
+- [ ] **3. `llm.txt`** at `client/public/llm.txt`. Emerging standard for AI crawlers (Anthropic, OpenAI, Perplexity). Format per the current spec proposal: brief description of the site, key sections, links to canonical sources. Should make our content easy for ChatGPT/Claude/Perplexity to cite. Also add a brief reference in `robots.txt` if appropriate.
+
+- [ ] **4. Pillar + cluster content map** — proposal doc at `docs/seo-pillar-cluster-map.md`. Survey existing 33 blog posts; propose 5 pillar topics; map each post to a pillar; propose 2-3 cluster posts per pillar that we don't have yet (don't write the new posts, just propose them); recommend internal-linking changes. Earth approves pillar choice tomorrow before any restructure happens.
+
+- [ ] **5. Strategic conversation summary** at `docs/strategy-conversation-2026-05-20.md`. Capture: (a) the "active wave ≠ product scope" lesson, (b) the $0 phased plan (Phase 0 free data install → Phase 1 branch by Wave 5 result → Phase 2 first $100 MRR → Phase 3 $1k MRR → Phase 4 $5k MRR), (c) the 5-dimensional segment grid (geography × vertical × volume × channel × pricing), (d) what we deliberately are NOT doing at this stage. 5-min read.
+
+- [ ] **6. Wiki update** — append a "Strategic decisions 2026-05-20" section to `docs/reviewhub-wiki.md` summarizing tonight's framing changes (product is geography- and vertical-agnostic; Wave 5 is one hypothesis test; the new feedback memory files exist).
+
+- [ ] **7. `/why-us` page** — new React page at `client/src/pages/WhyUs.jsx` + route. Short, philosophical: "ChatGPT-paste doesn't scale," "Voice consistency matters," "Privacy is a feature," "Built by a solo founder who reads every support ticket." Different audience than Landing (which is "sell"); this is "I believe X about reviews."
+
+- [ ] **8. Newsletter signup widget** — small component on Landing (above footer) + on blog index + at end of every blog post via the inline-cta template. Backend: POST `/api/newsletter` route that inserts into a new `newsletter_signups` table (email, source, created_at). No third-party integration yet — local SQLite collection that we can export and import into ConvertKit/Loops when we're ready. Includes server test + honeypot + rate limit.
+
+- [ ] **9. MarketingFooter refresh** — surface `/trust`, `/integrations`, `/why-us` in the appropriate sections. Move `/about` to where it makes sense alongside `/why-us`. Keep total links per group <8 to avoid bloat.
+
+- [ ] **10. Schema.org Organization + WebSite + SearchAction markup** in `client/index.html`. `Organization` with our name, URL, logo, sameAs links to X handles. `WebSite` with potentialAction `SearchAction` so Google can show a sitelinks searchbox for "reviewhub" queries. Validate with Google Rich Results Test before committing.
+
+- [ ] **11. `security.txt`** at `client/public/.well-known/security.txt` per RFC 9116. Contact: security@reviewhub.review, expires field, preferred-languages, canonical URL. Plus a PGP key placeholder (note in commit message: actual PGP key when Earth wants to set one up).
+
+- [ ] **12. OG meta audit for non-blog marketing pages** — check Landing, Pricing, /audit, /audit-demo, /guide, /changelog, /support, /about, /for-spas, /for-dentists, /vs/chatgpt, /vs/birdeye. Use `useSocialMeta` hook to ensure every page sets og:title / og:description / og:image / og:type / twitter:card / twitter:image. The og:image should be `/og-image.png` (homepage), `/og-image-audit.png` (audit pages), or `/og-image-blog.png` (blog). Per-page og:title and og:description should match the page's purpose. Document any pages missing meta in the status report.
+
+- [ ] **13. Server tests** for `/api/health` and `/api/admin/waitlist-stats`. Both endpoints shipped recently (cycles 31, 39) without direct test coverage. Test: `/api/health` returns expected shape with components bag; `/api/admin/waitlist-stats` requires admin auth and returns the by_plan structure with `last_30d`, `total`, `latest_at` per plan.
+
+- [ ] **14. Final status report** at `docs/overnight-status-2026-05-20.md`. Lists every item that shipped (with commit hash), every blocker hit, and 3 recommendations for what Earth should look at first when he wakes (with file links). Marks itself `[done]`. Cron's prompt should detect this and exit.
+
+---
+
+## Reminders for the cron's execution agent
+
+- The `feedback_active_wave_is_not_product_scope.md` rule says: before writing any user-facing copy, check whether you're narrowing the product to Bangkok or hospitality. If yes, rewrite to be segment-agnostic.
+- The product is **global**. Ships 10 language packs. Has Telegram (global) alongside LINE (Asia). WhatsApp is on the roadmap. CSV import works for 60+ non-Thai platforms. **Default scope: global**. Restrict to Bangkok/hospitality only when explicitly discussing today's outreach pipeline.
+- Use the brand tokens: `--rh-paper`, `--rh-ink`, `--rh-teal`, `--rh-rose`, `--rh-sage`, `--rh-ochre`. Typography: Instrument Serif (headings), Inter (body), JetBrains Mono (eyebrows).
+- Run pre-commit hooks. Don't `--no-verify` unless absolutely necessary.
+- Commit message format: 2-line, ends with `Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>`.
