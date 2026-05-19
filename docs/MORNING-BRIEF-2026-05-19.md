@@ -146,7 +146,33 @@ visual → code):
 | 3 | content | New blog post: ChatGPT for Google review replies (EN+TH) | /vs/chatgpt + pricing comparison row just shipped; needed the search-intent post |
 | 4 | visual | "NEW" badge on /blog index for posts <7 days old | Fresh content was invisible across 31 posts; auto-expires by date |
 | 5 | code | Deleted 5 orphan files + 3 dead tests (~1,700 lines, ~36 KB) | Dead code is a compounding tax; flagged by find-orphans.js |
+| 6 | doc | Wiki + morning-brief synced with cycles 1-5 | Doc-as-canonical only works if it stays canonical |
+| 7 | visual | og-image.svg + .png regenerated to match real hero ("Reply to Google reviews in 10 seconds — from your phone") | 6+ weeks of every X/LinkedIn/iMessage share previewing a tagline that no longer exists on the site |
+| 8 | content | New blog post: How fast should you reply? (EN+TH) | Search-intent gap + aligns with the new "10 seconds" og-image |
+| 9 | code | Server tests for /api/support (13 tests) | Public no-auth endpoint emailing the founder — needed coverage on honeypot + CR/LF + /me cross-user leakage |
+| 10 | doc | Memory file: `feedback_static_assets_drift_silently.md` | Codified the drift class behind cycle 7 so future sessions sweep early |
+| 11 | visual | PNG favicon fallbacks at 32/180/192/512 | iOS Add-to-Home-Screen was showing the generic page screenshot |
+| 12 | content | Fixed feed.xml drift — added 5 missing posts (incl. chatgpt + how-fast pairs) + bumped lastBuildDate | RSS feed was 11 days behind the blog dir |
+| 13 | code | New `scripts/check-blog-sync.js` + pre-commit hook | Structural guard against cycle 12's drift class — every future blog ship is checked |
+| 14 | doc | `docs/autopilot-loop-playbook.md` | Distilled the loop patterns so the next overnight session starts at cycle 1 with the rules already known |
+| 15 | visual | Drift sweep 2nd pass — `og:image:alt` + audit-svg comment refreshed | Second class of "editorial dashboard" reference caught after the playbook ship |
+| 16 | content | 5th /pricing FAQ: "Why pay when ChatGPT exists?" | Bottom-of-funnel objection answered at the moment of intent |
+| 17 | code | Server tests for /api/plans + plans.js helpers (16 tests) | Quota-gating source of truth — silent un-gating regressions would be invisible |
 
 Full per-cycle reasoning in `docs/overnight-log-2026-05-19.md`.
 
 Loop continues firing every 15 min at :07/:22/:37/:52 ICT.
+
+### Summary so far
+
+- **17 cycles** shipped in ~4 hours
+- **17 commits** to `main` (each cycle = one self-contained commit + push + Railway redeploy)
+- **+5 blog posts** (ChatGPT + how-fast pairs, EN+TH each) → 33 total
+- **+41 new server tests** (waitlist 12, support 13, plans 16) + cycle 5 deleted 3
+- **2 new pre-commit guards** (blog-sync, plus honesty-lint inherited)
+- **1 memory file** (`feedback_static_assets_drift_silently.md`) — auto-loaded next session
+- **1 playbook** (`docs/autopilot-loop-playbook.md`) — reference for the next overnight run
+- **0 STOP triggers fired** — CI green throughout, no Wave 5 lockdown breaches
+
+If the loop is still running when you wake, the cron job ID is `b7c3edfe`. Cancel
+with `claude` → "cancel cron b7c3edfe" or via the CronDelete tool.

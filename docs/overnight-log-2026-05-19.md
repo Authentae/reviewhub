@@ -352,3 +352,22 @@ breaking the contract `/api/plans` consumers depend on.
 
 **Commit:** `test(plans): cover /api/plans route + planAllows/planMax/wouldExceed`
 
+## Cycle 18 — 2026-05-19 ~07:55 ICT — doc
+
+**Shipped:** Extended the morning-brief overnight addendum from
+cycles 1-5 to cycles 1-17. Added a 12-row table continuation (one
+row per cycle) and a "Summary so far" panel: 17 cycles, 17 commits,
++5 blog posts, +41 new tests, +2 pre-commit guards, +1 memory file,
++1 playbook, 0 STOP triggers fired. Also reminded Earth of the cron
+job ID `b7c3edfe` for cancellation.
+
+**Why:** The morning brief is the doc Earth opens first on waking.
+It had the cycles-1-5 table from cycle 6 but the next 12 cycles
+were only visible in the per-cycle log file (which is dense). A
+returning founder needs to see the full picture in 30 seconds, not
+scroll a 400-line cycle log. Doc as canonical only stays canonical
+when it's kept current — same lesson cycle 6 captured, applied
+again 12 cycles later.
+
+**Commit:** `docs: extend morning brief overnight table to cycles 1-17`
+
