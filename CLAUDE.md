@@ -38,7 +38,37 @@ railway logs
 
 # Check production health
 curl -s https://reviewhub.review/api/health | jq
+
+# Regenerate ALL PNG renders from their SVG sources
+# (og-image, og-image-audit, x-header, 4 favicons). Run after editing
+# any SVG in client/public/. Replaces the magic sharp incantation that
+# used to live in an HTML comment.
+node scripts/regen-og-images.js
+
+# Verify every blog HTML in client/public/blog/ has matching entries
+# in sitemap.xml, feed.xml, and BlogIndex.jsx POSTS. Also enforced by
+# pre-commit when any of those four files change.
+node scripts/check-blog-sync.js
+
+# Find orphaned source files — components / hooks / utils not imported
+# anywhere in production code. Output is candidates for deletion
+# (cycle 5 of 2026-05-19 deleted ~36 KB this way).
+node scripts/find-orphans.js
 ```
+
+## Scripts you can rely on (under scripts/)
+
+- `regen-og-images.js` — SVG→PNG rasterization for every social-share
+  asset. Run after editing any SVG.
+- `check-blog-sync.js` — cross-checks blog HTML / sitemap / feed /
+  BlogIndex POSTS. Wired into pre-commit.
+- `find-orphans.js` — surfaces dead source files for deletion.
+- `validate-blog-seo.js` — pre-commit hook for blog OG metadata.
+- `check-stale-positioning.js` — pre-commit hook for stale Chrome-
+  extension / iOS-app references.
+- `check-banned-phrases.sh` — honesty-lint (also a pre-commit hook).
+
+Install/refresh the local git hooks: `bash scripts/install-hooks.sh`
 
 ## Conventions you must follow
 

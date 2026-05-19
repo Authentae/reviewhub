@@ -434,3 +434,22 @@ tests guard the contract.
 
 **Commit:** `test(botDetection): cover all 19 known UAs + patterns + browsers + edge cases`
 
+## Cycle 22 — 2026-05-19 ~08:55 ICT — doc
+
+**Shipped:** Updated `CLAUDE.md` with the new scripts that landed
+this session. Added three commands to the "Commands you'll run
+constantly" block (`regen-og-images.js`, `check-blog-sync.js`,
+`find-orphans.js`) and a new "Scripts you can rely on" section
+inventorying all six scripts under `scripts/` with one-line
+descriptions of each. Closing line points at `bash scripts/install-
+hooks.sh` to refresh pre-commit hooks.
+
+**Why:** `CLAUDE.md` is loaded into every Claude session's context.
+Three useful scripts shipped tonight (cycles 13, 19, plus existing
+find-orphans surfaced in cycle 5) but a future session would have
+to discover them by grepping the repo. Listing them in the
+auto-loaded doc makes the right tool the easy tool — same pattern
+as cycle 14's playbook applied to the canonical project doc.
+
+**Commit:** `docs(CLAUDE.md): inventory scripts + add to commands block`
+
