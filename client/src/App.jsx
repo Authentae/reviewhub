@@ -23,6 +23,11 @@ const About = lazy(() => import('./pages/About'));
 // scope and what we never touch. Closes the #1 customer-flow friction
 // from the 2026-05-20 strategic audit.
 const Trust = lazy(() => import('./pages/Trust'));
+// /integrations — what ReviewHub connects to (Google + LINE + Telegram +
+// WhatsApp roadmap + CSV for 60+ + email-forward). Built 2026-05-20 per
+// overnight queue item 2. Answers "what does your product do" cleanly,
+// reduces Pricing FAQ load, satisfies enterprise/agency due-diligence.
+const Integrations = lazy(() => import('./pages/Integrations'));
 const FounderBrief = lazy(() => import('./pages/FounderBrief'));
 // Outbound audits — founder-only tool for the demo-first outreach loop.
 // Paste a prospect's reviews → AI drafts replies → shareable URL to DM.
@@ -189,6 +194,7 @@ export default function App() {
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/about" element={<About />} />
         <Route path="/trust" element={<Trust />} />
+        <Route path="/integrations" element={<Integrations />} />
         <Route path="/admin/brief" element={<PrivateRoute><FounderBrief /></PrivateRoute>} />
         <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         <Route path="/outbound-audits" element={<PrivateRoute><OutboundAudits /></PrivateRoute>} />
