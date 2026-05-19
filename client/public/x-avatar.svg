@@ -1,0 +1,21 @@
+<!-- X / Twitter / social-profile avatar source.
+     400×400 final (X recommended). Same brand mark as favicon, but:
+       - Full bleed (X applies its own circle mask)
+       - Single centred sparkle scaled to ~70% of canvas so it stays
+         visible inside X's circle crop (~80% safe zone)
+       - No rounded corners — X handles the circle.
+     Render PNG via `node scripts/regen-og-images.js`. Upload the
+     resulting 400×400 PNG to X/LinkedIn/Mastodon profiles.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="rh-avatar-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1e4d5e"/>
+      <stop offset="1" stop-color="#2c7889"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" fill="url(#rh-avatar-grad)"/>
+  <g transform="translate(32 32) scale(0.75) translate(-32 -24)">
+    <path d="M32 10c1.5 10 4 12.5 14 14-10 1.5-12.5 4-14 14-1.5-10-4-12.5-14-14 10-1.5 12.5-4 14-14z" fill="#fbf8f1"/>
+  </g>
+</svg>

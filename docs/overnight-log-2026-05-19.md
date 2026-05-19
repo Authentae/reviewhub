@@ -824,3 +824,26 @@ brief exists to prevent.
 
 **Commit:** `docs: extend morning brief overnight table to cycles 1-37`
 
+## Cycle 39 — 2026-05-19 ~13:10 ICT — visual
+
+**Shipped:** Added an SVG source for `x-avatar.png`. The X / social
+profile avatar was a 4.7 KB orphan PNG with no SVG counterpart —
+every other social-share asset (og-image, og-image-audit, x-header,
+favicons) has a regen-able SVG, but the avatar was a one-off blob
+checked in May 7. Now there's `x-avatar.svg` (full-bleed teal,
+centred sparkle at 75% scale for X's circle crop) + a new entry
+in `regen-og-images.js` that renders to 400×400 PNG (X's
+recommended profile-pic size). Re-rendered → new PNG is 15.8 KB
+(SVG-rasterized at density 300 vs the original 4.7 KB blob —
+slightly larger but matches the brand mark exactly + scales
+cleanly).
+
+**Why:** Fills the last gap in the SVG→PNG asset pipeline. Cycle
+19's `regen-og-images.js` script can now reproduce **every**
+brand raster from source SVGs in one command. Compounds: when
+Earth wants to refresh the X profile pic (or upload to LinkedIn /
+Mastodon / Threads), `node scripts/regen-og-images.js` does it.
+No more "go open the original Sketch/Figma file" tax.
+
+**Commit:** `visual(x-avatar): add SVG source + regen entry (closes asset pipeline)`
+

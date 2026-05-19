@@ -56,6 +56,16 @@ const RENDERS = [
     ],
   },
   {
+    // X / social profile avatar — 400×400. X (and Mastodon, LinkedIn etc.)
+    // apply their own circle mask, so the SVG is full-bleed with a centred
+    // sparkle at ~75% scale. Upload the rendered PNG to each platform's
+    // profile-picture upload.
+    svg: 'x-avatar.svg',
+    outputs: [
+      ['x-avatar.png', 400, 400],
+    ],
+  },
+  {
     svg: 'favicon.svg',
     outputs: [
       ['favicon-32.png', 32, 32],
