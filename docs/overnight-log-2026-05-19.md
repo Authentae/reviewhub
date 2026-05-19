@@ -957,3 +957,24 @@ diff cost than incremental rollout justifies.
 
 **Commit:** `visual(og-image-blog): add blog-specific social card + apply to 4 newest posts`
 
+## Cycle 44 — 2026-05-19 ~14:25 ICT — content
+
+**Shipped:** Retrofitted the remaining 29 blog posts to use the new
+`og-image-blog.png` from cycle 43. sed across `client/public/blog/
+*.html` swapped every reference to `/og-image.png` → `/og-image-
+blog.png`. All 33 blog posts now share a consistent blog-specific
+social-share card. Pre-commit guards both green:
+- `validate-blog-seo.js` — 33 posts, all checks pass
+- `check-blog-sync.js` — 33 posts in sync with sitemap/feed/BlogIndex
+
+**Why:** Cycle 43's note said "incremental rollout" but a `sed`
+across 29 files is one mechanical action — the diff is large by
+line count but small by risk. Half-rolled-out social-card identity
+is worse than either extreme (consistent old or consistent new):
+sharing one post shows the generic homepage card, sharing a
+different post shows the blog-specific card, and Earth wouldn't
+notice which was which. Completing the swap eliminates that
+inconsistency.
+
+**Commit:** `content(blog): all 33 posts now use og-image-blog.png (retrofit cycle 43)`
+
