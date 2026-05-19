@@ -932,3 +932,28 @@ captured for static assets.
 
 **Commit:** `docs(memory): cross-session daily log for 2026-05-19 overnight`
 
+## Cycle 43 — 2026-05-19 ~14:10 ICT — visual
+
+**Shipped:** Blog-specific social-share card. New
+`og-image-blog.svg` + `og-image-blog.png` (1200×630, ~50 KB) with
+the same brand chrome as `og-image.svg` but a different
+framing — "PRACTICAL WRITING · BLOG" eyebrow, "Reviewing the
+playbook, one reply at a time." headline, blog-specific sub-line
++ footer URL `reviewhub.review/blog`. Added to
+`scripts/regen-og-images.js`. The 4 newest blog posts (cycle 3
+ChatGPT pair + cycle 8 how-fast pair, EN+TH each) updated via
+sed to reference `og-image-blog.png` for `og:image` and
+`twitter:image` + the JSON-LD Article `image` field.
+
+**Why:** Blog shares were using the same generic
+`reviewhub.review` og-image as the homepage and pricing — so a
+LinkedIn share of a blog post and a homepage share looked
+identical. The audit-preview page already has its own
+`og-image-audit.png` for this exact reason (cycle 7 of the
+prior session). Filling in the blog variant completes the
+per-context social-card system. Older posts left on the
+generic og-image for now — retrofitting all 29 has a higher
+diff cost than incremental rollout justifies.
+
+**Commit:** `visual(og-image-blog): add blog-specific social card + apply to 4 newest posts`
+

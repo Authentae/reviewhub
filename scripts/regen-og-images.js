@@ -50,6 +50,16 @@ const RENDERS = [
     ],
   },
   {
+    // Blog-post-specific social card. Used by /blog/* posts so a post
+    // share on X / LinkedIn / Slack looks visually distinct from a
+    // product-page share. Per-post title/description still come from
+    // each post's og:title / og:description meta tags.
+    svg: 'og-image-blog.svg',
+    outputs: [
+      ['og-image-blog.png', 1200, 630],
+    ],
+  },
+  {
     svg: 'x-header.svg',
     outputs: [
       ['x-header.png', 1500, 500],
