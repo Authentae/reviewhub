@@ -594,3 +594,27 @@ honest picture.
 
 **Commit:** `content(CLAUDE.md): refresh "what's shipped" — waitlist gate, killed routes, new features`
 
+## Cycle 29 — 2026-05-19 ~10:40 ICT — code
+
+**Shipped:** `scripts/__tests__/check-blog-sync.test.js` (3 tests)
+covering the blog-sync pre-commit guard shipped in cycle 13:
+1. Exits 0 on the committed repo state (always in sync because the
+   guard runs on every commit).
+2. Exits 1 when a stray blog HTML is added without sitemap/feed
+   entries — asserts on the specific error message format
+   ("sitemap.xml is MISSING") and on the offending slug being
+   echoed.
+3. Sanity check that the script's hard-coded paths still resolve.
+   If anyone renames `sitemap.xml` or moves `BlogIndex.jsx`, the
+   script would silently never-find-them and "pass" trivially —
+   this catches that.
+
+**Why:** The blog-sync guard is wired into pre-commit so every
+contributor relies on it being correct. If its regex broke
+silently (e.g. someone refactors the `<loc>` matching), the guard
+would always-pass and we'd be back to cycle 12's 11-day feed.xml
+drift before noticing. Compounding meta-test: protects the
+protector.
+
+**Commit:** `test(check-blog-sync): cover the pre-commit guard from cycle 13`
+
