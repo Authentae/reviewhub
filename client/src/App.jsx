@@ -19,6 +19,10 @@ const Analytics = lazy(() => import('./pages/Analytics'));
 const Settings = lazy(() => import('./pages/Settings'));
 const Pricing = lazy(() => import('./pages/Pricing'));
 const About = lazy(() => import('./pages/About'));
+// /trust — pre-OAuth trust page; explains what we access via Google
+// scope and what we never touch. Closes the #1 customer-flow friction
+// from the 2026-05-20 strategic audit.
+const Trust = lazy(() => import('./pages/Trust'));
 const FounderBrief = lazy(() => import('./pages/FounderBrief'));
 // Outbound audits — founder-only tool for the demo-first outreach loop.
 // Paste a prospect's reviews → AI drafts replies → shareable URL to DM.
@@ -184,6 +188,7 @@ export default function App() {
         <Route path="/register" element={<PublicOnlyRoute><Register /></PublicOnlyRoute>} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/about" element={<About />} />
+        <Route path="/trust" element={<Trust />} />
         <Route path="/admin/brief" element={<PrivateRoute><FounderBrief /></PrivateRoute>} />
         <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         <Route path="/outbound-audits" element={<PrivateRoute><OutboundAudits /></PrivateRoute>} />
