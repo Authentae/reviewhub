@@ -618,3 +618,22 @@ protector.
 
 **Commit:** `test(check-blog-sync): cover the pre-commit guard from cycle 13`
 
+## Cycle 30 — 2026-05-19 ~10:55 ICT — doc
+
+**Shipped:** Extended morning-brief overnight table cycles 18-29
+(12 new rows) + refreshed "Summary so far" panel: 29 cycles / 29
+commits / +5 blog posts / +96 new tests / +2 pre-commit guards /
++2 scripts / +5 generated PNG assets / +1 memory file / +1
+playbook / +5 changelog entries / -5 dead files. Still 0 STOP
+triggers fired across the entire session.
+
+**Why:** Same rationale as cycle 18: Earth's read-first doc must
+mirror what shipped. The cycle log file is now dense (30 entries);
+the morning brief gives a glanceable summary of the same data.
+Bringing it forward to cycle 29 means the first ~30s of Earth's
+morning shows the full overnight picture, not "looks like 17
+cycles ran and then maybe more?" Each row keeps the same shape
+as cycles 1-17 (number / type / one-line ship / one-line why).
+
+**Commit:** `docs: extend morning brief overnight table to cycles 1-29`
+

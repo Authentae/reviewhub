@@ -158,21 +158,39 @@ visual → code):
 | 15 | visual | Drift sweep 2nd pass — `og:image:alt` + audit-svg comment refreshed | Second class of "editorial dashboard" reference caught after the playbook ship |
 | 16 | content | 5th /pricing FAQ: "Why pay when ChatGPT exists?" | Bottom-of-funnel objection answered at the moment of intent |
 | 17 | code | Server tests for /api/plans + plans.js helpers (16 tests) | Quota-gating source of truth — silent un-gating regressions would be invisible |
+| 18 | doc | Extended morning-brief overnight table to cycles 1-17 + Summary panel | Earth's read-first doc now mirrors the cycle log |
+| 19 | visual | `scripts/regen-og-images.js` — one command for SVG→PNG | Replaces the magic sharp incantation buried in an index.html comment |
+| 20 | content | Localized pricing.faq5 (vs ChatGPT) to Thai | TH is the primary Wave 5 outreach market — answer the objection in their language |
+| 21 | code | Tests for `botDetection.isLikelyBot` (40 tests, 19 known UAs + browsers + edge cases) | Guards the audit-open notification signal driving founder follow-up |
+| 22 | doc | `CLAUDE.md` scripts inventory + commands block | Future sessions discover the new tools without grepping |
+| 23 | visual | Editorial 404 redesign (sparkle SVG, ochre eyebrow, serif h1) | Last default-Tailwind surface on the site, now brand-aligned |
+| 24 | content | Surfaced 2 newest blog posts at top of `MarketingFooter` Resources | Internal-link signal from ~30 pages now flows to the freshest content |
+| 25 | code | Tests for `audit.logAudit` (12 tests — best-effort, truncation, IP fallback) | Audit helper is on every auth-sensitive route; the swallow-don't-throw contract was unprotected |
+| 26 | doc | 5 new public `/changelog` entries dated 2026-05-19 (EN + TH) | Public changelog was 9 days stale — credibility risk for tech buyers |
+| 27 | visual | Maskable favicon variant for iOS adaptive icon crop | Original favicon's larger sparkle was being cropped on iOS Home Screen |
+| 28 | content | `CLAUDE.md` "what's shipped" refresh — waitlist gate + killed routes + new categories | Future Claude reading "Pro is shipped" would have built features for a demand-signal tier |
+| 29 | code | Tests for `scripts/check-blog-sync.js` (3 tests, in/out-of-sync + path resolution) | Meta-test: protects the cycle-13 protector against silent regex regressions |
 
 Full per-cycle reasoning in `docs/overnight-log-2026-05-19.md`.
 
 Loop continues firing every 15 min at :07/:22/:37/:52 ICT.
 
-### Summary so far
+### Summary so far (cycles 1-29)
 
-- **17 cycles** shipped in ~4 hours
-- **17 commits** to `main` (each cycle = one self-contained commit + push + Railway redeploy)
+- **29 cycles** shipped in ~7.5 hours
+- **29 commits** to `main` (one per cycle; CI green throughout)
 - **+5 blog posts** (ChatGPT + how-fast pairs, EN+TH each) → 33 total
-- **+41 new server tests** (waitlist 12, support 13, plans 16) + cycle 5 deleted 3
-- **2 new pre-commit guards** (blog-sync, plus honesty-lint inherited)
-- **1 memory file** (`feedback_static_assets_drift_silently.md`) — auto-loaded next session
-- **1 playbook** (`docs/autopilot-loop-playbook.md`) — reference for the next overnight run
-- **0 STOP triggers fired** — CI green throughout, no Wave 5 lockdown breaches
+- **+96 new tests** — server: waitlist 12, support 13, plans 16, botDetection 40,
+  audit 12; scripts: check-blog-sync 3
+- **+2 pre-commit guards** (blog-sync, plus existing honesty-lint / blog-SEO / stale-positioning)
+- **+2 scripts** (`regen-og-images.js`, `check-blog-sync.js`) + tests for one of them
+- **+5 PNG assets** generated from SVG via sharp (favicon 32/180/192/512 + 2 maskable)
+- **+1 memory file** (`feedback_static_assets_drift_silently.md`) — auto-loaded next session
+- **+1 playbook** (`docs/autopilot-loop-playbook.md`) — runbook for the next overnight
+- **+5 public `/changelog` entries** + `CLAUDE.md` refresh + wiki refresh
+- **−5 dead source files + 3 dead tests** (~1,700 lines / ~36 KB removed in cycle 5)
+- **0 STOP triggers fired** — CI green throughout, no Wave 5 lockdown breaches, no
+  ambiguous decisions punted to Earth
 
 If the loop is still running when you wake, the cron job ID is `b7c3edfe`. Cancel
 with `claude` → "cancel cron b7c3edfe" or via the CronDelete tool.
