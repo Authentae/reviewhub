@@ -1,0 +1,26 @@
+<!-- Apple Touch Icon variant of favicon.svg.
+     iOS apple-touch-icon spec: render as a full square; iOS applies its
+     own corner-rounding mask. If we ship a PNG that already has rounded
+     corners (favicon.svg has rx=14), iOS rounds again on top → visible
+     double-rounding effect on Add-to-Home-Screen icons.
+
+     This variant:
+       - Full-bleed teal background, NO corner rounding (rx=0)
+       - Single sparkle at ~75% scale, centred, so the brand mark stays
+         visually centred when iOS adds the corner mask.
+       - The decorative second star from favicon.svg is dropped — at
+         180×180 with iOS rounding, the corner star sits awkwardly
+         right under iOS's rounding mask edge.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="rh-apple-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1e4d5e"/>
+      <stop offset="1" stop-color="#2c7889"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" fill="url(#rh-apple-grad)"/>
+  <g transform="translate(32 32) scale(0.85) translate(-32 -24)">
+    <path d="M32 10c1.5 10 4 12.5 14 14-10 1.5-12.5 4-14 14-1.5-10-4-12.5-14-14 10-1.5 12.5-4 14-14z" fill="#fbf8f1"/>
+  </g>
+</svg>

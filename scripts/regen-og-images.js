@@ -74,6 +74,15 @@ const RENDERS = [
       ['favicon-maskable-512.png', 512, 512],
     ],
   },
+  {
+    // Apple Touch Icon variant — flat square (no SVG corner rounding),
+    // sparkle at ~75% so iOS's own corner mask doesn't double-round.
+    // Referenced by <link rel="apple-touch-icon"> in index.html.
+    svg: 'favicon-apple-touch.svg',
+    outputs: [
+      ['favicon-apple-touch-180.png', 180, 180],
+    ],
+  },
 ];
 
 async function regenOne(svgFile, [outFile, width, height]) {

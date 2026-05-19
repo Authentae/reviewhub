@@ -740,3 +740,22 @@ review).
 
 **Commit:** `docs: capture deferred Anthropic SDK + vite@8 upgrades for Earth`
 
+## Cycle 35 — 2026-05-19 ~12:10 ICT — visual
+
+**Shipped:** Apple Touch Icon variant — fixes double-corner-rounding
+on iOS Add-to-Home-Screen. The previous `apple-touch-icon` link
+pointed at `favicon-180.png`, which inherits `rx=14` from favicon.svg.
+iOS then applies its own corner mask on top → visible double-round.
+The fix: new `favicon-apple-touch.svg` with NO corner rounding +
+sparkle at 75% scale; renders to `favicon-apple-touch-180.png`.
+Wired in `client/index.html` apple-touch-icon link. Added to
+`scripts/regen-og-images.js` so future SVG edits regenerate.
+
+**Why:** iOS Home Screen + Safari bookmarks are the icon's most-
+visible context. Cycle 27 fixed the same issue for Android via the
+maskable variant but I missed that iOS apple-touch-icon needs a
+different treatment (flat square, iOS rounds). Honest visual ship
+— catches a polish defect Earth would notice on his iPhone test.
+
+**Commit:** `visual(apple-touch): flat-square variant to stop iOS double-rounding`
+

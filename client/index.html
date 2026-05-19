@@ -9,7 +9,12 @@
          changes:
            cd client && node -e "['public/favicon-32.png',32, 'public/favicon-180.png',180, 'public/favicon-192.png',192, 'public/favicon-512.png',512]" -->
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png" />
+    <!-- apple-touch-icon must be a flat square — iOS applies its own
+         corner-rounding mask. Using favicon-180.png here doubled the
+         rounding (rx=14 in SVG + iOS mask). favicon-apple-touch.svg
+         renders to a flat 180px square with a centred sparkle for a
+         clean iOS Home Screen icon. See cycle 35 of overnight log. -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon-apple-touch-180.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="ReviewHub — reply to every Google and Wongnai review in 10 seconds. AI drafts replies in 10 languages including Thai, Japanese, and Korean — in your voice. From $14 / ฿499 a month. Free plan, no credit card." />
     <!-- Mobile browsers use this to tint the URL bar. Match the editorial
