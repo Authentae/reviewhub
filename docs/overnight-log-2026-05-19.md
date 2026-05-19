@@ -713,3 +713,30 @@ forward shows the smaller surface.
 
 **Commit:** `chore(server): npm audit fix — 3 moderate (brace-expansion, ip-address)`
 
+## Cycle 34 — 2026-05-19 ~11:55 ICT — doc
+
+**Shipped:** `docs/deferred-dependency-upgrades.md` — captures the
+context for the two breaking-semver upgrades cycle 33 deliberately
+skipped:
+- `@anthropic-ai/sdk` 0.79 → 0.96 (Memory Tool advisory we don't
+  use; breaking API; ~80 call sites; Wave 5 in flight)
+- `vite` 5 → 8 (dev-server-only advisory; would re-open the CI
+  peer-dep saga we just stabilised; advisory irrelevant for Earth's
+  workflow)
+
+Each entry has: advisory link + severity, "does it affect us?"
+analysis, why deferred, recommended upgrade path (branch / verify /
+ship), and cost of waiting.
+
+**Why:** Cycle 33's commit message says "skipped Anthropic SDK
+breaking-upgrade and client vite@8 breaking — both need Earth."
+That's a pointer, not a decision document. When Earth (or future
+Claude) revisits `npm audit` and wonders "what's the deal with
+these?" they need the context loaded in one place — risk
+assessment, exploit reachability, and what verification needs to
+happen before shipping. Compounds: prevents re-deriving the
+analysis when the question recurs (e.g. next quarterly security
+review).
+
+**Commit:** `docs: capture deferred Anthropic SDK + vite@8 upgrades for Earth`
+
