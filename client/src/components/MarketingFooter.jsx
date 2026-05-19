@@ -3,13 +3,14 @@
 // Why: every marketing page had only 3-5 internal links. PageRank-distribution
 // signal to Google was thin, and human visitors who finished reading one page
 // had no clear "where do I go next" except the back button. This footer adds
-// 15+ internal links to every marketing page, organized by intent.
+// 26 internal links to every marketing page, organized by intent.
 //
-// Sections:
-//   - Product (the audit funnel + free tools)
-//   - Verticals (the 5 SEO landing pages)
-//   - Resources (blog, changelog, roadmap, status)
-//   - Company (terms, privacy, etc.)
+// Sections (each capped at ≤8 links per overnight queue item 9, 2026-05-20,
+// to avoid bloat):
+//   - Product (audit funnel, pricing, guide, integrations, 4 free tools)
+//   - By industry (2 vertical SEO landing pages)
+//   - Resources (blog index + 5 featured posts + changelog + RSS)
+//   - Company (why-us, about, support, trust, 4 legal pages)
 //
 // Visual: minimal editorial — matches the rest of the site (paper bg, hairline
 // rule, mono section-headers, sans body links). NOT a "huge dark footer" —
@@ -27,16 +28,18 @@ export default function MarketingFooter() {
   const groups = [
     {
       heading: isThai ? 'สินค้า' : 'Product',
+      // "Home" intentionally NOT here — the wordmark in the bottom bar
+      // already links home. Freeing the slot keeps the group at the
+      // ≤8-links-per-group cap (queue item 9, 2026-05-20).
       links: [
-        { href: '/', label: isThai ? 'หน้าหลัก' : 'Home' },
         { href: '/audit', label: isThai ? 'Audit ฟรี' : 'Free audit' },
+        { href: '/audit-demo', label: isThai ? 'ลองดูตัวอย่าง' : 'See a sample (no signup)' },
         { href: '/pricing', label: isThai ? 'ราคา' : 'Pricing' },
         { href: '/guide', label: isThai ? 'วิธีใช้งาน' : 'How it works' },
         { href: '/integrations', label: isThai ? 'ระบบเชื่อมต่อ' : 'Integrations' },
         { href: '/tools/review-reply-generator', label: isThai ? 'Reply Generator (ฟรี)' : 'Reply Generator (free)' },
         { href: '/tools/reply-roaster', label: isThai ? 'Reply Roaster (ฟรี)' : 'Reply Roaster (free)' },
         { href: '/tools/review-impact', label: isThai ? 'Review Impact (ฟรี)' : 'Review Impact (free)' },
-        { href: '/tools/one-star-playbook', label: isThai ? '1-Star Playbook (ฟรี)' : '1-Star Playbook (free)' },
       ],
     },
     {
@@ -57,22 +60,30 @@ export default function MarketingFooter() {
         { href: isThai ? '/blog/why-respond-to-google-reviews-th' : '/blog/why-respond-to-google-reviews', label: isThai ? 'ทำไมต้องตอบรีวิว' : 'Why respond to reviews' },
         { href: isThai ? '/blog/how-to-ask-for-google-reviews-th' : '/blog/how-to-ask-for-google-reviews', label: isThai ? 'วิธีขอรีวิวจากลูกค้า' : 'How to ask for reviews' },
         { href: isThai ? '/blog/fake-extortion-google-reviews-th' : '/blog/fake-extortion-google-reviews', label: isThai ? 'รีวิวปลอม / รีดไถ' : 'Fake & extortion reviews' },
-        { href: isThai ? '/blog/bangkok-hospitality-review-mistakes-th' : '/blog/bangkok-hospitality-review-mistakes', label: isThai ? '5 ข้อผิดพลาดของเจ้าของในกรุงเทพฯ' : '5 Bangkok hospitality mistakes' },
+        // Removed 2026-05-20 (queue 9): the Bangkok-hospitality post was
+        // surfacing as a top-tier blog link in the always-visible footer
+        // while the product is globally scoped. Post still lives at /blog
+        // and is reachable via the /blog index + search; the footer slot
+        // now goes to the more segment-agnostic Changelog/RSS pair.
         { href: '/changelog',                           label: isThai ? 'มีอะไรใหม่' : 'Changelog' },
         { href: '/feed.xml', external: true,            label: 'RSS' },
       ],
     },
     {
       heading: isThai ? 'บริษัท' : 'Company',
+      // /about (founder story) + /why-us (product philosophy) sit next to
+      // each other — different audiences, both first in the group. Dropped
+      // /legal/th-summary 2026-05-20 (queue 9): linked from /terms anyway,
+      // and the ≤8-per-group cap had no slot for it once /about landed.
       links: [
         { href: '/why-us',          label: isThai ? 'ทำไมเราถึงสร้างสิ่งนี้' : 'Why we built this' },
+        { href: '/about',           label: isThai ? 'เกี่ยวกับเรา' : 'About the founder' },
         { href: '/support',         label: isThai ? 'ติดต่อเรา' : 'Support' },
         { href: '/trust',           label: isThai ? 'ความเป็นส่วนตัวและข้อมูล' : 'Trust & data access' },
         { href: '/terms',           label: isThai ? 'ข้อตกลง' : 'Terms' },
         { href: '/privacy',         label: isThai ? 'นโยบายความเป็นส่วนตัว' : 'Privacy' },
         { href: '/acceptable-use',  label: isThai ? 'การใช้งานที่ยอมรับ' : 'Acceptable use' },
         { href: '/refund-policy',   label: isThai ? 'นโยบายคืนเงิน' : 'Refund policy' },
-        { href: '/legal/th-summary',label: isThai ? 'สรุปกฎหมาย (ไทย)' : 'Thai legal summary' },
       ],
     },
   ];
