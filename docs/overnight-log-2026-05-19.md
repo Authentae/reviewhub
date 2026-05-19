@@ -453,3 +453,23 @@ as cycle 14's playbook applied to the canonical project doc.
 
 **Commit:** `docs(CLAUDE.md): inventory scripts + add to commands block`
 
+## Cycle 23 — 2026-05-19 ~09:10 ICT — visual
+
+**Shipped:** Editorial 404 page. Replaced the generic
+"big-gray-7xl 404 + small heading" with a brand-aligned layout:
+56×56 sparkle SVG (same gradient as favicon), ochre mono eyebrow
+"404 · Page not found", Instrument Serif headline, branded teal
+CTA + outline secondary, teal-underlined support link for stale-
+link recovery. Inline styles use the `--rh-*` design tokens.
+
+**Why:** 404 is the only page on the site that was still showing
+default Tailwind grey-on-white. A visitor following a broken
+search-engine result, an outdated outreach link, or a typo'd URL
+needs to land on a page that visually says "you're still on
+ReviewHub" — the previous design said "you hit some generic SPA
+template." Compounds — every 404 from now on (and there will be
+some, given Search Console reindex lag on the 11 killed routes
+from earlier today) has brand identity.
+
+**Commit:** `visual(404): editorial redesign — sparkle + ochre eyebrow + serif`
+
