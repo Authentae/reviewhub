@@ -31,6 +31,77 @@ verification ask (Lemon Squeezy, Google Workspace, etc.), use these:
 About.jsx until 2026-05-20 (fixed). If you see it referenced anywhere
 else, that's drift and needs correcting.
 
+## Strategic decisions — 2026-05-20
+
+After a long discussion between Earth and the agent on 2026-05-19 →
+2026-05-20, three framing decisions are now load-bearing for every
+future plan, post, page, or pitch. Read this section first.
+
+### 1. The product is global. Bangkok is the current outreach segment.
+
+ReviewHub serves any local business worldwide with a Google Business
+Profile and a chat app. Evidence baked into the code:
+
+- 10 language packs ship in `aiDrafts.js` and `mockAnthropic` (EN, TH,
+  JA, KO, ZH, ES, FR, DE, PT, IT)
+- LINE OA (Asia-heavy) AND Telegram (global) both live
+- WhatsApp on roadmap (Q3 2026)
+- CSV import covers Yelp, TripAdvisor, Trustpilot, Booking, Airbnb,
+  and ~20 other non-Thai platforms
+- Pricing supports USD AND THB plus generic currency formatting
+
+Wave 5 (14 Bangkok hospitality prospects, fired Tue/Wed) is ONE
+hypothesis test in a 5-dimensional segment grid. **When discussing the
+current outreach pipeline, "Bangkok hospitality" is correct.** When
+discussing strategy, marketing, positioning, directory submissions,
+or PR — **default to global**.
+
+### 2. The "active wave ≠ product scope" meta-rule
+
+The agent kept collapsing the product's identity to match Wave 5
+even after writing memory files warning against it. The rule is now
+procedural — three new memory files form the chain:
+
+- `feedback_dont_narrow_to_hospitality.md` — vertical axis
+- `feedback_dont_narrow_to_thailand.md` — geographic axis
+- `feedback_active_wave_is_not_product_scope.md` — the meta-rule above
+  both. Includes a 3-step procedural check to run BEFORE writing any
+  strategic content: (1) what's the active wave? (2) what's the product
+  scope? (3) am I conflating them? If yes, reframe.
+
+### 3. The $0 phased plan replaces unbounded ship-everything thinking
+
+Full plan in `docs/strategy-conversation-2026-05-20.md`. TL;DR:
+
+- **Phase 0 (now → Sun 5/24):** install free data tools (Search Console,
+  Clarity, Alerts), don't disrupt Wave 5, harvest pre-revenue testimonials.
+  $0. ~3 hrs Earth time.
+- **Phase 1 (Sun 5/24+):** branch by Wave 5 result. 1+ paying customer →
+  scale validated combo + start parallel test. 0 paying → diagnostic
+  interviews + SEO bridge.
+- **Phase 2 ($100 MRR):** reinvest 50% of revenue, one tool at a time.
+- **Phase 3 ($1k MRR):** Product Hunt launch, first VA hire, paid ads
+  experiment, first international segment test.
+- **Phase 4 ($5k MRR):** full SaaS-tool stack applies.
+
+### 4. Deferred decisions parked in `docs/deferred-dependency-upgrades.md`
+
+- `@anthropic-ai/sdk` 0.79 → 0.96 (breaking; Memory Tool advisory we don't
+  use; needs Wave-5-clear timing before upgrade)
+- `vite` 5 → 8 (dev-server-only advisory; would re-open the CI peer-dep
+  saga we just stabilized)
+
+Both untouched. Re-visit at Phase 1 or 2.
+
+### 5. Other docs updated tonight
+
+- `docs/strategy-conversation-2026-05-20.md` — full strategy briefing
+- `docs/seo-pillar-cluster-map.md` — proposal for restructuring 33 blog
+  posts into 5 pillars; Earth's sign-off on pillar choice needed
+- `docs/overnight-queue-2026-05-20.md` — finite cron queue running tonight
+- New site pages: `/trust` (pre-OAuth transparency), `/integrations`
+  (what we connect to), `/llm.txt` at root (AI-crawler summary)
+
 ## Customers
 
 _(empty — pre-revenue as of 2026-05-05)_
