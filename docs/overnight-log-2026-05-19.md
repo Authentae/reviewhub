@@ -1141,3 +1141,27 @@ suite from earlier cycles. Compounds across every route nav.
 
 **Commit:** `visual(loader): replace generic spinner with brand sparkle + reduced-motion fallback`
 
+## Cycle 52 — 2026-05-19 ~16:25 ICT — content
+
+**Shipped:** New "TOP-OF-MIND for Earth on next desk session"
+section at the top of `docs/operating-queue.md`. Surfaces the 5
+highest-priority items that need Earth's hands (not the agent's)
+when he's back at his desk:
+1. Send the Lemon Squeezy reply (paste-ready in chat; from
+   theearth1659 Gmail)
+2. Rotate JWT_SECRET to 64 chars on Railway
+3. Upload founder photo (audit-preview is locked from agent,
+   but asset swap is Earth's job)
+4. Review deferred dependency upgrades
+   (`docs/deferred-dependency-upgrades.md`)
+5. Wave 5 conversion-result watch (5/24)
+
+**Why:** Earth has been intermittently active during this overnight
+session — frustrated when blocked, then disappearing. When he's
+back at the desk he needs a single glanceable list of "what only I
+can do right now" that doesn't require reading 52 cycles of log.
+Operating queue is the canonical work-routing doc; putting this
+panel at the top is exactly where his eye lands when he opens it.
+
+**Commit:** `content(queue): TOP-OF-MIND panel — 5 items needing Earth's hands`
+

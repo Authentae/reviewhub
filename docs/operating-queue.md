@@ -41,6 +41,43 @@ moves the needle the most goes top, regardless of effort.
 
 ---
 
+## TOP-OF-MIND for Earth on next desk session (added 2026-05-19 cycle 52)
+
+Highest-priority unblocked items that need Earth's hands, not the
+agent's. Surface here so the next desk session opens with a clear
+list of "what only Earth can do right now."
+
+- `[wait:user]` **Send the Lemon Squeezy reply** — application went
+  out from `theearth1659@gmail.com`. Reply text is paste-ready in
+  the 2026-05-19 chat history (and cycle 50 of
+  `docs/overnight-log-2026-05-19.md` has the context). Three things
+  to send: website URL + live demo (`/audit-demo`) + X profile. No
+  LinkedIn per Earth's choice. **Action**: paste-and-send manually
+  from theearth1659 Gmail; mark this `[done]` after.
+- `[wait:user]` **Rotate JWT_SECRET** to 64 chars on Railway. The
+  morning brief flagged the current value at the 32-char minimum
+  threshold. 3 min in the Railway dashboard:
+  `node -e "console.log(require('crypto').randomBytes(48).toString('base64url'))"`
+  → Variables → save. You'll be logged out; log back in.
+- `[wait:user]` **Upload founder photo** to replace the "E" initial
+  circle on `/audit-preview`. Audit-preview is Wave-5-locked from
+  the agent side, but the image asset swap is something Earth can
+  do without touching the locked copy.
+- `[wait:user]` **Review deferred-dependency upgrades** —
+  `docs/deferred-dependency-upgrades.md` lists 2 breaking upgrades
+  the autopilot punted: `@anthropic-ai/sdk` 0.79→0.96 (Memory Tool
+  advisory we don't expose; breaking API) and `vite` 5→8
+  (dev-server-only advisory; would re-open the CI peer-dep saga we
+  just stabilised). Decide path; both have recommended next steps
+  in that doc.
+- `[wait:signal]` **Wave 5 conversion result** — first batch fired
+  09:00 ICT 2026-05-19. By Sun 5/24 we'll know the audit-view rate,
+  reply rate, and which vertical (Muay Thai / spa / dental / coffee)
+  is most responsive. **No action until then** — let the signal
+  arrive.
+
+---
+
 ## CODE — app, server, tests
 
 The app side. Roadmap.jsx is the public face; this is the working
