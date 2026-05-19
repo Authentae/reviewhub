@@ -312,3 +312,22 @@ to either side.
 
 **Commit:** `visual(og): sync og:image:alt + audit-svg comment with new hero`
 
+## Cycle 16 — 2026-05-19 ~07:25 ICT — content
+
+**Shipped:** 5th FAQ entry on /pricing — "Why pay for this when
+ChatGPT exists?" Direct copy distilled from cycle 3's ChatGPT blog
+post: ChatGPT fine at 1 review/wk, ReviewHub solves the workflow tax
+at 5+/wk. EN-only key (`pricing.faq5q/a`) added to `translations.js`;
+other locales fall through `translations.en[key]` so non-EN visitors
+still see the answer until translations land.
+
+**Why:** The ChatGPT comparison row on /pricing answers the
+objection statically; the ChatGPT blog post answers it for readers
+already at the bottom of the funnel. The pricing FAQ is where the
+*deciding* visitor is — adding the answer at the moment of intent
+beats them having to scroll to the comparison row or click through
+to a blog post. Compounds: every future /pricing visit gets the
+objection answered inline.
+
+**Commit:** `content(pricing): add 5th FAQ — why pay vs ChatGPT?`
+

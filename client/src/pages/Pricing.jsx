@@ -248,6 +248,7 @@ export default function Pricing() {
     { q: t('pricing.faq2q'), a: t('pricing.faq2a') },
     { q: t('pricing.faq3q'), a: t('pricing.faq3a') },
     { q: t('pricing.faq4q'), a: t('pricing.faq4a') },
+    { q: t('pricing.faq5q'), a: t('pricing.faq5a') },
   ];
 
   // Feature key → display label. Keys match server's plans.js features bag.

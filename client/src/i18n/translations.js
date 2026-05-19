@@ -1223,6 +1223,11 @@ const en = {
   'pricing.faq3a': 'Google syncs automatically — one-click secure sign-in, no setup. For Yelp, Facebook, TripAdvisor, Trustpilot, Wongnai, Tabelog, Naver, Dianping, TheFork, HolidayCheck, Reclame Aqui and 50+ other platforms, use CSV import — works on every plan today.',
   'pricing.faq4q': 'Is there a setup fee or contract?',
   'pricing.faq4a': 'No setup fees, no contracts, no hidden costs. Pay month-to-month and cancel whenever you like.',
+  // Added 2026-05-19 (overnight cycle 16) — directly addresses the
+  // ChatGPT objection that surfaced on the new pricing comparison row
+  // and the ChatGPT blog post. EN only for now; other locales fall back.
+  'pricing.faq5q': 'Why pay for this when ChatGPT exists?',
+  'pricing.faq5a': 'ChatGPT can draft a reply if you paste in the review and your business context — that\'s fine when you get 1 review a week. ReviewHub connects to your Google Business Profile, pings you on LINE or Telegram the moment a review lands, and drafts in your voice (the system remembers across reviews — ChatGPT starts cold each chat). When you have 5+ reviews a week, the workflow tax of copy-pasting between tabs adds up; that\'s the cost we\'re solving.',
   'pricing.perMonth': '/month',
 
   // Sentiment override
