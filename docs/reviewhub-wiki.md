@@ -110,20 +110,63 @@ When the first paying customer lands, log: business name, plan,
 acquisition channel (cold email / audit funnel / inbound / referral),
 date, and any pre-purchase friction worth remembering.
 
-## SEO infrastructure
+## SEO + analytics infrastructure (refreshed 2026-05-20)
 
-- **2026-05-05** — Google Search Console verified for
-  `https://reviewhub.review` (URL prefix property, HTML-tag method).
-  Verification meta tag in `client/index.html`. Sitemap.xml submitted.
-  Owner: earth.reviewhub@gmail.com.
-- **Bing Webmaster Tools** — TODO. Cleanest path: log into
-  https://www.bing.com/webmasters → Import from Google Search
-  Console (one click).
-- 5 vertical landing pages live: `/for-restaurants`, `/for-dentists`,
-  `/for-hotels`, `/for-spas`, `/for-cafes`. Each has Service JSON-LD.
-- `/blog` index live + 3 static blog posts cross-linked.
-- 2 free tools: `/tools/review-reply-generator` (AI-powered) and
-  `/tools/reply-roaster` (heuristic critique).
+**Search engine + LLM crawler coverage:**
+- **Google Search Console** — verified 2026-05-05 via meta tag. Owner
+  account is NOT theearth1659@gmail.com (only has mathstub.com); actual
+  GSC owner is unknown / probably earth.reviewhub@gmail.com (signed out).
+  Sitemap.xml submitted.
+- **Bing Webmaster Tools** — verified 2026-05-20 under
+  theearth1659@gmail.com via meta tag. Token committed to index.html.
+  Important because Bing's index feeds ChatGPT web search (per OpenAI).
+- **Ahrefs Webmaster Tools** — verified 2026-05-20 under
+  theearth1659@gmail.com. First backlink + site-audit report ready
+  ~24h after verification. Free for own-site only.
+- **llm.txt** at site root (llmstxt.org convention) — shipped 2026-05-20.
+  `LLM-content:` pointer also added in robots.txt.
+- **Schema.org JSON-LD** in index.html — SoftwareApplication +
+  Organization (with sameAs, contactPoints, 2 locales) + WebSite (10
+  locales) + FAQPage. SearchAction deliberately omitted (no /search
+  endpoint yet).
+- **security.txt** at /.well-known — enhanced 2026-05-20 with Canonical,
+  Policy → /trust, Encryption placeholder (commented), Preferred-Languages
+  en+th, Expires 2027-05-20.
+
+**Behavior + analytics:**
+- **Plausible** — page-views, privacy-first, auto-injects on prod hostname.
+- **Microsoft Clarity** — session replays + heatmaps, free unlimited.
+  Project ID `wty65sy6vo` under theearth1659@gmail.com. Loader gated by
+  `VITE_CLARITY_PROJECT_ID` env var (set in Railway). **Dashboard
+  graduates from "Almost there!" once Clarity backend detects ingest
+  (~30 min after first traffic).** Sessions only worth scrubbing once 10+.
+
+**Brand + competitor monitoring:**
+- **7 Google Alerts active** under theearth1659@gmail.com:
+  - "ReviewHub" (exact)
+  - reviewhub.review
+  - "Authentae" (exact)
+  - Birdeye review (competitor mentions)
+  - Podium reviews (competitor)
+  - AI Google review reply (category)
+  - เครื่องมือ ตอบรีวิว Google (Thai-language competitor scan)
+
+**Email deliverability:**
+- **Mail-tester.com** — used per-send to score Wave-N outreach (10/day
+  free per IP, no signup). Aim for 9+/10 before sending real wave.
+
+**Content surfaces (post-trim 2026-05-18 + additions 2026-05-19/20):**
+- 2 vertical landing pages: `/for-spas`, `/for-dentists`. Each has
+  Service JSON-LD. Others trimmed cycle 28 of 2026-05-18 due to
+  unvalidated traction (rebuild only when ONE current vertical converts).
+- 2 comparison pages: `/vs/chatgpt`, `/vs/birdeye`. Trimmed the others
+  (Podium, Yotpo, etc.) in same cycle.
+- `/blog` index + 33 blog posts (EN+TH paired) — `og-image-blog.png`
+  standardised cycle 43-45 of 2026-05-19.
+- 4 free tools live (reply generator, reply roaster, etc.).
+- Marketing pages added 2026-05-20 overnight: `/trust`, `/integrations`,
+  `/why-us`, `/about` already existed.
+- Newsletter signup widget on Landing + BlogIndex (panel + inline variants).
 
 ## Outreach waves
 

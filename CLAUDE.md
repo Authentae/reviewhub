@@ -126,21 +126,33 @@ until every section is `[wait:*]`.
   drafting (Anthropic Haiku, EN + TH + 8 more locales), bulk actions, tags,
   pinning, flagging, presets, share tokens
 - Notifications: LINE OA + Telegram push (every new review pings with an AI-drafted
-  reply), weekly impact email, Stripe-paid welcome email, founder alerts on signup
+  reply), weekly impact email, paid-welcome email (LemonSqueezy), founder
+  alerts on signup. WhatsApp on Q3 2026 roadmap.
 - Billing: LemonSqueezy webhook + checkout for Starter ($14/mo) **only**.
   Pro and Business surface waitlist email-capture forms on /pricing — gated tiers
-  not yet sellable until demand justifies building features.
+  not yet sellable until demand justifies building features. LS application
+  to merchant-of-record verification submitted; reviewer Issac Abraham
+  responded 2026-05-20, reply sent same morning.
 - Audit funnel: /audit landing, /audit-preview/:token (tone switcher: warm /
   concise / formal), /audit-demo (public sample, no signup), outbound audits
   with bot-filtered view notifications
 - Ops: backups (24h), Sentry forwarder, audit log retention, /api/health,
   /admin, /admin/brief (waitlist + outreach view stats), pre-commit guards
-  (blog SEO, blog sync, stale positioning, honesty lint)
-- Marketing surfaces (post 2026-05-19 trim): Landing, Pricing, Blog (33 posts,
-  EN+TH paired), 4 free tools, 2 vertical pages (/for-spas, /for-dentists),
-  2 comparison pages (/vs/chatgpt, /vs/birdeye), /audit, /audit-demo, /guide,
-  /changelog, /support. Killed in cycle 28 of 2026-05-18 session: /roadmap,
-  /status, /api-docs, /year-review, /line, 3 vs/* pages, 6 verticals.
+  (blog SEO, blog sync, stale positioning, honesty lint), Microsoft Clarity
+  session recordings (project ID `wty65sy6vo`, gated by VITE_CLARITY_PROJECT_ID
+  + Dockerfile ARG)
+- SEO infrastructure: Google Search Console (legacy, different account),
+  Bing Webmaster Tools (verified 2026-05-20), Ahrefs Webmaster Tools
+  (verified 2026-05-20), llm.txt at site root, Schema.org JSON-LD
+  (SoftwareApplication + Organization + WebSite + FAQPage), 7 Google Alerts
+  active under theearth1659@gmail.com.
+- Marketing surfaces (post 2026-05-20): Landing, Pricing, About, Why-Us,
+  Trust, Integrations, Blog (33 posts EN+TH paired), 4 free tools, 2
+  vertical pages (/for-spas, /for-dentists), 2 comparison pages
+  (/vs/chatgpt, /vs/birdeye), /audit, /audit-demo, /guide, /changelog,
+  /support, Newsletter signup widget (panel + inline variants). Killed in
+  cycle 28 of 2026-05-18 session: /roadmap, /status, /api-docs, /year-review,
+  /line, 3 vs/* pages, 6 verticals.
 
 ## Things that will trip you up
 
@@ -153,7 +165,19 @@ until every section is `[wait:*]`.
   so the client can persist the `rh_logged_in` localStorage marker. Without that the
   user bounces back to /login.
 - **Railway deploy fingerprint:** `/api/health` returns `uptime_seconds`. Poll until
-  it's <60 to confirm a fresh container.
+  it's <60 to confirm a fresh container. The client-bundle hash in
+  `client-dist/assets/index-*.js` ALSO changes on every meaningful rebuild —
+  use it to distinguish "container restarted with cached image" from "fresh
+  build with new env vars."
+- **VITE_* env vars need a Docker ARG declaration** in `Dockerfile` (client-builder
+  stage) for Railway to propagate them to `npm run build`. Without ARG, the
+  service variable is set at runtime but Vite reads `undefined` at build time
+  and tree-shakes the relevant code paths (cost ~45 min to diagnose 2026-05-20).
+  Already ARG'd: `VITE_CLARITY_PROJECT_ID`, `VITE_SENTRY_DSN`, `VITE_FRILL_KEY`,
+  `VITE_SHOW_DEMO`. Add new ones to the same ARG block.
+- **Railway CLI needs a TTY** for `railway login` — agent shell can't provide one.
+  If OAuth expired, ask Earth to run `railway login` himself OR drive
+  railway.com dashboard via Chrome MCP for env var changes + manual redeploys.
 
 ## Memory location
 
