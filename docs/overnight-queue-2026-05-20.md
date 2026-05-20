@@ -43,7 +43,7 @@ Earth is asleep. Cron fires every 20 min and executes the next `[ ]` item.
 
 - [done] **13. Server tests** — shipped (commit 1656ffb). 8 new tests for `/api/admin/waitlist-stats`: 401 unauth, 404 non-admin (enumeration-resistant), 404 ADMIN_EMAIL-unset, 200 shape contract, Cache-Control no-store/private, by_plan row shape after a signup, PII exclusion canary (recent rows never include email), empty-table resilience. Queue's premise about `/api/health` was wrong — solid coverage already exists in `health.test.js` (smoke + redaction + cache headers), no changes made there.
 
-- [ ] **14. Final status report** at `docs/overnight-status-2026-05-20.md`. Lists every item that shipped (with commit hash), every blocker hit, and 3 recommendations for what Earth should look at first when he wakes (with file links). Marks itself `[done]`. Cron's prompt should detect this and exit.
+- [done] **14. Final status report** — shipped (this commit). `docs/overnight-status-2026-05-20.md` is the morning briefing: 14/14 items shipped, 0 blockers, 0 STOP triggers, $0 spent. Tells Earth which 3 docs to read first + restates the 5 open decisions. Cron's next fire will detect no `[ ]` items and exit per queue rules.
 
 ---
 
