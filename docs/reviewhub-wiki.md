@@ -93,14 +93,42 @@ Full plan in `docs/strategy-conversation-2026-05-20.md`. TL;DR:
 
 Both untouched. Re-visit at Phase 1 or 2.
 
-### 5. Other docs updated tonight
+### 5. Companion docs (2026-05-20)
 
 - `docs/strategy-conversation-2026-05-20.md` — full strategy briefing
+  (5-min morning read)
 - `docs/seo-pillar-cluster-map.md` — proposal for restructuring 33 blog
-  posts into 5 pillars; Earth's sign-off on pillar choice needed
-- `docs/overnight-queue-2026-05-20.md` — finite cron queue running tonight
-- New site pages: `/trust` (pre-OAuth transparency), `/integrations`
-  (what we connect to), `/llm.txt` at root (AI-crawler summary)
+  posts into 5 pillars. **Earth's sign-off pending.** Caveat: pillars
+  are intuition-based, not keyword-researched yet. Validate against
+  Search Console data before approving the restructure.
+- `docs/overnight-queue-2026-05-20.md` — the 14-item finite cron queue
+  that ran overnight 2026-05-19/20. All 14 shipped, 0 blockers.
+- `docs/overnight-status-2026-05-20.md` — final morning report from the
+  overnight queue (14/14 done, $0 spent, what to read first).
+- `docs/free-tools-survey.md` — Tier 1-8 ranked list of $0 tools.
+- `docs/free-tools-setup.md` — Tier 1 install walkthrough (now obsolete —
+  all 6 Tier 1 tools installed mid-morning 2026-05-20).
+- New site pages 2026-05-20 overnight: `/trust` (pre-OAuth transparency),
+  `/integrations` (what we connect to), `/why-us` (5 beliefs), newsletter
+  signup widget on Landing + BlogIndex.
+- New site assets 2026-05-20 overnight: `/llm.txt` at root (AI-crawler
+  summary), enhanced Schema.org JSON-LD, enhanced security.txt.
+
+### 6. Tools installed mid-morning 2026-05-20
+
+After the overnight queue completed, Earth and the agent installed and
+verified the Tier-1 free tool stack (see `## SEO + analytics infrastructure`
+section below for state):
+
+- Microsoft Clarity (session replays) — project `wty65sy6vo`
+- Bing Webmaster Tools — verified
+- Ahrefs Webmaster Tools — verified
+- 7 Google Alerts active
+- Dockerfile fix landed (commit `0615e4b`): VITE_* env vars now declared
+  as ARGs so Railway propagates them into the client build stage. Without
+  this, Clarity loader was tree-shaken away.
+- Lemon Squeezy reviewer Issac Abraham asked for website/demo/socials;
+  reply sent same morning from theearth1659@gmail.com.
 
 ## Customers
 
