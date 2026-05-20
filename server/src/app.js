@@ -93,7 +93,13 @@ function createApp() {
         // plausible.io serves the analytics script tag <script defer src="...">
         // when Plausible is enabled. Allowed here so the snippet works without
         // a CSP redeploy.
-        scriptSrc: ["'self'", INLINE_SCRIPT_HASH, 'https://plausible.io', 'https://widget.frill.co'],
+        // *.clarity.ms — Microsoft Clarity loads its tracker via the
+        // snippet's runtime fetch from www.clarity.ms/tag/<projectId>;
+        // that script in turn loads sub-resources from various clarity.ms
+        // subdomains (CDN, region-specific). Pre-allowed so dropping
+        // VITE_CLARITY_PROJECT_ID into env activates Clarity without a
+        // CSP redeploy.
+        scriptSrc: ["'self'", INLINE_SCRIPT_HASH, 'https://plausible.io', 'https://widget.frill.co', 'https://www.clarity.ms', 'https://*.clarity.ms'],
         // Google Fonts: CSS from fonts.googleapis.com, woff2 from fonts.gstatic.com.
         // Without these in style-src/font-src, the editorial typography
         // (Instrument Serif / Inter Tight / JetBrains Mono) silently falls
@@ -118,6 +124,8 @@ function createApp() {
           'https://*.ingest.sentry.io',
           'https://plausible.io',
           'https://api.frill.co',
+          // Clarity POSTs session events + heatmap data to *.clarity.ms.
+          'https://*.clarity.ms',
         ],
         // Frill loads suggestion images and avatars; allow data: + frill-cdn.
         fontSrc: ["'self'", 'https://fonts.gstatic.com'],

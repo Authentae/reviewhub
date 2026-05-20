@@ -25,10 +25,21 @@
     <meta name="theme-color" content="#0d2a35" media="(prefers-color-scheme: dark)" />
     <meta name="color-scheme" content="light dark" />
     <meta name="robots" content="index, follow" />
-    <!-- Google Search Console ownership verification — one-time tag. Once
-         GSC has confirmed ownership it can stay (Google checks for the tag
-         on every recrawl); removing it later would require re-verifying. -->
+    <!-- Search-engine ownership verification — one-time tags. Once the
+         engine has confirmed ownership it can stay (each engine re-checks
+         the tag on every recrawl); removing later would require re-verifying.
+         Setup walkthrough: docs/free-tools-setup.md -->
     <meta name="google-site-verification" content="tLTker4DVPNQQVffxEF8t6YekekNO1ahgbcKivxerZk" />
+    <!-- Bing Webmaster Tools verification. Sign up at bing.com/webmasters,
+         add reviewhub.review, copy the meta-tag verification token here,
+         uncomment, redeploy. Bing's index also feeds ChatGPT's web search
+         (per OpenAI), so this is leverage beyond bing.com itself. -->
+    <!-- <meta name="msvalidate.01" content="REPLACE_WITH_BING_TOKEN" /> -->
+    <!-- Ahrefs Webmaster Tools verification. Free for own-site only at
+         ahrefs.com/webmaster-tools. Gives us backlink data + site audit
+         we'd otherwise pay for. Copy the meta-tag token here, uncomment,
+         redeploy. -->
+    <!-- <meta name="ahrefs-site-verification" content="REPLACE_WITH_AHREFS_TOKEN" /> -->
     <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="ReviewHub" />
