@@ -27,6 +27,23 @@ COPY client/package.json client/package-lock.json* client/.npmrc* ./
 # binary metadata that strict ci doesn't tolerate. install handles it cleanly.
 RUN npm install --no-audit --no-fund
 COPY client/ ./
+# Build-time env vars for Vite's import.meta.env.VITE_* substitution.
+# Railway only passes service variables to the BUILD step when they're
+# explicitly declared as ARGs (default is runtime-only). Without these,
+# Vite tree-shakes the relevant code paths because it sees `undefined`
+# at build time.
+#   VITE_CLARITY_PROJECT_ID — Microsoft Clarity (loaded in main.jsx)
+#   VITE_SENTRY_DSN         — Frontend Sentry
+#   VITE_FRILL_KEY          — Frill feedback widget
+#   VITE_SHOW_DEMO          — Demo data toggle on Dashboard/Login
+ARG VITE_CLARITY_PROJECT_ID
+ARG VITE_SENTRY_DSN
+ARG VITE_FRILL_KEY
+ARG VITE_SHOW_DEMO
+ENV VITE_CLARITY_PROJECT_ID=$VITE_CLARITY_PROJECT_ID \
+    VITE_SENTRY_DSN=$VITE_SENTRY_DSN \
+    VITE_FRILL_KEY=$VITE_FRILL_KEY \
+    VITE_SHOW_DEMO=$VITE_SHOW_DEMO
 RUN npm run build
 # Output: /build/dist
 
