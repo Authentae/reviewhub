@@ -163,9 +163,9 @@ function Hero() {
             </div>
             <div className="rh-hero-proof">
               <div className="metric"><div className="n">10<small> {t('landing.heroMetricLangsUnit', 'langs')}</small></div><div className="l">{t('landing.heroMetricLangs', 'Including Thai natively')}</div></div>
-              {/* Audit 2026-05-16: previous metric "60+ platforms tracked"
+              {/* Audit 2026-05-16: previous metric "platforms tracked"
                   overpromised — only Google polls automatically today. The
-                  "60+" figure was an aggregate of CSV-import targets that
+                  inflated figure was an aggregate of CSV-import targets that
                   doesn't reflect live coverage. Replaced with the honest
                   channel-count: where reviews actually surface (Google)
                   and where alerts actually fire (LINE + Telegram). */}
@@ -253,7 +253,7 @@ function CardStack() {
 // Honest framing: Google syncs automatically via OAuth ("Auto-sync"); every
 // other platform is tracked via CSV import or manual entry ("Manual / CSV"),
 // which is a real, working capability — not a "coming soon" promise. The
-// platform registry covers 60+ platforms across 10 locales.
+// platform registry covers ~20 confirmed platforms across 10 locales.
 function Marquee() {
   const { t } = useI18n();
   const liveLabel = t('marquee.liveToday', 'Auto-sync');
@@ -738,7 +738,7 @@ function Pricing() {
             </div>
             <ul>
               <li><Check />{t('landing.plan.starter1', 'Unlimited AI drafts')}</li>
-              <li><Check />{t('landing.plan.starter2', '2 platforms (e.g. Google + Wongnai)')}</li>
+              <li><Check />{t('landing.plan.starter2', '2 platforms (Google + 1 via CSV)')}</li>
               <li><Check />{t('landing.plan.starter3', 'AI drafts in 10 languages')}</li>
               <li><Check />{t('landing.plan.starter4', 'Email alerts on new reviews')}</li>
               <li><Check />{t('landing.plan.starter5', 'Templates + CSV export')}</li>

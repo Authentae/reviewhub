@@ -59,9 +59,15 @@ REASONS=(
 
 # Restrict the search to actual product source — not docs, scripts, the
 # lint itself, build output, node_modules, lockfiles, or git internals.
+#
+# client/index.html is the SPA shell — has og:description, meta description,
+# Schema.org JSON-LD, FAQPage answers. SaaSHub auto-pulled "60+ platforms"
+# from here on 2026-05-20 because it wasn't being scanned. Added 2026-05-21
+# after that drift escaped to production for ~36 hours undetected.
 SEARCH_PATHS=(
   "client/src"
   "client/public"
+  "client/index.html"
   "server/src"
 )
 
