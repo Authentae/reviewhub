@@ -24,6 +24,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'ai-google-review-replies',
+    title: "AI Google review reply tools in 2026: what works, what doesn't, and how to pick",
+    description: 'An honest, vendor-agnostic guide to AI tools that draft Google review replies. What they do well, where they fail, the 5 names worth knowing, and the decision framework for picking one (or skipping the category entirely).',
+    date: '2026-05-20',
+    readingMins: 12,
+    lang: 'en',
+  },
+  {
     slug: 'how-fast-should-you-reply-to-google-reviews',
     title: 'How fast should you reply to Google reviews? (and what slow replies signal)',
     description: 'The honest answer on response speed for Google reviews — what fast looks like, why same-day matters more for 1-stars than 5-stars, and how to stop using slow as a default.',
