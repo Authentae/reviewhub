@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar';
 import { useToast } from '../components/Toast';
 import { isLoggedIn } from '../lib/auth';
 import usePageTitle from '../hooks/usePageTitle';
+import useSocialMeta from '../hooks/useSocialMeta';
 import { useI18n } from '../context/I18nContext';
 import api from '../lib/api';
 import { getStripeCheckoutUrl } from '../lib/checkout';
@@ -138,6 +139,10 @@ function formatPrice(n, currency, lang) {
 export default function Pricing() {
   const { t, lang } = useI18n();
   usePageTitle(t('page.pricing'));
+  useSocialMeta({
+    title: 'Pricing — ReviewHub',
+    description: 'Free forever Starter, $14/mo for unlimited AI drafts in 10 languages, multi-platform CSV import, LINE/Telegram pushes. Cancel anytime, no contract. Pro and Business waitlist open.',
+  });
   const loggedIn = isLoggedIn();
   const toast = useToast();
   const [cycle, setCycle] = useState('monthly');

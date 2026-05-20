@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import MarketingNav from '../components/MarketingNav';
 import MarketingFooter from '../components/MarketingFooter';
 import usePageTitle from '../hooks/usePageTitle';
+import useSocialMeta from '../hooks/useSocialMeta';
 import { useI18n } from '../context/I18nContext';
 
 // /changelog — what shipped recently. Tech-savvy buyers (the developer
@@ -22,6 +23,12 @@ export default function Changelog() {
   // bilingual to match the rest of this page's pattern (8 other isThai
   // checks render content directly, no key indirection).
   usePageTitle(isThai ? 'มีอะไรใหม่ · ReviewHub' : 'Changelog · ReviewHub');
+  useSocialMeta({
+    title: isThai ? 'มีอะไรใหม่ · ReviewHub' : 'Changelog · ReviewHub',
+    description: isThai
+      ? 'ฟีเจอร์และการแก้ไขที่เพิ่งเปิดตัวบน ReviewHub ปรับปรุงอย่างต่อเนื่อง — โปร่งใสในระดับ commit'
+      : 'Recently-shipped features and fixes on ReviewHub. Honest, commit-level transparency for developers + buyers evaluating tools.',
+  });
 
   const REPO = 'https://github.com/Authentae/reviewhub/commits/main';
 

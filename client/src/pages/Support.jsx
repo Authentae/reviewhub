@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import api from '../lib/api';
 import usePageTitle from '../hooks/usePageTitle';
+import useSocialMeta from '../hooks/useSocialMeta';
 import MarketingNav from '../components/MarketingNav';
 import MarketingFooter from '../components/MarketingFooter';
 import HoneypotField from '../components/HoneypotField';
@@ -24,6 +25,10 @@ export default function Support() {
   const { user } = useUser();
   const location = useLocation();
   usePageTitle(t('support.title', 'Support — direct line to the founder'));
+  useSocialMeta({
+    title: 'Support — direct line to the founder · ReviewHub',
+    description: 'Bug reports, billing questions, account issues — go straight to the founder\'s inbox. Reply within 24h. Or use the Feedback widget for feature ideas.',
+  });
 
   // Pre-select category from ?type= so e.g. a billing-error toast can
   // link to /support?type=billing and the user lands with the right

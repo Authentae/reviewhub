@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../lib/api';
 import usePageTitle from '../hooks/usePageTitle';
+import useSocialMeta from '../hooks/useSocialMeta';
 import MarketingNav from '../components/MarketingNav';
 import MarketingFooter from '../components/MarketingFooter';
 import HoneypotField from '../components/HoneypotField';
@@ -22,6 +23,11 @@ import { useI18n } from '../context/I18nContext';
 export default function AuditLanding() {
   const { t, lang } = useI18n();
   usePageTitle(t('audit.title', 'Free Google review-reply audit · 10 drafts in your tone'));
+  useSocialMeta({
+    title: 'Free Google review-reply audit — 10 drafts in your tone',
+    description: 'Drop your Google Business URL, get back 10 AI-drafted reply variants in your voice. Free, no signup, founder personally reviews. Or try the interactive demo at /audit-demo.',
+    image: 'https://reviewhub.review/og-image-audit.png',
+  });
 
   const [form, setForm] = useState({ businessName: '', businessUrl: '', email: '', notes: '' });
   const [honeypot, setHoneypot] = useState('');

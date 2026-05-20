@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import MarketingNav from '../components/MarketingNav';
 import MarketingFooter from '../components/MarketingFooter';
 import usePageTitle from '../hooks/usePageTitle';
+import useSocialMeta from '../hooks/useSocialMeta';
 import { useI18n } from '../context/I18nContext';
 
 // /guide — "How ReviewHub works" + getting-started walkthrough.
@@ -27,6 +28,14 @@ export default function Guide() {
       : 'How ReviewHub works — get set up in 10 minutes'
   );
   const isThai = lang === 'th';
+  useSocialMeta({
+    title: isThai
+      ? 'วิธีใช้ ReviewHub — เริ่มต้นใน 10 นาที'
+      : 'How ReviewHub works — get set up in 10 minutes',
+    description: isThai
+      ? 'สมัคร → เชื่อม Google → เชื่อม LINE/Telegram → ตอบรีวิวใน 10 วินาทีจากแชท 4 ขั้นตอน 10 นาที'
+      : '4-step walkthrough: sign up → connect Google → connect LINE/Telegram/WhatsApp (Q3 2026) → reply to reviews in 10 seconds from your chat.',
+  });
 
   // Central walkthrough — 4 steps from signup to first reply posted.
   // Numbers + screenshots-as-text descriptions because real screenshots

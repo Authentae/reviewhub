@@ -14,6 +14,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import usePageTitle from '../hooks/usePageTitle';
+import useSocialMeta from '../hooks/useSocialMeta';
 import MarketingNav from '../components/MarketingNav';
 import MarketingFooter from '../components/MarketingFooter';
 import Navbar from '../components/Navbar';
@@ -186,6 +187,10 @@ function ContactCard({ label, value, href }) {
 
 export default function About() {
   usePageTitle('About · Earth · ReviewHub');
+  useSocialMeta({
+    title: 'About the founder · ReviewHub',
+    description: 'Solo founder building ReviewHub from Bangkok. Why this tool exists, what I believe about review replies, and how to reach me directly.',
+  });
   const loggedIn = isLoggedIn();
 
   return (
