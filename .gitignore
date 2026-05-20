@@ -3,6 +3,7 @@ server/node_modules/
 client/node_modules/
 server/data/
 server/backups/
+tmp/
 .env
 .env.local
 .env.*.local

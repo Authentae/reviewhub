@@ -605,6 +605,34 @@ the SEO surface expansion. Smaller wins; ship in batches.
 
 The boring-but-load-bearing work.
 
+- `[ ]` **a11y violations found by new audit** (2026-05-21): 5 serious +
+  2 moderate across landing/pricing/audit-demo/for-spas.
+  - color-contrast: 7+32+10+10 = 59 nodes failing WCAG AA across the
+    four pages. Suspect token combos involving `--rh-paper`/`--rh-ink`
+    at small font sizes, or muted gray text on warm-paper background.
+    Run `npm run check:a11y -- --only=landing` and inspect the JSON
+    report for the specific selectors.
+  - aria-prohibited-attr on audit-demo: 1 element using an aria-
+    attribute that doesn't apply to its role. Easy fix.
+- `[ ]` **Lighthouse best-practices = 73 on prod** (below threshold 85).
+  Real signal from `npm run check:lighthouse -- --only=landing,pricing,audit-demo`.
+  Likely CSP / cookie / mixed-content / deprecated API. Read the JSON
+  report at `tmp/lighthouse/landing.json` → `categories.best-practices.auditRefs`
+  to find which specific audits are red.
+- `[done]` Compounding-infra research doc — see
+  `docs/compounding-infra-research.md`. Surveyed every category of
+  infra ReviewHub could use (testing, SEO, observability, dev health,
+  customer, content production). Tier 1 (4 of 6 items) shipped this
+  session. Tier 2-6 remain documented for future.
+- `[done]` Visual regression harness — `npm run check:visual:baseline`
+  to freeze, `npm run check:visual` to diff. Covers 20 surfaces inc.
+  dark mode + Thai locale. Tested 5/5 surfaces 0.000% diff against prod.
+- `[done]` Lighthouse CI runner — `npm run check:lighthouse`. 16
+  surfaces × mobile by default. Outputs `tmp/lighthouse/summary.{csv,md}`.
+- `[done]` Broken-link crawler — `npm run check:links`. Walks sitemap
+  (55 URLs), probes 55 unique internal links. Tested clean.
+- `[done]` Accessibility audit — `npm run check:a11y`. axe-core via
+  Puppeteer across 16 surfaces. Fails on serious+ by default.
 - `[wait:user]` Verify production `REPLY_TO_PLATFORMS` is unset (not
   `=` empty). 5-second task: SSH or check Railway/Fly env panel.
   Look for `[REPLY-POST] Auto-posting enabled for: google` in

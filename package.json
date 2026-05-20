@@ -17,10 +17,22 @@
     "check:all": "npm run check:seo && npm run check:positioning",
     "hooks:install": "bash scripts/install-hooks.sh",
     "stats:content": "node scripts/content-stats.js",
-    "check:outreach": "node scripts/validate-outreach.js"
+    "check:outreach": "node scripts/validate-outreach.js",
+    "check:links": "node scripts/check-broken-links.mjs",
+    "check:a11y": "node scripts/a11y-audit.mjs",
+    "check:lighthouse": "node scripts/lighthouse-batch.mjs",
+    "check:visual": "node scripts/visual-regression.mjs check --url=https://reviewhub.review",
+    "check:visual:baseline": "node scripts/visual-regression.mjs baseline --url=https://reviewhub.review",
+    "screenshot": "node scripts/screenshot.mjs"
   },
   "devDependencies": {
+    "@axe-core/puppeteer": "^4.11.3",
+    "axe-core": "^4.11.4",
+    "chrome-launcher": "^1.2.1",
     "concurrently": "^8.2.2",
+    "lighthouse": "^13.3.0",
+    "pixelmatch": "^7.2.0",
+    "pngjs": "^7.0.0",
     "puppeteer": "^25.0.4"
   }
 }
