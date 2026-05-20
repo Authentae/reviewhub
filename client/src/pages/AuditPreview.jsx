@@ -75,6 +75,34 @@ export default function AuditPreview() {
   // (their own review + AI draft) while letting the CTA breathe higher
   // up the page.
   const [showAllDrafts, setShowAllDrafts] = useState(false);
+  // Sticky-bar reveal gate. The bottom CTA bar used to mount on first paint,
+  // which made the page open with "$14/mo" in the user's peripheral vision
+  // BEFORE they'd seen a single draft. Conversion-review 2026-05-20 cited
+  // this as the top "sales-page smell" hypothesis explaining 19 opens / 0
+  // replies. Fix: gate the sticky bar behind an IntersectionObserver on a
+  // sentinel rendered AFTER the first review card. The prospect now experiences
+  // the value (their own review + a real AI draft) before any price tag enters
+  // the viewport. The gate is one-way (once revealed, stays revealed even if
+  // they scroll back up), so dismissing isn't undone by scrolling.
+  const [stickyGateOpen, setStickyGateOpen] = useState(false);
+  const stickyGateRef = useRef(null);
+  useEffect(() => {
+    if (!stickyGateRef.current) return;
+    if (typeof IntersectionObserver === 'undefined') {
+      // Old browser — fall back to immediate reveal (the original behaviour
+      // before this gate landed). Better than no CTA at all.
+      setStickyGateOpen(true);
+      return;
+    }
+    const obs = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        setStickyGateOpen(true);
+        obs.disconnect();
+      }
+    }, { threshold: 0.1, rootMargin: '0px 0px -10% 0px' });
+    obs.observe(stickyGateRef.current);
+    return () => obs.disconnect();
+  }, [state.status]);
   usePageTitle(state.data?.business_name
     ? `${state.data.business_name} — Reply suggestions`
     : 'Audit preview · ReviewHub');
@@ -239,7 +267,7 @@ export default function AuditPreview() {
       <StickyConversionBar
         businessName={business_name}
         token={token || ''}
-        show={totalDrafts > 0}
+        show={totalDrafts > 0 && stickyGateOpen}
         ctaVariant={ctaVariant}
       />
       <main className="max-w-3xl mx-auto px-5 py-8 md:py-16 pb-28 md:pb-16">
@@ -294,8 +322,19 @@ export default function AuditPreview() {
             examples + the "and there's more" tease. */}
         <div className="space-y-6">
           {(showAllDrafts ? reviews : reviews.slice(0, 2)).map((r, i) => (
+            <React.Fragment key={i}>
+              {/* Sticky-bar reveal sentinel — observed by an IntersectionObserver
+                  in the parent component. Placed AFTER the first review card so
+                  the prospect must have seen one full review + draft before the
+                  bottom sticky CTA mounts. Empty, no visual presence. */}
+              {i === 1 && (
+                <div
+                  ref={stickyGateRef}
+                  aria-hidden="true"
+                  style={{ height: 1, width: '100%' }}
+                />
+              )}
             <article
-              key={i}
               className="rounded-2xl p-5 md:p-6"
               style={{
                 background: COLORS.cardBg,
@@ -340,6 +379,7 @@ export default function AuditPreview() {
                 </p>
               )}
             </article>
+            </React.Fragment>
           ))}
         </div>
 
