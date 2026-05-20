@@ -12,15 +12,55 @@ import api from '../lib/api';
 import { getStripeCheckoutUrl } from '../lib/checkout';
 
 // Pricing page — renders tier cards from /api/plans so the server is the
-// source of truth. Adding a tier or changing a price is a server-only change.
-// Language → default currency. Thai users get THB; everyone else USD.
-// Overridable via the pill toggle on the page itself — stored in localStorage
-// so it persists across sessions.
-const LANG_CURRENCY = { th: 'THB' };
+// source of truth for the canonical USD billing amount. Local-currency
+// display below is a UX layer for buyer-side conversion; LemonSqueezy still
+// charges USD at checkout regardless of what we render here.
+//
+// Per-locale display prices (LOCAL_DISPLAY_PRICES) are rounded DOWN to
+// psychologically friendly anchors — e.g. Starter at ~฿449 (under 500),
+// ~¥1,980 (under 2,000), ~₩18,000 (under 20k). That's a ~7% display
+// discount vs the true USD→local FX rate. We accept it as a conversion
+// signal for price-sensitive markets — the actual checkout amount in USD
+// is unchanged so revenue isn't affected.
+//
+// FX drift: when USD strengthens, the displayed local price drifts further
+// below true USD-equivalent. We treat that as a passive conversion discount,
+// not a margin problem. Refresh this table quarterly if rates move > 15%.
+//
+// 2026-05-21: replaced the hardcoded USD/THB-everywhere toggle with this
+// per-locale system after Earth flagged the Thai-baht toggle showing on
+// Spanish / French / German / etc. landings.
+const LANG_CURRENCY = {
+  th: 'THB',
+  ja: 'JPY',
+  zh: 'CNY',
+  ko: 'KRW',
+  fr: 'EUR',
+  de: 'EUR',
+  it: 'EUR',
+  pt: 'BRL',
+  // en + es default to USD (no entry below). Spanish LATAM owners typically
+  // think in USD; broader EN markets too. Override via toggle if locale has
+  // a corresponding entry above.
+};
 const CURRENCY_PREF_KEY = 'reviewhub_currency';
 const CURRENCY_META = {
-  USD: { symbol: '$', position: 'prefix' },
-  THB: { symbol: '฿', position: 'prefix' },
+  USD: { symbol: '$',   position: 'prefix', approx: false },
+  THB: { symbol: '฿',   position: 'prefix', approx: true  },
+  JPY: { symbol: '¥',   position: 'prefix', approx: true  },
+  CNY: { symbol: '¥',   position: 'prefix', approx: true  },
+  KRW: { symbol: '₩',   position: 'prefix', approx: true  },
+  EUR: { symbol: '€',   position: 'prefix', approx: true  },
+  BRL: { symbol: 'R$',  position: 'prefix', approx: true  },
+};
+// Per-tier, per-currency, per-cycle display prices. Picked for
+// psychological anchoring (round-number-friendly, under common mental
+// price points) rather than strict FX conversion. USD price is the
+// canonical billing amount in plans.js — not duplicated here.
+const LOCAL_DISPLAY_PRICES = {
+  starter:  { THB: { monthly: 449,  annual: 4290  }, JPY: { monthly: 1980, annual: 18900 }, CNY: { monthly: 99,  annual: 950   }, KRW: { monthly: 18000, annual: 172000 }, EUR: { monthly: 12, annual: 115  }, BRL: { monthly: 69,  annual: 659  } },
+  pro:      { THB: { monthly: 949,  annual: 9090  }, JPY: { monthly: 4280, annual: 40900 }, CNY: { monthly: 199, annual: 1900  }, KRW: { monthly: 38000, annual: 365000 }, EUR: { monthly: 26, annual: 249  }, BRL: { monthly: 149, annual: 1429 } },
+  business: { THB: { monthly: 1890, annual: 18100 }, JPY: { monthly: 8800, annual: 84000 }, CNY: { monthly: 399, annual: 3829  }, KRW: { monthly: 78000, annual: 749000 }, EUR: { monthly: 53, annual: 509  }, BRL: { monthly: 299, annual: 2869 } },
 };
 // Waitlist email-capture for gated tiers (Pro / Business). Replaces the
 // dead 'Coming soon' button with a real demand-signal instrument.
@@ -127,13 +167,36 @@ function WaitlistInput({ plan, lang }) {
 
 function formatPrice(n, currency, lang) {
   const m = CURRENCY_META[currency] || CURRENCY_META.USD;
-  // Thai baht prices are whole numbers; USD might be whole. Use the user's
-  // locale (was hardcoded 'en-US') so Thai readers see "฿1,234" with the
-  // separators their OS uses, German users see "1.234", etc. Fall back to
-  // 'en-US' when lang isn't supplied so existing callers don't break.
+  // Locale-aware separators: Thai readers see "฿1,234", German users see
+  // "1.234", etc. Falls back to 'en-US' when lang isn't supplied so
+  // existing callers don't break.
   const rounded = Math.round(n * 100) / 100;
   const body = rounded.toLocaleString(lang || 'en-US', { maximumFractionDigits: 2 });
-  return m.position === 'prefix' ? `${m.symbol}${body}` : `${body}${m.symbol}`;
+  // Approx marker for non-USD currencies. USD is the canonical billing
+  // amount in plans.js + the LemonSqueezy charge; non-USD displays are
+  // psychologically-anchored approximations of that USD price, so we
+  // signal that with a `~` prefix to keep the rendering honest.
+  const prefix = m.approx ? '~' : '';
+  return m.position === 'prefix' ? `${prefix}${m.symbol}${body}` : `${prefix}${body}${m.symbol}`;
+}
+
+// Resolve the display price for a plan + cycle + currency. USD pulls from
+// the canonical plan record (the LemonSqueezy billing amount). Non-USD
+// uses the psychologically-anchored LOCAL_DISPLAY_PRICES table; if a
+// (plan, currency) pair is missing from the table, we fall back to the
+// USD price so we never render a misleading 0 or NaN.
+function resolveDisplayPrice(plan, currency, cycle) {
+  if (currency === 'USD') {
+    return cycle === 'annual' ? plan.priceAnnualUsd : plan.priceMonthlyUsd;
+  }
+  const local = LOCAL_DISPLAY_PRICES[plan.id]?.[currency]?.[cycle];
+  if (typeof local === 'number') return local;
+  // Fallback: use legacy THB price for THB if table is missing (back-compat
+  // with the old plans.js fields); otherwise just show the USD anchor.
+  if (currency === 'THB') {
+    return cycle === 'annual' ? plan.priceAnnualThb : plan.priceMonthlyThb;
+  }
+  return cycle === 'annual' ? plan.priceAnnualUsd : plan.priceMonthlyUsd;
 }
 
 export default function Pricing() {
@@ -149,9 +212,17 @@ export default function Pricing() {
   const [plans, setPlans] = useState(null);
   const [error, setError] = useState(false);
   const [currency, setCurrency] = useState(() => {
+    const localFor = LANG_CURRENCY[lang] || 'USD';
     const stored = localStorage.getItem(CURRENCY_PREF_KEY);
-    if (stored && CURRENCY_META[stored]) return stored;
-    return LANG_CURRENCY[lang] || 'USD';
+    // Only honour the stored preference if it's one of the two options
+    // this locale would offer — i.e. USD or the locale-specific local
+    // currency. Prevents stale state where, e.g., a French user who once
+    // visited via the Thai locale ends up seeing Thai-baht prices in
+    // perpetuity (the old logic would happily restore that).
+    if (stored && (stored === 'USD' || stored === localFor) && CURRENCY_META[stored]) {
+      return stored;
+    }
+    return localFor;
   });
   function chooseCurrency(c) {
     localStorage.setItem(CURRENCY_PREF_KEY, c);
@@ -359,22 +430,28 @@ export default function Pricing() {
                   className={cycle === 'annual' ? 'on' : ''}
                 >{t('billing.annual')} <span style={{ color: 'var(--rh-sage)', marginLeft: 6, fontWeight: 500 }}>−20%</span></button>
               </div>
-              <div role="radiogroup" aria-label={t('pricing.currency')} className="rh-seg">
-                {['USD', 'THB'].map((c) => (
-                  <button
-                    type="button" key={c} role="radio" aria-checked={currency === c}
-                    onClick={() => chooseCurrency(c)}
-                    className={currency === c ? 'on' : ''}
-                  >{c}</button>
-                ))}
-              </div>
+              {/* Currency toggle is only meaningful when the user's locale
+                  has a corresponding local-currency entry. For en/es and
+                  any other locale that already defaults to USD, hide the
+                  toggle entirely — no reason to show a Thai-baht (or any
+                  other arbitrary) alternate option to a user whose market
+                  doesn't use it. */}
+              {LANG_CURRENCY[lang] && LANG_CURRENCY[lang] !== 'USD' && (
+                <div role="radiogroup" aria-label={t('pricing.currency')} className="rh-seg">
+                  {['USD', LANG_CURRENCY[lang]].map((c) => (
+                    <button
+                      type="button" key={c} role="radio" aria-checked={currency === c}
+                      onClick={() => chooseCurrency(c)}
+                      className={currency === c ? 'on' : ''}
+                    >{c}</button>
+                  ))}
+                </div>
+              )}
             </div>
-            {/* THB pricing affordance — checkout is via LemonSqueezy (the
-                Merchant of Record), which collects + remits Thai VAT 7% on
-                our behalf. PromptPay deliberately not listed: it's a Thai
-                bank rail with no MoR coverage, which would put VAT
-                compliance back on us — defeats the point of LS. */}
-            {currency === 'THB' && (
+            {/* Currency-mode footnote. Single locale-aware paragraph replaces
+                the old THB-only / USD-only two-paragraph split. LemonSqueezy
+                handles VAT + FX at checkout regardless of what we display. */}
+            {currency !== 'USD' && CURRENCY_META[currency]?.approx && (
               <p style={{
                 marginTop: 18,
                 fontFamily: 'var(--rh-mono)',
@@ -383,8 +460,8 @@ export default function Pricing() {
                 textTransform: 'uppercase',
                 color: 'var(--rh-ink-3)',
               }}>
-                <span style={{ color: 'var(--rh-ochre-deep)' }}>฿ Thai pricing.</span>{' '}
-                Card checkout via secure global processor. Thai VAT 7% included.
+                <span style={{ color: 'var(--rh-ochre-deep)' }}>{CURRENCY_META[currency].symbol} Approximate local pricing.</span>{' '}
+                Card checkout via secure global processor in USD; your bank converts to local currency and any VAT/sales tax is calculated at checkout.
               </p>
             )}
             {currency === 'USD' && (
@@ -420,8 +497,8 @@ export default function Pricing() {
             ) : (
               <div className="rh-pricing-grid">
                 {plans.map((plan) => {
-                  const priceMonthly = currency === 'THB' ? plan.priceMonthlyThb : plan.priceMonthlyUsd;
-                  const priceAnnual = currency === 'THB' ? plan.priceAnnualThb : plan.priceAnnualUsd;
+                  const priceMonthly = resolveDisplayPrice(plan, currency, 'monthly');
+                  const priceAnnual = resolveDisplayPrice(plan, currency, 'annual');
                   const price = cycle === 'annual' ? priceAnnual : priceMonthly;
                   const perUnit = cycle === 'annual' ? t('billing.perYear') : t('billing.perMonth');
                   const isFree = plan.id === 'free';

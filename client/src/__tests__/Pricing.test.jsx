@@ -104,38 +104,51 @@ describe('Pricing page', () => {
     });
   });
 
-  it('switches to THB prices via the currency toggle', async () => {
+  it('switches to THB prices via the currency toggle (Thai locale only)', async () => {
+    // The USD/THB toggle now ONLY renders for the Thai locale (2026-05-21
+    // change — previously the toggle appeared on every locale, which made
+    // no sense for Spanish / German / etc visitors). So this test sets
+    // lang=th to make the toggle present.
+    localStorage.setItem('reviewhub_lang', 'th');
     const user = userEvent.setup();
-    // Add THB prices to the mocked plans
-    const PLANS_WITH_THB = PLANS.map(p => ({
-      ...p,
-      priceMonthlyThb: p.priceMonthlyUsd * 35,
-      priceAnnualThb: p.priceAnnualUsd * 35,
-    }));
-    api.get.mockResolvedValueOnce({ data: { plans: PLANS_WITH_THB } });
+    api.get.mockResolvedValueOnce({ data: { plans: PLANS } });
     renderPage();
+    // Thai locale defaults to THB; check the psychologically-anchored
+    // Starter price (~฿449, not the literal $14 × FX rate). The ~ prefix
+    // marks it as approximate.
+    await waitFor(() => expect(screen.getByText(/~฿449/)).toBeInTheDocument());
+    // Click the USD currency pill to switch back
+    const usdBtn = screen.getAllByRole('radio').find((el) => el.textContent === 'USD');
+    expect(usdBtn).toBeTruthy();
+    await user.click(usdBtn);
     await waitFor(() => expect(screen.getByText('$14')).toBeInTheDocument());
-
-    // Click the THB currency pill
-    const thbBtn = screen.getAllByRole('radio').find((el) => el.textContent === 'THB');
-    expect(thbBtn).toBeTruthy();
-    await user.click(thbBtn);
-    // $14 × 35 = 490 THB (formatted as "฿490")
-    await waitFor(() => expect(screen.getByText(/฿490/)).toBeInTheDocument());
   });
 
-  it('defaults currency to THB for a Thai-locale user', async () => {
+  it('defaults currency to THB (with ~ marker) for a Thai-locale user', async () => {
     // Set the stored language to Thai BEFORE render. Pricing reads the lang
-    // from I18nContext; auto-detect picks lang='th' → currency 'THB' default.
+    // from I18nContext; lang='th' → currency 'THB' default. Display is the
+    // psychologically-anchored ~฿449 not the literal FX-computed amount,
+    // and the ~ prefix marks it approximate (LemonSqueezy still charges
+    // USD at checkout).
     localStorage.setItem('reviewhub_lang', 'th');
-    const PLANS_WITH_THB = PLANS.map(p => ({
-      ...p,
-      priceMonthlyThb: p.priceMonthlyUsd * 35,
-      priceAnnualThb: p.priceAnnualUsd * 35,
-    }));
-    api.get.mockResolvedValueOnce({ data: { plans: PLANS_WITH_THB } });
+    api.get.mockResolvedValueOnce({ data: { plans: PLANS } });
     renderPage();
-    // THB should be the default display without clicking
-    await waitFor(() => expect(screen.getByText(/฿490/)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText(/~฿449/)).toBeInTheDocument());
+  });
+
+  it('hides the currency toggle entirely for USD-default locales (en, es)', async () => {
+    // 2026-05-21 change: no point showing a single-option "USD" toggle to
+    // visitors whose locale has no local-currency alternate (the old code
+    // always rendered USD + THB regardless of locale). Verify the toggle
+    // is absent for English.
+    localStorage.setItem('reviewhub_lang', 'en');
+    api.get.mockResolvedValueOnce({ data: { plans: PLANS } });
+    renderPage();
+    await waitFor(() => expect(screen.getByText('$14')).toBeInTheDocument());
+    // The cycle toggle (Monthly/Annual) still exists, but the currency
+    // toggle (USD/THB or USD/JPY etc) should not.
+    const radios = screen.getAllByRole('radio').map((el) => el.textContent);
+    expect(radios).not.toContain('THB');
+    expect(radios).not.toContain('JPY');
   });
 });
