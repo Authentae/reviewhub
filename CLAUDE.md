@@ -293,6 +293,26 @@ PERSONAL Gmail (`theearth1659@gmail.com`). The outreach playbook
 explicitly says send from `earth.reviewhub@gmail.com` (the brand
 account). Founder caught the mismatch. Wasted ~10 min and 2 drafts.
 
+## Drive the browser until blocked — don't ask permission for reversible work
+
+Confirmed 2026-05-21. If a task can be done by driving Earth's authed
+Chrome session (Chrome MCP) OR by Puppeteer against public surfaces
+(installed as devDep, headless, **saves screenshots to disk** — unlike
+Chrome MCP), **just execute**. Don't propose Option A/B, don't ask
+"want me to?", don't narrate the plan.
+
+**Stop and ask** only at: login/password entry, payment forms,
+final "Submit/Post/Send/Publish" buttons that go public, account
+creation, sending email as Earth, OAuth grants, destructive third-
+party operations.
+
+**Puppeteer one-liner pattern** (use for any public-URL screenshot):
+```bash
+node scripts/screenshot.mjs <url> <output-path>
+```
+
+Full rules: `memory/feedback_drive_browser_until_blocked.md`.
+
 ## Survey full capabilities before declaring "I can't"
 
 Sibling rule. When about to say *"I can't do X with the tools I have"*
