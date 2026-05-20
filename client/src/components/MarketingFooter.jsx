@@ -53,12 +53,16 @@ export default function MarketingFooter() {
       heading: isThai ? 'ทรัพยากร' : 'Resources',
       links: [
         { href: '/blog',                                                       label: isThai ? 'บล็อก' : 'Blog' },
-        // Top two slots: the two newest, highest-search-intent posts. Internal-
-        // link signal compounds toward what we want indexed. Order = newest first.
+        // Pillar 4 page promoted to slot 2 on 2026-05-20 (commit dde6ff6).
+        // It's our wedge-keyword pillar ("AI Google review reply tool") — the
+        // broadest SEO surface we own. Every footer-link is a vote in Google's
+        // internal-link graph, so we want our highest-leverage page voted
+        // hardest. Replaces "How to ask for reviews" which mapped to Pillar 3
+        // (deferred per docs/seo-pillar-signoff-2026-05-20.md).
+        { href: '/blog/ai-google-review-replies', label: isThai ? 'เครื่องมือ AI ตอบรีวิว' : 'AI review reply tools' },
         { href: isThai ? '/blog/how-fast-should-you-reply-to-google-reviews-th' : '/blog/how-fast-should-you-reply-to-google-reviews', label: isThai ? 'ตอบเร็วแค่ไหนถึงจะดี?' : 'How fast to reply?' },
         { href: isThai ? '/blog/chatgpt-for-google-review-replies-th' : '/blog/chatgpt-for-google-review-replies', label: isThai ? 'ChatGPT vs ReviewHub' : 'ChatGPT vs ReviewHub' },
         { href: isThai ? '/blog/why-respond-to-google-reviews-th' : '/blog/why-respond-to-google-reviews', label: isThai ? 'ทำไมต้องตอบรีวิว' : 'Why respond to reviews' },
-        { href: isThai ? '/blog/how-to-ask-for-google-reviews-th' : '/blog/how-to-ask-for-google-reviews', label: isThai ? 'วิธีขอรีวิวจากลูกค้า' : 'How to ask for reviews' },
         { href: isThai ? '/blog/fake-extortion-google-reviews-th' : '/blog/fake-extortion-google-reviews', label: isThai ? 'รีวิวปลอม / รีดไถ' : 'Fake & extortion reviews' },
         // Removed 2026-05-20 (queue 9): the Bangkok-hospitality post was
         // surfacing as a top-tier blog link in the always-visible footer
