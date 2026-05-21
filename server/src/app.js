@@ -99,7 +99,13 @@ function createApp() {
         // subdomains (CDN, region-specific). Pre-allowed so dropping
         // VITE_CLARITY_PROJECT_ID into env activates Clarity without a
         // CSP redeploy.
-        scriptSrc: ["'self'", INLINE_SCRIPT_HASH, 'https://plausible.io', 'https://widget.frill.co', 'https://www.clarity.ms', 'https://*.clarity.ms'],
+        //
+        // static.cloudflareinsights.com — Cloudflare's free Web Analytics
+        // beacon, injected by CF when Web Analytics is enabled on the zone.
+        // Lighthouse best-practices=73 (2026-05-21) was driven by this
+        // script being blocked. Adding it both unlocks CF Analytics AND
+        // resolves the CSP-violation console-error penalty.
+        scriptSrc: ["'self'", INLINE_SCRIPT_HASH, 'https://plausible.io', 'https://widget.frill.co', 'https://www.clarity.ms', 'https://*.clarity.ms', 'https://static.cloudflareinsights.com'],
         // Google Fonts: CSS from fonts.googleapis.com, woff2 from fonts.gstatic.com.
         // Without these in style-src/font-src, the editorial typography
         // (Instrument Serif / Inter Tight / JetBrains Mono) silently falls
@@ -110,7 +116,13 @@ function createApp() {
         // the /link <token> command in LINE. Image-only, no data leakage
         // (the URL we ask it to encode is the LINE deep-link, not anything
         // sensitive). Stable since 2013; no API key required.
-        imgSrc: ["'self'", 'data:', 'https://*.frill.co', 'https://*.frillcdn.com', 'https://api.qrserver.com'],
+        //
+        // *.clarity.ms — Clarity fires tracking pixels at c.clarity.ms/c.gif
+        // for engagement events. Without this in imgSrc, Lighthouse picks
+        // up the CSP violations (best-practices penalty) AND Clarity's
+        // per-session pings drop silently. Allowed alongside the existing
+        // scriptSrc / connectSrc entries for the same service.
+        imgSrc: ["'self'", 'data:', 'https://*.frill.co', 'https://*.frillcdn.com', 'https://api.qrserver.com', 'https://*.clarity.ms'],
         // connect-src additions:
         // - *.ingest.us.sentry.io / *.ingest.sentry.io: frontend Sentry SDK
         //   POST /envelope/ events from the browser. Without this the SDK
