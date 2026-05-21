@@ -7,6 +7,67 @@ This file is loaded into your context every session. Keep it updated when conven
 
 ---
 
+## ⚡ Read this FIRST every session — the decision frame
+
+**North star at this stage: Time To First Paying Customer (TTFPC).**
+
+Stage 0 (now): 0 paying customers, $0 MRR, 5 outreach waves run, audit-view
+rate ~35%, **reply rate 0%**. The bottleneck is *"audit-views don't convert
+to replies."* Until that changes, every decision passes through this filter:
+
+> *"Does this measurably shorten the path to first paying customer?"*
+
+If no → back-burner. Default deflates from "is this useful?" (always yes) to
+"is this on the critical path?" (correctly narrow).
+
+**Session-start ritual (60 seconds, run BEFORE picking work):**
+
+1. **Stage check** — read `docs/reviewhub-wiki.md` for current customer count + MRR. Has it changed?
+2. **Bottleneck check** — pre-validation: outreach→reply conversion. Post first-customer: trial→paid. Post-$1k: scalable acquisition.
+3. **Active wave** — `docs/outreach/wave-N-*` — what test is in flight?
+4. **New signal since last session** — Gmail, `/admin/outreach-stats`, Resend, Clarity.
+5. **Pick work IN the bottleneck zone** — default to the *promote list* below, not the *demote list*.
+
+**Promote list (default top-of-queue at pre-revenue):**
+- Wave-N postmortems + per-prospect view-count diagnostics
+- Followup-email drafts to opener-no-reply segment
+- Funnel diagnostic dashboards
+- Outreach identity / deliverability investigation
+- Audit-preview + pricing-page A/B variants
+- Sharper CTAs and offer rewrites
+- Customer-interview prep (Earth-executed; agent preps the drafts/scripts)
+
+**Demote list (defer unless they pass the decision frame):**
+- New marketing surfaces (we have 100+)
+- New blog posts (we have 33)
+- Visual polish / aesthetic refactors
+- New free tools (we have 4)
+- New vertical pages (we have 2)
+- New /vs/* comparison pages (we have 2)
+- Schema markup polish, internal-link refactors, hreflang additions
+- Infrastructure-for-infra's-sake (compounding only if the recurring events are happening NOW)
+
+**Pre-ship checklist for ANY ship >1 hour:**
+- Which decision-frame tier? (1: signal on bottleneck · 2: friction on conversion path · 3: compounding-NOW · 4: required maintenance · 5: motion-without-progress)
+- If shipped AND 1 paying customer landed next month, would this have been the cause?
+- If 0 customers landed, would this be the missing piece?
+
+**When user says `ship` / `go` / `more` / `autopilot`:**
+- Run the session-start ritual silently first.
+- Default to a promote-list item, NOT a demote-list item.
+- If queue has only demote-list items, surface 2-3 promote-list candidates instead of grinding.
+
+**Stage transitions (re-evaluate the framework when these fire):**
+- First paying customer lands → TTFPC becomes MRR/month delta
+- MRR > $1k → bottleneck shifts to retention
+- MRR > $5k → bottleneck shifts to efficient growth (CAC payback)
+
+Full framework: `docs/decision-framework.md`. Memory rule: `memory/feedback_stage_aware_decisions.md`.
+
+**Why this section exists:** for ~6 months the agent shipped 100+ surfaces while the bottleneck (reply rate) stayed at 0%. That's motion-without-progress at a pre-revenue solo SaaS. Earth flagged it 2026-05-21; this frame is the fix.
+
+---
+
 ## Stack
 
 - **Server:** Node + Express + SQLite (better-sqlite3) at [server/src](server/src)
