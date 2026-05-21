@@ -111,7 +111,7 @@ renderAt('/audit-preview/sharetoken123?variant=control');
     ).toBeTruthy();
   });
 
-  it('primary CTA goes to Stripe Payment Link for Starter, with fallback /register if Stripe is null', async () => {
+  it('primary CTA goes to a hosted checkout URL for Starter, with fallback /register if checkout is null', async () => {
     apiGet.mockResolvedValue({ data: SAMPLE });
     // ?variant=control pins the assignCtaVariant URL override so these
 // tests stay deterministic across hash-fn changes (mod-2 → mod-3 etc).
@@ -125,14 +125,19 @@ renderAt('/audit-preview/sharetoken123?variant=control');
     const cta = screen.getByText(/set this up for me/i).closest('a');
     expect(cta).toBeTruthy();
     const href = cta.getAttribute('href');
-    // Post-Stripe-pivot (2026-05-15): primary CTA routes directly to
-    // the Starter Stripe Payment Link. The /register fallback only
-    // fires if getStripeCheckoutUrl returns null (e.g. plan gated).
-    // Either path is acceptable; both bypass the old register-first
-    // interstitial. Audit attribution lives in plausible-tagged-events
-    // classes now, not URL params (Stripe strips them).
+    // 2026-05-21: switched from Stripe Payment Links to LemonSqueezy
+    // (LS as Merchant of Record handles VAT/sales-tax globally — see
+    // checkout.js header). Test now accepts either:
+    //   - LS checkout: `reviewhub.lemonsqueezy.com/checkout/buy/<UUID>`
+    //   - Stripe backup: `buy.stripe.com/...` (if rolled back)
+    //   - Legacy fallback: `/register?from=audit&...` (when plan is
+    //     coming_soon or getCheckoutUrl returns null)
+    // Audit attribution lives in plausible-tagged-events classes now,
+    // not URL params (provider strips them on redirect anyway).
     expect(
-      href.includes('buy.stripe.com') || href.includes('/register')
+      href.includes('lemonsqueezy.com') ||
+      href.includes('buy.stripe.com') ||
+      href.includes('/register')
     ).toBe(true);
   });
 
