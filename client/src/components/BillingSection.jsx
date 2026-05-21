@@ -112,7 +112,7 @@ export default function BillingSection({ subscription, onRefresh }) {
               {status !== 'active' && getStripeCheckoutUrl(plan) ? (
                 <a
                   href={getStripeCheckoutUrl(plan)}
-                  className="btn-primary text-sm plausible-event-name=SettingsResubscribeClick"
+                  className="lemonsqueezy-button btn-primary text-sm plausible-event-name=SettingsResubscribeClick"
                   data-plan={plan}
                 >
                   {t('billing.resubscribe', 'Resubscribe')}

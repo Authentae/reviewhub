@@ -197,6 +197,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <!-- LemonSqueezy Checkout Overlay — loads lemon.js so any anchor with
+         class="lemonsqueezy-button" opens checkout as a modal on this domain
+         instead of redirecting to reviewhub.lemonsqueezy.com. defer'd so it
+         doesn't compete with LCP-critical resources. Falls back gracefully
+         to a plain redirect (the anchor's href) if the script fails to load. -->
+    <script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
     <title>ReviewHub — AI Review Replies in 10 Languages</title>
     <script>
       // Two responsibilities, kept inline so they run before React mounts:

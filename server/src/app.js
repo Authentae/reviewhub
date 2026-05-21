@@ -105,7 +105,12 @@ function createApp() {
         // Lighthouse best-practices=73 (2026-05-21) was driven by this
         // script being blocked. Adding it both unlocks CF Analytics AND
         // resolves the CSP-violation console-error penalty.
-        scriptSrc: ["'self'", INLINE_SCRIPT_HASH, 'https://plausible.io', 'https://widget.frill.co', 'https://www.clarity.ms', 'https://*.clarity.ms', 'https://static.cloudflareinsights.com'],
+        // assets.lemonsqueezy.com — hosts lemon.js, the LS Checkout Overlay
+        // script. Loaded from client/index.html so any anchor with
+        // class="lemonsqueezy-button" opens checkout as a modal on our
+        // domain instead of redirecting customers to reviewhub.lemonsqueezy.com.
+        // Trust-signal upgrade: customer never leaves reviewhub.review.
+        scriptSrc: ["'self'", INLINE_SCRIPT_HASH, 'https://plausible.io', 'https://widget.frill.co', 'https://www.clarity.ms', 'https://*.clarity.ms', 'https://static.cloudflareinsights.com', 'https://assets.lemonsqueezy.com'],
         // Google Fonts: CSS from fonts.googleapis.com, woff2 from fonts.gstatic.com.
         // Without these in style-src/font-src, the editorial typography
         // (Instrument Serif / Inter Tight / JetBrains Mono) silently falls
@@ -146,6 +151,13 @@ function createApp() {
         // Frill loads suggestion images and avatars; allow data: + frill-cdn.
         fontSrc: ["'self'", 'https://fonts.gstatic.com'],
         objectSrc: ["'none'"],
+        // frameSrc — who WE can embed in iframes. lemonsqueezy.com is
+        // needed for the LS Checkout Overlay (lemon.js mounts an iframe
+        // pointing at reviewhub.lemonsqueezy.com/checkout/buy/<UUID>?embed=1).
+        // Without this in frame-src, the modal opens blank or CSP-blocks.
+        frameSrc: ["'self'", 'https://*.lemonsqueezy.com'],
+        // frameAncestors — who can frame US. Locked to 'none' (matches
+        // frameguard X-Frame-Options DENY) so we can't be clickjacked.
         frameAncestors: ["'none'"],
         baseUri: ["'self'"],
         formAction: ["'self'"],

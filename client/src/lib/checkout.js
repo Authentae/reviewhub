@@ -27,9 +27,29 @@
 const CHECKOUT_URLS = {
   // LemonSqueezy test-mode URLs. Same URLs work in live mode once Earth
   // flips the store from test → live; the variant UUIDs don't change.
-  starter:  'https://reviewhub.lemonsqueezy.com/checkout/buy/6a430dc7-698f-4ec2-8dde-fad8a4942e88',
+  // The ?embed=1 flag + class="lemonsqueezy-button" on the anchor triggers
+  // lemon.js (loaded in client/index.html) to open checkout as a modal
+  // overlay on this domain instead of a full-page redirect. If lemon.js
+  // fails to load, the anchor's href still works as a plain redirect —
+  // graceful degradation.
+  starter:  'https://reviewhub.lemonsqueezy.com/checkout/buy/6a430dc7-698f-4ec2-8dde-fad8a4942e88?embed=1',
   pro:      null, // coming_soon — no LS product created yet
   business: null, // coming_soon — no LS product created yet
+};
+
+// LS variant IDs (numeric, for server-side LS API calls — webhooks,
+// createCheckoutSession, plan-match in webhook events). Set as Railway
+// env vars per server/src/lib/billing/lemonsqueezy.js:
+//   LS_VARIANT_STARTER_MONTHLY=1076073
+// (Earth's LS dashboard → Products → ReviewHub Starter → variant 1076073)
+//
+// Variant UUID (6a430dc7-...) is the checkout slug; variant ID (1076073)
+// is the database id LS sends in webhook payloads. Different things;
+// both belong to the same Starter Monthly variant.
+export const LS_VARIANT_IDS = {
+  starter_monthly: 1076073,
+  // pro_monthly:    null, // coming_soon
+  // business_monthly: null, // coming_soon
 };
 
 // Stripe Payment Links (backup, paused 2026-05-21).

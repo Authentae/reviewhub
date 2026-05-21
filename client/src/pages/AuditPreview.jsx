@@ -509,7 +509,7 @@ export default function AuditPreview() {
               </p>
               <a
                 href={getStripeCheckoutUrl('starter') || `/register?from=audit&business=${encodeURIComponent(business_name)}&token=${encodeURIComponent(token || '')}&v=${ctaVariant}`}
-                className="plausible-event-name=AuditRegisterClick_LowFriction plausible-event-source=audit-cta-L plausible-event-plan=starter inline-block px-4 py-2 rounded-lg text-sm font-medium transition-transform hover:scale-105"
+                className="lemonsqueezy-button plausible-event-name=AuditRegisterClick_LowFriction plausible-event-source=audit-cta-L plausible-event-plan=starter inline-block px-4 py-2 rounded-lg text-sm font-medium transition-transform hover:scale-105"
                 style={{ background: 'rgba(255,255,255,0.12)', color: '#fff', border: '1px solid rgba(255,255,255,0.25)' }}
               >
                 Set it up for $14/mo (~฿499) →
@@ -566,7 +566,7 @@ export default function AuditPreview() {
                 variant (V) CTA copy. */}
             <a
               href={getStripeCheckoutUrl('starter') || `/register?from=audit&business=${encodeURIComponent(business_name)}&token=${encodeURIComponent(token || '')}&v=${ctaVariant}`}
-              className={`${ctaVariant === 'E' ? 'plausible-event-name=AuditRegisterClick_PermissionV' : 'plausible-event-name=AuditRegisterClick'} plausible-event-source=audit-cta plausible-event-plan=starter inline-block px-6 py-3 rounded-lg text-sm font-semibold transition-transform hover:scale-105`}
+              className={`lemonsqueezy-button ${ctaVariant === 'E' ? 'plausible-event-name=AuditRegisterClick_PermissionV' : 'plausible-event-name=AuditRegisterClick'} plausible-event-source=audit-cta plausible-event-plan=starter inline-block px-6 py-3 rounded-lg text-sm font-semibold transition-transform hover:scale-105`}
               style={{ background: COLORS.cardBg, color: COLORS.tealDeep }}
             >
               {ctaVariant === 'E' ? 'Yes, keep the drafts coming →' : 'Yes, set this up for me →'}
@@ -864,8 +864,8 @@ function StickyConversionBar({ businessName, token, show, ctaVariant = 'control'
           rel={ctaVariant === 'L' ? 'noopener noreferrer' : undefined}
           className={`${
             ctaVariant === 'L'  ? 'plausible-event-name=AuditLineChatClick_LowFriction' :
-            ctaVariant === 'E'  ? 'plausible-event-name=AuditRegisterClick_PermissionV' :
-                                  'plausible-event-name=AuditRegisterClick'
+            ctaVariant === 'E'  ? 'lemonsqueezy-button plausible-event-name=AuditRegisterClick_PermissionV' :
+                                  'lemonsqueezy-button plausible-event-name=AuditRegisterClick'
           } plausible-event-source=sticky plausible-event-plan=starter inline-block px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold whitespace-nowrap transition-transform hover:scale-105`}
           style={{
             background: ctaVariant === 'L' ? '#06c755' : COLORS.cardBg,
