@@ -137,6 +137,18 @@ function PublicOnlyRoute({ children }) {
 // paint between routes stays on-brand instead of flashing a generic
 // spinner. Sparkle reuses the same path as favicon.svg / NotFound.jsx
 // for visual consistency across loading + error + favicon surfaces.
+// AuditDemoRedirect — /audit-demo → /audit-preview/demo while preserving
+// the query string. Plain <Navigate to="/audit-preview/demo"> dropped
+// the search params, which broke the ?variant=L A/B override path —
+// every demo visit was getting hash-assigned variant on the 'demo'
+// token instead of the requested override. Fixed 2026-05-21 after the
+// variant L verification screenshot showed Variant E copy under
+// /audit-demo?variant=L.
+function AuditDemoRedirect() {
+  const location = useLocation();
+  return <Navigate to={`/audit-preview/demo${location.search}`} replace />;
+}
+
 function PageLoader() {
   return (
     <div
@@ -211,7 +223,13 @@ export default function App() {
             2026-05-19 per page-flow audit v2 build-first #1: prospects
             landing on /pricing without an outreach link had no way to
             see what an audit looks like before paying. */}
-        <Route path="/audit-demo" element={<Navigate to="/audit-preview/demo" replace />} />
+        {/* AuditDemoRedirect preserves the query string (e.g. ?variant=L)
+            when bouncing from /audit-demo → /audit-preview/demo. The
+            plain <Navigate to="/audit-preview/demo"> dropped search
+            params, which silently broke A/B variant URL overrides
+            (CTA variants test was getting control on every demo
+            visit regardless of ?variant=). */}
+        <Route path="/audit-demo" element={<AuditDemoRedirect />} />
         <Route path="/analytics" element={<PrivateRoute><Analytics /></PrivateRoute>} />
         <Route path="/review-requests" element={<PrivateRoute><ReviewRequests /></PrivateRoute>} />
         <Route path="/owner" element={<PrivateRoute><OwnerDashboard /></PrivateRoute>} />
