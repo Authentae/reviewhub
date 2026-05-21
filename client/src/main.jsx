@@ -53,16 +53,33 @@ if (import.meta.env.PROD && import.meta.env.VITE_SENTRY_DSN) {
 // masking opt-in here — Clarity masks input fields and PII patterns by
 // default; review your project settings if you collect anything sensitive.
 if (import.meta.env.PROD && import.meta.env.VITE_CLARITY_PROJECT_ID) {
-  try {
-    const id = import.meta.env.VITE_CLARITY_PROJECT_ID;
-    window.clarity = window.clarity || function () {
-      (window.clarity.q = window.clarity.q || []).push(arguments);
-    };
-    const s = document.createElement('script');
-    s.async = true;
-    s.src = `https://www.clarity.ms/tag/${id}`;
-    document.head.appendChild(s);
-  } catch (e) { /* analytics is optional — never crash the page */ }
+  // Defer Clarity load until after the browser is idle. Lighthouse
+  // showed audit-demo LCP=4.2s on slow 4G (2026-05-21); Clarity's
+  // 25 KB script was competing for bandwidth during the critical
+  // render path. requestIdleCallback fires after the page has finished
+  // its first paint + initial event loop; setTimeout is the fallback
+  // for browsers without requestIdleCallback (mostly older Safari).
+  // The deferral preserves session-replay coverage (Clarity hooks
+  // history API the moment it loads) at the cost of missing the
+  // first ~1-2s of cursor movement, which is acceptable trade for
+  // a faster LCP on the conversion-critical audit-preview surface.
+  const loadClarity = () => {
+    try {
+      const id = import.meta.env.VITE_CLARITY_PROJECT_ID;
+      window.clarity = window.clarity || function () {
+        (window.clarity.q = window.clarity.q || []).push(arguments);
+      };
+      const s = document.createElement('script');
+      s.async = true;
+      s.src = `https://www.clarity.ms/tag/${id}`;
+      document.head.appendChild(s);
+    } catch (e) { /* analytics is optional — never crash the page */ }
+  };
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(loadClarity, { timeout: 3000 });
+  } else {
+    setTimeout(loadClarity, 1500);
+  }
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(
