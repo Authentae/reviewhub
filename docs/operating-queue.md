@@ -1,5 +1,19 @@
 # Operating queue — single source of truth for "what's next"
 
+> **DECISION FRAME (2026-05-21):** the queue is the *menu*; the
+> [decision framework](decision-framework.md) is the *filter*. North
+> star at this stage is **Time To First Paying Customer (TTFPC)**.
+> Every queue item passes through the promote/demote frame in
+> CLAUDE.md before shipping. The framework defaults to *promote-list*
+> work (Wave-N diagnostics, followups, audit-preview A/B, customer-dev)
+> over *demote-list* work (new marketing surfaces, blog posts, visual
+> polish, more infra-for-infra's-sake).
+>
+> **NEAR-TERM PRIORITY:** Wave 5 result-harvest (Sun 2026-05-24). See
+> [`docs/outreach/wave-5-result-harvest-checklist.md`](outreach/wave-5-result-harvest-checklist.md)
+> and the diagnostic CLI at `scripts/wave-diagnostic.mjs`. Until Wave 5
+> closes, don't ship demote-list items.
+
 > **STRATEGIC ANCHOR:** The 30-day plan in
 > [`docs/strategy-30day.md`](strategy-30day.md) supersedes
 > the queue when they conflict. The queue lists work that's
