@@ -143,6 +143,202 @@ router.get('/outreach-stats', (req, res) => {
   }
 });
 
+// GET /api/admin/funnel — per-step conversion + verification-cluster check.
+//
+// Reads from audit_previews + users. Each row in audit_previews
+// represents an outbound outreach (the founder generated a per-prospect
+// audit URL, then emailed it). The funnel measures the prospect's
+// journey:
+//
+//   1. SENT             — audit_previews row exists (audit URL emailed)
+//   2. OPENED           — first_viewed_at IS NOT NULL (anyone fetched the URL)
+//   3. MULTI_OPENED     — view_count >= 2 (came back — engagement signal)
+//   4. REPLIED          — marked_as_replied_at IS NOT NULL (real prospect reply)
+//   5. REGISTERED       — a users row exists with same email as the audit owner
+//                         created in the post-send window (manual cross-ref today)
+//   6. PAID             — user has plan_id = 'starter' / 'pro' / 'business'
+//                         and a paid_at timestamp (LS webhook fills this in;
+//                         today's manual provision marks via /admin)
+//
+// The verification-cluster check exists because of the Wave 5 lesson
+// (2026-05-21): all 9 "opens" in Wave 5 had first_viewed_at timestamps
+// clustered in 2 narrow windows (5/16 21:51:21-50 and 5/18 09:41:43-44)
+// that fingerprint as Earth's URL-verification batches AFTER he created
+// the audits. The naive "9 of 14 opened = 64%" claim was wrong — true
+// prospect opens were 0-1. This endpoint detects such clusters and
+// flags them.
+//
+// Query params:
+//   ?from=YYYY-MM-DD              — filter by audit_previews.created_at >=
+//   ?to=YYYY-MM-DD                — filter by audit_previews.created_at <=
+//   ?cluster_window_seconds=60    — bucket size for cluster detection (default 60s)
+//   ?cluster_min_size=3           — min audits in a cluster to flag (default 3)
+//
+// Returns:
+//   {
+//     ok, ts, window: {from, to},
+//     funnel: {sent, opened, multi_opened, replied, registered, paid},
+//     rates: {open_rate, multi_open_rate, reply_rate, register_rate, paid_rate},
+//     verification_cluster_check: {
+//       clusters_detected, clusters: [...],
+//       raw_open_count, honest_open_estimate,
+//     },
+//     wave_breakdown: {wave_5, wave_6, ...}  // hardcoded date windows
+//   }
+router.get('/funnel', (req, res) => {
+  try {
+    const from = req.query.from ? String(req.query.from) : null;
+    const to = req.query.to ? String(req.query.to) : null;
+    const clusterWindowSeconds = Number(req.query.cluster_window_seconds || 60);
+    const clusterMinSize = Number(req.query.cluster_min_size || 3);
+
+    // Build WHERE clauses for the date filter.
+    const whereClauses = [];
+    const params = [];
+    if (from) { whereClauses.push("created_at >= ?"); params.push(from); }
+    if (to)   { whereClauses.push("created_at <= ?"); params.push(to + ' 23:59:59'); }
+    const whereSql = whereClauses.length ? ('WHERE ' + whereClauses.join(' AND ')) : '';
+
+    // Funnel counts in one query.
+    const funnel = get(
+      `SELECT COUNT(*) AS sent,
+              COALESCE(SUM(CASE WHEN first_viewed_at IS NOT NULL THEN 1 ELSE 0 END), 0) AS opened,
+              COALESCE(SUM(CASE WHEN view_count >= 2 THEN 1 ELSE 0 END), 0) AS multi_opened,
+              COALESCE(SUM(CASE WHEN marked_as_replied_at IS NOT NULL THEN 1 ELSE 0 END), 0) AS replied
+         FROM audit_previews
+         ${whereSql}`,
+      params
+    );
+
+    // Registered + paid counts. The link is audit_previews.owner_user_id (the
+    // FOUNDER who created the audit), NOT the prospect. So "registered" here
+    // means: did a customer sign up in the window who later got marked paid.
+    // This is approximate until we wire prospect email → audit_previews row
+    // (would need a `prospect_email` column on audit_previews).
+    const registered = get(
+      `SELECT COUNT(*) AS count
+         FROM users
+         ${whereClauses.length ? whereSql : ''}`,
+      params
+    );
+    // Paid users count — depends on the plan schema. Be defensive: not every
+    // schema branch has a plan_id column.
+    let paidCount = 0;
+    try {
+      const paid = get(
+        `SELECT COUNT(*) AS count
+           FROM users
+           WHERE plan_id IS NOT NULL AND plan_id != 'free'
+           ${whereClauses.length ? 'AND ' + whereClauses.join(' AND ') : ''}`,
+        params
+      );
+      paidCount = paid?.count || 0;
+    } catch { /* plan_id may not exist; leave 0 */ }
+
+    // Verification-cluster detection — group opened audits by first_viewed_at
+    // bucket and flag any bucket with >= clusterMinSize audits.
+    const openedRows = all(
+      `SELECT id, business_name, first_viewed_at, created_at, view_count
+         FROM audit_previews
+         WHERE first_viewed_at IS NOT NULL
+         ${whereClauses.length ? 'AND ' + whereClauses.join(' AND ') : ''}
+         ORDER BY first_viewed_at ASC`,
+      params
+    );
+
+    // Bucket by Math.floor(epoch_seconds / clusterWindowSeconds). Audits in
+    // the same bucket viewed within the window are candidate cluster members.
+    const buckets = new Map();
+    for (const row of openedRows) {
+      if (!row.first_viewed_at) continue;
+      const epoch = Math.floor(new Date(row.first_viewed_at.replace(' ', 'T') + 'Z').getTime() / 1000);
+      const bucket = Math.floor(epoch / clusterWindowSeconds);
+      if (!buckets.has(bucket)) buckets.set(bucket, []);
+      buckets.get(bucket).push(row);
+    }
+    const clusters = [];
+    for (const [bucket, audits] of buckets) {
+      if (audits.length < clusterMinSize) continue;
+      const firstTs = audits[0].first_viewed_at;
+      const lastTs = audits[audits.length - 1].first_viewed_at;
+      clusters.push({
+        timestamp_range: `${firstTs}Z – ${lastTs}Z`,
+        audits_in_cluster: audits.length,
+        business_names: audits.map(a => a.business_name),
+        warning: audits.length >= 4
+          ? `${audits.length} audits opened within ${clusterWindowSeconds}s — extremely likely admin verification clicks, not prospect engagement`
+          : `${audits.length} audits opened within ${clusterWindowSeconds}s — possible admin verification batch; cross-check with send timeline`,
+      });
+    }
+
+    // Honest open estimate: subtract cluster members from the raw count.
+    const clusterMemberIds = new Set();
+    for (const [bucket, audits] of buckets) {
+      if (audits.length < clusterMinSize) continue;
+      for (const a of audits) clusterMemberIds.add(a.id);
+    }
+    const honestOpenEstimate = openedRows.filter(r => !clusterMemberIds.has(r.id)).length;
+
+    const rates = {
+      open_rate: funnel.sent ? funnel.opened / funnel.sent : 0,
+      honest_open_rate: funnel.sent ? honestOpenEstimate / funnel.sent : 0,
+      multi_open_rate: funnel.sent ? funnel.multi_opened / funnel.sent : 0,
+      reply_rate: funnel.opened ? funnel.replied / funnel.opened : 0,
+      // register_rate + paid_rate are approximate until prospect-email join is built
+      register_rate: funnel.sent ? (registered?.count || 0) / funnel.sent : 0,
+      paid_rate: funnel.sent ? paidCount / funnel.sent : 0,
+    };
+
+    // Hardcoded wave windows — refactor to a manifest-driven approach when
+    // wave count grows. Keep in sync with docs/outreach/wave-N-prospects.md.
+    const WAVE_WINDOWS = {
+      wave_5: { from: '2026-05-16', to: '2026-05-18', expected_total: 14 },
+      wave_6: { from: '2026-05-26', to: '2026-05-27', expected_total: 13 },
+    };
+    const waveBreakdown = {};
+    for (const [name, win] of Object.entries(WAVE_WINDOWS)) {
+      const w = get(
+        `SELECT COUNT(*) AS sent,
+                COALESCE(SUM(CASE WHEN first_viewed_at IS NOT NULL THEN 1 ELSE 0 END), 0) AS opened,
+                COALESCE(SUM(CASE WHEN marked_as_replied_at IS NOT NULL THEN 1 ELSE 0 END), 0) AS replied
+           FROM audit_previews
+           WHERE created_at >= ? AND created_at <= ?`,
+        [win.from, win.to + ' 23:59:59']
+      );
+      waveBreakdown[name] = { ...win, ...w };
+    }
+
+    res.setHeader('Cache-Control', 'no-store, private');
+    res.json({
+      ok: true,
+      ts: new Date().toISOString(),
+      window: { from, to },
+      funnel: {
+        sent: funnel.sent,
+        opened: funnel.opened,
+        multi_opened: funnel.multi_opened,
+        replied: funnel.replied,
+        registered: registered?.count || 0,
+        paid: paidCount,
+      },
+      rates,
+      verification_cluster_check: {
+        clusters_detected: clusters.length,
+        clusters,
+        raw_open_count: funnel.opened,
+        honest_open_estimate: honestOpenEstimate,
+        note: clusters.length > 0
+          ? 'Raw open count is contaminated by verification-batch clicks. honest_open_estimate excludes detected clusters.'
+          : 'No verification clusters detected — raw open count is the honest signal.',
+      },
+      wave_breakdown: waveBreakdown,
+    });
+  } catch (err) {
+    captureException(err, { route: 'admin.funnel' });
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // GET /api/admin/waitlist-stats — Pro/Business demand signal.
 //
 // The /pricing page replaces the dead 'Coming soon' buttons for gated

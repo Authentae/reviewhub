@@ -119,6 +119,61 @@ describe('admin routes', () => {
     delete process.env.ADMIN_EMAIL;
   });
 
+  test('admin funnel: returns funnel + rates + cluster-check + wave breakdown', async () => {
+    const u = await makeUser();
+    process.env.ADMIN_EMAIL = u.email;
+
+    const res = await request(app).get('/api/admin/funnel')
+      .set('Authorization', `Bearer ${u.token}`);
+    assert.strictEqual(res.status, 200);
+    assert.ok(res.body.funnel, 'funnel present');
+    assert.ok(typeof res.body.funnel.sent === 'number', 'sent is number');
+    assert.ok(typeof res.body.funnel.opened === 'number', 'opened is number');
+    assert.ok(typeof res.body.funnel.multi_opened === 'number', 'multi_opened is number');
+    assert.ok(typeof res.body.funnel.replied === 'number', 'replied is number');
+    assert.ok(typeof res.body.funnel.registered === 'number', 'registered is number');
+    assert.ok(typeof res.body.funnel.paid === 'number', 'paid is number');
+
+    assert.ok(res.body.rates, 'rates present');
+    assert.ok(typeof res.body.rates.open_rate === 'number', 'open_rate is number');
+    assert.ok(typeof res.body.rates.honest_open_rate === 'number',
+      'honest_open_rate is number — the verification-cluster-corrected rate');
+
+    assert.ok(res.body.verification_cluster_check, 'verification_cluster_check present');
+    assert.ok(Array.isArray(res.body.verification_cluster_check.clusters), 'clusters is array');
+    assert.ok(typeof res.body.verification_cluster_check.clusters_detected === 'number');
+    assert.ok(typeof res.body.verification_cluster_check.honest_open_estimate === 'number');
+
+    assert.ok(res.body.wave_breakdown, 'wave_breakdown present');
+    assert.ok(res.body.wave_breakdown.wave_5, 'wave_5 present');
+    assert.ok(res.body.wave_breakdown.wave_6, 'wave_6 present');
+
+    delete process.env.ADMIN_EMAIL;
+  });
+
+  test('admin funnel: ?from=...&to=... filters by date', async () => {
+    const u = await makeUser();
+    process.env.ADMIN_EMAIL = u.email;
+
+    // Future window with no audits — should return 0 sent / 0 opened
+    const res = await request(app).get('/api/admin/funnel?from=2099-01-01&to=2099-01-31')
+      .set('Authorization', `Bearer ${u.token}`);
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.body.funnel.sent, 0, 'no audits in 2099 window');
+    assert.strictEqual(res.body.funnel.opened, 0);
+
+    delete process.env.ADMIN_EMAIL;
+  });
+
+  test('admin funnel: non-admin gets 404', async () => {
+    const u = await makeUser();
+    // ADMIN_EMAIL unset → 404 even though caller is authed
+    delete process.env.ADMIN_EMAIL;
+    const res = await request(app).get('/api/admin/funnel')
+      .set('Authorization', `Bearer ${u.token}`);
+    assert.strictEqual(res.status, 404, 'non-admin must get 404 from funnel');
+  });
+
   test('admin __whoami: reports env + match status without leaking values', async () => {
     const u = await makeUser();
     process.env.ADMIN_EMAIL = u.email;
