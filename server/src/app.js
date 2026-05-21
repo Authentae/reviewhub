@@ -122,7 +122,11 @@ function createApp() {
         // up the CSP violations (best-practices penalty) AND Clarity's
         // per-session pings drop silently. Allowed alongside the existing
         // scriptSrc / connectSrc entries for the same service.
-        imgSrc: ["'self'", 'data:', 'https://*.frill.co', 'https://*.frillcdn.com', 'https://api.qrserver.com', 'https://*.clarity.ms'],
+        // c.bing.com — Clarity is a Microsoft service that bounces a
+        // sync-id pixel through Bing. Without this, Lighthouse picks
+        // up another CSP violation (best-practices penalty); Clarity's
+        // cross-domain session-stitching also breaks silently.
+        imgSrc: ["'self'", 'data:', 'https://*.frill.co', 'https://*.frillcdn.com', 'https://api.qrserver.com', 'https://*.clarity.ms', 'https://c.bing.com'],
         // connect-src additions:
         // - *.ingest.us.sentry.io / *.ingest.sentry.io: frontend Sentry SDK
         //   POST /envelope/ events from the browser. Without this the SDK
