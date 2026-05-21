@@ -77,7 +77,10 @@ describe('AuditPreview', () => {
 
   it('renders business name, drafts, and the founder-reply alt-CTA on happy path', async () => {
     apiGet.mockResolvedValue({ data: SAMPLE });
-    renderAt('/audit-preview/sharetoken123');
+    // ?variant=control pins the assignCtaVariant URL override so these
+// tests stay deterministic across hash-fn changes (mod-2 → mod-3 etc).
+// Variant-specific copy assertions belong in dedicated tests below.
+renderAt('/audit-preview/sharetoken123?variant=control');
 
     // Business name in header
     await waitFor(() => {
@@ -110,7 +113,10 @@ describe('AuditPreview', () => {
 
   it('primary CTA goes to Stripe Payment Link for Starter, with fallback /register if Stripe is null', async () => {
     apiGet.mockResolvedValue({ data: SAMPLE });
-    renderAt('/audit-preview/sharetoken123');
+    // ?variant=control pins the assignCtaVariant URL override so these
+// tests stay deterministic across hash-fn changes (mod-2 → mod-3 etc).
+// Variant-specific copy assertions belong in dedicated tests below.
+renderAt('/audit-preview/sharetoken123?variant=control');
 
     await waitFor(() => {
       expect(screen.getByText('Old Capital Bike Inn')).toBeTruthy();
@@ -137,7 +143,10 @@ describe('AuditPreview', () => {
     // click the register CTA — the entire Wave 4 conversion-funnel
     // measurement depends on this class staying put. Pin it down.
     apiGet.mockResolvedValue({ data: SAMPLE });
-    renderAt('/audit-preview/sharetoken123');
+    // ?variant=control pins the assignCtaVariant URL override so these
+// tests stay deterministic across hash-fn changes (mod-2 → mod-3 etc).
+// Variant-specific copy assertions belong in dedicated tests below.
+renderAt('/audit-preview/sharetoken123?variant=control');
 
     await waitFor(() => {
       expect(screen.getByText('Old Capital Bike Inn')).toBeTruthy();
@@ -145,5 +154,43 @@ describe('AuditPreview', () => {
 
     const cta = screen.getByText(/set this up for me/i).closest('a');
     expect(cta.className).toContain('plausible-event-name=AuditRegisterClick');
+  });
+
+  it('variant=L inverts the CTA — async-ask is primary, Stripe is secondary', async () => {
+    // Variant L (low-friction lead) is the Wave 5.5 hypothesis test:
+    // the price tag in the viewport too early causes the 35%-open /
+    // 0%-reply gap. L puts LINE chat + Email Earth as the primary
+    // actions and demotes Stripe checkout to a small "already
+    // convinced?" link below the founder card. If a future copy edit
+    // accidentally restores the control-shape order, this test fails.
+    apiGet.mockResolvedValue({ data: SAMPLE });
+    renderAt('/audit-preview/sharetoken123?variant=L');
+
+    await waitFor(() => {
+      expect(screen.getByText('Old Capital Bike Inn')).toBeTruthy();
+    });
+
+    // The L variant's signature copy. Appears in BOTH the main CTA
+    // section and the sticky bar at the bottom — both should swap to
+    // L's "Anything off?" tone when variant=L. getAllByText accepts ≥1.
+    expect(screen.getAllByText(/Anything off, or a fit/i).length).toBeGreaterThanOrEqual(1);
+
+    // The async primary button now reads "Email Earth" (L copy) not
+    // "Email me" (control copy).
+    expect(screen.getByText(/Email Earth/i)).toBeTruthy();
+
+    // The secondary Stripe link in L still carries a Plausible class but
+    // tagged with the _LowFriction suffix so funnel analysis splits L
+    // from control/E.
+    const stripeLink = screen.getByText(/Set it up for/i).closest('a');
+    expect(stripeLink.className).toContain('plausible-event-name=AuditRegisterClick_LowFriction');
+
+    // Control-only headline MUST NOT render under variant=L. There's
+    // an unrelated inline-plan-promo above the CTA section that uses
+    // "Want this on autopilot for new reviews?" so we can't match the
+    // shorter regex without false-positives — match the exact CTA
+    // headline instead.
+    expect(screen.queryByText(/set this up for me/i)).toBeNull();
+    expect(screen.queryByText(/Set this up for .* in 10 minutes/i)).toBeNull();
   });
 });

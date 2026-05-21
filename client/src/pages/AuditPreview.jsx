@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import api from '../lib/api';
 import usePageTitle from '../hooks/usePageTitle';
 import useNoIndex from '../hooks/useNoIndex';
@@ -46,27 +46,53 @@ const COLORS = {
                          // fought the warm paper background)
 };
 
-// CTA A/B split — Variant E (permission-asking) vs control. Per
-// docs/audit-preview-cta-variants.md. Tests the hypothesis that "Yes,
-// keep the drafts coming" reads as lower-commitment opt-in than "Yes,
-// set this up for me" (an imperative buy verb). Wave 4 (sent 5/12-5/13)
-// is the first cohort; reply window closes 5/16.
+// CTA A/B/L split — control / Variant E (permission-asking) / Variant L
+// (low-friction lead). Per docs/audit-preview-cta-variants.md.
 //
-// Deterministic per-token assignment — each prospect always sees the
-// same variant across refreshes/devices. No DB change required; the
-// signal reads from Plausible event names (`AuditRegisterClick` for
-// control, `AuditRegisterClick_PermissionV` for variant). Sticky bar
-// matches the same variant assignment so we don't cross-pollinate.
-function assignCtaVariant(token) {
+// - control: paid Stripe-checkout CTA primary, async-ask secondary
+// - E: same structure as control but "permission asking" copy
+//   ("keep the drafts coming" vs "set this up for me")
+// - L: INVERTS the order — async-ask (LINE/email) is primary and
+//   visually dominant; the paid CTA becomes a secondary "ready to
+//   try it?" link below. Tests the hypothesis that the price/checkout
+//   shows up too early in the trust journey — 4 prior waves had 35%
+//   audit-views with 0 replies, suggesting prospects bounce off the
+//   pay-first ask. Wave 5.5+ ICP.
+//
+// Deterministic per-token assignment for new traffic; URL ?variant=
+// override for explicit prospect-targeting (Earth sends Wave 5.5
+// prospects with ?variant=L appended to the share URL). Plausible
+// events split per variant so per-variant click rate is readable
+// without a DB column.
+function assignCtaVariant(token, urlOverride) {
+  // URL override wins. Used to force a specific variant for targeted
+  // Wave N+0.5 sends. Validated to known values to prevent garbage.
+  const VALID = new Set(['control', 'E', 'L']);
+  if (urlOverride && VALID.has(urlOverride)) return urlOverride;
   if (!token) return 'control';
   let h = 0;
   for (let i = 0; i < token.length; i++) h = (h * 31 + token.charCodeAt(i)) | 0;
-  return (Math.abs(h) % 2 === 0) ? 'control' : 'E';
+  // Three-way split — modulo 3 over the same hash. Existing tokens
+  // shift assignment (was 2-way) but ALL Wave 1-5 prospects already
+  // received their share URL before this code shipped, so their
+  // first impression is locked. Re-views of pre-shipped tokens after
+  // this code lands may show a different variant — that's noise to
+  // their funnel but Plausible event names reflect the actual variant
+  // rendered so the analytics stays clean.
+  const m = Math.abs(h) % 3;
+  return m === 0 ? 'control' : m === 1 ? 'E' : 'L';
 }
 
 export default function AuditPreview() {
   const { token } = useParams();
-  const ctaVariant = useMemo(() => assignCtaVariant(token), [token]);
+  // ?variant= URL override — used for explicit Wave N+0.5 retargeting
+  // (Earth appends ?variant=L to the share URL when sending to a Wave
+  // 5.5 prospect). useSearchParams stays in sync with the active route
+  // (MemoryRouter in tests, BrowserRouter in prod), unlike a raw
+  // window.location read which jsdom doesn't update from MemoryRouter.
+  const [searchParams] = useSearchParams();
+  const urlOverride = searchParams.get('variant');
+  const ctaVariant = useMemo(() => assignCtaVariant(token, urlOverride), [token, urlOverride]);
   const [state, setState] = useState({ status: 'loading', data: null, error: '' });
   // Collapse the review wall — show first 2 above the fold, expander for
   // the rest. Conversion ship from 2026-05-18: previously 5 review
@@ -408,8 +434,93 @@ export default function AuditPreview() {
             drafts and BEFORE the educational footer. Footer-only pitch
             buries the conversion path; a real button here at the moment
             the prospect just read their own personalised replies captures
-            intent that prose loses. */}
-        {totalDrafts > 0 && (
+            intent that prose loses.
+
+            Variant L renders a fundamentally different SHAPE — async-ask
+            is the primary action; the paid CTA gets relegated below the
+            founder card as "if you're already convinced, here's the
+            button." Tests the hypothesis that the price tag entering
+            the viewport too early causes the 35%-open / 0%-reply gap. */}
+        {totalDrafts > 0 && ctaVariant === 'L' && (
+          <section
+            id="audit-cta"
+            className="mt-10 rounded-2xl p-6 md:p-8 text-center"
+            style={{ background: COLORS.tealDeep, color: '#fff' }}
+          >
+            <p
+              className="text-xs font-mono uppercase tracking-widest mb-2"
+              style={{ color: '#f5d8a7', opacity: 0.9 }}
+            >
+              Drafts above are yours — keep them either way
+            </p>
+            <h2 className="text-xl md:text-2xl font-bold mb-3" style={{ letterSpacing: '-0.01em' }}>
+              Anything off, or a fit for {business_name}?
+            </h2>
+            <p className="text-sm leading-relaxed mb-5 max-w-md mx-auto" style={{ color: '#fdf2dc' }}>
+              I'm Earth — solo founder, Bangkok. A one-line "this draft missed
+              the mark" or "looks good but we already use X" is genuinely
+              useful either way. No call, no signup — just async chat.
+            </p>
+            {/* Async actions FIRST and LARGE — opposite of control/E
+                where they're secondary. */}
+            <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
+              <a
+                href="https://line.me/R/ti/p/@024hjpcv"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="plausible-event-name=AuditLineChatClick_LowFriction plausible-event-source=audit-cta-L inline-flex items-center gap-2 px-6 py-3 rounded-lg text-base font-semibold transition-transform hover:scale-105"
+                style={{ background: '#06c755', color: '#fff' }}
+              >
+                <span aria-hidden="true" style={{ fontSize: '18px' }}>💬</span>
+                Chat on LINE
+              </a>
+              <a
+                href={`mailto:earth.reviewhub@gmail.com?subject=${encodeURIComponent(`Re: ${business_name} reply drafts`)}&body=${encodeURIComponent(`Hi Earth,\n\nQuestion about the drafts for ${business_name}: `)}`}
+                className="plausible-event-name=AuditFounderReplyClick_LowFriction plausible-event-source=audit-cta-L inline-flex items-center gap-2 px-6 py-3 rounded-lg text-base font-semibold transition-transform hover:scale-105"
+                style={{ background: COLORS.cardBg, color: COLORS.tealDeep }}
+              >
+                <span aria-hidden="true" style={{ fontSize: '18px' }}>✉</span>
+                Email Earth
+              </a>
+            </div>
+            {/* Founder mini-card between async + paid — context for who
+                they'd be talking to. */}
+            <div
+              className="mt-4 pt-5 flex items-center justify-center gap-3 max-w-md mx-auto"
+              style={{ borderTop: '1px solid rgba(253,242,220,0.18)' }}
+            >
+              <div
+                className="grid place-items-center rounded-full flex-shrink-0"
+                style={{ width: 36, height: 36, background: '#f5d8a7', color: COLORS.tealDeep, fontWeight: 700, fontSize: '14px', letterSpacing: '0.02em' }}
+                aria-hidden="true"
+              >
+                E
+              </div>
+              <p className="text-xs leading-relaxed text-left" style={{ color: '#fdf2dc', maxWidth: '300px' }}>
+                <strong style={{ color: '#fff' }}>I reply within a day</strong>, async.
+                You're one of the first 30 prospects — I'm watching this inbox.
+              </p>
+            </div>
+            {/* SECONDARY paid CTA — small, below the founder card, framed
+                as "if you're already sure" not as "buy now". */}
+            <div className="mt-6 pt-5" style={{ borderTop: '1px solid rgba(253,242,220,0.18)' }}>
+              <p className="text-xs mb-2" style={{ color: '#f5d8a7', opacity: 0.9 }}>
+                Already convinced? Skip the chat:
+              </p>
+              <a
+                href={getStripeCheckoutUrl('starter') || `/register?from=audit&business=${encodeURIComponent(business_name)}&token=${encodeURIComponent(token || '')}&v=${ctaVariant}`}
+                className="plausible-event-name=AuditRegisterClick_LowFriction plausible-event-source=audit-cta-L plausible-event-plan=starter inline-block px-4 py-2 rounded-lg text-sm font-medium transition-transform hover:scale-105"
+                style={{ background: 'rgba(255,255,255,0.12)', color: '#fff', border: '1px solid rgba(255,255,255,0.25)' }}
+              >
+                Set it up for $14/mo (~฿499) →
+              </a>
+              <p className="text-xs mt-3" style={{ color: '#fdf2dc', opacity: 0.85 }}>
+                No credit card to start · 30-day refund window · cancel anytime
+              </p>
+            </div>
+          </section>
+        )}
+        {totalDrafts > 0 && ctaVariant !== 'L' && (
           <section
             id="audit-cta"
             className="mt-10 rounded-2xl p-6 md:p-8 text-center"
@@ -733,18 +844,38 @@ function StickyConversionBar({ businessName, token, show, ctaVariant = 'control'
       <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3">
         <p className="text-xs sm:text-sm flex-1 leading-snug">
           <span className="font-semibold">
-            {ctaVariant === 'E' ? 'Keep the drafts coming?' : 'Want this on autopilot?'}
+            {ctaVariant === 'L' ? 'Anything off, or a fit?' :
+             ctaVariant === 'E' ? 'Keep the drafts coming?' : 'Want this on autopilot?'}
           </span>{' '}
           <span className="hidden sm:inline" style={{ color: '#fdf2dc' }}>
-            New reviews ping you on LINE or Telegram. $14/mo (~฿499).
+            {ctaVariant === 'L'
+              ? 'A one-line "yes / no / wrong fit" is genuinely useful.'
+              : 'New reviews ping you on LINE or Telegram. $14/mo (~฿499).'}
           </span>
         </p>
+        {/* Sticky primary action — paid checkout for control/E, async-ask
+            (LINE chat) for L. The L variant test is "what happens if we
+            never put a price in the viewport before they engage." */}
         <a
-          href={getStripeCheckoutUrl('starter') || `/register?from=audit&business=${encodeURIComponent(businessName || '')}&token=${encodeURIComponent(token || '')}&source=sticky&v=${ctaVariant}`}
-          className={`${ctaVariant === 'E' ? 'plausible-event-name=AuditRegisterClick_PermissionV' : 'plausible-event-name=AuditRegisterClick'} plausible-event-source=sticky plausible-event-plan=starter inline-block px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold whitespace-nowrap transition-transform hover:scale-105`}
-          style={{ background: COLORS.cardBg, color: COLORS.tealDeep, minHeight: '40px', display: 'inline-flex', alignItems: 'center' }}
+          href={ctaVariant === 'L'
+            ? 'https://line.me/R/ti/p/@024hjpcv'
+            : (getStripeCheckoutUrl('starter') || `/register?from=audit&business=${encodeURIComponent(businessName || '')}&token=${encodeURIComponent(token || '')}&source=sticky&v=${ctaVariant}`)}
+          target={ctaVariant === 'L' ? '_blank' : undefined}
+          rel={ctaVariant === 'L' ? 'noopener noreferrer' : undefined}
+          className={`${
+            ctaVariant === 'L'  ? 'plausible-event-name=AuditLineChatClick_LowFriction' :
+            ctaVariant === 'E'  ? 'plausible-event-name=AuditRegisterClick_PermissionV' :
+                                  'plausible-event-name=AuditRegisterClick'
+          } plausible-event-source=sticky plausible-event-plan=starter inline-block px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold whitespace-nowrap transition-transform hover:scale-105`}
+          style={{
+            background: ctaVariant === 'L' ? '#06c755' : COLORS.cardBg,
+            color: ctaVariant === 'L' ? '#fff' : COLORS.tealDeep,
+            minHeight: '40px', display: 'inline-flex', alignItems: 'center',
+          }}
         >
-          {ctaVariant === 'E' ? 'Keep the drafts — $14/mo →' : 'Set this up — $14/mo →'}
+          {ctaVariant === 'L' ? 'Chat on LINE →' :
+           ctaVariant === 'E' ? 'Keep the drafts — $14/mo →' :
+                                'Set this up — $14/mo →'}
         </a>
         {/* Parallel low-friction CTA on the sticky bar — Wave 4 diagnostic
             showed audit views convert to interest but never to reply

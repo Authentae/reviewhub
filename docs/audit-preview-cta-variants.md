@@ -115,6 +115,76 @@ killed (`memory/project_reviewhub_pricing.md` says trials are dead).
 Need product decision before shipping. **Skip unless Earth re-opens
 the trial question.**
 
+### Variant L — "Low-friction lead" (shipped 2026-05-21)
+
+**Hypothesis being tested:** the price tag ($14/mo) entering the
+viewport too early in the trust journey causes the 35%-open / 0%-reply
+gap across Waves 1-4. By demoting the paid CTA below the founder card
+and elevating async-ask (LINE + email) to PRIMARY, the prospect's
+first action becomes commitment-free.
+
+**Surface:** `client/src/pages/AuditPreview.jsx` — inverts the
+existing CTA section structure when `ctaVariant === 'L'`.
+
+```
+[eyebrow]  Drafts above are yours — keep them either way
+[headline] Anything off, or a fit for {business_name}?
+[body]     I'm Earth — solo founder, Bangkok. A one-line "this draft
+           missed the mark" or "looks good but we already use X" is
+           genuinely useful either way. No call, no signup — just
+           async chat.
+
+[PRIMARY button]   💬 Chat on LINE
+[PRIMARY button]   ✉ Email Earth
+
+[founder card]     I reply within a day, async. You're one of the
+                   first 30 prospects — I'm watching this inbox.
+
+[secondary link]   Already convinced? Skip the chat:
+                   Set it up for $14/mo (~฿499) →
+                   (small, low-contrast, framed as opt-in not buy-now)
+```
+
+**Sticky bar copy (matches the variant):**
+
+```
+Anything off, or a fit? · A one-line "yes / no / wrong fit" is
+genuinely useful.
+[button]  💬 Chat on LINE  (green, primary)
+```
+
+The sticky CTA target SWAPS from Stripe checkout to LINE deep-link —
+that's the test's core: never put the price in the viewport before
+the prospect chooses to engage.
+
+**Plausible event names** (per variant; lets us split funnels):
+- Main CTA, LINE click   → `AuditLineChatClick_LowFriction`
+- Main CTA, email click  → `AuditFounderReplyClick_LowFriction`
+- Secondary Stripe       → `AuditRegisterClick_LowFriction`
+- Sticky LINE click      → `AuditLineChatClick_LowFriction` (source=sticky disambiguates)
+
+**URL override:** `?variant=L` appended to any audit-preview share URL
+forces this variant. Use this for Wave 5.5+ retargeting where Earth
+wants specific prospects to see L (e.g. the highest-opener vertical
+from Wave 5 result-harvest). Without the override, ~1/3 of NEW share
+tokens get assigned L randomly via `assignCtaVariant` hash.
+
+**When to ship beyond Wave 5.5:**
+
+- If L's reply-rate > control's by 2+ replies across ≥10 L-tagged sends
+  → make L the new control, replace mod-3 hash with new structure
+- If L's reply-rate ≤ control → the bottleneck isn't price-in-viewport.
+  Investigate: audience quality, email subject line, audit page load
+- If L produces "talked to Earth" conversations but no paid conversions
+  → the offer or pricing itself is the issue, not the funnel
+
+**Smallest hint of success worth keeping L permanent:** even ONE reply
+within 5 days of an L-tagged send (vs 0 across 22 control sends in
+Waves 1-4). Statistical significance at this sample size is impossible;
+binary qualitative signal is.
+
+---
+
 ### Variant E — "Permission-asking"
 
 Lower-pressure entry. Reads less like "buy" and more like "let us
