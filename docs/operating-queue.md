@@ -9,10 +9,19 @@
 > over *demote-list* work (new marketing surfaces, blog posts, visual
 > polish, more infra-for-infra's-sake).
 >
-> **NEAR-TERM PRIORITY:** Wave 5 result-harvest (Sun 2026-05-24). See
-> [`docs/outreach/wave-5-result-harvest-checklist.md`](outreach/wave-5-result-harvest-checklist.md)
-> and the diagnostic CLI at `scripts/wave-diagnostic.mjs`. Until Wave 5
-> closes, don't ship demote-list items.
+> **NEAR-TERM PRIORITY (2026-05-22, post-Wave-5 honest harvest):**
+> Wave 5 closed with verified-zero conversions (4 bounces, 0
+> confirmed prospect opens after verification-cluster correction —
+> see `feedback_verification_batch_fingerprint.md` for the lesson).
+> Wave 6 prep DONE overnight 2026-05-22:
+> - 13 verified-email prospects (`docs/outreach/wave-6-prospects.md`)
+> - Outcome tree (`docs/wave-postmortems/wave-6-outcomes-tree.md`)
+> - Send sheet (`docs/outreach/wave-6-send-sheet.md`)
+> - Funnel diagnostic with cluster-check (`/api/admin/funnel`)
+> - Strategic synthesis (`docs/strategy/post-wave-5-synthesis.md`)
+>
+> **Earth-action required Tue/Wed 9-11 AM ICT/SGT:** Wave 6 send.
+> ~45 min. After: Sun 2026-06-01 harvest via diagnostic CLI.
 
 > **STRATEGIC ANCHOR:** The 30-day plan in
 > [`docs/strategy-30day.md`](strategy-30day.md) supersedes

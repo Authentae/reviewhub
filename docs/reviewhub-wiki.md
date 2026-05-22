@@ -132,11 +132,99 @@ section below for state):
 
 ## Customers
 
-_(empty — pre-revenue as of 2026-05-05)_
+_(empty — pre-revenue as of 2026-05-22)_
 
 When the first paying customer lands, log: business name, plan,
 acquisition channel (cold email / audit funnel / inbound / referral),
 date, and any pre-purchase friction worth remembering.
+
+## Billing state — REVENUE-CAPABLE 2026-05-22
+
+**Active provider: LemonSqueezy** (Merchant of Record, handles VAT +
+sales tax + payouts globally — the right architecture for a solo
+Thai founder selling internationally).
+
+- LS account APPROVED + ACTIVATED 2026-05-21 12:57 ICT by reviewer
+  Issac Abraham. Approval email said "your account has now been
+  approved... risk profile to us as the Merchant of Record is low
+  enough to allow you to sell."
+- LS store: `reviewhub.lemonsqueezy.com`
+- LS Starter product CREATED 2026-05-21: ReviewHub Starter, $14/mo,
+  Standard pricing, no trial, no setup fee, no usage meter, tax
+  category SaaS, post-purchase redirect to
+  `/register?from=lemonsqueezy&plan=starter&checkout_success=1`
+- **LS variant ID: `1076073`** (numeric, for server webhook payload
+  matching; Railway env var `LS_VARIANT_STARTER_MONTHLY=1076073`
+  when wiring auto-provisioning)
+- **LS checkout slug: `6a430dc7-698f-4ec2-8dde-fad8a4942e88`**
+  (UUID, used in `client/src/lib/checkout.js` for the `?embed=1`
+  overlay URL)
+- LS Checkout Overlay live in prod (commit `638e8f3`) — customer
+  clicks "Set it up for $14/mo" on any audit-preview page → LS
+  iframe mounts on `reviewhub.review` (no domain bounce). Verified
+  end-to-end via Puppeteer.
+- **LS still in TEST MODE** as of 2026-05-22 — Earth must flip
+  Settings → General → Mode to LIVE before real money flows.
+
+**Backup provider: Stripe** (paused, KYC pending).
+- Stripe Payment Links exist (`buy.stripe.com/8x27sLfzsgP4eragJs1ZS02`
+  for Starter) created 2026-05-15. Account ID `acct_1TXN2zGp5vNlIwDs`.
+- Stripe "Continue setup" wizard INCOMPLETE — bank verification +
+  potentially business document upload remain. Earth needs to finish
+  this manually (KYC is hard-prohibited for the agent).
+- Stripe URLs commented as backup in `client/src/lib/checkout.js` —
+  one line swap to re-enable if LS proves problematic.
+
+**SaaSHub directory: VERIFIED 2026-05-21** (clicked through via
+Chrome MCP). Listing approved by Stan Bright; ReviewHub.review now
+gets the verified badge + "Recently Verified" placement + appears
+as a verified alternative on competitors' pages (Birdeye, Podium,
+Reviews.io, Yext, BrightLocal, Grade.us, NiceJob, Reputation.com,
+ReviewTrackers, Trustpilot, VisualDNA, Yotpo).
+
+## Major sessions of note
+
+### 2026-05-21/22 — TTFPC framework + Wave 5 honest re-analysis + Wave 6 prep + LS live
+
+**Single biggest session in ReviewHub's history.** 18 commits.
+
+Strategic shifts:
+- **TTFPC decision framework** locked into CLAUDE.md (load-bearing
+  every session). North star at pre-revenue is Time To First Paying
+  Customer. Promote/demote lists. Pre-ship checklist for any work
+  >1 hour. Stage-transition triggers for when bottleneck shifts.
+  Doc: `docs/decision-framework.md`. Memory rule:
+  `feedback_stage_aware_decisions.md`.
+- **Compounding-infra survey** approach captured in
+  `feedback_compounding_infra_survey.md`. Doc: `docs/compounding-infra-research.md`.
+- **Honest Wave 5 re-analysis** (after Earth's pushback "do all that
+  strategically"): 4 bounces + 0-1 real opens, not the celebrated
+  "64%". Memory rule for future: `feedback_verification_batch_fingerprint.md`.
+
+Infrastructure shipped:
+- Visual regression / Lighthouse / broken-link / a11y compounding-
+  infra harnesses (`scripts/visual-regression.mjs`,
+  `scripts/lighthouse-batch.mjs`, `scripts/check-broken-links.mjs`,
+  `scripts/a11y-audit.mjs`)
+- Audit-preview Variant L (low-friction lead — async-ask primary,
+  paid demoted) shipped to prod, commit `de75c0f`
+- LS checkout switched from Stripe Payment Links (`2062fbe`) + LS
+  Checkout Overlay shipped (`638e8f3`)
+- CSP fixes for Clarity / Cloudflare beacon / Bing pixel
+- Clarity load deferred to post-LCP via requestIdleCallback
+- `scripts/wave-diagnostic.mjs` + `wave-5-followup-template.md` +
+  `wave-5-outcomes-tree.md` + `wave-5-customer-dev-packs.md`
+- Funnel diagnostic endpoint `/api/admin/funnel` with verification-
+  cluster detection (`7f282c6`)
+
+Wave 6 prep (overnight 2026-05-22):
+- 13 verified-email prospects researched + verified
+  (`docs/outreach/wave-6-prospects.md`)
+- Per-prospect drafts + outcome tree + send sheet
+- Strategic synthesis (`docs/strategy/post-wave-5-synthesis.md`)
+
+Earth-required next: flip LS test→live (2 min), Wave 6 send
+Tue/Wed 9-11 AM (~45 min), Wave 6 harvest Sun 2026-06-01 (~15 min).
 
 ## SEO + analytics infrastructure (refreshed 2026-05-20)
 
@@ -197,6 +285,30 @@ date, and any pre-purchase friction worth remembering.
 - Newsletter signup widget on Landing + BlogIndex (panel + inline variants).
 
 ## Outreach waves
+
+- **Wave 6 — PREPARED overnight 2026-05-22, FIRES Tue 5/26 OR Wed 5/27, 9-11 AM ICT/SGT.**
+  13 verified-email prospects across Bangkok + Singapore × Dental + Spa.
+  Every email verified on the prospect's OWN website (NO pattern guesses
+  — direct response to Wave 5's bounce mode). Drops muay thai email
+  channel entirely (Wave 5 bounced 4/5). Drops coffee (sites don't
+  publish emails — different buyer model).
+  - Roster: `docs/outreach/wave-6-prospects.md`
+  - Drafts paste-ready: `docs/outreach/wave-6-send-sheet.md`
+  - Outcome branches: `docs/wave-postmortems/wave-6-outcomes-tree.md`
+  - Pre-committed strategy: `docs/strategy/post-wave-5-synthesis.md`
+  - Variant L audit-preview URLs (low-friction lead, async-ask primary)
+  - Subject A/B/C distributed cross-vertical for clean variant signal
+
+- **Wave 5 — HONEST RE-ANALYSIS 2026-05-21:** sent ~5/16-5/18, harvested
+  early via Chrome MCP. **4 bounces** (entire muay thai cohort — pattern-
+  guessed gmail/hotmail addresses that don't exist). **0-1 real prospect
+  opens** (the apparent 9 of 14 opens were Earth's own URL-verification
+  clicks, clustered in 2 windows: 5/16 21:51:21-50 and 5/18
+  09:41:43-44 = verification-batch fingerprint, not engagement). **0
+  replies, 0 conversations, 0 customers.** Original confident "64% open
+  rate, Outcome B confirmed" claim was an artifact. Detailed in
+  `docs/outreach/wave-5-deliverability-fix-2026-05-21.md` and
+  `feedback_verification_batch_fingerprint.md` memory rule.
 
 - **Wave 5 — SCHEDULED 2026-05-18, fires Tue 5/19 + Wed 5/20.**
   14 prospects queued in `earth.reviewhub@gmail.com` Scheduled folder
