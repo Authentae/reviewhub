@@ -11,9 +11,12 @@ This file is loaded into your context every session. Keep it updated when conven
 
 **North star at this stage: Time To First Paying Customer (TTFPC).**
 
-Stage 0 (now): 0 paying customers, $0 MRR, 5 outreach waves run, audit-view
-rate ~35%, **reply rate 0%**. The bottleneck is *"audit-views don't convert
-to replies."* Until that changes, every decision passes through this filter:
+Stage 0 (now): 0 paying customers, $0 MRR, **5 waves run with 0 confirmed
+replies, 0 confirmed real opens after verification-cluster correction**.
+The previously-claimed "35% open rate" was an artifact of Earth's own URL-
+verification clicks contaminating audit_previews.view_count (Wave 5 lesson,
+see `feedback_verification_batch_fingerprint.md`). The bottleneck is
+*"prospects don't open the audit URL — OR if they do, don't reply."* Until that changes, every decision passes through this filter:
 
 > *"Does this measurably shorten the path to first paying customer?"*
 
@@ -25,7 +28,7 @@ If no → back-burner. Default deflates from "is this useful?" (always yes) to
 1. **Stage check** — read `docs/reviewhub-wiki.md` for current customer count + MRR. Has it changed?
 2. **Bottleneck check** — pre-validation: outreach→reply conversion. Post first-customer: trial→paid. Post-$1k: scalable acquisition.
 3. **Active wave** — `docs/outreach/wave-N-*` — what test is in flight?
-4. **New signal since last session** — Gmail, `/admin/outreach-stats`, Resend, Clarity.
+4. **New signal since last session** — Gmail (inc. `mailer-daemon` for bounces — Wave 5 had 4 bounces hidden in inbox), `/api/admin/funnel` (run with verification-cluster check FIRST per `feedback_verification_batch_fingerprint.md`), `/admin/outreach-stats`, Resend, Clarity replays of any opened audit URLs.
 5. **Pick work IN the bottleneck zone** — default to the *promote list* below, not the *demote list*.
 
 **Promote list (default top-of-queue at pre-revenue):**
@@ -61,6 +64,16 @@ If no → back-burner. Default deflates from "is this useful?" (always yes) to
 - First paying customer lands → TTFPC becomes MRR/month delta
 - MRR > $1k → bottleneck shifts to retention
 - MRR > $5k → bottleneck shifts to efficient growth (CAC payback)
+
+**Strategic state as of 2026-05-22 (read these before "what next?"):**
+- `docs/strategy/post-wave-5-synthesis.md` — 5-page strategic synthesis
+- `docs/outreach/wave-6-prospects.md` — 13 verified prospects, ready
+- `docs/outreach/wave-6-send-sheet.md` — paste-ready Gmail drafts for Tue/Wed 5/26-27 send
+- `docs/wave-postmortems/wave-6-outcomes-tree.md` — pre-committed branches
+- `docs/wave-postmortems/wave-6-followup-template.md` — for Sun 6/2 if needed
+- `docs/outreach/wave-5-muay-thai-im-scripts.md` — IG/FB DMs for the 4 Wave 5 bounces
+- `docs/skills/first-customer-onboarding-sequence.md` — 30-day email arc, activates on first paid signup
+- `/api/admin/funnel` — diagnostic endpoint with verification-cluster check (run THIS before claiming any open-rate)
 
 Full framework: `docs/decision-framework.md`. Memory rule: `memory/feedback_stage_aware_decisions.md`.
 
@@ -189,11 +202,15 @@ until every section is `[wait:*]`.
 - Notifications: LINE OA + Telegram push (every new review pings with an AI-drafted
   reply), weekly impact email, paid-welcome email (LemonSqueezy), founder
   alerts on signup. WhatsApp on Q3 2026 roadmap.
-- Billing: LemonSqueezy webhook + checkout for Starter ($14/mo) **only**.
-  Pro and Business surface waitlist email-capture forms on /pricing — gated tiers
-  not yet sellable until demand justifies building features. LS application
-  to merchant-of-record verification submitted; reviewer Issac Abraham
-  responded 2026-05-20, reply sent same morning.
+- Billing: **LemonSqueezy APPROVED + ACTIVATED 2026-05-21** by reviewer Issac
+  Abraham. LS Starter product live (variant ID `1076073`, checkout slug
+  `6a430dc7-698f-4ec2-8dde-fad8a4942e88`). LS Checkout Overlay on prod —
+  customer clicks the audit-preview CTA → LS iframe mounts on reviewhub.review
+  (no domain bounce). **LS still in test mode** as of 2026-05-22; Earth must
+  flip Settings → General → Mode for real money flow. Stripe Payment Links
+  commented as backup (Stripe KYC incomplete). Pro and Business stay as
+  waitlist email-capture on /pricing — gated tiers not yet sellable until
+  demand justifies building features.
 - Audit funnel: /audit landing, /audit-preview/:token (tone switcher: warm /
   concise / formal), /audit-demo (public sample, no signup), outbound audits
   with bot-filtered view notifications
