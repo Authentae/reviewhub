@@ -196,6 +196,19 @@
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Preload the body-font 400 weight (Inter Tight) so the browser
+         starts fetching it the moment the HTML parses, in parallel with
+         CSS discovery. Without this, font fetch waits for CSS to load +
+         parse + discover the @font-face rule — typical 400-800ms LCP
+         saving on text-LCP pages like /audit-preview. URL is version-
+         pinned to Google Fonts v9 of Inter Tight; if Google updates the
+         font, this preload becomes a harmless 404 (browser falls back to
+         the CSS-discovered fetch). 2026-05-22 audit-demo LCP was 6.2s
+         on slow 4G mobile — main contributors: 354 KB critical-path
+         resources + 554ms Railway TTFB. Font preload is the smallest
+         safe ship that moves the needle. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+          href="https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsH8ahuQ2e8.woff2" />
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
     <!-- LemonSqueezy Checkout Overlay — loads lemon.js so any anchor with
          class="lemonsqueezy-button" opens checkout as a modal on this domain
