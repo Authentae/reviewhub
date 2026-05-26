@@ -165,6 +165,35 @@ describe('admin routes', () => {
     delete process.env.ADMIN_EMAIL;
   });
 
+  test('admin storage: returns data_dir + entries + row counts', async () => {
+    const u = await makeUser();
+    process.env.ADMIN_EMAIL = u.email;
+
+    const res = await request(app).get('/api/admin/storage')
+      .set('Authorization', `Bearer ${u.token}`);
+    assert.strictEqual(res.status, 200);
+    assert.ok(typeof res.body.data_dir === 'string', 'data_dir is string');
+    assert.ok(typeof res.body.total_bytes === 'number', 'total_bytes is number');
+    assert.ok(typeof res.body.total_human === 'string', 'total_human is string');
+    assert.ok(typeof res.body.pct_of_railway_free === 'number', 'pct_of_railway_free is number');
+    assert.ok(Array.isArray(res.body.entries), 'entries is array');
+    assert.ok(res.body.db_row_counts, 'db_row_counts present');
+    assert.ok(typeof res.body.db_row_counts.audit_previews === 'number'
+              || res.body.db_row_counts.audit_previews === 'table missing',
+              'audit_previews row count present');
+    assert.ok(Array.isArray(res.body.warnings), 'warnings is array');
+
+    delete process.env.ADMIN_EMAIL;
+  });
+
+  test('admin storage: non-admin gets 404', async () => {
+    const u = await makeUser();
+    delete process.env.ADMIN_EMAIL;
+    const res = await request(app).get('/api/admin/storage')
+      .set('Authorization', `Bearer ${u.token}`);
+    assert.strictEqual(res.status, 404);
+  });
+
   test('admin funnel: non-admin gets 404', async () => {
     const u = await makeUser();
     // ADMIN_EMAIL unset → 404 even though caller is authed

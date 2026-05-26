@@ -346,6 +346,130 @@ router.get('/funnel', (req, res) => {
 // surfaces the resulting demand signal to the founder daily brief so
 // it's glanceable without bouncing between dashboards.
 //
+// GET /api/admin/storage — Railway volume size breakdown.
+//
+// Shipped 2026-05-26 after the Railway volume hit 84% capacity
+// (420 MB / 500 MB free-tier limit). The volume holds:
+//   - SQLite DB file (reviews.db)
+//   - 24-hour rolling backup snapshots (server/backups/)
+//   - audit log table rows (in DB; size reported as part of DB)
+//   - audit_previews with reviews_json blobs (in DB; same)
+//
+// Without railway ssh (CLI OAuth expires routinely), the only way for
+// Earth to inspect what's eating the volume was either to upgrade the
+// volume or wait for it to fill + crash. This endpoint surfaces the
+// breakdown in 1 second from a browser.
+//
+// Returns:
+//   {
+//     ok, ts,
+//     data_dir: '/app/data' (or wherever DATABASE_PATH resolves),
+//     total_bytes, total_human,
+//     entries: [{ name, type, bytes, human }, ...]   // sorted desc by bytes
+//     db_row_counts: { audit_previews, audit_log, users, reviews, ... }
+//     warnings: [...]  // if total approaches 80%+ of 500MB
+//   }
+router.get('/storage', (req, res) => {
+  try {
+    const fs = require('node:fs');
+    const path = require('node:path');
+
+    // Resolve the data directory. In prod with Railway volume mounted
+    // at /app/data, the DB path is /app/data/reviews.db. In dev it's
+    // server/data/reviews.db. Walk up from the configured DB path.
+    const dbPath = process.env.DATABASE_PATH || path.join(__dirname, '..', '..', 'data', 'reviews.db');
+    const dataDir = path.dirname(dbPath);
+
+    const entries = [];
+    let totalBytes = 0;
+    try {
+      const items = fs.readdirSync(dataDir, { withFileTypes: true });
+      for (const item of items) {
+        const fullPath = path.join(dataDir, item.name);
+        let bytes = 0;
+        let type = 'file';
+        try {
+          if (item.isDirectory()) {
+            type = 'dir';
+            // Walk the directory recursively, summing file sizes
+            const walk = (dir) => {
+              try {
+                const subItems = fs.readdirSync(dir, { withFileTypes: true });
+                for (const sub of subItems) {
+                  const subPath = path.join(dir, sub.name);
+                  try {
+                    if (sub.isDirectory()) walk(subPath);
+                    else if (sub.isFile()) bytes += fs.statSync(subPath).size;
+                  } catch { /* skip unreadable */ }
+                }
+              } catch { /* skip unreadable dir */ }
+            };
+            walk(fullPath);
+          } else if (item.isFile()) {
+            bytes = fs.statSync(fullPath).size;
+          }
+        } catch (err) {
+          entries.push({ name: item.name, type: 'error', bytes: 0, error: err.message });
+          continue;
+        }
+        entries.push({ name: item.name, type, bytes, human: humanBytes(bytes) });
+        totalBytes += bytes;
+      }
+      entries.sort((a, b) => b.bytes - a.bytes);
+    } catch (err) {
+      return res.status(500).json({ error: `Could not read data dir ${dataDir}: ${err.message}` });
+    }
+
+    // DB row counts — high-signal info for "what's growing inside the DB"
+    let dbRowCounts = {};
+    try {
+      const tables = ['audit_previews', 'audit_log', 'users', 'reviews', 'businesses', 'sessions', 'waitlist_signups', 'business_share_tokens'];
+      for (const t of tables) {
+        try {
+          const row = get(`SELECT COUNT(*) AS count FROM ${t}`);
+          dbRowCounts[t] = row?.count ?? null;
+        } catch { dbRowCounts[t] = 'table missing'; }
+      }
+    } catch (err) {
+      dbRowCounts._error = err.message;
+    }
+
+    // Warnings — Railway free-tier volume is 500 MB; warn at 80%+
+    const RAILWAY_FREE_VOLUME_BYTES = 500 * 1024 * 1024;
+    const warnings = [];
+    const pctOfFree = (totalBytes / RAILWAY_FREE_VOLUME_BYTES) * 100;
+    if (pctOfFree >= 80) {
+      warnings.push(`Storage at ${pctOfFree.toFixed(1)}% of Railway 500MB free-tier — investigate the biggest entry above. Common culprits: backups/ folder hoarding snapshots (cron the cleanup), audit_log table runaway growth.`);
+    }
+    if (entries[0]?.name === 'backups' && entries[0].bytes > 200 * 1024 * 1024) {
+      warnings.push(`backups/ is the largest entry at ${entries[0].human}. Backups likely accumulating — consider rotation: \`find /app/data/backups -mtime +7 -delete\` (keeps last 7 days).`);
+    }
+
+    res.setHeader('Cache-Control', 'no-store, private');
+    res.json({
+      ok: true,
+      ts: new Date().toISOString(),
+      data_dir: dataDir,
+      total_bytes: totalBytes,
+      total_human: humanBytes(totalBytes),
+      pct_of_railway_free: Number(pctOfFree.toFixed(1)),
+      entries,
+      db_row_counts: dbRowCounts,
+      warnings,
+    });
+  } catch (err) {
+    captureException(err, { route: 'admin.storage' });
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+function humanBytes(n) {
+  if (n < 1024) return `${n} B`;
+  if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
+  if (n < 1024 * 1024 * 1024) return `${(n / (1024 * 1024)).toFixed(1)} MB`;
+  return `${(n / (1024 * 1024 * 1024)).toFixed(2)} GB`;
+}
+
 // Decision thresholds documented in waitlist.js + first-stripe-customer-
 // provisioning.md: 5+ signups for a plan over 30 days = real demand,
 // consider building. 0 signups in 30 days = kill the tier with confidence.
