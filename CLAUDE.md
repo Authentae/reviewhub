@@ -193,6 +193,27 @@ until every section is `[wait:*]`.
 - `/standup` — daily brief: signups, errors, support, top queue item
 - `/ship` — run queue-driven autopilot from anywhere
 
+## Community skills (user-level, installed 2026-05-26)
+
+Six SKILL.md files at `~/.claude/skills/` from quality community repos.
+They auto-load when their trigger conditions appear in a request OR
+when the user types the matching slash command. Reach for them
+instead of re-deriving the discipline from scratch.
+
+| Skill | Trigger | When it helps |
+|---|---|---|
+| `debug-mantra` | `/debug-mantra` OR "bug / broken / failing / error" | Quick 4-step debug discipline (reproduce → trace → falsify → cross-ref). Faster than `diagnose` for small bugs. |
+| `diagnose` | `/diagnose` OR "diagnose this" OR perf regression | Full 6-phase debug loop (reproduce → minimise → hypothesise → instrument → fix → regression-test). Use for hard bugs / LCP-regression-style work. |
+| `grill-me` | `/grill-me` OR "stress-test this plan" | Relentless one-question-at-a-time interview until decision-tree resolved. Earth invokes when he wants pressure-testing of his own ideas. |
+| `handoff` | `/handoff` OR "compact this conversation" | Compress session state into a handoff doc in temp dir for fresh agent pickup. Different from the overnight-summary pattern (that's Earth-facing; this is agent-facing). |
+| `karpathy-guidelines` | `/karpathy-guidelines` OR before any code ship | Reinforces existing decision framework — Think Before Coding / Simplicity First / Surgical Changes / Goal-Driven. Read before any non-trivial code change. |
+| `scrutinize` | `/scrutinize` OR "review this" OR pre-commit | Outsider-perspective code review: should this exist at all + does it actually do what it claims (trace execution, not just diff). Use pre-commit on non-trivial changes. |
+
+Source repos (for updates):
+- thananon/9arm-skills — debug-mantra, scrutinize
+- mattpocock/skills — diagnose, grill-me, handoff
+- multica-ai/andrej-karpathy-skills — karpathy-guidelines
+
 ## What's already shipped (don't rebuild)
 
 - Auth: email/password, Google OAuth, magic link, MFA, password reset
