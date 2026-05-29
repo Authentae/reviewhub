@@ -135,3 +135,33 @@ available.
 After Wave 6 sends, decide: test the "get more reviews" angle (Option A,
 ~1hr) or not. Claude can draft the get-reviews cold email + pick the
 5 prospects whenever Earth says go.
+
+---
+
+## DECISION (2026-05-26, locked)
+
+Verified the existing "get more reviews" feature (review-requests) is
+**production-complete**, not a stub:
+- `server/src/routes/reviewRequests.js` — single send, bulk CSV (200/req),
+  resend, delete, click-tracking redirect, 24h per-customer cooldown,
+  multi-platform (Google/Yelp/Facebook), multi-language, Starter-gated bulk.
+- That's a full Birdeye/Podium-class review-request engine, already shipped.
+
+**Decisions:**
+1. Wave 6 reply-first pitch is PARKED, not sent. 5 waves × 0 replies +
+   demand research (880-comment "get reviews" vs 30-comment "reply") =
+   the reply-first pitch is aimed at the wrong pain.
+2. ReviewHub repositions: headline = "get more reviews on autopilot,"
+   AI reply-drafting = bonus. The most-wanted feature already exists.
+3. Next experiment: get-reviews cold email + get-reviews demo artifact
+   + 5 fresh prospects. If it gets ANY reply where reply-first got 0,
+   pivot confirmed.
+
+**Still Earth-only:** the actual email send (safety stop, unchanged).
+Claude preps everything; Earth sends 5.
+
+**Next-session deliverables for Claude to build:**
+- [ ] "Get more reviews" cold email (replaces wave-6 reply-first bodies)
+- [ ] Get-reviews demo artifact (current audit-preview shows reply drafts —
+      wrong for this pitch)
+- [ ] 5 fresh prospects (can reuse the verified-email Wave 6 list)
