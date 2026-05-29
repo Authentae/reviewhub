@@ -23,8 +23,11 @@ Stage 0 (now): 0 paying customers, $0 MRR, **5 waves run with 0 confirmed
 replies, 0 confirmed real opens after verification-cluster correction**.
 The previously-claimed "35% open rate" was an artifact of Earth's own URL-
 verification clicks contaminating audit_previews.view_count (Wave 5 lesson,
-see `feedback_verification_batch_fingerprint.md`). The bottleneck is
-*"prospects don't open the audit URL — OR if they do, don't reply."* Until that changes, every decision passes through this filter:
+see `feedback_verification_batch_fingerprint.md`).
+
+**STRATEGIC PIVOT 2026-05-26 — read `docs/strategy/demand-validation-2026-05-26.md` before any outreach work.** Demand research found owners care ~25× more about GETTING reviews than REPLYING (880-comment vs 30-comment threads). ReviewHub led with the wrong half: AI reply-drafting (the 30-comment pain) instead of review-gathering (the 880-comment pain). The review-request feature that solves the bigger pain is **already built to production quality** (`server/src/routes/reviewRequests.js`). Decision locked: **reposition headline to "get more reviews," reply-drafting becomes the bonus.** The reply-first cold-outreach pitch (Wave 6) is PARKED, not sent. The real bottleneck was never "open rate" — it was *"we were selling the wrong feature."*
+
+Until first paying customer, every decision passes through this filter:
 
 > *"Does this measurably shorten the path to first paying customer?"*
 
@@ -73,15 +76,19 @@ If no → back-burner. Default deflates from "is this useful?" (always yes) to
 - MRR > $1k → bottleneck shifts to retention
 - MRR > $5k → bottleneck shifts to efficient growth (CAC payback)
 
-**Strategic state as of 2026-05-22 (read these before "what next?"):**
-- `docs/strategy/post-wave-5-synthesis.md` — 5-page strategic synthesis
-- `docs/outreach/wave-6-prospects.md` — 13 verified prospects, ready
-- `docs/outreach/wave-6-send-sheet.md` — paste-ready Gmail drafts for Tue/Wed 5/26-27 send
-- `docs/wave-postmortems/wave-6-outcomes-tree.md` — pre-committed branches
-- `docs/wave-postmortems/wave-6-followup-template.md` — for Sun 6/2 if needed
-- `docs/outreach/wave-5-muay-thai-im-scripts.md` — IG/FB DMs for the 4 Wave 5 bounces
-- `docs/skills/first-customer-onboarding-sequence.md` — 30-day email arc, activates on first paid signup
+**Strategic state as of 2026-05-26 (read these before "what next?"):**
+- `docs/strategy/demand-validation-2026-05-26.md` — **THE current doc.** The get-more-reviews pivot, evidence, locked decision, next-session checklist. Read first.
+- `docs/strategy/post-wave-5-synthesis.md` — prior synthesis (reply-first era; context, now superseded by the pivot)
+- `docs/outreach/wave-6-prospects.md` — 13 verified-email prospects (reusable for the get-reviews test; the reply-first send-sheet is PARKED)
 - `/api/admin/funnel` — diagnostic endpoint with verification-cluster check (run THIS before claiming any open-rate)
+- `/api/admin/storage` — Railway volume breakdown (volume hit 84% — likely backups/ accumulation)
+
+**Next-session work (from the locked pivot decision) — all PREP, Earth sends:**
+1. "Get more reviews on autopilot" cold email (replaces wave-6 reply-first bodies)
+2. Get-reviews demo artifact (current `/audit-preview` shows reply drafts — wrong for this pitch)
+3. Reuse 5 prospects from the verified Wave 6 list → Earth sends 5 → compare reply rate to reply-first's 0/5-waves
+
+**PARKED (do not send):** Wave 6 reply-first cold emails, `wave-6-send-sheet.md`, `wave-5-muay-thai-im-scripts.md`, `wave-6-followup-template.md`. These were built for the reply-first pitch the pivot supersedes. `docs/skills/first-customer-onboarding-sequence.md` still valid (activates on first paid signup regardless of pitch).
 
 Full framework: `docs/decision-framework.md`. Memory rule: `memory/feedback_stage_aware_decisions.md`.
 

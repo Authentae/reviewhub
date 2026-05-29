@@ -31,11 +31,56 @@ verification ask (Lemon Squeezy, Google Workspace, etc.), use these:
 About.jsx until 2026-05-20 (fixed). If you see it referenced anywhere
 else, that's drift and needs correcting.
 
+## ⚡ STRATEGIC PIVOT — 2026-05-26 (supersedes the reply-first positioning)
+
+After 5 outreach waves / ~41 sends / 0 replies / 0 customers, a
+grill-me + scrutinize + demand-validation pass produced the first real
+strategic clarity in 6 months. Full doc:
+`docs/strategy/demand-validation-2026-05-26.md`.
+
+**The finding:** business owners care ~25× more about GETTING reviews
+than REPLYING to them (880-comment "how to get more reviews" Reddit
+threads vs 30-comment "should I reply" threads). ReviewHub led with the
+wrong feature — AI reply-drafting solves the smaller pain.
+
+**The opportunity:** ReviewHub already has a production-complete
+review-request engine (`server/src/routes/reviewRequests.js` — single +
+bulk-CSV send, click-tracking, 24h cooldown, multi-platform,
+multi-language, Starter-gated). It's been a SECONDARY feature behind
+the reply headline.
+
+**Decision (locked 2026-05-26):**
+1. Reposition: headline = "get more reviews on autopilot," AI
+   reply-drafting = the bonus.
+2. Wave 6 reply-first cold-email pitch is PARKED, not sent.
+3. Next test: get-reviews cold email + get-reviews demo + 5 fresh
+   prospects. Any reply (vs reply-first's 0/5-waves) confirms the pivot.
+
+**Earth's own insight that seeded this (2026-05-26):** review-reply
+care tracks owner sophistication — owners who understand
+reputation→revenue feel the pain; the rest are indifferent. The
+believer segment is thin. (Getting reviews, by contrast, nearly every
+owner wants.)
+
+**Competitive reality confirmed:** Google Business Profile ships AI
+reply suggestions free; Podium bundles an AI review-responder; GatherUp
+et al. focus on review GATHERING (the bigger pain). ReviewHub's old
+headline was a paid version of something Google gives free.
+
+---
+
 ## Strategic decisions — 2026-05-20
 
 After a long discussion between Earth and the agent on 2026-05-19 →
 2026-05-20, three framing decisions are now load-bearing for every
 future plan, post, page, or pitch. Read this section first.
+
+> **NOTE (2026-05-26):** the framing decisions below remain valid
+> (global scope, active-wave ≠ product-scope, phased $0 plan). But the
+> PRODUCT POSITIONING has pivoted — see the get-more-reviews pivot
+> section above. Where older text implies "AI review replies" is the
+> headline product, read it as "get more reviews, reply-drafting is the
+> bonus."
 
 ### 1. The product is global. Bangkok is the current outreach segment.
 

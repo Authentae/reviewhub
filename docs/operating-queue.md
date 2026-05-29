@@ -9,19 +9,27 @@
 > over *demote-list* work (new marketing surfaces, blog posts, visual
 > polish, more infra-for-infra's-sake).
 >
-> **NEAR-TERM PRIORITY (2026-05-22, post-Wave-5 honest harvest):**
-> Wave 5 closed with verified-zero conversions (4 bounces, 0
-> confirmed prospect opens after verification-cluster correction —
-> see `feedback_verification_batch_fingerprint.md` for the lesson).
-> Wave 6 prep DONE overnight 2026-05-22:
-> - 13 verified-email prospects (`docs/outreach/wave-6-prospects.md`)
-> - Outcome tree (`docs/wave-postmortems/wave-6-outcomes-tree.md`)
-> - Send sheet (`docs/outreach/wave-6-send-sheet.md`)
-> - Funnel diagnostic with cluster-check (`/api/admin/funnel`)
-> - Strategic synthesis (`docs/strategy/post-wave-5-synthesis.md`)
+> **NEAR-TERM PRIORITY (2026-05-26, STRATEGIC PIVOT):**
+> Demand validation found owners care ~25× more about GETTING reviews
+> than REPLYING (880-comment vs 30-comment Reddit threads). ReviewHub
+> led with the wrong feature. **Decision locked: reposition headline to
+> "get more reviews," reply-drafting becomes the bonus.** The
+> review-request feature that solves the bigger pain is already built
+> to production quality (`server/src/routes/reviewRequests.js`).
+> Full evidence + decision: `docs/strategy/demand-validation-2026-05-26.md`.
 >
-> **Earth-action required Tue/Wed 9-11 AM ICT/SGT:** Wave 6 send.
-> ~45 min. After: Sun 2026-06-01 harvest via diagnostic CLI.
+> **Wave 6 reply-first pitch is PARKED — do NOT send it.** 5 waves of
+> reply-first cold email = 0 replies; sending a 6th of the same pitch
+> is the wrong move. The 13 verified prospects + funnel diagnostic +
+> verification-cluster check all carry forward; the *pitch* changes.
+>
+> **Next-session deliverables (Claude preps, Earth sends 5):**
+> 1. "Get more reviews on autopilot" cold email
+> 2. Get-reviews demo artifact (current /audit-preview shows reply
+>    drafts — wrong for this pitch)
+> 3. 5 fresh prospects (reuse verified Wave 6 list)
+> If the get-reviews angle gets ANY reply where reply-first got 0 →
+> pivot confirmed.
 
 > **STRATEGIC ANCHOR:** The 30-day plan in
 > [`docs/strategy-30day.md`](strategy-30day.md) supersedes
