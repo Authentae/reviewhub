@@ -9,6 +9,14 @@ This file is loaded into your context every session. Keep it updated when conven
 
 ## ⚡ Read this FIRST every session — the decision frame
 
+**Always-active coding discipline (Karpathy guidelines):**
+1. **Think Before Coding** — surface assumptions, present alternatives, ask when unclear (don't pick silently)
+2. **Simplicity First** — minimum code that solves the problem; no speculative abstractions or "flexibility" not requested
+3. **Surgical Changes** — touch only what's needed; every changed line must trace to the user's request; don't "improve" adjacent code
+4. **Goal-Driven Execution** — define verifiable success criteria before starting; loop until verified
+
+Full text: `~/.claude/skills/karpathy-guidelines/SKILL.md`. These apply to every interaction, not just code work — including answering questions concisely.
+
 **North star at this stage: Time To First Paying Customer (TTFPC).**
 
 Stage 0 (now): 0 paying customers, $0 MRR, **5 waves run with 0 confirmed
