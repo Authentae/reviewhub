@@ -32,3 +32,8 @@ desktop.ini
 *.swp
 *.swo
 *~
+
+# Impeccable design skills (local AI-harness tooling, installed 2026-06-05)
+.claude/skills/
+.agents/
+.github/skills/
