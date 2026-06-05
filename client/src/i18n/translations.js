@@ -30,9 +30,9 @@ const en = {
 
   // Landing page
   'landing.pageTitle': 'AI Review Replies in 10 Languages.',
-  'landing.heroBadge': 'Built for Bangkok · Free forever · From ฿499 / $14 a month',
-  'landing.heroTitle': 'Reply to Google reviews in 10 seconds — from your phone.',
-  'landing.heroSubtitle': 'New Google reviews ping you on LINE or Telegram — with an AI-drafted reply in your voice, ready to copy and paste in Google. (One-tap auto-post launches Q3 2026 when Google\'s API approval lands.) Built in Bangkok for hospitality, restaurants, clinics, and salons — owners who live in chat, not Slack.',
+  'landing.heroBadge': 'Free forever · From ฿499 / $14 a month',
+  'landing.heroTitle': 'Get more Google reviews, on autopilot.',
+  'landing.heroSubtitle': 'Most happy customers mean to leave a Google review, then they get busy and forget. ReviewHub sends each one a short, friendly reminder with a one-tap link to your review page, so the reviews you\'ve earned actually show up. New reviews also land on LINE or Telegram with a draft reply ready to post. Built for dentists, spas, salons, and clinics worldwide.',
   'landing.heroCtaPrimary': 'Start Free',
   'landing.heroCtaSecondary': 'Try free — no signup',
   'landing.heroCtaPrimaryNewTab': '(opens in a new tab)',
