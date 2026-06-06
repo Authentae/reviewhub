@@ -1076,7 +1076,7 @@ const en = {
 
   // Pricing page
   'pricing.headline': 'Simple, honest pricing',
-  'pricing.subheadline': 'Start free. Upgrade when you need more. Cancel anytime.',
+  'pricing.subheadline': 'Get more Google reviews on every plan. Start free, upgrade when you need more, cancel anytime.',
   'pricing.badge': 'MOST POPULAR',
   'pricing.planName': 'Professional',
   'pricing.featuresListAria': 'Included features',
