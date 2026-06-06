@@ -34,7 +34,7 @@ export default function Guide() {
       : 'How ReviewHub works — get set up in 10 minutes',
     description: isThai
       ? 'สมัคร → เชื่อม Google → เชื่อม LINE/Telegram → ตอบรีวิวใน 10 วินาทีจากแชท 4 ขั้นตอน 10 นาที'
-      : '4-step walkthrough: sign up → connect Google → connect LINE/Telegram/WhatsApp (Q3 2026) → reply to reviews in 10 seconds from your chat.',
+      : '4-step walkthrough: sign up, connect Google, connect LINE/Telegram, then send review requests to get more Google reviews (with AI-drafted replies for the ones that come in).',
   });
 
   // Central walkthrough — 4 steps from signup to first reply posted.
@@ -176,7 +176,7 @@ export default function Guide() {
         <p className="text-lg md:text-xl leading-relaxed" style={{ color: 'var(--rh-ink-soft)' }}>
           {isThai
             ? 'สี่ขั้นตอน เชื่อม Google, เชื่อม LINE, รีวิวใหม่เด้งเข้าทุกครั้ง พร้อมคำตอบที่ AI ร่างให้ ใช้เวลาตั้งค่าครั้งเดียว ใช้ฟรีตลอดถ้ารีวิวไม่เกิน 3 อันต่อเดือน'
-            : 'Four steps: connect Google, connect LINE, every new review pings you with an AI-drafted reply ready to send. Set up once. Free forever if you stay under 3 reviews/month.'}
+            : 'Four steps: connect Google, connect LINE, send review requests to get more reviews, and every new review pings you with an AI-drafted reply ready to send. Set up once. Free forever if you stay under 3 reviews/month.'}
         </p>
       </section>
 
