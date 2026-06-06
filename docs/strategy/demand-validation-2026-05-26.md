@@ -197,3 +197,46 @@ Goal: reposition + polish every page to the get-more-reviews pivot.
 The high-value reposition (the homepage, the page a prospect sees first,
 in every language + the conversion page) is DONE. The rest is either
 large-build (audit-demo) or diminishing-value polish.
+
+---
+
+## Site reposition — session 2 complete (2026-06-05, extended)
+
+**DONE this session (all committed + deployed):**
+- Homepage: FULLY repositioned in all 10 languages — hero + subtitle
+  (en/es/fr/de/pt/it/ja/zh/ko/th) + English sections (pageTitle, feat1
+  review-requests, how-it-works, CTA, footer)
+- Pricing: subheadline → get-reviews value
+- About: founder origin narrative now leads with get-reviews (drafting =
+  bonus), meta updated
+- Guide: intro + meta include sending review requests
+- impeccable installed + PRODUCT.md
+- Em dashes removed on every string touched
+
+**Verified pitch-neutral (no change needed):** WhyUs, Trust, Integrations
+(no reply-first hero framing found).
+
+**Deliberately NOT changed (with reasons):**
+- **Blog posts (33):** these are TOPIC-SPECIFIC SEO articles. A post
+  titled "how fast should you reply to Google reviews" is correctly
+  about replying — repositioning it would break its SEO intent and topic
+  coherence. The right blog move is ADDITIVE: write NEW "how to get more
+  reviews" posts (high search demand), not edit existing reply-topic
+  articles. Em-dash cleanup across them is low-value mechanical work.
+- **ReplyGeneratorTool:** a free reply-drafting lead-magnet tool. It's
+  legitimately about replies. Leave it.
+
+**STILL NEEDS A REAL (non-3-AM, browser-available) SESSION:**
+- **audit-demo / audit-preview get-reviews artifact** — `/audit-preview/demo`
+  shows review→reply-draft pairs (inherently a reply demo). A get-reviews
+  demo needs a NEW component built (review-request flow). This is real
+  design+build on a prospect-facing surface, and the Gmail/browser
+  automation has been frozen all session, so it can't be visually
+  verified right now. Doing it blind would risk shipping a broken page.
+  This is the one genuine "improve" that can't be done well in this
+  session. Highest-priority next-session item.
+- **New get-reviews blog posts** (additive, see above).
+
+The marketing pages are repositioned. The remaining work is either
+inappropriate to change (reply-topic blog articles) or requires a
+browser to build+verify safely (audit-demo).
