@@ -189,7 +189,7 @@ export default function About() {
   usePageTitle('About · Earth · ReviewHub');
   useSocialMeta({
     title: 'About the founder · ReviewHub',
-    description: 'Solo founder building ReviewHub from Bangkok. Why this tool exists, what I believe about review replies, and how to reach me directly.',
+    description: 'Solo founder building ReviewHub from Bangkok. Why this tool exists, how it helps businesses get more Google reviews, and how to reach me directly.',
   });
   const loggedIn = isLoggedIn();
 
@@ -249,12 +249,14 @@ export default function About() {
               color: C.ink, letterSpacing: '-0.005em',
             }}>
               I noticed something working in Bangkok hospitality: small
-              owners reply to maybe 1 in 4 reviews. Not because they don't
-              care — because the templates feel fake, and translating a
-              thoughtful reply across Thai/English/Japanese/Chinese is real
-              work after a 14-hour day. ReviewHub drafts the reply in your
-              voice, in the language the customer wrote. You approve it on
-              LINE in 30 seconds. That's it.
+              owners barely get reviews, and reply to maybe 1 in 4 of the
+              ones they do. The reviews don't come because happy customers
+              mean to leave one, then forget. So ReviewHub sends your
+              customers a one-tap reminder, and the reviews you've earned
+              actually show up. Then it drafts your reply in your voice, in
+              the language the customer wrote, ready on LINE in 30 seconds.
+              Getting more reviews is the main job. The drafting is the
+              bonus.
             </p>
             <ReviewDraftCard />
           </div>
