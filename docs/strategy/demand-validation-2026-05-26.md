@@ -165,3 +165,35 @@ Claude preps everything; Earth sends 5.
 - [ ] Get-reviews demo artifact (current audit-preview shows reply drafts —
       wrong for this pitch)
 - [ ] 5 fresh prospects (can reuse the verified-email Wave 6 list)
+
+---
+
+## Site reposition progress (2026-06-05 overnight, impeccable polish)
+
+Goal: reposition + polish every page to the get-more-reviews pivot.
+
+**DONE (committed + deployed):**
+- Homepage hero — English (`7919eae`) + all 9 other locales es/fr/de/pt/it/ja/zh/ko/th (`c6f981e`)
+- Homepage sections — English pageTitle, feat1 (review-requests now the headline feature, was missing from the grid), how-it-works 3 steps (connect → remind customers → reviews come in + reply), CTA, footer tagline (`c625421`)
+- Pricing subheadline → get-reviews value (`0892952`)
+- Impeccable installed + `PRODUCT.md` written (`7ec1156`, `7919eae`)
+- Em dashes removed on every string touched (impeccable rule)
+
+**REMAINING (needs a fresh session, NOT 3-AM work):**
+1. **audit-demo / audit-preview get-reviews artifact** — `/audit-preview/demo`
+   currently shows review→reply-draft pairs (inherently a reply demo). A
+   get-reviews demo needs a NEW artifact showing the review-request flow
+   (reminder → one-tap link → review arrives). Real design+build, not copy.
+   Building a new prospect-facing page at 3 AM risks bugs; deferred.
+2. **Non-EN homepage subtitles + body** — the 9 locale heroTitles are
+   repositioned, but their subtitles/feature copy still describe the reply
+   flow. Large translation job; English is the reference.
+3. **Other marketing pages** (about, why-us, trust, verticals, /vs/*) —
+   spot-check for reply-first framing; most are pitch-neutral or hardcoded
+   in JSX (not in translations.js).
+4. **Em-dash sweep** across 33 blog posts (impeccable flags them) — low
+   value, mechanical.
+
+The high-value reposition (the homepage, the page a prospect sees first,
+in every language + the conversion page) is DONE. The rest is either
+large-build (audit-demo) or diminishing-value polish.
