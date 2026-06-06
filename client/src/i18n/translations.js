@@ -1442,7 +1442,7 @@ const es = {
   // Landing page
   'landing.pageTitle': 'Todas tus reseñas. Un panel inteligente.',
   'landing.heroBadge': 'Plan gratuito para siempre · Sin tarjeta · 10 idiomas',
-  'landing.heroTitle': 'Responde a cada reseña de Google en 10 segundos.',
+  'landing.heroTitle': 'Consigue más reseñas de Google, en piloto automático.',
   'landing.heroSubtitle': 'Todas tus reseñas de Google en un solo panel. La IA escribe respuestas en tu tono — en 10 idiomas. Importa desde 20+ plataformas vía CSV (TheFork, OpenTable, TripAdvisor, Trustpilot, Yelp México…).',
   'landing.heroCta': 'Empezar gratis — planes desde $14/mes',
   'landing.heroNote': 'Plan gratuito · Sin tarjeta · 10 idiomas',
@@ -2133,7 +2133,7 @@ const fr = {
   // Landing page
   'landing.pageTitle': 'Tous vos avis. Un tableau de bord intelligent.',
   'landing.heroBadge': 'Plan gratuit · Sans carte · 10 langues',
-  'landing.heroTitle': 'Répondez à chaque avis Google en 10 secondes.',
+  'landing.heroTitle': 'Obtenez plus d\'avis Google, en pilote automatique.',
   'landing.heroSubtitle': 'Tous vos avis Google dans un seul tableau de bord. L\'IA rédige des réponses dans votre ton — en 10 langues. Importez depuis 20+ plateformes via CSV (TheFork, Pages Jaunes, Avis Vérifiés, TripAdvisor…).',
   'landing.heroCta': 'Commencer gratuitement — à partir de 14 $/mois',
   'landing.heroNote': 'Plan gratuit · Sans carte · 10 langues',
@@ -2799,7 +2799,7 @@ const de = {
   // Landing page
   'landing.pageTitle': 'Alle Bewertungen. Ein smartes Dashboard.',
   'landing.heroBadge': 'Für immer kostenlos · Keine Kreditkarte · 10 Sprachen',
-  'landing.heroTitle': 'Antworte auf jede Google-Bewertung in 10 Sekunden.',
+  'landing.heroTitle': 'Mehr Google-Bewertungen, ganz automatisch.',
   'landing.heroSubtitle': 'Alle deine Google-Bewertungen in einem Dashboard. KI schreibt Antworten in deinem Ton — in 10 Sprachen. Importiere von 20+ Plattformen per CSV (HolidayCheck, kununu, eKomi, TripAdvisor…).',
   'landing.heroCta': 'Kostenlos starten — ab $14/Monat',
   'landing.heroNote': 'Kostenloser Plan · Ohne Kreditkarte · 10 Sprachen',
@@ -3465,7 +3465,7 @@ const pt = {
   // Landing page
   'landing.pageTitle': 'Todas as suas avaliações. Um painel inteligente.',
   'landing.heroBadge': 'Plano grátis para sempre · Sem cartão · 10 idiomas',
-  'landing.heroTitle': 'Responda a cada avaliação do Google em 10 segundos.',
+  'landing.heroTitle': 'Receba mais avaliações no Google, no piloto automático.',
   'landing.heroSubtitle': 'Todas as suas avaliações do Google num só painel. A IA escreve respostas no seu tom — em 10 idiomas. Importe de 20+ plataformas via CSV (Reclame Aqui, TripAdvisor, Trustpilot, Mercado Livre…).',
   'landing.heroCta': 'Comece grátis — planos a partir de $14/mês',
   'landing.heroNote': 'Plano grátis · Sem cartão · 10 idiomas',
@@ -4131,7 +4131,7 @@ const it = {
   // Landing page
   'landing.pageTitle': 'Tutte le tue recensioni. Un cruscotto intelligente.',
   'landing.heroBadge': 'Piano gratuito per sempre · Nessuna carta · 10 lingue',
-  'landing.heroTitle': 'Rispondi a ogni recensione Google in 10 secondi.',
+  'landing.heroTitle': 'Ottieni più recensioni Google, in automatico.',
   'landing.heroSubtitle': 'Tutte le tue recensioni Google in un\'unica dashboard. L\'IA scrive risposte nel tuo stile — in 10 lingue. Importa da 20+ piattaforme via CSV (TheFork, Pagine Gialle, TripAdvisor, Trustpilot…).',
   'landing.heroCta': 'Inizia gratis — piani da $14/mese',
   'landing.heroNote': 'Piano gratuito · Senza carta · 10 lingue',
@@ -4797,7 +4797,7 @@ const ja = {
   // Landing page
   'landing.pageTitle': 'すべての口コミを一か所に。スマートなダッシュボード。',
   'landing.heroBadge': '永久無料 · クレジットカード不要 · 10言語対応',
-  'landing.heroTitle': 'すべてのGoogle口コミに10秒で返信。',
+  'landing.heroTitle': 'Googleの口コミを自動でもっと集める。',
   'landing.heroSubtitle': 'Google口コミを全部まとめて1つのダッシュボードへ。AIがお店のトーンで自然な返信を書きます — 10言語対応（日本語・韓国語・中国語含む）。食べログ、Retty、ホットペッパー、ぐるなびなど60以上のプラットフォームからCSVで取り込めます。',
   'landing.heroCta': '無料で開始 — プランは月$14から',
   'landing.heroNote': '無料プランあり · カード登録不要 · 10言語',
@@ -5463,7 +5463,7 @@ const zh = {
   // Landing page
   'landing.pageTitle': '所有评价，一个智能仪表盘。',
   'landing.heroBadge': '永久免费 · 无需信用卡 · 支持10种语言',
-  'landing.heroTitle': '10秒内回复每条Google评价。',
+  'landing.heroTitle': '自动获取更多 Google 评价。',
   'landing.heroSubtitle': '把所有Google评价集中到一个面板。AI用您店里的语气写回复 — 支持10种语言（含中文、日文、韩文、泰文）。可通过CSV从20+平台导入（大众点评、美团、小红书、TripAdvisor…）。',
   'landing.heroCta': '免费开始 — 套餐从 $14/月起',
   'landing.heroNote': '免费套餐 · 不用信用卡 · 支持10种语言',
@@ -6140,7 +6140,7 @@ const ko = {
   // Landing page
   'landing.pageTitle': '모든 리뷰를 하나의 스마트 대시보드로.',
   'landing.heroBadge': '평생 무료 · 신용카드 불필요 · 10개 언어 지원',
-  'landing.heroTitle': '모든 Google 리뷰에 10초 안에 답변하세요.',
+  'landing.heroTitle': '구글 리뷰를 자동으로 더 많이 받으세요.',
   'landing.heroSubtitle': '모든 Google 리뷰를 하나의 대시보드로. AI가 가게 톤에 맞는 답변을 써드립니다 — 한국어·일본어·중국어 포함 10개 언어 지원. 네이버 플레이스, 카카오맵, 망고플레이트 등 60개 이상 플랫폼에서 CSV로 가져올 수 있습니다.',
   'landing.heroCta': '무료로 시작 — $14/월부터 시작하는 요금제',
   'landing.heroNote': '무료 플랜 · 카드 등록 없이 · 10개 언어',
@@ -6817,7 +6817,7 @@ const th = {
   // Landing page
   'landing.pageTitle': 'รวมรีวิวทั้งหมด ในแดชบอร์ดเดียว',
   'landing.heroBadge': 'ทำในกรุงเทพ · ฟรีตลอดไป · เริ่มต้น ฿499/เดือน',
-  'landing.heroTitle': 'ตอบรีวิว Google ใน 10 วินาที — จากมือถือ',
+  'landing.heroTitle': 'รับรีวิว Google มากขึ้น แบบอัตโนมัติ',
   'landing.heroSubtitle': 'รีวิว Google ใหม่เด้งเข้า LINE หรือ Telegram ของคุณ พร้อมข้อความตอบกลับที่ AI ร่างให้ในโทนของร้าน ก็อปแล้ววางใน Google (โพสต์อัตโนมัติแบบคลิกเดียว เปิดตัวไตรมาส 3 ปี 2026 เมื่อ Google อนุมัติ API) ทำในกรุงเทพสำหรับเจ้าของโรงแรม ร้านอาหาร คลินิก และร้านเสริมสวย',
   'landing.heroCta': 'เริ่มต้นฟรี — แพ็กเกจเริ่มต้น $14/เดือน',
   'landing.heroNote': 'แพ็กเกจฟรี · ไม่ต้องใช้บัตร · 10 ภาษา',
