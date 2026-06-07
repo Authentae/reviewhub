@@ -297,13 +297,45 @@ export default function AuditPreview() {
         ctaVariant={ctaVariant}
       />
       <main className="max-w-3xl mx-auto px-5 py-8 md:py-16 pb-28 md:pb-16">
+        {/* DEMO-ONLY get-reviews intro. The audit page is shared with REAL
+            audits (which render reply drafts), so this section is gated on
+            token === 'demo' and never shows for real prospect audits. It
+            reframes the demo around the post-2026-05-26 pivot: getting more
+            reviews is the main job; the reply drafts below are the bonus.
+            Added 2026-06-08 — fixes the message mismatch where the homepage
+            sold get-reviews but the demo still led with replies. */}
+        {token === 'demo' && (
+          <section className="mb-12" aria-label="How you get more reviews">
+            <p className="text-xs font-mono uppercase tracking-widest mb-2" style={{ color: COLORS.ochre }}>
+              How {business_name.replace(' (sample cafe)', '')} gets more reviews
+            </p>
+            <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: COLORS.ink, letterSpacing: '-0.02em' }}>
+              First, the reviews come in — on autopilot.
+            </h2>
+            <p className="text-sm md:text-base leading-relaxed mb-6" style={{ color: COLORS.inkSoft }}>
+              After each visit, ReviewHub sends your happy customer a short, friendly reminder with a one-tap link to your Google review page. Most people mean to leave a review and then forget — this nudge is the difference between the reviews you earned and the ones that actually show up.
+            </p>
+            <div className="rounded-2xl px-5 py-4 mb-3 max-w-md" style={{ background: COLORS.cardBg, border: `1px solid ${COLORS.line}`, boxShadow: COLORS.cardShadow }}>
+              <p className="text-xs font-mono uppercase tracking-widest mb-2" style={{ color: COLORS.tealDeep }}>
+                ✦ The reminder your customer gets
+              </p>
+              <p className="text-sm md:text-base leading-relaxed" style={{ color: COLORS.ink }}>
+                "Hi Alex! Thanks for visiting Common Grounds today. If you have 10 seconds, a quick Google review really helps us — here's the one-tap link 👉 g.page/r/common-grounds"
+              </p>
+            </div>
+            <p className="text-sm leading-relaxed mb-8" style={{ color: COLORS.inkSoft }}>
+              More happy customers leave the review they meant to. <strong style={{ color: COLORS.ink }}>Then the bonus, below ↓</strong> — every review that lands gets a reply drafted in your voice, ready to copy and paste.
+            </p>
+            <div style={{ height: 1, background: COLORS.line }} aria-hidden="true" />
+          </section>
+        )}
         {/* Header — sets context immediately so the prospect doesn't
             wonder "wait, who is this and what am I looking at?" Tightened
             on mobile so the first review card peeks above the fold —
             seeing your own review text is the "wait this is real" moment. */}
         <header className="mb-8 md:mb-10">
           <p className="text-xs font-mono uppercase tracking-widest mb-2" style={{ color: COLORS.ochre }}>
-            Reply suggestions for
+            {token === 'demo' ? 'The bonus · reply drafts for' : 'Reply suggestions for'}
           </p>
           <h1 className="text-2xl md:text-4xl font-bold mb-2 md:mb-3" style={{ color: COLORS.ink, letterSpacing: '-0.02em' }}>
             {business_name}
