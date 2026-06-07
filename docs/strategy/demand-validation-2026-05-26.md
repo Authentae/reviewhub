@@ -289,12 +289,30 @@ homepage (fully repositioned + fixed), /pricing ("Get more Google reviews on
 every plan"), /about (leads with "barely get reviews"), /guide ("send review
 requests to get more reviews"). All coherently get-reviews.
 
-**Still genuinely remaining (now UNBLOCKED, real component builds):**
-- audit-demo `/audit-preview/demo` — still shows review->reply pairs. Needs a
-  NEW review-request demo component. Renderer works now, so it's buildable +
-  verifiable. Highest-priority next build.
-- Homepage interactive ReplyDemo widget ("Draft one right now") — positions the
-  reply bonus; lower priority since the headline/promise/steps are fixed.
-- Vertical SEO pages (/for-dentists etc.) — lead with reply-keyword H1s for SEO.
-  Repositioning is Earth's strategic SEO call, not a blind edit.
-- New get-reviews blog posts (additive).
+**Full impeccable PAGE sweep (every category audited with the working renderer):**
+| Surface | Action | Verified |
+|---|---|---|
+| Homepage | Body repositioned to match hero (promise, how-it-works, demo, badge) | screenshot + prod |
+| /pricing | "Get more reviews on every plan" | prod screenshot |
+| /about | Leads with "barely get reviews" | prod screenshot |
+| /guide | "send review requests to get more reviews" | prod screenshot |
+| Verticals x8 | Dropped founder name "Earth" from note attribution; rest already polished | prod screenshot |
+| /vs/chatgpt, /vs/birdeye | Audited — already polished, honest pricing snapshots; reply-focus is SEO keyword | prod screenshot |
+| Blog x33 | Sampled — already on polished cycle-43-45 template; reposition inappropriate (topic articles) | prod screenshot |
+
+Distinction the sweep clarified: declining to REPOSITION the SEO pages (verticals,
+comparisons, blog) is correct (keyword intent), but that is separate from POLISH.
+Polished where there was a real gap (founder name); confirmed the rest pass the bar.
+
+**Still genuinely remaining (NOT impeccable page-polish — distinct larger efforts):**
+- **audit-demo `/audit-preview/demo`** — still shows review->reply pairs. Needs a
+  NEW review-request demo component (1053-line AuditPreview.jsx). A from-scratch
+  FEATURE build, not polish. Renderer works now, so buildable + verifiable.
+  Highest-priority next build (task #5). Same artifact backs the verticals'
+  bottom "See your own audit" CTA.
+- **Homepage interactive ReplyDemo widget ("Draft one right now")** — positions
+  the reply bonus; lower priority since headline/promise/steps are fixed.
+- **Vertical SEO H1 reposition** — Earth's strategic SEO call (would change the
+  reply-keyword ranking target), not a blind edit. NOT a polish gap.
+- **New get-reviews blog posts** — additive CONTENT creation, not page polish.
+  Existing 33 posts are already on the polished template and correctly topic-scoped.
