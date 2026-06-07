@@ -377,7 +377,7 @@ export default function VerticalLanding({ vertical }) {
             className="text-xs uppercase tracking-widest"
             style={{ color: 'var(--rh-ink-3, #8b939c)', fontFamily: 'JetBrains Mono, ui-monospace, monospace' }}
           >
-            — Earth, founder · <Link to="/about" style={{ color: 'inherit', textDecoration: 'underline' }}>about me</Link>
+            — Founder · <Link to="/about" style={{ color: 'inherit', textDecoration: 'underline' }}>about me</Link>
           </p>
         </section>
 
