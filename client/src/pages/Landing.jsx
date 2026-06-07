@@ -319,7 +319,7 @@ function DemoSection() {
           className="rh-display"
           style={{ fontSize: 'clamp(28px, 5vw, 48px)', lineHeight: 1.05, marginBottom: 36 }}
         >
-          {t('landing.demoHeading', "Watch one review become a posted reply.")}
+          {t('landing.demoHeading', "And the bonus: every review, replied in seconds.")}
         </h2>
         {/* The animation is 1200×675 native. On viewports < 1200px we scale
             it down via CSS transform so the 16:9 aspect is preserved and no
@@ -384,16 +384,16 @@ function HowItWorks() {
         </div>
       ),
     },
-    { n: 'II', cat: t('landing.step2Cat', 'Draft'), h: t('landing.step2H', 'AI writes in your voice — not "delight."'),
-      p: t('landing.step2P', 'Trained on your last 20 replies. Drafts sound like you, in any of 10 languages — Thai, Japanese, and Korean done natively, not via translate.'),
+    { n: 'II', cat: t('landing.step2Cat', 'Request'), h: t('landing.step2H', 'We ask your customers, automatically.'),
+      p: t('landing.step2P', 'After each visit, ReviewHub sends a short, friendly reminder with a one-tap link to your Google review page. More of the reviews you have earned actually show up.'),
       illo: (
         <div style={{ width: '100%', fontFamily: 'var(--rh-sans)', fontSize: 15, color: 'var(--rh-ink)', lineHeight: 1.5, fontWeight: 500 }}>
-          <div style={{ fontFamily: 'var(--rh-mono)', fontSize: 10, color: 'var(--rh-ochre-deep)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10, fontWeight: 600 }}>✦ Draft</div>
-          "Appreciate you stopping by, Marco — pour-over's back Thursday."
+          <div style={{ fontFamily: 'var(--rh-mono)', fontSize: 10, color: 'var(--rh-ochre-deep)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10, fontWeight: 600 }}>✦ Review request</div>
+          "Thanks for visiting! Mind leaving a quick Google review? It only takes a sec."
         </div>
       ),
     },
-    { n: 'III', cat: t('landing.step3Cat', 'Chat → Copy → Paste'), h: t('landing.step3H', "Copy the draft. Paste in Google."),
+    { n: 'III', cat: t('landing.step3Cat', 'Reply · the bonus'), h: t('landing.step3H', "Each review gets a reply in your voice."),
       p: t('landing.step3P', "New reviews ping you on LINE or Telegram with the AI draft as a follow-up text message. Long-press to copy, tap Reply on Google, paste. 30 seconds instead of 30 minutes. (One-tap auto-post launches Q3 2026 when Google's Business Profile API approval lands — case 8-9395000041442.)"),
       illo: (
         <div style={{ textAlign: 'center' }}>
@@ -597,10 +597,10 @@ function AiDemo() {
 function PullQuote() {
   const { t } = useI18n();
   return (
-    <section className="rh-pullquote" aria-label="Customer testimonial">
+    <section className="rh-pullquote" aria-label="The ReviewHub promise">
       <div className="rh-shell">
         <div className="q rh-reveal">
-          {t('landing.pullQuote', "Every review, drafted in your voice — before the coffee cools.")}
+          {t('landing.pullQuote', "The reviews you've earned, finally showing up on Google.")}
         </div>
         <div className="attrib rh-reveal">
           {/* Portrait glyph swapped from ¶ (paragraph mark — confusing
@@ -610,7 +610,7 @@ function PullQuote() {
           <div className="portrait" aria-hidden="true">★</div>
           <div className="who">
             <b>{t('landing.pullQuoteAttribTitle', 'The ReviewHub promise.')}</b>
-            <span>{t('landing.pullQuoteAttribDesc', 'Every review platform you live on, drafted in the voice your customers already know — ready to send in seconds.')}</span>
+            <span>{t('landing.pullQuoteAttribDesc', 'We remind every happy customer to leave the review they meant to. More reviews come in, and each one gets a reply in your voice.')}</span>
           </div>
         </div>
       </div>

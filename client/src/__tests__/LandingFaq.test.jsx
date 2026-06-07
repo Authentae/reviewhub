@@ -91,13 +91,14 @@ describe('Landing FAQ accordion', () => {
 describe('Landing How It Works section', () => {
   it('renders the three numbered steps', () => {
     renderLanding();
-    // Step-3 copy evolved: 'One tap, it's published' → 'Tap to copy, paste in
-    // Google' (LINE pivot) → 'Copy the draft. Paste in Google.' (honest fix
-    // 2026-05-14 — LINE Flex has no clipboard button, so the marketing
-    // shouldn't claim a tap-copy action). Test matches the current honest copy.
+    // Steps repositioned 2026-06-07 to the get-more-reviews narrative:
+    // I Connect → II Request (the main job: send review requests) →
+    // III Reply (the bonus). Previously all three were reply-centric
+    // ('paste a link' / 'ai writes in your voice' / 'copy the draft.
+    // paste in google'). Test matches the current get-reviews copy.
     expect(screen.getByRole('heading', { name: /paste a link.*pull the reviews/i })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /ai writes in.*your voice/i })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /copy the draft.*paste in google/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /we ask your customers/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /each review gets a reply/i })).toBeInTheDocument();
   });
 
   it('has a workflow section heading', () => {

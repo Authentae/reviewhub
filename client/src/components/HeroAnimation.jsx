@@ -707,7 +707,7 @@ function Stage() {
         position:'absolute',top:30,right:32,
         fontSize:10,color:C.sage,fontWeight:600,zIndex:20,
       }}>
-        BANGKOK HOSPITALITY · LIVE DEMO
+        REAL PRODUCT · LIVE DEMO
       </div>
 
       {/* captions */}
