@@ -240,3 +240,29 @@ large-build (audit-demo) or diminishing-value polish.
 The marketing pages are repositioned. The remaining work is either
 inappropriate to change (reply-topic blog articles) or requires a
 browser to build+verify safely (audit-demo).
+
+---
+
+## impeccable pass — final state (2026-06-07)
+
+Ran impeccable's COPY audit across every page (grep is site-wide). Result:
+- **Hype buzzwords:** 0 in customer-facing copy (honesty-lint pre-commit
+  has enforced this for months). The only "leverage" hits are an internal
+  admin page (FounderBrief) and a code comment.
+- **New repositioned copy** (homepage hero/sub, pricing sub, About, Guide):
+  already em-dash-clean and buzzword-clean — written to impeccable's bar.
+- **Em dashes elsewhere:** pervasive (375 in translations.js alone, across
+  10 languages). This is the deliberate brand voice. A blind site-wide
+  find-replace would mangle grammar at scale (esp. Thai/Japanese/Korean,
+  where dash conventions differ) and can't be visually verified. impeccable
+  itself requires browser evidence for polish. **Declined as the wrong move.**
+
+**Render path is frozen session-wide (confirmed 2026-06-07):** Chrome MCP,
+Puppeteer, AND Claude_Preview all time out on screenshot. Vite serves
+HTTP 200, builds pass, copy ships correctly — only the *renderer* is stuck.
+So no prospect-facing visual work can be verified right now.
+
+**Earth's decision (2026-06-07):** do the real impeccable VISUAL polish pass
+(spacing, hierarchy, interaction states) + the audit-demo get-reviews rebuild
+**next session, when a browser/renderer works again.** Not blind. The goal
+stays open until then. Copy-level impeccable work is complete.
