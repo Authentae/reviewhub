@@ -208,8 +208,13 @@ Thai founder selling internationally).
   clicks "Set it up for $14/mo" on any audit-preview page → LS
   iframe mounts on `reviewhub.review` (no domain bounce). Verified
   end-to-end via Puppeteer.
-- **LS still in TEST MODE** as of 2026-05-22 — Earth must flip
-  Settings → General → Mode to LIVE before real money flows.
+- **LS is in LIVE MODE** (confirmed 2026-06-08 by Earth's dashboard
+  screenshot: store "Test mode" toggle is OFF). The 2026-05-22 "still in
+  test mode" note was stale. ONE thing left to verify definitively: do a
+  real $14 Starter purchase end-to-end and confirm it charges (then refund),
+  because LS keeps SEPARATE products/variants/API keys for test vs live — if
+  variant 1076073 or the Railway LEMONSQUEEZY_API_KEY were created in test
+  mode, a live checkout can still fail. A real purchase is the only proof.
 
 **Backup provider: Stripe** (paused, KYC pending).
 - Stripe Payment Links exist (`buy.stripe.com/8x27sLfzsgP4eragJs1ZS02`
@@ -243,10 +248,10 @@ has signal, go hard (and THEN a full site reposition is justified). 0 replies
 (like all 5 prior reply-first waves) = email is the wrong channel; try LINE /
 walk-in / a different ICP next.
 
-**OPEN BLOCKER for actually earning $:** LemonSqueezy still in TEST MODE (see
-below, line ~211). Even if a prospect says yes, a real card will NOT charge
-until Earth flips LS Settings → General → Mode to live. Verify BEFORE a hot
-prospect reaches checkout.
+**Money path:** LemonSqueezy is in LIVE mode (confirmed 2026-06-08, store
+test-mode toggle OFF). Only remaining proof needed: one real $14 Starter
+purchase end-to-end (then refund), to rule out a test-vs-live variant/API-key
+mismatch. Do this BEFORE a hot prospect reaches checkout.
 
 ### 2026-05-21/22 — TTFPC framework + Wave 5 honest re-analysis + Wave 6 prep + LS live
 
