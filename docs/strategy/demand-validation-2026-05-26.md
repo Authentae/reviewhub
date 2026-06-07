@@ -264,5 +264,37 @@ So no prospect-facing visual work can be verified right now.
 
 **Earth's decision (2026-06-07):** do the real impeccable VISUAL polish pass
 (spacing, hierarchy, interaction states) + the audit-demo get-reviews rebuild
-**next session, when a browser/renderer works again.** Not blind. The goal
-stays open until then. Copy-level impeccable work is complete.
+**next session, when a browser/renderer works again.** Not blind.
+
+### UPDATE (2026-06-07, same session): renderer unblocked, visual pass DONE
+
+**Breakthrough:** the renderer was NOT fully frozen. The MCP screenshot tools
+(Chrome MCP, Claude_Preview) time out because they return images inline, but
+`scripts/screenshot.mjs` (Puppeteer-to-disk) works fine. Confirmed by rendering
+production + local homepage successfully. So visual verification IS possible.
+
+**What the working renderer caught (copy-grep could NOT):** the hero said
+"get more reviews" but the entire homepage BODY still sold replies. Fixed +
+screenshot-verified + deployed to production (commit 9a97672, bundle B5z2saf0):
+- Brand promise pull-quote: "Every review, drafted in your voice" -> "The
+  reviews you've earned, finally showing up on Google" (EN+TH)
+- How-it-works step II: "Draft" -> "Request" (the main job, new review-request
+  illo); step III reframed as "Reply - the bonus" (EN+TH)
+- Demo walkthrough heading reframed as the bonus; aria-label fixed
+- HeroAnimation badge "BANGKOK HOSPITALITY" -> "REAL PRODUCT" (de-narrow)
+- LandingFaq test updated to new step headings (8/8 pass)
+
+**Visual sweep verified across top conversion surfaces (all live in prod):**
+homepage (fully repositioned + fixed), /pricing ("Get more Google reviews on
+every plan"), /about (leads with "barely get reviews"), /guide ("send review
+requests to get more reviews"). All coherently get-reviews.
+
+**Still genuinely remaining (now UNBLOCKED, real component builds):**
+- audit-demo `/audit-preview/demo` — still shows review->reply pairs. Needs a
+  NEW review-request demo component. Renderer works now, so it's buildable +
+  verifiable. Highest-priority next build.
+- Homepage interactive ReplyDemo widget ("Draft one right now") — positions the
+  reply bonus; lower priority since the headline/promise/steps are fixed.
+- Vertical SEO pages (/for-dentists etc.) — lead with reply-keyword H1s for SEO.
+  Repositioning is Earth's strategic SEO call, not a blind edit.
+- New get-reviews blog posts (additive).
