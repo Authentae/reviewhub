@@ -229,6 +229,25 @@ ReviewTrackers, Trustpilot, VisualDNA, Yotpo).
 
 ## Major sessions of note
 
+### 2026-06-08 — FIRST get-reviews demand test SENT (5 dental cold emails)
+
+**The first real demand test in ReviewHub's history.** Earth sent the 5
+get-reviews cold emails himself (from earth.reviewhub@gmail.com) to: TP Dental,
+Dentalis, Smile Signature, SmileBox, Keishikai. Pitch = "get more Google
+reviews on autopilot" (the post-pivot angle), reply-drafting framed as bonus.
+This is the cheapest high-value experiment available and the thing 6 months of
+website-building never did: actually ask prospects.
+
+**Watch for replies ~2026-06-13 to 06-15.** 1+ reply = the get-reviews angle
+has signal, go hard (and THEN a full site reposition is justified). 0 replies
+(like all 5 prior reply-first waves) = email is the wrong channel; try LINE /
+walk-in / a different ICP next.
+
+**OPEN BLOCKER for actually earning $:** LemonSqueezy still in TEST MODE (see
+below, line ~211). Even if a prospect says yes, a real card will NOT charge
+until Earth flips LS Settings → General → Mode to live. Verify BEFORE a hot
+prospect reaches checkout.
+
 ### 2026-05-21/22 — TTFPC framework + Wave 5 honest re-analysis + Wave 6 prep + LS live
 
 **Single biggest session in ReviewHub's history.** 18 commits.
