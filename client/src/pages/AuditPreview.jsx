@@ -30,7 +30,7 @@ const COLORS = {
   ink: '#1d242c',       // dark ink for primary text
   inkSoft: '#4a525a',   // muted dark for secondary text
   inkDim: '#9aa3ac',    // dimmer muted for tertiary
-  ochre: '#c48a2c',     // brand accent for "REPLY SUGGESTIONS FOR" label
+  ochre: '#8a5e14',     // brand accent for "REPLY SUGGESTIONS FOR" label
   tealDeep: '#1e4d5e',  // brand teal for buttons and "Suggested reply" label
   line: '#e6dfce',      // subtle border around cards
   divider: '#f0e9d8',   // softer than `line` — used INSIDE cards (review/draft separator)

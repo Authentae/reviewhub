@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 const C = {
   paper: '#fbf8f1', ink: '#1d242c',
   teal: '#1e4d5e', tealDeep: '#163d4a',
-  ochre: '#c08a3e', sage: '#6b8e7a',
+  ochre: '#8a5e14', sage: '#6b8e7a',
   lineGreen: '#06C755', chatBg: '#F1F2F6',
   draft: '#fdf8ec',
 };

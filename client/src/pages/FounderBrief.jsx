@@ -27,7 +27,7 @@ const C = {
   inkDim: 'rgba(29,36,44,0.5)',
   teal: '#1e4d5e',
   tealDeep: '#163d4a',
-  ochre: '#c08a3e',
+  ochre: '#8a5e14',
   ochreSoft: 'rgba(192,138,62,0.08)',
   sage: '#6b8e7a',
   sageSoft: 'rgba(107,142,122,0.10)',

@@ -260,7 +260,7 @@ export default function Changelog() {
         <ul className="space-y-6">
           {highlights.map((entry, i) => (
             <li key={i}>
-              <div className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: 'var(--rh-ochre, #c48a2c)' }}>
+              <div className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: 'var(--rh-ochre, #8a5e14)' }}>
                 {entry.date}
               </div>
               <p className="text-base leading-relaxed" style={{ color: 'var(--rh-ink)' }}>

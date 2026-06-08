@@ -17,8 +17,8 @@
   --rh-teal: oklch(0.42 0.09 220);
   --rh-teal-deep: oklch(0.32 0.08 220);
   --rh-teal-soft: oklch(0.92 0.035 220);
-  --rh-ochre: oklch(0.75 0.13 75);
-  --rh-ochre-deep: oklch(0.64 0.14 65);
+  --rh-ochre: oklch(0.52 0.105 72); /* darkened 2026-06-08 to meet WCAG AA (4.5:1) as TEXT on cream paper; was oklch(0.75) which failed contrast on ~60 nodes site-wide. Used for eyebrow labels + thin accent bars. */
+  --rh-ochre-deep: oklch(0.48 0.11 66);
   --rh-ochre-soft: oklch(0.95 0.045 75);
   --rh-sage: oklch(0.58 0.10 155);
   --rh-sage-soft: oklch(0.93 0.035 155);

@@ -18,7 +18,7 @@ const C = {
   inkSoft: '#4a525a',
   teal: '#1e4d5e',
   tealDeep: '#163d4a',
-  ochre: '#c08a3e',
+  ochre: '#8a5e14',
   sage: '#6b8e7a',
   rose: '#c2566c',
   hairline: 'rgba(29,36,44,0.08)',

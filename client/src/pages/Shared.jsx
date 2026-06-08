@@ -22,7 +22,7 @@ const COLORS = {
   ink: '#1d242c',
   inkSoft: '#4a525a',
   inkDim: '#9aa3ac',
-  ochre: '#c48a2c',
+  ochre: '#8a5e14',
   tealDeep: '#1e4d5e',
   line: '#e6dfce',
   cardBg: '#ffffff',

@@ -37,7 +37,7 @@ const SAMPLE_GOOD_REPLY = {
 
 const SEVERITY_COLOR = {
   high: '#c2566c',   // rose
-  medium: '#c48a2c', // ochre
+  medium: '#8a5e14', // ochre
   low: '#8b939c',    // ink-3
 };
 

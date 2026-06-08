@@ -174,7 +174,7 @@ export default function AuditLanding() {
         <div className="text-center mb-12">
           <div
             className="inline-block px-3 py-1 mb-6 text-xs font-bold uppercase tracking-widest rounded-full"
-            style={{ background: 'rgba(196,138,44,0.12)', color: 'var(--rh-ochre, #c48a2c)' }}
+            style={{ background: 'rgba(196,138,44,0.12)', color: 'var(--rh-ochre, #8a5e14)' }}
           >
             {isThai ? 'ฟรี · Earth ทำเอง · 1 ครั้งต่อร้าน' : 'Free · Hand-crafted by Earth · One per business'}
           </div>
@@ -328,7 +328,7 @@ export default function AuditLanding() {
             </div>
           </div>
           <div>
-            <div className="text-3xl font-bold mb-2" style={{ color: 'var(--rh-ochre, #c48a2c)' }}>24h</div>
+            <div className="text-3xl font-bold mb-2" style={{ color: 'var(--rh-ochre, #8a5e14)' }}>24h</div>
             <div className="text-sm" style={{ color: 'var(--rh-ink-soft, #4a525a)' }}>
               {isThai ? 'ส่งถึงอินบ็อกซ์คุณ' : 'delivered to your inbox'}
             </div>
