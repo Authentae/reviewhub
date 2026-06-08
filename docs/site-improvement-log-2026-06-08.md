@@ -172,3 +172,36 @@ Remaining (deliberately not fixed): mockup colours (fidelity to third-party UIs)
 the systemic seam (shared tokens/components) ran deep and cleared many pages per
 fix. But the once I rushed (token darkening) I shipped a regression. Net rule:
 keep auditing, but verify computed values before shipping shared-token changes.
+
+---
+
+## Performance + SEO audit (Lighthouse, mobile) — first time ever measured
+
+Ran `scripts/lighthouse-batch.mjs` (prod, mobile). a11y scores now **96-100**
+(confirms the sweep). Three shared issues found across all React pages:
+
+**FIXED:**
+- **SEO 83 -> ~92 (all pages):** robots.txt was INVALID — the non-standard
+  `LLM-content:` directive triggered "unknown directive". Commented it out
+  (commit d5d1198). One file, every page's SEO score.
+
+**TRACKED (needs care — NOT 4-AM autopilot work):**
+- **best-practices 73 (all pages) — REAL PROD BUG, precisely diagnosed:**
+  The inline theme/flash-prevention script in `client/index.html` (~line 220)
+  is being **CSP-blocked in production**. `server/src/app.js` (lines 45-69)
+  dynamically sha256-hashes that script for the CSP `scriptSrc`, but the served
+  CSP hash doesn't match the actual script — console shows
+  `'sha256-SScxEflUZZfLg84wJXSOuVPzijkLvNlxNZGGFB5R8Xc='` blocked, while the
+  app.js fallback (line 69) is `'sha256-NSs+hzMhH+NczQN/UN0+Sl/EWmV2lnPzMCeXmqiPIvk='`.
+  Likely the dynamic hash reads SOURCE index.html but Vite transforms the BUILT
+  one (build-vs-runtime mismatch — a recurring class of bug here). Effect: the
+  dark/light flash-prevention may not run + a console error on every page.
+  Fix: hash the BUILT index.html (dist), or verify the extraction regex against
+  the served file. SECURITY-SENSITIVE (CSP) + needs the real Railway container
+  to test (`railway run` uses local FS, not the volume) — do it carefully, not
+  blind. Also BP-adjacent: third-party cookies (Plausible/LS — mostly external),
+  missing source maps (could enable `build.sourcemap` — minor).
+- **LCP 4-5.5s on mobile (all React pages; static blog = 1.9s):** the React SPA
+  has no SSR, so the JS bundle gates first paint. Architectural — a real project
+  (SSR/prerender, or critical-CSS + bundle splitting), not a quick fix. Matters
+  for Bangkok 4G prospects. The static blog posts already prove the target.
