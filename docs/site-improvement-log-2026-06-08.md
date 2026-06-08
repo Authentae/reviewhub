@@ -64,3 +64,41 @@ have 0 customers. The bottleneck is demand proof — the 5 emails (watch ~June
 The site is now coherent enough to convert; the missing piece is a real
 conversation with a real owner. Polishing further has sharply diminishing
 returns until someone says "yes."
+
+---
+
+## a11y cycle results (overnight, after the improvement log above)
+
+Ran axe (Puppeteer) repeatedly in plan→execute→audit→repeat cycles. Note: the
+audit renders pages in **dark mode** (`<html class="dark">`), so some failures
+are dark-mode-only — real for dark-mode users, but the marketing default for new
+prospects is light mode.
+
+**Fixed + shipped (live):**
+- Ochre eyebrow text contrast (hex #c08a3e→#8a5e14) — ~60 nodes, both modes.
+- **Primary CTA button** (`.rh-btn-amber`): was `color:var(--rh-ink)` which
+  flipped to white on dark sections (white-on-gold = 2.1:1, fail). Forced
+  near-black `#1d242c` → ~7:1 in both modes, every page. **PRICING now fully
+  AA-clean.** Also looks better (dark-on-gold).
+- Caught + fixed a self-inflicted regression: an earlier token darkening
+  (--rh-ochre 0.75→0.52) degraded that same button on light pages — reverted
+  the token (the hex fix did the real eyebrow work, not the token).
+- Guide `<main>` landmark (fixed landmark-one-main + region; moderate 2→0).
+
+**Remaining a11y (tracked, NOT done — by reason):**
+1. **Teal CTA buttons** (`var(--rh-teal)` bg + inline `#fff` text), e.g. "Get a
+   free audit" on verticals/blog. Fail in DARK MODE only (--rh-teal flips to
+   bright cyan; white text = 1.68:1). Light mode (default) is fine. Fix = give
+   these buttons a FIXED dark-teal bg (like the amber fix), but the bg is
+   inline-styled across many files → multi-file change. Deferred: too
+   regression-prone to rush at the tail of a long session (just caught one).
+   Clean follow-up: add a `.rh-btn-teal` class (fixed dark teal + white) and
+   swap the inline-styled CTAs to it.
+2. **Mockup/illustrative colors** (hero float-cards, Google-card grays, LINE
+   green, demo avatars) — intentionally mimic real third-party UIs. Leave.
+3. **Dim-gray tertiary text + sr-only** — long tail, near-zero user impact.
+4. **Dark-section body text** (homepage) — theme-entangled; needs per-element
+   background checks. Careful focused pass, not blind.
+
+Net: the **money-path conversion elements** (primary CTA every page, pricing
+page) are now AA-clean. The rest is dark-mode-only or low-impact.
