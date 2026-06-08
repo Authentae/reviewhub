@@ -165,6 +165,7 @@ export default function Guide() {
     <div className="rh-design rh-app min-h-screen" style={{ background: 'var(--rh-paper)', color: 'var(--rh-ink)' }}>
       <MarketingNav />
 
+      <main>
       {/* Hero */}
       <section className="max-w-3xl mx-auto px-5 pt-16 pb-12 md:pt-24 md:pb-16">
         <p className="text-xs font-mono uppercase tracking-widest mb-3" style={{ color: 'var(--rh-ochre)' }}>
@@ -311,6 +312,7 @@ export default function Guide() {
         </div>
       </section>
 
+      </main>
       <MarketingFooter />
     </div>
   );
