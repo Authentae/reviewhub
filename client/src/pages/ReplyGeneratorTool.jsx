@@ -285,7 +285,7 @@ export default function ReplyGeneratorTool() {
                 {t('tool.reviewText', 'Review text')} <span className="text-red-500">*</span>
               </label>
               <div className="flex items-center gap-2 text-xs">
-                <span className="text-gray-400 dark:text-gray-500">{t('tool.noReview', 'No review handy? Try:')}</span>
+                <span className="text-gray-500 dark:text-gray-300">{t('tool.noReview', 'No review handy? Try:')}</span>
                 <button
                   type="button"
                   onClick={() => { setForm(SAMPLES.negative); setDraft(null); setError(''); }}

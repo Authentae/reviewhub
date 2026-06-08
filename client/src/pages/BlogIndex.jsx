@@ -478,7 +478,7 @@ export default function BlogIndex() {
           </Link>
           <p className="text-xs" style={{ color: 'var(--rh-ink-3, #8b939c)' }}>
             {isThai ? 'ติดตามโพสต์ใหม่ทาง ' : 'Subscribe to new posts via '}
-            <a href="/feed.xml" style={{ color: 'var(--rh-teal-deep, #1e4d5e)' }}>RSS</a>
+            <a href="/feed.xml" style={{ color: 'var(--rh-teal-deep, #1e4d5e)', textDecoration: 'underline' }}>RSS</a>
             {' · '}
             <Link to="/" style={{ color: 'var(--rh-ink-3, #8b939c)' }}>← {isThai ? 'หน้าหลัก' : 'Home'}</Link>
           </p>
