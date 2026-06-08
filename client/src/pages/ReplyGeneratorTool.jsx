@@ -473,7 +473,7 @@ export default function ReplyGeneratorTool() {
 
         {/* SEO content — helps the page rank for long-tail review-reply queries */}
         <section aria-label={t('tool.seo.aria', 'How the AI review reply generator works')} className="mt-10 prose prose-sm max-w-none" style={{ color: 'var(--rh-ink)' }}>
-          <p className="rh-mono" style={{ marginBottom: 8, color: 'var(--rh-sage)' }}>{t('tool.seo.eyebrow', 'HOW IT WORKS')}</p>
+          <p className="rh-mono" style={{ marginBottom: 8, color: 'var(--rh-teal)' }}>{t('tool.seo.eyebrow', 'HOW IT WORKS')}</p>
           <h2 className="text-lg mt-0" style={{ color: 'var(--rh-ink)', fontFamily: 'var(--rh-serif)', fontWeight: 500 }}>
             {t('tool.seo.title', 'How the AI review reply generator works')}
           </h2>
