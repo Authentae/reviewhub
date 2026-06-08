@@ -46,7 +46,7 @@ function Eyebrow({ children, color = C.ochre }) {
 function StatusBadge({ status }) {
   // status: 'live' | 'beta' | 'roadmap'
   const map = {
-    live:    { label: 'LIVE',    bg: C.sage,  fg: '#fff' },
+    live:    { label: 'LIVE',    bg: '#3d6b53', fg: '#fff' }, /* deeper sage: C.sage (#6b8e7a) + white = 3.6:1 (fail AA); #3d6b53 + white = ~6.8:1, still reads as the brand green */
     beta:    { label: 'BETA',    bg: C.ochre, fg: '#fff' },
     roadmap: { label: 'ROADMAP', bg: 'rgba(29,36,44,0.08)', fg: C.inkSoft },
   };
