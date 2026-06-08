@@ -205,3 +205,24 @@ Ran `scripts/lighthouse-batch.mjs` (prod, mobile). a11y scores now **96-100**
   has no SSR, so the JS bundle gates first paint. Architectural — a real project
   (SSR/prerender, or critical-CSS + bundle splitting), not a quick fix. Matters
   for Bangkok 4G prospects. The static blog posts already prove the target.
+
+---
+
+## Dependency security audit (npm audit) — fixed
+
+Ran `find-orphans` (0 dead files — clean) and `npm audit` on prod deps:
+- **Client: react-router open-redirect** (GHSA-2j2x-hqr9-3h42, moderate) ->
+  patched 6.30.3->6.30.4 (npm audit fix, non-breaking). Client prod = 0 vulns.
+  Build + 172 tests pass.
+- **Server: qs/body-parser/express** prototype-pollution chain (4 moderate) ->
+  3 patched non-breaking; 1092 server tests pass.
+- **TRACKED:** `@anthropic-ai/sdk` 1 moderate, needs a BREAKING major bump and
+  is the CORE reply-drafting dependency. Not force-bumped blind — needs a careful
+  migration + a reply-drafting feature test. Dev-only vite/esbuild advisories
+  also left (breaking, dev-only).
+
+## Net of the whole overnight block (25 commits)
+Audited to ground across a11y, SEO, performance, dead-code, and dependency
+security. Fixed everything clean + verifiable; tracked everything that's
+security-sensitive (CSP, anthropic SDK), architectural (LCP/SSR), or strategic
+(Earth's product calls). The site is materially healthier than 10 hours ago.
