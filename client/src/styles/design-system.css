@@ -8,6 +8,11 @@
      ALWAYS use these (or other --rh-* tokens) for inline backgrounds —
      never hardcode '#fff' or similar, which won't flip in dark mode. */
   --rh-card: oklch(1 0 0);
+  /* alias: Guide referenced var(--rh-card-bg, #ffffff) — a misspelling of
+     --rh-card that was never defined, so its FAQ cards stayed hardcoded white
+     and didn't flip in dark mode (cream text -> invisible). Alias re-resolves
+     --rh-card per theme. */
+  --rh-card-bg: var(--rh-card);
   --rh-card-2: oklch(0.97 0.008 85);
   --rh-ink: oklch(0.18 0.02 220);
   --rh-ink-2: oklch(0.34 0.025 220);
