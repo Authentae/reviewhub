@@ -47,6 +47,9 @@ Sitemap: https://reviewhub.review/sitemap.xml
 
 # LLM-friendly site summary (emerging convention, llmstxt.org).
 # Structured markdown overview of the site for AI crawlers (ChatGPT,
-# Claude, Perplexity, Gemini). Not part of the robots.txt spec, but
-# the LLM-content key signals where to find it for crawlers that look.
-LLM-content: https://reviewhub.review/llm.txt
+# Claude, Perplexity, Gemini). Kept as a COMMENT, not a directive:
+# `LLM-content:` is non-standard and Lighthouse/validators flag it as an
+# "unknown directive" -> invalid robots.txt -> SEO score drop on every page.
+# The file still lives at the URL below; comment form keeps the signal
+# without breaking validation.
+# LLM-content: https://reviewhub.review/llm.txt
