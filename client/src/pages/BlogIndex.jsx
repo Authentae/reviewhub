@@ -386,15 +386,15 @@ export default function BlogIndex() {
                 onClick={() => setFilterPersist(k)}
                 className="px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors"
                 style={{
-                  background: active ? 'var(--rh-teal-deep, #1e4d5e)' : 'transparent',
+                  background: active ? '#1e4d5e' : 'transparent',
                   color: active ? '#fff' : 'var(--rh-ink-2, #4a525a)',
-                  border: active ? '1px solid var(--rh-teal-deep, #1e4d5e)' : '1px solid var(--rh-rule, #e8e3d6)',
+                  border: active ? '1px solid #1e4d5e' : '1px solid var(--rh-rule, #e8e3d6)',
                   fontFamily: 'JetBrains Mono, ui-monospace, monospace',
                   fontSize: '12px',
                   letterSpacing: '0.04em',
                 }}
               >
-                {pillLabel(k)} <span style={{ opacity: 0.6 }}>· {pillCount(k)}</span>
+                {pillLabel(k)} <span style={{ opacity: 0.85 }}>· {pillCount(k)}</span>
               </button>
             );
           })}

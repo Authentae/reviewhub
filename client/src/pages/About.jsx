@@ -24,7 +24,7 @@ const C = {
   paper: '#fbf8f1',
   ink: '#1d242c',
   inkSoft: '#4a525a',
-  inkDim: 'rgba(29,36,44,0.5)',
+  inkDim: 'rgba(29,36,44,0.7)', /* was 0.5 -> ~#8c8e8f on cream = failed AA; 0.7 passes while staying visibly dim */
   teal: '#1e4d5e',
   tealDeep: '#163d4a',
   ochre: '#8a5e14',

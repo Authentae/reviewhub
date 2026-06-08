@@ -27,7 +27,7 @@ const C = {
   tealDeep: '#163d4a',
   ochre: '#8a5e14',
   sage: '#6b8e7a',
-  rose: '#c2566c',
+  rose: '#a23a50', /* darkened from #c2566c: failed AA as eyebrow text on cream; #a23a50 passes as text (~5.4:1) and keeps white-on-rose status dots readable */
   hairline: 'rgba(29,36,44,0.08)',
 };
 
