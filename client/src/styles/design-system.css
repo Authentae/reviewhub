@@ -144,7 +144,7 @@
 }
 .rh-btn-primary { background: var(--rh-ink); color: var(--rh-paper); }
 .rh-btn-primary:hover { background: var(--rh-teal); transform: translateY(-1px); }
-.rh-btn-amber { background: var(--rh-ochre); color: var(--rh-ink); }
+.rh-btn-amber { background: var(--rh-ochre); color: #1d242c; } /* near-black text, theme-FIXED. var(--rh-ink) flipped to white on dark sections -> white-on-gold = 2.1:1 (fail). The button bg (--rh-ochre) is bright gold in BOTH themes, so fixed dark text = ~7:1 everywhere. Primary CTA — must be legible on every page. */
 .rh-btn-amber:hover { background: var(--rh-ochre-deep); color: var(--rh-paper); transform: translateY(-1px); }
 .rh-btn-ghost { background: transparent; color: var(--rh-ink); border-color: var(--rh-rule-2); }
 .rh-btn-ghost:hover { background: var(--rh-paper-2); border-color: var(--rh-ink-3); }
