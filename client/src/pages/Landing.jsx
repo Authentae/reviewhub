@@ -899,7 +899,7 @@ function Footer() {
               <h4>{t('landing.footerSupport', 'Support')}</h4>
               <ul>
                 <li><Link to="/support">{t('landing.footerHelp', 'Help & support')}</Link></li>
-                <li><a href="#demo">{t('landing.footerAiDrafts', 'AI drafts')}</a></li>
+                <li><a href="#demo">{t('landing.footerAiDrafts', 'Live demo')}</a></li>
                 <li><a href="#features">{t('landing.footerFeatures', 'Features')}</a></li>
                 <li><a href="mailto:hello@reviewhub.review">hello@reviewhub.review</a></li>
               </ul>

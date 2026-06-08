@@ -7892,7 +7892,7 @@ const th = {
   'landing.footerFreeTool': 'เครื่องมือฟรี',
   'landing.footerDashboard': 'แดชบอร์ด',
   'landing.footerPricing': 'ราคา',
-  'landing.footerAiDrafts': 'AI ร่างคำตอบ',
+  'landing.footerAiDrafts': 'ดูตัวอย่างสด',
   'landing.footerFeatures': 'ฟีเจอร์',
   'landing.footerPrivacy': 'นโยบายความเป็นส่วนตัว',
   'landing.footerTerms': 'ข้อกำหนด',
