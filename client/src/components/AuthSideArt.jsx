@@ -39,7 +39,7 @@ export default function AuthSideArt({ eyebrow, title }) {
 
           {/* Editorial pull quote */}
           <figure className="rh-auth-quote">
-            <div className="rh-stars" aria-label="5 of 5 stars">
+            <div className="rh-stars" role="img" aria-label="5 of 5 stars">
               {[1, 2, 3, 4, 5].map((i) => (
                 <svg key={i} width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
                   <path d="M8 1.5l2 4.4 4.8.4-3.7 3.2 1.1 4.7L8 11.8 3.8 14.2l1.1-4.7L1.2 6.3l4.8-.4L8 1.5z" />

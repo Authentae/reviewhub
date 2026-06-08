@@ -449,7 +449,7 @@ export default function ComparisonLanding({ competitor }) {
               ))}
           </div>
           <p className="text-xs mt-4" style={{ color: 'var(--rh-ink-3, #8b939c)' }}>
-            Pricing data current as of 2026 Q2 from each vendor's public pricing page and aggregated G2 / Capterra reviews. We re-check quarterly. Found a number that\'s wrong? <a href="/support" style={{ color: 'var(--rh-teal, #1e4d5e)' }}>Tell us</a>.
+            Pricing data current as of 2026 Q2 from each vendor's public pricing page and aggregated G2 / Capterra reviews. We re-check quarterly. Found a number that\'s wrong? <a href="/support" style={{ color: 'var(--rh-teal, #1e4d5e)', textDecoration: 'underline' }}>Tell us</a>.
           </p>
         </section>
       </main>
