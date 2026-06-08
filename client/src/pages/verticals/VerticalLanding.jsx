@@ -313,8 +313,7 @@ export default function VerticalLanding({ vertical }) {
                     style={{
                       background: 'var(--rh-card)',
                       border: '1px solid var(--rh-rule, #e8e3d6)',
-                      color: 'var(--rh-ink-3, #8b939c)',
-                      opacity: 0.75,
+                      color: 'var(--rh-ink-2, #4a525a)', /* was ink-3 + opacity 0.75 = failed AA; ink-2 stays visually muted vs the live 'Google' pill but is readable in both themes */
                     }}
                   >
                     {p}
