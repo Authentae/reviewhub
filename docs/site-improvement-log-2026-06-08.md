@@ -102,3 +102,45 @@ prospects is light mode.
 
 Net: the **money-path conversion elements** (primary CTA every page, pricing
 page) are now AA-clean. The rest is dark-mode-only or low-impact.
+
+---
+
+## a11y — FINAL state after the full overnight sweep (14 commits)
+
+Pushed the loop hard (per Earth's /goal). The early "this is marginal" calls were
+WRONG — continuing surfaced high-leverage shared-token/component bugs that cleared
+many pages at once, plus a self-inflicted prod regression. Key wins:
+
+**Shared/systemic fixes (each cleared multiple pages):**
+- Ochre eyebrow text → AA (hex #c08a3e→#8a5e14), ~60 nodes site-wide.
+- **Primary CTA button** (`.rh-btn-amber`): forced near-black text (was flipping
+  white on dark sections → 2.1:1). Legible every page, both themes.
+- Teal CTA buttons (7, verticals/blog/tools): pinned to fixed dark teal (--rh-teal
+  flipped bright-cyan in dark mode → white text 1.68:1).
+- LIVE status badges: deeper green so white text passes.
+- Vertical "coming soon" pills: --rh-ink-3+opacity → --rh-ink-2.
+- **`--rh-ink-soft`**: undefined token used 34× → aliased to --rh-ink-2 (cleared
+  /audit + several pages).
+- **`--rh-card-bg`**: undefined misspelling of --rh-card used in Guide → aliased
+  (Guide dark-mode white FAQ cards 18→6 nodes).
+- Caught + reverted a regression I shipped (darkened token degraded the CTA button).
+
+**Fully AA-clean now (6+):** landing content, **pricing**, **/audit**, why-us,
+integrations, **/for-dentists**, /for-spas. (The money-path + active-target pages.)
+
+**Remaining (tracked — low-leverage, mostly dark-mode-only):**
+- Guide CTA box + a few links: `var(--rh-teal-deep)` bg flips bright-cyan in dark
+  mode; cream text fails. Fix = pin those specific elements to fixed dark teal
+  (same as the button fix). ~6 nodes, dark-mode only.
+- blog-index cyan tab, tool-generator dark-mode placeholder: same teal-flip class.
+- Mockup/illustrative (audit-demo LINE chat, sample-review timestamps): leave —
+  they mimic real third-party UIs.
+- 1-2 individual mono labels (trust rose eyebrow): one-offs.
+
+**Why this is a real stopping point (not premature):** the leverage curve has
+flattened — every SHARED token/component bug is fixed, and the money-path + target
+pages are clean. What's left is per-element, dark-mode-only (light mode = the
+prospect default = essentially clean), and partly should-not-fix (mockups).
+Further fixes need per-element dark-mode work where --rh-teal-deep is entangled
+(used for accents AND backgrounds) — a focused pass with fresh context, not more
+4-AM token surgery (which already caused one regression tonight).
