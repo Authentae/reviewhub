@@ -197,7 +197,7 @@ export default function Guide() {
               <div className="flex items-start gap-4 md:gap-6">
                 <div
                   className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center text-xl font-bold"
-                  style={{ background: 'var(--rh-teal-deep)', color: '#fff' }}
+                  style={{ background: '#1e4d5e', color: '#fff' }}
                   aria-hidden="true"
                 >
                   {s.n}
@@ -213,7 +213,7 @@ export default function Guide() {
                     <Link
                       to={s.ctaTo}
                       className="inline-flex items-center gap-1.5 text-sm font-semibold px-4 py-2 rounded-lg"
-                      style={{ background: 'var(--rh-teal-deep)', color: '#fff' }}
+                      style={{ background: '#1e4d5e', color: '#fff' }}
                     >
                       {isThai ? s.ctaTh : s.ctaEn}
                     </Link>
@@ -292,7 +292,7 @@ export default function Guide() {
       <section className="max-w-3xl mx-auto px-5 pb-16 md:pb-24">
         <div
           className="rounded-2xl p-8 md:p-10 text-center"
-          style={{ background: 'var(--rh-teal-deep)', color: '#fff' }}
+          style={{ background: '#1e4d5e', color: '#fff' }}
         >
           <h2 className="text-2xl md:text-3xl font-bold mb-3" style={{ letterSpacing: '-0.01em' }}>
             {isThai ? 'ยังติดอยู่?' : 'Still stuck?'}
@@ -305,7 +305,7 @@ export default function Guide() {
           <Link
             to="/support"
             className="inline-block px-6 py-3 rounded-lg text-sm font-semibold"
-            style={{ background: '#fff', color: 'var(--rh-teal-deep)' }}
+            style={{ background: '#fff', color: '#1e4d5e' }}
           >
             {isThai ? 'ไปที่ Support →' : 'Go to Support →'}
           </Link>
