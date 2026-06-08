@@ -1074,7 +1074,7 @@ export default function Landing() {
       {isLoggedIn() ? <Navbar /> : (
         <MarketingNav sections={[
           { id: 'how', label: t('nav.howItWorks', 'How it works') },
-          { id: 'demo', label: t('nav.aiDrafts', 'AI drafts') },
+          { id: 'demo', label: t('nav.aiDrafts', 'Live demo') },
           { id: 'features', label: t('nav.features', 'Features') },
           { id: 'pricing', label: t('nav.pricing', 'Pricing') },
           { id: 'faq', label: t('nav.faq', 'FAQ') },
