@@ -144,3 +144,31 @@ prospect default = essentially clean), and partly should-not-fix (mockups).
 Further fixes need per-element dark-mode work where --rh-teal-deep is entangled
 (used for accents AND backgrounds) — a focused pass with fresh context, not more
 4-AM token surgery (which already caused one regression tonight).
+
+---
+
+## a11y sweep — COMPLETE (final, 20 commits)
+
+Ran the loop to ground. **Serious axe violations: 19 → 4. All 4 remaining are
+intentional mockups** (hero review-card demo, a sample-review timestamp, the
+LINE-chat mockup) — they deliberately mimic real Google/LINE UIs and should keep
+those colors. **Every real, non-mockup serious a11y issue across all 16 audited
+surfaces is fixed.**
+
+**13/16 surfaces fully AA-clean:** pricing, why-us, trust, integrations, audit,
+for-spas, for-dentists, vs-birdeye, tool-generator, guide, blog-index, register,
+login. (The 3 not "clean" only carry mockup-colour or sr-only-region items.)
+
+Full fix list this sweep: 2 undefined-token bugs (--rh-ink-soft, --rh-card-bg),
+primary CTA button (every page), teal CTA buttons, LIVE badges, vertical pills,
+ochre eyebrows, Guide dark-mode cards + CTA box, auth-page star aria role,
+about/trust eyebrow labels, blog tab + RSS link, tool-generator grays + eyebrow,
+vs-birdeye link. Plus one self-inflicted regression caught and reverted.
+
+Remaining (deliberately not fixed): mockup colours (fidelity to third-party UIs),
+3 `region` moderates (sr-only landmark technicalities, ~0 user impact).
+
+**Lesson banked:** my repeated "this is marginal, stop now" calls were wrong —
+the systemic seam (shared tokens/components) ran deep and cleared many pages per
+fix. But the once I rushed (token darkening) I shipped a regression. Net rule:
+keep auditing, but verify computed values before shipping shared-token changes.
