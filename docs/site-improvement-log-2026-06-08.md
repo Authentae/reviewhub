@@ -226,3 +226,22 @@ Audited to ground across a11y, SEO, performance, dead-code, and dependency
 security. Fixed everything clean + verifiable; tracked everything that's
 security-sensitive (CSP, anthropic SDK), architectural (LCP/SSR), or strategic
 (Earth's product calls). The site is materially healthier than 10 hours ago.
+
+---
+
+## Prod verification audit (the "audit" step, against deployed state)
+
+Confirmed the night's work is live + caught 2 things:
+1. **Security: prod deps = 0 vulnerabilities** (react-router + server chain
+   patches deployed, container healthy, all components green incl. ai:live).
+2. **robots.txt SEO fix is Cloudflare-EDGE-CACHED.** Origin serves the fixed
+   file (verified in dist), but `cf-cache-status: HIT, Age ~1157, max-age=86400`
+   -> prod serves the stale copy up to 24h. ACTION (Earth): purge `/robots.txt`
+   in Cloudflare for the SEO fix to reach crawlers now; else it self-clears <24h.
+3. **CSP diagnosis CORRECTED.** The served CSP header DOES contain
+   `'sha256-SScxEflUZZfL...'` and it MATCHES the inline theme script — so the
+   app.js dynamic hashing WORKS. The console-error inline script is a DIFFERENT,
+   THIRD-PARTY one (Clarity/Frill/LS injecting inline JS), which can't be fully
+   fixed without the vendor. Lower priority than first thought. (Good that this
+   was tracked, not rushed — a blind "re-hash the theme script" fix would have
+   been wrong.)
