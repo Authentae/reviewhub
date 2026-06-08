@@ -12,6 +12,11 @@
   --rh-ink: oklch(0.18 0.02 220);
   --rh-ink-2: oklch(0.34 0.025 220);
   --rh-ink-3: oklch(0.54 0.02 220);
+  /* --rh-ink-soft was referenced 34x via var(--rh-ink-soft, <hex>) but never
+     defined, so it always used the fixed-gray fallback -> failed AA in dark mode.
+     Alias to --rh-ink-2 (re-resolves per theme: dark text in light mode, light
+     text in dark mode), so every existing usage becomes theme-aware + AA. */
+  --rh-ink-soft: var(--rh-ink-2);
   --rh-rule: oklch(0.88 0.012 220);
   --rh-rule-2: oklch(0.78 0.015 220);
   --rh-teal: oklch(0.42 0.09 220);
