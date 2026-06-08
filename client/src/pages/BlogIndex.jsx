@@ -24,6 +24,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'how-to-get-more-google-reviews',
+    title: 'How to get more Google reviews (without buying, begging, or breaking the rules)',
+    description: "Why happy customers don't leave reviews, exactly how and when to ask, the one-tap link that lifts response rates, what violates Google's policy, and how to make the whole thing automatic.",
+    date: '2026-06-08',
+    readingMins: 7,
+    lang: 'en',
+  },
+  {
     slug: 'ai-google-review-replies',
     title: "AI Google review reply tools in 2026: what works, what doesn't, and how to pick",
     description: 'An honest, vendor-agnostic guide to AI tools that draft Google review replies. What they do well, where they fail, the 5 names worth knowing, and the decision framework for picking one (or skipping the category entirely).',
