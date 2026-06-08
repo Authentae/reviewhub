@@ -472,7 +472,7 @@ export default function BlogIndex() {
           <Link
             to="/audit"
             className="inline-block px-5 py-3 rounded-lg font-semibold text-sm mb-4"
-            style={{ background: 'var(--rh-teal, #1e4d5e)', color: '#fff', textDecoration: 'none' }}
+            style={{ background: '#1e4d5e', color: '#fff', textDecoration: 'none' }}
           >
             {isThai ? 'ขอ audit ฟรี →' : 'Get a free audit →'}
           </Link>

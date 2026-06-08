@@ -159,7 +159,7 @@ export default function ToolsIndex() {
           <Link
             to="/audit"
             className="inline-block px-5 py-2.5 rounded-lg font-semibold text-sm"
-            style={{ background: 'var(--rh-teal, #1e4d5e)', color: '#fff', textDecoration: 'none' }}
+            style={{ background: '#1e4d5e', color: '#fff', textDecoration: 'none' }}
           >
             {isThai ? 'ขอ audit ฟรี →' : 'Get a free audit →'}
           </Link>

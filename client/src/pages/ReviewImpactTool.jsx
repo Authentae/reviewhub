@@ -363,7 +363,7 @@ export default function ReviewImpactTool() {
                 <Link
                   to="/audit"
                   className="plausible-event-name=ImpactAuditClick inline-block px-5 py-2.5 rounded-lg font-semibold text-sm"
-                  style={{ background: 'var(--rh-teal, #1e4d5e)', color: '#fff', textDecoration: 'none' }}
+                  style={{ background: '#1e4d5e', color: '#fff', textDecoration: 'none' }}
                 >
                   Get a free audit →
                 </Link>

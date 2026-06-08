@@ -415,7 +415,7 @@ export default function ComparisonLanding({ competitor }) {
           <Link
             to="/audit"
             className="inline-block px-6 py-3 rounded-lg font-semibold text-sm"
-            style={{ background: 'var(--rh-teal, #1e4d5e)', color: '#fff', textDecoration: 'none' }}
+            style={{ background: '#1e4d5e', color: '#fff', textDecoration: 'none' }}
           >
             Get a free audit →
           </Link>
