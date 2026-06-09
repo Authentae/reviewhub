@@ -273,3 +273,6 @@ SEO content: new post `how-many-google-reviews-do-you-need` (informational, high
 
 ## Passive-income loop — cycle 8 (2026-06-08) — VERTICAL content seam (overnight per Earth)
 Earth asked to keep working all night. Reframed: generic get-reviews cluster is saturated, but VERTICAL-SPECIFIC content is a fresh high-value seam (buyer-intent local keywords + pairs with our vertical pages). New post `get-more-google-reviews-dental-clinic` — dentists = active ICP. Addresses the privacy fear head-on (asking for a review never discloses treatment = no PHI issue; directly counters the register HIPAA-warning concern). Internal-links to /for-dentists + cluster. 40 posts in sync, validators+honesty pass, screenshot-verified.
+
+## Passive-income loop — cycle 9 (2026-06-08) — vertical content (salon/spa)
+New post `get-more-google-reviews-salon-spa` (pairs with /for-spas). The "mirror moment" timing angle, salon-specific asking + named-stylist tip, compliance rules, automation tie-in. Internal-links to /for-spas + cluster. 41 posts in sync, validators+honesty pass, screenshot-verified. Vertical seam now: dentists + salons/spas (both pair with existing vertical routes).

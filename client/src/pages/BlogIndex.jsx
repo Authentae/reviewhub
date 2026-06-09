@@ -24,6 +24,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'get-more-google-reviews-salon-spa',
+    title: 'How to get more Google reviews for your salon or spa',
+    description: 'A practical guide for salons, spas, and barbershops: why the mirror moment is the best time to ask, how to ask without it feeling awkward, what breaks Google\'s rules, and how to catch the moment every time.',
+    date: '2026-06-08',
+    readingMins: 5,
+    lang: 'en',
+  },
+  {
     slug: 'get-more-google-reviews-dental-clinic',
     title: 'How to get more Google reviews for your dental clinic',
     description: 'A practical guide for dental clinics: why reviews matter more for clinics, how to ask without touching patient privacy, what violates Google\'s rules, and how to keep a steady flow without the front desk remembering.',
