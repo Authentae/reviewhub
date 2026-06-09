@@ -288,3 +288,6 @@ New post `get-more-google-reviews-home-services` (plumbers/electricians/HVAC/con
 
 ## Passive-income loop — cycle 13 (2026-06-08) — vertical content (gym/fitness)
 New post `get-more-google-reviews-gym-fitness-studio` (gyms, studios, PTs — on-ICP, appointment-based, milestone-driven). "Milestone moment" angle (PB, first month, goal hit), named-trainer tip, compliance, automation tie-in. Standalone, links to cluster. 43 posts in sync, validators+honesty pass, screenshot-verified. Vertical seam now: dental, salon/spa, home-services, gym/fitness (4 on-ICP verticals).
+
+## Passive-income loop — cycle 14 (2026-06-08) — pillar-cluster structure
+Added a "Go deeper" section to the flagship post (how-to-get-more-google-reviews) linking OUT to all 9 spokes: 5 topic guides (ask, timing, templates, QR, how-many) + 4 by-business-type (dental, salon/spa, home-services, gym). Completes the pillar-cluster SEO model: flagship HUB -> all spokes; spokes -> hub + each other; vertical pages -> cluster. All 9 link targets verified, build + 172 tests green, screenshot-verified. The get-reviews content engine is now a structured 10-post cluster, fully interlinked.
