@@ -251,3 +251,6 @@ SEO content: new post `how-to-make-a-google-review-qr-code` (high-intent "google
 
 ## Passive-income loop — cycle 2 (2026-06-08)
 Keyword/competitive research -> `docs/strategy/content-roadmap-2026-06-08.md`. Findings: market consensus (SMS review requests convert 3-5x better than email, send within ~2h) = exactly our mechanism (positioning validated). Data-backed content backlog ranked by proven demand: #1 review-request templates (competitors rank with "75 templates" listicles), then best-time-to-ask, SMS-vs-email, how-many-reviews. Also logged a real conversion finding: OnboardingChecklist activation step is REPLY-focused (respond to a review) not GET-REVIEWS (send a request) — backwards for the pivot + passive income; needs account-access to fix+verify (handed off).
+
+## Passive-income loop — cycle 3 (2026-06-08)
+SEO content: new post `google-review-request-templates` — the #1 data-backed topic from the cycle-2 roadmap (competitors rank with "X templates" listicles = proven demand). Copy-paste SMS + email templates by business type (clinic/salon/restaurant/home-service/retail), honest (no incentives), timing guidance, automation tie-in. 37 posts in sync, validators + honesty pass, screenshot-verified, internal-linked to QR + flagship posts. Alternated: cycle1 content -> cycle2 research -> cycle3 content.

@@ -24,6 +24,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'google-review-request-templates',
+    title: 'Google review request templates that actually work (SMS + email, by business type)',
+    description: 'Copy-paste Google review request templates for SMS and email by business type — clinics, salons, restaurants, home services, retail — plus the timing and the one rule that keeps them compliant.',
+    date: '2026-06-08',
+    readingMins: 7,
+    lang: 'en',
+  },
+  {
     slug: 'how-to-make-a-google-review-qr-code',
     title: 'How to make a Google review QR code (free) and where to put it',
     description: 'Step by step: get your Google review link, turn it into a free QR code, place it where it gets scanned, lift the scan rate, and cover the one thing a QR code can\'t reach.',
