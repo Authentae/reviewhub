@@ -285,3 +285,6 @@ Found + fixed a pre-existing bug: VerticalLanding cross-vertical section used Ob
 
 ## Passive-income loop — cycle 12 (2026-06-08) — vertical content (home services)
 New post `get-more-google-reviews-home-services` (plumbers/electricians/HVAC/contractors). Chosen because it FITS the ICP (appointment-based, captures contacts, same-day SMS) unlike walk-in cafes which PRODUCT.md says are NOT the target. Standalone post (no /for-home-services route exists -> links only to cluster + home + /audit, avoiding the 404 class I fixed in cycle 11). 42 posts in sync, validators+honesty pass, screenshot-verified. Also did a codebase /for-* broken-link sweep (cycle 11 follow-up): no other instances found.
+
+## Passive-income loop — cycle 13 (2026-06-08) — vertical content (gym/fitness)
+New post `get-more-google-reviews-gym-fitness-studio` (gyms, studios, PTs — on-ICP, appointment-based, milestone-driven). "Milestone moment" angle (PB, first month, goal hit), named-trainer tip, compliance, automation tie-in. Standalone, links to cluster. 43 posts in sync, validators+honesty pass, screenshot-verified. Vertical seam now: dental, salon/spa, home-services, gym/fitness (4 on-ICP verticals).

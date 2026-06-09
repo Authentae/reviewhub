@@ -24,6 +24,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'get-more-google-reviews-gym-fitness-studio',
+    title: 'How to get more Google reviews for your gym or fitness studio',
+    description: 'A practical guide for gyms, studios, and personal trainers: why reviews sell memberships, the milestone moments that earn them, how to ask without breaking the vibe, and how to catch the gratitude automatically.',
+    date: '2026-06-08',
+    readingMins: 5,
+    lang: 'en',
+  },
+  {
     slug: 'get-more-google-reviews-home-services',
     title: 'How to get more Google reviews for your home service business',
     description: 'For plumbers, electricians, HVAC, and contractors: why reviews decide home-service jobs, asking the same day you finish, making it one tap by text, staying compliant, and keeping a steady flow without texting from the van.',
