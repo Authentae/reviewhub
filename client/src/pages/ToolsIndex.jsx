@@ -27,6 +27,14 @@ const TOOLS = [
     bestFor: 'When you want more reviews and need the ask.',
   },
   {
+    href: '/tools/review-qr-code',
+    eyebrow: 'Generator · no AI',
+    title: 'Review QR Code Generator',
+    descEn: 'Turn your Google review link into a scannable QR code for the counter, receipt, or table. Download the high-res PNG. Free, no signup.',
+    descTh: 'เปลี่ยนลิงก์รีวิว Google เป็น QR code ให้ลูกค้าสแกนที่เคาน์เตอร์ ใบเสร็จ หรือโต๊ะ ดาวน์โหลด PNG ความละเอียดสูง ฟรี ไม่ต้องสมัคร',
+    bestFor: 'When you want an in-person way to collect reviews.',
+  },
+  {
     href: '/tools/review-reply-generator',
     eyebrow: 'Generator · uses AI',
     title: 'Review Reply Generator',
@@ -67,7 +75,7 @@ export default function ToolsIndex() {
   usePageTitle(isThai ? 'เครื่องมือฟรี — ReviewHub' : 'Free tools for Google review replies — ReviewHub');
   useSocialMeta({
     title: isThai ? 'เครื่องมือฟรีของ ReviewHub' : 'Free tools — Google review request generator, reply generator, and more',
-    description: 'Five free tools for getting and managing Google reviews. Review request generator, AI reply generator, draft-reply critic, negative-review impact scorer, and the 1-star playbook. No signup, instant results.',
+    description: 'Six free tools for getting and managing Google reviews. Review request generator, review QR code generator, AI reply generator, draft-reply critic, negative-review impact scorer, and the 1-star playbook. No signup, instant results.',
   });
 
   return (
