@@ -260,3 +260,6 @@ Audited /register (money-path signup). Page is clean + low-friction: "free forev
 
 ## Passive-income loop — cycle 5 (2026-06-08)
 SEO content: new post `best-time-to-ask-for-a-google-review` (roadmap #2; timing is the market-consensus #1 lever, high intent). Same-day/within-2h rule + exact moment by business type + when NOT to ask + automation tie-in. 38 posts in sync, validators+honesty pass, screenshot-verified, internal-linked. Get-reviews cluster now 5 posts (flagship, ask, QR, templates, timing). DIMINISHING-RETURNS NOTE: the core high-intent cluster is now well-covered; remaining roadmap topics (SMS-vs-email, how-many-reviews) are still worth 1-2 more, but beyond ~6-7 posts marginal SEO value drops and the bottleneck (demand) dominates. Will weight next cycles toward conversion/onboarding-handoff + only the highest-intent remaining topics.
+
+## Passive-income loop — cycle 6 (2026-06-08) — internal linking
+Leveraged the new get-reviews cluster: added cluster links FROM 2 established, high-relevance posts -> spreads link equity + discovery to the new posts (internal linking is a real ranking factor). how-to-ask-for-google-reviews "Related posts" now points to the full cluster (get-more, templates, best-time, QR); why-respond now links to the flagship. Kept it relevant (no link-stuffing). Verified link targets exist + build green.
