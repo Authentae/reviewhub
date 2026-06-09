@@ -279,3 +279,6 @@ New post `get-more-google-reviews-salon-spa` (pairs with /for-spas). The "mirror
 
 ## Passive-income loop — cycle 10 (2026-06-08) — internal linking (vertical pages -> cluster)
 Added a "Further reading" block to VerticalLanding (all 8 vertical pages) linking to the get-reviews cluster (how-to-get-more, templates, best-time). Completes the link loop: blog posts already link TO the vertical pages; now the vertical pages link TO the cluster -> spreads equity both ways + gives vertical visitors a content path. Theme-safe (matches the existing cross-vertical section styling exactly), screenshot-verified in dark mode (links readable cyan-on-dark), build + 172 tests green.
+
+## Passive-income loop — cycle 11 (2026-06-08) — REAL BUG FIX (broken internal links)
+Found + fixed a pre-existing bug: VerticalLanding cross-vertical section used Object.keys(VERTICALS) (8 verticals) but only /for-dentists + /for-spas have Routes in App.jsx (the other 6 were killed). So every vertical page linked to /for-restaurants, /for-hotels, /for-bars, /for-fitness, /for-pharmacies, /for-cafes -> all 404. Fixed to the routed list [dentists, spas]. Removes 6 broken internal links per vertical page (bad for SEO crawl + UX). Screenshot-verified ("spas · everyone else" now), build + 172 tests green.

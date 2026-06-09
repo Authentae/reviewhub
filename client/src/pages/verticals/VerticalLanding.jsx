@@ -400,11 +400,15 @@ export default function VerticalLanding({ vertical }) {
           </Link>
         </section>
 
-        {/* Footer link to other verticals — internal linking for SEO */}
+        {/* Footer link to other verticals — internal linking for SEO.
+            ONLY verticals with an actual <Route> in App.jsx (dentists, spas).
+            VERTICALS defines 8, but the other 6 were killed (not routed), so
+            linking Object.keys(VERTICALS) pointed at /for-restaurants etc. =
+            404s on every vertical page. Keep this list in sync with App.jsx. */}
         <section className="text-center">
           <p className="text-sm" style={{ color: 'var(--rh-ink-3, #8b939c)' }}>
             Different industry? See ReviewHub for{' '}
-            {Object.keys(VERTICALS).filter(k => k !== vertical).map((k, i, arr) => (
+            {['dentists', 'spas'].filter(k => k !== vertical).map((k, i, arr) => (
               <span key={k}>
                 <Link to={`/for-${k}`} style={{ color: 'var(--rh-teal-deep, #1e4d5e)', fontWeight: 600 }}>{k}</Link>
                 {i < arr.length - 1 ? ' · ' : ''}
