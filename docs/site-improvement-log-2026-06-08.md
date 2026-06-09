@@ -245,3 +245,6 @@ Confirmed the night's work is live + caught 2 things:
    fixed without the vendor. Lower priority than first thought. (Good that this
    was tracked, not rushed — a blind "re-hash the theme script" fix would have
    been wrong.)
+
+## Passive-income loop — cycle 1 (2026-06-08)
+SEO content: new post `how-to-make-a-google-review-qr-code` (high-intent "google review QR code" keyword, uncovered gap; reply-heavy blog had only 2 get-reviews posts). Honest practical guide + the honest limit (QR only reaches in-person) -> the automated-follow-up tie-in. Template-matched, 36 posts in sync, SEO+honesty validators pass, screenshot-verified, internal links to the 2 sibling get-reviews posts.

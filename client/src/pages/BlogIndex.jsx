@@ -24,6 +24,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'how-to-make-a-google-review-qr-code',
+    title: 'How to make a Google review QR code (free) and where to put it',
+    description: 'Step by step: get your Google review link, turn it into a free QR code, place it where it gets scanned, lift the scan rate, and cover the one thing a QR code can\'t reach.',
+    date: '2026-06-08',
+    readingMins: 6,
+    lang: 'en',
+  },
+  {
     slug: 'how-to-get-more-google-reviews',
     title: 'How to get more Google reviews (without buying, begging, or breaking the rules)',
     description: "Why happy customers don't leave reviews, exactly how and when to ask, the one-tap link that lifts response rates, what violates Google's policy, and how to make the whole thing automatic.",
