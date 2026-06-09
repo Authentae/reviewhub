@@ -300,3 +300,6 @@ Built the first GET-REVIEWS free tool: `/tools/review-request-generator` (Review
 
 ## Passive-income loop — cycle 17 (2026-06-08) — 2nd free tool (QR generator)
 Built `/tools/review-qr-code` (ReviewQRCodeTool.jsx): paste your Google review link -> scannable QR (rendered via api.qrserver.com, already CSP-allowed -> NO new dependency) + high-res PNG download + placement tips + lead-gen CTA. Route + ToolsIndex entry + meta (5->6 tools) + sitemap. VERIFIED: build green, 172 tests, screenshot render, Puppeteer interact-test (entering a link -> QR img encodes it + download link = 1000px high-res). High commercial-intent keyword "google review qr code generator", pairs with the QR blog post. Tools now: review-request-generator + review-qr-code (2 get-reviews tools) alongside the 4 reply tools.
+
+## Passive-income loop — cycle 18 (2026-06-08) — wire content -> the new tools
+Connected the content engine to the 2 new tools (reader -> interactive tool -> signup): QR blog post now links to /tools/review-qr-code; templates post links to /tools/review-request-generator; the flagship pillar "Go deeper" now lists both free tools. Completes the loop: content<->tools<->cluster<->vertical pages all interlinked. Build green, blog-sync OK, link targets are the verified tool routes.
