@@ -24,6 +24,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'get-more-google-reviews-home-services',
+    title: 'How to get more Google reviews for your home service business',
+    description: 'For plumbers, electricians, HVAC, and contractors: why reviews decide home-service jobs, asking the same day you finish, making it one tap by text, staying compliant, and keeping a steady flow without texting from the van.',
+    date: '2026-06-08',
+    readingMins: 6,
+    lang: 'en',
+  },
+  {
     slug: 'get-more-google-reviews-salon-spa',
     title: 'How to get more Google reviews for your salon or spa',
     description: 'A practical guide for salons, spas, and barbershops: why the mirror moment is the best time to ask, how to ask without it feeling awkward, what breaks Google\'s rules, and how to catch the moment every time.',

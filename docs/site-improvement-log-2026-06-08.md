@@ -282,3 +282,6 @@ Added a "Further reading" block to VerticalLanding (all 8 vertical pages) linkin
 
 ## Passive-income loop — cycle 11 (2026-06-08) — REAL BUG FIX (broken internal links)
 Found + fixed a pre-existing bug: VerticalLanding cross-vertical section used Object.keys(VERTICALS) (8 verticals) but only /for-dentists + /for-spas have Routes in App.jsx (the other 6 were killed). So every vertical page linked to /for-restaurants, /for-hotels, /for-bars, /for-fitness, /for-pharmacies, /for-cafes -> all 404. Fixed to the routed list [dentists, spas]. Removes 6 broken internal links per vertical page (bad for SEO crawl + UX). Screenshot-verified ("spas · everyone else" now), build + 172 tests green.
+
+## Passive-income loop — cycle 12 (2026-06-08) — vertical content (home services)
+New post `get-more-google-reviews-home-services` (plumbers/electricians/HVAC/contractors). Chosen because it FITS the ICP (appointment-based, captures contacts, same-day SMS) unlike walk-in cafes which PRODUCT.md says are NOT the target. Standalone post (no /for-home-services route exists -> links only to cluster + home + /audit, avoiding the 404 class I fixed in cycle 11). 42 posts in sync, validators+honesty pass, screenshot-verified. Also did a codebase /for-* broken-link sweep (cycle 11 follow-up): no other instances found.
