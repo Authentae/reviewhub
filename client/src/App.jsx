@@ -51,6 +51,10 @@ const ReviewRequests = lazy(() => import('./pages/ReviewRequests'));
 const LoginMfa = lazy(() => import('./pages/LoginMfa'));
 const EmailChange = lazy(() => import('./pages/EmailChange'));
 const ReplyGeneratorTool = lazy(() => import('./pages/ReplyGeneratorTool'));
+// /tools/review-request-generator — first GET-REVIEWS free tool. Client-side
+// template filler (no API): business + customer + type + channel -> a ready,
+// compliant review request to text/email. SEO "review request generator" + PLG.
+const ReviewRequestGeneratorTool = lazy(() => import('./pages/ReviewRequestGeneratorTool'));
 // Cold-outreach lead-capture page. Funnel target for DM/email campaigns —
 // prospect submits Google Business URL, founder hand-crafts a 10-reply audit
 // and emails it back. Public, no signup.
@@ -248,6 +252,7 @@ export default function App() {
         <Route path="/confirm-erasure" element={<ConfirmErasure />} />
         {/* Public no-signup SEO/PLG tool */}
         <Route path="/tools/review-reply-generator" element={<ReplyGeneratorTool />} />
+        <Route path="/tools/review-request-generator" element={<ReviewRequestGeneratorTool />} />
         <Route path="/tools" element={<ToolsIndex />} />
         <Route path="/tools/reply-roaster" element={<ReplyRoasterTool />} />
         <Route path="/tools/review-impact" element={<ReviewImpactTool />} />

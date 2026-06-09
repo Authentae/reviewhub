@@ -19,6 +19,14 @@ import { useI18n } from '../context/I18nContext';
 
 const TOOLS = [
   {
+    href: '/tools/review-request-generator',
+    eyebrow: 'Generator · no AI',
+    title: 'Review Request Generator',
+    descEn: 'Fill in your business and get a short, compliant Google review request to text or email customers. No incentives, no gating — just a clear ask. Free, no signup.',
+    descTh: 'กรอกชื่อร้านแล้วรับข้อความขอรีวิว Google สั้นๆ ส่งทาง SMS หรืออีเมลให้ลูกค้าได้เลย ไม่มีของแลก ฟรี ไม่ต้องสมัคร',
+    bestFor: 'When you want more reviews and need the ask.',
+  },
+  {
     href: '/tools/review-reply-generator',
     eyebrow: 'Generator · uses AI',
     title: 'Review Reply Generator',
@@ -58,8 +66,8 @@ export default function ToolsIndex() {
 
   usePageTitle(isThai ? 'เครื่องมือฟรี — ReviewHub' : 'Free tools for Google review replies — ReviewHub');
   useSocialMeta({
-    title: isThai ? 'เครื่องมือฟรีของ ReviewHub' : 'Free tools — Google review reply generator, critic, and impact scorer',
-    description: 'Four free tools for owners managing Google reviews. AI reply generator, draft-reply critic, negative-review impact scorer, and the 1-star playbook decision tree. No signup, instant results.',
+    title: isThai ? 'เครื่องมือฟรีของ ReviewHub' : 'Free tools — Google review request generator, reply generator, and more',
+    description: 'Five free tools for getting and managing Google reviews. Review request generator, AI reply generator, draft-reply critic, negative-review impact scorer, and the 1-star playbook. No signup, instant results.',
   });
 
   return (
