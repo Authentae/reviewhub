@@ -24,6 +24,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'best-time-to-ask-for-a-google-review',
+    title: 'The best time to ask for a Google review (by business type)',
+    description: 'Timing beats wording. The honest answer on when to ask for a Google review — same-day, within two hours — and the exact best moment for clinics, salons, restaurants, home services, and retail.',
+    date: '2026-06-08',
+    readingMins: 5,
+    lang: 'en',
+  },
+  {
     slug: 'google-review-request-templates',
     title: 'Google review request templates that actually work (SMS + email, by business type)',
     description: 'Copy-paste Google review request templates for SMS and email by business type — clinics, salons, restaurants, home services, retail — plus the timing and the one rule that keeps them compliant.',
