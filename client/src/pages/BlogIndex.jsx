@@ -24,6 +24,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'how-many-google-reviews-do-you-need',
+    title: 'How many Google reviews do you need? (an honest answer)',
+    description: 'There is no magic number. The honest answer is relative — enough to be credible, more than your nearest competitor, and recent enough to look alive — plus a simple target to aim for and why the first reviews matter most.',
+    date: '2026-06-08',
+    readingMins: 5,
+    lang: 'en',
+  },
+  {
     slug: 'best-time-to-ask-for-a-google-review',
     title: 'The best time to ask for a Google review (by business type)',
     description: 'Timing beats wording. The honest answer on when to ask for a Google review — same-day, within two hours — and the exact best moment for clinics, salons, restaurants, home services, and retail.',

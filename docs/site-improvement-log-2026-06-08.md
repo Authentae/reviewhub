@@ -263,3 +263,10 @@ SEO content: new post `best-time-to-ask-for-a-google-review` (roadmap #2; timing
 
 ## Passive-income loop — cycle 6 (2026-06-08) — internal linking
 Leveraged the new get-reviews cluster: added cluster links FROM 2 established, high-relevance posts -> spreads link equity + discovery to the new posts (internal linking is a real ranking factor). how-to-ask-for-google-reviews "Related posts" now points to the full cluster (get-more, templates, best-time, QR); why-respond now links to the flagship. Kept it relevant (no link-stuffing). Verified link targets exist + build green.
+
+## Passive-income loop — cycle 7 (2026-06-08) + DIMINISHING-RETURNS FLAG
+SEO content: new post `how-many-google-reviews-do-you-need` (informational, high search volume, distinct benchmark angle, funnels into the cluster). 39 posts in sync, validators+honesty pass, screenshot-verified, internal-linked.
+
+**The get-reviews content cluster is now COMPLETE + internally linked (6 posts):** how-to-get-more (flagship), how-to-ask, how-to-make-a-qr-code, google-review-request-templates, best-time-to-ask, how-many-do-you-need. Built from a data-backed roadmap (proven-demand keywords), cross-linked, get-reviews-positioned, global.
+
+**DIMINISHING RETURNS REACHED (flagging per the goal):** the distinct high-intent get-reviews topics are now covered. The remaining roadmap topic (SMS-vs-email) overlaps the templates post -> redundant/marginal. The other priority items need Earth or an account: conversion (register HIPAA-warning finding = legal/Earth), onboarding activation step (reply-focused, needs account to fix+verify), CSP/anthropic-SDK/Cloudflare (off-limits). Marginal-only items left (more niche posts, dark-mode a11y). Per the goal: STOP rather than fabricate marginal work to fill time. The passive-income ENGINE v1 is built; the BOTTLENECK is now demand validation (5 dental replies ~June 13-15 + the in-person pilot) and the Earth-only items above.
