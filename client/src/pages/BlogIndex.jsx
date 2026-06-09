@@ -24,6 +24,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'get-more-google-reviews-dental-clinic',
+    title: 'How to get more Google reviews for your dental clinic',
+    description: 'A practical guide for dental clinics: why reviews matter more for clinics, how to ask without touching patient privacy, what violates Google\'s rules, and how to keep a steady flow without the front desk remembering.',
+    date: '2026-06-08',
+    readingMins: 6,
+    lang: 'en',
+  },
+  {
     slug: 'how-many-google-reviews-do-you-need',
     title: 'How many Google reviews do you need? (an honest answer)',
     description: 'There is no magic number. The honest answer is relative — enough to be credible, more than your nearest competitor, and recent enough to look alive — plus a simple target to aim for and why the first reviews matter most.',
