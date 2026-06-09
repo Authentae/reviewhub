@@ -414,6 +414,20 @@ export default function VerticalLanding({ vertical }) {
             <Link to="/" style={{ color: 'var(--rh-teal-deep, #1e4d5e)', fontWeight: 600 }}>everyone else</Link>
           </p>
         </section>
+        {/* Further reading — internal links from the vertical page to the
+            get-reviews content cluster (spreads link equity + gives visitors a
+            content path). Matches the cross-vertical section's theme-safe
+            styling above. Added 2026-06-08 (passive-income loop). */}
+        <section className="max-w-3xl mx-auto px-5 pb-16">
+          <p className="text-sm" style={{ color: 'var(--rh-ink-3, #8b939c)' }}>
+            Further reading:{' '}
+            <Link to="/blog/how-to-get-more-google-reviews" style={{ color: 'var(--rh-teal-deep, #1e4d5e)', fontWeight: 600 }}>How to get more Google reviews</Link>
+            {' · '}
+            <Link to="/blog/google-review-request-templates" style={{ color: 'var(--rh-teal-deep, #1e4d5e)', fontWeight: 600 }}>Review request templates</Link>
+            {' · '}
+            <Link to="/blog/best-time-to-ask-for-a-google-review" style={{ color: 'var(--rh-teal-deep, #1e4d5e)', fontWeight: 600 }}>The best time to ask</Link>
+          </p>
+        </section>
       </main>
       <MarketingFooter />
     </div>

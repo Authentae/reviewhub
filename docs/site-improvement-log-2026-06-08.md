@@ -276,3 +276,6 @@ Earth asked to keep working all night. Reframed: generic get-reviews cluster is 
 
 ## Passive-income loop — cycle 9 (2026-06-08) — vertical content (salon/spa)
 New post `get-more-google-reviews-salon-spa` (pairs with /for-spas). The "mirror moment" timing angle, salon-specific asking + named-stylist tip, compliance rules, automation tie-in. Internal-links to /for-spas + cluster. 41 posts in sync, validators+honesty pass, screenshot-verified. Vertical seam now: dentists + salons/spas (both pair with existing vertical routes).
+
+## Passive-income loop — cycle 10 (2026-06-08) — internal linking (vertical pages -> cluster)
+Added a "Further reading" block to VerticalLanding (all 8 vertical pages) linking to the get-reviews cluster (how-to-get-more, templates, best-time). Completes the link loop: blog posts already link TO the vertical pages; now the vertical pages link TO the cluster -> spreads equity both ways + gives vertical visitors a content path. Theme-safe (matches the existing cross-vertical section styling exactly), screenshot-verified in dark mode (links readable cyan-on-dark), build + 172 tests green.
