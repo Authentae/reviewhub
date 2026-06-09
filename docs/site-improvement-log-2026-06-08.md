@@ -303,3 +303,6 @@ Built `/tools/review-qr-code` (ReviewQRCodeTool.jsx): paste your Google review l
 
 ## Passive-income loop — cycle 18 (2026-06-08) — wire content -> the new tools
 Connected the content engine to the 2 new tools (reader -> interactive tool -> signup): QR blog post now links to /tools/review-qr-code; templates post links to /tools/review-request-generator; the flagship pillar "Go deeper" now lists both free tools. Completes the loop: content<->tools<->cluster<->vertical pages all interlinked. Build green, blog-sync OK, link targets are the verified tool routes.
+
+## Passive-income loop — cycle 19 (2026-06-08) — distinct topic (first reviews from zero)
+New post `how-to-get-your-first-google-reviews` — distinct high-intent angle (new businesses, 0-to-first, ties to "first reviews matter most"). Set-the-stage -> who to ask first -> how -> what to avoid -> make it a habit. Links to BOTH new tools + the cluster. 45 posts in sync, validators+honesty pass, screenshot-verified.

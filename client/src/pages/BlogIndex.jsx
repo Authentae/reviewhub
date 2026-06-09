@@ -24,6 +24,14 @@ import { useI18n } from '../context/I18nContext';
 // publishing a new post in /public/blog/.
 const POSTS = [
   {
+    slug: 'how-to-get-your-first-google-reviews',
+    title: 'How to get your first Google reviews (from zero)',
+    description: 'A step-by-step guide for new businesses: set up your profile, who to ask first, how to ask so they actually do it, what to avoid, and why the first ten reviews matter most — then how to keep the trickle going.',
+    date: '2026-06-08',
+    readingMins: 6,
+    lang: 'en',
+  },
+  {
     slug: 'get-more-google-reviews-auto-repair-shop',
     title: 'How to get more Google reviews for your auto repair shop',
     description: 'A practical guide for auto repair shops, mechanics, and detailers: why trust drives the decision, asking at pickup (the relief moment), making it one tap, staying compliant, and keeping a steady flow without a busy counter remembering.',
